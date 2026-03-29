@@ -11,6 +11,11 @@
 #include <algorithm>
 #include <new>
 
+#include <string>
+#include <wil/com.h>
+#include <wil/registry.h>
+#include <wil/result.h>
+
 #include "../Common/NativeApi-Constants.h"
 
 #define API_EXPORT extern "C" __declspec(dllexport)
@@ -20,6 +25,16 @@
    Common
 ================================ */
 
+typedef int WMSSERVICECHECKRESULT;
+
+#define WMSSERVICECHECKRESULT_OK 0
+#define WMSSERVICECHECKRESULT_ERROR_OPENSCMANAGER 1
+#define WMSSERVICECHECKRESULT_ERROR_OPENSERVICE 2
+#define WMSSERVICECHECKRESULT_ERROR_QUERYSERVICECONFIG_1 3
+#define WMSSERVICECHECKRESULT_ERROR_ALLOCSERVICECONFIG 4
+#define WMSSERVICECHECKRESULT_ERROR_QUERYSERVICECONFIG_2 5
+#define WMSSERVICECHECKRESULT_ERROR_SERVICEDISABLED 6
+
 API_EXPORT API_TYPE API_CALL GetApiType()
 {
     return API_TYPE_WIN;
@@ -28,6 +43,114 @@ API_EXPORT API_TYPE API_CALL GetApiType()
 API_EXPORT char API_CALL CanCompareDevices()
 {
     return 0;
+}
+
+struct __declspec(uuid("2BA15E4E-5417-4A66-85B8-2B2260EFBC84")) MidiSrvTransportPlaceholder : ::IUnknown
+{};
+
+struct __declspec(uuid("c3263827-c3b0-bdbd-2500-ce63a3f3f2c3")) MidiClientInitializer : ::IUnknown
+{};
+
+char CheckWmsAvailability_Registry()
+{
+    std::wstring keyPath = L"SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Drivers32";
+
+    for (int i = 0; i < 10; i++)
+    {
+        std::wstring valueName = (i == 0) ? L"midi" : L"midi" + std::to_wstring(i);
+
+        auto val = wil::reg::try_get_value_string(HKEY_LOCAL_MACHINE, keyPath.c_str(), valueName.c_str());
+
+        if (val.has_value() && val.value() == L"wdmaud2.drv")
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+char CheckWmsAvailability_Com()
+{
+    wil::com_ptr_nothrow<IUnknown> servicePointer;
+
+    HRESULT hr = CoCreateInstance(
+        __uuidof(MidiSrvTransportPlaceholder),
+        nullptr,
+        CLSCTX_INPROC_SERVER,
+        IID_PPV_ARGS(&servicePointer)
+    );
+
+    return SUCCEEDED(hr);
+}
+
+WMSSERVICECHECKRESULT CheckWmsAvailability_Service()
+{
+    SC_HANDLE hSCManager = OpenSCManagerW(nullptr, nullptr, SC_MANAGER_CONNECT);
+    if (!hSCManager)
+        return WMSSERVICECHECKRESULT_ERROR_OPENSCMANAGER;
+
+    auto closeSCM = wil::scope_exit([&] { CloseServiceHandle(hSCManager); });
+
+    SC_HANDLE hService = OpenServiceW(hSCManager, L"midisrv", SERVICE_QUERY_STATUS | SERVICE_QUERY_CONFIG);
+    if (!hService)
+        return WMSSERVICECHECKRESULT_ERROR_OPENSERVICE;
+
+    auto closeSvc = wil::scope_exit([&] { CloseServiceHandle(hService); });
+
+    DWORD bytesNeeded = 0;
+    BOOL ok = QueryServiceConfigW(hService, nullptr, 0, &bytesNeeded);
+    if (!ok && (GetLastError() != ERROR_INSUFFICIENT_BUFFER || bytesNeeded == 0))
+        return WMSSERVICECHECKRESULT_ERROR_QUERYSERVICECONFIG_1;
+
+    LPQUERY_SERVICE_CONFIGW config = static_cast<LPQUERY_SERVICE_CONFIGW>(LocalAlloc(LPTR, bytesNeeded));
+    if (!config)
+        return WMSSERVICECHECKRESULT_ERROR_ALLOCSERVICECONFIG;
+
+    auto freeConfig = wil::scope_exit([&] { LocalFree(config); });
+
+    if (!QueryServiceConfigW(hService, config, bytesNeeded, &bytesNeeded))
+        return WMSSERVICECHECKRESULT_ERROR_QUERYSERVICECONFIG_2;
+
+    if (config->dwStartType == SERVICE_DISABLED)
+        return WMSSERVICECHECKRESULT_ERROR_SERVICEDISABLED;
+
+    return WMSSERVICECHECKRESULT_OK;
+}
+
+char CheckWmsAvailability_Sdk()
+{
+    wil::com_ptr_nothrow<IUnknown> initPointer;
+
+    HRESULT hr = CoCreateInstance(
+        __uuidof(MidiClientInitializer),
+        nullptr,
+        CLSCTX_INPROC_SERVER,
+        IID_PPV_ARGS(&initPointer)
+    );
+
+    return SUCCEEDED(hr);
+}
+
+API_EXPORT void API_CALL GetNativeEnvironmentInfo_Win(
+    char* comInitializationResult,
+    char* registryCheckResult,
+    char* comCheckResult,
+    WMSSERVICECHECKRESULT* serviceCheckResult,
+    char* sdkCheckResult)
+{
+    HRESULT hrInit = CoInitializeEx(nullptr, COINIT_MULTITHREADED);
+    
+    *comInitializationResult = SUCCEEDED(hrInit);
+    if (!*comInitializationResult)
+        return;
+    
+    *registryCheckResult = CheckWmsAvailability_Registry();
+    *comCheckResult = CheckWmsAvailability_Com();
+    *serviceCheckResult = CheckWmsAvailability_Service();
+    *sdkCheckResult = CheckWmsAvailability_Sdk();
+
+    CoUninitialize();
 }
 
 /* ================================
@@ -270,6 +393,7 @@ API_EXPORT const char* API_CALL GetDeviceProduct(WORD productId)
 typedef struct
 {
     char* name;
+    char wmsAvailable;
 } SessionHandle;
 
 API_EXPORT SESSION_OPENRESULT API_CALL OpenSession_Win(char* name, void** handle, int* errorCode)
@@ -279,8 +403,27 @@ API_EXPORT SESSION_OPENRESULT API_CALL OpenSession_Win(char* name, void** handle
     SessionHandle* sessionHandle = new SessionHandle();
     sessionHandle->name = name;
 
-    *handle = sessionHandle;
+    char comInitializationResult;
+    char registryCheckResult;
+    char comCheckResult;
+    WMSSERVICECHECKRESULT serviceCheckResult;
+    char sdkCheckResult;
 
+    GetNativeEnvironmentInfo_Win(
+        &comInitializationResult,
+        &registryCheckResult,
+        &comCheckResult,
+        &serviceCheckResult,
+        &sdkCheckResult);
+
+    sessionHandle->wmsAvailable = static_cast<char>(
+        comInitializationResult &&
+        registryCheckResult &&
+        comCheckResult &&
+        (serviceCheckResult == WMSSERVICECHECKRESULT_OK) &&
+        sdkCheckResult);
+
+    *handle = sessionHandle;
     return SESSION_OPENRESULT_OK;
 }
 
@@ -302,7 +445,6 @@ typedef struct
     LPMIDIHDR* sysExHeaders;
     int sysExBufferCount;
     int sysExBufferSize;
-    SessionHandle* sessionHandle;
     CRITICAL_SECTION lock;
     LONG isClosing;
 } InputDeviceHandle;
@@ -515,13 +657,11 @@ API_EXPORT IN_OPENRESULT API_CALL OpenInputDevice_Win(void* info, void* sessionH
     *errorCode = 0;
 
     InputDeviceInfo* inputDeviceInfo = static_cast<InputDeviceInfo*>(info);
-    SessionHandle* pSessionHandle = static_cast<SessionHandle*>(sessionHandle);
 
     InputDeviceHandle* inputDeviceHandle = new InputDeviceHandle();
     inputDeviceHandle->info = inputDeviceInfo;
     inputDeviceHandle->sysExBufferSize = sysExBufferSize;
     inputDeviceHandle->sysExBufferCount = sysExBufferCount;
-    inputDeviceHandle->sessionHandle = pSessionHandle;
 
     inputDeviceHandle->sysExHeaders = new LPMIDIHDR[sysExBufferCount];
     for (int i = 0; i < sysExBufferCount; i++)

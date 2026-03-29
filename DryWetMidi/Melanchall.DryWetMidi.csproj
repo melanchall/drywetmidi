@@ -4,7 +4,7 @@
     <TargetFrameworks>netstandard2.0;net7.0;net8.0</TargetFrameworks>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <LangVersion>10</LangVersion>
-    <Configurations>Debug;Release;ReleaseTest;ReleaseTestFull</Configurations>
+    <Configurations>Debug;Release;ReleaseTest;ReleaseTestFull;ReleaseNativeless</Configurations>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <IsAotCompatible Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net8.0'))">true</IsAotCompatible>
     <EnableAotAnalyzer>true</EnableAotAnalyzer>
@@ -53,19 +53,23 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)'=='Debug'">
-    <DefineConstants>DEBUG;TRACE;TEST</DefineConstants>
+    <DefineConstants>DEBUG;TRACE;TEST;FULL</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)'=='Release'">
-    <DefineConstants></DefineConstants>
+    <DefineConstants>FULL</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)'=='ReleaseNativeless'">
+    <DefineConstants>NATIVELESS</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)'=='ReleaseTest'">
-    <DefineConstants>TEST</DefineConstants>
+    <DefineConstants>TEST;FULL</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)'=='ReleaseTestFull'">
-    <DefineConstants>TRACE;TEST</DefineConstants>
+    <DefineConstants>TRACE;TEST;FULL</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup Label="Native">
@@ -73,6 +77,34 @@
     <None Include="..\Native\win_arm64\Melanchall_DryWetMidi_Native.dll" Pack="true" PackagePath="runtimes/win-arm64/native" />
     <None Include="..\Native\macos_x64_arm64\Melanchall_DryWetMidi_Native.dylib" Pack="true" PackagePath="build\" />
     <None Include="Melanchall.DryWetMidi.targets" Pack="true" PackagePath="build\" />
+  </ItemGroup>
+
+  <ItemGroup Label="Nativeless" Condition="'$(Configuration)'=='ReleaseNativeless'">
+    <Compile Remove="Multimedia\VirtualDevice\**\*.cs" />
+    <Compile Remove="Multimedia\DevicesWatcher\**\*.cs" />
+    <Compile Remove="Multimedia\Session\**\*.cs" />
+    <Compile Remove="Multimedia\Common\**\*.cs" />
+    <Compile Remove="Multimedia\Native\NativeApi.cs" />
+    <Compile Remove="Multimedia\Native\NativeApiUtilities.cs" />
+    <Compile Remove="Multimedia\Native\NativeHandle.cs" />
+    <Compile Remove="Multimedia\MidiDevice.cs" />
+    <Compile Remove="Multimedia\InputDevice\InputDevice.cs" />
+    <Compile Remove="Multimedia\InputDevice\InputDeviceHandle.cs" />
+    <Compile Remove="Multimedia\InputDevice\InputDeviceApi.cs" />
+    <Compile Remove="Multimedia\InputDevice\InputDeviceCheckpointsNames.cs" />
+    <Compile Remove="Multimedia\InputDevice\InputDeviceProperty.cs" />
+    <Compile Remove="Multimedia\InputDevice\MidiTimeCodeReceivedEventArgs.cs" />
+    <Compile Remove="Multimedia\OutputDevice\OutputDevice.cs" />
+    <Compile Remove="Multimedia\OutputDevice\OutputDeviceHandle.cs" />
+    <Compile Remove="Multimedia\OutputDevice\OutputDeviceApi.cs" />
+    <Compile Remove="Multimedia\OutputDevice\OutputDeviceCheckpointsNames.cs" />
+    <Compile Remove="Multimedia\OutputDevice\OutputDeviceOption.cs" />
+    <Compile Remove="Multimedia\OutputDevice\OutputDeviceProperty.cs" />
+    <Compile Remove="Multimedia\OutputDevice\OutputDeviceTechnology.cs" />
+    <Compile Remove="Multimedia\Clock\TickGenerator\Session\**\*.cs" />
+    <Compile Remove="Multimedia\Clock\TickGenerator\TickGeneratorApi.cs" />
+    <Compile Remove="Multimedia\Clock\TickGenerator\TickGeneratorException.cs" />
+    <Compile Remove="Multimedia\Clock\TickGenerator\HighPrecisionTickGenerator.cs" />
   </ItemGroup>
 
   <ItemGroup Label="Resources">

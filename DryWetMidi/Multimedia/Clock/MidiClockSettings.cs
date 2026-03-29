@@ -10,7 +10,12 @@ namespace Melanchall.DryWetMidi.Multimedia
     {
         #region Fields
 
-        private Func<TickGenerator> _createTickGeneratorCallback = () => new HighPrecisionTickGenerator();
+        private Func<TickGenerator> _createTickGeneratorCallback = () =>
+#if NATIVELESS
+            new RegularPrecisionTickGenerator();
+#else
+            new HighPrecisionTickGenerator();
+#endif
 
         #endregion
 

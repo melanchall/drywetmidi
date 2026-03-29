@@ -4,7 +4,7 @@
     {
         #region Fields
 
-        private static volatile System.Random _instance;
+        private static volatile global::System.Random _instance;
         private static readonly object _lockObject = new object();
 
         #endregion
@@ -19,7 +19,7 @@
 
         #region Properties
 
-        public static System.Random Instance
+        public static global::System.Random Instance
         {
             get
             {
@@ -29,7 +29,7 @@
                     {
                         if (_instance == null)
                         {
-                            _instance = new System.Random();
+                            _instance = new global::System.Random();
                         }
                     }
                 }

@@ -5,8 +5,6 @@ using NUnit.Framework;
 using NUnit.Framework.Legacy;
 using System;
 using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
-using static Melanchall.DryWetMidi.Multimedia.MidiDevicesSessionApi;
 
 namespace Melanchall.DryWetMidi.Tests.Multimedia
 {

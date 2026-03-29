@@ -59,13 +59,14 @@ stages:
         script: |
           Get-ChildItem $(Build.SourcesDirectory) -Include *.pdb -Recurse | Remove-Item -Force
     
-    - task: ArchiveFiles@2
-      displayName: Archive binaries
-      inputs:
-        rootFolderOrFile: 'DryWetMidi\bin\$(BuildConfiguration)\netstandard2.0'
-        includeRootFolder: false
-        archiveType: 'zip'
-        archiveFile: '$(Build.ArtifactStagingDirectory)\Binaries\DryWetMIDI.$(LibraryVersion)-bin-netstandard20.zip'
+    - ${{ each tfm in split('netstandard2.0,net7.0,net8.0', ',') }}:
+      - task: ArchiveFiles@2
+        displayName: Archive binaries (${{ tfm }})
+        inputs:
+          rootFolderOrFile: 'DryWetMidi\bin\$(BuildConfiguration)\${{ tfm }}'
+          includeRootFolder: false
+          archiveType: 'zip'
+          archiveFile: '$(Build.ArtifactStagingDirectory)\Binaries\DryWetMIDI.$(LibraryVersion)-bin-${{ tfm }}.zip'
         
     - task: PowerShell@2
       displayName: Copy native binaries in directory
@@ -83,7 +84,7 @@ stages:
           $macosX64Arm64Destination = "$(Pipeline.Workspace)/Native/macos_x64_arm64"
           New-Item -ItemType Directory -Force -Path $macosX64Arm64Destination
           Copy-Item -Path "$(Pipeline.Workspace)/NativeLibraries/Native_macOS_x64_arm64/Melanchall_DryWetMidi_Native.dylib" -Destination "$macosX64Arm64Destination" -Force -Verbose
-        
+    
     - task: ArchiveFiles@2
       displayName: Archive native binaries
       inputs:

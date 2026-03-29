@@ -14,6 +14,10 @@ jobs:
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v2
       
+      - name: Restore NuGet packages
+        run: |
+          nuget restore "Resources/Native/Windows/Melanchall.DryWetMidi.Native.Windows/Melanchall.DryWetMidi.Native.Windows/Melanchall.DryWetMidi.Native.Windows.vcxproj" -SolutionDirectory "${{ github.workspace }}/Resources/Native/Windows/Melanchall.DryWetMidi.Native.Windows"
+
       - name: Build dll
         run: |
           msbuild Resources/Native/Windows/Melanchall.DryWetMidi.Native.Windows/Melanchall.DryWetMidi.Native.Windows/Melanchall.DryWetMidi.Native.Windows.vcxproj `
@@ -39,6 +43,10 @@ jobs:
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v2
       
+      - name: Restore NuGet packages
+        run: |
+          nuget restore "Resources/Native/Windows/Melanchall.DryWetMidi.Native.Windows/Melanchall.DryWetMidi.Native.Windows/Melanchall.DryWetMidi.Native.Windows.vcxproj" -SolutionDirectory "${{ github.workspace }}/Resources/Native/Windows/Melanchall.DryWetMidi.Native.Windows"
+
       - name: Build dll
         run: |
           msbuild Resources/Native/Windows/Melanchall.DryWetMidi.Native.Windows/Melanchall.DryWetMidi.Native.Windows/Melanchall.DryWetMidi.Native.Windows.vcxproj `

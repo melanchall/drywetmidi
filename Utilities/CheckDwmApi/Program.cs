@@ -20,7 +20,7 @@ namespace Melanchall.CheckDwmApi
 
             Console.WriteLine(@"
 Thank you for your willing to help make DryWetMIDI better by running this program!
-It will take just several minutes to run all tests guiding you through the process.".Trim());
+It will take just several minutes or even less to run all tests guiding you through the process.".Trim());
 
             //
 
@@ -28,6 +28,7 @@ It will take just several minutes to run all tests guiding you through the proce
 
             var tasks = new List<ITask>
             {
+                new WriteLibraryInfoTask(),
                 new WriteSystemInfoTask(),
                 new ReadWriteMidiFileTask(midiFile),
             };

@@ -47,7 +47,7 @@ stages:
       inputs:
         command: 'build'
         projects: 'DryWetMidi/Melanchall.DryWetMidi.csproj'
-        arguments: '--configuration $(BuildConfiguration)'
+        arguments: '--configuration $(BuildConfiguration.Nativeless)'
     
     - task: PowerShell@2
       displayName: Delete pdb files
@@ -56,13 +56,14 @@ stages:
         script: |
           Get-ChildItem $(Build.SourcesDirectory) -Include *.pdb -Recurse | Remove-Item -Force
     
-    - task: ArchiveFiles@2
-      displayName: Archive binaries
-      inputs:
-        rootFolderOrFile: 'DryWetMidi\bin\$(BuildConfiguration)\netstandard2.0'
-        includeRootFolder: false
-        archiveType: 'zip'
-        archiveFile: '$(Build.ArtifactStagingDirectory)\Binaries\DryWetMIDI.$(LibraryVersion)-bin-netstandard20-nativeless.zip'
+    - ${{ each tfm in split('netstandard2.0,net7.0,net8.0', ',') }}:
+      - task: ArchiveFiles@2
+        displayName: Archive binaries (${{ tfm }})
+        inputs:
+          rootFolderOrFile: 'DryWetMidi\bin\$(BuildConfiguration.Nativeless)\${{ tfm }}'
+          includeRootFolder: false
+          archiveType: 'zip'
+          archiveFile: '$(Build.ArtifactStagingDirectory)\Binaries\DryWetMIDI.$(LibraryVersion)-bin-${{ tfm }}-nativeless.zip'
     
     - task: PublishPipelineArtifact@1
       displayName: Publish 'Binaries' artifact

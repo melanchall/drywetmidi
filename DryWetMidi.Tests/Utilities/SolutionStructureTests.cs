@@ -32,6 +32,7 @@ namespace Melanchall.DryWetMidi.Tests.Utilities
                 "Melanchall.DryWetMidi.MusicTheory",
                 "Melanchall.DryWetMidi.Standards",
                 "Melanchall.DryWetMidi.Tools",
+                "Melanchall.DryWetMidi.Configuration",
             };
 
             var invalidNamespaces = actualNamespaces

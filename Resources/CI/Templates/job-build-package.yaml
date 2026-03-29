@@ -79,20 +79,56 @@ jobs:
     - template: step-setup-nativeless-project.yaml
   
   - task: PowerShell@2
+    displayName: Set data for LibraryInformation
+    inputs:
+      targetType: 'inline'
+      script: |
+        $csprojFilePath = Resolve-Path "DryWetMidi\Melanchall.DryWetMidi.csproj"
+
+        Write-Host "Loading version from '$csprojFilePath'..."
+        $xml = New-Object xml
+        $xml.PreserveWhitespace = $true
+        $xml.Load($csprojFilePath)
+        $version = $xml.Project.PropertyGroup[1].Version
+        Write-Host "Version is '$version'"
+
+        $libraryInformationFilePath = Resolve-Path "DryWetMidi\Configuration\LibraryInformation.cs"
+
+        Write-Host "Loading LibraryInformation content from '$libraryInformationFilePath'..."
+        $content = Get-Content -Path $libraryInformationFilePath -Raw
+
+        Write-Host "Setting version..."
+        $content = $content -replace 'Version = UnofficialReleaseMarker', "Version = `"$version`""
+
+        Write-Host "Setting commit ID..."
+        $content = $content -replace 'CommitId = UnofficialReleaseMarker', "CommitId = `"$(Build.SourceVersion)`""
+
+        Write-Host "Printing file content:"
+        Write-Host "$content"
+
+        Write-Host "Writing content back..."
+        Set-Content -Path $libraryInformationFilePath -Value $content -NoNewline
+
+        Write-Host "Version successfully inlined."
+
+  - task: PowerShell@2
     displayName: Copy native libraries locally
     condition: eq('${{ parameters.packageType }}', 'Full')
     inputs:
       targetType: filePath
       filePath: '$(Build.SourcesDirectory)/Resources/Scripts/Copy native binaries locally.ps1'
       arguments: '-fromDirectory "$(Pipeline.Workspace)/NativeLibraries"'
-  
+      
   - task: DotNetCoreCLI@2
     displayName: Build project
     inputs:
       command: 'build'
       projects: |
         DryWetMidi/Melanchall.DryWetMidi.csproj
-      arguments: '--configuration $(BuildConfiguration)'
+      ${{ if eq(parameters.packageType, 'Nativeless') }}:
+        arguments: '--configuration $(BuildConfiguration.Nativeless)'
+      ${{ else }}:
+        arguments: '--configuration $(BuildConfiguration)'
   
   - task: DotNetCoreCLI@2
     displayName: Create NuGet package
@@ -101,8 +137,11 @@ jobs:
       projects: 'DryWetMidi/Melanchall.DryWetMidi.csproj'
       outputDir: '$(Build.ArtifactStagingDirectory)\NuGetPackage'
       packagesToPack: 'DryWetMidi/Melanchall.DryWetMidi.csproj'
-      configuration: '$(BuildConfiguration)'
       nobuild: true
+      ${{ if eq(parameters.packageType, 'Nativeless') }}:
+        configuration: '$(BuildConfiguration.Nativeless)'
+      ${{ else }}:
+        configuration: '$(BuildConfiguration)'
       buildProperties: 'RepositoryBranch="$(Build.SourceBranchName)'
   
   - task: PublishPipelineArtifact@1

@@ -101,15 +101,30 @@ jobs:
         run: |
           & "${{ github.workspace }}/Resources/Scripts/Copy native binaries locally.ps1" -fromDirectory "${{ runner.temp }}/NativeLibraries"
       
-      - name: Build project
-        run: dotnet build DryWetMidi/Melanchall.DryWetMidi.csproj --configuration ${{ vars.BUILD_CONFIGURATION || 'Release' }}
+      - name: Build project (full)
+        if: inputs.package-type == 'Full'
+        run: dotnet build DryWetMidi/Melanchall.DryWetMidi.csproj --configuration ${{ vars.BUILD_CONFIGURATION }}
+        
+      - name: Build project (nativeless)
+        if: inputs.package-type == 'Nativeless'
+        run: dotnet build DryWetMidi/Melanchall.DryWetMidi.csproj --configuration ${{ vars.BUILD_CONFIGURATION_NATIVELESS }}
       
-      - name: Create NuGet package
+      - name: Create NuGet package (full)
+        if: inputs.package-type == 'Full'
         run:  |
           dotnet pack DryWetMidi/Melanchall.DryWetMidi.csproj `
             --no-build `
-            --configuration ${{ vars.BUILD_CONFIGURATION || 'Release' }} `
             --output NuGetPackage `
+            --configuration ${{ vars.BUILD_CONFIGURATION }} `
+            -p:RepositoryBranch="${{ github.ref_name }}"
+
+      - name: Create NuGet package (nativeless)
+        if: inputs.package-type == 'Nativeless'
+        run:  |
+          dotnet pack DryWetMidi/Melanchall.DryWetMidi.csproj `
+            --no-build `
+            --output NuGetPackage `
+            --configuration ${{ vars.BUILD_CONFIGURATION_NATIVELESS }} `
             -p:RepositoryBranch="${{ github.ref_name }}"
       
       - name: Upload NuGet package

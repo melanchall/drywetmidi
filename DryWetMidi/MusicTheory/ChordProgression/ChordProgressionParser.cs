@@ -42,7 +42,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
             if (string.IsNullOrWhiteSpace(input))
                 return ParsingResult.EmptyInputString;
 
-            var parts = input.Split(new[] { PartsDelimiter }, System.StringSplitOptions.RemoveEmptyEntries);
+            var parts = input.Split(new[] { PartsDelimiter }, global::System.StringSplitOptions.RemoveEmptyEntries);
             var chords = new List<Chord>();
 
             foreach (var part in parts)

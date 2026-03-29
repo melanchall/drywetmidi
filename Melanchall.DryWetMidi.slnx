@@ -2,23 +2,28 @@
   <Configurations>
     <BuildType Name="Debug" />
     <BuildType Name="Release" />
+    <BuildType Name="ReleaseNativeless" />
     <BuildType Name="ReleaseTest" />
     <BuildType Name="ReleaseTestFull" />
   </Configurations>
   <Folder Name="/Melanchall.Utilities/">
     <Project Path="Utilities/CheckDwmApi/Melanchall.CheckDwmApi.csproj">
+      <BuildType Solution="ReleaseNativeless|*" Project="Release" />
       <BuildType Solution="ReleaseTestFull|*" Project="Release" />
       <BuildType Solution="ReleaseTest|*" Project="Release" />
     </Project>
     <Project Path="Utilities/Common/Melanchall.Common.csproj">
+      <BuildType Solution="ReleaseNativeless|*" Project="Release" />
       <BuildType Solution="ReleaseTestFull|*" Project="Release" />
       <BuildType Solution="ReleaseTest|*" Project="Release" />
     </Project>
     <Project Path="Utilities/ReceiveMidiData/Melanchall.ReceiveMidiData.csproj">
+      <BuildType Solution="ReleaseNativeless|*" Project="Release" />
       <BuildType Solution="ReleaseTestFull|*" Project="Release" />
       <BuildType Solution="ReleaseTest|*" Project="Release" />
     </Project>
     <Project Path="Utilities/SendMidiData/Melanchall.SendMidiData.csproj">
+      <BuildType Solution="ReleaseNativeless|*" Project="Release" />
       <BuildType Solution="ReleaseTestFull|*" Project="Release" />
       <BuildType Solution="ReleaseTest|*" Project="Release" />
     </Project>

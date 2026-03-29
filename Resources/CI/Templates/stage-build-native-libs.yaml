@@ -7,6 +7,11 @@ stages:
     pool:
       vmImage: 'windows-latest'
     steps:
+    - task: NuGetCommand@2
+      displayName: 'Restore NuGet packages'
+      inputs:
+        command: 'custom'
+        arguments: 'restore "Resources/Native/Windows/Melanchall.DryWetMidi.Native.Windows/Melanchall.DryWetMidi.Native.Windows/Melanchall.DryWetMidi.Native.Windows.vcxproj" -SolutionDirectory "$(Build.SourcesDirectory)/Resources/Native/Windows/Melanchall.DryWetMidi.Native.Windows"'
     - task: VSBuild@1
       displayName: 'Build dll'
       inputs:
@@ -31,6 +36,11 @@ stages:
     pool:
       vmImage: 'windows-latest'
     steps:
+    - task: NuGetCommand@2
+      displayName: 'Restore NuGet packages'
+      inputs:
+        command: 'custom'
+        arguments: 'restore "Resources/Native/Windows/Melanchall.DryWetMidi.Native.Windows/Melanchall.DryWetMidi.Native.Windows/Melanchall.DryWetMidi.Native.Windows.vcxproj" -SolutionDirectory "$(Build.SourcesDirectory)/Resources/Native/Windows/Melanchall.DryWetMidi.Native.Windows"'
     - task: VSBuild@1
       displayName: 'Build dll'
       inputs:
