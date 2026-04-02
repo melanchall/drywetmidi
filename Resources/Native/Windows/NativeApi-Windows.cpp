@@ -16,6 +16,10 @@
 #include <wil/registry.h>
 #include <wil/result.h>
 
+#include <winrt/Windows.Foundation.h>
+#include <winrt/Microsoft.Windows.Devices.Midi2.h>
+#include <winrt/Microsoft.Windows.Devices.Midi2.Endpoints.BasicLoopback.h>
+
 #include "../Common/NativeApi-Constants.h"
 
 #define API_EXPORT extern "C" __declspec(dllexport)
@@ -132,12 +136,25 @@ char CheckWmsAvailability_Sdk()
     return SUCCEEDED(hr);
 }
 
+char CheckWmsAvailability_BasicLoopback()
+{
+    try
+    {
+        return winrt::Microsoft::Windows::Devices::Midi2::Endpoints::BasicLoopback::MidiBasicLoopbackEndpointManager::IsTransportAvailable();
+    }
+    catch (...)
+    {
+        return 0;
+    }
+}
+
 API_EXPORT void API_CALL GetNativeEnvironmentInfo_Win(
     char* comInitializationResult,
     char* registryCheckResult,
     char* comCheckResult,
     WMSSERVICECHECKRESULT* serviceCheckResult,
-    char* sdkCheckResult)
+    char* sdkCheckResult,
+    char* basicLoopbackCheckResult)
 {
     HRESULT hrInit = CoInitializeEx(nullptr, COINIT_MULTITHREADED);
     
@@ -149,6 +166,7 @@ API_EXPORT void API_CALL GetNativeEnvironmentInfo_Win(
     *comCheckResult = CheckWmsAvailability_Com();
     *serviceCheckResult = CheckWmsAvailability_Service();
     *sdkCheckResult = CheckWmsAvailability_Sdk();
+    *basicLoopbackCheckResult = CheckWmsAvailability_BasicLoopback();
 
     CoUninitialize();
 }
@@ -394,6 +412,7 @@ typedef struct
 {
     char* name;
     char wmsAvailable;
+    char basicLoopbackAvailable;
 } SessionHandle;
 
 API_EXPORT SESSION_OPENRESULT API_CALL OpenSession_Win(char* name, void** handle, int* errorCode)
@@ -414,7 +433,8 @@ API_EXPORT SESSION_OPENRESULT API_CALL OpenSession_Win(char* name, void** handle
         &registryCheckResult,
         &comCheckResult,
         &serviceCheckResult,
-        &sdkCheckResult);
+        &sdkCheckResult,
+        &sessionHandle->basicLoopbackAvailable);
 
     sessionHandle->wmsAvailable = static_cast<char>(
         comInitializationResult &&

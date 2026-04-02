@@ -59,14 +59,16 @@ namespace Melanchall.DryWetMidi.Configuration
                 out var registryCheckResult,
                 out var comCheckResult,
                 out var serviceCheckResult,
-                out var sdkCheckResult);
+                out var sdkCheckResult,
+                out var basicLoopbackCheckResult);
 
             var wmsAvailable =
                 comInitializationResult &&
                 registryCheckResult &&
                 comCheckResult &&
                 serviceCheckResult == CommonApi.WMSSERVICECHECKRESULT.WMSSERVICECHECKRESULT_OK &&
-                sdkCheckResult;
+                sdkCheckResult &&
+                basicLoopbackCheckResult;
 
             if (wmsAvailable)
             {
@@ -84,10 +86,11 @@ namespace Melanchall.DryWetMidi.Configuration
             {
                 resultLines.AddRange(new[]
                 {
-                    $"-- registry check result: {registryCheckResult}",
-                    $"-- COM check result: {comCheckResult}",
-                    $"-- service check result: {serviceCheckResult}",
-                    $"-- SDK check result: {sdkCheckResult}"
+                    $"-- registry: {registryCheckResult}",
+                    $"-- COM: {comCheckResult}",
+                    $"-- service: {serviceCheckResult}",
+                    $"-- SDK: {sdkCheckResult}",
+                    $"-- basic loopback: {basicLoopbackCheckResult}"
                 });
             }
         }

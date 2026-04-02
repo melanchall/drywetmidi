@@ -4,9 +4,16 @@ on:
   workflow_call:
 
 jobs:
-  build-dll-x64:
-    name: Build x64 dll
+  build-dll:
+    name: Build ${{ matrix.platform }} dll
     runs-on: windows-latest
+    strategy:
+      matrix:
+        include:
+          - platform: x64
+            artifact_name: Native_Win_x64
+          - platform: ARM64EC
+            artifact_name: Native_Win_arm64
     steps:
       - name: Checkout
         uses:  actions/checkout@v4
@@ -14,51 +21,39 @@ jobs:
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v2
       
-      - name: Restore NuGet packages
-        run: |
-          nuget restore "Resources/Native/Windows/Melanchall.DryWetMidi.Native.Windows/Melanchall.DryWetMidi.Native.Windows/Melanchall.DryWetMidi.Native.Windows.vcxproj" -SolutionDirectory "${{ github.workspace }}/Resources/Native/Windows/Melanchall.DryWetMidi.Native.Windows"
-
-      - name: Build dll
-        run: |
-          msbuild Resources/Native/Windows/Melanchall.DryWetMidi.Native.Windows/Melanchall.DryWetMidi.Native.Windows/Melanchall.DryWetMidi.Native.Windows.vcxproj `
-            /p:Configuration=Release `
-            /p:Platform=x64 `
-            /p:SolutionDir="${{ github.workspace }}\Resources\Native\Windows\Melanchall.DryWetMidi.Native.Windows\"
+      - name: Download Microsoft.Windows.Devices.Midi2.nupkg
         shell: pwsh
-      
-      - name:  Upload dll artifact
-        uses: actions/upload-artifact@v4
-        with: 
-          name: Native_Win_x64
-          path: Resources/Native/Windows/Melanchall_DryWetMidi_Native.dll
-          if-no-files-found: error
+        run: |
+          $packageUrl = "https://github.com/microsoft/MIDI/releases/download/rc-3/Microsoft.Windows.Devices.Midi2.1.0.16-rc.3.7.nupkg"
+          $downloadFolder = "${{ runner.temp }}\Midi2"
           
-  build-dll-arm64:
-    name: Build arm64 dll
-    runs-on: windows-latest
-    steps:
-      - name: Checkout
-        uses:  actions/checkout@v4
-      
-      - name: Setup MSBuild
-        uses: microsoft/setup-msbuild@v2
-      
+          New-Item -Path $downloadFolder -ItemType Directory -Force | Out-Null
+          
+          $fileName = Split-Path $packageUrl -Leaf
+          $destinationPath = Join-Path $downloadFolder $fileName
+          
+          Write-Host "Downloading package from: $packageUrl"
+          Write-Host "Saving to: $destinationPath"
+          
+          Invoke-WebRequest -Uri $packageUrl -OutFile $destinationPath
+          Write-Host "Download complete. Package saved to: $destinationPath"
+
       - name: Restore NuGet packages
         run: |
-          nuget restore "Resources/Native/Windows/Melanchall.DryWetMidi.Native.Windows/Melanchall.DryWetMidi.Native.Windows/Melanchall.DryWetMidi.Native.Windows.vcxproj" -SolutionDirectory "${{ github.workspace }}/Resources/Native/Windows/Melanchall.DryWetMidi.Native.Windows"
+          nuget restore "Resources/Native/Windows/Melanchall.DryWetMidi.Native.Windows/Melanchall.DryWetMidi.Native.Windows/Melanchall.DryWetMidi.Native.Windows.vcxproj" -Source "${{ runner.temp }}\Midi2" -Source "https://api.nuget.org/v3/index.json" -SolutionDirectory "${{ github.workspace }}/Resources/Native/Windows/Melanchall.DryWetMidi.Native.Windows"
 
       - name: Build dll
         run: |
           msbuild Resources/Native/Windows/Melanchall.DryWetMidi.Native.Windows/Melanchall.DryWetMidi.Native.Windows/Melanchall.DryWetMidi.Native.Windows.vcxproj `
             /p:Configuration=Release `
-            /p:Platform=ARM64EC `
+            /p:Platform=${{ matrix.platform }} `
             /p:SolutionDir="${{ github.workspace }}\Resources\Native\Windows\Melanchall.DryWetMidi.Native.Windows\"
         shell: pwsh
       
       - name:  Upload dll artifact
         uses: actions/upload-artifact@v4
         with: 
-          name: Native_Win_arm64
+          name: ${{ matrix.artifact_name }}
           path: Resources/Native/Windows/Melanchall_DryWetMidi_Native.dll
           if-no-files-found: error
 

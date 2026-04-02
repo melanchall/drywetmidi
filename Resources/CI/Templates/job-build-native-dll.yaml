@@ -1,0 +1,60 @@
+parameters:
+- name: configuration
+  displayName: 'Build configuration'
+  type: string
+- name: artifactName
+  displayName: 'Artifact name'
+  type: string
+
+jobs:
+- job: BuildDll${{ parameters.configuration }}
+  displayName: 'Build dll (${{ parameters.configuration }})'
+  pool:
+    vmImage: 'windows-latest'
+  steps:
+  - task: PowerShell@2
+    displayName: 'Download Microsoft.Windows.Devices.Midi2.nupkg'
+    inputs:
+      targetType: 'inline'
+      script: |
+        $packageUrl = "https://github.com/microsoft/MIDI/releases/download/rc-3/Microsoft.Windows.Devices.Midi2.1.0.16-rc.3.7.nupkg"
+        $downloadFolder = "$(Pipeline.Workspace)\Midi2"
+        
+        New-Item -Path $downloadFolder -ItemType Directory -Force | Out-Null
+        
+        $fileName = Split-Path $packageUrl -Leaf
+        $destinationPath = Join-Path $downloadFolder $fileName
+        
+        Write-Host "Downloading package from: $packageUrl"
+        Write-Host "Saving to: $destinationPath"
+        
+        Invoke-WebRequest -Uri $packageUrl -OutFile $destinationPath
+        Write-Host "Download complete. Package saved to: $destinationPath"
+
+  - task: NuGetCommand@2
+    displayName: 'Restore NuGet packages'
+    inputs:
+      command: 'custom'
+      arguments: 'restore "Resources/Native/Windows/Melanchall.DryWetMidi.Native.Windows/Melanchall.DryWetMidi.Native.Windows/Melanchall.DryWetMidi.Native.Windows.vcxproj" -Source "$(Pipeline.Workspace)\Midi2" -Source "https://api.nuget.org/v3/index.json" -SolutionDirectory "$(Build.SourcesDirectory)/Resources/Native/Windows/Melanchall.DryWetMidi.Native.Windows"'
+  
+  - task: VSBuild@1
+    displayName: 'Build dll'
+    inputs:
+      solution: 'Resources/Native/Windows/Melanchall.DryWetMidi.Native.Windows/Melanchall.DryWetMidi.Native.Windows/Melanchall.DryWetMidi.Native.Windows.vcxproj'
+      platform: '${{ parameters.configuration }}'
+      configuration: 'Release'
+      msbuildArgs: '/p:SolutionDir=$(Build.SourcesDirectory)\Resources\Native\Windows\Melanchall.DryWetMidi.Native.Windows\'
+
+  - task: PublishPipelineArtifact@1
+    displayName: 'Publish dll artifact'
+    inputs:
+      targetPath: 'Resources\Native\Windows\Melanchall_DryWetMidi_Native.dll'
+      artifactName: '${{ parameters.artifactName }}'
+      artifactType: pipeline
+
+  - task: PublishPipelineArtifact@1
+    displayName: 'Publish pdb artifact'
+    inputs:
+      targetPath: 'Resources\Native\Windows\Melanchall_DryWetMidi_Native.pdb'
+      artifactName: '${{ parameters.artifactName }}_pdb'
+      artifactType: pipeline
