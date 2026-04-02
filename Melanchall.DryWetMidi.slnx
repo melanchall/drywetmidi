@@ -1,6 +1,7 @@
 <Solution>
   <Configurations>
     <BuildType Name="Debug" />
+    <BuildType Name="DebugNativeless" />
     <BuildType Name="Release" />
     <BuildType Name="ReleaseNativeless" />
     <BuildType Name="ReleaseTest" />
@@ -8,24 +9,34 @@
   </Configurations>
   <Folder Name="/Melanchall.Utilities/">
     <Project Path="Utilities/CheckDwmApi/Melanchall.CheckDwmApi.csproj">
+      <BuildType Solution="DebugNativeless|*" Project="Debug" />
       <BuildType Solution="ReleaseNativeless|*" Project="Release" />
       <BuildType Solution="ReleaseTestFull|*" Project="Release" />
       <BuildType Solution="ReleaseTest|*" Project="Release" />
+      <Build Solution="DebugNativeless|*" Project="false" />
+      <Build Solution="ReleaseNativeless|*" Project="false" />
     </Project>
     <Project Path="Utilities/Common/Melanchall.Common.csproj">
+      <BuildType Solution="DebugNativeless|*" Project="Debug" />
       <BuildType Solution="ReleaseNativeless|*" Project="Release" />
       <BuildType Solution="ReleaseTestFull|*" Project="Release" />
       <BuildType Solution="ReleaseTest|*" Project="Release" />
     </Project>
     <Project Path="Utilities/ReceiveMidiData/Melanchall.ReceiveMidiData.csproj">
+      <BuildType Solution="DebugNativeless|*" Project="Debug" />
       <BuildType Solution="ReleaseNativeless|*" Project="Release" />
       <BuildType Solution="ReleaseTestFull|*" Project="Release" />
       <BuildType Solution="ReleaseTest|*" Project="Release" />
+      <Build Solution="DebugNativeless|*" Project="false" />
+      <Build Solution="ReleaseNativeless|*" Project="false" />
     </Project>
     <Project Path="Utilities/SendMidiData/Melanchall.SendMidiData.csproj">
+      <BuildType Solution="DebugNativeless|*" Project="Debug" />
       <BuildType Solution="ReleaseNativeless|*" Project="Release" />
       <BuildType Solution="ReleaseTestFull|*" Project="Release" />
       <BuildType Solution="ReleaseTest|*" Project="Release" />
+      <Build Solution="DebugNativeless|*" Project="false" />
+      <Build Solution="ReleaseNativeless|*" Project="false" />
     </Project>
   </Folder>
   <Project Path="DryWetMidi.Tests/Melanchall.DryWetMidi.Tests.csproj" />

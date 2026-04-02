@@ -4,7 +4,7 @@
     <TargetFrameworks>netstandard2.0;net7.0;net8.0</TargetFrameworks>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <LangVersion>10</LangVersion>
-    <Configurations>Debug;Release;ReleaseTest;ReleaseTestFull;ReleaseNativeless</Configurations>
+    <Configurations>Debug;Release;ReleaseTest;ReleaseTestFull;ReleaseNativeless;DebugNativeless</Configurations>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <IsAotCompatible Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net8.0'))">true</IsAotCompatible>
     <EnableAotAnalyzer>true</EnableAotAnalyzer>
@@ -56,6 +56,10 @@
     <DefineConstants>DEBUG;TRACE;TEST;FULL</DefineConstants>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)'=='DebugNativeless'">
+    <DefineConstants>DEBUG;TRACE;TEST;NATIVELESS</DefineConstants>
+  </PropertyGroup>
+
   <PropertyGroup Condition="'$(Configuration)'=='Release'">
     <DefineConstants>FULL</DefineConstants>
   </PropertyGroup>
@@ -79,7 +83,7 @@
     <None Include="Melanchall.DryWetMidi.targets" Pack="true" PackagePath="build\" />
   </ItemGroup>
 
-  <ItemGroup Label="Nativeless" Condition="'$(Configuration)'=='ReleaseNativeless'">
+  <ItemGroup Condition="'$(Configuration)'=='ReleaseNativeless' OR '$(Configuration)'=='DebugNativeless'">
     <Compile Remove="Multimedia\VirtualDevice\**\*.cs" />
     <Compile Remove="Multimedia\DevicesWatcher\**\*.cs" />
     <Compile Remove="Multimedia\Session\**\*.cs" />

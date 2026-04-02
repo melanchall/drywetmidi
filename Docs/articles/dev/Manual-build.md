@@ -19,9 +19,7 @@ If you want to build full version of the library (see steps below to build [nati
     * for _develop_ branch go to https://dev.azure.com/Melanchall/DryWetMIDI/_build/latest?definitionId=6&branchName=develop and download _DryWetMIDI.<release_number>-bin-native.zip_ from `Artifacts` → `Binaries`.
 4. Extract the archive and place extracted content in `<your_local_folder_with_repository>\Native` folder.
 
-If you want to build [nativeless version](xref:a_develop_nativeless) of the library, two steps above should be replaced with this one:
-
-3. Run `Resources\Scripts\Setup nativeless version.ps1 script` from the root of the repository.
+If you want to build [nativeless version](xref:a_develop_nativeless) of the library, skip two steps above and just use `DebugNativeless` or `ReleaseNativeless` build configuration.
 
 Now you should be able to build the solution `<your_local_folder_with_repository>\Melanchall.DryWetMidi.slnx`. For build you can use any tool you want: `dotnet` CLI, Visual Studio, Rider and so on. The library uses "new" csproj format so your build tools should be modern enough.
 
@@ -32,9 +30,11 @@ _master_ branch contains code that the library releases built on. _develop_ one 
 There are four build configurations available:
 
 * `Debug` – for development, debugging and testing. The library is not optimized and contains all debug information. [Traces](#traces) are generated.
+* `DebugNativeless` – the same as `Debug` but with native API cut out. Use it to build nativeless version of the library.
 * `Release` – for production. The library is optimized and does not contain debug information. It's the configuration used to build official releases. [Traces](#traces) are disabled.
 * `ReleaseTest` – for running tests in release mode. The library is optimized and does not contains debug information. Additional tests are enabled in this configuration. Use it to run tests without generating additional files on your machine. [Traces](#traces) are disabled.
 * `ReleaseTestFull` – for running tests in release mode with gathering additional information (playback traces, for example). The library is optimized and does not contain debug information. [Traces](#traces) are generated.
+* `ReleaseNativeless` – the same as `Release` but with native API cut out. Use it to build nativeless version of the library.
 
 ### Traces
 

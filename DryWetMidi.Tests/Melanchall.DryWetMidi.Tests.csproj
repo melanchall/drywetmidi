@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFrameworks>net48;net10.0</TargetFrameworks>
     <OutputType>Library</OutputType>
-    <Configurations>Debug;Release;ReleaseTest;ReleaseTestFull;ReleaseNativeless</Configurations>
+    <Configurations>Debug;Release;ReleaseTest;ReleaseTestFull;ReleaseNativeless;DebugNativeless</Configurations>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>strongnamekey.snk</AssemblyOriginatorKeyFile>
@@ -11,6 +11,10 @@
 
   <PropertyGroup Condition="'$(Configuration)'=='Debug'">
     <DefineConstants>DEBUG;TRACE;TEST;FULL</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)'=='DebugNativeless'">
+    <DefineConstants>DEBUG;TRACE;TEST;NATIVELESS</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)'=='Release'">
@@ -46,7 +50,7 @@
     <ProjectReference Include="..\DryWetMidi\Melanchall.DryWetMidi.csproj" />
   </ItemGroup>
 
-  <ItemGroup Label="Nativeless" Condition="'$(Configuration)'=='ReleaseNativeless'">
+  <ItemGroup Condition="'$(Configuration)'=='ReleaseNativeless' OR '$(Configuration)'=='DebugNativeless'">
     <Compile Remove="Multimedia\**\*.cs" />
   </ItemGroup>
 
