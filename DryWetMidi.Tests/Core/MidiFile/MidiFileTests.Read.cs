@@ -1059,6 +1059,146 @@ namespace Melanchall.DryWetMidi.Tests.Core
         }
 
         [Test]
+        public void Read_VlqNumberOverflow_DeltaTime_1() => ClassicAssert.Throws<VlqNumberOverflowException>(
+            () => ReadInvalidFile(
+                new byte[] { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xC0, 0x00 },
+                null),
+            "No exception on VLQ number overflow.");
+
+        [Test]
+        public void Read_VlqNumberOverflow_DeltaTime_2() => ClassicAssert.Throws<VlqNumberOverflowException>(
+            () => ReadInvalidFile(
+                new byte[] { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x7F + 1, 0xC0, 0x00 },
+                null),
+            "No exception on VLQ number overflow.");
+
+        [Test]
+        public void Read_VlqNumberOverflow_MetaEventSize_1() => ClassicAssert.Throws<VlqNumberOverflowException>(
+            () => ReadInvalidFile(
+                new byte[]
+                {
+                    0x00,                         // Delta-time
+                    0xFF,                         // Meta event
+                    0x01,                         // Text event
+                    0x88, 0xFF, 0xFF, 0xFF, 0x7F, // Size
+                    0x41,                         // "A"
+                },
+                null),
+            "No exception on VLQ number overflow.");
+
+        [Test]
+        public void Read_VlqNumberOverflow_MetaEventSize_2() => ClassicAssert.Throws<VlqNumberOverflowException>(
+            () => ReadInvalidFile(
+                new byte[]
+                {
+                    0x00,                             // Delta-time
+                    0xFF,                             // Meta event
+                    0x01,                             // Text event
+                    0x87, 0xFF, 0xFF, 0xFF, 0x7F + 1, // Size
+                    0x41,                             // "A"
+                },
+                null),
+            "No exception on VLQ number overflow.");
+
+        [Test]
+        public void Read_VlqNumberOverflow_MetaEventSize_3() => ClassicAssert.Throws<VlqNumberOverflowException>(
+            () => ReadInvalidFile(
+                new byte[]
+                {
+                    0x00,                               // Delta-time
+                    0xFF,                               // Meta event
+                    0x01,                               // Text event
+                    0x87, 0xFF, 0xFF, 0xFF, 0xFF, 0x7F, // Size
+                    0x41,                               // "A"
+                },
+                null),
+            "No exception on VLQ number overflow.");
+
+        [Test]
+        public void Read_VlqNumberOverflow_NormalSysExSize_1() => ClassicAssert.Throws<VlqNumberOverflowException>(
+            () => ReadInvalidFile(
+                new byte[]
+                {
+                    0x00,                         // Delta-time = 0
+                    0xF0,                         // Normal SysEx status byte
+                    0x88, 0xFF, 0xFF, 0xFF, 0x7F, // Size
+                    0x41, 0x00,                   // Data
+                    0xF7                          // EOX (End of Exclusive)
+                },
+                null),
+            "No exception on VLQ number overflow.");
+
+        [Test]
+        public void Read_VlqNumberOverflow_NormalSysExSize_2() => ClassicAssert.Throws<VlqNumberOverflowException>(
+            () => ReadInvalidFile(
+                new byte[]
+                {
+                    0x00,                             // Delta-time = 0
+                    0xF0,                             // Normal SysEx status byte
+                    0x87, 0xFF, 0xFF, 0xFF, 0x7F + 1, // Size
+                    0x41, 0x00,                       // Data
+                    0xF7                              // EOX (End of Exclusive)
+                },
+                null),
+            "No exception on VLQ number overflow.");
+
+        [Test]
+        public void Read_VlqNumberOverflow_NormalSysExSize_3() => ClassicAssert.Throws<VlqNumberOverflowException>(
+            () => ReadInvalidFile(
+                new byte[]
+                {
+                    0x00,                               // Delta-time = 0
+                    0xF0,                               // Normal SysEx status byte
+                    0x87, 0xFF, 0xFF, 0xFF, 0xFF, 0x7F, // Size
+                    0x41, 0x00,                         // Data
+                    0xF7                                // EOX (End of Exclusive)
+                },
+                null),
+            "No exception on VLQ number overflow.");
+
+        [Test]
+        public void Read_VlqNumberOverflow_EscapeSysExSize_1() => ClassicAssert.Throws<VlqNumberOverflowException>(
+            () => ReadInvalidFile(
+                new byte[]
+                {
+                    0x00,                         // Delta-time = 0
+                    0xF7,                         // Escape SysEx status byte
+                    0x88, 0xFF, 0xFF, 0xFF, 0x7F, // Size
+                    0x41, 0x00,                   // Data
+                    0xF7                          // EOX (End of Exclusive)
+                },
+                null),
+            "No exception on VLQ number overflow.");
+
+        [Test]
+        public void Read_VlqNumberOverflow_EscapeSysExSize_2() => ClassicAssert.Throws<VlqNumberOverflowException>(
+            () => ReadInvalidFile(
+                new byte[]
+                {
+                    0x00,                             // Delta-time = 0
+                    0xF7,                             // Escape SysEx status byte
+                    0x87, 0xFF, 0xFF, 0xFF, 0x7F + 1, // Size
+                    0x41, 0x00,                       // Data
+                    0xF7                              // EOX (End of Exclusive)
+                },
+                null),
+            "No exception on VLQ number overflow.");
+
+        [Test]
+        public void Read_VlqNumberOverflow_EscapeSysExSize_3() => ClassicAssert.Throws<VlqNumberOverflowException>(
+            () => ReadInvalidFile(
+                new byte[]
+                {
+                    0x00,                               // Delta-time = 0
+                    0xF7,                               // Escape SysEx status byte
+                    0x87, 0xFF, 0xFF, 0xFF, 0xFF, 0x7F, // Size
+                    0x41, 0x00,                         // Data
+                    0xF7                                // EOX (End of Exclusive)
+                },
+                null),
+            "No exception on VLQ number overflow.");
+
+        [Test]
         public void Read_NoHeaderChunk_Abort()
         {
             ReadInvalidFileWithException<NoHeaderChunkException>(
@@ -1837,6 +1977,46 @@ namespace Melanchall.DryWetMidi.Tests.Core
         #endregion
 
         #region Private methods
+
+        private MidiFile ReadInvalidFile(
+            byte[] firstEventBytes,
+            ReadingSettings readingSettings)
+        {
+            var prefix = new byte[]
+            {
+                0x4D, 0x54, 0x68, 0x64,     // "MThd" - chunk ID
+                0x00, 0x00, 0x00, 0x06,     // chunk size = 6 bytes
+                0x00, 0x00,                 // format = 0 (single track)
+                0x00, 0x01,                 // number of tracks = 1
+                0x00, 0x60,                 // time division = 96 ticks per quarter note
+    
+                0x4D, 0x54, 0x72, 0x6B,     // "MTrk" - chunk ID
+                0x00, 0x00, 0x00, (byte)(4 + firstEventBytes.Length),     // chunk size = 7 bytes
+            };
+
+            var suffix = new byte[]
+            {
+                0x00,                       // delta time
+                0xFF, 0x2F, 0x00            // End of Track event
+            };
+
+            var bytes = prefix
+                .Concat(firstEventBytes)
+                .Concat(suffix)
+                .ToArray();
+
+            var filePath = FileOperations.GetTempFilePath();
+
+            try
+            {
+                FileOperations.WriteAllBytesToFile(filePath, bytes);
+                return MidiFile.Read(filePath, readingSettings);
+            }
+            finally
+            {
+                FileOperations.DeleteFile(filePath);
+            }
+        }
 
         private void Read_StopReadingOnExpectedTrackChunksCountReached(MidiFile midiFile)
         {

@@ -1,6 +1,4 @@
 ﻿using Melanchall.DryWetMidi.Common;
-using System;
-using System.Runtime.Serialization;
 
 namespace Melanchall.DryWetMidi.Core
 {
@@ -13,7 +11,6 @@ namespace Melanchall.DryWetMidi.Core
     /// is set to <see cref="InvalidChunkSizePolicy.Abort"/> for the <see cref="ReadingSettings"/>
     /// used for reading a MIDI file.</para>
     /// </remarks>
-    [Serializable]
     public sealed class InvalidChunkSizeException : MidiException
     {
         #region Constructors
@@ -24,14 +21,6 @@ namespace Melanchall.DryWetMidi.Core
             ChunkId = chunkId;
             ExpectedSize = expectedSize;
             ActualSize = actualSize;
-        }
-
-        private InvalidChunkSizeException(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        {
-            ChunkId = info.GetString(nameof(ChunkId));
-            ExpectedSize = info.GetInt64(nameof(ExpectedSize));
-            ActualSize = info.GetInt64(nameof(ActualSize));
         }
 
         #endregion
@@ -52,27 +41,6 @@ namespace Melanchall.DryWetMidi.Core
         /// Gets the actual size of a chunk.
         /// </summary>
         public long ActualSize { get; }
-
-        #endregion
-
-        #region Overrides
-
-        /// <summary>
-        /// Sets the <see cref="SerializationInfo"/> with information about the exception.
-        /// </summary>
-        /// <param name="info">The <see cref="SerializationInfo"/> that holds the serialized object data
-        /// about the exception being thrown.</param>
-        /// <param name="context">The <see cref="StreamingContext"/> that contains contextual information
-        /// about the source or destination.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="info"/> is <c>null</c>.</exception>
-        public override void GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            base.GetObjectData(info, context);
-
-            info.AddValue(nameof(ChunkId), ChunkId);
-            info.AddValue(nameof(ExpectedSize), ExpectedSize);
-            info.AddValue(nameof(ActualSize), ActualSize);
-        }
 
         #endregion
     }

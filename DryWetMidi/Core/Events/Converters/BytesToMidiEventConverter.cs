@@ -272,6 +272,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <exception cref="NotEnoughBytesException">MIDI events data cannot be read since the sub-array <paramref name="bytes"/>
         /// doesn't have enough bytes and that should be treated as error according to the <see cref="NotEnoughBytesPolicy"/>.</exception>
         /// <exception cref="UnexpectedRunningStatusException">Unexpected running status is encountered.</exception>
+        /// <exception cref="VlqNumberOverflowException">A variable-length quantity (VLQ) number in the file is too large.</exception>
         public ICollection<MidiEvent> ConvertMultiple(byte[] bytes, int offset, int length)
         {
             ThrowIfArgument.IsNull(nameof(bytes), bytes);
@@ -343,6 +344,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <exception cref="NotEnoughBytesException">MIDI events data cannot be read since the sub-array <paramref name="bytes"/>
         /// doesn't have enough bytes and that should be treated as error according to the <see cref="NotEnoughBytesPolicy"/>.</exception>
         /// <exception cref="UnexpectedRunningStatusException">Unexpected running status is encountered.</exception>
+        /// <exception cref="VlqNumberOverflowException">A variable-length quantity (VLQ) number in the file is too large.</exception>
         public ICollection<MidiEvent> ConvertMultiple(byte[] bytes)
         {
             ThrowIfArgument.IsNull(nameof(bytes), bytes);
@@ -359,6 +361,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <param name="dataBytes">Data bytes of MIDI event (bytes except status byte). Can be <c>null</c>
         /// if MIDI event has no data bytes.</param>
         /// <returns><see cref="MidiEvent"/> read from <paramref name="statusByte"/> and <paramref name="dataBytes"/>.</returns>
+        /// <exception cref="VlqNumberOverflowException">A variable-length quantity (VLQ) number in the file is too large.</exception>
         public MidiEvent Convert(byte statusByte, byte[] dataBytes)
         {
             PrepareStreamWithBytes(dataBytes, 0, dataBytes?.Length ?? 0);
@@ -377,6 +380,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <returns><see cref="MidiEvent"/> read from <paramref name="bytes"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="bytes"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException"><paramref name="bytes"/> is an empty array.</exception>
+        /// <exception cref="VlqNumberOverflowException">A variable-length quantity (VLQ) number in the file is too large.</exception>
         public MidiEvent Convert(byte[] bytes)
         {
             ThrowIfArgument.IsNull(nameof(bytes), bytes);
@@ -385,6 +389,7 @@ namespace Melanchall.DryWetMidi.Core
             return Convert(bytes, 0, bytes.Length);
         }
 
+        // TODO: add all exceptions info on reading
         /// <summary>
         /// Converts sub-array of the specified bytes to an instance of the <see cref="MidiEvent"/>. First byte
         /// at the specified offset is the status byte of MIDI event. If sub-array contains multiple events, only
@@ -412,6 +417,7 @@ namespace Melanchall.DryWetMidi.Core
         /// </item>
         /// </list>
         /// </exception>
+        /// <exception cref="VlqNumberOverflowException">A variable-length quantity (VLQ) number in the file is too large.</exception>
         public MidiEvent Convert(byte[] bytes, int offset, int length)
         {
             ThrowIfArgument.IsNull(nameof(bytes), bytes);

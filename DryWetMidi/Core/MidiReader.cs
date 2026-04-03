@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
 namespace Melanchall.DryWetMidi.Core
 {
@@ -14,6 +15,12 @@ namespace Melanchall.DryWetMidi.Core
         #region Constants
 
         private static readonly byte[] EmptyByteArray = new byte[0];
+
+        private const int VlqIntMaxBytes = 5;
+        private const long VlqIntLastCheckReference = int.MaxValue >> 7;
+
+        private const int VlqLongMaxBytes = 9;
+        private const long VlqLongLastCheckReference = long.MaxValue >> 7;
 
         #endregion
 
@@ -276,10 +283,8 @@ namespace Melanchall.DryWetMidi.Core
         /// number.</exception>
         /// <exception cref="ObjectDisposedException">Method was called after the reader was disposed.</exception>
         /// <exception cref="IOException">An I/O error occurred on the underlying stream.</exception>
-        public int ReadVlqNumber()
-        {
-            return (int)ReadVlqLongNumber();
-        }
+        public int ReadVlqNumber() =>
+            (int)ReadVlqNumberCore(VlqIntMaxBytes, VlqIntLastCheckReference);
 
         /// <summary>
         /// Reads a 64-bit signed integer presented in compressed format called variable-length quantity (VLQ)
@@ -295,28 +300,8 @@ namespace Melanchall.DryWetMidi.Core
         /// number.</exception>
         /// <exception cref="ObjectDisposedException">Method was called after the reader was disposed.</exception>
         /// <exception cref="IOException">An I/O error occurred on the underlying stream.</exception>
-        public long ReadVlqLongNumber()
-        {
-            long result = 0;
-
-            try
-            {
-                byte b;
-
-                do
-                {
-                    b = ReadByte();
-                    result = (result << 7) + (b & 127);
-                }
-                while (b >> 7 != 0);
-            }
-            catch (EndOfStreamException ex)
-            {
-                throw new NotEnoughBytesException("Not enough bytes in the stream to read a variable-length quantity number.", ex);
-            }
-
-            return result;
-        }
+        public long ReadVlqLongNumber() =>
+            ReadVlqNumberCore(VlqLongMaxBytes, VlqLongLastCheckReference);
 
         /// <summary>
         /// Reads a DWORD value (32-bit unsigned integer) presented by 3 bytes from the underlying
@@ -335,6 +320,38 @@ namespace Melanchall.DryWetMidi.Core
                 throw new NotEnoughBytesException("Not enough bytes in the stream to read a 3-byte DWORD.", dwordSize, bytes.Length);
 
             return (uint)((bytes[0] << 16) + (bytes[1] << 8) + bytes[2]);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private long ReadVlqNumberCore(int maxBytes, long lastCheckReference)
+        {
+            long result = 0;
+            int bytesRead = 0;
+
+            try
+            {
+                byte b;
+
+                do
+                {
+                    if (++bytesRead > maxBytes)
+                        throw new VlqNumberOverflowException("VLQ number is too large.");
+
+                    b = ReadByte();
+
+                    if (bytesRead == maxBytes && ((b >> 7) != 0 || result > lastCheckReference))
+                        throw new VlqNumberOverflowException("VLQ number is too large.");
+
+                    result = (result << 7) + (b & 127);
+                }
+                while (b >> 7 != 0);
+            }
+            catch (EndOfStreamException ex)
+            {
+                throw new NotEnoughBytesException("Not enough bytes in the stream to read a variable-length quantity number.", ex);
+            }
+
+            return result;
         }
 
         private byte[] ReadBytesInternal(int count)

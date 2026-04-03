@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
@@ -541,6 +542,427 @@ namespace Melanchall.DryWetMidi.Tests.Core
                     bytesToMidiEventConverter,
                     new byte[] { EventStatusBytes.SystemCommon.SongSelect, parameterValue },
                     new SongSelectEvent(SevenBitNumber.MaxValue));
+            }
+        }
+
+        [Test]
+        public void ConvertMultiple_Bytes_VlqNumberOverflow_DeltaTimes_1()
+        {
+            using (var bytesToMidiEventConverter = new BytesToMidiEventConverter())
+            {
+                bytesToMidiEventConverter.ReadDeltaTimes = true;
+
+                ClassicAssert.Throws<VlqNumberOverflowException>(
+                    () => ConvertMultiple_Bytes(
+                        bytesToMidiEventConverter,
+                        new byte[] { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xC0, 0x00 },
+                        Array.Empty<MidiEvent>()),
+                    "No exception on VLQ number overflow.");
+            }
+        }
+
+        [Test]
+        public void ConvertMultiple_Bytes_VlqNumberOverflow_DeltaTimes_2()
+        {
+            using (var bytesToMidiEventConverter = new BytesToMidiEventConverter())
+            {
+                bytesToMidiEventConverter.ReadDeltaTimes = true;
+
+                ClassicAssert.Throws<VlqNumberOverflowException>(
+                    () => ConvertMultiple_Bytes(
+                        bytesToMidiEventConverter,
+                        new byte[] { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x7F + 1, 0xC0, 0x00 },
+                        Array.Empty<MidiEvent>()),
+                    "No exception on VLQ number overflow.");
+            }
+        }
+
+        [Test]
+        public void ConvertMultiple_Bytes_VlqNumberOverflow_DeltaTimes_3()
+        {
+            using (var bytesToMidiEventConverter = new BytesToMidiEventConverter())
+            {
+                bytesToMidiEventConverter.ReadDeltaTimes = true;
+
+                ClassicAssert.Throws<VlqNumberOverflowException>(
+                    () => ConvertMultiple_Bytes(
+                        bytesToMidiEventConverter,
+                        new byte[]
+                        {
+                            0x00, 0xC0, 0x00,
+                            0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x7F + 1, 0xC0, 0x00
+                        },
+                        Array.Empty<MidiEvent>()),
+                    "No exception on VLQ number overflow.");
+            }
+        }
+
+        [Test]
+        public void ConvertMultiple_Bytes_VlqNumberOverflow_MetaEventSize_1()
+        {
+            using (var bytesToMidiEventConverter = new BytesToMidiEventConverter())
+            {
+                ClassicAssert.Throws<VlqNumberOverflowException>(
+                    () => ConvertMultiple_Bytes(
+                        bytesToMidiEventConverter,
+                        new byte[]
+                        {
+                            0xC0, 0x00,
+                            0xFF,                         // Meta event
+                            0x01,                         // Text event
+                            0x88, 0xFF, 0xFF, 0xFF, 0x7F, // Size
+                            0x41,                         // "A"
+                        },
+                        Array.Empty<MidiEvent>()),
+                    "No exception on VLQ number overflow.");
+            }
+        }
+
+        [Test]
+        public void ConvertMultiple_Bytes_VlqNumberOverflow_MetaEventSize_2()
+        {
+            using (var bytesToMidiEventConverter = new BytesToMidiEventConverter())
+            {
+                ClassicAssert.Throws<VlqNumberOverflowException>(
+                    () => ConvertMultiple_Bytes(
+                        bytesToMidiEventConverter,
+                        new byte[]
+                        {
+                            0xFF,                             // Meta event
+                            0x01,                             // Text event
+                            0x87, 0xFF, 0xFF, 0xFF, 0x7F + 1, // Size
+                            0x41,                             // "A"
+                        },
+                        Array.Empty<MidiEvent>()),
+                    "No exception on VLQ number overflow.");
+            }
+        }
+
+        [Test]
+        public void ConvertMultiple_Bytes_VlqNumberOverflow_MetaEventSize_3()
+        {
+            using (var bytesToMidiEventConverter = new BytesToMidiEventConverter())
+            {
+                ClassicAssert.Throws<VlqNumberOverflowException>(
+                    () => ConvertMultiple_Bytes(
+                        bytesToMidiEventConverter,
+                        new byte[]
+                        {
+                            0xC0, 0x00,
+                            0xFF,                               // Meta event
+                            0x01,                               // Text event
+                            0x87, 0xFF, 0xFF, 0xFF, 0xFF, 0x7F, // Size
+                            0x41,                               // "A"
+                        },
+                        Array.Empty<MidiEvent>()),
+                    "No exception on VLQ number overflow.");
+            }
+        }
+
+        [Test]
+        public void ConvertMultiple_Bytes_VlqNumberOverflow_NormalSysExSize_1()
+        {
+            using (var bytesToMidiEventConverter = new BytesToMidiEventConverter())
+            {
+                ClassicAssert.Throws<VlqNumberOverflowException>(
+                    () => ConvertMultiple_Bytes(
+                        bytesToMidiEventConverter,
+                        new byte[]
+                        {
+                            0xC0, 0x00,
+                            0xF0,                         // Normal SysEx status byte
+                            0x88, 0xFF, 0xFF, 0xFF, 0x7F, // Size
+                            0x41, 0x00,                   // Data
+                            0xF7                          // EOX (End of Exclusive)
+                        },
+                        Array.Empty<MidiEvent>()),
+                    "No exception on VLQ number overflow.");
+            }
+        }
+
+        [Test]
+        public void ConvertMultiple_Bytes_VlqNumberOverflow_NormalSysExSize_2()
+        {
+            using (var bytesToMidiEventConverter = new BytesToMidiEventConverter())
+            {
+                ClassicAssert.Throws<VlqNumberOverflowException>(
+                    () => ConvertMultiple_Bytes(
+                        bytesToMidiEventConverter,
+                        new byte[]
+                        {
+                            0xF0,                             // Normal SysEx status byte
+                            0x87, 0xFF, 0xFF, 0xFF, 0x7F + 1, // Size
+                            0x41, 0x00,                       // Data
+                            0xF7                              // EOX (End of Exclusive)
+                        },
+                        Array.Empty<MidiEvent>()),
+                    "No exception on VLQ number overflow.");
+            }
+        }
+
+        [Test]
+        public void ConvertMultiple_Bytes_VlqNumberOverflow_NormalSysExSize_3()
+        {
+            using (var bytesToMidiEventConverter = new BytesToMidiEventConverter())
+            {
+                ClassicAssert.Throws<VlqNumberOverflowException>(
+                    () => ConvertMultiple_Bytes(
+                        bytesToMidiEventConverter,
+                        new byte[]
+                        {
+                            0xC0, 0x00,
+                            0xF0,                               // Normal SysEx status byte
+                            0x87, 0xFF, 0xFF, 0xFF, 0xFF, 0x7F, // Size
+                            0x41, 0x00,                         // Data
+                            0xF7,                               // EOX (End of Exclusive)
+                            0xC0, 0x00,
+                        },
+                        Array.Empty<MidiEvent>()),
+                    "No exception on VLQ number overflow.");
+            }
+        }
+
+        [Test]
+        public void ConvertMultiple_Bytes_VlqNumberOverflow_EscapeSysExSize_1()
+        {
+            using (var bytesToMidiEventConverter = new BytesToMidiEventConverter())
+            {
+                ClassicAssert.Throws<VlqNumberOverflowException>(
+                    () => ConvertMultiple_Bytes(
+                        bytesToMidiEventConverter,
+                        new byte[]
+                        {
+                            0xC0, 0x00,
+                            0xF7,                         // Escape SysEx status byte
+                            0x88, 0xFF, 0xFF, 0xFF, 0x7F, // Size
+                            0x41, 0x00,                   // Data
+                            0xF7                          // EOX (End of Exclusive)
+                        },
+                        Array.Empty<MidiEvent>()),
+                    "No exception on VLQ number overflow.");
+            }
+        }
+
+        [Test]
+        public void ConvertMultiple_Bytes_VlqNumberOverflow_EscapeSysExSize_2()
+        {
+            using (var bytesToMidiEventConverter = new BytesToMidiEventConverter())
+            {
+                ClassicAssert.Throws<VlqNumberOverflowException>(
+                    () => ConvertMultiple_Bytes(
+                        bytesToMidiEventConverter,
+                        new byte[]
+                        {
+                            0xF7,                             // Escape SysEx status byte
+                            0x87, 0xFF, 0xFF, 0xFF, 0x7F + 1, // Size
+                            0x41, 0x00,                       // Data
+                            0xF7                              // EOX (End of Exclusive)
+                        },
+                        Array.Empty<MidiEvent>()),
+                    "No exception on VLQ number overflow.");
+            }
+        }
+
+        [Test]
+        public void ConvertMultiple_Bytes_VlqNumberOverflow_EscapeSysExSize_3()
+        {
+            using (var bytesToMidiEventConverter = new BytesToMidiEventConverter())
+            {
+                ClassicAssert.Throws<VlqNumberOverflowException>(
+                    () => ConvertMultiple_Bytes(
+                        bytesToMidiEventConverter,
+                        new byte[]
+                        {
+                            0xC0, 0x00,
+                            0xF7,                               // Escape SysEx status byte
+                            0x87, 0xFF, 0xFF, 0xFF, 0xFF, 0x7F, // Size
+                            0x41, 0x00,                         // Data
+                            0xF7,                               // EOX (End of Exclusive)
+                            0xC0, 0x00,
+                        },
+                        Array.Empty<MidiEvent>()),
+                    "No exception on VLQ number overflow.");
+            }
+        }
+
+        [Test]
+        public void Convert_StatusByte_DataBytes_VlqNumberOverflow_MetaEventSize_1()
+        {
+            using (var bytesToMidiEventConverter = new BytesToMidiEventConverter())
+            {
+                ClassicAssert.Throws<VlqNumberOverflowException>(
+                    () => Convert_StatusByte_DataBytes(
+                        bytesToMidiEventConverter,
+                        0xFF,
+                        new byte[]
+                        {
+                            0x01,                         // Text event
+                            0x88, 0xFF, 0xFF, 0xFF, 0x7F, // Size
+                            0x41,                         // "A"
+                        },
+                        null),
+                    "No exception on VLQ number overflow.");
+            }
+        }
+
+        [Test]
+        public void Convert_StatusByte_DataBytes_VlqNumberOverflow_MetaEventSize_2()
+        {
+            using (var bytesToMidiEventConverter = new BytesToMidiEventConverter())
+            {
+                ClassicAssert.Throws<VlqNumberOverflowException>(
+                    () => Convert_StatusByte_DataBytes(
+                        bytesToMidiEventConverter,
+                        0xFF,
+                        new byte[]
+                        {
+                            0x01,                             // Text event
+                            0x87, 0xFF, 0xFF, 0xFF, 0x7F + 1, // Size
+                            0x41,                             // "A"
+                        },
+                        null),
+                    "No exception on VLQ number overflow.");
+            }
+        }
+
+        [Test]
+        public void Convert_StatusByte_DataBytes_VlqNumberOverflow_MetaEventSize_3()
+        {
+            using (var bytesToMidiEventConverter = new BytesToMidiEventConverter())
+            {
+                ClassicAssert.Throws<VlqNumberOverflowException>(
+                    () => Convert_StatusByte_DataBytes(
+                        bytesToMidiEventConverter,
+                        0xFF,
+                        new byte[]
+                        {
+                            0x01,                               // Text event
+                            0x87, 0xFF, 0xFF, 0xFF, 0xFF, 0x7F, // Size
+                            0x41,                               // "A"
+                        },
+                        null),
+                    "No exception on VLQ number overflow.");
+            }
+        }
+
+        [Test]
+        public void Convert_StatusByte_DataBytes_VlqNumberOverflow_NormalSysExSize_1()
+        {
+            using (var bytesToMidiEventConverter = new BytesToMidiEventConverter())
+            {
+                ClassicAssert.Throws<VlqNumberOverflowException>(
+                    () => Convert_StatusByte_DataBytes(
+                        bytesToMidiEventConverter,
+                        0xF0,
+                        new byte[]
+                        {
+                            0x88, 0xFF, 0xFF, 0xFF, 0x7F, // Size
+                            0x41, 0x00,                   // Data
+                            0xF7                          // EOX (End of Exclusive)
+                        },
+                        null),
+                    "No exception on VLQ number overflow.");
+            }
+        }
+
+        [Test]
+        public void Convert_StatusByte_DataBytes_VlqNumberOverflow_NormalSysExSize_2()
+        {
+            using (var bytesToMidiEventConverter = new BytesToMidiEventConverter())
+            {
+                ClassicAssert.Throws<VlqNumberOverflowException>(
+                    () => Convert_StatusByte_DataBytes(
+                        bytesToMidiEventConverter,
+                        0xF0,
+                        new byte[]
+                        {
+                            0x87, 0xFF, 0xFF, 0xFF, 0x7F + 1, // Size
+                            0x41, 0x00,                       // Data
+                            0xF7                              // EOX (End of Exclusive)
+                        },
+                        null),
+                    "No exception on VLQ number overflow.");
+            }
+        }
+
+        [Test]
+        public void Convert_StatusByte_DataBytes_VlqNumberOverflow_NormalSysExSize_3()
+        {
+            using (var bytesToMidiEventConverter = new BytesToMidiEventConverter())
+            {
+                ClassicAssert.Throws<VlqNumberOverflowException>(
+                    () => Convert_StatusByte_DataBytes(
+                        bytesToMidiEventConverter,
+                        0xF0,
+                        new byte[]
+                        {
+                            0x87, 0xFF, 0xFF, 0xFF, 0xFF, 0x7F, // Size
+                            0x41, 0x00,                         // Data
+                            0xF7,                               // EOX (End of Exclusive)
+                            0xC0, 0x00,
+                        },
+                        null),
+                    "No exception on VLQ number overflow.");
+            }
+        }
+
+        [Test]
+        public void Convert_StatusByte_DataBytes_VlqNumberOverflow_EscapeSysExSize_1()
+        {
+            using (var bytesToMidiEventConverter = new BytesToMidiEventConverter())
+            {
+                ClassicAssert.Throws<VlqNumberOverflowException>(
+                    () => Convert_StatusByte_DataBytes(
+                        bytesToMidiEventConverter,
+                        0xF7,
+                        new byte[]
+                        {
+                            0x88, 0xFF, 0xFF, 0xFF, 0x7F, // Size
+                            0x41, 0x00,                   // Data
+                            0xF7                          // EOX (End of Exclusive)
+                        },
+                        null),
+                    "No exception on VLQ number overflow.");
+            }
+        }
+
+        [Test]
+        public void Convert_StatusByte_DataBytes_VlqNumberOverflow_EscapeSysExSize_2()
+        {
+            using (var bytesToMidiEventConverter = new BytesToMidiEventConverter())
+            {
+                ClassicAssert.Throws<VlqNumberOverflowException>(
+                    () => Convert_StatusByte_DataBytes(
+                        bytesToMidiEventConverter,
+                        0xF7,
+                        new byte[]
+                        {
+                            0x87, 0xFF, 0xFF, 0xFF, 0x7F + 1, // Size
+                            0x41, 0x00,                       // Data
+                            0xF7                              // EOX (End of Exclusive)
+                        },
+                        null),
+                    "No exception on VLQ number overflow.");
+            }
+        }
+
+        [Test]
+        public void Convert_StatusByte_DataBytes_VlqNumberOverflow_EscapeSysExSize_3()
+        {
+            using (var bytesToMidiEventConverter = new BytesToMidiEventConverter())
+            {
+                ClassicAssert.Throws<VlqNumberOverflowException>(
+                    () => Convert_StatusByte_DataBytes(
+                        bytesToMidiEventConverter,
+                        0xF7,
+                        new byte[]
+                        {
+                            0x87, 0xFF, 0xFF, 0xFF, 0xFF, 0x7F, // Size
+                            0x41, 0x00,                         // Data
+                            0xF7,                               // EOX (End of Exclusive)
+                        },
+                        null),
+                    "No exception on VLQ number overflow.");
             }
         }
 

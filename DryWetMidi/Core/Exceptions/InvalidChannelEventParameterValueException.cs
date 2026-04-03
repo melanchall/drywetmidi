@@ -1,6 +1,4 @@
 ﻿using Melanchall.DryWetMidi.Common;
-using System;
-using System.Runtime.Serialization;
 
 namespace Melanchall.DryWetMidi.Core
 {
@@ -13,7 +11,6 @@ namespace Melanchall.DryWetMidi.Core
     /// is set to <see cref="InvalidChannelEventParameterValuePolicy.Abort"/> for the <see cref="ReadingSettings"/>
     /// used for reading a MIDI file.</para>
     /// </remarks>
-    [Serializable]
     public sealed class InvalidChannelEventParameterValueException : MidiException
     {
         #region Constructors
@@ -23,13 +20,6 @@ namespace Melanchall.DryWetMidi.Core
         {
             EventType = eventType;
             Value = value;
-        }
-
-        private InvalidChannelEventParameterValueException(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        {
-            EventType = (MidiEventType)info.GetValue(nameof(EventType), typeof(MidiEventType));
-            Value = info.GetByte(nameof(Value));
         }
 
         #endregion
@@ -45,26 +35,6 @@ namespace Melanchall.DryWetMidi.Core
         /// Gets the value of the channel event's parameter that caused this exception.
         /// </summary>
         public byte Value { get; }
-
-        #endregion
-
-        #region Overrides
-
-        /// <summary>
-        /// Sets the <see cref="SerializationInfo"/> with information about the exception.
-        /// </summary>
-        /// <param name="info">The <see cref="SerializationInfo"/> that holds the serialized object data
-        /// about the exception being thrown.</param>
-        /// <param name="context">The <see cref="StreamingContext"/> that contains contextual information
-        /// about the source or destination.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="info"/> is <c>null</c>.</exception>
-        public override void GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            base.GetObjectData(info, context);
-
-            info.AddValue(nameof(EventType), EventType);
-            info.AddValue(nameof(Value), Value);
-        }
 
         #endregion
     }

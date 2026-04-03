@@ -1,5 +1,4 @@
 ﻿using Melanchall.DryWetMidi.Common;
-using System;
 
 namespace Melanchall.DryWetMidi.Core
 {
@@ -11,7 +10,6 @@ namespace Melanchall.DryWetMidi.Core
     /// is set to <see cref="NoHeaderChunkPolicy.Abort"/> for the <see cref="ReadingSettings"/>
     /// used for reading a MIDI file.</para>
     /// </remarks>
-    [Serializable]
     public sealed class NoHeaderChunkException : MidiException
     {
         #region Constructors

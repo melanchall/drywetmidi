@@ -264,6 +264,19 @@ namespace Melanchall.DryWetMidi.Tests.Core
         }
 
         [Test]
+        public void CheckDeltaTimeWriteRead_Max()
+        {
+            var midiEvent = new TextEvent("A") { DeltaTime = long.MaxValue };
+            var midiFile = MidiFileTestUtilities.Read(
+                new MidiFile(new TrackChunk(new[] { midiEvent })),
+                null,
+                null,
+                MidiFileFormat.SingleTrack);
+            var readMidiEvent = midiFile.GetTrackChunks().First().Events.First();
+            MidiAsserts.AreEqual(midiEvent, readMidiEvent, true, "MIDI event is invalid.");
+        }
+
+        [Test]
         public void GetStandardMetaEventStatusBytes()
         {
             var statusBytes = MetaEvent.GetStandardMetaEventStatusBytes();

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.Serialization;
 using Melanchall.DryWetMidi.Common;
 
 namespace Melanchall.DryWetMidi.Core
@@ -13,7 +12,6 @@ namespace Melanchall.DryWetMidi.Core
     /// is set to <see cref="NotEnoughBytesPolicy.Abort"/> for the <see cref="ReadingSettings"/>
     /// used for reading a MIDI file.</para>
     /// </remarks>
-    [Serializable]
     public sealed class NotEnoughBytesException : MidiException
     {
         #region Constructors
@@ -30,13 +28,6 @@ namespace Melanchall.DryWetMidi.Core
             ActualCount = actualCount;
         }
 
-        private NotEnoughBytesException(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        {
-            ExpectedCount = info.GetInt64(nameof(ExpectedCount));
-            ActualCount = info.GetInt64(nameof(ActualCount));
-        }
-
         #endregion
 
         #region Properties
@@ -50,26 +41,6 @@ namespace Melanchall.DryWetMidi.Core
         /// Gets the actual count of bytes available in the reader's underlying stream.
         /// </summary>
         public long ActualCount { get; }
-
-        #endregion
-
-        #region Overrides
-
-        /// <summary>
-        /// Sets the <see cref="SerializationInfo"/> with information about the exception.
-        /// </summary>
-        /// <param name="info">The <see cref="SerializationInfo"/> that holds the serialized object data
-        /// about the exception being thrown.</param>
-        /// <param name="context">The <see cref="StreamingContext"/> that contains contextual information
-        /// about the source or destination.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="info"/> is <c>null</c>.</exception>
-        public override void GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            base.GetObjectData(info, context);
-
-            info.AddValue(nameof(ExpectedCount), ExpectedCount);
-            info.AddValue(nameof(ActualCount), ActualCount);
-        }
 
         #endregion
     }
