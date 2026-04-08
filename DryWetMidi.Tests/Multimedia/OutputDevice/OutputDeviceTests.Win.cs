@@ -1,6 +1,7 @@
 ﻿using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Multimedia;
+using Melanchall.DryWetMidi.Tests.Attributes;
 using NUnit.Framework;
 using NUnit.Framework.Legacy;
 using System;
@@ -15,7 +16,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
         // TODO: failed on WMS enabled
         // [Test]
-        [Platform("Win")]
+        [WinOnly]
         public void OutputDeviceIsInUse()
         {
             using (var outputDevice1 = OutputDevice.GetByName(MidiDevicesNames.DeviceA))
@@ -30,7 +31,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         [Test]
-        [Platform("Win")]
+        [WinOnly]
         public void GetOutputDeviceSupportedProperties_Win()
         {
             CollectionAssert.AreEquivalent(
@@ -50,7 +51,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         [Test]
-        [Platform("Win")]
+        [WinOnly]
         public void GetOutputDeviceProperty_Product_Win()
         {
             var outputDevice = OutputDevice.GetByName(MidiDevicesNames.DeviceA);
@@ -58,7 +59,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         [Test]
-        [Platform("Win")]
+        [WinOnly]
         public void GetOutputDeviceProperty_Manufacturer_Win()
         {
             var outputDevice = OutputDevice.GetByName(MidiDevicesNames.DeviceA);
@@ -66,7 +67,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         [Test]
-        [Platform("Win")]
+        [WinOnly]
         public void GetOutputDeviceProperty_DriverVersion_Win()
         {
             var outputDevice = OutputDevice.GetByName(MidiDevicesNames.DeviceA);
@@ -74,7 +75,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         [Test]
-        [Platform("Win")]
+        [WinOnly]
         public void GetOutputDeviceProperty_Technology_Win()
         {
             var outputDevice = OutputDevice.GetByName(MidiDevicesNames.DeviceA);
@@ -82,7 +83,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         [Test]
-        [Platform("Win")]
+        [WinOnly]
         public void GetOutputDeviceProperty_UniqueId_Win()
         {
             var outputDevice = OutputDevice.GetByName(MidiDevicesNames.DeviceA);
@@ -90,7 +91,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         [Test]
-        [Platform("Win")]
+        [WinOnly]
         public void GetOutputDeviceProperty_VoicesNumber_Win()
         {
             var outputDevice = OutputDevice.GetByName(MidiDevicesNames.DeviceA);
@@ -98,7 +99,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         [Test]
-        [Platform("Win")]
+        [WinOnly]
         public void GetOutputDeviceProperty_NotesNumber_Win()
         {
             var outputDevice = OutputDevice.GetByName(MidiDevicesNames.DeviceA);
@@ -106,7 +107,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         [Test]
-        [Platform("Win")]
+        [WinOnly]
         public void GetOutputDeviceProperty_Channels_Win()
         {
             var outputDevice = OutputDevice.GetByName(MidiDevicesNames.DeviceA);
@@ -117,7 +118,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         [Test]
-        [Platform("Win")]
+        [WinOnly]
         public void GetOutputDeviceProperty_Options_Win()
         {
             var outputDevice = OutputDevice.GetByName(MidiDevicesNames.DeviceA);
@@ -125,7 +126,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         [Test]
-        [Platform("Win")]
+        [WinOnly]
         public void GetOutputDeviceProperty_DriverOwner_Win()
         {
             var outputDevice = OutputDevice.GetByName(MidiDevicesNames.DeviceA);
@@ -133,7 +134,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         [Test]
-        [Platform("Win")]
+        [WinOnly]
         public void CheckOutputDevicesEquality_ViaEquals_SameDevices_Win()
         {
             var outputDevice1 = OutputDevice.GetByName(MidiDevicesNames.DeviceA);
@@ -143,7 +144,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         [Test]
-        [Platform("Win")]
+        [WinOnly]
         public void CheckOutputDevicesEquality_ViaEquals_DifferentDevices_Win()
         {
             var outputDevice1 = OutputDevice.GetByName(MidiDevicesNames.DeviceA);
@@ -153,7 +154,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         [Test]
-        [Platform("Win")]
+        [WinOnly]
         public void CheckOutputDevicesEquality_ViaOperator_SameDevices_Win()
         {
             var outputDevice1 = OutputDevice.GetByName(MidiDevicesNames.DeviceA);
@@ -164,7 +165,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         [Test]
-        [Platform("Win")]
+        [WinOnly]
         public void CheckOutputDevicesEquality_ViaOperator_DifferentDevices_Win()
         {
             var outputDevice1 = OutputDevice.GetByName(MidiDevicesNames.DeviceA);

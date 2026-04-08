@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Multimedia;
+using Melanchall.DryWetMidi.Tests.Attributes;
 using NUnit.Framework;
 using NUnit.Framework.Legacy;
 
@@ -13,7 +14,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         #region Test methods
 
         [Test]
-        [Platform("MacOsX")]
+        [MacOnly]
         public void GetOutputDeviceSupportedProperties_Mac()
         {
             CollectionAssert.AreEquivalent(
@@ -30,7 +31,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         [Test]
-        [Platform("MacOsX")]
+        [MacOnly]
         public void GetOutputDeviceProperty_Product_Mac()
         {
             var outputDevice = OutputDevice.GetByName(MidiDevicesNames.DeviceA);
@@ -38,7 +39,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         [Test]
-        [Platform("MacOsX")]
+        [MacOnly]
         public void GetOutputDeviceProperty_Manufacturer_Mac()
         {
             var outputDevice = OutputDevice.GetByName(MidiDevicesNames.DeviceA);
@@ -46,7 +47,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         [Test]
-        [Platform("MacOsX")]
+        [MacOnly]
         public void GetOutputDeviceProperty_DriverVersion_Mac()
         {
             var outputDevice = OutputDevice.GetByName(MidiDevicesNames.DeviceA);
@@ -54,7 +55,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         [Test]
-        [Platform("MacOsX")]
+        [MacOnly]
         public void GetOutputDeviceProperty_Technology_Mac()
         {
             var outputDevice = OutputDevice.GetByName(MidiDevicesNames.DeviceA);
@@ -62,7 +63,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         [Test]
-        [Platform("MacOsX")]
+        [MacOnly]
         public void GetOutputDeviceProperty_UniqueId_Mac()
         {
             var outputDevice = OutputDevice.GetByName(MidiDevicesNames.DeviceA);
@@ -70,7 +71,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         [Test]
-        [Platform("MacOsX")]
+        [MacOnly]
         public void GetOutputDeviceProperty_VoicesNumber_Mac()
         {
             var outputDevice = OutputDevice.GetByName(MidiDevicesNames.DeviceA);
@@ -78,7 +79,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         [Test]
-        [Platform("MacOsX")]
+        [MacOnly]
         public void GetOutputDeviceProperty_NotesNumber_Mac()
         {
             var outputDevice = OutputDevice.GetByName(MidiDevicesNames.DeviceA);
@@ -86,7 +87,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         [Test]
-        [Platform("MacOsX")]
+        [MacOnly]
         public void GetOutputDeviceProperty_Channels_Mac()
         {
             var outputDevice = OutputDevice.GetByName(MidiDevicesNames.DeviceA);
@@ -94,7 +95,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         [Test]
-        [Platform("MacOsX")]
+        [MacOnly]
         public void GetOutputDeviceProperty_Options_Mac()
         {
             var outputDevice = OutputDevice.GetByName(MidiDevicesNames.DeviceA);
@@ -102,7 +103,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         [Test]
-        [Platform("MacOsX")]
+        [MacOnly]
         public void GetOutputDeviceProperty_DriverOwner_Mac()
         {
             var outputDevice = OutputDevice.GetByName(MidiDevicesNames.DeviceA);
@@ -110,7 +111,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         [Test]
-        [Platform("MacOsX")]
+        [MacOnly]
         public void CheckOutputDevicesEquality_ViaEquals_SameDevices_Mac()
         {
             var outputDevice1 = OutputDevice.GetByName(MidiDevicesNames.DeviceA);
@@ -120,7 +121,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         [Test]
-        [Platform("MacOsX")]
+        [MacOnly]
         public void CheckOutputDevicesEquality_ViaEquals_DifferentDevices_Mac()
         {
             var outputDevice1 = OutputDevice.GetByName(MidiDevicesNames.DeviceA);
@@ -130,7 +131,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         [Test]
-        [Platform("MacOsX")]
+        [MacOnly]
         public void CheckOutputDevicesEquality_ViaOperator_SameDevices_Mac()
         {
             var outputDevice1 = OutputDevice.GetByName(MidiDevicesNames.DeviceA);
@@ -141,7 +142,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         [Test]
-        [Platform("MacOsX")]
+        [MacOnly]
         public void CheckOutputDevicesEquality_ViaOperator_DifferentDevices_Mac()
         {
             var outputDevice1 = OutputDevice.GetByName(MidiDevicesNames.DeviceA);
@@ -152,7 +153,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         [Test]
-        [Platform("MacOsX")]
+        [MacOnly]
         public void CheckRemovedOutputDeviceAccess_Name()
         {
             var outputDevice = GetRemovedOutputDevice();
@@ -162,7 +163,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         [Test]
-        [Platform("MacOsX")]
+        [MacOnly]
         public void CheckRemovedOutputDeviceAccess_Property()
         {
             var outputDevice = GetRemovedOutputDevice();
@@ -172,7 +173,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         [Test]
-        [Platform("MacOsX")]
+        [MacOnly]
         public void CheckRemovedOutputDeviceAccess_SendEvent()
         {
             var outputDevice = GetRemovedOutputDevice();
@@ -182,7 +183,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         [Test]
-        [Platform("MacOsX")]
+        [MacOnly]
         public void OutputDeviceToString_AddedDevice()
         {
             var outputDevice = GetAddedOutputDevice();
@@ -190,7 +191,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         [Test]
-        [Platform("MacOsX")]
+        [MacOnly]
         public void OutputDeviceToString_RemovedDevice()
         {
             var outputDevice = GetRemovedOutputDevice();
@@ -198,7 +199,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         [Test]
-        [Platform("MacOsX")]
+        [MacOnly]
         public void OutputDeviceToString_VirtualDevice()
         {
             var outputDevice = GetVirtualDeviceOutputDevice();
@@ -206,7 +207,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         [Test]
-        [Platform("MacOsX")]
+        [MacOnly]
         public void FindOutputDeviceInDictionary()
         {
             var label = "X";

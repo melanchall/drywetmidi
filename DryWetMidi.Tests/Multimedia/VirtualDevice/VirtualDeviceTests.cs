@@ -1,18 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Melanchall.DryWetMidi.Common;
+﻿using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Multimedia;
+using Melanchall.DryWetMidi.Tests.Attributes;
 using Melanchall.DryWetMidi.Tests.Utilities;
 using NUnit.Framework;
 using NUnit.Framework.Legacy;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 
 namespace Melanchall.DryWetMidi.Tests.Multimedia
 {
     [TestFixture]
-    [Platform("MacOsX")]
+    [VirtualDeviceApiRequired]
     public sealed class VirtualDeviceTests
     {
         #region Constants
@@ -124,11 +125,64 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 #endif
 
+        [Test]
+        public void SendEventToVirtualDevice_EscapeSysEx() => Assert.Throws<ArgumentException>(
+            () => SendEvents(new[] { new EscapeSysExEvent(new byte[] { 0x5F, 0x40, 0xF7 }) }));
+
         [MultimediaTestRetry]
         [Test]
-        public void SendEventToVirtualDevice_SysEx()
+        public void SendEventToVirtualDevice_SysEx_1()
         {
-            SendEvent(new NormalSysExEvent(new byte[] { 0x5F, 0x40, 0xF7 }));
+            SendEvents(new[] { new NormalSysExEvent(new byte[] { 0x5F, 0x40, 0xF7 }) });
+        }
+
+        [MultimediaTestRetry]
+        [Test]
+        public void SendEventToVirtualDevice_SysEx_2()
+        {
+            SendEvents(new[] { new NormalSysExEvent(new byte[] { 0xF0, 0x5F, 0x40, 0xF7 }) });
+        }
+
+        // TODO: fix very large sys ex sending
+        [MultimediaTestRetry]
+        [Test]
+        public void SendEventToVirtualDevice_SysEx_Large([Values(100, 1000, 10000/*, 100000*/)] int size)
+        {
+            SendEvents(new[] { new NormalSysExEvent(
+                Enumerable
+                    .Range(0, size)
+                    .Select(_ => (byte)DryWetMidi.Common.Random.Instance.Next(127))
+                    .Concat(new byte[] { 0xF7 })
+                    .ToArray()) });
+        }
+
+        // TODO: failed
+        [MultimediaTestRetry]
+        // [Test]
+        public void SendEventToVirtualDevice_SysEx_NotTerminated()
+        {
+            var bytes = new byte[] { 0xF0, 0x50 };
+            SendEvents(
+                new[] { new NormalSysExEvent(bytes) },
+                receivedEvents =>
+                {
+                    var midiEvent = receivedEvents.Single().Event;
+                    CollectionAssert.AreEqual(bytes, ((NormalSysExEvent)midiEvent).Data, "Received SysEx data is invalid.");
+                });
+        }
+
+        [MultimediaTestRetry]
+        [Test]
+        public void SendEventToVirtualDevice_SysEx_Multiple([Values(2, 5, 10)] int eventsCount, [Values(1, 10, 100, 1000)] int dataSize)
+        {
+            SendEvents(Enumerable
+                .Range(0, eventsCount)
+                .Select(_ => new NormalSysExEvent(Enumerable
+                    .Range(0, eventsCount)
+                    .Select(__ => (byte)0x50)
+                    .Concat(new byte[] { 0xF7 })
+                    .ToArray()))
+                .ToArray());
         }
 
         [MultimediaTestRetry]
@@ -156,14 +210,14 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 .Select(t => (MidiEvent)Activator.CreateInstance(t))
                 .First(e => e.EventType == eventType);
 
-            SendEvent(midiEvent);
+            SendEvents(new[] { midiEvent });
         }
 
         [MultimediaTestRetry]
         [TestCaseSource(nameof(GetNonDefaultShortEvents))]
         public void SendEventToVirtualDevice_Short_NonDefault(MidiEvent midiEvent)
         {
-            SendEvent(midiEvent);
+            SendEvents(new[] { midiEvent });
         }
 
         [Test]
@@ -214,27 +268,27 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 var inputDevice = virtualDevice.InputDevice;
                 var outputDevice = virtualDevice.OutputDevice;
 
-                var receivedEventsCount = 0;
+                var receivedEvents = new List<MidiEvent>();
 
                 inputDevice.StartEventsListening();
-                inputDevice.EventReceived += (_, __) => receivedEventsCount++;
+                inputDevice.EventReceived += (_, e) => receivedEvents.Add(e.Event);
 
                 outputDevice.SendEvent(new NoteOnEvent());
-                var eventReceived = WaitOperations.Wait(() => receivedEventsCount == 1, SendReceiveUtilities.MaximumEventSendReceiveDelay);
+                var eventReceived = WaitOperations.Wait(() => receivedEvents.Count == 1 && receivedEvents.Last() is NoteOnEvent, SendReceiveUtilities.MaximumEventSendReceiveDelay);
                 ClassicAssert.IsTrue(eventReceived, "Event is not received.");
 
                 virtualDevice.IsEnabled = false;
                 ClassicAssert.IsFalse(virtualDevice.IsEnabled, "Device is enabled after disabling.");
 
-                outputDevice.SendEvent(new NoteOnEvent());
-                eventReceived = WaitOperations.Wait(() => receivedEventsCount > 1, TimeSpan.FromSeconds(5));
+                outputDevice.SendEvent(new NoteOffEvent());
+                eventReceived = WaitOperations.Wait(() => receivedEvents.Count > 1 && receivedEvents.Last() is NoteOffEvent, TimeSpan.FromSeconds(5));
                 ClassicAssert.IsFalse(eventReceived, "Event is received after device disabled.");
 
                 virtualDevice.IsEnabled = true;
                 ClassicAssert.IsTrue(virtualDevice.IsEnabled, "Device is disabled after enabling.");
 
                 outputDevice.SendEvent(new NoteOnEvent());
-                eventReceived = WaitOperations.Wait(() => receivedEventsCount > 1, SendReceiveUtilities.MaximumEventSendReceiveDelay);
+                eventReceived = WaitOperations.Wait(() => receivedEvents.Count > 1 && receivedEvents.Last() is NoteOnEvent, SendReceiveUtilities.MaximumEventSendReceiveDelay);
                 ClassicAssert.IsTrue(eventReceived, "Event is not received after enabling again.");
             }
         }
@@ -332,55 +386,64 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             new ProgramChangeEvent((SevenBitNumber)127) { Channel = (FourBitNumber)6 },
         };
 
-        private void SendEvent(MidiEvent midiEvent)
+        private void SendEvents(
+            MidiEvent[] midiEvents,
+            Action<ICollection<TimestampedEvent>> checkAction = null,
+            Action<InputDevice> setupInputDevice = null)
         {
+            var stopwatch = new Stopwatch();
+
+            var timestampedEvents = midiEvents
+                .Select(e => new TimestampedEvent(e, TimeSpan.Zero))
+                .ToArray();
+
+            var receivedEvents = new List<TimestampedEvent>();
+            var sentEvents = new List<TimestampedEvent>();
+
             using (var virtualDevice = GetVirtualDevice())
             {
-                string errorOnVirtualDevice = null;
-                virtualDevice.ErrorOccurred += (_, e) => errorOnVirtualDevice = e.Exception.Message;
-
                 var outputDevice = virtualDevice.OutputDevice;
-
                 var inputDevice = virtualDevice.InputDevice;
 
-                MidiEvent eventSent = null;
-                outputDevice.EventSent += (_, e) => eventSent = e.Event;
+                outputDevice.EventSent += (_, e) => sentEvents.Add(new TimestampedEvent(e.Event, stopwatch.Elapsed));
+                outputDevice.PrepareForEventsSending();
 
                 string errorOnSend = null;
                 outputDevice.ErrorOccurred += (_, e) => errorOnSend = e.Exception.Message;
 
-                MidiEvent eventReceived = null;
-                inputDevice.EventReceived += (_, e) => eventReceived = e.Event;
+                inputDevice.EventReceived += (_, e) => receivedEvents.Add(new TimestampedEvent(e.Event, stopwatch.Elapsed));
 
                 string errorOnReceive = null;
                 inputDevice.ErrorOccurred += (_, e) => errorOnReceive = e.Exception.Message;
 
-                inputDevice.StartEventsListening();
+                setupInputDevice?.Invoke(inputDevice);
 
+                inputDevice.StartEventsListening();
                 outputDevice.PrepareForEventsSending();
-                outputDevice.SendEvent(midiEvent);
+                stopwatch.Start();
 
                 var timeout = SendReceiveUtilities.MaximumEventSendReceiveDelay;
-                var isEventSentReceived = WaitOperations.Wait(() => eventSent != null && eventReceived != null, timeout);
-                if (!isEventSentReceived)
+
+                foreach (var midiEvent in midiEvents)
                 {
-                    var errorBuilder = new StringBuilder();
-
-                    if (errorOnSend != null)
-                        errorBuilder.AppendLine($"Failed to send event: {errorOnSend}");
-                    if (errorOnReceive != null)
-                        errorBuilder.AppendLine($"Failed to receive event: {errorOnReceive}");
-                    if (errorOnVirtualDevice != null)
-                        errorBuilder.AppendLine($"Failed to route event within virtual device: {errorOnVirtualDevice}");
-
-                    if (errorBuilder.Length == 0)
-                        errorBuilder.AppendLine("Event either not sent ot not received.");
-
-                    ClassicAssert.Fail(errorBuilder.ToString());
+                    outputDevice.SendEvent(midiEvent);
                 }
 
-                MidiAsserts.AreEqual(midiEvent, eventSent, false, "Sent event is invalid.");
-                MidiAsserts.AreEqual(eventSent, eventReceived, false, "Received event is invalid.");
+                WaitOperations.Wait(() => receivedEvents.Count >= midiEvents.Length, timeout);
+
+                SendReceiveUtilities.CheckTimestampedEvents(
+                    sentEvents,
+                    timestampedEvents,
+                    timeout,
+                    $"Sent events are invalid.");
+
+                SendReceiveUtilities.CheckTimestampedEvents(
+                    receivedEvents,
+                    timestampedEvents,
+                    timeout,
+                    $"Received events are invalid.");
+
+                checkAction?.Invoke(receivedEvents);
             }
         }
 

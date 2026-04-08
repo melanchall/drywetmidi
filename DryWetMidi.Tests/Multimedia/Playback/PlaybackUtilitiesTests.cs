@@ -11,6 +11,7 @@ using Melanchall.DryWetMidi.Standards;
 using NUnit.Framework;
 using System.Threading;
 using NUnit.Framework.Legacy;
+using Melanchall.DryWetMidi.Tests.Attributes;
 
 namespace Melanchall.DryWetMidi.Tests.Multimedia
 {

@@ -1,6 +1,7 @@
 ﻿using System;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Multimedia;
+using Melanchall.DryWetMidi.Tests.Attributes;
 using NUnit.Framework;
 using NUnit.Framework.Legacy;
 
@@ -12,7 +13,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         #region Test methods
 
         [Test]
-        [Platform("Win")]
+        [WinOnly]
         public void ReceiveData_SinglepartSysExInSinglePacket_Win() => ReceiveData_Win(
             packets: new[]
             {
@@ -24,7 +25,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             });
 
         [Test]
-        [Platform("Win")]
+        [WinOnly]
         public void ReceiveData_MultipartSysExInOnePackage_Win() => ReceiveData_Win(
             packets: new[]
             {
@@ -38,7 +39,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             checkCheckpoints: false);
 
         [Test]
-        [Platform("Win")]
+        [WinOnly]
         public void ReceiveData_MultipleMultipartSysExInOnePackage_Win() => ReceiveData_Win(
             packets: new[]
             {
@@ -55,7 +56,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             checkCheckpoints: false);
 
         [Test]
-        [Platform("Win")]
+        [WinOnly]
         public void ReceiveData_MultipleCompleteSysExInOnePackage_Win() => ReceiveData_Win(
             packets: new[]
             {
@@ -70,7 +71,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
         // TODO: failed on WMS enabled
         // [Test]
-        [Platform("Win")]
+        [WinOnly]
         public void InputDeviceIsInUse()
         {
             using (var inputDevice1 = InputDevice.GetByName(MidiDevicesNames.DeviceA))
@@ -85,7 +86,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         [Test]
-        [Platform("Win")]
+        [WinOnly]
         public void GetInputDeviceSupportedProperties_Win()
         {
             CollectionAssert.AreEquivalent(
@@ -100,7 +101,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         [Test]
-        [Platform("Win")]
+        [WinOnly]
         public void GetInputDeviceProperty_Product_Win()
         {
             var inputDevice = InputDevice.GetByName(MidiDevicesNames.DeviceA);
@@ -108,7 +109,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         [Test]
-        [Platform("Win")]
+        [WinOnly]
         public void GetInputDeviceProperty_Manufacturer_Win()
         {
             var inputDevice = InputDevice.GetByName(MidiDevicesNames.DeviceA);
@@ -116,7 +117,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         [Test]
-        [Platform("Win")]
+        [WinOnly]
         public void GetInputDeviceProperty_DriverVersion_Win()
         {
             var inputDevice = InputDevice.GetByName(MidiDevicesNames.DeviceA);
@@ -124,7 +125,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         [Test]
-        [Platform("Win")]
+        [WinOnly]
         public void GetInputDeviceProperty_UniqueId_Win()
         {
             var inputDevice = InputDevice.GetByName(MidiDevicesNames.DeviceA);
@@ -132,7 +133,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         [Test]
-        [Platform("Win")]
+        [WinOnly]
         public void GetInputDeviceProperty_DriverOwner_Win()
         {
             var inputDevice = InputDevice.GetByName(MidiDevicesNames.DeviceA);
@@ -140,7 +141,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         [Test]
-        [Platform("Win")]
+        [WinOnly]
         public void CheckInputDevicesEquality_ViaEquals_SameDevices_Win()
         {
             var inputDevice1 = InputDevice.GetByName(MidiDevicesNames.DeviceA);
@@ -150,7 +151,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         [Test]
-        [Platform("Win")]
+        [WinOnly]
         public void CheckInputDevicesEquality_ViaEquals_DifferentDevices_Win()
         {
             var inputDevice1 = InputDevice.GetByName(MidiDevicesNames.DeviceA);
@@ -160,7 +161,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         [Test]
-        [Platform("Win")]
+        [WinOnly]
         public void CheckInputDevicesEquality_ViaOperator_SameDevices_Win()
         {
             var inputDevice1 = InputDevice.GetByName(MidiDevicesNames.DeviceA);
@@ -171,7 +172,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         [Test]
-        [Platform("Win")]
+        [WinOnly]
         public void CheckInputDevicesEquality_ViaOperator_DifferentDevices_Win()
         {
             var inputDevice1 = InputDevice.GetByName(MidiDevicesNames.DeviceA);

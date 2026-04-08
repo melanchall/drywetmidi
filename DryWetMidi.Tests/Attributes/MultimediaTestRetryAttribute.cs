@@ -5,7 +5,7 @@ using NUnit.Framework.Internal.Commands;
 using System;
 using System.Threading;
 
-namespace Melanchall.DryWetMidi.Tests
+namespace Melanchall.DryWetMidi.Tests.Attributes
 {
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = false)]
     internal sealed class MultimediaTestRetryAttribute : PropertyAttribute, IRepeatTest

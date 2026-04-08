@@ -1,5 +1,4 @@
 ﻿using Melanchall.DryWetMidi.Common;
-using Microsoft.Win32.SafeHandles;
 using System;
 using System.Collections.Generic;
 
@@ -49,6 +48,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// Flag to detect redundant disposing.
         /// </summary>
         protected bool _disposed = false;
+        protected bool _enabled = true;
 
 #if TEST
         private TestCheckpoints _testCheckpoints;
@@ -82,7 +82,18 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <summary>
         /// Gets or sets a value indicating whether a device is enabled (i.e. operable) or not.
         /// </summary>
-        public bool IsEnabled { get; set; } = true;
+        public bool IsEnabled
+        {
+            get { return _enabled; }
+            set
+            {
+                if (_enabled == value)
+                    return;
+
+                _enabled = value;
+                OnEnabledChanged(value);
+            }
+        }
 
         /// <summary>
         /// Gets the name of the current MIDI device.
@@ -142,6 +153,10 @@ namespace Melanchall.DryWetMidi.Multimedia
         protected void OnError(Exception exception)
         {
             ErrorOccurred?.Invoke(this, new ErrorOccurredEventArgs(exception));
+        }
+
+        protected virtual void OnEnabledChanged(bool enabled)
+        {
         }
 
         // TODO: check all calls, looks like some not needed

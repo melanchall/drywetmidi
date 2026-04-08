@@ -1,11 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Melanchall.DryWetMidi.Common;
+﻿using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Multimedia;
+using Melanchall.DryWetMidi.Tests.Attributes;
 using NUnit.Framework;
 using NUnit.Framework.Legacy;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Melanchall.DryWetMidi.Tests.Multimedia
 {
@@ -15,7 +16,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         #region Test methods
 
         [Test]
-        [Platform("MacOsX")]
+        [MacOnly]
         public void ReceiveData_NoteOnAndSysExInOnePackage_Mac() => ReceiveData_Mac(
             packages: new[]
             {
@@ -30,7 +31,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             });
 
         [Test]
-        [Platform("MacOsX")]
+        [MacOnly]
         public void ReceiveData_NoteOnAndMultipartSysExInOnePackage_Mac_1() => ReceiveData_Mac(
             packages: new[]
             {
@@ -46,7 +47,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             });
 
         [Test]
-        [Platform("MacOsX")]
+        [MacOnly]
         public void ReceiveData_NoteOnAndMultipartSysExInOnePackage_Mac_2() => ReceiveData_Mac(
             packages: new[]
             {
@@ -61,7 +62,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             });
 
         [Test]
-        [Platform("MacOsX")]
+        [MacOnly]
         public void ReceiveData_NoteOnAndMultipartSysExInOnePackage_DontWaitForCompleteSysExEvent_Mac_1() => ReceiveData_Mac(
             packages: new[]
             {
@@ -78,7 +79,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             waitForCompleteSysExEvent: false);
 
         [Test]
-        [Platform("MacOsX")]
+        [MacOnly]
         public void ReceiveData_NoteOnAndMultipartSysExInOnePackage_DontWaitForCompleteSysExEvent_Mac_2() => ReceiveData_Mac(
             packages: new[]
             {
@@ -95,7 +96,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             waitForCompleteSysExEvent: false);
 
         [Test]
-        [Platform("MacOsX")]
+        [MacOnly]
         public void ReceiveData_SinglepartSysExInSinglePacket_Mac() => ReceiveData_Mac(
             packages: new[]
             {
@@ -108,7 +109,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             });
 
         [Test]
-        [Platform("MacOsX")]
+        [MacOnly]
         public void ReceiveData_MultipartSysExInOnePackage_Mac() => ReceiveData_Mac(
             packages: new[]
             {
@@ -122,7 +123,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             });
 
         [Test]
-        [Platform("MacOsX")]
+        [MacOnly]
         public void ReceiveData_MultipartSysExInOnePackage_DontWaitForCompleteSysExEvent_Mac() => ReceiveData_Mac(
             packages: new[]
             {
@@ -137,7 +138,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             waitForCompleteSysExEvent: false);
 
         [Test]
-        [Platform("MacOsX")]
+        [MacOnly]
         public void ReceiveData_MultipleMultipartSysExInOnePackage_Mac() => ReceiveData_Mac(
             packages: new[]
             {
@@ -154,7 +155,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             });
 
         [Test]
-        [Platform("MacOsX")]
+        [MacOnly]
         public void ReceiveData_MultipleMultipartSysExInOnePackage_DontWaitForCompleteSysExEvent_Mac() => ReceiveData_Mac(
             packages: new[]
             {
@@ -172,7 +173,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             waitForCompleteSysExEvent: false);
 
         [Test]
-        [Platform("MacOsX")]
+        [MacOnly]
         public void ReceiveData_MultipleCompleteSysExInOnePackage_Mac() => ReceiveData_Mac(
             packages: new[]
             {
@@ -187,7 +188,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             });
 
         [Test]
-        [Platform("MacOsX")]
+        [MacOnly]
         public void ReceiveData_MultipartSysExInMultiplePackages_Mac() => ReceiveData_Mac(
             packages: new[]
             {
@@ -202,7 +203,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             });
 
         [Test]
-        [Platform("MacOsX")]
+        [MacOnly]
         public void ReceiveData_MultipleMultipartSysExsInMultiplePackage_Mac() => ReceiveData_Mac(
             packages: new[]
             {
@@ -222,7 +223,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             });
 
         [Test]
-        [Platform("MacOsX")]
+        [MacOnly]
         public void ReceiveData_SingleEventWithStatusByte_Mac() => ReceiveData_Mac(
             packages: new[]
             {
@@ -235,7 +236,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             });
 
         [Test]
-        [Platform("MacOsX")]
+        [MacOnly]
         public void ReceiveData_MultipleEventsWithStatusBytes_Mac() => ReceiveData_Mac(
             packages: new[]
             {
@@ -250,7 +251,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             });
 
         [Test]
-        [Platform("MacOsX")]
+        [MacOnly]
         public void ReceiveData_MultipleEventsWithRunningStatus_Mac() => ReceiveData_Mac(
             packages: new[]
             {
@@ -265,7 +266,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             });
 
         [Test]
-        [Platform("MacOsX")]
+        [MacOnly]
         public void ReceiveData_LotOfEventsWithStatusBytes_Mac()
         {
             const int eventsCount = 3333;
@@ -286,7 +287,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         [Test]
-        [Platform("MacOsX")]
+        [MacOnly]
         public void ReceiveData_UnexpectedRunningStatus_Mac()
         {
             var deviceName = MidiDevicesNames.DeviceA;
@@ -316,7 +317,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         [Test]
-        [Platform("MacOsX")]
+        [MacOnly]
         public void GetInputDeviceSupportedProperties_Mac()
         {
             CollectionAssert.AreEquivalent(
@@ -333,7 +334,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         [Test]
-        [Platform("MacOsX")]
+        [MacOnly]
         public void GetInputDeviceProperty_Product_Mac()
         {
             var inputDevice = InputDevice.GetByName(MidiDevicesNames.DeviceA);
@@ -341,7 +342,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         [Test]
-        [Platform("MacOsX")]
+        [MacOnly]
         public void GetInputDeviceProperty_Manufacturer_Mac()
         {
             var inputDevice = InputDevice.GetByName(MidiDevicesNames.DeviceA);
@@ -349,7 +350,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         [Test]
-        [Platform("MacOsX")]
+        [MacOnly]
         public void GetInputDeviceProperty_DriverVersion_Mac()
         {
             var inputDevice = InputDevice.GetByName(MidiDevicesNames.DeviceA);
@@ -357,7 +358,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         [Test]
-        [Platform("MacOsX")]
+        [MacOnly]
         public void GetInputDeviceProperty_UniqueId_Mac()
         {
             var inputDevice = InputDevice.GetByName(MidiDevicesNames.DeviceA);
@@ -365,7 +366,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         [Test]
-        [Platform("MacOsX")]
+        [MacOnly]
         public void GetInputDeviceProperty_DriverOwner_Mac()
         {
             var inputDevice = InputDevice.GetByName(MidiDevicesNames.DeviceA);
@@ -373,7 +374,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         [Test]
-        [Platform("MacOsX")]
+        [MacOnly]
         public void CheckInputDevicesEquality_ViaEquals_SameDevices_Mac()
         {
             var inputDevice1 = InputDevice.GetByName(MidiDevicesNames.DeviceA);
@@ -383,7 +384,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         [Test]
-        [Platform("MacOsX")]
+        [MacOnly]
         public void CheckInputDevicesEquality_ViaEquals_DifferentDevices_Mac()
         {
             var inputDevice1 = InputDevice.GetByName(MidiDevicesNames.DeviceA);
@@ -393,7 +394,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         [Test]
-        [Platform("MacOsX")]
+        [MacOnly]
         public void CheckInputDevicesEquality_ViaOperator_SameDevices_Mac()
         {
             var inputDevice1 = InputDevice.GetByName(MidiDevicesNames.DeviceA);
@@ -404,7 +405,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         [Test]
-        [Platform("MacOsX")]
+        [MacOnly]
         public void CheckInputDevicesEquality_ViaOperator_DifferentDevices_Mac()
         {
             var inputDevice1 = InputDevice.GetByName(MidiDevicesNames.DeviceA);
@@ -415,7 +416,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         [Test]
-        [Platform("MacOsX")]
+        [MacOnly]
         public void CheckRemovedInputDeviceAccess_Name()
         {
             var inputDevice = GetRemovedInputDevice();
@@ -425,7 +426,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         [Test]
-        [Platform("MacOsX")]
+        [MacOnly]
         public void CheckRemovedInputDeviceAccess_Property()
         {
             var inputDevice = GetRemovedInputDevice();
@@ -435,7 +436,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         [Test]
-        [Platform("MacOsX")]
+        [MacOnly]
         public void CheckRemovedInputDeviceAccess_StartEventsListening()
         {
             var inputDevice = GetRemovedInputDevice();
@@ -445,7 +446,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         [Test]
-        [Platform("MacOsX")]
+        [MacOnly]
         public void InputDeviceToString_AddedDevice()
         {
             var inputDevice = GetAddedInputDevice();
@@ -453,7 +454,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         [Test]
-        [Platform("MacOsX")]
+        [MacOnly]
         public void InputDeviceToString_RemovedDevice()
         {
             var inputDevice = GetRemovedInputDevice();
@@ -461,7 +462,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         [Test]
-        [Platform("MacOsX")]
+        [MacOnly]
         public void InputDeviceToString_VirtualDevice()
         {
             var inputDevice = GetVirtualDeviceInputDevice();
@@ -469,7 +470,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         [Test]
-        [Platform("MacOsX")]
+        [MacOnly]
         public void FindInputDeviceInDictionary()
         {
             var label = "X";

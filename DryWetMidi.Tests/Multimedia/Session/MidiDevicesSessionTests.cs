@@ -1,5 +1,6 @@
 ﻿using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Multimedia;
+using Melanchall.DryWetMidi.Tests.Attributes;
 using Melanchall.DryWetMidi.Tests.Utilities;
 using NUnit.Framework;
 using NUnit.Framework.Legacy;
@@ -25,12 +26,12 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
 #if TEST
         [Test]
-        [Platform("Win")]
+        [WinOnly]
         public void CheckMidiDevicesSession_DisposeManually_Win([Values(0, 50, 5000)] int waitAfterSessionCreatedMs) =>
             CheckMidiDevicesSession_DisposeManually(CreateSessionHandle_Win, null, null, waitAfterSessionCreatedMs);
 
         [Test]
-        [Platform("MacOsX")]
+        [MacOnly]
         public void CheckMidiDevicesSession_DisposeManually_Mac([Values(0, 50, 5000)] int waitAfterSessionCreatedMs)
         {
             MidiDevicesSessionApi.InputDeviceCallback inputDeviceCallback = InputDeviceCallback;
@@ -40,12 +41,12 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         [Test]
-        [Platform("Win")]
+        [WinOnly]
         public void CheckMidiDevicesSession_AbandonAndWaitForFinalizer_Win([Values(0, 50, 5000)] int waitAfterSessionCreatedMs) =>
             CheckMidiDevicesSession_AbandonAndWaitForFinalizer(CreateSessionHandle_Win, null, null, waitAfterSessionCreatedMs);
 
         [Test]
-        [Platform("MacOsX")]
+        [MacOnly]
         public void CheckMidiDevicesSession_AbandonAndWaitForFinalizer_Mac([Values(0, 50, 5000)] int waitAfterSessionCreatedMs)
         {
             MidiDevicesSessionApi.InputDeviceCallback inputDeviceCallback = InputDeviceCallback;
@@ -55,7 +56,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         [Test]
-        [Platform("Win")]
+        [WinOnly]
         public void CheckMidiDevicesSession_CloseViaApi_Win([Values(0, 50, 5000)] int waitAfterSessionCreatedMs)
         {
             var sessionHandle = CreateSessionHandle_Win(null, null, waitAfterSessionCreatedMs);
@@ -67,7 +68,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         [Test]
-        [Platform("MacOsX")]
+        [MacOnly]
         public void CheckMidiDevicesSession_CloseViaApi_Mac([Values(0, 50, 5000)] int waitAfterSessionCreatedMs)
         {
             MidiDevicesSessionApi.InputDeviceCallback inputDeviceCallback = InputDeviceCallback;

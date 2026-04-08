@@ -30,6 +30,9 @@ namespace Melanchall.DryWetMidi.Multimedia
                 case CommonApi.API_TYPE.API_TYPE_MAC:
                     InitializeDevice_Mac();
                     break;
+                case CommonApi.API_TYPE.API_TYPE_WIN:
+                    InitializeDevice_Win();
+                    break;
             }
         }
 
@@ -72,7 +75,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             ThrowIfArgument.IsNullOrWhiteSpaceString(nameof(name), name, "Device name");
 
             var apiType = CommonApi.Api_GetApiType();
-            if (apiType != CommonApi.API_TYPE.API_TYPE_MAC)
+            if (apiType != CommonApi.API_TYPE.API_TYPE_MAC && apiType != CommonApi.API_TYPE.API_TYPE_WIN)
                 throw new NotSupportedException("Virtual device creation is not supported on the current operating system.");
 
             return new VirtualDevice(name);
@@ -100,6 +103,21 @@ namespace Melanchall.DryWetMidi.Multimedia
             var result = VirtualDeviceApi.Api_OpenDevice_Mac(Name, sessionHandle, _callback_Mac, out var deviceInfo, out var errorCode);
             NativeApiUtilities.HandleDevicesNativeApiResult(result, errorCode);
 
+            InitializeDevice(deviceInfo);
+        }
+
+        private void InitializeDevice_Win()
+        {
+            var sessionHandle = MidiDevicesSession.GetSessionHandle();
+
+            var result = VirtualDeviceApi.Api_OpenDevice_Win(Name, sessionHandle, out var deviceInfo, out var errorCode);
+            NativeApiUtilities.HandleDevicesNativeApiResult(result, errorCode);
+
+            InitializeDevice(deviceInfo);
+        }
+
+        private void InitializeDevice(IntPtr deviceInfo)
+        {
             var inputDeviceInfo = VirtualDeviceApi.Api_GetInputDeviceInfo(deviceInfo);
             InputDevice = new InputDevice(inputDeviceInfo, CreationContext.VirtualDevice);
 
@@ -116,6 +134,16 @@ namespace Melanchall.DryWetMidi.Multimedia
         #endregion
 
         #region Overrides
+
+        protected override void OnEnabledChanged(bool enabled)
+        {
+            base.OnEnabledChanged(enabled);
+
+            if (enabled)
+                VirtualDeviceApi.Api_UnmuteDevice(Handle.DangerousGetHandle());
+            else
+                VirtualDeviceApi.Api_MuteDevice(Handle.DangerousGetHandle());
+        }
 
         /// <summary>
         /// Returns a string that represents the current object.

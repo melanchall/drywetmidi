@@ -1081,19 +1081,22 @@ struct VirtualDeviceInfo
     char* name;
 };
 
-API_EXPORT VIRTUAL_OPENRESULT OpenVirtualDevice_Mac(char* name, void* sessionHandle, MIDIReadProc callback, void** info, int* errorCode)
+API_EXPORT char IsVirtualDeviceApiAvailable(SessionHandle* sessionHandle)
+{
+    return 1;
+}
+
+API_EXPORT VIRTUAL_OPENRESULT OpenVirtualDevice_Mac(char* name, SessionHandle* sessionHandle, MIDIReadProc callback, VirtualDeviceInfo** info, int* errorCode)
 {
     *errorCode = 0;
 
-    SessionHandle* pSessionHandle = static_cast<SessionHandle*>(sessionHandle);
-    
     VirtualDeviceInfo* virtualDeviceInfo = new VirtualDeviceInfo();
     virtualDeviceInfo->name = name;
     
     CFStringRef nameRef = CFStringCreateWithCString(nullptr, name, kCFStringEncodingUTF8);
     
     MIDIEndpointRef sourceRef;
-    OSStatus status = MIDISourceCreate(pSessionHandle->clientRef, nameRef, &sourceRef);
+    OSStatus status = MIDISourceCreate(sessionHandle->clientRef, nameRef, &sourceRef);
     if (nameRef)
         CFRelease(nameRef);
     
@@ -1119,7 +1122,7 @@ API_EXPORT VIRTUAL_OPENRESULT OpenVirtualDevice_Mac(char* name, void* sessionHan
     
     CFStringRef nameRef2 = CFStringCreateWithCString(nullptr, name, kCFStringEncodingUTF8);
     MIDIEndpointRef destinationRef;
-    status = MIDIDestinationCreate(pSessionHandle->clientRef, nameRef2, callback, inputDeviceInfo, &destinationRef);
+    status = MIDIDestinationCreate(sessionHandle->clientRef, nameRef2, callback, inputDeviceInfo, &destinationRef);
     if (nameRef2)
         CFRelease(nameRef2);
     
@@ -1149,13 +1152,11 @@ API_EXPORT VIRTUAL_OPENRESULT OpenVirtualDevice_Mac(char* name, void* sessionHan
     return VIRTUAL_OPENRESULT_OK;
 }
 
-API_EXPORT VIRTUAL_CLOSERESULT CloseVirtualDevice(void* info, int* errorCode)
+API_EXPORT VIRTUAL_CLOSERESULT CloseVirtualDevice(VirtualDeviceInfo* info, int* errorCode)
 {
     *errorCode = 0;
 
-    VirtualDeviceInfo* virtualDeviceInfo = static_cast<VirtualDeviceInfo*>(info);
-    
-    OSStatus status = MIDIEndpointDispose(virtualDeviceInfo->inputDeviceInfo->endpointRef);
+    OSStatus status = MIDIEndpointDispose(info->inputDeviceInfo->endpointRef);
     if (status != noErr)
     {
         *errorCode = status;
@@ -1169,7 +1170,7 @@ API_EXPORT VIRTUAL_CLOSERESULT CloseVirtualDevice(void* info, int* errorCode)
         return VIRTUAL_CLOSERESULT_DISPOSESOURCE_UNKNOWNERROR;
     }
     
-    status = MIDIEndpointDispose(virtualDeviceInfo->outputDeviceInfo->endpointRef);
+    status = MIDIEndpointDispose(info->outputDeviceInfo->endpointRef);
     if (status != noErr)
     {
         *errorCode = status;
@@ -1183,9 +1184,10 @@ API_EXPORT VIRTUAL_CLOSERESULT CloseVirtualDevice(void* info, int* errorCode)
         return VIRTUAL_CLOSERESULT_DISPOSEDESTINATION_UNKNOWNERROR;
     }
     
-    delete virtualDeviceInfo->inputDeviceInfo;
-    delete virtualDeviceInfo->outputDeviceInfo;
-    delete virtualDeviceInfo;
+    // TODO: check
+    // delete info->inputDeviceInfo;
+    // delete info->outputDeviceInfo;
+    delete info;
     
     return VIRTUAL_CLOSERESULT_OK;
 }
@@ -1217,14 +1219,26 @@ API_EXPORT VIRTUAL_SENDBACKRESULT SendDataBackFromVirtualDevice(const MIDIPacket
     return VIRTUAL_SENDBACKRESULT_OK;
 }
 
-API_EXPORT void* GetInputDeviceInfoFromVirtualDevice(void* info)
+API_EXPORT void* GetInputDeviceInfoFromVirtualDevice(VirtualDeviceInfo* info)
 {
-    VirtualDeviceInfo* virtualDeviceInfo = static_cast<VirtualDeviceInfo*>(info);
-    return virtualDeviceInfo->inputDeviceInfo;
+    return info->inputDeviceInfo;
 }
 
-API_EXPORT void* GetOutputDeviceInfoFromVirtualDevice(void* info)
+API_EXPORT void* GetOutputDeviceInfoFromVirtualDevice(VirtualDeviceInfo* info)
 {
-    VirtualDeviceInfo* virtualDeviceInfo = static_cast<VirtualDeviceInfo*>(info);
-    return virtualDeviceInfo->outputDeviceInfo;
+    return info->outputDeviceInfo;
+}
+
+API_EXPORT VIRTUAL_MUTERESULT MuteVirtualDevice(VirtualDeviceInfo* info)
+{
+    // TODO
+
+    return VIRTUAL_MUTERESULT_OK;
+}
+
+API_EXPORT VIRTUAL_UNMUTERESULT UnmuteVirtualDevice(VirtualDeviceInfo* info)
+{
+    // TODO
+
+    return VIRTUAL_UNMUTERESULT_OK;
 }

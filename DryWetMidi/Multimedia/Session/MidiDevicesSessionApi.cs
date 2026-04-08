@@ -14,6 +14,12 @@ namespace Melanchall.DryWetMidi.Multimedia
         public enum SESSION_OPENRESULT
         {
             SESSION_OPENRESULT_OK = 0,
+
+            SESSION_OPENRESULT_CANTCREATEWMSSDKINITIALIZER = 1,
+            SESSION_OPENRESULT_CANTINITIALIZEWMSSDK = 2,
+            SESSION_OPENRESULT_OLDWMSSDK = 3,
+            SESSION_OPENRESULT_WMSSERVICEUNAVAILABLE = 4,
+
             SESSION_OPENRESULT_SERVERSTARTERROR = 101,
             SESSION_OPENRESULT_WRONGTHREAD = 102,
             [NativeApi.NativeErrorType(NativeApi.NativeErrorType.NotPermitted)]

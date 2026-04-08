@@ -48,8 +48,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             [MarshalAs(UnmanagedType.U1)] out bool registryCheckResult,
             [MarshalAs(UnmanagedType.U1)] out bool comCheckResult,
             out WMSSERVICECHECKRESULT serviceCheckResult,
-            [MarshalAs(UnmanagedType.U1)] out bool sdkCheckResult,
-            [MarshalAs(UnmanagedType.U1)] out bool basicLoopbackCheckResult);
+            [MarshalAs(UnmanagedType.U1)] out bool sdkCheckResult);
 #else
         [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
         private static extern API_TYPE GetApiType();
@@ -64,8 +63,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             [MarshalAs(UnmanagedType.U1)] out bool registryCheckResult,
             [MarshalAs(UnmanagedType.U1)] out bool comCheckResult,
             out WMSSERVICECHECKRESULT serviceCheckResult,
-            [MarshalAs(UnmanagedType.U1)] out bool sdkCheckResult,
-            [MarshalAs(UnmanagedType.U1)] out bool basicLoopbackCheckResult);
+            [MarshalAs(UnmanagedType.U1)] out bool sdkCheckResult);
 #endif
 
         #endregion
@@ -87,16 +85,14 @@ namespace Melanchall.DryWetMidi.Multimedia
             out bool registryCheckResult,
             out bool comCheckResult,
             out WMSSERVICECHECKRESULT serviceCheckResult,
-            out bool sdkCheckResult,
-            out bool basicLoopbackCheckResult)
+            out bool sdkCheckResult)
         {
             GetNativeEnvironmentInfo_Win(
                 out comInitializationResult,
                 out registryCheckResult,
                 out comCheckResult,
                 out serviceCheckResult,
-                out sdkCheckResult,
-                out basicLoopbackCheckResult);
+                out sdkCheckResult);
         }
 
         #endregion

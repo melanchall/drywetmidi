@@ -1,4 +1,5 @@
 ﻿using Melanchall.DryWetMidi.Interaction;
+using Melanchall.DryWetMidi.Tests.Attributes;
 using NUnit.Framework;
 using System;
 using System.Linq;

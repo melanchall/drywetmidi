@@ -19,6 +19,12 @@
 #include <winrt/Windows.Foundation.h>
 #include <winrt/Microsoft.Windows.Devices.Midi2.h>
 #include <winrt/Microsoft.Windows.Devices.Midi2.Endpoints.BasicLoopback.h>
+namespace basicLoopback = winrt::Microsoft::Windows::Devices::Midi2::Endpoints::BasicLoopback;
+
+#include "winmidi/init/Microsoft.Windows.Devices.Midi2.Initialization.hpp"
+namespace init = Microsoft::Windows::Devices::Midi2::Initialization;
+
+#include "winmidi/init/WindowsMidiServicesVersion.h"
 
 #include "../Common/NativeApi-Constants.h"
 
@@ -136,25 +142,12 @@ char CheckWmsAvailability_Sdk()
     return SUCCEEDED(hr);
 }
 
-char CheckWmsAvailability_BasicLoopback()
-{
-    try
-    {
-        return winrt::Microsoft::Windows::Devices::Midi2::Endpoints::BasicLoopback::MidiBasicLoopbackEndpointManager::IsTransportAvailable();
-    }
-    catch (...)
-    {
-        return 0;
-    }
-}
-
 API_EXPORT void API_CALL GetNativeEnvironmentInfo_Win(
     char* comInitializationResult,
     char* registryCheckResult,
     char* comCheckResult,
     WMSSERVICECHECKRESULT* serviceCheckResult,
-    char* sdkCheckResult,
-    char* basicLoopbackCheckResult)
+    char* sdkCheckResult)
 {
     HRESULT hrInit = CoInitializeEx(nullptr, COINIT_MULTITHREADED);
     
@@ -166,7 +159,6 @@ API_EXPORT void API_CALL GetNativeEnvironmentInfo_Win(
     *comCheckResult = CheckWmsAvailability_Com();
     *serviceCheckResult = CheckWmsAvailability_Service();
     *sdkCheckResult = CheckWmsAvailability_Sdk();
-    *basicLoopbackCheckResult = CheckWmsAvailability_BasicLoopback();
 
     CoUninitialize();
 }
@@ -411,8 +403,11 @@ API_EXPORT const char* API_CALL GetDeviceProduct(WORD productId)
 typedef struct
 {
     char* name;
+
     char wmsAvailable;
     char basicLoopbackAvailable;
+    std::shared_ptr<init::MidiDesktopAppSdkInitializer> wmsSdkInitializer;
+    char wmsSdkInitialized;
 } SessionHandle;
 
 API_EXPORT SESSION_OPENRESULT API_CALL OpenSession_Win(char* name, void** handle, int* errorCode)
@@ -421,27 +416,61 @@ API_EXPORT SESSION_OPENRESULT API_CALL OpenSession_Win(char* name, void** handle
 
     SessionHandle* sessionHandle = new SessionHandle();
     sessionHandle->name = name;
+    sessionHandle->wmsSdkInitialized = 0;
 
-    char comInitializationResult;
-    char registryCheckResult;
-    char comCheckResult;
-    WMSSERVICECHECKRESULT serviceCheckResult;
-    char sdkCheckResult;
+    try
+    {
+        char comInitializationResult;
+        char registryCheckResult;
+        char comCheckResult;
+        WMSSERVICECHECKRESULT serviceCheckResult;
+        char sdkCheckResult;
 
-    GetNativeEnvironmentInfo_Win(
-        &comInitializationResult,
-        &registryCheckResult,
-        &comCheckResult,
-        &serviceCheckResult,
-        &sdkCheckResult,
-        &sessionHandle->basicLoopbackAvailable);
+        GetNativeEnvironmentInfo_Win(
+            &comInitializationResult,
+            &registryCheckResult,
+            &comCheckResult,
+            &serviceCheckResult,
+            &sdkCheckResult);
 
-    sessionHandle->wmsAvailable = static_cast<char>(
-        comInitializationResult &&
-        registryCheckResult &&
-        comCheckResult &&
-        (serviceCheckResult == WMSSERVICECHECKRESULT_OK) &&
-        sdkCheckResult);
+        sessionHandle->wmsAvailable = static_cast<char>(
+            comInitializationResult &&
+            registryCheckResult &&
+            comCheckResult &&
+            (serviceCheckResult == WMSSERVICECHECKRESULT_OK) &&
+            sdkCheckResult);
+
+        if (sessionHandle->wmsAvailable)
+        {
+            winrt::init_apartment();
+
+            std::shared_ptr<init::MidiDesktopAppSdkInitializer> wmsSdkInitializer = std::make_shared<init::MidiDesktopAppSdkInitializer>();
+
+            if (wmsSdkInitializer == nullptr)
+                return SESSION_OPENRESULT_CANTCREATEWMSSDKINITIALIZER;
+
+            if (!wmsSdkInitializer->InitializeSdkRuntime())
+                return SESSION_OPENRESULT_CANTINITIALIZEWMSSDK;
+
+            if (!wmsSdkInitializer->CheckForMinimumRequiredSdkVersion(
+                WINDOWS_MIDI_SERVICES_NUGET_BUILD_VERSION_MAJOR,
+                WINDOWS_MIDI_SERVICES_NUGET_BUILD_VERSION_MINOR,
+                WINDOWS_MIDI_SERVICES_NUGET_BUILD_VERSION_PATCH))
+                return SESSION_OPENRESULT_OLDWMSSDK;
+
+            if (!wmsSdkInitializer->EnsureServiceAvailable())
+                return SESSION_OPENRESULT_WMSSERVICEUNAVAILABLE;
+
+            sessionHandle->wmsSdkInitializer = wmsSdkInitializer;
+            sessionHandle->basicLoopbackAvailable = basicLoopback::MidiBasicLoopbackEndpointManager::IsTransportAvailable();
+
+            sessionHandle->wmsSdkInitialized = 1;
+        }
+    }
+    catch (...)
+    {
+        // TODO
+    }
 
     *handle = sessionHandle;
     return SESSION_OPENRESULT_OK;
@@ -450,6 +479,25 @@ API_EXPORT SESSION_OPENRESULT API_CALL OpenSession_Win(char* name, void** handle
 API_EXPORT SESSION_CLOSERESULT API_CALL CloseSession(void* handle)
 {
     SessionHandle* sessionHandle = static_cast<SessionHandle*>(handle);
+
+    try
+    {
+        if (sessionHandle->wmsAvailable && sessionHandle->wmsSdkInitialized)
+        {
+            if (sessionHandle->wmsSdkInitializer != nullptr)
+            {
+                sessionHandle->wmsSdkInitializer->ShutdownSdkRuntime();
+                sessionHandle->wmsSdkInitializer.reset();
+            }
+
+            winrt::uninit_apartment();
+        }
+    }
+    catch (...)
+    {
+        // TODO
+    }
+
     delete sessionHandle;
     return SESSION_CLOSERESULT_OK;
 }
@@ -1243,3 +1291,162 @@ API_EXPORT char API_CALL IsOutputDevicePropertySupported(OUT_PROPERTY property)
 /* ================================
  Virtual device
  ================================ */
+
+struct VirtualDeviceInfo
+{
+    InputDeviceInfo* inputDeviceInfo;
+    OutputDeviceInfo* outputDeviceInfo;
+    char* name;
+    winrt::guid associationId;
+};
+
+API_EXPORT char API_CALL IsVirtualDeviceApiAvailable(SessionHandle* sessionHandle)
+{
+    if (!sessionHandle->wmsSdkInitialized || !sessionHandle->wmsAvailable)
+        return 0;
+
+    return sessionHandle->basicLoopbackAvailable;
+}
+
+API_EXPORT VIRTUAL_OPENRESULT API_CALL OpenVirtualDevice_Win(char* name, SessionHandle* sessionHandle, VirtualDeviceInfo** info, int* errorCode)
+{
+    *errorCode = 0;
+
+    VirtualDeviceInfo* virtualDeviceInfo = new VirtualDeviceInfo();
+    virtualDeviceInfo->name = name;
+
+    if (!sessionHandle->wmsSdkInitialized || !sessionHandle->wmsAvailable)
+    {
+        delete virtualDeviceInfo;
+        return VIRTUAL_OPENRESULT_WMSUNAVAILABLE;
+    }
+
+    if (!sessionHandle->basicLoopbackAvailable)
+    {
+        delete virtualDeviceInfo;
+        return VIRTUAL_OPENRESULT_WMSBASICLOOPBACKUNAVAILABLE;
+    }
+
+    try
+    {
+        winrt::hstring uniqueId;
+
+        do
+        {
+            uniqueId = winrt::to_hstring(winrt::Windows::Foundation::GuidHelper::CreateNewGuid());
+        } while (basicLoopback::MidiBasicLoopbackEndpointManager::DoesLoopbackExist(uniqueId));
+
+        virtualDeviceInfo->associationId = winrt::Windows::Foundation::GuidHelper::CreateNewGuid();
+
+        basicLoopback::MidiBasicLoopbackEndpointDefinition definition{};
+        definition.Name = winrt::to_hstring(name);
+        definition.UniqueId = uniqueId;
+        definition.IsMuted = false;
+
+        basicLoopback::MidiBasicLoopbackEndpointCreationConfig config(
+            virtualDeviceInfo->associationId,
+            definition);
+
+        basicLoopback::MidiBasicLoopbackEndpointCreationResult result =
+            basicLoopback::MidiBasicLoopbackEndpointManager::CreateTransientLoopbackEndpoint(config);
+
+        if (!result.Success)
+        {
+            // TODO: error info
+
+            delete virtualDeviceInfo;
+            return VIRTUAL_OPENRESULT_FAILED;
+        }
+
+        void* rawInputDeviceInfo = nullptr;
+        int inputDeviceInfoErrorCode;
+        IN_GETINFORESULT inputResult = GetInputDeviceInfo(midiInGetNumDevs() - 1, &rawInputDeviceInfo, &inputDeviceInfoErrorCode);
+        if (inputResult != IN_GETINFORESULT_OK)
+            return VIRTUAL_OPENRESULT_FAILEDGETINPUTDEVICEINFO;
+
+        virtualDeviceInfo->inputDeviceInfo = static_cast<InputDeviceInfo*>(rawInputDeviceInfo);
+
+        void* rawOutputDeviceInfo = nullptr;
+        int outputDeviceInfoErrorCode;
+        OUT_GETINFORESULT outputResult = GetOutputDeviceInfo(midiOutGetNumDevs() - 1, &rawOutputDeviceInfo, &outputDeviceInfoErrorCode);
+        if (outputResult != OUT_GETINFORESULT_OK)
+            return VIRTUAL_OPENRESULT_FAILEDGETOUTPUTDEVICEINFO;
+
+        virtualDeviceInfo->outputDeviceInfo = static_cast<OutputDeviceInfo*>(rawOutputDeviceInfo);
+    }
+    catch (...)
+    {
+        delete virtualDeviceInfo;
+        return VIRTUAL_OPENRESULT_WMSERROR;
+    }
+
+    *info = virtualDeviceInfo;
+    return VIRTUAL_OPENRESULT_OK;
+}
+
+API_EXPORT VIRTUAL_CLOSERESULT API_CALL CloseVirtualDevice(VirtualDeviceInfo* info, int* errorCode)
+{
+    *errorCode = 0;
+
+    try
+    {
+        auto removed = basicLoopback::MidiBasicLoopbackEndpointManager::RemoveTransientLoopbackEndpoint(
+            basicLoopback::MidiBasicLoopbackEndpointRemovalConfig{ info->associationId });
+
+        if (!removed)
+            return VIRTUAL_CLOSERESULT_FAILED;
+    }
+    catch (...)
+    {
+        return VIRTUAL_CLOSERESULT_WMSERROR;
+    }
+
+    // TODO: analyze why this causes crash
+    // delete virtualDeviceInfo->inputDeviceInfo;
+    // delete virtualDeviceInfo->outputDeviceInfo;
+    delete info;
+
+    return VIRTUAL_CLOSERESULT_OK;
+}
+
+API_EXPORT void* API_CALL GetInputDeviceInfoFromVirtualDevice(VirtualDeviceInfo* info)
+{
+    return info->inputDeviceInfo;
+}
+
+API_EXPORT void* API_CALL GetOutputDeviceInfoFromVirtualDevice(VirtualDeviceInfo* info)
+{
+    return info->outputDeviceInfo;
+}
+
+API_EXPORT VIRTUAL_MUTERESULT API_CALL MuteVirtualDevice(VirtualDeviceInfo* info)
+{
+    try
+    {
+        auto muted = basicLoopback::MidiBasicLoopbackEndpointManager::MuteLoopback(info->associationId);
+        if (!muted)
+            return VIRTUAL_MUTERESULT_FAILED;
+    }
+    catch (...)
+    {
+        return VIRTUAL_MUTERESULT_WMSERROR;
+    }
+
+    return VIRTUAL_MUTERESULT_OK;
+}
+
+API_EXPORT VIRTUAL_UNMUTERESULT API_CALL UnmuteVirtualDevice(VirtualDeviceInfo* info)
+{
+    try
+    {
+        auto unmuted = basicLoopback::MidiBasicLoopbackEndpointManager::UnmuteLoopback(info->associationId);
+        if (!unmuted)
+            return VIRTUAL_UNMUTERESULT_FAILED;
+    }
+    catch (...)
+    {
+        return VIRTUAL_UNMUTERESULT_WMSERROR;
+    }
+
+    return VIRTUAL_UNMUTERESULT_OK;
+}

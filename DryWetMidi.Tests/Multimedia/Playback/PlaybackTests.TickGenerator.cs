@@ -6,6 +6,7 @@ using Melanchall.DryWetMidi.Core;
 using NUnit.Framework;
 using System.Diagnostics;
 using Melanchall.DryWetMidi.Interaction;
+using Melanchall.DryWetMidi.Tests.Attributes;
 
 namespace Melanchall.DryWetMidi.Tests.Multimedia
 {

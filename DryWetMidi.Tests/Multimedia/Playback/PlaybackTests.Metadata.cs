@@ -9,6 +9,7 @@ using Melanchall.DryWetMidi.Tests.Utilities;
 using NUnit.Framework;
 using System.Diagnostics;
 using NUnit.Framework.Legacy;
+using Melanchall.DryWetMidi.Tests.Attributes;
 
 namespace Melanchall.DryWetMidi.Tests.Multimedia
 {
