@@ -15,10 +15,16 @@ namespace Melanchall.DryWetMidi.Multimedia
         {
             SESSION_OPENRESULT_OK = 0,
 
+            [NativeApi.NativeErrorType(NativeApi.NativeErrorType.WmsError)]
             SESSION_OPENRESULT_CANTCREATEWMSSDKINITIALIZER = 1,
+            [NativeApi.NativeErrorType(NativeApi.NativeErrorType.WmsError)]
             SESSION_OPENRESULT_CANTINITIALIZEWMSSDK = 2,
+            [NativeApi.NativeErrorType(NativeApi.NativeErrorType.WmsError)]
             SESSION_OPENRESULT_OLDWMSSDK = 3,
+            [NativeApi.NativeErrorType(NativeApi.NativeErrorType.WmsError)]
             SESSION_OPENRESULT_WMSSERVICEUNAVAILABLE = 4,
+            [NativeApi.NativeErrorType(NativeApi.NativeErrorType.WmsError)]
+            SESSION_OPENRESULT_WMSUNKNOWNERROR = 5,
 
             SESSION_OPENRESULT_SERVERSTARTERROR = 101,
             SESSION_OPENRESULT_WRONGTHREAD = 102,
@@ -51,21 +57,14 @@ namespace Melanchall.DryWetMidi.Multimedia
 #if NET7_0_OR_GREATER
         [LibraryImport(NativeApi.LibraryName)]
         [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-        private static partial SESSION_OPENRESULT OpenSession_Mac(IntPtr name, InputDeviceCallback inputDeviceCallback, OutputDeviceCallback outputDeviceCallback, out IntPtr handle, out int errorCode);
-
-        [LibraryImport(NativeApi.LibraryName)]
-        [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-        private static partial SESSION_OPENRESULT OpenSession_Win(IntPtr name, out IntPtr handle, out int errorCode);
+        private static partial SESSION_OPENRESULT OpenSession(IntPtr name, InputDeviceCallback inputDeviceCallback, OutputDeviceCallback outputDeviceCallback, out IntPtr handle, out int errorCode);
 
         [LibraryImport(NativeApi.LibraryName)]
         [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
         private static partial SESSION_CLOSERESULT CloseSession(IntPtr handle);
 #else
         [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
-        private static extern SESSION_OPENRESULT OpenSession_Mac(IntPtr name, InputDeviceCallback inputDeviceCallback, OutputDeviceCallback outputDeviceCallback, out IntPtr handle, out int errorCode);
-
-        [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
-        private static extern SESSION_OPENRESULT OpenSession_Win(IntPtr name, out IntPtr handle, out int errorCode);
+        private static extern SESSION_OPENRESULT OpenSession(IntPtr name, InputDeviceCallback inputDeviceCallback, OutputDeviceCallback outputDeviceCallback, out IntPtr handle, out int errorCode);
 
         [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
         private static extern SESSION_CLOSERESULT CloseSession(IntPtr handle);
@@ -75,22 +74,14 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         #region Methods
 
-        public static SESSION_OPENRESULT Api_OpenSession_Mac(
+        public static SESSION_OPENRESULT Api_OpenSession(
             IntPtr name,
             InputDeviceCallback inputDeviceCallback,
             OutputDeviceCallback outputDeviceCallback,
             out IntPtr handle,
             out int errorCode)
         {
-            return OpenSession_Mac(name, inputDeviceCallback, outputDeviceCallback, out handle, out errorCode);
-        }
-
-        public static SESSION_OPENRESULT Api_OpenSession_Win(
-            IntPtr name,
-            out IntPtr handle,
-            out int errorCode)
-        {
-            return OpenSession_Win(name, out handle, out errorCode);
+            return OpenSession(name, inputDeviceCallback, outputDeviceCallback, out handle, out errorCode);
         }
 
         public static SESSION_CLOSERESULT Api_CloseSession(IntPtr handle)

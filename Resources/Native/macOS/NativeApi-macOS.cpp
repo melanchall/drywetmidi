@@ -244,10 +244,20 @@ struct InputDeviceInfo
     MIDIEndpointRef endpointRef;
 };
 
+API_EXPORT void DeleteInputDeviceInfo(InputDeviceInfo* info)
+{
+    delete info;
+}
+
 struct OutputDeviceInfo
 {
     MIDIEndpointRef endpointRef;
 };
+
+API_EXPORT void DeleteOutputDeviceInfo(OutputDeviceInfo* info)
+{
+    delete info;
+}
 
 OSStatus GetDevicePropertyValue(MIDIEndpointRef endpointRef, CFStringRef propertyID, char** value)
 {
@@ -299,11 +309,12 @@ struct SessionHandle
     OSStatus clientCreationStatus;
     InputDeviceCallback inputDeviceCallback;
     OutputDeviceCallback outputDeviceCallback;
+    std::atomic<char> devicesWatcherEnabled{0};
 };
  
 void HandleSource(MIDIEndpointRef source, SessionHandle* sessionHandle, char operation)
 {
-    if (sessionHandle->sessionClosed.load() == 1)
+    if (sessionHandle->sessionClosed.load() == 1 || sessionHandle->devicesWatcherEnabled.load() == 0)
         return;
 
     InputDeviceInfo* inputDeviceInfo = new InputDeviceInfo();
@@ -315,7 +326,7 @@ void HandleSource(MIDIEndpointRef source, SessionHandle* sessionHandle, char ope
 
 void HandleDestination(MIDIEndpointRef destination, SessionHandle* sessionHandle, char operation)
 {
-    if (sessionHandle->sessionClosed.load() == 1)
+    if (sessionHandle->sessionClosed.load() == 1 || sessionHandle->devicesWatcherEnabled.load() == 0)
         return;
 
     OutputDeviceInfo* outputDeviceInfo = new OutputDeviceInfo();
@@ -327,7 +338,7 @@ void HandleDestination(MIDIEndpointRef destination, SessionHandle* sessionHandle
 
 void HandleEntitySources(MIDIEntityRef entity, SessionHandle* sessionHandle, char operation)
 {
-    if (sessionHandle->sessionClosed.load() == 1)
+    if (sessionHandle->sessionClosed.load() == 1 || sessionHandle->devicesWatcherEnabled.load() == 0)
         return;
 
     ItemCount _sourcesCount = MIDIEntityGetNumberOfSources(entity);
@@ -341,7 +352,7 @@ void HandleEntitySources(MIDIEntityRef entity, SessionHandle* sessionHandle, cha
 
 void HandleEntityDestinations(MIDIEntityRef entity, SessionHandle* sessionHandle, char operation)
 {
-    if (sessionHandle->sessionClosed.load() == 1)
+    if (sessionHandle->sessionClosed.load() == 1 || sessionHandle->devicesWatcherEnabled.load() == 0)
         return;
 
     ItemCount _destinationsCount = MIDIEntityGetNumberOfDestinations(entity);
@@ -355,7 +366,7 @@ void HandleEntityDestinations(MIDIEntityRef entity, SessionHandle* sessionHandle
 
 void HandleEntity(MIDIEntityRef entity, SessionHandle* sessionHandle, char operation)
 {
-    if (sessionHandle->sessionClosed.load() == 1)
+    if (sessionHandle->sessionClosed.load() == 1 || sessionHandle->devicesWatcherEnabled.load() == 0)
         return;
 
     HandleEntitySources(entity, sessionHandle, operation);
@@ -364,7 +375,7 @@ void HandleEntity(MIDIEntityRef entity, SessionHandle* sessionHandle, char opera
 
 void HandleDevice(MIDIDeviceRef device, SessionHandle* sessionHandle, char operation)
 {
-    if (sessionHandle->sessionClosed.load() == 1)
+    if (sessionHandle->sessionClosed.load() == 1 || sessionHandle->devicesWatcherEnabled.load() == 0)
         return;
 
     ItemCount entitiesCount = MIDIDeviceGetNumberOfEntities(device);
@@ -378,7 +389,7 @@ void HandleDevice(MIDIDeviceRef device, SessionHandle* sessionHandle, char opera
 
 void HandleNotification(const MIDINotification* message, SessionHandle* sessionHandle)
 {
-    if (sessionHandle->sessionClosed.load() == 1)
+    if (sessionHandle->sessionClosed.load() == 1 || sessionHandle->devicesWatcherEnabled.load() == 0)
         return;
 
     switch (message->messageID)
@@ -422,7 +433,7 @@ void HandleNotification(const MIDINotification* message, SessionHandle* sessionH
 void NotifyProc(const MIDINotification* message, void* refCon)
 {
     SessionHandle* sessionHandle = static_cast<SessionHandle*>(refCon);
-    if (sessionHandle->sessionClosed.load() == 1)
+    if (sessionHandle->sessionClosed.load() == 1 || sessionHandle->devicesWatcherEnabled.load() == 0)
         return;
 
     HandleNotification(message, sessionHandle);
@@ -453,7 +464,7 @@ void* ThreadProc(void* data)
     return nullptr;
 }
 
-API_EXPORT SESSION_OPENRESULT OpenSession_Mac(char* name, InputDeviceCallback inputDeviceCallback, OutputDeviceCallback outputDeviceCallback, void** handle, int* errorCode)
+API_EXPORT SESSION_OPENRESULT OpenSession(char* name, InputDeviceCallback inputDeviceCallback, OutputDeviceCallback outputDeviceCallback, void** handle, int* errorCode)
 {
     *errorCode = 0;
 
@@ -465,6 +476,7 @@ API_EXPORT SESSION_OPENRESULT OpenSession_Mac(char* name, InputDeviceCallback in
     sessionHandle->clientCreated.store(0);
     sessionHandle->sessionClosed.store(0);
     sessionHandle->threadExited.store(0);
+    sessionHandle->devicesWatcherEnabled.store(0);
     
     int pthreadCreateResult;
     if ((pthreadCreateResult = pthread_create(&sessionHandle->thread, nullptr, ThreadProc, sessionHandle)) != 0)
@@ -527,6 +539,20 @@ API_EXPORT SESSION_CLOSERESULT CloseSession(void* handle)
 
     delete sessionHandle;
     return result;
+}
+
+/* ================================
+   Devices watcher
+================================ */
+
+API_EXPORT void EnableDevicesWatcher(SessionHandle* sessionHandle)
+{
+    sessionHandle->devicesWatcherEnabled.store(1);
+}
+
+API_EXPORT void DisableDevicesWatcher(SessionHandle* sessionHandle)
+{
+    sessionHandle->devicesWatcherEnabled.store(0);
 }
 
 /* ================================
@@ -696,8 +722,9 @@ API_EXPORT IN_CLOSERESULT CloseInputDevice(void* handle, int* errorCode)
     *errorCode = 0;
 
     InputDeviceHandle* inputDeviceHandle = static_cast<InputDeviceHandle*>(handle);
+    MIDIPortDispose(inputDeviceHandle->portRef);
 
-    delete inputDeviceHandle->info;
+    // delete inputDeviceHandle->info;
     delete inputDeviceHandle;
 
     return IN_CLOSERESULT_OK;
@@ -962,8 +989,9 @@ API_EXPORT OUT_CLOSERESULT CloseOutputDevice(void* handle, int* errorCode)
     *errorCode = 0;
 
     OutputDeviceHandle* outputDeviceHandle = static_cast<OutputDeviceHandle*>(handle);
+    MIDIPortDispose(outputDeviceHandle->portRef);
 
-    delete outputDeviceHandle->info;
+    // delete outputDeviceHandle->info;
     delete outputDeviceHandle;
 
     return OUT_CLOSERESULT_OK;

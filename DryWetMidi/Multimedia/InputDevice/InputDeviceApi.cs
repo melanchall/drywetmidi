@@ -228,6 +228,10 @@ namespace Melanchall.DryWetMidi.Multimedia
         [LibraryImport(NativeApi.LibraryName)]
         [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
         private static partial IN_GETPROPERTYRESULT GetInputDeviceDriverOwner(IntPtr info, out IntPtr value, out int errorCode);
+
+        [LibraryImport(NativeApi.LibraryName)]
+        [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
+        private static partial void DeleteInputDeviceInfo(IntPtr info);
 #else
         [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
         private static extern IN_GETCOUNTRESULT GetInputDevicesCount(out int count);
@@ -287,6 +291,9 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
         private static extern IN_GETPROPERTYRESULT GetInputDeviceDriverOwner(IntPtr info, out IntPtr value, out int errorCode);
+
+        [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
+        private static extern void DeleteInputDeviceInfo(IntPtr info);
 #endif
 
         #endregion
@@ -398,6 +405,11 @@ namespace Melanchall.DryWetMidi.Multimedia
             var result = GetInputDeviceDriverOwner(info, out driverOwnerPointer, out errorCode);
             driverOwner = NativeApi.GetStringFromPointer(driverOwnerPointer);
             return result;
+        }
+
+        public static void Api_DeleteDeviceInfo(IntPtr info)
+        {
+            DeleteInputDeviceInfo(info);
         }
 
         #endregion

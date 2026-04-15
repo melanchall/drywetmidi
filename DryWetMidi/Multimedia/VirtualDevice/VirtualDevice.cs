@@ -13,7 +13,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         private readonly string _name;
 
-        private VirtualDeviceApi.Callback_Mac _callback_Mac;
+        private VirtualDeviceApi.Callback_Mac _callbackMac;
 
         #endregion
 
@@ -98,9 +98,9 @@ namespace Melanchall.DryWetMidi.Multimedia
         {
             var sessionHandle = MidiDevicesSession.GetSessionHandle();
 
-            _callback_Mac = OnMessage_Mac;
+            _callbackMac = OnMessage_Mac;
 
-            var result = VirtualDeviceApi.Api_OpenDevice_Mac(Name, sessionHandle, _callback_Mac, out var deviceInfo, out var errorCode);
+            var result = VirtualDeviceApi.Api_OpenDevice_Mac(Name, sessionHandle, _callbackMac, out var deviceInfo, out var errorCode);
             NativeApiUtilities.HandleDevicesNativeApiResult(result, errorCode);
 
             InitializeDevice(deviceInfo);
@@ -128,6 +128,8 @@ namespace Melanchall.DryWetMidi.Multimedia
 
 #if TEST
             Handle.TestCheckpoints = TestCheckpoints;
+            InputDevice.TestCheckpoints = TestCheckpoints;
+            OutputDevice.TestCheckpoints = TestCheckpoints;
 #endif
         }
 
@@ -165,12 +167,13 @@ namespace Melanchall.DryWetMidi.Multimedia
             if (_disposed)
                 return;
 
+            Handle?.Dispose();
+            Handle = null;
+
             if (disposing)
             {
                 InputDevice?.Dispose(true);
                 OutputDevice?.Dispose(true);
-                Handle?.Dispose();
-                Handle = null;
             }
 
             _disposed = true;

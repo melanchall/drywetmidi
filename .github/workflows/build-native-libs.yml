@@ -24,7 +24,7 @@ jobs:
       - name: Download Microsoft.Windows.Devices.Midi2.nupkg
         shell: pwsh
         run: |
-          $packageUrl = "https://github.com/microsoft/MIDI/releases/download/rc-3/Microsoft.Windows.Devices.Midi2.1.0.16-rc.3.7.nupkg"
+          $packageUrl = "https://github.com/microsoft/MIDI/releases/download/rc-4/Microsoft.Windows.Devices.Midi2.1.0.17-rc.4.25.nupkg"
           $downloadFolder = "${{ runner.temp }}\Midi2"
           
           New-Item -Path $downloadFolder -ItemType Directory -Force | Out-Null

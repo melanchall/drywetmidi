@@ -184,7 +184,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     InputDeviceCheckpointsNames.DisconnectDeviceExecutedInReleaseHandle,
                     InputDeviceCheckpointsNames.DisconnectDeviceSuccessInReleaseHandle,
                     InputDeviceCheckpointsNames.CloseDeviceExecutedInReleaseHandle,
-                    InputDeviceCheckpointsNames.CloseDeviceSuccessInReleaseHandle);
+                    InputDeviceCheckpointsNames.CloseDeviceSuccessInReleaseHandle,
+                    InputDeviceCheckpointsNames.ReleaseInfoHandleEntered,
+                    InputDeviceCheckpointsNames.InfoDeletedInReleaseInfoHandle);
 
                 inputDevice.Dispose();
 
@@ -193,7 +195,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     InputDeviceCheckpointsNames.DisconnectDeviceExecutedInReleaseHandle,
                     InputDeviceCheckpointsNames.DisconnectDeviceSuccessInReleaseHandle,
                     InputDeviceCheckpointsNames.CloseDeviceExecutedInReleaseHandle,
-                    InputDeviceCheckpointsNames.CloseDeviceSuccessInReleaseHandle);
+                    InputDeviceCheckpointsNames.CloseDeviceSuccessInReleaseHandle,
+                    InputDeviceCheckpointsNames.ReleaseInfoHandleEntered,
+                    InputDeviceCheckpointsNames.InfoDeletedInReleaseInfoHandle);
             }
         }
 
@@ -225,7 +229,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     InputDeviceCheckpointsNames.DisconnectDeviceExecutedInReleaseHandle,
                     InputDeviceCheckpointsNames.DisconnectDeviceSuccessInReleaseHandle,
                     InputDeviceCheckpointsNames.CloseDeviceExecutedInReleaseHandle,
-                    InputDeviceCheckpointsNames.CloseDeviceSuccessInReleaseHandle);
+                    InputDeviceCheckpointsNames.CloseDeviceSuccessInReleaseHandle,
+                    InputDeviceCheckpointsNames.ReleaseInfoHandleEntered,
+                    InputDeviceCheckpointsNames.InfoDeletedInReleaseInfoHandle);
 
                 ClassicAssert.IsTrue(openDevice(checkpoints), $"Can't open device on iteration {i}.");
 
@@ -238,7 +244,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     InputDeviceCheckpointsNames.DisconnectDeviceExecutedInReleaseHandle,
                     InputDeviceCheckpointsNames.DisconnectDeviceSuccessInReleaseHandle,
                     InputDeviceCheckpointsNames.CloseDeviceExecutedInReleaseHandle,
-                    InputDeviceCheckpointsNames.CloseDeviceSuccessInReleaseHandle);
+                    InputDeviceCheckpointsNames.CloseDeviceSuccessInReleaseHandle,
+                    InputDeviceCheckpointsNames.ReleaseInfoHandleEntered,
+                    InputDeviceCheckpointsNames.InfoDeletedInReleaseInfoHandle);
             }
         }
 #endif

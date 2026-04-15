@@ -10,6 +10,9 @@
         public const string CloseDeviceExecutedInReleaseHandle = "IN C";
         public const string CloseDeviceSuccessInReleaseHandle = "IN C SUCCESS";
 
+        public const string ReleaseInfoHandleEntered = "IN A 2";
+        public const string InfoDeletedInReleaseInfoHandle = "IN B 2";
+
         public const string MessageDataReceived = "MSG DATA";
 
         #endregion

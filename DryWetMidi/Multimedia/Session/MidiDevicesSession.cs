@@ -49,23 +49,14 @@ namespace Melanchall.DryWetMidi.Multimedia
                         _name = Marshal.StringToHGlobalAuto(name);
 
                         var apiType = CommonApi.Api_GetApiType();
-                        var result = default(MidiDevicesSessionApi.SESSION_OPENRESULT);
                         int errorCode = 0;
 
                         var rawHandle = IntPtr.Zero;
 
-                        switch (apiType)
-                        {
-                            case CommonApi.API_TYPE.API_TYPE_MAC:
-                                _inputDeviceCallback = InputDeviceCallback;
-                                _outputDeviceCallback = OutputDeviceCallback;
-                                result = MidiDevicesSessionApi.Api_OpenSession_Mac(_name, _inputDeviceCallback, _outputDeviceCallback, out rawHandle, out errorCode);
-                                break;
-                            case CommonApi.API_TYPE.API_TYPE_WIN:
-                                result = MidiDevicesSessionApi.Api_OpenSession_Win(_name, out rawHandle, out errorCode);
-                                break;
-                        }
+                        _inputDeviceCallback = InputDeviceCallback;
+                        _outputDeviceCallback = OutputDeviceCallback;
 
+                        var result = MidiDevicesSessionApi.Api_OpenSession(_name, _inputDeviceCallback, _outputDeviceCallback, out rawHandle, out errorCode);
                         NativeApiUtilities.HandleDevicesNativeApiResult(result, errorCode);
                         
                         _handle = new MidiDevicesSessionHandle(rawHandle);

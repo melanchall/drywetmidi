@@ -194,14 +194,18 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 checkpoints.CheckCheckpointsAreNotReached(
                     OutputDeviceCheckpointsNames.ReleaseHandleEntered,
                     OutputDeviceCheckpointsNames.CloseDeviceExecutedInReleaseHandle,
-                    OutputDeviceCheckpointsNames.CloseDeviceSuccessInReleaseHandle);
+                    OutputDeviceCheckpointsNames.CloseDeviceSuccessInReleaseHandle,
+                    OutputDeviceCheckpointsNames.ReleaseInfoHandleEntered,
+                    OutputDeviceCheckpointsNames.InfoDeletedInReleaseInfoHandle);
 
                 outputDevice.Dispose();
 
                 checkpoints.CheckCheckpointsReached(
                     OutputDeviceCheckpointsNames.ReleaseHandleEntered,
                     OutputDeviceCheckpointsNames.CloseDeviceExecutedInReleaseHandle,
-                    OutputDeviceCheckpointsNames.CloseDeviceSuccessInReleaseHandle);
+                    OutputDeviceCheckpointsNames.CloseDeviceSuccessInReleaseHandle,
+                    OutputDeviceCheckpointsNames.ReleaseInfoHandleEntered,
+                    OutputDeviceCheckpointsNames.InfoDeletedInReleaseInfoHandle);
             }
         }
 
@@ -231,7 +235,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 checkpoints.CheckCheckpointsAreNotReached(
                     OutputDeviceCheckpointsNames.ReleaseHandleEntered,
                     OutputDeviceCheckpointsNames.CloseDeviceExecutedInReleaseHandle,
-                    OutputDeviceCheckpointsNames.CloseDeviceSuccessInReleaseHandle);
+                    OutputDeviceCheckpointsNames.CloseDeviceSuccessInReleaseHandle,
+                    OutputDeviceCheckpointsNames.ReleaseInfoHandleEntered,
+                    OutputDeviceCheckpointsNames.InfoDeletedInReleaseInfoHandle);
 
                 ClassicAssert.IsTrue(sendEvent(checkpoints), $"Can't send event on iteration {i}.");
 
@@ -242,7 +248,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 checkpoints.CheckCheckpointsReached(
                     OutputDeviceCheckpointsNames.ReleaseHandleEntered,
                     OutputDeviceCheckpointsNames.CloseDeviceExecutedInReleaseHandle,
-                    OutputDeviceCheckpointsNames.CloseDeviceSuccessInReleaseHandle);
+                    OutputDeviceCheckpointsNames.CloseDeviceSuccessInReleaseHandle,
+                    OutputDeviceCheckpointsNames.ReleaseInfoHandleEntered,
+                    OutputDeviceCheckpointsNames.InfoDeletedInReleaseInfoHandle);
             }
         }
 #endif

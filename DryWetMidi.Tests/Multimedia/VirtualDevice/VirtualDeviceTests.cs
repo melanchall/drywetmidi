@@ -60,6 +60,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
             var virtualDevice = GetVirtualDevice();
             virtualDevice.TestCheckpoints = checkpoints;
+            virtualDevice.InputDevice.TestCheckpoints = checkpoints;
+            virtualDevice.OutputDevice.TestCheckpoints = checkpoints;
 
             var inputDeviceFound = WaitOperations.Wait(() => InputDevice.GetAll().Any(d => d.Name == virtualDevice.Name), timeout);
             ClassicAssert.IsTrue(inputDeviceFound, $"Input device is not found for [{timeout}].");
@@ -70,7 +72,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             checkpoints.CheckCheckpointsAreNotReached(
                 VirtualDeviceCheckpointsNames.ReleaseHandleEntered,
                 VirtualDeviceCheckpointsNames.CloseDeviceExecutedInReleaseHandle,
-                VirtualDeviceCheckpointsNames.CloseDeviceSuccessInReleaseHandle);
+                VirtualDeviceCheckpointsNames.CloseDeviceSuccessInReleaseHandle,
+                InputDeviceCheckpointsNames.ReleaseInfoHandleEntered,
+                InputDeviceCheckpointsNames.InfoDeletedInReleaseInfoHandle,
+                OutputDeviceCheckpointsNames.ReleaseInfoHandleEntered,
+                OutputDeviceCheckpointsNames.InfoDeletedInReleaseInfoHandle);
 
             virtualDevice.Dispose();
 
@@ -83,7 +89,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             checkpoints.CheckCheckpointsReached(
                 VirtualDeviceCheckpointsNames.ReleaseHandleEntered,
                 VirtualDeviceCheckpointsNames.CloseDeviceExecutedInReleaseHandle,
-                VirtualDeviceCheckpointsNames.CloseDeviceSuccessInReleaseHandle);
+                VirtualDeviceCheckpointsNames.CloseDeviceSuccessInReleaseHandle,
+                InputDeviceCheckpointsNames.ReleaseInfoHandleEntered,
+                InputDeviceCheckpointsNames.InfoDeletedInReleaseInfoHandle,
+                OutputDeviceCheckpointsNames.ReleaseInfoHandleEntered,
+                OutputDeviceCheckpointsNames.InfoDeletedInReleaseInfoHandle);
         }
 
         [Test]
@@ -93,6 +103,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             {
                 var virtualDevice = GetVirtualDevice();
                 virtualDevice.TestCheckpoints = testCheckpoints;
+                virtualDevice.InputDevice.TestCheckpoints = testCheckpoints;
+                virtualDevice.OutputDevice.TestCheckpoints = testCheckpoints;
 
                 return virtualDevice.Name;
             };
@@ -104,7 +116,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             checkpoints.CheckCheckpointsAreNotReached(
                 VirtualDeviceCheckpointsNames.ReleaseHandleEntered,
                 VirtualDeviceCheckpointsNames.CloseDeviceExecutedInReleaseHandle,
-                VirtualDeviceCheckpointsNames.CloseDeviceSuccessInReleaseHandle);
+                VirtualDeviceCheckpointsNames.CloseDeviceSuccessInReleaseHandle,
+                InputDeviceCheckpointsNames.ReleaseInfoHandleEntered,
+                InputDeviceCheckpointsNames.InfoDeletedInReleaseInfoHandle,
+                OutputDeviceCheckpointsNames.ReleaseInfoHandleEntered,
+                OutputDeviceCheckpointsNames.InfoDeletedInReleaseInfoHandle);
 
             GC.Collect();
             GC.WaitForPendingFinalizers();
@@ -115,7 +131,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             checkpoints.CheckCheckpointsReached(
                 VirtualDeviceCheckpointsNames.ReleaseHandleEntered,
                 VirtualDeviceCheckpointsNames.CloseDeviceExecutedInReleaseHandle,
-                VirtualDeviceCheckpointsNames.CloseDeviceSuccessInReleaseHandle);
+                VirtualDeviceCheckpointsNames.CloseDeviceSuccessInReleaseHandle,
+                InputDeviceCheckpointsNames.ReleaseInfoHandleEntered,
+                InputDeviceCheckpointsNames.InfoDeletedInReleaseInfoHandle,
+                OutputDeviceCheckpointsNames.ReleaseInfoHandleEntered,
+                OutputDeviceCheckpointsNames.InfoDeletedInReleaseInfoHandle);
 
             var inputDeviceFound = WaitOperations.Wait(() => InputDevice.GetAll().Any(d => d.Name == deviceName), timeout);
             ClassicAssert.IsFalse(inputDeviceFound, $"Input device is found after virtual device disposed after [{timeout}].");

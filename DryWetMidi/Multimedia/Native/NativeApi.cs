@@ -41,7 +41,8 @@ namespace Melanchall.DryWetMidi.Multimedia
             NoMemory,
             InUse,
             NotPermitted,
-            Busy
+            Busy,
+            WmsError,
         }
 
         public enum MidiMessage
@@ -70,7 +71,8 @@ namespace Melanchall.DryWetMidi.Multimedia
             [NativeErrorType.NoMemory] = "There is no memory in the system to complete the operation",
             [NativeErrorType.InUse] = "Device is already in use",
             [NativeErrorType.NotPermitted] = "The process doesn’t have privileges for the requested operation",
-            [NativeErrorType.Busy] = "The hardware is busy with other data"
+            [NativeErrorType.Busy] = "The hardware is busy with other data",
+            [NativeErrorType.WmsError] = "Windows MIDI Services error"
         };
 
         #endregion

@@ -9,10 +9,16 @@ namespace Melanchall.DryWetMidi.Common
         #region Fields
 
         private readonly Dictionary<string, List<object>> _checkpointsReachedStates = new Dictionary<string, List<object>>();
+        private readonly List<string> _errors = new List<string>();
 
         #endregion
 
         #region Methods
+
+        public void SetErrorReached(string error)
+        {
+            _errors.Add(error);
+        }
 
         public void SetCheckpointReached(string checkpointName)
         {
@@ -37,6 +43,11 @@ namespace Melanchall.DryWetMidi.Common
             return _checkpointsReachedStates.TryGetValue(checkpointName, out var dataList)
                 ? dataList
                 : null;
+        }
+
+        public ICollection<string> GetErrors()
+        {
+            return _errors;
         }
 
         #endregion

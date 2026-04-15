@@ -15,12 +15,24 @@ namespace Melanchall.DryWetMidi.Multimedia
         {
             VIRTUAL_OPENRESULT_OK = 0,
 
+            [NativeApi.NativeErrorType(NativeApi.NativeErrorType.WmsError)]
             VIRTUAL_OPENRESULT_WMSUNAVAILABLE = 1,
+            [NativeApi.NativeErrorType(NativeApi.NativeErrorType.WmsError)]
             VIRTUAL_OPENRESULT_WMSBASICLOOPBACKUNAVAILABLE = 2,
+            [NativeApi.NativeErrorType(NativeApi.NativeErrorType.WmsError)]
             VIRTUAL_OPENRESULT_FAILED = 3,
             VIRTUAL_OPENRESULT_FAILEDGETINPUTDEVICEINFO = 4,
             VIRTUAL_OPENRESULT_FAILEDGETOUTPUTDEVICEINFO = 5,
+            [NativeApi.NativeErrorType(NativeApi.NativeErrorType.WmsError)]
             VIRTUAL_OPENRESULT_WMSERROR = 6,
+            [NativeApi.NativeErrorType(NativeApi.NativeErrorType.WmsError)]
+            VIRTUAL_OPENRESULT_INVALIDNAME = 7,
+            [NativeApi.NativeErrorType(NativeApi.NativeErrorType.WmsError)]
+            VIRTUAL_OPENRESULT_INVALIDUNIQUEID = 8,
+            [NativeApi.NativeErrorType(NativeApi.NativeErrorType.WmsError)]
+            VIRTUAL_OPENRESULT_NAMEINUSE = 9,
+            [NativeApi.NativeErrorType(NativeApi.NativeErrorType.WmsError)]
+            VIRTUAL_OPENRESULT_UNIQUEIDINUSE = 10,
 
             [NativeApi.NativeErrorType(NativeApi.NativeErrorType.NotPermitted)]
             VIRTUAL_OPENRESULT_CREATESOURCE_NOTPERMITTED = 101,

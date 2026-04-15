@@ -31,8 +31,10 @@ namespace Melanchall.DryWetMidi.Tests.Attributes
             var name = Guid.NewGuid().ToString();
             var sessionName = Marshal.StringToHGlobalAuto(name);
 
-            var result = MidiDevicesSessionApi.Api_OpenSession_Win(
+            var result = MidiDevicesSessionApi.Api_OpenSession(
                 sessionName,
+                InputDeviceCallback,
+                OutputDeviceCallback,
                 out var rawHandle,
                 out _);
 
@@ -54,6 +56,14 @@ namespace Melanchall.DryWetMidi.Tests.Attributes
             }
 
             return null;
+        }
+
+        private static void InputDeviceCallback(IntPtr info, bool operation)
+        {
+        }
+
+        private static void OutputDeviceCallback(IntPtr info, bool operation)
+        {
         }
     }
 }

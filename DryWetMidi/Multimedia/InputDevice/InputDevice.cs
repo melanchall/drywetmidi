@@ -52,8 +52,8 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         private readonly BytesToMidiEventConverter _bytesToMidiEventConverter = new BytesToMidiEventConverter(ChannelParametersBufferSize) { BytesFormat = BytesFormat.Device };
 
-        private InputDeviceApi.Callback_Win _callback_Win;
-        private InputDeviceApi.Callback_Mac _callback_Mac;
+        private InputDeviceApi.Callback_Win _callbackWin;
+        private InputDeviceApi.Callback_Mac _callbackMac;
 
         private int _sysExBufferSize = DefaultSysExBufferSize;
         private int _sysExBuffersCount = DefaultSysExBufferCount;
@@ -66,7 +66,6 @@ namespace Melanchall.DryWetMidi.Multimedia
         private readonly CommonApi.API_TYPE _apiType;
         private readonly int _hashCode;
 
-        private readonly IntPtr _info = IntPtr.Zero;
         private readonly object _handleLock = new object();
         private readonly object _eventProcessingLock = new object();
         private volatile bool _disposing;
@@ -78,7 +77,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         internal InputDevice(IntPtr info, CreationContext context)
             : base(context)
         {
-            _info = info;
+            Info = new InputDeviceInfo(info);
             _apiType = CommonApi.Api_GetApiType();
             _hashCode = InputDeviceApi.Api_GetDeviceHashCode(info);
             _bytesToMidiEventConverter.SilentNoteOnPolicy = SilentNoteOnPolicy.NoteOn;
@@ -99,7 +98,7 @@ namespace Melanchall.DryWetMidi.Multimedia
                 EnsureDeviceIsNotRemoved();
 
                 // TODO: cache the name and provide method to invalidate cache
-                var result = InputDeviceApi.Api_GetDeviceName(_info, out var name, out var errorCode);
+                var result = InputDeviceApi.Api_GetDeviceName(Info.DangerousGetHandle(), out var name, out var errorCode);
                 NativeApiUtilities.HandleDevicesNativeApiResult(result, errorCode);
 
                 return name;
@@ -339,31 +338,31 @@ namespace Melanchall.DryWetMidi.Multimedia
             {
                 case InputDeviceProperty.Product:
                     {
-                        var result = InputDeviceApi.Api_GetDeviceProduct(_info, out var product, out errorCode);
+                        var result = InputDeviceApi.Api_GetDeviceProduct(Info.DangerousGetHandle(), out var product, out errorCode);
                         NativeApiUtilities.HandleDevicesNativeApiResult(result, errorCode);
                         return product;
                     }
                 case InputDeviceProperty.Manufacturer:
                     {
-                        var result = InputDeviceApi.Api_GetDeviceManufacturer(_info, out var manufacturer, out errorCode);
+                        var result = InputDeviceApi.Api_GetDeviceManufacturer(Info.DangerousGetHandle(), out var manufacturer, out errorCode);
                         NativeApiUtilities.HandleDevicesNativeApiResult(result, errorCode);
                         return manufacturer;
                     }
                 case InputDeviceProperty.DriverVersion:
                     {
-                        var result = InputDeviceApi.Api_GetDeviceDriverVersion(_info, out var driverVersion, out errorCode);
+                        var result = InputDeviceApi.Api_GetDeviceDriverVersion(Info.DangerousGetHandle(), out var driverVersion, out errorCode);
                         NativeApiUtilities.HandleDevicesNativeApiResult(result, errorCode);
                         return driverVersion;
                     }
                 case InputDeviceProperty.UniqueId:
                     {
-                        var result = InputDeviceApi.Api_GetDeviceUniqueId(_info, out var uniqueId, out errorCode);
+                        var result = InputDeviceApi.Api_GetDeviceUniqueId(Info.DangerousGetHandle(), out var uniqueId, out errorCode);
                         NativeApiUtilities.HandleDevicesNativeApiResult(result, errorCode);
                         return uniqueId;
                     }
                 case InputDeviceProperty.DriverOwner:
                     {
-                        var result = InputDeviceApi.Api_GetDeviceDriverOwner(_info, out var driverOwner, out errorCode);
+                        var result = InputDeviceApi.Api_GetDeviceDriverOwner(Info.DangerousGetHandle(), out var driverOwner, out errorCode);
                         NativeApiUtilities.HandleDevicesNativeApiResult(result, errorCode);
                         return driverOwner;
                     }
@@ -509,15 +508,15 @@ namespace Melanchall.DryWetMidi.Multimedia
                 {
                     case CommonApi.API_TYPE.API_TYPE_WIN:
                         {
-                            _callback_Win = OnMessage_Win;
-                            var result = InputDeviceApi.Api_OpenDevice_Win(_info, sessionHandle, _callback_Win, SysExBufferSize, SysExBuffersCount, out rawHandle, out errorCode);
+                            _callbackWin = OnMessage_Win;
+                            var result = InputDeviceApi.Api_OpenDevice_Win(Info.DangerousGetHandle(), sessionHandle, _callbackWin, SysExBufferSize, SysExBuffersCount, out rawHandle, out errorCode);
                             NativeApiUtilities.HandleDevicesNativeApiResult(result, errorCode);
                         }
                         break;
                     case CommonApi.API_TYPE.API_TYPE_MAC:
                         {
-                            _callback_Mac = OnMessage_Mac;
-                            var result = InputDeviceApi.Api_OpenDevice_Mac(_info, sessionHandle, _callback_Mac, out rawHandle, out errorCode);
+                            _callbackMac = OnMessage_Mac;
+                            var result = InputDeviceApi.Api_OpenDevice_Mac(Info.DangerousGetHandle(), sessionHandle, _callbackMac, out rawHandle, out errorCode);
                             NativeApiUtilities.HandleDevicesNativeApiResult(result, errorCode);
                         }
                         break;
@@ -892,8 +891,8 @@ namespace Melanchall.DryWetMidi.Multimedia
 
             var canCompare = CommonApi.Api_CanCompareDevices();
             return canCompare
-                ? InputDeviceApi.Api_AreDevicesEqual(_info, inputDevice._info)
-                : _info.Equals(inputDevice._info);
+                ? InputDeviceApi.Api_AreDevicesEqual(Info.DangerousGetHandle(), inputDevice.Info.DangerousGetHandle())
+                : Info.DangerousGetHandle().Equals(inputDevice.Info.DangerousGetHandle());
         }
 
         /// <summary>
@@ -939,6 +938,14 @@ namespace Melanchall.DryWetMidi.Multimedia
                         Handle = null;
                     }
                 }
+
+                Info?.Dispose();
+                Info = null;
+            }
+            else
+            {
+                Handle?.Dispose();
+                Handle = null;
             }
 
             _disposed = true;

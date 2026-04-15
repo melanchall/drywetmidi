@@ -1,6 +1,5 @@
 ﻿using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Multimedia;
-using Melanchall.DryWetMidi.Tests.Attributes;
 using Melanchall.DryWetMidi.Tests.Utilities;
 using NUnit.Framework;
 using NUnit.Framework.Legacy;
@@ -26,55 +25,30 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
 #if TEST
         [Test]
-        [WinOnly]
-        public void CheckMidiDevicesSession_DisposeManually_Win([Values(0, 50, 5000)] int waitAfterSessionCreatedMs) =>
-            CheckMidiDevicesSession_DisposeManually(CreateSessionHandle_Win, null, null, waitAfterSessionCreatedMs);
-
-        [Test]
-        [MacOnly]
-        public void CheckMidiDevicesSession_DisposeManually_Mac([Values(0, 50, 5000)] int waitAfterSessionCreatedMs)
+        public void CheckMidiDevicesSession_DisposeManually([Values(0, 50, 5000)] int waitAfterSessionCreatedMs)
         {
             MidiDevicesSessionApi.InputDeviceCallback inputDeviceCallback = InputDeviceCallback;
             MidiDevicesSessionApi.OutputDeviceCallback outputDeviceCallback = OutputDeviceCallback;
 
-            CheckMidiDevicesSession_DisposeManually(CreateSessionHandle_Mac, inputDeviceCallback, outputDeviceCallback, waitAfterSessionCreatedMs);
+            CheckMidiDevicesSession_DisposeManually(CreateSessionHandle, inputDeviceCallback, outputDeviceCallback, waitAfterSessionCreatedMs);
         }
 
         [Test]
-        [WinOnly]
-        public void CheckMidiDevicesSession_AbandonAndWaitForFinalizer_Win([Values(0, 50, 5000)] int waitAfterSessionCreatedMs) =>
-            CheckMidiDevicesSession_AbandonAndWaitForFinalizer(CreateSessionHandle_Win, null, null, waitAfterSessionCreatedMs);
-
-        [Test]
-        [MacOnly]
-        public void CheckMidiDevicesSession_AbandonAndWaitForFinalizer_Mac([Values(0, 50, 5000)] int waitAfterSessionCreatedMs)
+        public void CheckMidiDevicesSession_AbandonAndWaitForFinalizer([Values(0, 50, 5000)] int waitAfterSessionCreatedMs)
         {
             MidiDevicesSessionApi.InputDeviceCallback inputDeviceCallback = InputDeviceCallback;
             MidiDevicesSessionApi.OutputDeviceCallback outputDeviceCallback = OutputDeviceCallback;
 
-            CheckMidiDevicesSession_AbandonAndWaitForFinalizer(CreateSessionHandle_Mac, inputDeviceCallback, outputDeviceCallback, waitAfterSessionCreatedMs);
+            CheckMidiDevicesSession_AbandonAndWaitForFinalizer(CreateSessionHandle, inputDeviceCallback, outputDeviceCallback, waitAfterSessionCreatedMs);
         }
 
         [Test]
-        [WinOnly]
-        public void CheckMidiDevicesSession_CloseViaApi_Win([Values(0, 50, 5000)] int waitAfterSessionCreatedMs)
-        {
-            var sessionHandle = CreateSessionHandle_Win(null, null, waitAfterSessionCreatedMs);
-            var result = MidiDevicesSessionApi.Api_CloseSession(sessionHandle);
-            ClassicAssert.AreEqual(
-                MidiDevicesSessionApi.SESSION_CLOSERESULT.SESSION_CLOSERESULT_OK,
-                result,
-                "Session was not closed successfully.");
-        }
-
-        [Test]
-        [MacOnly]
-        public void CheckMidiDevicesSession_CloseViaApi_Mac([Values(0, 50, 5000)] int waitAfterSessionCreatedMs)
+        public void CheckMidiDevicesSession_CloseViaApi([Values(0, 50, 5000)] int waitAfterSessionCreatedMs)
         {
             MidiDevicesSessionApi.InputDeviceCallback inputDeviceCallback = InputDeviceCallback;
             MidiDevicesSessionApi.OutputDeviceCallback outputDeviceCallback = OutputDeviceCallback;
 
-            var sessionHandle = CreateSessionHandle_Mac(inputDeviceCallback, outputDeviceCallback, waitAfterSessionCreatedMs);
+            var sessionHandle = CreateSessionHandle(inputDeviceCallback, outputDeviceCallback, waitAfterSessionCreatedMs);
             var result = MidiDevicesSessionApi.Api_CloseSession(sessionHandle);
             ClassicAssert.AreEqual(
                 MidiDevicesSessionApi.SESSION_CLOSERESULT.SESSION_CLOSERESULT_OK,
@@ -160,33 +134,12 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             return Marshal.StringToHGlobalAuto(name);
         }
 
-        private static IntPtr CreateSessionHandle_Win(
+        private static IntPtr CreateSessionHandle(
             MidiDevicesSessionApi.InputDeviceCallback inputDeviceCallback,
             MidiDevicesSessionApi.OutputDeviceCallback outputDeviceCallback,
             int waitAfterSessionCreatedMs)
         {
-            var result = MidiDevicesSessionApi.Api_OpenSession_Win(
-                GetSessionName(),
-                out var rawHandle,
-                out var errorCode);
-
-            ClassicAssert.AreEqual(
-                MidiDevicesSessionApi.SESSION_OPENRESULT.SESSION_OPENRESULT_OK,
-                result,
-                "Session was not opened successfully.");
-
-            if (waitAfterSessionCreatedMs > 0)
-                WaitOperations.Wait(waitAfterSessionCreatedMs);
-
-            return rawHandle;
-        }
-
-        private static IntPtr CreateSessionHandle_Mac(
-            MidiDevicesSessionApi.InputDeviceCallback inputDeviceCallback,
-            MidiDevicesSessionApi.OutputDeviceCallback outputDeviceCallback,
-            int waitAfterSessionCreatedMs)
-        {
-            var result = MidiDevicesSessionApi.Api_OpenSession_Mac(
+            var result = MidiDevicesSessionApi.Api_OpenSession(
                 GetSessionName(),
                 inputDeviceCallback,
                 outputDeviceCallback,

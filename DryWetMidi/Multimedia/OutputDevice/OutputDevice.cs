@@ -45,8 +45,6 @@ namespace Melanchall.DryWetMidi.Multimedia
         private readonly CommonApi.API_TYPE _apiType;
         private readonly int _hashCode;
 
-        private readonly IntPtr _info = IntPtr.Zero;
-
         #endregion
 
         #region Constructor
@@ -54,7 +52,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         internal OutputDevice(IntPtr info, CreationContext context)
             : base(context)
         {
-            _info = info;
+            Info = new OutputDeviceInfo(info);
             _apiType = CommonApi.Api_GetApiType();
             _hashCode = OutputDeviceApi.Api_GetDeviceHashCode(info);
         }
@@ -73,7 +71,7 @@ namespace Melanchall.DryWetMidi.Multimedia
                 EnsureSessionIsCreated();
                 EnsureDeviceIsNotRemoved();
 
-                var result = OutputDeviceApi.Api_GetDeviceName(_info, out var name, out var errorCode);
+                var result = OutputDeviceApi.Api_GetDeviceName(Info.DangerousGetHandle(), out var name, out var errorCode);
                 NativeApiUtilities.HandleDevicesNativeApiResult(result, errorCode);
 
                 return name;
@@ -249,50 +247,50 @@ namespace Melanchall.DryWetMidi.Multimedia
             {
                 case OutputDeviceProperty.Product:
                     {
-                        var result = OutputDeviceApi.Api_GetDeviceProduct(_info, out var product, out errorCode);
+                        var result = OutputDeviceApi.Api_GetDeviceProduct(Info.DangerousGetHandle(), out var product, out errorCode);
                         NativeApiUtilities.HandleDevicesNativeApiResult(result, errorCode);
                         return product;
                     }
                 case OutputDeviceProperty.Manufacturer:
                     {
-                        var result = OutputDeviceApi.Api_GetDeviceManufacturer(_info, out var manufacturer, out errorCode);
+                        var result = OutputDeviceApi.Api_GetDeviceManufacturer(Info.DangerousGetHandle(), out var manufacturer, out errorCode);
                         NativeApiUtilities.HandleDevicesNativeApiResult(result, errorCode);
                         return manufacturer;
                     }
                 case OutputDeviceProperty.DriverVersion:
                     {
-                        var result = OutputDeviceApi.Api_GetDeviceDriverVersion(_info, out var driverVersion, out errorCode);
+                        var result = OutputDeviceApi.Api_GetDeviceDriverVersion(Info.DangerousGetHandle(), out var driverVersion, out errorCode);
                         NativeApiUtilities.HandleDevicesNativeApiResult(result, errorCode);
                         return driverVersion;
                     }
                 case OutputDeviceProperty.Technology:
                     {
                         OutputDeviceTechnology technology;
-                        var result = OutputDeviceApi.Api_GetDeviceTechnology(_info, out technology, out errorCode);
+                        var result = OutputDeviceApi.Api_GetDeviceTechnology(Info.DangerousGetHandle(), out technology, out errorCode);
                         NativeApiUtilities.HandleDevicesNativeApiResult(result, errorCode);
                         return technology;
                     }
                 case OutputDeviceProperty.UniqueId:
                     {
-                        var result = OutputDeviceApi.Api_GetDeviceUniqueId(_info, out var uniqueId, out errorCode);
+                        var result = OutputDeviceApi.Api_GetDeviceUniqueId(Info.DangerousGetHandle(), out var uniqueId, out errorCode);
                         NativeApiUtilities.HandleDevicesNativeApiResult(result, errorCode);
                         return uniqueId;
                     }
                 case OutputDeviceProperty.VoicesNumber:
                     {
-                        var result = OutputDeviceApi.Api_GetDeviceVoicesNumber(_info, out var voicesNumber, out errorCode);
+                        var result = OutputDeviceApi.Api_GetDeviceVoicesNumber(Info.DangerousGetHandle(), out var voicesNumber, out errorCode);
                         NativeApiUtilities.HandleDevicesNativeApiResult(result, errorCode);
                         return voicesNumber;
                     }
                 case OutputDeviceProperty.NotesNumber:
                     {
-                        var result = OutputDeviceApi.Api_GetDeviceNotesNumber(_info, out var notesNumber, out errorCode);
+                        var result = OutputDeviceApi.Api_GetDeviceNotesNumber(Info.DangerousGetHandle(), out var notesNumber, out errorCode);
                         NativeApiUtilities.HandleDevicesNativeApiResult(result, errorCode);
                         return notesNumber;
                     }
                 case OutputDeviceProperty.Channels:
                     {
-                        var result = OutputDeviceApi.Api_GetDeviceChannelsMask(_info, out var channelsMask, out errorCode);
+                        var result = OutputDeviceApi.Api_GetDeviceChannelsMask(Info.DangerousGetHandle(), out var channelsMask, out errorCode);
                         NativeApiUtilities.HandleDevicesNativeApiResult(result, errorCode);
                         return (from channel in FourBitNumber.Values
                                 let isChannelSupported = (channelsMask >> channel) & 1
@@ -301,13 +299,13 @@ namespace Melanchall.DryWetMidi.Multimedia
                     }
                 case OutputDeviceProperty.Options:
                     {
-                        var result = OutputDeviceApi.Api_GetDeviceOptions(_info, out var option, out errorCode);
+                        var result = OutputDeviceApi.Api_GetDeviceOptions(Info.DangerousGetHandle(), out var option, out errorCode);
                         NativeApiUtilities.HandleDevicesNativeApiResult(result, errorCode);
                         return option;
                     }
                 case OutputDeviceProperty.DriverOwner:
                     {
-                        var result = OutputDeviceApi.Api_GetDeviceDriverOwner(_info, out var driverOwner, out errorCode);
+                        var result = OutputDeviceApi.Api_GetDeviceDriverOwner(Info.DangerousGetHandle(), out var driverOwner, out errorCode);
                         NativeApiUtilities.HandleDevicesNativeApiResult(result, errorCode);
                         return driverOwner;
                     }
@@ -449,13 +447,13 @@ namespace Melanchall.DryWetMidi.Multimedia
                 case CommonApi.API_TYPE.API_TYPE_WIN:
                     {
                         _callback = OnMessage;
-                        var result = OutputDeviceApi.Api_OpenDevice_Win(_info, sessionHandle, _callback, out rawHandle, out errorCode);
+                        var result = OutputDeviceApi.Api_OpenDevice_Win(Info.DangerousGetHandle(), sessionHandle, _callback, out rawHandle, out errorCode);
                         NativeApiUtilities.HandleDevicesNativeApiResult(result, errorCode);
                     }
                     break;
                 case CommonApi.API_TYPE.API_TYPE_MAC:
                     {
-                        var result = OutputDeviceApi.Api_OpenDevice_Mac(_info, sessionHandle, out rawHandle, out errorCode);
+                        var result = OutputDeviceApi.Api_OpenDevice_Mac(Info.DangerousGetHandle(), sessionHandle, out rawHandle, out errorCode);
                         NativeApiUtilities.HandleDevicesNativeApiResult(result, errorCode);
                     }
                     break;
@@ -647,8 +645,8 @@ namespace Melanchall.DryWetMidi.Multimedia
 
             var canCompare = CommonApi.Api_CanCompareDevices();
             return canCompare
-                ? OutputDeviceApi.Api_AreDevicesEqual(_info, outputDevice._info)
-                : _info.Equals(outputDevice._info);
+                ? OutputDeviceApi.Api_AreDevicesEqual(Info.DangerousGetHandle(), outputDevice.Info.DangerousGetHandle())
+                : Info.DangerousGetHandle().Equals(outputDevice.Info.DangerousGetHandle());
         }
 
         /// <summary>
@@ -685,8 +683,12 @@ namespace Melanchall.DryWetMidi.Multimedia
             {
                 _midiEventToBytesConverter.Dispose();
                 _bytesToMidiEventConverter.Dispose();
+
                 Handle?.Dispose();
                 Handle = null;
+
+                Info?.Dispose();
+                Info = null;
             }
 
             _disposed = true;

@@ -28,6 +28,8 @@ namespace Melanchall.DryWetMidi.Multimedia
 
             if (closed)
                 TestCheckpoints?.SetCheckpointReached(VirtualDeviceCheckpointsNames.CloseDeviceSuccessInReleaseHandle);
+            else
+                TestCheckpoints?.SetErrorReached($"Failed to close virtual device: {closeResult} ({errorCode}).");
 #endif
 
             return closed;

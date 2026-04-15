@@ -104,6 +104,8 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         internal NativeHandle Handle { get; set; }
 
+        internal NativeHandle Info { get; set; }
+
 #if TEST
         internal TestCheckpoints TestCheckpoints
         {
@@ -112,9 +114,11 @@ namespace Melanchall.DryWetMidi.Multimedia
             {
                 _testCheckpoints = value;
 
-                var handle = Handle;
-                if (handle != null)
-                    handle.TestCheckpoints = value;
+                if (Handle != null)
+                    Handle.TestCheckpoints = value;
+
+                if (Info != null)
+                    Info.TestCheckpoints = value;
             }
         }
 #endif
