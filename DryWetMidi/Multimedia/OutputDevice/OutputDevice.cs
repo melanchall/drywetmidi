@@ -319,8 +319,10 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// </summary>
         /// <returns>Number of output MIDI devices presented in the system.</returns>
         /// <exception cref="MidiDeviceException">An error occurred.</exception>
+        /// <exception cref="PlatformNotSupportedException">This operation is not supported on the current operating system.</exception>
         public static int GetDevicesCount()
         {
+            Utilities.EnsureOsIsSupported();
             EnsureSessionIsCreated();
 
             var result = OutputDeviceApi.Api_GetDevicesCount(out var count);
@@ -335,8 +337,11 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// </summary>
         /// <returns>The list of the properties supported by output devices on the current
         /// operating system.</returns>
+        /// <exception cref="PlatformNotSupportedException">This operation is not supported on the current operating system.</exception>
         public static OutputDeviceProperty[] GetSupportedProperties()
         {
+            Utilities.EnsureOsIsSupported();
+
             if (_supportedProperties != null)
                 return _supportedProperties;
 
@@ -350,31 +355,26 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// </summary>
         /// <returns>All output MIDI devices presented in the system.</returns>
         /// <exception cref="MidiDeviceException">An error occurred.</exception>
+        /// <exception cref="PlatformNotSupportedException">This operation is not supported on the current operating system.</exception>
         public static ICollection<OutputDevice> GetAll()
         {
+            Utilities.EnsureOsIsSupported();
             EnsureSessionIsCreated();
 
-            return GetAllLazy().ToArray();
-        }
+            var result = OutputDeviceApi.Api_GetDevicesInfo(MidiDevicesSession.GetSessionHandle(), out var devicesInfoArray, out var size, out var error);
+            NativeApiUtilities.HandleDevicesNativeApiResult(result, error);
 
-        /// <summary>
-        /// Retrieves an output MIDI device by the specified index.
-        /// </summary>
-        /// <param name="index">Index of an output device to retrieve.</param>
-        /// <returns>Output MIDI device at the specified index.</returns>
-        /// <exception cref="ArgumentOutOfRangeException">Index is less than zero or greater than devices count minus 1.</exception>
-        /// <exception cref="MidiDeviceException">An error occurred.</exception>
-        public static OutputDevice GetByIndex(int index)
-        {
-            var devicesCount = GetDevicesCount();
-            ThrowIfArgument.IsOutOfRange(nameof(index), index, 0, devicesCount - 1, "Index is less than zero or greater than devices count minus 1.");
+            var devices = new OutputDevice[size];
 
-            EnsureSessionIsCreated();
+            for (int i = 0; i < size; i++)
+            {
+                var info = Marshal.ReadIntPtr(devicesInfoArray, i * IntPtr.Size);
+                devices[i] = new OutputDevice(info, CreationContext.User);
+            }
 
-            var result = OutputDeviceApi.Api_GetDeviceInfo(index, out var info, out var errorCode);
-            NativeApiUtilities.HandleDevicesNativeApiResult(result, errorCode);
+            OutputDeviceApi.Api_FreeDevicesInfo(devicesInfoArray, size);
 
-            return new OutputDevice(info, CreationContext.User);
+            return devices;
         }
 
         /// <summary>
@@ -394,13 +394,15 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// </list>
         /// </exception>
         /// <exception cref="MidiDeviceException">An error occurred.</exception>
+        /// <exception cref="PlatformNotSupportedException">This operation is not supported on the current operating system.</exception>
         public static OutputDevice GetByName(string name)
         {
             ThrowIfArgument.IsNullOrWhiteSpaceString(nameof(name), name, "Device name");
 
+            Utilities.EnsureOsIsSupported();
             EnsureSessionIsCreated();
 
-            var device = GetAllLazy().FirstOrDefault(d => d.Name == name);
+            var device = GetAll().FirstOrDefault(d => d.Name == name);
             if (device == null)
                 throw new ArgumentException($"There is no output MIDI device '{name}'.", nameof(name));
 
@@ -420,16 +422,6 @@ namespace Melanchall.DryWetMidi.Multimedia
 
             var result = OutputDeviceApi.Api_SendSysExEvent_Win(Handle.DangerousGetHandle(), bufferPointer, bufferLength, out var errorCode);
             NativeApiUtilities.HandleDevicesNativeApiResult(result, errorCode);
-        }
-
-        private static IEnumerable<OutputDevice> GetAllLazy()
-        {
-            var devicesCount = GetDevicesCount();
-
-            for (var i = 0; i < devicesCount; i++)
-            {
-                yield return GetByIndex(i);
-            }
         }
 
         private void EnsureHandleIsCreated()
@@ -643,10 +635,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             if (outputDevice == null)
                 return false;
 
-            var canCompare = CommonApi.Api_CanCompareDevices();
-            return canCompare
-                ? OutputDeviceApi.Api_AreDevicesEqual(Info.DangerousGetHandle(), outputDevice.Info.DangerousGetHandle())
-                : Info.DangerousGetHandle().Equals(outputDevice.Info.DangerousGetHandle());
+            return OutputDeviceApi.Api_AreDevicesEqual(Info.DangerousGetHandle(), outputDevice.Info.DangerousGetHandle());
         }
 
         /// <summary>

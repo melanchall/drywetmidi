@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 
 namespace Melanchall.DryWetMidi.Tests.Multimedia
 {
@@ -45,9 +46,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
                 ClassicAssert.IsNotNull(virtualDevice.InputDevice, "Input device is null.");
                 ClassicAssert.IsNotNull(deviceName, virtualDevice.InputDevice.Name, "Input device name is null.");
+                ClassicAssert.AreEqual("Input device (subdevice of a virtual device)", virtualDevice.InputDevice.ToString(), "Device string representation is invalid.");
 
                 ClassicAssert.IsNotNull(virtualDevice.OutputDevice, "Output device is null.");
                 ClassicAssert.IsNotNull(deviceName, virtualDevice.OutputDevice.Name, "Output device name is null.");
+                ClassicAssert.AreEqual("Output device (subdevice of a virtual device)", virtualDevice.OutputDevice.ToString(), "Device string representation is invalid.");
             }
         }
 
@@ -254,6 +257,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             }
         }
 
+        [DevicesEqualityApiRequired]
         [Test]
         public void CheckVirtualDeviceSubdevicesEquality_SameDevices()
         {
@@ -266,6 +270,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             }
         }
 
+        [DevicesEqualityApiRequired]
         [Test]
         public void CheckVirtualDeviceSubdevicesEquality_DifferentDevices()
         {
@@ -379,6 +384,47 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 outputDevice.SendEvent(new NoteOnEvent());
                 eventReceived = WaitOperations.Wait(() => sentEventsCount > 1, SendReceiveUtilities.MaximumEventSendReceiveDelay);
                 ClassicAssert.IsTrue(eventReceived, "Event is not sent after enabling again.");
+            }
+        }
+
+        [Test]
+        public void AccessSubDevicesAfterSomeDeviceRemoval([Values(1, 5)] int previousCount)
+        {
+            var previousNames = Enumerable
+                .Range(0, previousCount)
+                .Select(i => Guid.NewGuid().ToString())
+                .ToArray();
+
+            var virtualDevices = new VirtualDevice[previousCount];
+
+            for (var i = 0; i < previousCount; i++)
+            {
+                virtualDevices[i] = VirtualDevice.Create(previousNames[i]);
+            }
+
+            Thread.Sleep(2000);
+
+            const string lastVirtualDeviceName = "Last virtual device";
+
+            using (var lastVirtualDevice = VirtualDevice.Create(lastVirtualDeviceName))
+            {
+                var inputDevice = lastVirtualDevice.InputDevice;
+                var outputDevice = lastVirtualDevice.OutputDevice;
+
+                for (var i = 0; i < previousCount; i++)
+                {
+                    virtualDevices[i]?.Dispose();
+                }
+
+                Thread.Sleep(2000);
+
+                Assert.DoesNotThrow(
+                    () => inputDevice.StartEventsListening(),
+                    "Exception has been thrown on input device.");
+
+                Assert.DoesNotThrow(
+                    () => outputDevice.SendEvent(new NoteOnEvent()),
+                    "Exception has been thrown on output device.");
             }
         }
 

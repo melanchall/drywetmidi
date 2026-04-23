@@ -1,4 +1,5 @@
 ﻿using Melanchall.DryWetMidi.Common;
+using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Multimedia;
 using Melanchall.DryWetMidi.Tests.Attributes;
 using NUnit.Framework;
@@ -60,10 +61,12 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     var firstAddedDevice = addedDevices.First();
                     ClassicAssert.IsInstanceOf<InputDevice>(firstAddedDevice, "Invalid type of the first added device.");
                     ClassicAssert.AreEqual(deviceName, firstAddedDevice.Name, "Invalid name of the first added device.");
+                    ClassicAssert.AreEqual("Input device (from 'Device added' notification)", firstAddedDevice.ToString(), "Added input device string representation is invalid.");
 
                     var lastAddedDevice = addedDevices.Last();
                     ClassicAssert.IsInstanceOf<OutputDevice>(lastAddedDevice, "Invalid type of the last added device.");
                     ClassicAssert.AreEqual(deviceName, lastAddedDevice.Name, "Invalid name of the last added device.");
+                    ClassicAssert.AreEqual("Output device (from 'Device added' notification)", lastAddedDevice.ToString(), "Added output device string representation is invalid.");
                 }
 
                 var removed = WaitOperations.Wait(() => removedDevices.Count >= 2, timeout);
@@ -73,9 +76,29 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
                 var firstRemovedDevice = removedDevices.First();
                 ClassicAssert.IsInstanceOf<InputDevice>(firstRemovedDevice, "Invalid type of the first removed device.");
+                ClassicAssert.AreEqual("Input device (from 'Device removed' notification)", firstRemovedDevice.ToString(), "Removed input device string representation is invalid.");
+                ClassicAssert.Throws<InvalidOperationException>(
+                    () => { var name = firstRemovedDevice.Name; },
+                    "Can get name of removed input device.");
+                ClassicAssert.Throws<InvalidOperationException>(
+                    () => { var name = ((InputDevice)firstRemovedDevice).GetProperty(InputDeviceProperty.Product); },
+                    "Can get property value of removed input device.");
+                ClassicAssert.Throws<InvalidOperationException>(
+                    () => ((InputDevice)firstRemovedDevice).StartEventsListening(),
+                    "Can start events listening on removed input device.");
 
                 var lastRemovedDevice = removedDevices.Last();
                 ClassicAssert.IsInstanceOf<OutputDevice>(lastRemovedDevice, "Invalid type of the last removed device.");
+                ClassicAssert.AreEqual("Output device (from 'Device removed' notification)", lastRemovedDevice.ToString(), "Removed output device string representation is invalid.");
+                ClassicAssert.Throws<InvalidOperationException>(
+                    () => { var name = lastRemovedDevice.Name; },
+                    "Can get name of removed output device.");
+                ClassicAssert.Throws<InvalidOperationException>(
+                    () => { var name = ((OutputDevice)lastRemovedDevice).GetProperty(OutputDeviceProperty.Product); },
+                    "Can get property value of removed output device.");
+                ClassicAssert.Throws<InvalidOperationException>(
+                    () => ((OutputDevice)lastRemovedDevice).SendEvent(new NoteOnEvent()),
+                    "Can send event via removed output device.");
 
                 DevicesWatcher.Instance.DeviceAdded -= addedHandler;
                 DevicesWatcher.Instance.DeviceRemoved -= removedHandler;
@@ -180,7 +203,6 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
             using (var virtualDevice = VirtualDevice.Create(deviceName))
             {
-                // TODO: microsoft/MIDI/issues/997
                 Thread.Sleep(5000);
             }
 
@@ -199,7 +221,6 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
             using (var virtualDevice = VirtualDevice.Create(deviceName))
             {
-                // TODO: microsoft/MIDI/issues/997
                 Thread.Sleep(5000);
             }
 
@@ -218,7 +239,6 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
             using (var virtualDevice = VirtualDevice.Create(deviceName))
             {
-                // TODO: microsoft/MIDI/issues/997
                 Thread.Sleep(5000);
             }
 
@@ -228,6 +248,62 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             ClassicAssert.AreEqual(0, removedDevices1.Count, $"[C] Invalid first count of removed devices.");
             ClassicAssert.IsFalse(removed2, $"[C] Devices were removed on second collection.");
             ClassicAssert.AreEqual(0, removedDevices2.Count, $"[C] Invalid second count of removed devices.");
+        }
+
+        [Test]
+        public void CheckDevicesEqualityFromNotifications_StandaloneDevices()
+        {
+            var addedDevices = new List<MidiDevice>();
+            var removedDevices = new List<MidiDevice>();
+
+            EventHandler<DeviceAddedRemovedEventArgs> addedHandler = (_, e) => addedDevices.Add(e.Device);
+            DevicesWatcher.Instance.DeviceAdded += addedHandler;
+
+            EventHandler<DeviceAddedRemovedEventArgs> removedHandler = (_, e) => removedDevices.Add(e.Device);
+            DevicesWatcher.Instance.DeviceRemoved += removedHandler;
+
+            var deviceName = "VD8";
+            var timeout = TimeSpan.FromSeconds(5);
+
+            using (var virtualDevice = VirtualDevice.Create(deviceName))
+            {
+                var added = WaitOperations.Wait(() => addedDevices.Count >= 2, timeout);
+                ClassicAssert.IsTrue(added, $"Devices weren't added for [{timeout}].");
+                ClassicAssert.AreEqual(2, addedDevices.Count, $"Invalid count of added devices.");
+
+                using (var inputDevice = InputDevice.GetByName(deviceName))
+                using (var outputDevice = OutputDevice.GetByName(deviceName))
+                {
+                    ClassicAssert.IsTrue(addedDevices.Contains(inputDevice), "Added devices don't contain input device.");
+                    ClassicAssert.IsTrue(addedDevices.Contains(outputDevice), "Added devices don't contain output device.");
+                }
+            }
+        }
+
+        [Test]
+        public void CheckDevicesEqualityFromNotifications_VirtualSubDevices()
+        {
+            var addedDevices = new List<MidiDevice>();
+            var removedDevices = new List<MidiDevice>();
+
+            EventHandler<DeviceAddedRemovedEventArgs> addedHandler = (_, e) => addedDevices.Add(e.Device);
+            DevicesWatcher.Instance.DeviceAdded += addedHandler;
+
+            EventHandler<DeviceAddedRemovedEventArgs> removedHandler = (_, e) => removedDevices.Add(e.Device);
+            DevicesWatcher.Instance.DeviceRemoved += removedHandler;
+
+            var deviceName = "VD8";
+            var timeout = TimeSpan.FromSeconds(5);
+
+            using (var virtualDevice = VirtualDevice.Create(deviceName))
+            {
+                var added = WaitOperations.Wait(() => addedDevices.Count >= 2, timeout);
+                ClassicAssert.IsTrue(added, $"Devices weren't added for [{timeout}].");
+                ClassicAssert.AreEqual(2, addedDevices.Count, $"Invalid count of added devices.");
+
+                ClassicAssert.IsTrue(addedDevices.Contains(virtualDevice.InputDevice), "Added devices don't contain input device.");
+                ClassicAssert.IsTrue(addedDevices.Contains(virtualDevice.OutputDevice), "Added devices don't contain output device.");
+            }
         }
 
         #endregion

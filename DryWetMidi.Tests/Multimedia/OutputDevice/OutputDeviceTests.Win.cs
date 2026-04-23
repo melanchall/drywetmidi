@@ -12,6 +12,12 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
     [TestFixture]
     public sealed partial class OutputDeviceTests
     {
+        #region Constants
+
+        public const string MicrosoftGsWavetableSynth = "Microsoft GS Wavetable Synth";
+
+        #endregion
+
         #region Test methods
 
         // TODO: failed on WMS enabled
@@ -133,48 +139,6 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             ClassicAssert.Throws<ArgumentException>(() => outputDevice.GetProperty(OutputDeviceProperty.DriverOwner), "Driver owner is supported.");
         }
 
-        [Test]
-        [WinOnly]
-        public void CheckOutputDevicesEquality_ViaEquals_SameDevices_Win()
-        {
-            var outputDevice1 = OutputDevice.GetByName(MidiDevicesNames.DeviceA);
-            var outputDevice2 = OutputDevice.GetByName(MidiDevicesNames.DeviceA);
-
-            ClassicAssert.AreNotEqual(outputDevice1, outputDevice2, "Devices are equal.");
-        }
-
-        [Test]
-        [WinOnly]
-        public void CheckOutputDevicesEquality_ViaEquals_DifferentDevices_Win()
-        {
-            var outputDevice1 = OutputDevice.GetByName(MidiDevicesNames.DeviceA);
-            var outputDevice2 = OutputDevice.GetByName(MidiDevicesNames.DeviceB);
-
-            ClassicAssert.AreNotEqual(outputDevice1, outputDevice2, "Devices are equal.");
-        }
-
-        [Test]
-        [WinOnly]
-        public void CheckOutputDevicesEquality_ViaOperator_SameDevices_Win()
-        {
-            var outputDevice1 = OutputDevice.GetByName(MidiDevicesNames.DeviceA);
-            var outputDevice2 = OutputDevice.GetByName(MidiDevicesNames.DeviceA);
-
-            ClassicAssert.IsFalse(outputDevice1 == outputDevice2, "Devices are equal via equality.");
-            ClassicAssert.IsTrue(outputDevice1 != outputDevice2, "Devices are equal via inequality.");
-        }
-
-        [Test]
-        [WinOnly]
-        public void CheckOutputDevicesEquality_ViaOperator_DifferentDevices_Win()
-        {
-            var outputDevice1 = OutputDevice.GetByName(MidiDevicesNames.DeviceA);
-            var outputDevice2 = OutputDevice.GetByName(MidiDevicesNames.DeviceB);
-
-            ClassicAssert.IsFalse(outputDevice1 == outputDevice2, "Devices are equal via equality.");
-            ClassicAssert.IsTrue(outputDevice1 != outputDevice2, "Devices are equal via inequality.");
-        }
-
         [MultimediaTestRetry]
         [Test]
         public void SendEvent_SysEx_SysExBufferSettings(
@@ -194,6 +158,38 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     inputDevice.SysExBufferSize = bufferSize;
                     inputDevice.SysExBuffersCount = buffersCount;
                 });
+        }
+
+        [Test]
+        [WinOnly]
+        [DevicesEqualityApiRequired]
+        public void CheckMicrosoftGsWavetableSynth()
+        {
+            using (var outputDevice = OutputDevice.GetByName(MicrosoftGsWavetableSynth))
+            {
+                outputDevice.PrepareForEventsSending();
+                outputDevice.SendEvent(new NoteOnEvent());
+            }
+        }
+
+        [Test]
+        [WinOnly]
+        [DevicesEqualityApiRequired]
+        public void CheckMicrosoftGsWavetableSynthEquality_SameDevices()
+        {
+            var outputDevice1 = OutputDevice.GetByName(MicrosoftGsWavetableSynth);
+            var outputDevice2 = OutputDevice.GetByName(MicrosoftGsWavetableSynth);
+            ClassicAssert.AreEqual(outputDevice1, outputDevice2, "Devices are not equal.");
+        }
+
+        [Test]
+        [WinOnly]
+        [DevicesEqualityApiRequired]
+        public void CheckMicrosoftGsWavetableSynthEquality_DifferentDevices()
+        {
+            var outputDevice1 = OutputDevice.GetByName(MicrosoftGsWavetableSynth);
+            var outputDevice2 = OutputDevice.GetByName(MidiDevicesNames.DeviceA);
+            ClassicAssert.AreNotEqual(outputDevice1, outputDevice2, "Devices are equal.");
         }
 
         #endregion

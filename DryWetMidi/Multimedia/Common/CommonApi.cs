@@ -38,11 +38,6 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         [LibraryImport(NativeApi.LibraryName)]
         [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-        [return: MarshalAs(UnmanagedType.U1)]
-        private static partial bool CanCompareDevices();
-
-        [LibraryImport(NativeApi.LibraryName)]
-        [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
         private static partial void GetNativeEnvironmentInfo_Win(
             [MarshalAs(UnmanagedType.U1)] out bool comInitializationResult,
             [MarshalAs(UnmanagedType.U1)] out bool registryCheckResult,
@@ -52,10 +47,6 @@ namespace Melanchall.DryWetMidi.Multimedia
 #else
         [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
         private static extern API_TYPE GetApiType();
-
-        [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
-        [return:MarshalAs(UnmanagedType.U1)]
-        private static extern bool CanCompareDevices();
 
         [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
         private static extern void GetNativeEnvironmentInfo_Win(
@@ -73,11 +64,6 @@ namespace Melanchall.DryWetMidi.Multimedia
         public static API_TYPE Api_GetApiType()
         {
             return GetApiType();
-        }
-
-        public static bool Api_CanCompareDevices()
-        {
-            return CanCompareDevices();
         }
 
         public static void Api_GetNativeEnvironmentInfo_Win(

@@ -28,11 +28,6 @@ API_EXPORT API_TYPE GetApiType()
     return API_TYPE_MAC;
 }
 
-API_EXPORT char CanCompareDevices()
-{
-    return 1;
-}
-
 /* ================================
    High-precision tick generator
  ================================ */
@@ -565,13 +560,7 @@ struct InputDeviceHandle
     MIDIPortRef portRef;
 };
 
-API_EXPORT IN_GETCOUNTRESULT GetInputDevicesCount(int* count)
-{
-    *count = static_cast<int>(MIDIGetNumberOfSources());
-    return IN_GETCOUNTRESULT_OK;
-}
-
-API_EXPORT IN_GETINFORESULT GetInputDeviceInfo(int deviceIndex, void** info, int* errorCode)
+IN_GETINFORESULT GetInputDeviceInfo(int deviceIndex, InputDeviceInfo** info, int* errorCode)
 {
     *errorCode = 0;
 
@@ -591,18 +580,49 @@ API_EXPORT IN_GETINFORESULT GetInputDeviceInfo(int deviceIndex, void** info, int
     return IN_GETINFORESULT_OK;
 }
 
-API_EXPORT int GetInputDeviceHashCode(void* info)
+API_EXPORT IN_GETALLINFORESULT GetInputDevicesInfo(SessionHandle* sessionHandle, InputDeviceInfo*** devicesInfo, int* devicesCount, int* errorCode)
+{
+    *errorCode = 0;
+    *devicesCount = static_cast<int>(MIDIGetNumberOfSources());
+
+    InputDeviceInfo** result = new InputDeviceInfo*[*devicesCount];
+
+    for (int i = 0; i < *devicesCount; i++)
+    {
+        InputDeviceInfo* inputDeviceInfo;
+
+        auto getInputDeviceInfoResult = GetInputDeviceInfo(i, &inputDeviceInfo, errorCode);
+        if (getInputDeviceInfoResult != IN_GETINFORESULT_OK)
+            return IN_GETALLINFORESULT_UNKNOWNERRORONGETINFO;
+
+        result[i] = inputDeviceInfo;
+    }
+
+    *devicesInfo = result;
+
+    return IN_GETALLINFORESULT_OK;
+}
+
+API_EXPORT void FreeInputDevicesInfo(InputDeviceInfo** devicesInfo, int devicesCount)
+{
+    delete[] devicesInfo;
+}
+
+API_EXPORT IN_GETCOUNTRESULT GetInputDevicesCount(int* count)
+{
+    *count = static_cast<int>(MIDIGetNumberOfSources());
+    return IN_GETCOUNTRESULT_OK;
+}
+
+API_EXPORT int GetInputDeviceHashCode(InputDeviceInfo* info)
 {
     InputDeviceInfo* inputDeviceInfo = static_cast<InputDeviceInfo*>(info);
     return static_cast<int>(inputDeviceInfo->endpointRef);
 }
 
-API_EXPORT char AreInputDevicesEqual(void* info1, void* info2)
+API_EXPORT char AreInputDevicesEqual(InputDeviceInfo* info1, InputDeviceInfo* info2)
 {
-    InputDeviceInfo* inputDeviceInfo1 = static_cast<InputDeviceInfo*>(info1);
-    InputDeviceInfo* inputDeviceInfo2 = static_cast<InputDeviceInfo*>(info2);
-    
-    return static_cast<char>(inputDeviceInfo1->endpointRef == inputDeviceInfo2->endpointRef);
+    return static_cast<char>(info1->endpointRef == info2->endpointRef);
 }
 
 IN_GETPROPERTYRESULT GetInputDeviceStringPropertyValue(InputDeviceInfo* inputDeviceInfo, CFStringRef propertyID, char** value, int* errorCode)
@@ -648,51 +668,44 @@ IN_GETPROPERTYRESULT GetInputDeviceIntPropertyValue(InputDeviceInfo* inputDevice
     return IN_GETPROPERTYRESULT_OK;
 }
 
-API_EXPORT IN_GETPROPERTYRESULT GetInputDeviceName(void* info, char** value, int* errorCode)
+API_EXPORT IN_GETPROPERTYRESULT GetInputDeviceName(InputDeviceInfo* info, char** value, int* errorCode)
 {
-    InputDeviceInfo* inputDeviceInfo = static_cast<InputDeviceInfo*>(info);
-    return GetInputDeviceStringPropertyValue(inputDeviceInfo, kMIDIPropertyDisplayName, value, errorCode);
+    return GetInputDeviceStringPropertyValue(info, kMIDIPropertyDisplayName, value, errorCode);
 }
 
-API_EXPORT IN_GETPROPERTYRESULT GetInputDeviceManufacturer(void* info, char** value, int* errorCode)
+API_EXPORT IN_GETPROPERTYRESULT GetInputDeviceManufacturer(InputDeviceInfo* info, char** value, int* errorCode)
 {
-    InputDeviceInfo* inputDeviceInfo = static_cast<InputDeviceInfo*>(info);
-    return GetInputDeviceStringPropertyValue(inputDeviceInfo, kMIDIPropertyManufacturer, value, errorCode);
+    return GetInputDeviceStringPropertyValue(info, kMIDIPropertyManufacturer, value, errorCode);
 }
 
-API_EXPORT IN_GETPROPERTYRESULT GetInputDeviceProduct(void* info, char** value, int* errorCode)
+API_EXPORT IN_GETPROPERTYRESULT GetInputDeviceProduct(InputDeviceInfo* info, char** value, int* errorCode)
 {
-    InputDeviceInfo* inputDeviceInfo = static_cast<InputDeviceInfo*>(info);
-    return GetInputDeviceStringPropertyValue(inputDeviceInfo, kMIDIPropertyModel, value, errorCode);
+    return GetInputDeviceStringPropertyValue(info, kMIDIPropertyModel, value, errorCode);
 }
 
-API_EXPORT IN_GETPROPERTYRESULT GetInputDeviceDriverVersion(void* info, int* value, int* errorCode)
+API_EXPORT IN_GETPROPERTYRESULT GetInputDeviceDriverVersion(InputDeviceInfo* info, int* value, int* errorCode)
 {
-    InputDeviceInfo* inputDeviceInfo = static_cast<InputDeviceInfo*>(info);
-    return GetInputDeviceIntPropertyValue(inputDeviceInfo, kMIDIPropertyDriverVersion, value, errorCode);
+    return GetInputDeviceIntPropertyValue(info, kMIDIPropertyDriverVersion, value, errorCode);
 }
 
-API_EXPORT IN_GETPROPERTYRESULT GetInputDeviceUniqueId(void* info, int* value, int* errorCode)
+API_EXPORT IN_GETPROPERTYRESULT GetInputDeviceUniqueId(InputDeviceInfo* info, int* value, int* errorCode)
 {
-    InputDeviceInfo* inputDeviceInfo = static_cast<InputDeviceInfo*>(info);
-    return GetInputDeviceIntPropertyValue(inputDeviceInfo, kMIDIPropertyUniqueID, value, errorCode);
+    return GetInputDeviceIntPropertyValue(info, kMIDIPropertyUniqueID, value, errorCode);
 }
 
-API_EXPORT IN_GETPROPERTYRESULT GetInputDeviceDriverOwner(void* info, char** value, int* errorCode)
+API_EXPORT IN_GETPROPERTYRESULT GetInputDeviceDriverOwner(InputDeviceInfo* info, char** value, int* errorCode)
 {
-    InputDeviceInfo* inputDeviceInfo = static_cast<InputDeviceInfo*>(info);
-    return GetInputDeviceStringPropertyValue(inputDeviceInfo, kMIDIPropertyDriverOwner, value, errorCode);
+    return GetInputDeviceStringPropertyValue(info, kMIDIPropertyDriverOwner, value, errorCode);
 }
 
-API_EXPORT IN_OPENRESULT OpenInputDevice_Mac(void* info, void* sessionHandle, MIDIReadProc callback, void** handle, int* errorCode)
+API_EXPORT IN_OPENRESULT OpenInputDevice_Mac(InputDeviceInfo* info, void* sessionHandle, MIDIReadProc callback, void** handle, int* errorCode)
 {
     *errorCode = 0;
 
-    InputDeviceInfo* inputDeviceInfo = static_cast<InputDeviceInfo*>(info);
     SessionHandle* pSessionHandle = static_cast<SessionHandle*>(sessionHandle);
 
     InputDeviceHandle* inputDeviceHandle = new InputDeviceHandle();
-    inputDeviceHandle->info = inputDeviceInfo;
+    inputDeviceHandle->info = info;
 
     *handle = inputDeviceHandle;
 
@@ -832,13 +845,7 @@ struct OutputDeviceHandle
     MIDIPortRef portRef;
 };
 
-API_EXPORT OUT_GETCOUNTRESULT GetOutputDevicesCount(int* count)
-{
-    *count = static_cast<int>(MIDIGetNumberOfDestinations());
-    return OUT_GETCOUNTRESULT_OK;
-}
-
-API_EXPORT OUT_GETINFORESULT GetOutputDeviceInfo(int deviceIndex, void** info, int* errorCode)
+OUT_GETINFORESULT GetOutputDeviceInfo(int deviceIndex, OutputDeviceInfo** info, int* errorCode)
 {
     *errorCode = 0;
 
@@ -858,18 +865,48 @@ API_EXPORT OUT_GETINFORESULT GetOutputDeviceInfo(int deviceIndex, void** info, i
     return OUT_GETINFORESULT_OK;
 }
 
-API_EXPORT int GetOutputDeviceHashCode(void* info)
+API_EXPORT OUT_GETALLINFORESULT GetOutputDevicesInfo(SessionHandle* sessionHandle, OutputDeviceInfo*** devicesInfo, int* devicesCount, int* errorCode)
 {
-    OutputDeviceInfo* outputDeviceInfo = static_cast<OutputDeviceInfo*>(info);
-    return static_cast<int>(outputDeviceInfo->endpointRef);
+    *errorCode = 0;
+    *devicesCount = static_cast<int>(MIDIGetNumberOfDestinations());
+
+    OutputDeviceInfo** result = new OutputDeviceInfo*[*devicesCount];
+
+    for (int i = 0; i < *devicesCount; i++)
+    {
+        OutputDeviceInfo* outputDeviceInfo;
+
+        auto getOutputDeviceInfoResult = GetOutputDeviceInfo(i, &outputDeviceInfo, errorCode);
+        if (getOutputDeviceInfoResult != OUT_GETINFORESULT_OK)
+            return OUT_GETALLINFORESULT_UNKNOWNERRORONGETINFO;
+
+        result[i] = outputDeviceInfo;
+    }
+
+    *devicesInfo = result;
+
+    return OUT_GETALLINFORESULT_OK;
 }
 
-API_EXPORT char AreOutputDevicesEqual(void* info1, void* info2)
+API_EXPORT void FreeOutputDevicesInfo(OutputDeviceInfo** devicesInfo, int devicesCount)
 {
-    OutputDeviceInfo* outputDeviceInfo1 = static_cast<OutputDeviceInfo*>(info1);
-    OutputDeviceInfo* outputDeviceInfo2 = static_cast<OutputDeviceInfo*>(info2);
-    
-    return static_cast<char>(outputDeviceInfo1->endpointRef == outputDeviceInfo2->endpointRef);
+    delete[] devicesInfo;
+}
+
+API_EXPORT OUT_GETCOUNTRESULT GetOutputDevicesCount(int* count)
+{
+    *count = static_cast<int>(MIDIGetNumberOfDestinations());
+    return OUT_GETCOUNTRESULT_OK;
+}
+
+API_EXPORT int GetOutputDeviceHashCode(OutputDeviceInfo* info)
+{
+    return static_cast<int>(info->endpointRef);
+}
+
+API_EXPORT char AreOutputDevicesEqual(OutputDeviceInfo* info1, OutputDeviceInfo* info2)
+{
+    return static_cast<char>(info1->endpointRef == info2->endpointRef);
 }
 
 OUT_GETPROPERTYRESULT GetOutputDeviceStringPropertyValue(OutputDeviceInfo* outputDeviceInfo, CFStringRef propertyID, char** value, int* errorCode)
@@ -915,51 +952,44 @@ OUT_GETPROPERTYRESULT GetOutputDeviceIntPropertyValue(OutputDeviceInfo* outputDe
     return OUT_GETPROPERTYRESULT_OK;
 }
 
-API_EXPORT OUT_GETPROPERTYRESULT GetOutputDeviceName(void* info, char** value, int* errorCode)
+API_EXPORT OUT_GETPROPERTYRESULT GetOutputDeviceName(OutputDeviceInfo* info, char** value, int* errorCode)
 {
-    OutputDeviceInfo* outputDeviceInfo = static_cast<OutputDeviceInfo*>(info);
-    return GetOutputDeviceStringPropertyValue(outputDeviceInfo, kMIDIPropertyDisplayName, value, errorCode);
+    return GetOutputDeviceStringPropertyValue(info, kMIDIPropertyDisplayName, value, errorCode);
 }
 
-API_EXPORT OUT_GETPROPERTYRESULT GetOutputDeviceManufacturer(void* info, char** value, int* errorCode)
+API_EXPORT OUT_GETPROPERTYRESULT GetOutputDeviceManufacturer(OutputDeviceInfo* info, char** value, int* errorCode)
 {
-    OutputDeviceInfo* outputDeviceInfo = static_cast<OutputDeviceInfo*>(info);
-    return GetOutputDeviceStringPropertyValue(outputDeviceInfo, kMIDIPropertyManufacturer, value, errorCode);
+    return GetOutputDeviceStringPropertyValue(info, kMIDIPropertyManufacturer, value, errorCode);
 }
 
-API_EXPORT OUT_GETPROPERTYRESULT GetOutputDeviceProduct(void* info, char** value, int* errorCode)
+API_EXPORT OUT_GETPROPERTYRESULT GetOutputDeviceProduct(OutputDeviceInfo* info, char** value, int* errorCode)
 {
-    OutputDeviceInfo* outputDeviceInfo = static_cast<OutputDeviceInfo*>(info);
-    return GetOutputDeviceStringPropertyValue(outputDeviceInfo, kMIDIPropertyModel, value, errorCode);
+    return GetOutputDeviceStringPropertyValue(info, kMIDIPropertyModel, value, errorCode);
 }
 
-API_EXPORT OUT_GETPROPERTYRESULT GetOutputDeviceDriverVersion(void* info, int* value, int* errorCode)
+API_EXPORT OUT_GETPROPERTYRESULT GetOutputDeviceDriverVersion(OutputDeviceInfo* info, int* value, int* errorCode)
 {
-    OutputDeviceInfo* outputDeviceInfo = static_cast<OutputDeviceInfo*>(info);
-    return GetOutputDeviceIntPropertyValue(outputDeviceInfo, kMIDIPropertyDriverVersion, value, errorCode);
+    return GetOutputDeviceIntPropertyValue(info, kMIDIPropertyDriverVersion, value, errorCode);
 }
 
-API_EXPORT OUT_GETPROPERTYRESULT GetOutputDeviceUniqueId(void* info, int* value, int* errorCode)
+API_EXPORT OUT_GETPROPERTYRESULT GetOutputDeviceUniqueId(OutputDeviceInfo* info, int* value, int* errorCode)
 {
-    OutputDeviceInfo* outputDeviceInfo = static_cast<OutputDeviceInfo*>(info);
-    return GetOutputDeviceIntPropertyValue(outputDeviceInfo, kMIDIPropertyUniqueID, value, errorCode);
+    return GetOutputDeviceIntPropertyValue(info, kMIDIPropertyUniqueID, value, errorCode);
 }
 
-API_EXPORT OUT_GETPROPERTYRESULT GetOutputDeviceDriverOwner(void* info, char** value, int* errorCode)
+API_EXPORT OUT_GETPROPERTYRESULT GetOutputDeviceDriverOwner(OutputDeviceInfo* info, char** value, int* errorCode)
 {
-    OutputDeviceInfo* outputDeviceInfo = static_cast<OutputDeviceInfo*>(info);
-    return GetOutputDeviceStringPropertyValue(outputDeviceInfo, kMIDIPropertyDriverOwner, value, errorCode);
+    return GetOutputDeviceStringPropertyValue(info, kMIDIPropertyDriverOwner, value, errorCode);
 }
 
-API_EXPORT OUT_OPENRESULT OpenOutputDevice_Mac(void* info, void* sessionHandle, void** handle, int* errorCode)
+API_EXPORT OUT_OPENRESULT OpenOutputDevice_Mac(OutputDeviceInfo* info, void* sessionHandle, void** handle, int* errorCode)
 {
     *errorCode = 0;
 
-    OutputDeviceInfo* outputDeviceInfo = static_cast<OutputDeviceInfo*>(info);
     SessionHandle* pSessionHandle = static_cast<SessionHandle*>(sessionHandle);
 
     OutputDeviceHandle* outputDeviceHandle = new OutputDeviceHandle();
-    outputDeviceHandle->info = outputDeviceInfo;
+    outputDeviceHandle->info = info;
 
     *handle = outputDeviceHandle;
 
@@ -1247,12 +1277,12 @@ API_EXPORT VIRTUAL_SENDBACKRESULT SendDataBackFromVirtualDevice(const MIDIPacket
     return VIRTUAL_SENDBACKRESULT_OK;
 }
 
-API_EXPORT void* GetInputDeviceInfoFromVirtualDevice(VirtualDeviceInfo* info)
+API_EXPORT InputDeviceInfo* GetInputDeviceInfoFromVirtualDevice(VirtualDeviceInfo* info)
 {
     return info->inputDeviceInfo;
 }
 
-API_EXPORT void* GetOutputDeviceInfoFromVirtualDevice(VirtualDeviceInfo* info)
+API_EXPORT OutputDeviceInfo* GetOutputDeviceInfoFromVirtualDevice(VirtualDeviceInfo* info)
 {
     return info->outputDeviceInfo;
 }

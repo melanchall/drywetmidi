@@ -1,13 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Melanchall.DryWetMidi.Common;
+﻿using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Multimedia;
 using Melanchall.DryWetMidi.Tests.Attributes;
 using Melanchall.DryWetMidi.Tests.Utilities;
 using NUnit.Framework;
 using NUnit.Framework.Legacy;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
 
 namespace Melanchall.DryWetMidi.Tests.Multimedia
 {
@@ -78,26 +79,6 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         public void GetInputDeviceByName(string deviceName)
         {
             ClassicAssert.IsNotNull(InputDevice.GetByName(deviceName), "There is no device.");
-        }
-
-        [Test]
-        public void GetInputDeviceByIndex_Valid()
-        {
-            var devicesCount = InputDevice.GetDevicesCount();
-            ClassicAssert.IsNotNull(InputDevice.GetByIndex(devicesCount / 2), "There is no device.");
-        }
-
-        [Test]
-        public void GetInputDeviceByIndex_BelowZero()
-        {
-            ClassicAssert.Throws<ArgumentOutOfRangeException>(() => InputDevice.GetByIndex(-1), "Exception is not thrown.");
-        }
-
-        [Test]
-        public void GetInputDeviceByIndex_BeyondDevicesCount()
-        {
-            var devicesCount = InputDevice.GetDevicesCount();
-            ClassicAssert.Throws<ArgumentOutOfRangeException>(() => InputDevice.GetByIndex(devicesCount), "Exception is not thrown.");
         }
 
         [Test]
@@ -424,6 +405,99 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     () => inputDevice.SysExBuffersCount = 128,
                     "There is no exception.");
             }
+        }
+
+        [VirtualDeviceApiRequired]
+        [Test]
+        public void AccessInputDeviceAfterSomeDeviceRemoval([Values(1, 5)] int previousCount)
+        {
+            var previousNames = Enumerable
+                .Range(0, previousCount)
+                .Select(i => Guid.NewGuid().ToString())
+                .ToArray();
+
+            var virtualDevices = new VirtualDevice[previousCount];
+
+            for (var i = 0; i < previousCount; i++)
+            {
+                virtualDevices[i] = VirtualDevice.Create(previousNames[i]);
+            }
+
+            Thread.Sleep(2000);
+
+            const string lastVirtualDeviceName = "Last virtual device";
+
+            using (var lastVirtualDevice = VirtualDevice.Create(lastVirtualDeviceName))
+            using (var inputDevice = InputDevice.GetByName(lastVirtualDeviceName))
+            {
+                for (var i = 0; i < previousCount; i++)
+                {
+                    virtualDevices[i]?.Dispose();
+                }
+
+                Thread.Sleep(2000);
+
+                Assert.DoesNotThrow(
+                    () => inputDevice.StartEventsListening(),
+                    "Exception has been thrown.");
+            }
+        }
+
+        [Test]
+        [DevicesEqualityApiRequired]
+        public void CheckInputDevicesEquality_ViaEquals_SameDevices()
+        {
+            var inputDevice1 = InputDevice.GetByName(MidiDevicesNames.DeviceA);
+            var inputDevice2 = InputDevice.GetByName(MidiDevicesNames.DeviceA);
+
+            ClassicAssert.AreEqual(inputDevice1, inputDevice2, "Devices are not equal.");
+        }
+
+        [Test]
+        [DevicesEqualityApiRequired]
+        public void CheckInputDevicesEquality_ViaEquals_DifferentDevices()
+        {
+            var inputDevice1 = InputDevice.GetByName(MidiDevicesNames.DeviceA);
+            var inputDevice2 = InputDevice.GetByName(MidiDevicesNames.DeviceB);
+
+            ClassicAssert.AreNotEqual(inputDevice1, inputDevice2, "Devices are equal.");
+        }
+
+        [Test]
+        [DevicesEqualityApiRequired]
+        public void CheckInputDevicesEquality_ViaOperator_SameDevices()
+        {
+            var inputDevice1 = InputDevice.GetByName(MidiDevicesNames.DeviceA);
+            var inputDevice2 = InputDevice.GetByName(MidiDevicesNames.DeviceA);
+
+            ClassicAssert.IsTrue(inputDevice1 == inputDevice2, "Devices are not equal via equality.");
+            ClassicAssert.IsFalse(inputDevice1 != inputDevice2, "Devices are not equal via inequality.");
+        }
+
+        [Test]
+        [DevicesEqualityApiRequired]
+        public void CheckInputDevicesEquality_ViaOperator_DifferentDevices()
+        {
+            var inputDevice1 = InputDevice.GetByName(MidiDevicesNames.DeviceA);
+            var inputDevice2 = InputDevice.GetByName(MidiDevicesNames.DeviceB);
+
+            ClassicAssert.IsFalse(inputDevice1 == inputDevice2, "Devices are equal via equality.");
+            ClassicAssert.IsTrue(inputDevice1 != inputDevice2, "Devices are equal via inequality.");
+        }
+
+        [Test]
+        [DevicesEqualityApiRequired]
+        public void FindOutputDeviceInDictionary()
+        {
+            var label = "X";
+            var dictionary = new Dictionary<MidiDevice, string>
+            {
+                [OutputDevice.GetByName(MidiDevicesNames.DeviceA)] = label
+            };
+
+            var outputDevice = OutputDevice.GetByName(MidiDevicesNames.DeviceA);
+            ClassicAssert.IsTrue(dictionary.TryGetValue(outputDevice, out var value), "Failed to find device in dictionary.");
+            ClassicAssert.AreEqual(label, value, "Device label is invalid.");
         }
 
         #endregion

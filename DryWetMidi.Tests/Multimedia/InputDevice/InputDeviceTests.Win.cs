@@ -124,6 +124,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             ClassicAssert.IsNotNull(inputDevice.GetProperty(InputDeviceProperty.DriverVersion), "Driver version is invalid.");
         }
 
+        // TODO: support on Windows
         [Test]
         [WinOnly]
         public void GetInputDeviceProperty_UniqueId_Win()
@@ -138,48 +139,6 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         {
             var inputDevice = InputDevice.GetByName(MidiDevicesNames.DeviceA);
             ClassicAssert.Throws<ArgumentException>(() => inputDevice.GetProperty(InputDeviceProperty.DriverOwner), "Driver owner is supported.");
-        }
-
-        [Test]
-        [WinOnly]
-        public void CheckInputDevicesEquality_ViaEquals_SameDevices_Win()
-        {
-            var inputDevice1 = InputDevice.GetByName(MidiDevicesNames.DeviceA);
-            var inputDevice2 = InputDevice.GetByName(MidiDevicesNames.DeviceA);
-
-            ClassicAssert.AreNotEqual(inputDevice1, inputDevice2, "Devices are equal.");
-        }
-
-        [Test]
-        [WinOnly]
-        public void CheckInputDevicesEquality_ViaEquals_DifferentDevices_Win()
-        {
-            var inputDevice1 = InputDevice.GetByName(MidiDevicesNames.DeviceA);
-            var inputDevice2 = InputDevice.GetByName(MidiDevicesNames.DeviceB);
-
-            ClassicAssert.AreNotEqual(inputDevice1, inputDevice2, "Devices are equal.");
-        }
-
-        [Test]
-        [WinOnly]
-        public void CheckInputDevicesEquality_ViaOperator_SameDevices_Win()
-        {
-            var inputDevice1 = InputDevice.GetByName(MidiDevicesNames.DeviceA);
-            var inputDevice2 = InputDevice.GetByName(MidiDevicesNames.DeviceA);
-
-            ClassicAssert.IsFalse(inputDevice1 == inputDevice2, "Devices are equal via equality.");
-            ClassicAssert.IsTrue(inputDevice1 != inputDevice2, "Devices are equal via inequality.");
-        }
-
-        [Test]
-        [WinOnly]
-        public void CheckInputDevicesEquality_ViaOperator_DifferentDevices_Win()
-        {
-            var inputDevice1 = InputDevice.GetByName(MidiDevicesNames.DeviceA);
-            var inputDevice2 = InputDevice.GetByName(MidiDevicesNames.DeviceB);
-
-            ClassicAssert.IsFalse(inputDevice1 == inputDevice2, "Devices are equal via equality.");
-            ClassicAssert.IsTrue(inputDevice1 != inputDevice2, "Devices are equal via inequality.");
         }
 
         #endregion

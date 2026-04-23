@@ -79,10 +79,13 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <summary>
         /// Gets the instance of <see cref="DevicesWatcher"/>.
         /// </summary>
+        /// <exception cref="PlatformNotSupportedException">This operation is not supported on the current operating system.</exception>
         public static DevicesWatcher Instance
         {
             get
             {
+                Utilities.EnsureOsIsSupported();
+
                 if (_instance == null)
                 {
                     lock (_lockObject)

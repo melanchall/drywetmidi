@@ -39,6 +39,8 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         public static MidiDevicesSessionHandle GetSessionHandle()
         {
+            Utilities.EnsureOsIsSupported();
+
             if (_handle == null || _handle.IsInvalid)
             {
                 lock (_lockObject)

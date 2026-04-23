@@ -68,15 +68,15 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <param name="name">The name of a virtual device to create.</param>
         /// <returns>An instance of the <see cref="VirtualDevice"/> with name of <paramref name="name"/>.</returns>
         /// <exception cref="ArgumentException"><paramref name="name"/> is <c>null</c> or contains white-spaces only.</exception>
-        /// <exception cref="NotSupportedException">Virtual device creation is not supported on the current operating system.</exception>
+        /// <exception cref="PlatformNotSupportedException">This operation is not supported on the current operating system.</exception>
         /// <exception cref="MidiDeviceException">An error occurred on device creation.</exception>
         public static VirtualDevice Create(string name)
         {
             ThrowIfArgument.IsNullOrWhiteSpaceString(nameof(name), name, "Device name");
 
-            var apiType = CommonApi.Api_GetApiType();
-            if (apiType != CommonApi.API_TYPE.API_TYPE_MAC && apiType != CommonApi.API_TYPE.API_TYPE_WIN)
-                throw new NotSupportedException("Virtual device creation is not supported on the current operating system.");
+            Utilities.EnsureOsIsSupported();
+
+            // TODO: ensure API available on Windows
 
             return new VirtualDevice(name);
         }

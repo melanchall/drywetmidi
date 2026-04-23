@@ -49,6 +49,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         #region Overrides
 
+        // TODO: check current OS
         /// <summary>
         /// Starts a tick generator.
         /// </summary>

@@ -67,7 +67,7 @@ namespace Melanchall.DryWetMidi.Tests.Attributes
                         if (_delay > TimeSpan.Zero)
                         {
                             TestContext.Progress.WriteLine(
-                                $"Test failed on attempt {attemptNumber}/{_repeatCount}. Waiting {_delay} before retry...");
+                                $"Test '{context.CurrentTest.Name}' failed on attempt {attemptNumber}/{_repeatCount}. Waiting {(int)_delay.TotalSeconds} seconds before retry...");
 
                             Thread.Sleep(_delay);
                         }

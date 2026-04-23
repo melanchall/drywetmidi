@@ -16,15 +16,19 @@ namespace Melanchall.DryWetMidi.Multimedia
             OUT_GETCOUNTRESULT_OK = 0
         }
 
-        public enum OUT_GETINFORESULT
+        public enum OUT_GETALLINFORESULT
         {
-            OUT_GETINFORESULT_OK = 0,
-            OUT_GETINFORESULT_BADDEVICEID = 1,
-            OUT_GETINFORESULT_INVALIDSTRUCTURE = 2,
-            OUT_GETINFORESULT_NODRIVER = 3,
+            OUT_GETALLINFORESULT_OK = 0,
+
+            OUT_GETALLINFORESULT_BADDEVICEID = 1,
+            OUT_GETALLINFORESULT_INVALIDSTRUCTURE = 2,
+            OUT_GETALLINFORESULT_NODRIVER = 3,
             [NativeApi.NativeErrorType(NativeApi.NativeErrorType.NoMemory)]
-            OUT_GETINFORESULT_NOMEMORY = 4,
-            OUT_GETINFORESULT_UNKNOWNERROR = 1000
+            OUT_GETALLINFORESULT_NOMEMORY = 4,
+            OUT_GETALLINFORESULT_UNKNOWNWMSERROR = 5,
+
+            OUT_GETALLINFORESULT_UNKNOWNERROR = 1000,
+            OUT_GETALLINFORESULT_UNKNOWNERRORONGETINFO = 1001
         }
 
         public enum OUT_OPENRESULT
@@ -137,7 +141,11 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         [LibraryImport(NativeApi.LibraryName)]
         [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-        private static partial OUT_GETINFORESULT GetOutputDeviceInfo(int deviceIndex, out IntPtr info, out int errorCode);
+        private static partial OUT_GETALLINFORESULT GetOutputDevicesInfo(MidiDevicesSessionHandle sessionHandle, out IntPtr devicesInfo, out int devicesCount, out int errorCode);
+
+        [LibraryImport(NativeApi.LibraryName)]
+        [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
+        private static partial void FreeOutputDevicesInfo(IntPtr array, int size);
 
         [LibraryImport(NativeApi.LibraryName)]
         [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
@@ -233,7 +241,10 @@ namespace Melanchall.DryWetMidi.Multimedia
         private static extern OUT_GETCOUNTRESULT GetOutputDevicesCount(out int count);
 
         [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
-        private static extern OUT_GETINFORESULT GetOutputDeviceInfo(int deviceIndex, out IntPtr info, out int errorCode);
+        private static extern OUT_GETALLINFORESULT GetOutputDevicesInfo(MidiDevicesSessionHandle sessionHandle, out IntPtr devicesInfo, out int devicesCount, out int errorCode);
+
+        [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
+        private static extern void FreeOutputDevicesInfo(IntPtr array, int size);
 
         [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
         private static extern int GetOutputDeviceHashCode(IntPtr info);
@@ -313,9 +324,14 @@ namespace Melanchall.DryWetMidi.Multimedia
             return GetOutputDevicesCount(out count);
         }
 
-        public static OUT_GETINFORESULT Api_GetDeviceInfo(int deviceIndex, out IntPtr info, out int errorCode)
+        public static OUT_GETALLINFORESULT Api_GetDevicesInfo(MidiDevicesSessionHandle sessionHandle, out IntPtr devicesInfo, out int devicesCount, out int errorCode)
         {
-            return GetOutputDeviceInfo(deviceIndex, out info, out errorCode);
+            return GetOutputDevicesInfo(sessionHandle, out devicesInfo, out devicesCount, out errorCode);
+        }
+
+        public static void Api_FreeDevicesInfo(IntPtr array, int size)
+        {
+            FreeOutputDevicesInfo(array, size);
         }
 
         public static int Api_GetDeviceHashCode(IntPtr info)
