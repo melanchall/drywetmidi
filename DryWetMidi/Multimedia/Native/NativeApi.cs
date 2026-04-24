@@ -81,9 +81,18 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         public static string GetStringFromPointer(IntPtr stringPointer)
         {
-            return stringPointer != IntPtr.Zero
-                ? Marshal.PtrToStringAnsi(stringPointer)
-                : string.Empty;
+            if (stringPointer == IntPtr.Zero)
+                return string.Empty;
+
+            switch (CommonApi.Api_GetApiType())
+            {
+                case CommonApi.API_TYPE.API_TYPE_WIN:
+                    return Marshal.PtrToStringUni(stringPointer) ?? string.Empty;
+                case CommonApi.API_TYPE.API_TYPE_MAC:
+                    return Marshal.PtrToStringAnsi(stringPointer) ?? string.Empty;
+            }
+
+            return string.Empty;
         }
 
         public static void HandleResult<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicFields | DynamicallyAccessedMemberTypes.Interfaces)] TResult, TException>(

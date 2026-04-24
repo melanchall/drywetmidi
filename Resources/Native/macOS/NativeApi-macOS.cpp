@@ -254,7 +254,7 @@ API_EXPORT void DeleteOutputDeviceInfo(OutputDeviceInfo* info)
     delete info;
 }
 
-OSStatus GetDevicePropertyValue(MIDIEndpointRef endpointRef, CFStringRef propertyID, char** value)
+OSStatus GetDevicePropertyValue(MIDIEndpointRef endpointRef, CFStringRef propertyID, const char** value)
 {
     CFStringRef stringRef = nullptr;
     OSStatus status = MIDIObjectGetStringProperty(endpointRef, propertyID, &stringRef);
@@ -294,7 +294,7 @@ typedef void (*OutputDeviceCallback)(void* info, char operation);
 
 struct SessionHandle
 {
-    char* name;
+    const char* name;
     MIDIClientRef clientRef;
     CFRunLoopRef runLoopRef;
     pthread_t thread;
@@ -459,7 +459,7 @@ void* ThreadProc(void* data)
     return nullptr;
 }
 
-API_EXPORT SESSION_OPENRESULT OpenSession(char* name, InputDeviceCallback inputDeviceCallback, OutputDeviceCallback outputDeviceCallback, void** handle, int* errorCode)
+API_EXPORT SESSION_OPENRESULT OpenSession_Mac(const char* name, InputDeviceCallback inputDeviceCallback, OutputDeviceCallback outputDeviceCallback, void** handle, int* errorCode)
 {
     *errorCode = 0;
 
@@ -625,7 +625,7 @@ API_EXPORT char AreInputDevicesEqual(InputDeviceInfo* info1, InputDeviceInfo* in
     return static_cast<char>(info1->endpointRef == info2->endpointRef);
 }
 
-IN_GETPROPERTYRESULT GetInputDeviceStringPropertyValue(InputDeviceInfo* inputDeviceInfo, CFStringRef propertyID, char** value, int* errorCode)
+IN_GETPROPERTYRESULT GetInputDeviceStringPropertyValue(InputDeviceInfo* inputDeviceInfo, CFStringRef propertyID, const char** value, int* errorCode)
 {
     *errorCode = 0;
 
@@ -668,17 +668,17 @@ IN_GETPROPERTYRESULT GetInputDeviceIntPropertyValue(InputDeviceInfo* inputDevice
     return IN_GETPROPERTYRESULT_OK;
 }
 
-API_EXPORT IN_GETPROPERTYRESULT GetInputDeviceName(InputDeviceInfo* info, char** value, int* errorCode)
+API_EXPORT IN_GETPROPERTYRESULT GetInputDeviceName(InputDeviceInfo* info, const char** value, int* errorCode)
 {
     return GetInputDeviceStringPropertyValue(info, kMIDIPropertyDisplayName, value, errorCode);
 }
 
-API_EXPORT IN_GETPROPERTYRESULT GetInputDeviceManufacturer(InputDeviceInfo* info, char** value, int* errorCode)
+API_EXPORT IN_GETPROPERTYRESULT GetInputDeviceManufacturer(InputDeviceInfo* info, const char** value, int* errorCode)
 {
     return GetInputDeviceStringPropertyValue(info, kMIDIPropertyManufacturer, value, errorCode);
 }
 
-API_EXPORT IN_GETPROPERTYRESULT GetInputDeviceProduct(InputDeviceInfo* info, char** value, int* errorCode)
+API_EXPORT IN_GETPROPERTYRESULT GetInputDeviceProduct(InputDeviceInfo* info, const char** value, int* errorCode)
 {
     return GetInputDeviceStringPropertyValue(info, kMIDIPropertyModel, value, errorCode);
 }
@@ -693,7 +693,7 @@ API_EXPORT IN_GETPROPERTYRESULT GetInputDeviceUniqueId(InputDeviceInfo* info, in
     return GetInputDeviceIntPropertyValue(info, kMIDIPropertyUniqueID, value, errorCode);
 }
 
-API_EXPORT IN_GETPROPERTYRESULT GetInputDeviceDriverOwner(InputDeviceInfo* info, char** value, int* errorCode)
+API_EXPORT IN_GETPROPERTYRESULT GetInputDeviceDriverOwner(InputDeviceInfo* info, const char** value, int* errorCode)
 {
     return GetInputDeviceStringPropertyValue(info, kMIDIPropertyDriverOwner, value, errorCode);
 }
@@ -909,7 +909,7 @@ API_EXPORT char AreOutputDevicesEqual(OutputDeviceInfo* info1, OutputDeviceInfo*
     return static_cast<char>(info1->endpointRef == info2->endpointRef);
 }
 
-OUT_GETPROPERTYRESULT GetOutputDeviceStringPropertyValue(OutputDeviceInfo* outputDeviceInfo, CFStringRef propertyID, char** value, int* errorCode)
+OUT_GETPROPERTYRESULT GetOutputDeviceStringPropertyValue(OutputDeviceInfo* outputDeviceInfo, CFStringRef propertyID, const char** value, int* errorCode)
 {
     *errorCode = 0;
 
@@ -952,17 +952,17 @@ OUT_GETPROPERTYRESULT GetOutputDeviceIntPropertyValue(OutputDeviceInfo* outputDe
     return OUT_GETPROPERTYRESULT_OK;
 }
 
-API_EXPORT OUT_GETPROPERTYRESULT GetOutputDeviceName(OutputDeviceInfo* info, char** value, int* errorCode)
+API_EXPORT OUT_GETPROPERTYRESULT GetOutputDeviceName(OutputDeviceInfo* info, const char** value, int* errorCode)
 {
     return GetOutputDeviceStringPropertyValue(info, kMIDIPropertyDisplayName, value, errorCode);
 }
 
-API_EXPORT OUT_GETPROPERTYRESULT GetOutputDeviceManufacturer(OutputDeviceInfo* info, char** value, int* errorCode)
+API_EXPORT OUT_GETPROPERTYRESULT GetOutputDeviceManufacturer(OutputDeviceInfo* info, const char** value, int* errorCode)
 {
     return GetOutputDeviceStringPropertyValue(info, kMIDIPropertyManufacturer, value, errorCode);
 }
 
-API_EXPORT OUT_GETPROPERTYRESULT GetOutputDeviceProduct(OutputDeviceInfo* info, char** value, int* errorCode)
+API_EXPORT OUT_GETPROPERTYRESULT GetOutputDeviceProduct(OutputDeviceInfo* info, const char** value, int* errorCode)
 {
     return GetOutputDeviceStringPropertyValue(info, kMIDIPropertyModel, value, errorCode);
 }
@@ -977,7 +977,7 @@ API_EXPORT OUT_GETPROPERTYRESULT GetOutputDeviceUniqueId(OutputDeviceInfo* info,
     return GetOutputDeviceIntPropertyValue(info, kMIDIPropertyUniqueID, value, errorCode);
 }
 
-API_EXPORT OUT_GETPROPERTYRESULT GetOutputDeviceDriverOwner(OutputDeviceInfo* info, char** value, int* errorCode)
+API_EXPORT OUT_GETPROPERTYRESULT GetOutputDeviceDriverOwner(OutputDeviceInfo* info, const char** value, int* errorCode)
 {
     return GetOutputDeviceStringPropertyValue(info, kMIDIPropertyDriverOwner, value, errorCode);
 }
@@ -1136,7 +1136,7 @@ struct VirtualDeviceInfo
 {
     InputDeviceInfo* inputDeviceInfo;
     OutputDeviceInfo* outputDeviceInfo;
-    char* name;
+    const char* name;
 };
 
 API_EXPORT char IsVirtualDeviceApiAvailable(SessionHandle* sessionHandle)
@@ -1144,7 +1144,12 @@ API_EXPORT char IsVirtualDeviceApiAvailable(SessionHandle* sessionHandle)
     return 1;
 }
 
-API_EXPORT VIRTUAL_OPENRESULT OpenVirtualDevice_Mac(char* name, SessionHandle* sessionHandle, MIDIReadProc callback, VirtualDeviceInfo** info, int* errorCode)
+API_EXPORT VIRTUAL_OPENRESULT OpenVirtualDevice_Mac(
+    const char* name,
+    SessionHandle* sessionHandle,
+    MIDIReadProc callback,
+    VirtualDeviceInfo** info,
+    int* errorCode)
 {
     *errorCode = 0;
 
@@ -1152,11 +1157,12 @@ API_EXPORT VIRTUAL_OPENRESULT OpenVirtualDevice_Mac(char* name, SessionHandle* s
     virtualDeviceInfo->name = name;
     
     CFStringRef nameRef = CFStringCreateWithCString(nullptr, name, kCFStringEncodingUTF8);
+    if (!nameRef)
+        return VIRTUAL_OPENRESULT_CREATESOURCE_FAILEDPROCESSNAME;
     
     MIDIEndpointRef sourceRef;
     OSStatus status = MIDISourceCreate(sessionHandle->clientRef, nameRef, &sourceRef);
-    if (nameRef)
-        CFRelease(nameRef);
+    CFRelease(nameRef);
     
     if (status != noErr)
     {
@@ -1179,10 +1185,12 @@ API_EXPORT VIRTUAL_OPENRESULT OpenVirtualDevice_Mac(char* name, SessionHandle* s
     virtualDeviceInfo->inputDeviceInfo = inputDeviceInfo;
     
     CFStringRef nameRef2 = CFStringCreateWithCString(nullptr, name, kCFStringEncodingUTF8);
+    if (!nameRef2)
+        return VIRTUAL_OPENRESULT_CREATEDESTINATION_FAILEDPROCESSNAME;
+    
     MIDIEndpointRef destinationRef;
     status = MIDIDestinationCreate(sessionHandle->clientRef, nameRef2, callback, inputDeviceInfo, &destinationRef);
-    if (nameRef2)
-        CFRelease(nameRef2);
+    CFRelease(nameRef2);
     
     if (status != noErr)
     {

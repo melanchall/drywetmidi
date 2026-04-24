@@ -321,7 +321,6 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         [Test]
-        [DevicesEqualityApiRequired]
         public void CheckOutputDevicesEquality_ViaEquals_SameDevices()
         {
             var outputDevice1 = OutputDevice.GetByName(MidiDevicesNames.DeviceA);
@@ -331,7 +330,6 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         [Test]
-        [DevicesEqualityApiRequired]
         public void CheckOutputDevicesEquality_ViaEquals_DifferentDevices()
         {
             var outputDevice1 = OutputDevice.GetByName(MidiDevicesNames.DeviceA);
@@ -341,7 +339,6 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         [Test]
-        [DevicesEqualityApiRequired]
         public void CheckOutputDevicesEquality_ViaOperator_SameDevices()
         {
             var outputDevice1 = OutputDevice.GetByName(MidiDevicesNames.DeviceA);
@@ -352,7 +349,6 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         [Test]
-        [DevicesEqualityApiRequired]
         public void CheckOutputDevicesEquality_ViaOperator_DifferentDevices()
         {
             var outputDevice1 = OutputDevice.GetByName(MidiDevicesNames.DeviceA);

@@ -5,7 +5,6 @@ using NUnit.Framework;
 using NUnit.Framework.Legacy;
 using System;
 using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 
 namespace Melanchall.DryWetMidi.Tests.Multimedia
 {
@@ -128,19 +127,13 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 #endif
 
-        private static IntPtr GetSessionName()
-        {
-            var name = Guid.NewGuid().ToString();
-            return Marshal.StringToHGlobalAuto(name);
-        }
-
         private static IntPtr CreateSessionHandle(
             MidiDevicesSessionApi.InputDeviceCallback inputDeviceCallback,
             MidiDevicesSessionApi.OutputDeviceCallback outputDeviceCallback,
             int waitAfterSessionCreatedMs)
         {
             var result = MidiDevicesSessionApi.Api_OpenSession(
-                GetSessionName(),
+                Guid.NewGuid().ToString(),
                 inputDeviceCallback,
                 outputDeviceCallback,
                 out var rawHandle,

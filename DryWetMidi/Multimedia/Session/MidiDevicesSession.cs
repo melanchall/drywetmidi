@@ -1,6 +1,5 @@
 ﻿using Melanchall.DryWetMidi.Common;
 using System;
-using System.Runtime.InteropServices;
 
 namespace Melanchall.DryWetMidi.Multimedia
 {
@@ -19,7 +18,6 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         private static readonly object _lockObject = new object();
 
-        private static IntPtr _name;
         private static MidiDevicesSessionHandle _handle;
 
         private static MidiDevicesSessionApi.InputDeviceCallback _inputDeviceCallback;
@@ -47,18 +45,13 @@ namespace Melanchall.DryWetMidi.Multimedia
                 {
                     if (_handle == null || _handle.IsInvalid)
                     {
-                        var name = Guid.NewGuid().ToString();
-                        _name = Marshal.StringToHGlobalAuto(name);
-
-                        var apiType = CommonApi.Api_GetApiType();
                         int errorCode = 0;
-
                         var rawHandle = IntPtr.Zero;
 
                         _inputDeviceCallback = InputDeviceCallback;
                         _outputDeviceCallback = OutputDeviceCallback;
 
-                        var result = MidiDevicesSessionApi.Api_OpenSession(_name, _inputDeviceCallback, _outputDeviceCallback, out rawHandle, out errorCode);
+                        var result = MidiDevicesSessionApi.Api_OpenSession(Guid.NewGuid().ToString(), _inputDeviceCallback, _outputDeviceCallback, out rawHandle, out errorCode);
                         NativeApiUtilities.HandleDevicesNativeApiResult(result, errorCode);
                         
                         _handle = new MidiDevicesSessionHandle(rawHandle);
@@ -86,12 +79,6 @@ namespace Melanchall.DryWetMidi.Multimedia
                     {
                         _handle?.Dispose();
                         _handle = null;
-
-                        if (_name != IntPtr.Zero)
-                        {
-                            Marshal.FreeHGlobal(_name);
-                            _name = IntPtr.Zero;
-                        }
                     }
                 }
             }

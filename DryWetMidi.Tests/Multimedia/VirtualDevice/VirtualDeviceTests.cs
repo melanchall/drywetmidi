@@ -36,20 +36,18 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         [Test]
-        public void CreateVirtualDevice()
+        public void CreateVirtualDevice([Values("My Virtual Device", "Mi Dispositivo Virtual", "我的虚拟设备")] string name)
         {
-            using (var virtualDevice = GetVirtualDevice())
+            using (var virtualDevice = GetVirtualDevice(name))
             {
-                var deviceName = virtualDevice.Name;
-
-                ClassicAssert.AreEqual(deviceName, virtualDevice.Name, "Name is invalid.");
+                ClassicAssert.AreEqual(name, virtualDevice.Name, "Name is invalid.");
 
                 ClassicAssert.IsNotNull(virtualDevice.InputDevice, "Input device is null.");
-                ClassicAssert.IsNotNull(deviceName, virtualDevice.InputDevice.Name, "Input device name is null.");
+                ClassicAssert.AreEqual(name, virtualDevice.InputDevice.Name, "Input device name is null.");
                 ClassicAssert.AreEqual("Input device (subdevice of a virtual device)", virtualDevice.InputDevice.ToString(), "Device string representation is invalid.");
 
                 ClassicAssert.IsNotNull(virtualDevice.OutputDevice, "Output device is null.");
-                ClassicAssert.IsNotNull(deviceName, virtualDevice.OutputDevice.Name, "Output device name is null.");
+                ClassicAssert.AreEqual(name, virtualDevice.OutputDevice.Name, "Output device name is null.");
                 ClassicAssert.AreEqual("Output device (subdevice of a virtual device)", virtualDevice.OutputDevice.ToString(), "Device string representation is invalid.");
             }
         }
@@ -257,7 +255,6 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             }
         }
 
-        [DevicesEqualityApiRequired]
         [Test]
         public void CheckVirtualDeviceSubdevicesEquality_SameDevices()
         {
@@ -270,7 +267,6 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             }
         }
 
-        [DevicesEqualityApiRequired]
         [Test]
         public void CheckVirtualDeviceSubdevicesEquality_DifferentDevices()
         {
@@ -432,9 +428,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
         #region Private methods
 
-        private VirtualDevice GetVirtualDevice()
+        private VirtualDevice GetVirtualDevice(string name = null)
         {
-            var deviceName = Guid.NewGuid().ToString().Replace("-", string.Empty).Substring(0, 10);
+            var deviceName = name ?? Guid.NewGuid().ToString().Replace("-", string.Empty).Substring(0, 10);
             return VirtualDevice.Create(deviceName);
         }
 

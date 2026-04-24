@@ -444,7 +444,6 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         [Test]
-        [DevicesEqualityApiRequired]
         public void CheckInputDevicesEquality_ViaEquals_SameDevices()
         {
             var inputDevice1 = InputDevice.GetByName(MidiDevicesNames.DeviceA);
@@ -454,7 +453,6 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         [Test]
-        [DevicesEqualityApiRequired]
         public void CheckInputDevicesEquality_ViaEquals_DifferentDevices()
         {
             var inputDevice1 = InputDevice.GetByName(MidiDevicesNames.DeviceA);
@@ -464,7 +462,6 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         [Test]
-        [DevicesEqualityApiRequired]
         public void CheckInputDevicesEquality_ViaOperator_SameDevices()
         {
             var inputDevice1 = InputDevice.GetByName(MidiDevicesNames.DeviceA);
@@ -475,7 +472,6 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         [Test]
-        [DevicesEqualityApiRequired]
         public void CheckInputDevicesEquality_ViaOperator_DifferentDevices()
         {
             var inputDevice1 = InputDevice.GetByName(MidiDevicesNames.DeviceA);
@@ -486,7 +482,6 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         [Test]
-        [DevicesEqualityApiRequired]
         public void FindOutputDeviceInDictionary()
         {
             var label = "X";

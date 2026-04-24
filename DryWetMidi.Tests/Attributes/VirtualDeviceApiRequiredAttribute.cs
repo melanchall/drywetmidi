@@ -28,17 +28,12 @@ namespace Melanchall.DryWetMidi.Tests.Attributes
             if (!RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.Windows))
                 return "Test requires macOS or Windows.";
 
-            var name = Guid.NewGuid().ToString();
-            var sessionName = Marshal.StringToHGlobalAuto(name);
-
             var result = MidiDevicesSessionApi.Api_OpenSession(
-                sessionName,
+                Guid.NewGuid().ToString(),
                 InputDeviceCallback,
                 OutputDeviceCallback,
                 out var rawHandle,
                 out _);
-
-            Marshal.FreeHGlobal(sessionName);
 
             if (result != MidiDevicesSessionApi.SESSION_OPENRESULT.SESSION_OPENRESULT_OK)
                 return "Failed to create session.";

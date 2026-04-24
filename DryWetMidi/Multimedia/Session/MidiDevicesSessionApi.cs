@@ -55,16 +55,23 @@ namespace Melanchall.DryWetMidi.Multimedia
         #region Extern functions
 
 #if NET7_0_OR_GREATER
-        [LibraryImport(NativeApi.LibraryName)]
+        [LibraryImport(NativeApi.LibraryName, StringMarshalling = StringMarshalling.Utf16)]
         [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-        private static partial SESSION_OPENRESULT OpenSession(IntPtr name, InputDeviceCallback inputDeviceCallback, OutputDeviceCallback outputDeviceCallback, out IntPtr handle, out int errorCode);
+        private static partial SESSION_OPENRESULT OpenSession_Win(string name, InputDeviceCallback inputDeviceCallback, OutputDeviceCallback outputDeviceCallback, out IntPtr handle, out int errorCode);
+
+        [LibraryImport(NativeApi.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
+        [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
+        private static partial SESSION_OPENRESULT OpenSession_Mac(string name, InputDeviceCallback inputDeviceCallback, OutputDeviceCallback outputDeviceCallback, out IntPtr handle, out int errorCode);
 
         [LibraryImport(NativeApi.LibraryName)]
         [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
         private static partial SESSION_CLOSERESULT CloseSession(IntPtr handle);
 #else
-        [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
-        private static extern SESSION_OPENRESULT OpenSession(IntPtr name, InputDeviceCallback inputDeviceCallback, OutputDeviceCallback outputDeviceCallback, out IntPtr handle, out int errorCode);
+        [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Unicode)]
+        private static extern SESSION_OPENRESULT OpenSession_Win(string name, InputDeviceCallback inputDeviceCallback, OutputDeviceCallback outputDeviceCallback, out IntPtr handle, out int errorCode);
+
+        [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        private static extern SESSION_OPENRESULT OpenSession_Mac(string name, InputDeviceCallback inputDeviceCallback, OutputDeviceCallback outputDeviceCallback, out IntPtr handle, out int errorCode);
 
         [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
         private static extern SESSION_CLOSERESULT CloseSession(IntPtr handle);
@@ -75,13 +82,21 @@ namespace Melanchall.DryWetMidi.Multimedia
         #region Methods
 
         public static SESSION_OPENRESULT Api_OpenSession(
-            IntPtr name,
+            string name,
             InputDeviceCallback inputDeviceCallback,
             OutputDeviceCallback outputDeviceCallback,
             out IntPtr handle,
             out int errorCode)
         {
-            return OpenSession(name, inputDeviceCallback, outputDeviceCallback, out handle, out errorCode);
+            switch (CommonApi.Api_GetApiType())
+            {
+                case CommonApi.API_TYPE.API_TYPE_WIN:
+                    return OpenSession_Win(name, inputDeviceCallback, outputDeviceCallback, out handle, out errorCode);
+                case CommonApi.API_TYPE.API_TYPE_MAC:
+                    return OpenSession_Mac(name, inputDeviceCallback, outputDeviceCallback, out handle, out errorCode);
+            }
+
+            throw new NotImplementedException();
         }
 
         public static SESSION_CLOSERESULT Api_CloseSession(IntPtr handle)

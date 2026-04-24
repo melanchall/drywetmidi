@@ -48,7 +48,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
                 DevicesWatcher.Instance.DeviceRemoved += removedHandler;
 
-                var deviceName = "VD7";
+                var deviceName = "VD10";
                 var timeout = TimeSpan.FromSeconds(5);
 
                 using (var virtualDevice = VirtualDevice.Create(deviceName))

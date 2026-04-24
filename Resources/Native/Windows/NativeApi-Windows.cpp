@@ -4,6 +4,14 @@
 #define NOMINMAX
 #endif
 
+#ifndef DRV_QUERYDEVICEINTERFACESIZE
+#define DRV_QUERYDEVICEINTERFACESIZE 0x80d
+#endif
+
+#ifndef DRV_QUERYDEVICEINTERFACE
+#define DRV_QUERYDEVICEINTERFACE 0x80C
+#endif
+
 #include <windows.h>
 #include <mmsystem.h>
 #include <mmreg.h>
@@ -265,10 +273,12 @@ void EnsureWinMmPortsAvailable()
 struct InputDeviceInfo
 {
     int deviceIndex;
-    LPMIDIINCAPSA caps;
+    LPMIDIINCAPSW caps;
 
     std::wstring endpointDeviceId;
     std::wstring portDeviceId;
+
+    std::wstring devicePath;
 };
 
 API_EXPORT int API_CALL GetInputDeviceHashCode(InputDeviceInfo* info)
@@ -276,10 +286,13 @@ API_EXPORT int API_CALL GetInputDeviceHashCode(InputDeviceInfo* info)
     if (info == nullptr)
         return 0;
 
-    if (info->endpointDeviceId.empty() || info->portDeviceId.empty())
-        return info->deviceIndex;
+    if (!info->endpointDeviceId.empty() && !info->portDeviceId.empty())
+        return std::hash<std::wstring>()(info->endpointDeviceId) ^ std::hash<std::wstring>()(info->portDeviceId);
 
-    return std::hash<std::wstring>()(info->endpointDeviceId) ^ std::hash<std::wstring>()(info->portDeviceId);
+    if (!info->devicePath.empty())
+        return std::hash<std::wstring>()(info->devicePath);
+
+    return info->deviceIndex;
 }
 
 API_EXPORT char API_CALL AreInputDevicesEqual(InputDeviceInfo* info1, InputDeviceInfo* info2)
@@ -289,6 +302,9 @@ API_EXPORT char API_CALL AreInputDevicesEqual(InputDeviceInfo* info1, InputDevic
 
     if (!info1->endpointDeviceId.empty() && !info1->portDeviceId.empty() && !info2->endpointDeviceId.empty() && !info2->portDeviceId.empty())
         return info1->endpointDeviceId == info2->endpointDeviceId && info1->portDeviceId == info2->portDeviceId;
+    
+    if (!info1->devicePath.empty() && !info2->devicePath.empty())
+        return info1->devicePath == info2->devicePath;
 
     return 0;
 }
@@ -306,9 +322,9 @@ IN_GETINFORESULT GetInputDeviceInfo(int deviceIndex, InputDeviceInfo** info, int
     InputDeviceInfo* inputDeviceInfo = new InputDeviceInfo();
 
     inputDeviceInfo->deviceIndex = deviceIndex;
-    inputDeviceInfo->caps = new MIDIINCAPSA();
+    inputDeviceInfo->caps = new MIDIINCAPSW();
 
-    MMRESULT result = midiInGetDevCapsA(deviceIndex, inputDeviceInfo->caps, sizeof(MIDIINCAPSA));
+    MMRESULT result = midiInGetDevCapsW(deviceIndex, inputDeviceInfo->caps, sizeof(MIDIINCAPSW));
     if (result != MMSYSERR_NOERROR)
     {
         delete inputDeviceInfo->caps;
@@ -325,6 +341,16 @@ IN_GETINFORESULT GetInputDeviceInfo(int deviceIndex, InputDeviceInfo** info, int
         }
 
         return IN_GETINFORESULT_UNKNOWNERROR;
+    }
+
+    ULONG size = 0;
+    result = midiInMessage((HMIDIIN)(uintptr_t)deviceIndex, DRV_QUERYDEVICEINTERFACESIZE, (DWORD_PTR)&size, 0);
+    if (result == MMSYSERR_NOERROR && size > 0)
+    {
+        std::vector<wchar_t> buffer(size / sizeof(wchar_t));
+        result = midiInMessage((HMIDIIN)(uintptr_t)deviceIndex, DRV_QUERYDEVICEINTERFACE, (DWORD_PTR)buffer.data(), size);
+        if (result == MMSYSERR_NOERROR)
+            inputDeviceInfo->devicePath = std::wstring(buffer.data());
     }
 
     *info = inputDeviceInfo;
@@ -352,10 +378,12 @@ API_EXPORT void API_CALL DeleteInputDeviceInfo(InputDeviceInfo* info)
 struct OutputDeviceInfo
 {
     int deviceIndex;
-    LPMIDIOUTCAPSA caps;
+    LPMIDIOUTCAPSW caps;
 
     std::wstring endpointDeviceId;
     std::wstring portDeviceId;
+
+    std::wstring devicePath;
 
     char isMicrosoftGsWavetableSynth = 0;
 };
@@ -365,10 +393,13 @@ API_EXPORT int API_CALL GetOutputDeviceHashCode(OutputDeviceInfo* info)
     if (info == nullptr)
         return 0;
 
-    if (info->endpointDeviceId.empty() || info->portDeviceId.empty())
-        return info->deviceIndex;
+    if (!info->endpointDeviceId.empty() && !info->portDeviceId.empty())
+        return std::hash<std::wstring>()(info->endpointDeviceId) ^ std::hash<std::wstring>()(info->portDeviceId);
 
-    return std::hash<std::wstring>()(info->endpointDeviceId) ^ std::hash<std::wstring>()(info->portDeviceId);
+    if (!info->devicePath.empty())
+        return std::hash<std::wstring>()(info->devicePath);
+
+    return info->deviceIndex;
 }
 
 API_EXPORT char API_CALL AreOutputDevicesEqual(OutputDeviceInfo* info1, OutputDeviceInfo* info2)
@@ -381,6 +412,9 @@ API_EXPORT char API_CALL AreOutputDevicesEqual(OutputDeviceInfo* info1, OutputDe
 
     if (!info1->endpointDeviceId.empty() && !info1->portDeviceId.empty() && !info2->endpointDeviceId.empty() && !info2->portDeviceId.empty())
         return info1->endpointDeviceId == info2->endpointDeviceId && info1->portDeviceId == info2->portDeviceId;
+
+    if (!info1->devicePath.empty() && !info2->devicePath.empty())
+        return info1->devicePath == info2->devicePath;
 
     return 0;
 }
@@ -398,9 +432,9 @@ OUT_GETINFORESULT GetOutputDeviceInfo(int deviceIndex, OutputDeviceInfo** info, 
     OutputDeviceInfo* outputDeviceInfo = new OutputDeviceInfo();
 
     outputDeviceInfo->deviceIndex = deviceIndex;
-    outputDeviceInfo->caps = new MIDIOUTCAPSA();
+    outputDeviceInfo->caps = new MIDIOUTCAPSW();
 
-    MMRESULT result = midiOutGetDevCapsA(deviceIndex, outputDeviceInfo->caps, sizeof(MIDIOUTCAPSA));
+    MMRESULT result = midiOutGetDevCapsW(deviceIndex, outputDeviceInfo->caps, sizeof(MIDIOUTCAPSW));
     if (result != MMSYSERR_NOERROR)
     {
         delete outputDeviceInfo->caps;
@@ -417,6 +451,16 @@ OUT_GETINFORESULT GetOutputDeviceInfo(int deviceIndex, OutputDeviceInfo** info, 
         }
 
         return OUT_GETINFORESULT_UNKNOWNERROR;
+    }
+
+    ULONG size = 0;
+    result = midiOutMessage((HMIDIOUT)(uintptr_t)deviceIndex, DRV_QUERYDEVICEINTERFACESIZE, (DWORD_PTR)&size, 0);
+    if (result == MMSYSERR_NOERROR && size > 0)
+    {
+        std::vector<wchar_t> buffer(size / sizeof(wchar_t));
+        result = midiOutMessage((HMIDIOUT)(uintptr_t)deviceIndex, DRV_QUERYDEVICEINTERFACE, (DWORD_PTR)buffer.data(), size);
+        if (result == MMSYSERR_NOERROR)
+            outputDeviceInfo->devicePath = std::wstring(buffer.data());
     }
 
     *info = outputDeviceInfo;
@@ -463,134 +507,134 @@ int FindPortIndex(const std::wstring& endpointDeviceId, const std::wstring& port
 }
 
 // TODO: WMS API
-API_EXPORT const char* API_CALL GetDeviceManufacturer(WORD manufacturerId)
+API_EXPORT const wchar_t* API_CALL GetDeviceManufacturer(WORD manufacturerId)
 {
     // https://docs.microsoft.com/en-us/windows/win32/multimedia/manufacturer-identifiers
     switch (manufacturerId)
     {
-        case MM_GRAVIS: return "Advanced Gravis Computer Technology, Ltd.";
-        case MM_ANTEX: return "Antex Electronics Corporation";
-        case MM_APPS: return "APPS Software";
-        case MM_ARTISOFT: return "Artisoft, Inc.";
-        case MM_AST: return "AST Research, Inc.";
-        case MM_ATI: return "ATI Technologies, Inc.";
-        case MM_AUDIOFILE: return "Audio, Inc.";
-        case MM_APT: return "Audio Processing Technology";
-        case MM_AUDIOPT: return "Audio Processing Technology";
-        case MM_AURAVISION: return "Auravision Corporation";
-        case MM_AZTECH: return "Aztech Labs, Inc.";
-        case MM_CANOPUS: return "Canopus, Co., Ltd.";
-        case MM_COMPUSIC: return "Compusic";
-        case MM_CAT: return "Computer Aided Technology, Inc.";
-        case MM_COMPUTER_FRIENDS: return "Computer Friends, Inc.";
-        case MM_CONTROLRES: return "Control Resources Corporation";
-        case MM_CREATIVE: return "Creative Labs, Inc.";
-        case MM_DIALOGIC: return "Dialogic Corporation";
-        case MM_DOLBY: return "Dolby Laboratories, Inc.";
-        case MM_DSP_GROUP: return "DSP Group, Inc.";
-        case MM_DSP_SOLUTIONS: return "DSP Solutions, Inc.";
-        case MM_ECHO: return "Echo Speech Corporation";
-        case MM_ESS: return "ESS Technology, Inc.";
-        case MM_EVEREX: return "Everex Systems, Inc.";
-        case MM_EXAN: return "EXAN, Ltd.";
-        case MM_FUJITSU: return "Fujitsu, Ltd.";
-        case MM_IOMAGIC: return "I/O Magic Corporation";
-        case MM_ICL_PS: return "ICL Personal Systems";
-        case MM_OLIVETTI: return "Ing. C. Olivetti & C., S.p.A.";
-        case MM_ICS: return "Integrated Circuit Systems, Inc.";
-        case MM_INTEL: return "Intel Corporation";
-        case MM_INTERACTIVE: return "InterActive, Inc.";
-        case MM_IBM: return "International Business Machines";
-        case MM_ITERATEDSYS: return "Iterated Systems, Inc.";
-        case MM_LOGITECH: return "Logitech, Inc.";
-        case MM_LYRRUS: return "Lyrrus, Inc.";
-        case MM_MATSUSHITA: return "Matsushita Electric Corporation of America";
-        case MM_MEDIAVISION: return "Media Vision, Inc.";
-        case MM_METHEUS: return "Metheus Corporation";
-        case MM_MELABS: return "microEngineering Labs";
-        case MM_MICROSOFT: return "Microsoft Corporation";
-        case MM_MOSCOM: return "MOSCOM Corporation";
-        case MM_MOTOROLA: return "Motorola, Inc.";
-        case MM_NMS: return "Natural MicroSystems Corporation";
-        case MM_NCR: return "NCR Corporation";
-        case MM_NEC: return "NEC Corporation";
-        case MM_NEWMEDIA: return "New Media Corporation";
-        case MM_OKI: return "OKI";
-        case MM_OPTI: return "OPTi, Inc.";
-        case MM_ROLAND: return "Roland Corporation";
-        case MM_SCALACS: return "SCALACS";
-        case MM_EPSON: return "Seiko Epson Corporation, Inc.";
-        case MM_SIERRA: return "Sierra Semiconductor Corporation";
-        case MM_SILICONSOFT: return "Silicon Software, Inc.";
-        case MM_SONICFOUNDRY: return "Sonic Foundry";
-        case MM_SPEECHCOMP: return "Speech Compression";
-        case MM_SUPERMAC: return "Supermac Technology, Inc.";
-        case MM_TANDY: return "Tandy Corporation";
-        case MM_KORG: return "Toshihiko Okuhura, Korg, Inc.";
-        case MM_TRUEVISION: return "Truevision, Inc.";
-        case MM_TURTLE_BEACH: return "Turtle Beach Systems";
-        case MM_VAL: return "Video Associates Labs, Inc.";
-        case MM_VIDEOLOGIC: return "VideoLogic, Inc.";
-        case MM_VITEC: return "Visual Information Technologies, Inc.";
-        case MM_VOCALTEC: return "VocalTec, Inc.";
-        case MM_VOYETRA: return "Voyetra Technologies";
-        case MM_WANGLABS: return "Wang Laboratories";
-        case MM_WILLOWPOND: return "Willow Pond Corporation";
-        case MM_WINNOV: return "Winnov, LP";
-        case MM_XEBEC: return "Xebec Multimedia Solutions Limited";
-        case MM_YAMAHA: return "Yamaha Corporation of America";
+        case MM_GRAVIS: return L"Advanced Gravis Computer Technology, Ltd.";
+        case MM_ANTEX: return L"Antex Electronics Corporation";
+        case MM_APPS: return L"APPS Software";
+        case MM_ARTISOFT: return L"Artisoft, Inc.";
+        case MM_AST: return L"AST Research, Inc.";
+        case MM_ATI: return L"ATI Technologies, Inc.";
+        case MM_AUDIOFILE: return L"Audio, Inc.";
+        case MM_APT: return L"Audio Processing Technology";
+        case MM_AUDIOPT: return L"Audio Processing Technology";
+        case MM_AURAVISION: return L"Auravision Corporation";
+        case MM_AZTECH: return L"Aztech Labs, Inc.";
+        case MM_CANOPUS: return L"Canopus, Co., Ltd.";
+        case MM_COMPUSIC: return L"Compusic";
+        case MM_CAT: return L"Computer Aided Technology, Inc.";
+        case MM_COMPUTER_FRIENDS: return L"Computer Friends, Inc.";
+        case MM_CONTROLRES: return L"Control Resources Corporation";
+        case MM_CREATIVE: return L"Creative Labs, Inc.";
+        case MM_DIALOGIC: return L"Dialogic Corporation";
+        case MM_DOLBY: return L"Dolby Laboratories, Inc.";
+        case MM_DSP_GROUP: return L"DSP Group, Inc.";
+        case MM_DSP_SOLUTIONS: return L"DSP Solutions, Inc.";
+        case MM_ECHO: return L"Echo Speech Corporation";
+        case MM_ESS: return L"ESS Technology, Inc.";
+        case MM_EVEREX: return L"Everex Systems, Inc.";
+        case MM_EXAN: return L"EXAN, Ltd.";
+        case MM_FUJITSU: return L"Fujitsu, Ltd.";
+        case MM_IOMAGIC: return L"I/O Magic Corporation";
+        case MM_ICL_PS: return L"ICL Personal Systems";
+        case MM_OLIVETTI: return L"Ing. C. Olivetti & C., S.p.A.";
+        case MM_ICS: return L"Integrated Circuit Systems, Inc.";
+        case MM_INTEL: return L"Intel Corporation";
+        case MM_INTERACTIVE: return L"InterActive, Inc.";
+        case MM_IBM: return L"International Business Machines";
+        case MM_ITERATEDSYS: return L"Iterated Systems, Inc.";
+        case MM_LOGITECH: return L"Logitech, Inc.";
+        case MM_LYRRUS: return L"Lyrrus, Inc.";
+        case MM_MATSUSHITA: return L"Matsushita Electric Corporation of America";
+        case MM_MEDIAVISION: return L"Media Vision, Inc.";
+        case MM_METHEUS: return L"Metheus Corporation";
+        case MM_MELABS: return L"microEngineering Labs";
+        case MM_MICROSOFT: return L"Microsoft Corporation";
+        case MM_MOSCOM: return L"MOSCOM Corporation";
+        case MM_MOTOROLA: return L"Motorola, Inc.";
+        case MM_NMS: return L"Natural MicroSystems Corporation";
+        case MM_NCR: return L"NCR Corporation";
+        case MM_NEC: return L"NEC Corporation";
+        case MM_NEWMEDIA: return L"New Media Corporation";
+        case MM_OKI: return L"OKI";
+        case MM_OPTI: return L"OPTi, Inc.";
+        case MM_ROLAND: return L"Roland Corporation";
+        case MM_SCALACS: return L"SCALACS";
+        case MM_EPSON: return L"Seiko Epson Corporation, Inc.";
+        case MM_SIERRA: return L"Sierra Semiconductor Corporation";
+        case MM_SILICONSOFT: return L"Silicon Software, Inc.";
+        case MM_SONICFOUNDRY: return L"Sonic Foundry";
+        case MM_SPEECHCOMP: return L"Speech Compression";
+        case MM_SUPERMAC: return L"Supermac Technology, Inc.";
+        case MM_TANDY: return L"Tandy Corporation";
+        case MM_KORG: return L"Toshihiko Okuhura, Korg, Inc.";
+        case MM_TRUEVISION: return L"Truevision, Inc.";
+        case MM_TURTLE_BEACH: return L"Turtle Beach Systems";
+        case MM_VAL: return L"Video Associates Labs, Inc.";
+        case MM_VIDEOLOGIC: return L"VideoLogic, Inc.";
+        case MM_VITEC: return L"Visual Information Technologies, Inc.";
+        case MM_VOCALTEC: return L"VocalTec, Inc.";
+        case MM_VOYETRA: return L"Voyetra Technologies";
+        case MM_WANGLABS: return L"Wang Laboratories";
+        case MM_WILLOWPOND: return L"Willow Pond Corporation";
+        case MM_WINNOV: return L"Winnov, LP";
+        case MM_XEBEC: return L"Xebec Multimedia Solutions Limited";
+        case MM_YAMAHA: return L"Yamaha Corporation of America";
     }
 
-    return "Unknown";
+    return L"Unknown";
 }
 
 // TODO: WMS API
-API_EXPORT const char* API_CALL GetDeviceProduct(WORD productId)
+API_EXPORT const wchar_t* API_CALL GetDeviceProduct(WORD productId)
 {
     // https://docs.microsoft.com/en-us/windows/win32/multimedia/microsoft-corporation-product-identifiers
     switch (productId)
     {
-        case MM_ADLIB: return "Adlib-compatible synthesizer";
-        case MM_MSFT_ACM_G711: return "G.711 codec";
-        case MM_MSFT_ACM_GSM610: return "GSM 610 codec";
-        case MM_MSFT_ACM_IMAADPCM: return "IMA ADPCM codec";
-        case MM_PC_JOYSTICK: return "Joystick adapter";
-        case MM_MIDI_MAPPER: return "MIDI mapper";
-        case MM_MPU401_MIDIIN: return "MPU 401-compatible MIDI input port";
-        case MM_MPU401_MIDIOUT: return "MPU 401-compatible MIDI output port";
-        case MM_MSFT_ACM_MSADPCM: return "MS ADPCM codec";
-        case MM_MSFT_WSS_FMSYNTH_STEREO: return "MS audio board stereo FM synthesizer";
-        case MM_MSFT_WSS_AUX: return "MS audio board aux port";
-        case MM_MSFT_WSS_MIXER: return "MS audio board mixer driver";
-        case MM_MSFT_WSS_WAVEIN: return "MS audio board waveform input";
-        case MM_MSFT_WSS_WAVEOUT: return "MS audio board waveform output";
-        case MM_MSFT_MSACM: return "MS audio compression manager";
-        case MM_MSFT_ACM_MSFILTER: return "MS filter";
-        case MM_MSFT_WSS_OEM_AUX: return "MS OEM audio aux port";
-        case MM_MSFT_WSS_OEM_MIXER: return "MS OEM audio board mixer driver";
-        case MM_MSFT_WSS_OEM_FMSYNTH_STEREO: return "MS OEM audio board stereo FM synthesizer";
-        case MM_MSFT_WSS_OEM_WAVEIN: return "MS OEM audio board waveform input";
-        case MM_MSFT_WSS_OEM_WAVEOUT: return "MS OEM audio board waveform output";
-        case MM_MSFT_GENERIC_AUX_CD: return "MS vanilla driver aux (CD)";
-        case MM_MSFT_GENERIC_AUX_LINE: return "MS vanilla driver aux (line in)";
-        case MM_MSFT_GENERIC_AUX_MIC: return "MS vanilla driver aux (mic)";
-        case MM_MSFT_GENERIC_MIDIOUT: return "MS vanilla driver MIDI external out";
-        case MM_MSFT_GENERIC_MIDIIN: return "MS vanilla driver MIDI in";
-        case MM_MSFT_GENERIC_MIDISYNTH: return "MS vanilla driver MIDI synthesizer";
-        case MM_MSFT_GENERIC_WAVEIN: return "MS vanilla driver waveform input";
-        case MM_MSFT_GENERIC_WAVEOUT: return "MS vanilla driver wavefrom output";
-        case MM_PCSPEAKER_WAVEOUT: return "PC speaker waveform output";
-        case MM_MSFT_ACM_PCM: return "PCM converter";
-        case MM_SNDBLST_SYNTH: return "Sound Blaster internal synthesizer";
-        case MM_SNDBLST_MIDIIN: return "Sound Blaster MIDI input port";
-        case MM_SNDBLST_MIDIOUT: return "Sound Blaster MIDI output port";
-        case MM_SNDBLST_WAVEIN: return "Sound Blaster waveform input";
-        case MM_SNDBLST_WAVEOUT: return "Sound Blaster waveform output";
-        case MM_WAVE_MAPPER: return "Wave mapper";
+        case MM_ADLIB: return L"Adlib-compatible synthesizer";
+        case MM_MSFT_ACM_G711: return L"G.711 codec";
+        case MM_MSFT_ACM_GSM610: return L"GSM 610 codec";
+        case MM_MSFT_ACM_IMAADPCM: return L"IMA ADPCM codec";
+        case MM_PC_JOYSTICK: return L"Joystick adapter";
+        case MM_MIDI_MAPPER: return L"MIDI mapper";
+        case MM_MPU401_MIDIIN: return L"MPU 401-compatible MIDI input port";
+        case MM_MPU401_MIDIOUT: return L"MPU 401-compatible MIDI output port";
+        case MM_MSFT_ACM_MSADPCM: return L"MS ADPCM codec";
+        case MM_MSFT_WSS_FMSYNTH_STEREO: return L"MS audio board stereo FM synthesizer";
+        case MM_MSFT_WSS_AUX: return L"MS audio board aux port";
+        case MM_MSFT_WSS_MIXER: return L"MS audio board mixer driver";
+        case MM_MSFT_WSS_WAVEIN: return L"MS audio board waveform input";
+        case MM_MSFT_WSS_WAVEOUT: return L"MS audio board waveform output";
+        case MM_MSFT_MSACM: return L"MS audio compression manager";
+        case MM_MSFT_ACM_MSFILTER: return L"MS filter";
+        case MM_MSFT_WSS_OEM_AUX: return L"MS OEM audio aux port";
+        case MM_MSFT_WSS_OEM_MIXER: return L"MS OEM audio board mixer driver";
+        case MM_MSFT_WSS_OEM_FMSYNTH_STEREO: return L"MS OEM audio board stereo FM synthesizer";
+        case MM_MSFT_WSS_OEM_WAVEIN: return L"MS OEM audio board waveform input";
+        case MM_MSFT_WSS_OEM_WAVEOUT: return L"MS OEM audio board waveform output";
+        case MM_MSFT_GENERIC_AUX_CD: return L"MS vanilla driver aux (CD)";
+        case MM_MSFT_GENERIC_AUX_LINE: return L"MS vanilla driver aux (line in)";
+        case MM_MSFT_GENERIC_AUX_MIC: return L"MS vanilla driver aux (mic)";
+        case MM_MSFT_GENERIC_MIDIOUT: return L"MS vanilla driver MIDI external out";
+        case MM_MSFT_GENERIC_MIDIIN: return L"MS vanilla driver MIDI in";
+        case MM_MSFT_GENERIC_MIDISYNTH: return L"MS vanilla driver MIDI synthesizer";
+        case MM_MSFT_GENERIC_WAVEIN: return L"MS vanilla driver waveform input";
+        case MM_MSFT_GENERIC_WAVEOUT: return L"MS vanilla driver wavefrom output";
+        case MM_PCSPEAKER_WAVEOUT: return L"PC speaker waveform output";
+        case MM_MSFT_ACM_PCM: return L"PCM converter";
+        case MM_SNDBLST_SYNTH: return L"Sound Blaster internal synthesizer";
+        case MM_SNDBLST_MIDIIN: return L"Sound Blaster MIDI input port";
+        case MM_SNDBLST_MIDIOUT: return L"Sound Blaster MIDI output port";
+        case MM_SNDBLST_WAVEIN: return L"Sound Blaster waveform input";
+        case MM_SNDBLST_WAVEOUT: return L"Sound Blaster waveform output";
+        case MM_WAVE_MAPPER: return L"Wave mapper";
     }
 
     // add from https://docs.microsoft.com/en-us/windows/win32/multimedia/product-identifiers
-    return "Unknown";
+    return L"Unknown";
 }
 
 /* ================================
@@ -608,7 +652,7 @@ struct EndpointDevicesInfo
 
 struct SessionHandle
 {
-    char* name;
+    const wchar_t* name;
 
     char wmsAvailable;
     char basicLoopbackAvailable;
@@ -648,7 +692,7 @@ void DeleteOutputDeviceInfos(std::vector<OutputDeviceInfo*>& deviceInfos)
     deviceInfos.clear();
 }
 
-API_EXPORT SESSION_OPENRESULT API_CALL OpenSession(char* name, InputDeviceCallback inputDeviceCallback, OutputDeviceCallback outputDeviceCallback, void** handle, int* errorCode)
+API_EXPORT SESSION_OPENRESULT API_CALL OpenSession_Win(const wchar_t* name, InputDeviceCallback inputDeviceCallback, OutputDeviceCallback outputDeviceCallback, void** handle, int* errorCode)
 {
     *errorCode = 0;
 
@@ -1088,7 +1132,7 @@ API_EXPORT void API_CALL FreeInputDevicesInfo(InputDeviceInfo** devicesInfo, int
 }
 
 // TODO: WMS API
-API_EXPORT IN_GETPROPERTYRESULT API_CALL GetInputDeviceName(InputDeviceInfo* info, const char** value, int* errorCode)
+API_EXPORT IN_GETPROPERTYRESULT API_CALL GetInputDeviceName(InputDeviceInfo* info, const wchar_t** value, int* errorCode)
 {
     *errorCode = 0;
 
@@ -1097,7 +1141,7 @@ API_EXPORT IN_GETPROPERTYRESULT API_CALL GetInputDeviceName(InputDeviceInfo* inf
 }
 
 // TODO: WMS API
-API_EXPORT IN_GETPROPERTYRESULT API_CALL GetInputDeviceManufacturer(InputDeviceInfo* info, const char** value, int* errorCode)
+API_EXPORT IN_GETPROPERTYRESULT API_CALL GetInputDeviceManufacturer(InputDeviceInfo* info, const wchar_t** value, int* errorCode)
 {
     *errorCode = 0;
 
@@ -1106,7 +1150,7 @@ API_EXPORT IN_GETPROPERTYRESULT API_CALL GetInputDeviceManufacturer(InputDeviceI
 }
 
 // TODO: WMS API
-API_EXPORT IN_GETPROPERTYRESULT API_CALL GetInputDeviceProduct(InputDeviceInfo* info, const char** value, int* errorCode)
+API_EXPORT IN_GETPROPERTYRESULT API_CALL GetInputDeviceProduct(InputDeviceInfo* info, const wchar_t** value, int* errorCode)
 {
     *errorCode = 0;
 
@@ -1479,12 +1523,14 @@ API_EXPORT OUT_GETALLINFORESULT API_CALL GetOutputDevicesInfo(SessionHandle* ses
             if (getOutputDeviceInfoResult != OUT_GETINFORESULT_OK)
                 return ConvertToGetAllOutInfoResult(getOutputDeviceInfoResult);
             
-            if (strcmp(outputDeviceInfo->caps->szPname, "Microsoft GS Wavetable Synth") == 0)
+            if (wcscmp(outputDeviceInfo->caps->szPname, L"Microsoft GS Wavetable Synth") == 0)
             {
                 outputDeviceInfo->isMicrosoftGsWavetableSynth = 1;
                 outputDevicesInfo.push_back(outputDeviceInfo);
                 break;
             }
+
+            delete outputDeviceInfo;
         }
 
         try
@@ -1543,6 +1589,9 @@ API_EXPORT OUT_GETALLINFORESULT API_CALL GetOutputDevicesInfo(SessionHandle* ses
         if (getOutputDeviceInfoResult != OUT_GETINFORESULT_OK)
             return ConvertToGetAllOutInfoResult(getOutputDeviceInfoResult);
 
+        if (wcscmp(outputDeviceInfo->caps->szPname, L"Microsoft GS Wavetable Synth") == 0)
+            outputDeviceInfo->isMicrosoftGsWavetableSynth = 1;
+
         result[i] = outputDeviceInfo;
     }
 
@@ -1556,7 +1605,7 @@ API_EXPORT void API_CALL FreeOutputDevicesInfo(OutputDeviceInfo** devicesInfo, i
     delete[] devicesInfo;
 }
 
-API_EXPORT OUT_GETPROPERTYRESULT API_CALL GetOutputDeviceName(OutputDeviceInfo* info, const char** value, int* errorCode)
+API_EXPORT OUT_GETPROPERTYRESULT API_CALL GetOutputDeviceName(OutputDeviceInfo* info, const wchar_t** value, int* errorCode)
 {
     *errorCode = 0;
 
@@ -1565,7 +1614,7 @@ API_EXPORT OUT_GETPROPERTYRESULT API_CALL GetOutputDeviceName(OutputDeviceInfo* 
 }
 
 // TODO: WMS API
-API_EXPORT OUT_GETPROPERTYRESULT API_CALL GetOutputDeviceManufacturer(OutputDeviceInfo* info, const char** value, int* errorCode)
+API_EXPORT OUT_GETPROPERTYRESULT API_CALL GetOutputDeviceManufacturer(OutputDeviceInfo* info, const wchar_t** value, int* errorCode)
 {
     *errorCode = 0;
 
@@ -1574,7 +1623,7 @@ API_EXPORT OUT_GETPROPERTYRESULT API_CALL GetOutputDeviceManufacturer(OutputDevi
 }
 
 // TODO: WMS API
-API_EXPORT OUT_GETPROPERTYRESULT API_CALL GetOutputDeviceProduct(OutputDeviceInfo* info, const char** value, int* errorCode)
+API_EXPORT OUT_GETPROPERTYRESULT API_CALL GetOutputDeviceProduct(OutputDeviceInfo* info, const wchar_t** value, int* errorCode)
 {
     *errorCode = 0;
 
@@ -1888,7 +1937,7 @@ struct VirtualDeviceInfo
 {
     InputDeviceInfo* inputDeviceInfo;
     OutputDeviceInfo* outputDeviceInfo;
-    char* name;
+    const wchar_t* name;
     winrt::guid associationId;
 };
 
@@ -1907,7 +1956,11 @@ const midi2::MidiEndpointAssociatedPortDeviceInformation GetSinglePort(midi2::Mi
     return port;
 }
 
-API_EXPORT VIRTUAL_OPENRESULT API_CALL OpenVirtualDevice_Win(char* name, SessionHandle* sessionHandle, VirtualDeviceInfo** info, int* errorCode)
+API_EXPORT VIRTUAL_OPENRESULT API_CALL OpenVirtualDevice_Win(
+    const wchar_t* name,
+    SessionHandle* sessionHandle,
+    VirtualDeviceInfo** info,
+    int* errorCode)
 {
     *errorCode = 0;
 
