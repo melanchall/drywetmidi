@@ -66,6 +66,9 @@ stages:
         Windows_Net:
           vmImage: 'windows-latest'
           framework: 'Net'
+        Windows_Net_Win11WithWms:
+          vmImage: 'Home agents'
+          framework: 'Net'
         Windows_NetFramework:
           vmImage: 'windows-latest'
           framework: 'NetFramework'
