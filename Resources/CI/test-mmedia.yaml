@@ -66,9 +66,6 @@ stages:
         Windows_Net:
           vmImage: 'windows-latest'
           framework: 'Net'
-        Windows_Net_Win11WithWms:
-          vmImage: 'Home agents'
-          framework: 'Net'
         Windows_NetFramework:
           vmImage: 'windows-latest'
           framework: 'NetFramework'
@@ -100,6 +97,46 @@ stages:
     - template: Templates/step-create-ports-macos.yaml
       parameters:
         enabled: contains(variables.vmImage, 'macos')
+    
+    - task: DotNetCoreCLI@2
+      displayName: Run unit tests
+      continueOnError: false
+      timeoutInMinutes: 60
+      inputs:
+        command: 'test'
+        projects: 'DryWetMidi.Tests/Melanchall.DryWetMidi.Tests.csproj'
+        arguments: '--blame --blame-hang --blame-hang-timeout 5m --blame-hang-dump-type full --no-build --configuration $(TestBuildConfiguration) --filter (FullyQualifiedName~.Multimedia) --framework $(Tfm) --verbosity normal --diag diagnostic.log --logger "console;verbosity=normal" -property:SolutionDir="$(Build.SourcesDirectory)/"'
+        
+    - template: Templates/step-collect-logs.yaml
+      parameters:
+        suffix: '_$(vmImage)_$(framework)'
+    
+    - task: PublishPipelineArtifact@1
+      displayName: Publish 'PlaybackTraces' artifact
+      condition: failed()
+      continueOnError: true
+      inputs:
+        targetPath: $(Build.ArtifactStagingDirectory)/$(Build.BuildId)/PlaybackTraces
+        artifact: 'PlaybackTraces_$(vmImage)_$(framework)_Attempt$(System.JobAttempt)'
+        
+    - task: PublishPipelineArtifact@1
+      displayName: Publish 'SysExTraces' artifact
+      condition: failed()
+      continueOnError: true
+      inputs:
+        targetPath: $(Build.ArtifactStagingDirectory)/$(Build.BuildId)/SysExTraces
+        artifact: 'SysExTraces_$(vmImage)_$(framework)_Attempt$(System.JobAttempt)'
+        
+  - job: RunTestsOnHome
+    displayName: Run tests on home agents
+    pool:
+      name: 'Home agents'
+    steps:
+    - template: Templates/step-copy-native-libraries-near-csproj.yaml
+    
+    - template: Templates/step-build-tests.yaml
+      parameters:
+        tfm: 'net10.0'
     
     - task: DotNetCoreCLI@2
       displayName: Run unit tests
