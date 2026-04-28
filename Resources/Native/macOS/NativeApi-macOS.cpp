@@ -234,9 +234,18 @@ API_EXPORT TG_STOPRESULT StopHighPrecisionTickGenerator(TickGeneratorSessionHand
    Devices common
  ================================ */
 
-struct InputDeviceInfo
+struct DeviceInfoBase
 {
     MIDIEndpointRef endpointRef;
+
+    int parentDeviceId = -1;
+    const char* parentDeviceName = nullptr;
+    const char* parentDeviceManufacturer = nullptr;
+    const char* parentDeviceModel = nullptr;
+};
+
+struct InputDeviceInfo : DeviceInfoBase
+{
 };
 
 API_EXPORT void DeleteInputDeviceInfo(InputDeviceInfo* info)
@@ -244,9 +253,8 @@ API_EXPORT void DeleteInputDeviceInfo(InputDeviceInfo* info)
     delete info;
 }
 
-struct OutputDeviceInfo
+struct OutputDeviceInfo : DeviceInfoBase
 {
-    MIDIEndpointRef endpointRef;
 };
 
 API_EXPORT void DeleteOutputDeviceInfo(OutputDeviceInfo* info)
@@ -283,6 +291,133 @@ OSStatus GetDeviceDriverVersion(MIDIEndpointRef endpointRef, int* value)
     *value = driverVersion;
 
     return status;
+}
+
+GETSTRINGPROPERTYRESULT GetStringPropertyValue(MIDIObjectRef obj, CFStringRef property, const char** value)
+{
+    CFStringRef stringRef = nullptr;
+    OSStatus status = MIDIObjectGetStringProperty(obj, property, &stringRef);
+
+    if (status != noErr)
+        return GETSTRINGPROPERTYRESULT_FAILEDGETVALUE;
+
+    CFIndex length = CFStringGetLength(stringRef);
+    CFIndex maxSize = CFStringGetMaximumSizeForEncoding(length, kCFStringEncodingUTF8) + 1;
+        
+    char* buffer = new char[maxSize];
+
+    if (!CFStringGetCString(stringRef, buffer, maxSize, kCFStringEncodingUTF8))
+    {
+        delete[] buffer;
+        CFRelease(stringRef);
+        return GETSTRINGPROPERTYRESULT_FAILEDFILLVALUEBUFFER;
+    }
+
+    *value = buffer;
+    CFRelease(stringRef);
+
+    return GETSTRINGPROPERTYRESULT_OK;
+}
+
+API_EXPORT DEVCOMMON_GETPARENTDEVICEINFORESULT GetParentDeviceInfo_Mac(
+    DeviceInfoBase* deviceInfo,
+    int* id,
+    const char** name,
+    const char** manufacturer,
+    const char** model,
+    int* errorCode)
+{
+    *errorCode = 0;
+
+    if (deviceInfo == nullptr || deviceInfo->endpointRef == 0)
+        return DEVCOMMON_GETPARENTDEVICEINFORESULT_NOINFO;
+
+    if (deviceInfo->parentDeviceId >= 0)
+    {
+        *id = deviceInfo->parentDeviceId;
+        *name = deviceInfo->parentDeviceName;
+        *manufacturer = deviceInfo->parentDeviceManufacturer;
+        *model = deviceInfo->parentDeviceModel;
+
+        return DEVCOMMON_GETPARENTDEVICEINFORESULT_OK;
+    }
+
+    MIDIEntityRef entity = 0;
+    OSStatus status = MIDIEndpointGetEntity(deviceInfo->endpointRef, &entity);
+    if (status != noErr || entity == 0)
+    {
+        *errorCode = status;
+        return DEVCOMMON_GETPARENTDEVICEINFORESULT_NOINFO;
+    }
+
+    MIDIDeviceRef device = 0;
+    status = MIDIEntityGetDevice(entity, &device);
+    if (status != noErr || device == 0)
+    {
+        *errorCode = status;
+        return DEVCOMMON_GETPARENTDEVICEINFORESULT_NOINFO;
+    }
+
+    if (deviceInfo->parentDeviceId < 0)
+    {
+        status = MIDIObjectGetIntegerProperty(device, kMIDIPropertyUniqueID, id);
+        if (status != noErr)
+        {
+            *errorCode = status;
+            return DEVCOMMON_GETPARENTDEVICEINFORESULT_FAILEDGETID;
+        }
+
+        deviceInfo->parentDeviceId = *id;
+    }
+
+    if (deviceInfo->parentDeviceName == nullptr)
+    {
+        auto getNameResult = GetStringPropertyValue(device, kMIDIPropertyName, name);
+        if (getNameResult != GETSTRINGPROPERTYRESULT_OK)
+        {
+            *errorCode = getNameResult;
+
+            switch (getNameResult)
+            {
+                case GETSTRINGPROPERTYRESULT_FAILEDGETVALUE: return DEVCOMMON_GETPARENTDEVICEINFORESULT_NAME_FAILEDGETVALUE;
+                case GETSTRINGPROPERTYRESULT_FAILEDFILLVALUEBUFFER: return DEVCOMMON_GETPARENTDEVICEINFORESULT_NAME_FAILEDFILLVALUEBUFFER;
+            }
+        }
+
+        deviceInfo->parentDeviceName = *name;
+    }
+
+    if (deviceInfo->parentDeviceManufacturer == nullptr)
+    {
+        auto getManufacturerResult = GetStringPropertyValue(device, kMIDIPropertyManufacturer, manufacturer);
+        if (getManufacturerResult != GETSTRINGPROPERTYRESULT_OK)
+        {
+            *errorCode = getManufacturerResult;
+            switch (getManufacturerResult)
+            {
+                case GETSTRINGPROPERTYRESULT_FAILEDGETVALUE: return DEVCOMMON_GETPARENTDEVICEINFORESULT_MANUFACTURER_FAILEDGETVALUE;
+                case GETSTRINGPROPERTYRESULT_FAILEDFILLVALUEBUFFER: return DEVCOMMON_GETPARENTDEVICEINFORESULT_MANUFACTURER_FAILEDFILLVALUEBUFFER;
+            }
+        }
+        deviceInfo->parentDeviceManufacturer = *manufacturer;
+    }
+
+    if (deviceInfo->parentDeviceModel == nullptr)
+    {
+        auto getModelResult = GetStringPropertyValue(device, kMIDIPropertyModel, model);
+        if (getModelResult != GETSTRINGPROPERTYRESULT_OK)
+        {
+            *errorCode = getModelResult;
+            switch (getModelResult)
+            {
+                case GETSTRINGPROPERTYRESULT_FAILEDGETVALUE: return DEVCOMMON_GETPARENTDEVICEINFORESULT_MODEL_FAILEDGETVALUE;
+                case GETSTRINGPROPERTYRESULT_FAILEDFILLVALUEBUFFER: return DEVCOMMON_GETPARENTDEVICEINFORESULT_MODEL_FAILEDFILLVALUEBUFFER;
+            }
+        }
+        deviceInfo->parentDeviceModel = *model;
+    }
+
+    return DEVCOMMON_GETPARENTDEVICEINFORESULT_OK;
 }
 
 /* ================================
@@ -1132,7 +1267,7 @@ API_EXPORT char IsOutputDevicePropertySupported(OUT_PROPERTY property)
  Virtual device
  ================================ */
 
-struct VirtualDeviceInfo
+struct VirtualDeviceInfo : DeviceInfoBase
 {
     InputDeviceInfo* inputDeviceInfo;
     OutputDeviceInfo* outputDeviceInfo;
@@ -1163,6 +1298,8 @@ API_EXPORT VIRTUAL_OPENRESULT OpenVirtualDevice_Mac(
     MIDIEndpointRef sourceRef;
     OSStatus status = MIDISourceCreate(sessionHandle->clientRef, nameRef, &sourceRef);
     CFRelease(nameRef);
+
+    virtualDeviceInfo->endpointRef = sourceRef;
     
     if (status != noErr)
     {

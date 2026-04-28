@@ -100,6 +100,20 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// </summary>
         public abstract string Name { get; }
 
+        public ParentDevice ParentDevice
+        {
+            get
+            {
+                // TODO: throw if not supported
+
+                var result = DevicesCommonApi.Api_GetParentDeviceInfo((Info ?? Handle).DangerousGetHandle(), out var id, out var name, out var manufacturer, out var model);
+                if (!result)
+                    return null;
+
+                return ParentDevice.Get(id, name, manufacturer, model);
+            }
+        }
+
         internal CreationContext Context { get; }
 
         internal NativeHandle Handle { get; set; }
@@ -127,6 +141,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         #region Methods
 
+        // TODO: Maybe mark internal and not expose? And for all protected methods below
         /// <summary>
         /// Checks that current instance of MIDI device class is not disposed and throws
         /// <see cref="ObjectDisposedException"/> if it is.

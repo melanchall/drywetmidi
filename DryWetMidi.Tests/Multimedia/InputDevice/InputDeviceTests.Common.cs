@@ -74,6 +74,50 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
         #region Test methods
 
+        [WinOnly]
+        [ParentDeviceApiRequired]
+        [Test]
+        public void CheckInputDeviceParentDeviceInfo([Values(MidiDevicesNames.DeviceA, MidiDevicesNames.DeviceB, MidiDevicesNames.DeviceC)] string deviceName)
+        {
+            var inputDevice = InputDevice.GetByName(deviceName);
+
+            var parentDevice = inputDevice.ParentDevice;
+            Console.WriteLine($"Parent device for [{deviceName}]: [{parentDevice}]");
+
+            ClassicAssert.IsNotNull(parentDevice, "There is no parent device.");
+            ClassicAssert.IsNotNull(parentDevice.Id, "Parent device ID is null.");
+            ClassicAssert.IsNotNull(parentDevice.Name, "Parent device name is null.");
+            ClassicAssert.IsNotEmpty(parentDevice.Name, "Parent device name is empty.");
+            ClassicAssert.IsNotNull(parentDevice.Manufacturer, "Parent device manufacturer is null.");
+            ClassicAssert.IsNotEmpty(parentDevice.Manufacturer, "Parent device manufacturer is empty.");
+        }
+
+        [MultimediaTestRetry]
+        [MultiClientDeviceAccessSupportRequired]
+        [Test]
+        public void CheckInputDeviceMultiClientAccess()
+        {
+            using (var inputDevice1 = InputDevice.GetByName(MidiDevicesNames.DeviceA))
+            using (var inputDevice2 = InputDevice.GetByName(MidiDevicesNames.DeviceA))
+            using (var outputDevice = OutputDevice.GetByName(MidiDevicesNames.DeviceA))
+            {
+                var receivedEventsCount = 0;
+
+                inputDevice1.EventReceived += (_, e) => receivedEventsCount++;
+                inputDevice1.StartEventsListening();
+
+                inputDevice2.EventReceived += (_, e) => receivedEventsCount++;
+                inputDevice2.StartEventsListening();
+
+                outputDevice.PrepareForEventsSending();
+                outputDevice.SendEvent(new NoteOnEvent());
+
+                var timeout = SendReceiveUtilities.MaximumEventSendReceiveDelay;
+                var success = WaitOperations.Wait(() => receivedEventsCount == 2, timeout);
+                ClassicAssert.IsTrue(success, "Event is not received by both devices.");
+            }
+        }
+
         [TestCase(MidiDevicesNames.DeviceA)]
         [TestCase(MidiDevicesNames.DeviceB)]
         public void GetInputDeviceByName(string deviceName)

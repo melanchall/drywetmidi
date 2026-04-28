@@ -54,6 +54,8 @@
     <Compile Remove="Multimedia\**\*.cs" />
     <Compile Remove="Attributes\DevicesWatcherApiRequiredAttribute.cs" />
     <Compile Remove="Attributes\VirtualDeviceApiRequiredAttribute.cs" />
+    <Compile Remove="Attributes\ParentDeviceApiRequiredAttribute.cs" />
+    <Compile Remove="Attributes\MultiClientDeviceAccessSupportRequiredAttribute.cs" />
   </ItemGroup>
 
   <Import Project="$(SolutionDir)Melanchall.DryWetMidi.Native.targets" />

@@ -381,6 +381,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         public static IN_GETPROPERTYRESULT Api_GetDeviceName(IntPtr info, out string name, out int errorCode)
         {
+            // out var + check result; see in many places
             IntPtr namePointer;
             var result = GetInputDeviceName(info, out namePointer, out errorCode);
             name = NativeApi.GetStringFromPointer(namePointer);

@@ -30,6 +30,7 @@
 
 #include <winrt/Windows.Foundation.h>
 #include <winrt/Windows.Foundation.Collections.h>
+#include <winrt/Windows.Devices.Enumeration.h>
 #include <winrt/Microsoft.Windows.Devices.Midi2.h>
 namespace midi2 = winrt::Microsoft::Windows::Devices::Midi2;
 #include <winrt/Microsoft.Windows.Devices.Midi2.Endpoints.BasicLoopback.h>
@@ -270,14 +271,22 @@ void EnsureWinMmPortsAvailable()
     midiOutGetNumDevs();
 }
 
-struct InputDeviceInfo
+struct DeviceInfoBase
+{
+    std::wstring endpointDeviceId;
+
+    std::wstring parentDeviceId;
+    std::wstring parentDeviceName;
+    std::wstring parentManufacturer;
+    std::wstring parentModel;
+};
+
+struct InputDeviceInfo : DeviceInfoBase
 {
     int deviceIndex;
     LPMIDIINCAPSW caps;
 
-    std::wstring endpointDeviceId;
     std::wstring portDeviceId;
-
     std::wstring devicePath;
 };
 
@@ -375,12 +384,11 @@ API_EXPORT void API_CALL DeleteInputDeviceInfo(InputDeviceInfo* info)
     delete info;
 }
 
-struct OutputDeviceInfo
+struct OutputDeviceInfo : DeviceInfoBase
 {
     int deviceIndex;
     LPMIDIOUTCAPSW caps;
 
-    std::wstring endpointDeviceId;
     std::wstring portDeviceId;
 
     std::wstring devicePath;
@@ -635,6 +643,85 @@ API_EXPORT const wchar_t* API_CALL GetDeviceProduct(WORD productId)
 
     // add from https://docs.microsoft.com/en-us/windows/win32/multimedia/product-identifiers
     return L"Unknown";
+}
+
+API_EXPORT DEVCOMMON_GETPARENTDEVICEINFORESULT API_CALL GetParentDeviceInfo_Win(
+    DeviceInfoBase* deviceInfo,
+    const wchar_t** id,
+    const wchar_t** name,
+    const wchar_t** manufacturer,
+    const wchar_t** model,
+    int* errorCode)
+{
+    *errorCode = 0;
+
+    if (deviceInfo == nullptr || deviceInfo->endpointDeviceId.empty())
+        return DEVCOMMON_GETPARENTDEVICEINFORESULT_NOINFO;
+
+    if (!deviceInfo->parentDeviceId.empty())
+    {
+        *id = deviceInfo->parentDeviceId.c_str();
+        *name = deviceInfo->parentDeviceName.c_str();
+        *manufacturer = deviceInfo->parentManufacturer.c_str();
+        *model = deviceInfo->parentModel.c_str();
+
+        return DEVCOMMON_GETPARENTDEVICEINFORESULT_OK;
+    }
+
+    winrt::Windows::Devices::Enumeration::DeviceInformation parentInformation = nullptr;
+
+    try
+    {
+        auto endpointInformation = midi2::MidiEndpointDeviceInformation::CreateFromEndpointDeviceId(winrt::hstring{ deviceInfo->endpointDeviceId });
+        if (endpointInformation == nullptr)
+            return DEVCOMMON_GETPARENTDEVICEINFORESULT_FAILEDTOGETINFO;
+
+        parentInformation = endpointInformation.GetParentDeviceInformation();
+        if (parentInformation == nullptr)
+            return DEVCOMMON_GETPARENTDEVICEINFORESULT_NOINFO;
+
+        deviceInfo->parentDeviceId = parentInformation.Id().c_str();
+        deviceInfo->parentDeviceName = parentInformation.Name().c_str();
+
+        // TODO: dangerous to return pointers to internal strings - need to copy them instead?
+        *id = deviceInfo->parentDeviceId.c_str();
+        *name = deviceInfo->parentDeviceName.c_str();
+    }
+    catch (...)
+    {
+        return DEVCOMMON_GETPARENTDEVICEINFORESULT_UNKNOWNWMSERROR;
+    }
+
+    if (parentInformation != nullptr)
+    {
+        try
+        {
+            auto manufacturerPropertyName = L"System.Devices.DeviceManufacturer";
+            auto modelPropertyName = L"System.Devices.ModelName";
+
+            auto properties = parentInformation.Properties();
+
+            auto manufacturerH = properties.HasKey(manufacturerPropertyName)
+                ? winrt::unbox_value_or<winrt::hstring>(properties.Lookup(manufacturerPropertyName), L"")
+                : L"";
+
+            auto modelH = properties.HasKey(modelPropertyName)
+                ? winrt::unbox_value_or<winrt::hstring>(properties.Lookup(modelPropertyName), L"")
+                : L"";
+
+            deviceInfo->parentManufacturer = manufacturerH.c_str();
+            deviceInfo->parentModel = modelH.c_str();
+        }
+        catch (...)
+        {
+            // TODO
+        }
+
+        *manufacturer = deviceInfo->parentManufacturer.c_str();
+        *model = deviceInfo->parentModel.c_str();
+    }
+
+    return DEVCOMMON_GETPARENTDEVICEINFORESULT_OK;
 }
 
 /* ================================
@@ -1933,7 +2020,7 @@ API_EXPORT char API_CALL IsOutputDevicePropertySupported(OUT_PROPERTY property)
  Virtual device
  ================================ */
 
-struct VirtualDeviceInfo
+struct VirtualDeviceInfo : DeviceInfoBase
 {
     InputDeviceInfo* inputDeviceInfo;
     OutputDeviceInfo* outputDeviceInfo;
@@ -2028,6 +2115,8 @@ API_EXPORT VIRTUAL_OPENRESULT API_CALL OpenVirtualDevice_Win(
             delete virtualDeviceInfo;
             return VIRTUAL_OPENRESULT_FAILED;
         }
+
+        virtualDeviceInfo->endpointDeviceId = result.EndpointDeviceId().c_str();
 
         EnsureWinMmPortsAvailable();
 

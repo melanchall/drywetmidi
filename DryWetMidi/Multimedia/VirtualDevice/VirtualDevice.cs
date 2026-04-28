@@ -1,5 +1,6 @@
-﻿using System;
-using Melanchall.DryWetMidi.Common;
+﻿using Melanchall.DryWetMidi.Common;
+using System;
+using static Melanchall.DryWetMidi.Multimedia.CommonApi;
 
 namespace Melanchall.DryWetMidi.Multimedia
 {
