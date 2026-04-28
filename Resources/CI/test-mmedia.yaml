@@ -145,7 +145,7 @@ stages:
       inputs:
         command: 'test'
         projects: 'DryWetMidi.Tests/Melanchall.DryWetMidi.Tests.csproj'
-        arguments: '--blame --blame-hang --blame-hang-timeout 5m --blame-hang-dump-type full --no-build --configuration $(TestBuildConfiguration) --filter (FullyQualifiedName~.Multimedia) --framework $(Tfm) --verbosity normal --diag diagnostic.log --logger "console;verbosity=normal" -property:SolutionDir="$(Build.SourcesDirectory)/"'
+        arguments: '--blame --blame-hang --blame-hang-timeout 5m --blame-hang-dump-type full --no-build --configuration $(TestBuildConfiguration) --filter (FullyQualifiedName~.Multimedia) --framework net10.0 --verbosity normal --diag diagnostic.log --logger "console;verbosity=normal" -property:SolutionDir="$(Build.SourcesDirectory)/"'
         
     - template: Templates/step-collect-logs.yaml
       parameters:
@@ -157,7 +157,7 @@ stages:
       continueOnError: true
       inputs:
         targetPath: $(Build.ArtifactStagingDirectory)/$(Build.BuildId)/PlaybackTraces
-        artifact: 'PlaybackTraces_$(vmImage)_$(framework)_Attempt$(System.JobAttempt)'
+        artifact: 'PlaybackTraces_HomeAgents_net10.0_Attempt$(System.JobAttempt)'
         
     - task: PublishPipelineArtifact@1
       displayName: Publish 'SysExTraces' artifact
@@ -165,4 +165,4 @@ stages:
       continueOnError: true
       inputs:
         targetPath: $(Build.ArtifactStagingDirectory)/$(Build.BuildId)/SysExTraces
-        artifact: 'SysExTraces_$(vmImage)_$(framework)_Attempt$(System.JobAttempt)'
+        artifact: 'SysExTraces_HomeAgents_net10.0_Attempt$(System.JobAttempt)'
