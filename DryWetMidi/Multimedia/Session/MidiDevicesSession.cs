@@ -1,4 +1,5 @@
 ﻿using Melanchall.DryWetMidi.Common;
+using Melanchall.DryWetMidi.Configuration;
 using System;
 
 namespace Melanchall.DryWetMidi.Multimedia
@@ -37,7 +38,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         public static MidiDevicesSessionHandle GetSessionHandle()
         {
-            Utilities.EnsureOsIsSupported();
+            NativeApiUtilities.EnsureOsIsSupported();
 
             if (_handle == null || _handle.IsInvalid)
             {
@@ -51,8 +52,8 @@ namespace Melanchall.DryWetMidi.Multimedia
                         _inputDeviceCallback = InputDeviceCallback;
                         _outputDeviceCallback = OutputDeviceCallback;
 
-                        var result = MidiDevicesSessionApi.Api_OpenSession(Guid.NewGuid().ToString(), _inputDeviceCallback, _outputDeviceCallback, out rawHandle, out errorCode);
-                        NativeApiUtilities.HandleDevicesNativeApiResult(result, errorCode);
+                        var result = MidiDevicesSessionApi.Api_OpenSession(Guid.NewGuid().ToString(), MidiConfiguration.GetConfigurationHandle(), _inputDeviceCallback, _outputDeviceCallback, out rawHandle, out errorCode);
+                        MidiDeviceUtilities.HandleDevicesNativeApiResult(result, errorCode);
                         
                         _handle = new MidiDevicesSessionHandle(rawHandle);
 

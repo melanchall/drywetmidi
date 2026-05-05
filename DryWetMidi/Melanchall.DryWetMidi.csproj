@@ -88,10 +88,14 @@
     <Compile Remove="Multimedia\DevicesWatcher\**\*.cs" />
     <Compile Remove="Multimedia\Session\**\*.cs" />
     <Compile Remove="Multimedia\Common\**\*.cs" />
-    <Compile Remove="Multimedia\Native\NativeApi.cs" />
-    <Compile Remove="Multimedia\Native\NativeApiUtilities.cs" />
-    <Compile Remove="Multimedia\Native\NativeHandle.cs" />
+    <Compile Remove="Common\Native\**\*.cs" />
+    <Compile Remove="Multimedia\DevicesCommon\**\*.cs" />
+    <Compile Remove="Configuration\MidiConfigurationApi.cs" />
+    <Compile Remove="Configuration\MidiConfiguration.cs" />
+    <Compile Remove="Configuration\MidiConfigurationCheckpointNames.cs" />
+    <Compile Remove="Configuration\MidiConfigurationHandle.cs" />
     <Compile Remove="Multimedia\MidiDevice.cs" />
+    <Compile Remove="Multimedia\MidiDeviceUtilities.cs" />
     <Compile Remove="Multimedia\InputDevice\InputDevice.cs" />
     <Compile Remove="Multimedia\InputDevice\InputDeviceHandle.cs" />
     <Compile Remove="Multimedia\InputDevice\InputDeviceInfo.cs" />
@@ -109,6 +113,7 @@
     <Compile Remove="Multimedia\OutputDevice\OutputDeviceTechnology.cs" />
     <Compile Remove="Multimedia\Clock\TickGenerator\Session\**\*.cs" />
     <Compile Remove="Multimedia\Clock\TickGenerator\TickGeneratorApi.cs" />
+    <Compile Remove="Multimedia\Clock\TickGenerator\TickGeneratorUtilities.cs" />
     <Compile Remove="Multimedia\Clock\TickGenerator\TickGeneratorException.cs" />
     <Compile Remove="Multimedia\Clock\TickGenerator\HighPrecisionTickGenerator.cs" />
   </ItemGroup>

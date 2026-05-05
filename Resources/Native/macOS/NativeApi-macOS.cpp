@@ -29,6 +29,37 @@ API_EXPORT API_TYPE GetApiType()
 }
 
 /* ================================
+   Configuration
+================================ */
+
+struct Configuration
+{
+    char dummy;
+};
+
+API_EXPORT CONFIGURATION_GETRESULT GetConfiguration_Mac(Configuration** configuration, int* errorCode)
+{
+    *errorCode = 0;
+
+    Configuration* config = new Configuration();
+
+    *configuration = config;
+    return CONFIGURATION_GETRESULT_OK;
+}
+
+API_EXPORT CONFIGURATION_CLEANUPRESULT CleanupConfiguration(Configuration* configuration)
+{
+    delete configuration;
+
+    return CONFIGURATION_CLEANUPRESULT_OK;
+}
+
+API_EXPORT char IsVirtualDeviceApiAvailable(Configuration* configuration)
+{
+    return 1;
+}
+
+/* ================================
    High-precision tick generator
  ================================ */
 
@@ -594,7 +625,7 @@ void* ThreadProc(void* data)
     return nullptr;
 }
 
-API_EXPORT SESSION_OPENRESULT OpenSession_Mac(const char* name, InputDeviceCallback inputDeviceCallback, OutputDeviceCallback outputDeviceCallback, void** handle, int* errorCode)
+API_EXPORT SESSION_OPENRESULT OpenSession_Mac(const char* name, Configuration* configuration, InputDeviceCallback inputDeviceCallback, OutputDeviceCallback outputDeviceCallback, SessionHandle** handle, int* errorCode)
 {
     *errorCode = 0;
 
@@ -639,10 +670,8 @@ API_EXPORT SESSION_OPENRESULT OpenSession_Mac(const char* name, InputDeviceCallb
     return SESSION_OPENRESULT_OK;
 }
 
-API_EXPORT SESSION_CLOSERESULT CloseSession(void* handle)
+API_EXPORT SESSION_CLOSERESULT CloseSession(SessionHandle* sessionHandle)
 {
-    SessionHandle* sessionHandle = static_cast<SessionHandle*>(handle);
-
     if (sessionHandle->sessionClosed.exchange(1) == 1 || sessionHandle->runLoopRef == nullptr)
         return SESSION_CLOSERESULT_OK;
     
@@ -715,7 +744,7 @@ IN_GETINFORESULT GetInputDeviceInfo(int deviceIndex, InputDeviceInfo** info, int
     return IN_GETINFORESULT_OK;
 }
 
-API_EXPORT IN_GETALLINFORESULT GetInputDevicesInfo(SessionHandle* sessionHandle, InputDeviceInfo*** devicesInfo, int* devicesCount, int* errorCode)
+API_EXPORT IN_GETALLINFORESULT GetInputDevicesInfo(Configuration* configuration, SessionHandle* sessionHandle, InputDeviceInfo*** devicesInfo, int* devicesCount, int* errorCode)
 {
     *errorCode = 0;
     *devicesCount = static_cast<int>(MIDIGetNumberOfSources());
@@ -1000,7 +1029,7 @@ OUT_GETINFORESULT GetOutputDeviceInfo(int deviceIndex, OutputDeviceInfo** info, 
     return OUT_GETINFORESULT_OK;
 }
 
-API_EXPORT OUT_GETALLINFORESULT GetOutputDevicesInfo(SessionHandle* sessionHandle, OutputDeviceInfo*** devicesInfo, int* devicesCount, int* errorCode)
+API_EXPORT OUT_GETALLINFORESULT GetOutputDevicesInfo(Configuration* configuration, SessionHandle* sessionHandle, OutputDeviceInfo*** devicesInfo, int* devicesCount, int* errorCode)
 {
     *errorCode = 0;
     *devicesCount = static_cast<int>(MIDIGetNumberOfDestinations());
@@ -1274,13 +1303,9 @@ struct VirtualDeviceInfo : DeviceInfoBase
     const char* name;
 };
 
-API_EXPORT char IsVirtualDeviceApiAvailable(SessionHandle* sessionHandle)
-{
-    return 1;
-}
-
 API_EXPORT VIRTUAL_OPENRESULT OpenVirtualDevice_Mac(
     const char* name,
+    Configuration* configuration,
     SessionHandle* sessionHandle,
     MIDIReadProc callback,
     VirtualDeviceInfo** info,

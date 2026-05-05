@@ -14,7 +14,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 #if NATIVELESS
             new RegularPrecisionTickGenerator();
 #else
-            Utilities.IsOsSupported() ? new HighPrecisionTickGenerator() : new RegularPrecisionTickGenerator();
+            NativeApiUtilities.IsOsSupported() ? new HighPrecisionTickGenerator() : new RegularPrecisionTickGenerator();
 #endif
 
         #endregion

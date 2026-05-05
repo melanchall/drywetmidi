@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using Melanchall.DryWetMidi.Common;
 
 #if NET7_0_OR_GREATER
 using System.Runtime.CompilerServices;
@@ -71,7 +72,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
             var (getInfoResult, idValue, namePointer, manufacturerPointer, modelPointer, errorCode) = getInfo(info);
 
-            NativeApiUtilities.HandleDevicesNativeApiResult(result, errorCode);
+            MidiDeviceUtilities.HandleDevicesNativeApiResult(result, errorCode);
 
             id = idValue;
             name = NativeApi.GetStringFromPointer(namePointer);

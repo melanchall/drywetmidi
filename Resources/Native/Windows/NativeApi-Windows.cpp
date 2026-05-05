@@ -174,6 +174,125 @@ API_EXPORT void API_CALL GetNativeEnvironmentInfo_Win(
 }
 
 /* ================================
+   Configuration
+================================ */
+
+struct Configuration
+{
+    char useWms{ 0 };
+    char wmsAvailable{0};
+    char basicLoopbackAvailable{0};
+    std::shared_ptr<init::MidiDesktopAppSdkInitializer> wmsSdkInitializer;
+    char wmsSdkInitialized{0};
+};
+
+API_EXPORT CONFIGURATION_GETRESULT API_CALL GetConfiguration_Win(
+    char useWms,
+    Configuration** configuration,
+    int* errorCode)
+{
+    *errorCode = 0;
+
+    Configuration* config = new Configuration();
+
+    config->wmsSdkInitialized = 0;
+    config->useWms = useWms;
+
+    if (useWms)
+    {
+        try
+        {
+            char comInitializationResult;
+            char registryCheckResult;
+            char comCheckResult;
+            WMSSERVICECHECKRESULT serviceCheckResult;
+            char sdkCheckResult;
+
+            GetNativeEnvironmentInfo_Win(
+                &comInitializationResult,
+                &registryCheckResult,
+                &comCheckResult,
+                &serviceCheckResult,
+                &sdkCheckResult);
+
+            config->wmsAvailable = static_cast<char>(
+                comInitializationResult &&
+                registryCheckResult &&
+                comCheckResult &&
+                (serviceCheckResult == WMSSERVICECHECKRESULT_OK) &&
+                sdkCheckResult);
+
+            if (config->wmsAvailable)
+            {
+                winrt::init_apartment();
+
+                std::shared_ptr<init::MidiDesktopAppSdkInitializer> wmsSdkInitializer = std::make_shared<init::MidiDesktopAppSdkInitializer>();
+
+                if (wmsSdkInitializer == nullptr)
+                    return CONFIGURATION_GETRESULT_CANTCREATEWMSSDKINITIALIZER;
+
+                if (!wmsSdkInitializer->InitializeSdkRuntime())
+                    return CONFIGURATION_GETRESULT_CANTINITIALIZEWMSSDK;
+
+                if (!wmsSdkInitializer->CheckForMinimumRequiredSdkVersion(
+                    WINDOWS_MIDI_SERVICES_NUGET_BUILD_VERSION_MAJOR,
+                    WINDOWS_MIDI_SERVICES_NUGET_BUILD_VERSION_MINOR,
+                    WINDOWS_MIDI_SERVICES_NUGET_BUILD_VERSION_PATCH))
+                    return SESSION_OPENRESULT_OLDWMSSDK;
+
+                if (!wmsSdkInitializer->EnsureServiceAvailable())
+                    return CONFIGURATION_GETRESULT_WMSSERVICEUNAVAILABLE;
+
+                config->wmsSdkInitializer = wmsSdkInitializer;
+                config->basicLoopbackAvailable = basicLoopback::MidiBasicLoopbackEndpointManager::IsTransportAvailable();
+
+                config->wmsSdkInitialized = 1;
+            }
+        }
+        catch (...)
+        {
+            return CONFIGURATION_GETRESULT_WMSUNKNOWNERROR;
+        }
+    }
+
+    *configuration = config;
+    return CONFIGURATION_GETRESULT_OK;
+}
+
+API_EXPORT CONFIGURATION_CLEANUPRESULT API_CALL CleanupConfiguration(Configuration* configuration)
+{
+    try
+    {
+        if (configuration->wmsAvailable)
+        {
+            if (configuration->wmsSdkInitializer != nullptr)
+            {
+                configuration->wmsSdkInitializer->ShutdownSdkRuntime();
+                configuration->wmsSdkInitializer.reset();
+            }
+
+            winrt::uninit_apartment();
+        }
+    }
+    catch (...)
+    {
+        return CONFIGURATION_CLEANUPRESULT_WMSUNKNOWNERROR;
+    }
+
+    delete configuration;
+
+    return CONFIGURATION_CLEANUPRESULT_OK;
+}
+
+API_EXPORT char API_CALL IsVirtualDeviceApiAvailable(Configuration* configuration)
+{
+    if (!configuration->useWms || !configuration->wmsSdkInitialized || !configuration->wmsAvailable)
+        return 0;
+
+    return configuration->basicLoopbackAvailable;
+}
+
+/* ================================
    High-precision tick generator
 ================================ */
 
@@ -741,11 +860,6 @@ struct SessionHandle
 {
     const wchar_t* name;
 
-    char wmsAvailable;
-    char basicLoopbackAvailable;
-    std::shared_ptr<init::MidiDesktopAppSdkInitializer> wmsSdkInitializer;
-    char wmsSdkInitialized;
-
     midi2::MidiEndpointDeviceWatcher watcher{nullptr};
     std::atomic<char> devicesWatcherEnabled{0};
     InputDeviceCallback inputDeviceCallback;
@@ -779,64 +893,19 @@ void DeleteOutputDeviceInfos(std::vector<OutputDeviceInfo*>& deviceInfos)
     deviceInfos.clear();
 }
 
-API_EXPORT SESSION_OPENRESULT API_CALL OpenSession_Win(const wchar_t* name, InputDeviceCallback inputDeviceCallback, OutputDeviceCallback outputDeviceCallback, void** handle, int* errorCode)
+API_EXPORT SESSION_OPENRESULT API_CALL OpenSession_Win(const wchar_t* name, Configuration* configuration, InputDeviceCallback inputDeviceCallback, OutputDeviceCallback outputDeviceCallback, SessionHandle** handle, int* errorCode)
 {
     *errorCode = 0;
 
     SessionHandle* sessionHandle = new SessionHandle();
     sessionHandle->name = name;
-    sessionHandle->wmsSdkInitialized = 0;
     sessionHandle->inputDeviceCallback = inputDeviceCallback;
     sessionHandle->outputDeviceCallback = outputDeviceCallback;
 
     try
     {
-        char comInitializationResult;
-        char registryCheckResult;
-        char comCheckResult;
-        WMSSERVICECHECKRESULT serviceCheckResult;
-        char sdkCheckResult;
-
-        GetNativeEnvironmentInfo_Win(
-            &comInitializationResult,
-            &registryCheckResult,
-            &comCheckResult,
-            &serviceCheckResult,
-            &sdkCheckResult);
-
-        sessionHandle->wmsAvailable = static_cast<char>(
-            comInitializationResult &&
-            registryCheckResult &&
-            comCheckResult &&
-            (serviceCheckResult == WMSSERVICECHECKRESULT_OK) &&
-            sdkCheckResult);
-
-        if (sessionHandle->wmsAvailable)
+        if (configuration->useWms && configuration->wmsAvailable && configuration->wmsSdkInitialized)
         {
-            winrt::init_apartment();
-
-            std::shared_ptr<init::MidiDesktopAppSdkInitializer> wmsSdkInitializer = std::make_shared<init::MidiDesktopAppSdkInitializer>();
-
-            if (wmsSdkInitializer == nullptr)
-                return SESSION_OPENRESULT_CANTCREATEWMSSDKINITIALIZER;
-
-            if (!wmsSdkInitializer->InitializeSdkRuntime())
-                return SESSION_OPENRESULT_CANTINITIALIZEWMSSDK;
-
-            if (!wmsSdkInitializer->CheckForMinimumRequiredSdkVersion(
-                WINDOWS_MIDI_SERVICES_NUGET_BUILD_VERSION_MAJOR,
-                WINDOWS_MIDI_SERVICES_NUGET_BUILD_VERSION_MINOR,
-                WINDOWS_MIDI_SERVICES_NUGET_BUILD_VERSION_PATCH))
-                return SESSION_OPENRESULT_OLDWMSSDK;
-
-            if (!wmsSdkInitializer->EnsureServiceAvailable())
-                return SESSION_OPENRESULT_WMSSERVICEUNAVAILABLE;
-
-            sessionHandle->wmsSdkInitializer = wmsSdkInitializer;
-            sessionHandle->basicLoopbackAvailable = basicLoopback::MidiBasicLoopbackEndpointManager::IsTransportAvailable();
-
-            sessionHandle->wmsSdkInitialized = 1;
-
             sessionHandle->watcher = midi2::MidiEndpointDeviceWatcher::Create(midi2::MidiEndpointDeviceInformationFilters::AllStandardEndpoints);
 
             auto OnWatcherDeviceAdded = [sessionHandle](midi2::MidiEndpointDeviceWatcher const&, midi2::MidiEndpointDeviceInformationAddedEventArgs const& args)
@@ -1044,43 +1113,23 @@ API_EXPORT SESSION_OPENRESULT API_CALL OpenSession_Win(const wchar_t* name, Inpu
     return SESSION_OPENRESULT_OK;
 }
 
-API_EXPORT SESSION_CLOSERESULT API_CALL CloseSession(void* handle)
+API_EXPORT SESSION_CLOSERESULT API_CALL CloseSession(SessionHandle* sessionHandle)
 {
-    SessionHandle* sessionHandle = static_cast<SessionHandle*>(handle);
-
-    try
+    if (sessionHandle->watcher != nullptr)
     {
-        if (sessionHandle->wmsAvailable)
-        {
-            if (sessionHandle->wmsSdkInitializer != nullptr)
-            {
-                sessionHandle->wmsSdkInitializer->ShutdownSdkRuntime();
-                sessionHandle->wmsSdkInitializer.reset();
-            }
+        if (sessionHandle->watcher.Status() != winrt::Windows::Devices::Enumeration::DeviceWatcherStatus::Stopped)
+            sessionHandle->watcher.Stop();
 
-            if (sessionHandle->watcher != nullptr)
-            {
-                if (sessionHandle->watcher.Status() != winrt::Windows::Devices::Enumeration::DeviceWatcherStatus::Stopped)
-                    sessionHandle->watcher.Stop();
+        if (sessionHandle->revokeOnWatcherEnumerationCompleted)
+            sessionHandle->watcher.EnumerationCompleted(sessionHandle->revokeOnWatcherEnumerationCompleted);
 
-                if (sessionHandle->revokeOnWatcherEnumerationCompleted)
-                    sessionHandle->watcher.EnumerationCompleted(sessionHandle->revokeOnWatcherEnumerationCompleted);
+        if (sessionHandle->revokeOnWatcherDeviceRemoved)
+            sessionHandle->watcher.Removed(sessionHandle->revokeOnWatcherDeviceRemoved);
 
-                if (sessionHandle->revokeOnWatcherDeviceRemoved)
-                    sessionHandle->watcher.Removed(sessionHandle->revokeOnWatcherDeviceRemoved);
+        if (sessionHandle->revokeOnWatcherDeviceAdded)
+            sessionHandle->watcher.Added(sessionHandle->revokeOnWatcherDeviceAdded);
 
-                if (sessionHandle->revokeOnWatcherDeviceAdded)
-                    sessionHandle->watcher.Added(sessionHandle->revokeOnWatcherDeviceAdded);
-
-                sessionHandle->watcher = nullptr;
-            }
-
-            winrt::uninit_apartment();
-        }
-    }
-    catch (...)
-    {
-        // TODO
+        sessionHandle->watcher = nullptr;
     }
 
     {
@@ -1140,13 +1189,13 @@ IN_GETALLINFORESULT ConvertToGetAllInInfoResult(IN_GETINFORESULT getInfoResult)
     }
 }
 
-API_EXPORT IN_GETALLINFORESULT API_CALL GetInputDevicesInfo(SessionHandle* sessionHandle, InputDeviceInfo*** devicesInfo, int* devicesCount, int* errorCode)
+API_EXPORT IN_GETALLINFORESULT API_CALL GetInputDevicesInfo(Configuration* configuration, SessionHandle* sessionHandle, InputDeviceInfo*** devicesInfo, int* devicesCount, int* errorCode)
 {
     *errorCode = 0;
 
     EnsureWinMmPortsAvailable();
 
-    if (sessionHandle->wmsAvailable && sessionHandle->wmsSdkInitialized)
+    if (configuration->useWms && configuration->wmsAvailable && configuration->wmsSdkInitialized)
     {
         try
         {
@@ -1589,13 +1638,13 @@ OUT_GETALLINFORESULT ConvertToGetAllOutInfoResult(OUT_GETINFORESULT getInfoResul
     }
 }
 
-API_EXPORT OUT_GETALLINFORESULT API_CALL GetOutputDevicesInfo(SessionHandle* sessionHandle, OutputDeviceInfo*** devicesInfo, int* devicesCount, int* errorCode)
+API_EXPORT OUT_GETALLINFORESULT API_CALL GetOutputDevicesInfo(Configuration* configuration, SessionHandle* sessionHandle, OutputDeviceInfo*** devicesInfo, int* devicesCount, int* errorCode)
 {
     *errorCode = 0;
 
     EnsureWinMmPortsAvailable();
 
-    if (sessionHandle->wmsAvailable && sessionHandle->wmsSdkInitialized)
+    if (configuration->useWms && configuration->wmsAvailable && configuration->wmsSdkInitialized)
     {
         std::vector<OutputDeviceInfo*> outputDevicesInfo;
 
@@ -2028,14 +2077,6 @@ struct VirtualDeviceInfo : DeviceInfoBase
     winrt::guid associationId;
 };
 
-API_EXPORT char API_CALL IsVirtualDeviceApiAvailable(SessionHandle* sessionHandle)
-{
-    if (!sessionHandle->wmsSdkInitialized || !sessionHandle->wmsAvailable)
-        return 0;
-
-    return sessionHandle->basicLoopbackAvailable;
-}
-
 const midi2::MidiEndpointAssociatedPortDeviceInformation GetSinglePort(midi2::MidiEndpointDeviceInformation endpointInformation, midi2::Midi1PortFlow flow)
 {
     auto ports = endpointInformation.FindAllAssociatedMidi1PortsForThisEndpoint(flow);
@@ -2045,6 +2086,7 @@ const midi2::MidiEndpointAssociatedPortDeviceInformation GetSinglePort(midi2::Mi
 
 API_EXPORT VIRTUAL_OPENRESULT API_CALL OpenVirtualDevice_Win(
     const wchar_t* name,
+    Configuration* configuration,
     SessionHandle* sessionHandle,
     VirtualDeviceInfo** info,
     int* errorCode)
@@ -2054,13 +2096,13 @@ API_EXPORT VIRTUAL_OPENRESULT API_CALL OpenVirtualDevice_Win(
     VirtualDeviceInfo* virtualDeviceInfo = new VirtualDeviceInfo();
     virtualDeviceInfo->name = name;
 
-    if (!sessionHandle->wmsSdkInitialized || !sessionHandle->wmsAvailable)
+    if (!configuration->useWms || !configuration->wmsSdkInitialized || !configuration->wmsAvailable)
     {
         delete virtualDeviceInfo;
         return VIRTUAL_OPENRESULT_WMSUNAVAILABLE;
     }
 
-    if (!sessionHandle->basicLoopbackAvailable)
+    if (!configuration->basicLoopbackAvailable)
     {
         delete virtualDeviceInfo;
         return VIRTUAL_OPENRESULT_WMSBASICLOOPBACKUNAVAILABLE;

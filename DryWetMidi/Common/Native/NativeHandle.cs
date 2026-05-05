@@ -2,7 +2,7 @@
 using Microsoft.Win32.SafeHandles;
 using System;
 
-namespace Melanchall.DryWetMidi.Multimedia
+namespace Melanchall.DryWetMidi.Common
 {
     internal abstract class NativeHandle : SafeHandleZeroOrMinusOneIsInvalid
     {

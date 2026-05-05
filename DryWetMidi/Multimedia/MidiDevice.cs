@@ -1,4 +1,5 @@
 ﻿using Melanchall.DryWetMidi.Common;
+using Melanchall.DryWetMidi.Configuration;
 using System;
 using System.Collections.Generic;
 
@@ -104,7 +105,8 @@ namespace Melanchall.DryWetMidi.Multimedia
         {
             get
             {
-                // TODO: throw if not supported
+                if (!LibraryConfiguration.IsParentDeviceApiAvailable())
+                    throw new PlatformNotSupportedException("Parent device API is not supported on the current operating system.");
 
                 var result = DevicesCommonApi.Api_GetParentDeviceInfo((Info ?? Handle).DangerousGetHandle(), out var id, out var name, out var manufacturer, out var model);
                 if (!result)
@@ -141,48 +143,29 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         #region Methods
 
-        // TODO: Maybe mark internal and not expose? And for all protected methods below
-        /// <summary>
-        /// Checks that current instance of MIDI device class is not disposed and throws
-        /// <see cref="ObjectDisposedException"/> if it is.
-        /// </summary>
-        /// <exception cref="ObjectDisposedException">Current instance of MIDI device class is disposed.</exception>
-        protected void EnsureDeviceIsNotDisposed()
+        internal void EnsureDeviceIsNotDisposed()
         {
             if (_disposed)
                 throw new ObjectDisposedException("Device is disposed.");
         }
 
-        /// <summary>
-        /// Checks that current instance of MIDI device class is not created via 'Device removed' notification
-        /// and throws <see cref="InvalidOperationException"/> if it is.
-        /// </summary>
-        /// <exception cref="InvalidOperationException">Current instance of MIDI device class is created via
-        /// 'Device removed' notification.</exception>
-        protected void EnsureDeviceIsNotRemoved()
+        internal void EnsureDeviceIsNotRemoved()
         {
             if (Context == CreationContext.RemovedDevice)
                 throw new InvalidOperationException("Operation can't be performed on removed device.");
         }
 
-        /// <summary>
-        /// Raises <see cref="ErrorOccurred"/> event.
-        /// </summary>
-        /// <param name="exception">An exception that represents error occurred.</param>
-        protected void OnError(Exception exception)
+        internal void OnError(Exception exception)
         {
             ErrorOccurred?.Invoke(this, new ErrorOccurredEventArgs(exception));
         }
 
-        protected virtual void OnEnabledChanged(bool enabled)
+        internal virtual void OnEnabledChanged(bool enabled)
         {
         }
 
         // TODO: check all calls, looks like some not needed
-        /// <summary>
-        /// Ensures MIDI devices session is created.
-        /// </summary>
-        protected static void EnsureSessionIsCreated()
+        internal static void EnsureSessionIsCreated()
         {
             MidiDevicesSession.GetSessionHandle();
         }

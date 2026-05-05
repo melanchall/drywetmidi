@@ -40,10 +40,6 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         {
             using (var virtualDevice = GetVirtualDevice(name))
             {
-                var parr = virtualDevice.InputDevice.ParentDevice;
-                var parr2 = virtualDevice.OutputDevice.ParentDevice;
-                var parr3 = virtualDevice.ParentDevice;
-
                 ClassicAssert.AreEqual(name, virtualDevice.Name, "Name is invalid.");
 
                 ClassicAssert.IsNotNull(virtualDevice.InputDevice, "Input device is null.");

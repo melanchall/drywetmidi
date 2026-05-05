@@ -79,7 +79,7 @@ jobs:
     - template: step-setup-nativeless-project.yaml
   
   - task: PowerShell@2
-    displayName: Set data for LibraryInformation
+    displayName: Set data for LibraryConfiguration
     inputs:
       targetType: 'inline'
       script: |
@@ -92,10 +92,10 @@ jobs:
         $version = $xml.Project.PropertyGroup[1].Version
         Write-Host "Version is '$version'"
 
-        $libraryInformationFilePath = Resolve-Path "DryWetMidi\Configuration\LibraryInformation.cs"
+        $libraryConfigurationFilePath = Resolve-Path "DryWetMidi\Configuration\LibraryConfiguration.cs"
 
-        Write-Host "Loading LibraryInformation content from '$libraryInformationFilePath'..."
-        $content = Get-Content -Path $libraryInformationFilePath -Raw
+        Write-Host "Loading LibraryConfiguration content from '$libraryConfigurationFilePath'..."
+        $content = Get-Content -Path $libraryConfigurationFilePath -Raw
 
         Write-Host "Setting version..."
         $content = $content -replace 'Version = UnofficialReleaseMarker', "Version = `"$version`""
@@ -107,7 +107,7 @@ jobs:
         Write-Host "$content"
 
         Write-Host "Writing content back..."
-        Set-Content -Path $libraryInformationFilePath -Value $content -NoNewline
+        Set-Content -Path $libraryConfigurationFilePath -Value $content -NoNewline
 
         Write-Host "Version successfully inlined."
 

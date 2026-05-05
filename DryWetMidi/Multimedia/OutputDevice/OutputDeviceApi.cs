@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using Melanchall.DryWetMidi.Configuration;
+using Melanchall.DryWetMidi.Common;
 
 #if NET7_0_OR_GREATER
 using System.Runtime.CompilerServices;
@@ -141,7 +143,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         [LibraryImport(NativeApi.LibraryName)]
         [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-        private static partial OUT_GETALLINFORESULT GetOutputDevicesInfo(MidiDevicesSessionHandle sessionHandle, out IntPtr devicesInfo, out int devicesCount, out int errorCode);
+        private static partial OUT_GETALLINFORESULT GetOutputDevicesInfo(MidiConfigurationHandle configuration, MidiDevicesSessionHandle sessionHandle, out IntPtr devicesInfo, out int devicesCount, out int errorCode);
 
         [LibraryImport(NativeApi.LibraryName)]
         [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
@@ -241,7 +243,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         private static extern OUT_GETCOUNTRESULT GetOutputDevicesCount(out int count);
 
         [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
-        private static extern OUT_GETALLINFORESULT GetOutputDevicesInfo(MidiDevicesSessionHandle sessionHandle, out IntPtr devicesInfo, out int devicesCount, out int errorCode);
+        private static extern OUT_GETALLINFORESULT GetOutputDevicesInfo(MidiConfigurationHandle configuration, MidiDevicesSessionHandle sessionHandle, out IntPtr devicesInfo, out int devicesCount, out int errorCode);
 
         [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
         private static extern void FreeOutputDevicesInfo(IntPtr array, int size);
@@ -324,9 +326,9 @@ namespace Melanchall.DryWetMidi.Multimedia
             return GetOutputDevicesCount(out count);
         }
 
-        public static OUT_GETALLINFORESULT Api_GetDevicesInfo(MidiDevicesSessionHandle sessionHandle, out IntPtr devicesInfo, out int devicesCount, out int errorCode)
+        public static OUT_GETALLINFORESULT Api_GetDevicesInfo(MidiConfigurationHandle configuration, MidiDevicesSessionHandle sessionHandle, out IntPtr devicesInfo, out int devicesCount, out int errorCode)
         {
-            return GetOutputDevicesInfo(sessionHandle, out devicesInfo, out devicesCount, out errorCode);
+            return GetOutputDevicesInfo(configuration, sessionHandle, out devicesInfo, out devicesCount, out errorCode);
         }
 
         public static void Api_FreeDevicesInfo(IntPtr array, int size)

@@ -12,7 +12,7 @@ namespace Melanchall.CheckDwmApi
 
         public void Execute(ToolOptions toolOptions, ReportWriter reportWriter)
         {
-            reportWriter.WriteOperationTitle(LibraryInformation.GetInformation());
+            reportWriter.WriteOperationTitle(LibraryConfiguration.GetConfigurationSummary());
         }
     }
 }

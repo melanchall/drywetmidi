@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using Melanchall.DryWetMidi.Common;
+using Melanchall.DryWetMidi.Configuration;
 using Melanchall.DryWetMidi.Core;
 
 namespace Melanchall.DryWetMidi.Multimedia
@@ -99,7 +100,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
                 // TODO: cache the name and provide method to invalidate cache
                 var result = InputDeviceApi.Api_GetDeviceName(Info.DangerousGetHandle(), out var name, out var errorCode);
-                NativeApiUtilities.HandleDevicesNativeApiResult(result, errorCode);
+                MidiDeviceUtilities.HandleDevicesNativeApiResult(result, errorCode);
 
                 return name;
             }
@@ -246,7 +247,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             EnsureHandleIsCreated();
 
             var result = InputDeviceApi.Api_Connect(Handle.DangerousGetHandle(), out var errorCode);
-            NativeApiUtilities.HandleDevicesNativeApiResult(result, errorCode);
+            MidiDeviceUtilities.HandleDevicesNativeApiResult(result, errorCode);
 
             IsListeningForEvents = true;
         }
@@ -268,7 +269,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             EnsureSessionIsCreated();
 
             var result = StopEventsListeningSilently(out var errorCode);
-            NativeApiUtilities.HandleDevicesNativeApiResult(result, errorCode);
+            MidiDeviceUtilities.HandleDevicesNativeApiResult(result, errorCode);
         }
 
         /// <summary>
@@ -339,31 +340,31 @@ namespace Melanchall.DryWetMidi.Multimedia
                 case InputDeviceProperty.Product:
                     {
                         var result = InputDeviceApi.Api_GetDeviceProduct(Info.DangerousGetHandle(), out var product, out errorCode);
-                        NativeApiUtilities.HandleDevicesNativeApiResult(result, errorCode);
+                        MidiDeviceUtilities.HandleDevicesNativeApiResult(result, errorCode);
                         return product;
                     }
                 case InputDeviceProperty.Manufacturer:
                     {
                         var result = InputDeviceApi.Api_GetDeviceManufacturer(Info.DangerousGetHandle(), out var manufacturer, out errorCode);
-                        NativeApiUtilities.HandleDevicesNativeApiResult(result, errorCode);
+                        MidiDeviceUtilities.HandleDevicesNativeApiResult(result, errorCode);
                         return manufacturer;
                     }
                 case InputDeviceProperty.DriverVersion:
                     {
                         var result = InputDeviceApi.Api_GetDeviceDriverVersion(Info.DangerousGetHandle(), out var driverVersion, out errorCode);
-                        NativeApiUtilities.HandleDevicesNativeApiResult(result, errorCode);
+                        MidiDeviceUtilities.HandleDevicesNativeApiResult(result, errorCode);
                         return driverVersion;
                     }
                 case InputDeviceProperty.UniqueId:
                     {
                         var result = InputDeviceApi.Api_GetDeviceUniqueId(Info.DangerousGetHandle(), out var uniqueId, out errorCode);
-                        NativeApiUtilities.HandleDevicesNativeApiResult(result, errorCode);
+                        MidiDeviceUtilities.HandleDevicesNativeApiResult(result, errorCode);
                         return uniqueId;
                     }
                 case InputDeviceProperty.DriverOwner:
                     {
                         var result = InputDeviceApi.Api_GetDeviceDriverOwner(Info.DangerousGetHandle(), out var driverOwner, out errorCode);
-                        NativeApiUtilities.HandleDevicesNativeApiResult(result, errorCode);
+                        MidiDeviceUtilities.HandleDevicesNativeApiResult(result, errorCode);
                         return driverOwner;
                     }
                 default:
@@ -380,7 +381,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <exception cref="PlatformNotSupportedException">This operation is not supported on the current operating system.</exception>
         public static InputDeviceProperty[] GetSupportedProperties()
         {
-            Utilities.EnsureOsIsSupported();
+            NativeApiUtilities.EnsureOsIsSupported();
 
             if (_supportedProperties != null)
                 return _supportedProperties;
@@ -399,11 +400,11 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <exception cref="PlatformNotSupportedException">This operation is not supported on the current operating system.</exception>
         public static int GetDevicesCount()
         {
-            Utilities.EnsureOsIsSupported();
+            NativeApiUtilities.EnsureOsIsSupported();
             EnsureSessionIsCreated();
 
             var result = InputDeviceApi.Api_GetDevicesCount(out var count);
-            NativeApiUtilities.HandleDevicesNativeApiResult(result, 0);
+            MidiDeviceUtilities.HandleDevicesNativeApiResult(result, 0);
             
             return count;
         }
@@ -416,11 +417,11 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <exception cref="PlatformNotSupportedException">This operation is not supported on the current operating system.</exception>
         public static ICollection<InputDevice> GetAll()
         {
-            Utilities.EnsureOsIsSupported();
+            NativeApiUtilities.EnsureOsIsSupported();
             EnsureSessionIsCreated();
 
-            var result = InputDeviceApi.Api_GetDevicesInfo(MidiDevicesSession.GetSessionHandle(), out var devicesInfo, out var size, out var errorCode);
-            NativeApiUtilities.HandleDevicesNativeApiResult(result, errorCode);
+            var result = InputDeviceApi.Api_GetDevicesInfo(MidiConfiguration.GetConfigurationHandle(), MidiDevicesSession.GetSessionHandle(), out var devicesInfo, out var size, out var errorCode);
+            MidiDeviceUtilities.HandleDevicesNativeApiResult(result, errorCode);
 
             var devices = new InputDevice[size];
 
@@ -457,7 +458,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         {
             ThrowIfArgument.IsNullOrWhiteSpaceString(nameof(name), name, "Device name");
 
-            Utilities.EnsureOsIsSupported();
+            NativeApiUtilities.EnsureOsIsSupported();
             EnsureSessionIsCreated();
 
             var device = GetAll().FirstOrDefault(d => d.Name == name);
@@ -501,14 +502,14 @@ namespace Melanchall.DryWetMidi.Multimedia
                         {
                             _callbackWin = OnMessage_Win;
                             var result = InputDeviceApi.Api_OpenDevice_Win(Info.DangerousGetHandle(), sessionHandle, _callbackWin, SysExBufferSize, SysExBuffersCount, out rawHandle, out errorCode);
-                            NativeApiUtilities.HandleDevicesNativeApiResult(result, errorCode);
+                            MidiDeviceUtilities.HandleDevicesNativeApiResult(result, errorCode);
                         }
                         break;
                     case CommonApi.API_TYPE.API_TYPE_MAC:
                         {
                             _callbackMac = OnMessage_Mac;
                             var result = InputDeviceApi.Api_OpenDevice_Mac(Info.DangerousGetHandle(), sessionHandle, _callbackMac, out rawHandle, out errorCode);
-                            NativeApiUtilities.HandleDevicesNativeApiResult(result, errorCode);
+                            MidiDeviceUtilities.HandleDevicesNativeApiResult(result, errorCode);
                         }
                         break;
                     default:
@@ -579,7 +580,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
             try
             {
-                NativeApiUtilities.HandleDevicesNativeApiResult(
+                MidiDeviceUtilities.HandleDevicesNativeApiResult(
                     InputDeviceApi.Api_GetEventData(pktlist, packetIndex, out var dataPtr, out var length, out packetsCount), 0);
 
                 data = new byte[length];
@@ -704,7 +705,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         private void OnInvalidSysExEvent(IntPtr headerPointer)
         {
-            NativeApiUtilities.HandleDevicesNativeApiResult(
+            MidiDeviceUtilities.HandleDevicesNativeApiResult(
                 InputDeviceApi.Api_GetSysExBufferData(headerPointer, out var dataPointer, out var size), 0);
 
             var data = new byte[size];
@@ -741,7 +742,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
             try
             {
-                NativeApiUtilities.HandleDevicesNativeApiResult(
+                MidiDeviceUtilities.HandleDevicesNativeApiResult(
                     InputDeviceApi.Api_GetSysExBufferData(sysExHeaderPointer, out var dataPointer, out var size), 0);
 
                 if (size <= 0)
@@ -771,7 +772,7 @@ namespace Melanchall.DryWetMidi.Multimedia
                     if (result == InputDeviceApi.IN_RENEWSYSEXBUFFERRESULT.IN_RENEWSYSEXBUFFERRESULT_CLOSING)
                         return;
 
-                    NativeApiUtilities.HandleDevicesNativeApiResult(result, errorCode);
+                    MidiDeviceUtilities.HandleDevicesNativeApiResult(result, errorCode);
                 }
             }
             catch (Exception ex)

@@ -1,4 +1,5 @@
-﻿using Melanchall.DryWetMidi.Multimedia;
+﻿using Melanchall.DryWetMidi.Configuration;
+using Melanchall.DryWetMidi.Multimedia;
 using NUnit.Framework;
 using NUnit.Framework.Interfaces;
 using NUnit.Framework.Internal;
@@ -28,21 +29,19 @@ namespace Melanchall.DryWetMidi.Tests.Attributes
             if (!RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.Windows))
                 return "Test requires macOS or Windows.";
 
-            var result = MidiDevicesSessionApi.Api_OpenSession(
-                Guid.NewGuid().ToString(),
-                InputDeviceCallback,
-                OutputDeviceCallback,
+            var result = MidiConfigurationApi.Api_GetConfiguration(
+                true,
                 out var rawHandle,
                 out _);
 
-            if (result != MidiDevicesSessionApi.SESSION_OPENRESULT.SESSION_OPENRESULT_OK)
-                return "Failed to create session.";
+            if (result != MidiConfigurationApi.CONFIGURATION_GETRESULT.CONFIGURATION_GETRESULT_OK)
+                return "Failed to create configuration.";
 
-            var handle = new MidiDevicesSessionHandle(rawHandle);
+            var handle = new MidiConfigurationHandle(rawHandle);
 
             try
             {
-                if (!VirtualDeviceApi.Api_IsAvailable(handle))
+                if (!MidiConfigurationApi.Api_IsVirtualDeviceApiAvailable(handle))
                     return "Virtual device API is not available on current Windows.";
             }
             finally
@@ -51,14 +50,6 @@ namespace Melanchall.DryWetMidi.Tests.Attributes
             }
 
             return null;
-        }
-
-        private static void InputDeviceCallback(IntPtr info, bool operation)
-        {
-        }
-
-        private static void OutputDeviceCallback(IntPtr info, bool operation)
-        {
         }
     }
 }

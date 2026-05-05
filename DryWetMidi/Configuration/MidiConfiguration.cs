@@ -1,15 +1,16 @@
 ﻿using Melanchall.DryWetMidi.Common;
+using Melanchall.DryWetMidi.Multimedia;
 using System;
 
-namespace Melanchall.DryWetMidi.Multimedia
+namespace Melanchall.DryWetMidi.Configuration
 {
-    internal static class TickGeneratorSession
+    internal static class MidiConfiguration
     {
         #region Fields
 
         private static readonly object _lockObject = new object();
 
-        private static TickGeneratorSessionHandle _handle;
+        private static MidiConfigurationHandle _handle;
 
         #endregion
 
@@ -23,20 +24,26 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         #region Methods
 
-        public static TickGeneratorSessionHandle GetSessionHandle()
+        public static MidiConfigurationHandle GetConfigurationHandle()
         {
+            NativeApiUtilities.EnsureOsIsSupported();
+
             if (_handle == null || _handle.IsInvalid)
             {
                 lock (_lockObject)
                 {
                     if (_handle == null || _handle.IsInvalid)
                     {
+                        int errorCode = 0;
                         var rawHandle = IntPtr.Zero;
 
-                        var result = TickGeneratorSessionApi.Api_OpenSession(out rawHandle, out var errorCode);
-                        TickGeneratorUtilities.HandleTickGeneratorNativeApiResult(result, errorCode);
+                        // TODO: pass useWms
+                        var result = MidiConfigurationApi.Api_GetConfiguration(true, out rawHandle, out errorCode);
+                        
+                        // TODO: separate from devices
+                        MidiDeviceUtilities.HandleDevicesNativeApiResult(result, errorCode);
 
-                        _handle = new TickGeneratorSessionHandle(rawHandle);
+                        _handle = new MidiConfigurationHandle(rawHandle);
 
 #if TEST
                         _handle.TestCheckpoints = TestCheckpoints;

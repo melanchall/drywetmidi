@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using Melanchall.DryWetMidi.Configuration;
+using Melanchall.DryWetMidi.Common;
 
 #if NET7_0_OR_GREATER
 using System.Runtime.CompilerServices;
@@ -107,18 +109,13 @@ namespace Melanchall.DryWetMidi.Multimedia
         #region Extern functions
 
 #if NET7_0_OR_GREATER
-        [LibraryImport(NativeApi.LibraryName)]
-        [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-        [return: MarshalAs(UnmanagedType.U1)]
-        private static partial bool IsVirtualDeviceApiAvailable(MidiDevicesSessionHandle sessionHandle);
-
         [LibraryImport(NativeApi.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
         [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-        private static partial VIRTUAL_OPENRESULT OpenVirtualDevice_Mac(string name, MidiDevicesSessionHandle sessionHandle, Callback_Mac callback, out IntPtr info, out int errorCode);
+        private static partial VIRTUAL_OPENRESULT OpenVirtualDevice_Mac(string name, MidiConfigurationHandle configuration, MidiDevicesSessionHandle sessionHandle, Callback_Mac callback, out IntPtr info, out int errorCode);
 
         [LibraryImport(NativeApi.LibraryName, StringMarshalling = StringMarshalling.Utf16)]
         [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-        private static partial VIRTUAL_OPENRESULT OpenVirtualDevice_Win(string name, MidiDevicesSessionHandle sessionHandle, out IntPtr info, out int errorCode);
+        private static partial VIRTUAL_OPENRESULT OpenVirtualDevice_Win(string name, MidiConfigurationHandle configuration, MidiDevicesSessionHandle sessionHandle, out IntPtr info, out int errorCode);
 
         [LibraryImport(NativeApi.LibraryName)]
         [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
@@ -144,15 +141,11 @@ namespace Melanchall.DryWetMidi.Multimedia
         [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
         private static partial VIRTUAL_UNMUTERESULT UnmuteVirtualDevice(IntPtr info);
 #else
-        [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
-        [return: MarshalAs(UnmanagedType.U1)]
-        private static extern bool IsVirtualDeviceApiAvailable(MidiDevicesSessionHandle sessionHandle);
-
         [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-        private static extern VIRTUAL_OPENRESULT OpenVirtualDevice_Mac(string name, MidiDevicesSessionHandle sessionHandle, Callback_Mac callback, out IntPtr info, out int errorCode);
+        private static extern VIRTUAL_OPENRESULT OpenVirtualDevice_Mac(string name, MidiConfigurationHandle configuration, MidiDevicesSessionHandle sessionHandle, Callback_Mac callback, out IntPtr info, out int errorCode);
 
         [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Unicode)]
-        private static extern VIRTUAL_OPENRESULT OpenVirtualDevice_Win(string name, MidiDevicesSessionHandle sessionHandle, out IntPtr info, out int errorCode);
+        private static extern VIRTUAL_OPENRESULT OpenVirtualDevice_Win(string name, MidiConfigurationHandle configuration, MidiDevicesSessionHandle sessionHandle, out IntPtr info, out int errorCode);
 
         [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
         private static extern VIRTUAL_CLOSERESULT CloseVirtualDevice(IntPtr info, out int errorCode);
@@ -177,19 +170,14 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         #region Methods
 
-        public static bool Api_IsAvailable(MidiDevicesSessionHandle sessionHandle)
+        public static VIRTUAL_OPENRESULT Api_OpenDevice_Mac(string name, MidiConfigurationHandle configuration, MidiDevicesSessionHandle sessionHandle, Callback_Mac callback, out IntPtr info, out int errorCode)
         {
-            return IsVirtualDeviceApiAvailable(sessionHandle);
+            return OpenVirtualDevice_Mac(name, configuration, sessionHandle, callback, out info, out errorCode);
         }
 
-        public static VIRTUAL_OPENRESULT Api_OpenDevice_Mac(string name, MidiDevicesSessionHandle sessionHandle, Callback_Mac callback, out IntPtr info, out int errorCode)
+        public static VIRTUAL_OPENRESULT Api_OpenDevice_Win(string name, MidiConfigurationHandle configuration, MidiDevicesSessionHandle sessionHandle, out IntPtr info, out int errorCode)
         {
-            return OpenVirtualDevice_Mac(name, sessionHandle, callback, out info, out errorCode);
-        }
-
-        public static VIRTUAL_OPENRESULT Api_OpenDevice_Win(string name, MidiDevicesSessionHandle sessionHandle, out IntPtr info, out int errorCode)
-        {
-            return OpenVirtualDevice_Win(name, sessionHandle, out info, out errorCode);
+            return OpenVirtualDevice_Win(name, configuration, sessionHandle, out info, out errorCode);
         }
 
         public static VIRTUAL_CLOSERESULT Api_CloseDevice(IntPtr info, out int errorCode)

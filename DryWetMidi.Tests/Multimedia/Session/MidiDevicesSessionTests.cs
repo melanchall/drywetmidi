@@ -1,4 +1,5 @@
 ﻿using Melanchall.DryWetMidi.Common;
+using Melanchall.DryWetMidi.Configuration;
 using Melanchall.DryWetMidi.Multimedia;
 using Melanchall.DryWetMidi.Tests.Utilities;
 using NUnit.Framework;
@@ -53,6 +54,100 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 MidiDevicesSessionApi.SESSION_CLOSERESULT.SESSION_CLOSERESULT_OK,
                 result,
                 "Session was not closed successfully.");
+        }
+
+        [Test]
+        public void CheckMidiDevicesSession_SessionAndConfigurationDisposeOrder(
+            [Values(0, 50, 5000)] int waitAfterConfigurationCreatedMs,
+            [Values(0, 50, 5000)] int waitAfterSessionCreatedMs,
+            [Values] bool disposeConfigurationFirst)
+        {
+            var checkpoints = new TestCheckpoints();
+
+            //
+
+            var getConfigurationResult = MidiConfigurationApi.Api_GetConfiguration(
+                true,
+                out var configurationRawHandle,
+                out _);
+
+            ClassicAssert.AreEqual(
+                MidiConfigurationApi.CONFIGURATION_GETRESULT.CONFIGURATION_GETRESULT_OK,
+                getConfigurationResult,
+                "Configuration was not retrieved successfully.");
+
+            if (waitAfterConfigurationCreatedMs > 0)
+                WaitOperations.Wait(waitAfterConfigurationCreatedMs);
+
+            var configurationHandle = new MidiConfigurationHandle(configurationRawHandle)
+            {
+                TestCheckpoints = checkpoints
+            };
+
+            //
+
+            MidiDevicesSessionApi.InputDeviceCallback inputDeviceCallback = InputDeviceCallback;
+            MidiDevicesSessionApi.OutputDeviceCallback outputDeviceCallback = OutputDeviceCallback;
+
+            var openSessionResult = MidiDevicesSessionApi.Api_OpenSession(
+                Guid.NewGuid().ToString(),
+                configurationHandle,
+                inputDeviceCallback,
+                outputDeviceCallback,
+                out var sessionRawHandle,
+                out _);
+
+            ClassicAssert.AreEqual(
+                MidiDevicesSessionApi.SESSION_OPENRESULT.SESSION_OPENRESULT_OK,
+                openSessionResult,
+                "Session was not opened successfully.");
+
+            if (waitAfterSessionCreatedMs > 0)
+                WaitOperations.Wait(waitAfterSessionCreatedMs);
+
+            var sessionHandle = new MidiDevicesSessionHandle(sessionRawHandle)
+            {
+                TestCheckpoints = checkpoints
+            };
+
+            //
+
+            checkpoints.CheckCheckpointsAreNotReached(
+                MidiDevicesSessionCheckpointNames.ReleaseHandleEntered,
+                MidiDevicesSessionCheckpointNames.CloseSessionInReleaseHandle,
+                MidiConfigurationCheckpointNames.ReleaseHandleEntered,
+                MidiConfigurationCheckpointNames.CleanupConfigurationInReleaseHandle);
+
+            //
+
+            Action disposeConfiguration = () =>
+            {
+                configurationHandle.Dispose();
+                checkpoints.CheckCheckpointsReached(
+                    MidiConfigurationCheckpointNames.ReleaseHandleEntered,
+                    MidiConfigurationCheckpointNames.CleanupConfigurationInReleaseHandle);
+                ClassicAssert.IsTrue(configurationHandle.IsClosed, "Configuration handle is not closed after disposing.");
+            };
+
+            Action disposeSession = () =>
+            {
+                sessionHandle.Dispose();
+                checkpoints.CheckCheckpointsReached(
+                    MidiDevicesSessionCheckpointNames.ReleaseHandleEntered,
+                    MidiDevicesSessionCheckpointNames.CloseSessionInReleaseHandle);
+                ClassicAssert.IsTrue(sessionHandle.IsClosed, "Session handle is not closed after disposing.");
+            };
+
+            if (disposeConfigurationFirst)
+            {
+                disposeConfiguration();
+                disposeSession();
+            }
+            else
+            {
+                disposeSession();
+                disposeConfiguration();
+            }
         }
 #endif
 
@@ -134,6 +229,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         {
             var result = MidiDevicesSessionApi.Api_OpenSession(
                 Guid.NewGuid().ToString(),
+                MidiConfiguration.GetConfigurationHandle(),
                 inputDeviceCallback,
                 outputDeviceCallback,
                 out var rawHandle,

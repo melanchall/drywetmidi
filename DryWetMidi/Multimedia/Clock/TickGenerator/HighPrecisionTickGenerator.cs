@@ -78,11 +78,11 @@ namespace Melanchall.DryWetMidi.Multimedia
             {
                 case CommonApi.API_TYPE.API_TYPE_WIN:
                     result = StartHighPrecisionTickGenerator_Win(intervalInMilliseconds, out _tickGeneratorInfo, out errorCode);
-                    NativeApiUtilities.HandleTickGeneratorNativeApiResult(result, errorCode);
+                    TickGeneratorUtilities.HandleTickGeneratorNativeApiResult(result, errorCode);
                     break;
                 case CommonApi.API_TYPE.API_TYPE_MAC:
                     result = StartHighPrecisionTickGenerator_Mac(intervalInMilliseconds, out _tickGeneratorInfo, out errorCode);
-                    NativeApiUtilities.HandleTickGeneratorNativeApiResult(result, errorCode);
+                    TickGeneratorUtilities.HandleTickGeneratorNativeApiResult(result, errorCode);
                     break;
             }
         }
@@ -93,7 +93,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         protected override void Stop()
         {
             var result = StopInternal(out var errorCode);
-            NativeApiUtilities.HandleTickGeneratorNativeApiResult(result, errorCode);
+            TickGeneratorUtilities.HandleTickGeneratorNativeApiResult(result, errorCode);
         }
 
         #endregion

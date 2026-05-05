@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Melanchall.DryWetMidi.Configuration;
+using System;
 
 namespace Melanchall.DryWetMidi.Multimedia
 {
@@ -79,12 +80,13 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <summary>
         /// Gets the instance of <see cref="DevicesWatcher"/>.
         /// </summary>
-        /// <exception cref="PlatformNotSupportedException">This operation is not supported on the current operating system.</exception>
+        /// <exception cref="PlatformNotSupportedException">Devices watcher API is not supported on the current operating system.</exception>
         public static DevicesWatcher Instance
         {
             get
             {
-                Utilities.EnsureOsIsSupported();
+                if (!LibraryConfiguration.IsDevicesWatcherApiAvailable())
+                    throw new PlatformNotSupportedException("Devices watcher API is not supported on the current operating system.");
 
                 if (_instance == null)
                 {

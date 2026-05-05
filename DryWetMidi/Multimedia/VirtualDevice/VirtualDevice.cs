@@ -1,6 +1,6 @@
 ﻿using Melanchall.DryWetMidi.Common;
+using Melanchall.DryWetMidi.Configuration;
 using System;
-using static Melanchall.DryWetMidi.Multimedia.CommonApi;
 
 namespace Melanchall.DryWetMidi.Multimedia
 {
@@ -73,11 +73,13 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <exception cref="MidiDeviceException">An error occurred on device creation.</exception>
         public static VirtualDevice Create(string name)
         {
+            NativeApiUtilities.EnsureOsIsSupported();
+
+            // TODO: choose exception type and document it above
+            if (!LibraryConfiguration.IsVirtualDeviceApiAvailable())
+                throw new NotSupportedException("Virtual device API is not available on the current operating system.");
+
             ThrowIfArgument.IsNullOrWhiteSpaceString(nameof(name), name, "Device name");
-
-            Utilities.EnsureOsIsSupported();
-
-            // TODO: ensure API available on Windows
 
             return new VirtualDevice(name);
         }
@@ -98,11 +100,12 @@ namespace Melanchall.DryWetMidi.Multimedia
         private void InitializeDevice_Mac()
         {
             var sessionHandle = MidiDevicesSession.GetSessionHandle();
+            var configuration = MidiConfiguration.GetConfigurationHandle();
 
             _callbackMac = OnMessage_Mac;
 
-            var result = VirtualDeviceApi.Api_OpenDevice_Mac(Name, sessionHandle, _callbackMac, out var deviceInfo, out var errorCode);
-            NativeApiUtilities.HandleDevicesNativeApiResult(result, errorCode);
+            var result = VirtualDeviceApi.Api_OpenDevice_Mac(Name, configuration, sessionHandle, _callbackMac, out var deviceInfo, out var errorCode);
+            MidiDeviceUtilities.HandleDevicesNativeApiResult(result, errorCode);
 
             InitializeDevice(deviceInfo);
         }
@@ -110,9 +113,10 @@ namespace Melanchall.DryWetMidi.Multimedia
         private void InitializeDevice_Win()
         {
             var sessionHandle = MidiDevicesSession.GetSessionHandle();
+            var configuration = MidiConfiguration.GetConfigurationHandle();
 
-            var result = VirtualDeviceApi.Api_OpenDevice_Win(Name, sessionHandle, out var deviceInfo, out var errorCode);
-            NativeApiUtilities.HandleDevicesNativeApiResult(result, errorCode);
+            var result = VirtualDeviceApi.Api_OpenDevice_Win(Name, configuration, sessionHandle, out var deviceInfo, out var errorCode);
+            MidiDeviceUtilities.HandleDevicesNativeApiResult(result, errorCode);
 
             InitializeDevice(deviceInfo);
         }
@@ -138,7 +142,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         #region Overrides
 
-        protected override void OnEnabledChanged(bool enabled)
+        internal override void OnEnabledChanged(bool enabled)
         {
             base.OnEnabledChanged(enabled);
 
