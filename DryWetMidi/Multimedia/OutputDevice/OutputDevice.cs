@@ -4,7 +4,6 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.InteropServices;
 using Melanchall.DryWetMidi.Common;
-using Melanchall.DryWetMidi.Configuration;
 using Melanchall.DryWetMidi.Core;
 
 namespace Melanchall.DryWetMidi.Multimedia
@@ -362,20 +361,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             NativeApiUtilities.EnsureOsIsSupported();
             EnsureSessionIsCreated();
 
-            var result = OutputDeviceApi.Api_GetDevicesInfo(MidiConfiguration.GetConfigurationHandle(), MidiDevicesSession.GetSessionHandle(), out var devicesInfoArray, out var size, out var error);
-            MidiDeviceUtilities.HandleDevicesNativeApiResult(result, error);
-
-            var devices = new OutputDevice[size];
-
-            for (int i = 0; i < size; i++)
-            {
-                var info = Marshal.ReadIntPtr(devicesInfoArray, i * IntPtr.Size);
-                devices[i] = new OutputDevice(info, CreationContext.User);
-            }
-
-            OutputDeviceApi.Api_FreeDevicesInfo(devicesInfoArray, size);
-
-            return devices;
+            return DevicesManager.Instance.GetAllOutputDevices();
         }
 
         /// <summary>
@@ -403,9 +389,9 @@ namespace Melanchall.DryWetMidi.Multimedia
             NativeApiUtilities.EnsureOsIsSupported();
             EnsureSessionIsCreated();
 
-            var device = GetAll().FirstOrDefault(d => d.Name == name);
+            var device = DevicesManager.Instance.GetOutputDeviceByName(name);
             if (device == null)
-                throw new ArgumentException($"There is no output MIDI device '{name}'.", nameof(name));
+                throw new ArgumentException($"There is no MIDI output device '{name}'.", nameof(name));
 
             return device;
         }

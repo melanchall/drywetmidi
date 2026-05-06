@@ -59,6 +59,11 @@ API_EXPORT char IsVirtualDeviceApiAvailable(Configuration* configuration)
     return 1;
 }
 
+API_EXPORT char IsDevicesCachingRequired(Configuration* configuration)
+{
+    return 0;
+}
+
 /* ================================
    High-precision tick generator
  ================================ */
@@ -470,12 +475,11 @@ struct SessionHandle
     OSStatus clientCreationStatus;
     InputDeviceCallback inputDeviceCallback;
     OutputDeviceCallback outputDeviceCallback;
-    std::atomic<char> devicesWatcherEnabled{0};
 };
  
 void HandleSource(MIDIEndpointRef source, SessionHandle* sessionHandle, char operation)
 {
-    if (sessionHandle->sessionClosed.load() == 1 || sessionHandle->devicesWatcherEnabled.load() == 0)
+    if (sessionHandle->sessionClosed.load() == 1)
         return;
 
     InputDeviceInfo* inputDeviceInfo = new InputDeviceInfo();
@@ -487,7 +491,7 @@ void HandleSource(MIDIEndpointRef source, SessionHandle* sessionHandle, char ope
 
 void HandleDestination(MIDIEndpointRef destination, SessionHandle* sessionHandle, char operation)
 {
-    if (sessionHandle->sessionClosed.load() == 1 || sessionHandle->devicesWatcherEnabled.load() == 0)
+    if (sessionHandle->sessionClosed.load() == 1)
         return;
 
     OutputDeviceInfo* outputDeviceInfo = new OutputDeviceInfo();
@@ -499,7 +503,7 @@ void HandleDestination(MIDIEndpointRef destination, SessionHandle* sessionHandle
 
 void HandleEntitySources(MIDIEntityRef entity, SessionHandle* sessionHandle, char operation)
 {
-    if (sessionHandle->sessionClosed.load() == 1 || sessionHandle->devicesWatcherEnabled.load() == 0)
+    if (sessionHandle->sessionClosed.load() == 1)
         return;
 
     ItemCount _sourcesCount = MIDIEntityGetNumberOfSources(entity);
@@ -513,7 +517,7 @@ void HandleEntitySources(MIDIEntityRef entity, SessionHandle* sessionHandle, cha
 
 void HandleEntityDestinations(MIDIEntityRef entity, SessionHandle* sessionHandle, char operation)
 {
-    if (sessionHandle->sessionClosed.load() == 1 || sessionHandle->devicesWatcherEnabled.load() == 0)
+    if (sessionHandle->sessionClosed.load() == 1)
         return;
 
     ItemCount _destinationsCount = MIDIEntityGetNumberOfDestinations(entity);
@@ -527,7 +531,7 @@ void HandleEntityDestinations(MIDIEntityRef entity, SessionHandle* sessionHandle
 
 void HandleEntity(MIDIEntityRef entity, SessionHandle* sessionHandle, char operation)
 {
-    if (sessionHandle->sessionClosed.load() == 1 || sessionHandle->devicesWatcherEnabled.load() == 0)
+    if (sessionHandle->sessionClosed.load() == 1)
         return;
 
     HandleEntitySources(entity, sessionHandle, operation);
@@ -536,7 +540,7 @@ void HandleEntity(MIDIEntityRef entity, SessionHandle* sessionHandle, char opera
 
 void HandleDevice(MIDIDeviceRef device, SessionHandle* sessionHandle, char operation)
 {
-    if (sessionHandle->sessionClosed.load() == 1 || sessionHandle->devicesWatcherEnabled.load() == 0)
+    if (sessionHandle->sessionClosed.load() == 1)
         return;
 
     ItemCount entitiesCount = MIDIDeviceGetNumberOfEntities(device);
@@ -550,7 +554,7 @@ void HandleDevice(MIDIDeviceRef device, SessionHandle* sessionHandle, char opera
 
 void HandleNotification(const MIDINotification* message, SessionHandle* sessionHandle)
 {
-    if (sessionHandle->sessionClosed.load() == 1 || sessionHandle->devicesWatcherEnabled.load() == 0)
+    if (sessionHandle->sessionClosed.load() == 1)
         return;
 
     switch (message->messageID)
@@ -594,7 +598,7 @@ void HandleNotification(const MIDINotification* message, SessionHandle* sessionH
 void NotifyProc(const MIDINotification* message, void* refCon)
 {
     SessionHandle* sessionHandle = static_cast<SessionHandle*>(refCon);
-    if (sessionHandle->sessionClosed.load() == 1 || sessionHandle->devicesWatcherEnabled.load() == 0)
+    if (sessionHandle->sessionClosed.load() == 1)
         return;
 
     HandleNotification(message, sessionHandle);
@@ -637,7 +641,6 @@ API_EXPORT SESSION_OPENRESULT OpenSession_Mac(const char* name, Configuration* c
     sessionHandle->clientCreated.store(0);
     sessionHandle->sessionClosed.store(0);
     sessionHandle->threadExited.store(0);
-    sessionHandle->devicesWatcherEnabled.store(0);
     
     int pthreadCreateResult;
     if ((pthreadCreateResult = pthread_create(&sessionHandle->thread, nullptr, ThreadProc, sessionHandle)) != 0)
@@ -698,20 +701,6 @@ API_EXPORT SESSION_CLOSERESULT CloseSession(SessionHandle* sessionHandle)
 
     delete sessionHandle;
     return result;
-}
-
-/* ================================
-   Devices watcher
-================================ */
-
-API_EXPORT void EnableDevicesWatcher(SessionHandle* sessionHandle)
-{
-    sessionHandle->devicesWatcherEnabled.store(1);
-}
-
-API_EXPORT void DisableDevicesWatcher(SessionHandle* sessionHandle)
-{
-    sessionHandle->devicesWatcherEnabled.store(0);
 }
 
 /* ================================

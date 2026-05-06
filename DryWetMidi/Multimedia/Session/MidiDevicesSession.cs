@@ -46,16 +46,14 @@ namespace Melanchall.DryWetMidi.Multimedia
                 {
                     if (_handle == null || _handle.IsInvalid)
                     {
-                        int errorCode = 0;
-                        var rawHandle = IntPtr.Zero;
-
                         _inputDeviceCallback = InputDeviceCallback;
                         _outputDeviceCallback = OutputDeviceCallback;
 
-                        var result = MidiDevicesSessionApi.Api_OpenSession(Guid.NewGuid().ToString(), MidiConfiguration.GetConfigurationHandle(), _inputDeviceCallback, _outputDeviceCallback, out rawHandle, out errorCode);
-                        MidiDeviceUtilities.HandleDevicesNativeApiResult(result, errorCode);
-                        
+                        var openResult = MidiDevicesSessionApi.Api_OpenSession(Guid.NewGuid().ToString(), MidiConfiguration.GetConfigurationHandle(), _inputDeviceCallback, _outputDeviceCallback, out var rawHandle, out var errorCode);
+                        MidiDeviceUtilities.HandleDevicesNativeApiResult(openResult, errorCode);
+
                         _handle = new MidiDevicesSessionHandle(rawHandle);
+                        _handle.IsDevicesCachingRequired = MidiConfigurationApi.Api_IsDevicesCachingRequired(MidiConfiguration.GetConfigurationHandle());
 
 #if TEST
                         _handle.TestCheckpoints = TestCheckpoints;

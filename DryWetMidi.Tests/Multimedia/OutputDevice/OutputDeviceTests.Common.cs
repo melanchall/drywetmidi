@@ -46,7 +46,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         {
             var outputDevice = OutputDevice.GetByName(deviceName);
 
-            var parentDevice = outputDevice.ParentDevice;
+            var parentDevice = outputDevice.GetParentDevice();
             Console.WriteLine($"Parent device for [{deviceName}]: [{parentDevice}]");
 
             ClassicAssert.IsNotNull(parentDevice, "There is no parent device.");

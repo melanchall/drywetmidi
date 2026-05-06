@@ -139,6 +139,10 @@ namespace Melanchall.DryWetMidi.Multimedia
 #if NET7_0_OR_GREATER
         [LibraryImport(NativeApi.LibraryName)]
         [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
+        private static partial void CloneOutputDeviceInfo(IntPtr source, out IntPtr info);
+
+        [LibraryImport(NativeApi.LibraryName)]
+        [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
         private static partial OUT_GETCOUNTRESULT GetOutputDevicesCount(out int count);
 
         [LibraryImport(NativeApi.LibraryName)]
@@ -240,6 +244,9 @@ namespace Melanchall.DryWetMidi.Multimedia
         private static partial void DeleteOutputDeviceInfo(IntPtr info);
 #else
         [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
+        private static extern void CloneOutputDeviceInfo(IntPtr source, out IntPtr info);
+
+        [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
         private static extern OUT_GETCOUNTRESULT GetOutputDevicesCount(out int count);
 
         [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
@@ -320,6 +327,11 @@ namespace Melanchall.DryWetMidi.Multimedia
         #endregion
 
         #region Methods
+
+        public static void Api_CloneOutputDeviceInfo(IntPtr source, out IntPtr info)
+        {
+            CloneOutputDeviceInfo(source, out info);
+        }
 
         public static OUT_GETCOUNTRESULT Api_GetDevicesCount(out int count)
         {

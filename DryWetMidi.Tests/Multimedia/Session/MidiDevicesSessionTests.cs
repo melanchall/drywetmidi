@@ -227,23 +227,23 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             MidiDevicesSessionApi.OutputDeviceCallback outputDeviceCallback,
             int waitAfterSessionCreatedMs)
         {
-            var result = MidiDevicesSessionApi.Api_OpenSession(
+            var openSessionResult = MidiDevicesSessionApi.Api_OpenSession(
                 Guid.NewGuid().ToString(),
                 MidiConfiguration.GetConfigurationHandle(),
                 inputDeviceCallback,
                 outputDeviceCallback,
-                out var rawHandle,
-                out var errorCode);
+                out var sessionRawHandle,
+                out _);
 
             ClassicAssert.AreEqual(
                 MidiDevicesSessionApi.SESSION_OPENRESULT.SESSION_OPENRESULT_OK,
-                result,
+                openSessionResult,
                 "Session was not opened successfully.");
 
             if (waitAfterSessionCreatedMs > 0)
                 WaitOperations.Wait(waitAfterSessionCreatedMs);
 
-            return rawHandle;
+            return sessionRawHandle;
         }
 
         private static void InputDeviceCallback(IntPtr info, bool operation)

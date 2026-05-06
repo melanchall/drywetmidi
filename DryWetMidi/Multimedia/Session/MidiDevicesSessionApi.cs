@@ -59,7 +59,13 @@ namespace Melanchall.DryWetMidi.Multimedia
 #if NET7_0_OR_GREATER
         [LibraryImport(NativeApi.LibraryName, StringMarshalling = StringMarshalling.Utf16)]
         [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-        private static partial SESSION_OPENRESULT OpenSession_Win(string name, MidiConfigurationHandle configuration, InputDeviceCallback inputDeviceCallback, OutputDeviceCallback outputDeviceCallback, out IntPtr handle, out int errorCode);
+        private static partial SESSION_OPENRESULT OpenSession_Win(
+            string name,
+            MidiConfigurationHandle configuration,
+            InputDeviceCallback inputDeviceCallback,
+            OutputDeviceCallback outputDeviceCallback,
+            out IntPtr handle,
+            out int errorCode);
 
         [LibraryImport(NativeApi.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
         [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
@@ -70,7 +76,13 @@ namespace Melanchall.DryWetMidi.Multimedia
         private static partial SESSION_CLOSERESULT CloseSession(IntPtr handle);
 #else
         [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Unicode)]
-        private static extern SESSION_OPENRESULT OpenSession_Win(string name, MidiConfigurationHandle configuration, InputDeviceCallback inputDeviceCallback, OutputDeviceCallback outputDeviceCallback, out IntPtr handle, out int errorCode);
+        private static extern SESSION_OPENRESULT OpenSession_Win(
+            string name,
+            MidiConfigurationHandle configuration,
+            InputDeviceCallback inputDeviceCallback,
+            OutputDeviceCallback outputDeviceCallback,
+            out IntPtr handle,
+            out int errorCode);
 
         [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         private static extern SESSION_OPENRESULT OpenSession_Mac(string name, MidiConfigurationHandle configuration, InputDeviceCallback inputDeviceCallback, OutputDeviceCallback outputDeviceCallback, out IntPtr handle, out int errorCode);
@@ -94,9 +106,21 @@ namespace Melanchall.DryWetMidi.Multimedia
             switch (CommonApi.Api_GetApiType())
             {
                 case CommonApi.API_TYPE.API_TYPE_WIN:
-                    return OpenSession_Win(name, configuration, inputDeviceCallback, outputDeviceCallback, out handle, out errorCode);
+                    return OpenSession_Win(
+                        name,
+                        configuration,
+                        inputDeviceCallback,
+                        outputDeviceCallback,
+                        out handle,
+                        out errorCode);
                 case CommonApi.API_TYPE.API_TYPE_MAC:
-                    return OpenSession_Mac(name, configuration, inputDeviceCallback, outputDeviceCallback, out handle, out errorCode);
+                    return OpenSession_Mac(
+                        name,
+                        configuration,
+                        inputDeviceCallback,
+                        outputDeviceCallback,
+                        out handle,
+                        out errorCode);
             }
 
             throw new NotImplementedException();

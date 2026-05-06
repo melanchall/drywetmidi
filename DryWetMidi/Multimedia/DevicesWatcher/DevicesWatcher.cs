@@ -11,50 +11,15 @@ namespace Melanchall.DryWetMidi.Multimedia
     {
         #region Events
 
-        private EventHandler<DeviceAddedRemovedEventArgs> _deviceAdded;
-        private EventHandler<DeviceAddedRemovedEventArgs> _deviceRemoved;
-
         /// <summary>
         /// Occurs when a MIDI device has been added to the system.
         /// </summary>
-        public event EventHandler<DeviceAddedRemovedEventArgs> DeviceAdded
-        {
-            add
-            {
-                var hadSubscribers = _deviceAdded != null || _deviceRemoved != null;
-                
-                _deviceAdded += value;
-                if (!hadSubscribers)
-                    EnableDevicesWatcher();
-            }
-            remove
-            {
-                _deviceAdded -= value;
-                if (_deviceAdded == null && _deviceRemoved == null)
-                    DisableDevicesWatcher();
-            }
-        }
+        public event EventHandler<DeviceAddedRemovedEventArgs> DeviceAdded;
 
         /// <summary>
         /// Occurs when a MIDI device has been removed from the system.
         /// </summary>
-        public event EventHandler<DeviceAddedRemovedEventArgs> DeviceRemoved
-        {
-            add
-            {
-                var hadSubscribers = _deviceRemoved != null || _deviceAdded != null;
-
-                _deviceRemoved += value;
-                if (!hadSubscribers)
-                    EnableDevicesWatcher();
-            }
-            remove
-            {
-                _deviceRemoved -= value;
-                if (_deviceRemoved == null && _deviceAdded == null)
-                    DisableDevicesWatcher();
-            }
-        }
+        public event EventHandler<DeviceAddedRemovedEventArgs> DeviceRemoved;
 
         #endregion
 
@@ -139,32 +104,22 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         private void OnInputDeviceAdded(object sender, IntPtr info)
         {
-            _deviceAdded?.Invoke(this, new DeviceAddedRemovedEventArgs(new InputDevice(info, MidiDevice.CreationContext.AddedDevice)));
+            DeviceAdded?.Invoke(this, new DeviceAddedRemovedEventArgs(new InputDevice(info, MidiDevice.CreationContext.AddedDevice)));
         }
 
         private void OnInputDeviceRemoved(object sender, IntPtr info)
         {
-            _deviceRemoved?.Invoke(this, new DeviceAddedRemovedEventArgs(new InputDevice(info, MidiDevice.CreationContext.RemovedDevice)));
+            DeviceRemoved?.Invoke(this, new DeviceAddedRemovedEventArgs(new InputDevice(info, MidiDevice.CreationContext.RemovedDevice)));
         }
 
         private void OnOutputDeviceAdded(object sender, IntPtr info)
         {
-            _deviceAdded?.Invoke(this, new DeviceAddedRemovedEventArgs(new OutputDevice(info, MidiDevice.CreationContext.AddedDevice)));
+            DeviceAdded?.Invoke(this, new DeviceAddedRemovedEventArgs(new OutputDevice(info, MidiDevice.CreationContext.AddedDevice)));
         }
 
         private void OnOutputDeviceRemoved(object sender, IntPtr info)
         {
-            _deviceRemoved?.Invoke(this, new DeviceAddedRemovedEventArgs(new OutputDevice(info, MidiDevice.CreationContext.RemovedDevice)));
-        }
-
-        private void EnableDevicesWatcher()
-        {
-            DevicesWatcherApi.Api_EnableDevicesWatcher(_sessionHandle);
-        }
-
-        private void DisableDevicesWatcher()
-        {
-            DevicesWatcherApi.Api_DisableDevicesWatcher(_sessionHandle);
+            DeviceRemoved?.Invoke(this, new DeviceAddedRemovedEventArgs(new OutputDevice(info, MidiDevice.CreationContext.RemovedDevice)));
         }
 
         #endregion

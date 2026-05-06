@@ -101,21 +101,6 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// </summary>
         public abstract string Name { get; }
 
-        public ParentDevice ParentDevice
-        {
-            get
-            {
-                if (!LibraryConfiguration.IsParentDeviceApiAvailable())
-                    throw new PlatformNotSupportedException("Parent device API is not supported on the current operating system.");
-
-                var result = DevicesCommonApi.Api_GetParentDeviceInfo((Info ?? Handle).DangerousGetHandle(), out var id, out var name, out var manufacturer, out var model);
-                if (!result)
-                    return null;
-
-                return ParentDevice.Get(id, name, manufacturer, model);
-            }
-        }
-
         internal CreationContext Context { get; }
 
         internal NativeHandle Handle { get; set; }
@@ -143,6 +128,18 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         #region Methods
 
+        public ParentDevice GetParentDevice()
+        {
+            if (!LibraryConfiguration.IsParentDeviceApiAvailable())
+                throw new PlatformNotSupportedException("Parent device API is not supported on the current operating system.");
+
+            var result = DevicesCommonApi.Api_GetParentDeviceInfo((Info ?? Handle).DangerousGetHandle(), out var id, out var name, out var manufacturer, out var model);
+            if (!result)
+                return null;
+
+            return ParentDevice.Get(id, name, manufacturer, model);
+        }
+
         internal void EnsureDeviceIsNotDisposed()
         {
             if (_disposed)
@@ -165,10 +162,8 @@ namespace Melanchall.DryWetMidi.Multimedia
         }
 
         // TODO: check all calls, looks like some not needed
-        internal static void EnsureSessionIsCreated()
-        {
+        internal static MidiDevicesSessionHandle EnsureSessionIsCreated() =>
             MidiDevicesSession.GetSessionHandle();
-        }
 
         #endregion
 

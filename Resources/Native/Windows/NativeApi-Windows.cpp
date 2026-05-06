@@ -46,6 +46,8 @@ namespace init = Microsoft::Windows::Devices::Midi2::Initialization;
 #define API_EXPORT extern "C" __declspec(dllexport)
 #define API_CALL __cdecl
 
+// TODO: check all char: maybe use bool?
+
 /* ================================
    Common
 ================================ */
@@ -292,6 +294,11 @@ API_EXPORT char API_CALL IsVirtualDeviceApiAvailable(Configuration* configuratio
     return configuration->basicLoopbackAvailable;
 }
 
+API_EXPORT char API_CALL IsDevicesCachingRequired(Configuration* configuration)
+{
+    return static_cast<bool>(configuration->useWms && configuration->wmsAvailable && configuration->wmsSdkInitialized);
+}
+
 /* ================================
    High-precision tick generator
 ================================ */
@@ -409,6 +416,23 @@ struct InputDeviceInfo : DeviceInfoBase
     std::wstring devicePath;
 };
 
+API_EXPORT void API_CALL CloneInputDeviceInfo(InputDeviceInfo* source, InputDeviceInfo** info)
+{
+    InputDeviceInfo* result = new InputDeviceInfo();
+
+    result->deviceIndex = source->deviceIndex;
+    result->caps = new MIDIINCAPSW(*source->caps);
+    result->portDeviceId = source->portDeviceId;
+    result->devicePath = source->devicePath;
+    result->endpointDeviceId = source->endpointDeviceId;
+    result->parentDeviceId = source->parentDeviceId;
+    result->parentDeviceName = source->parentDeviceName;
+    result->parentManufacturer = source->parentManufacturer;
+    result->parentModel = source->parentModel;
+
+    *info = result;
+}
+
 API_EXPORT int API_CALL GetInputDeviceHashCode(InputDeviceInfo* info)
 {
     if (info == nullptr)
@@ -491,8 +515,11 @@ IN_GETINFORESULT GetInputDeviceInfo(const int deviceIndex, const winrt::hstring&
     *errorCode = 0;
 
     auto result = GetInputDeviceInfo(deviceIndex, info, errorCode);
-    (*info)->endpointDeviceId = endpointDeviceId.c_str();
-    (*info)->portDeviceId = portDeviceId.c_str();
+    if (result == IN_GETINFORESULT_OK && info != nullptr)
+    {
+        (*info)->endpointDeviceId = endpointDeviceId.c_str();
+        (*info)->portDeviceId = portDeviceId.c_str();
+    }
 
     return result;
 }
@@ -514,6 +541,24 @@ struct OutputDeviceInfo : DeviceInfoBase
 
     char isMicrosoftGsWavetableSynth = 0;
 };
+
+API_EXPORT void API_CALL CloneOutputDeviceInfo(OutputDeviceInfo* source, OutputDeviceInfo** info)
+{
+    OutputDeviceInfo* result = new OutputDeviceInfo();
+
+    result->deviceIndex = source->deviceIndex;
+    result->caps = new MIDIOUTCAPSW(*source->caps);
+    result->portDeviceId = source->portDeviceId;
+    result->devicePath = source->devicePath;
+    result->isMicrosoftGsWavetableSynth = source->isMicrosoftGsWavetableSynth;
+    result->endpointDeviceId = source->endpointDeviceId;
+    result->parentDeviceId = source->parentDeviceId;
+    result->parentDeviceName = source->parentDeviceName;
+    result->parentManufacturer = source->parentManufacturer;
+    result->parentModel = source->parentModel;
+
+    *info = result;
+}
 
 API_EXPORT int API_CALL GetOutputDeviceHashCode(OutputDeviceInfo* info)
 {
@@ -600,8 +645,11 @@ OUT_GETINFORESULT GetOutputDeviceInfo(const int deviceIndex, const winrt::hstrin
     *errorCode = 0;
 
     auto result = GetOutputDeviceInfo(deviceIndex, info, errorCode);
-    (*info)->endpointDeviceId = endpointDeviceId.c_str();
-    (*info)->portDeviceId = portDeviceId.c_str();
+    if (result == OUT_GETINFORESULT_OK && info != nullptr)
+    {
+        (*info)->endpointDeviceId = endpointDeviceId.c_str();
+        (*info)->portDeviceId = portDeviceId.c_str();
+    }
 
     return result;
 }
@@ -860,10 +908,10 @@ struct SessionHandle
 {
     const wchar_t* name;
 
-    midi2::MidiEndpointDeviceWatcher watcher{nullptr};
-    std::atomic<char> devicesWatcherEnabled{0};
     InputDeviceCallback inputDeviceCallback;
     OutputDeviceCallback outputDeviceCallback;
+
+    midi2::MidiEndpointDeviceWatcher watcher{nullptr};
     winrt::event_token revokeOnWatcherDeviceRemoved;
     winrt::event_token revokeOnWatcherDeviceAdded;
     winrt::event_token revokeOnWatcherEnumerationCompleted;
@@ -893,7 +941,13 @@ void DeleteOutputDeviceInfos(std::vector<OutputDeviceInfo*>& deviceInfos)
     deviceInfos.clear();
 }
 
-API_EXPORT SESSION_OPENRESULT API_CALL OpenSession_Win(const wchar_t* name, Configuration* configuration, InputDeviceCallback inputDeviceCallback, OutputDeviceCallback outputDeviceCallback, SessionHandle** handle, int* errorCode)
+API_EXPORT SESSION_OPENRESULT API_CALL OpenSession_Win(
+    const wchar_t* name,
+    Configuration* configuration,
+    InputDeviceCallback inputDeviceCallback,
+    OutputDeviceCallback outputDeviceCallback,
+    SessionHandle** handle,
+    int* errorCode)
 {
     *errorCode = 0;
 
@@ -910,8 +964,7 @@ API_EXPORT SESSION_OPENRESULT API_CALL OpenSession_Win(const wchar_t* name, Conf
 
             auto OnWatcherDeviceAdded = [sessionHandle](midi2::MidiEndpointDeviceWatcher const&, midi2::MidiEndpointDeviceInformationAddedEventArgs const& args)
             {
-                if (sessionHandle->initialEnumerationCompleted.load() == 0 ||
-                    sessionHandle->devicesWatcherEnabled.load() == 0)
+                if (sessionHandle->initialEnumerationCompleted.load() == 0)
                     return;
 
                 std::lock_guard<std::mutex> lock(sessionHandle->endpointDevicesLock);
@@ -1055,8 +1108,7 @@ API_EXPORT SESSION_OPENRESULT API_CALL OpenSession_Win(const wchar_t* name, Conf
 
             auto OnWatcherDeviceRemoved = [sessionHandle](midi2::MidiEndpointDeviceWatcher const&, midi2::MidiEndpointDeviceInformationRemovedEventArgs const& args)
             {
-                if (sessionHandle->initialEnumerationCompleted.load() == 0 ||
-                    sessionHandle->devicesWatcherEnabled.load() == 0)
+                if (sessionHandle->initialEnumerationCompleted.load() == 0)
                     return;
 
                 std::lock_guard<std::mutex> lock(sessionHandle->endpointDevicesLock);
@@ -1146,20 +1198,6 @@ API_EXPORT SESSION_CLOSERESULT API_CALL CloseSession(SessionHandle* sessionHandl
 
     delete sessionHandle;
     return SESSION_CLOSERESULT_OK;
-}
-
-/* ================================
-   Devices watcher
-================================ */
-
-API_EXPORT void API_CALL EnableDevicesWatcher(SessionHandle* sessionHandle)
-{
-    sessionHandle->devicesWatcherEnabled.store(1);
-}
-
-API_EXPORT void API_CALL DisableDevicesWatcher(SessionHandle* sessionHandle)
-{
-    sessionHandle->devicesWatcherEnabled.store(0);
 }
 
 /* ================================

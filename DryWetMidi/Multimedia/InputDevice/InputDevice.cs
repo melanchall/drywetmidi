@@ -5,7 +5,6 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using Melanchall.DryWetMidi.Common;
-using Melanchall.DryWetMidi.Configuration;
 using Melanchall.DryWetMidi.Core;
 
 namespace Melanchall.DryWetMidi.Multimedia
@@ -420,20 +419,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             NativeApiUtilities.EnsureOsIsSupported();
             EnsureSessionIsCreated();
 
-            var result = InputDeviceApi.Api_GetDevicesInfo(MidiConfiguration.GetConfigurationHandle(), MidiDevicesSession.GetSessionHandle(), out var devicesInfo, out var size, out var errorCode);
-            MidiDeviceUtilities.HandleDevicesNativeApiResult(result, errorCode);
-
-            var devices = new InputDevice[size];
-
-            for (int i = 0; i < size; i++)
-            {
-                var info = Marshal.ReadIntPtr(devicesInfo, i * IntPtr.Size);
-                devices[i] = new InputDevice(info, CreationContext.User);
-            }
-
-            InputDeviceApi.Api_FreeDevicesInfo(devicesInfo, size);
-
-            return devices;
+            return DevicesManager.Instance.GetAllInputDevices();
         }
 
         /// <summary>
@@ -461,7 +447,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             NativeApiUtilities.EnsureOsIsSupported();
             EnsureSessionIsCreated();
 
-            var device = GetAll().FirstOrDefault(d => d.Name == name);
+            var device = DevicesManager.Instance.GetInputDeviceByName(name);
             if (device == null)
                 throw new ArgumentException($"There is no MIDI input device '{name}'.", nameof(name));
 
