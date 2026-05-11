@@ -3,7 +3,6 @@
 
 using System;
 using System.Runtime.InteropServices;
-using System.Threading;
 
 namespace CreateLoopbackPort
 {
@@ -20,7 +19,13 @@ namespace CreateLoopbackPort
 		[DllImport("teVirtualMIDI.dll", SetLastError = true, CharSet = CharSet.Unicode)]
 		private static extern bool virtualMIDIGetData(IntPtr midiPort, [Out] byte[] midiDataBytes, ref uint length);
 
-		private static byte[] Buffer = new byte[BufferLength];
+        [DllImport("teVirtualMIDI.dll", SetLastError = true)]
+        private static extern void virtualMIDIClosePort(IntPtr midiPort);
+
+        [DllImport("teVirtualMIDI.dll", SetLastError = true, CharSet = CharSet.Unicode)]
+        private static extern bool virtualMIDIShutdown(IntPtr midiPort);
+
+        private static readonly byte[] Buffer = new byte[BufferLength];
 
 		public static void Main(string[] args)
 		{
@@ -30,28 +35,30 @@ namespace CreateLoopbackPort
 
             Console.WriteLine($"Creating virtual MIDI port '{portName}'...");
             var portHandle = virtualMIDICreatePortEx3(portName, IntPtr.Zero, IntPtr.Zero, 65535, 12, ref manufacturer, ref product);
-            Console.WriteLine($"Virtual MIDI port created.");
+            Console.WriteLine($"Virtual MIDI port created and running...");
 
-            while (true)
+			var running = true;
+
+            while (running)
             {
-                var commandBytesLength = GetCommandBytesLength(portHandle);
-                SendCommandBytes(portHandle, commandBytesLength);
+				try
+				{
+					uint length = BufferLength;
+					var success = virtualMIDIGetData(portHandle, Buffer, ref length);
+
+					if (success && length > 0)
+						virtualMIDISendData(portHandle, Buffer, length);
+				}
+				catch (Exception ex)
+				{
+					Console.WriteLine($"Exception in loopback loop:{Environment.NewLine}{ex}.");
+				}
             }
-		}
 
-		private static void SendCommandBytes(IntPtr portHandle, uint commandBytesLength)
-		{
-			if (commandBytesLength == 0)
-				return;
+            virtualMIDIShutdown(portHandle);
+			virtualMIDIClosePort(portHandle);
 
-			virtualMIDISendData(portHandle, Buffer, commandBytesLength);
-		}
-
-		private static uint GetCommandBytesLength(IntPtr portHandle)
-		{
-			uint length = BufferLength;
-			virtualMIDIGetData(portHandle, Buffer, ref length);
-			return length;
-		}
+			Console.WriteLine($"Virtual MIDI port '{portName}' closed.");
+        }
 	}
 }

@@ -1,4 +1,5 @@
 ﻿using Melanchall.DryWetMidi.Common;
+using Melanchall.DryWetMidi.Configuration;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Multimedia;
 using System;
@@ -45,10 +46,9 @@ and receive them back via the same device.";
 
             var deviceName = DeviceName;
 
-            if (OperatingSystem.IsMacOS())
+            if (LibraryConfiguration.IsVirtualDeviceApiAvailable())
                 virtualDevice = VirtualDevice.Create(deviceName);
-
-            if (OperatingSystem.IsWindows() && !toolOptions.NonInteractive)
+            else if (OperatingSystem.IsWindows() && !toolOptions.NonInteractive)
                 deviceName = GetDeviceName();
 
             var eventsSentReceivedData = new EventsSentReceivedData();

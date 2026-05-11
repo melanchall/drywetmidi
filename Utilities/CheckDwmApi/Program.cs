@@ -1,5 +1,7 @@
 using Melanchall.Common;
+using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Composing;
+using Melanchall.DryWetMidi.Configuration;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
 using Melanchall.DryWetMidi.MusicTheory;
@@ -33,10 +35,10 @@ It will take just several minutes or even less to run all tests guiding you thro
                 new ReadWriteMidiFileTask(midiFile),
             };
 
-            if (OperatingSystem.IsMacOS())
+            if (LibraryConfiguration.IsVirtualDeviceApiAvailable() && LibraryConfiguration.IsDevicesWatcherApiAvailable())
                 tasks.Add(new CreateVirtualDeviceTask());
 
-            if (OperatingSystem.IsWindows() || OperatingSystem.IsMacOS())
+            if (NativeApiUtilities.IsOsSupported())
             {
                 tasks.Add(new SendReceiveViaVirtualDeviceTask());
                 tasks.Add(new RunHighPrecisionTickGeneratorTask());

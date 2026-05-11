@@ -442,7 +442,7 @@ API_EXPORT int API_CALL GetInputDeviceHashCode(InputDeviceInfo* info)
         return std::hash<std::wstring>()(info->endpointDeviceId) ^ std::hash<std::wstring>()(info->portDeviceId);
 
     if (!info->devicePath.empty())
-        return std::hash<std::wstring>()(info->devicePath);
+        return std::hash<std::wstring>()(info->devicePath) ^ std::hash<std::wstring>()(info->caps->szPname);
 
     return info->deviceIndex;
 }
@@ -456,7 +456,7 @@ API_EXPORT char API_CALL AreInputDevicesEqual(InputDeviceInfo* info1, InputDevic
         return info1->endpointDeviceId == info2->endpointDeviceId && info1->portDeviceId == info2->portDeviceId;
     
     if (!info1->devicePath.empty() && !info2->devicePath.empty())
-        return info1->devicePath == info2->devicePath;
+        return info1->devicePath == info2->devicePath && wcscmp(info1->caps->szPname, info2->caps->szPname) == 0;
 
     return 0;
 }
@@ -569,7 +569,7 @@ API_EXPORT int API_CALL GetOutputDeviceHashCode(OutputDeviceInfo* info)
         return std::hash<std::wstring>()(info->endpointDeviceId) ^ std::hash<std::wstring>()(info->portDeviceId);
 
     if (!info->devicePath.empty())
-        return std::hash<std::wstring>()(info->devicePath);
+        return std::hash<std::wstring>()(info->devicePath) ^ std::hash<std::wstring>()(info->caps->szPname);
 
     return info->deviceIndex;
 }
@@ -586,7 +586,7 @@ API_EXPORT char API_CALL AreOutputDevicesEqual(OutputDeviceInfo* info1, OutputDe
         return info1->endpointDeviceId == info2->endpointDeviceId && info1->portDeviceId == info2->portDeviceId;
 
     if (!info1->devicePath.empty() && !info2->devicePath.empty())
-        return info1->devicePath == info2->devicePath;
+        return info1->devicePath == info2->devicePath && wcscmp(info1->caps->szPname, info2->caps->szPname) == 0;
 
     return 0;
 }
@@ -983,22 +983,22 @@ API_EXPORT SESSION_OPENRESULT API_CALL OpenSession_Win(
                     
                     auto groupTerminalBlocks = endpointInformation.GetGroupTerminalBlocks();
 
-                    auto hasSources = false;
-                    auto hasDestinations = false;
+                    auto sourcesCount = 0;
+                    auto destinationsCount = 0;
 
                     for (auto const& gtb : groupTerminalBlocks)
                     {
                         switch (gtb.Direction())
                         {
                             case midi2::MidiGroupTerminalBlockDirection::BlockInput:
-                                hasDestinations = true;
+                                destinationsCount++;
                                 break;
                             case midi2::MidiGroupTerminalBlockDirection::BlockOutput:
-                                hasSources = true;
+                                sourcesCount++;
                                 break;
                             case midi2::MidiGroupTerminalBlockDirection::Bidirectional:
-                                hasSources = true;
-                                hasDestinations = true;
+                                sourcesCount++;
+                                destinationsCount++;
                                 break;
                         }
                     }
@@ -1012,8 +1012,10 @@ API_EXPORT SESSION_OPENRESULT API_CALL OpenSession_Win(
                     auto ok = false;
                     int attempts = 0;
 
-                    while (!ok && attempts++ < 10)
+                    while (!ok && attempts++ < 20)
                     {
+                        EnsureWinMmPortsAvailable();
+
                         ok = true;
 
                         DeleteInputDeviceInfos(inputDevicesInfo);
@@ -1028,10 +1030,12 @@ API_EXPORT SESSION_OPENRESULT API_CALL OpenSession_Win(
                             return;
                         }
 
-                        if (hasSources)
+                        if (sourcesCount > 0)
                         {
                             auto inputPorts = endpointInformation.FindAllAssociatedMidi1PortsForThisEndpoint(midi2::Midi1PortFlow::MidiMessageSource);
-                            ok = inputPorts.Size() > 0;
+                            ok = inputPorts.Size() >= sourcesCount;
+                            if (!ok)
+                                continue;
 
                             for (auto const& port : inputPorts)
                             {
@@ -1048,15 +1052,23 @@ API_EXPORT SESSION_OPENRESULT API_CALL OpenSession_Win(
                                 inputDevicesInfo.push_back(inputDeviceInfo);
 
                                 InputDeviceInfo* persistentInputDeviceInfo;
-                                GetInputDeviceInfo(port.PortNumber(), endpointId, port.PortDeviceId(), &persistentInputDeviceInfo, &errorCode);
+                                getInputDeviceInfoResult = GetInputDeviceInfo(port.PortNumber(), endpointId, port.PortDeviceId(), &persistentInputDeviceInfo, &errorCode);
+                                if (getInputDeviceInfoResult != IN_GETINFORESULT_OK)
+                                {
+                                    ok = false;
+                                    break;
+                                }
+                                
                                 endpointDevicesInfo.inputDevicesInfo.push_back(persistentInputDeviceInfo);
                             }
                         }
 
-                        if (hasDestinations)
+                        if (destinationsCount > 0)
                         {
                             auto outputPorts = endpointInformation.FindAllAssociatedMidi1PortsForThisEndpoint(midi2::Midi1PortFlow::MidiMessageDestination);
-                            ok = outputPorts.Size() > 0;
+                            ok = outputPorts.Size() >= destinationsCount;
+                            if (!ok)
+                                continue;
 
                             for (auto const& port : outputPorts)
                             {
@@ -1073,13 +1085,19 @@ API_EXPORT SESSION_OPENRESULT API_CALL OpenSession_Win(
                                 outputDevicesInfo.push_back(outputDeviceInfo);
 
                                 OutputDeviceInfo* persistentOutputDeviceInfo;
-                                GetOutputDeviceInfo(port.PortNumber(), endpointId, port.PortDeviceId(), &persistentOutputDeviceInfo, &errorCode);
+                                getOutputDeviceInfoResult = GetOutputDeviceInfo(port.PortNumber(), endpointId, port.PortDeviceId(), &persistentOutputDeviceInfo, &errorCode);
+                                if (getOutputDeviceInfoResult != OUT_GETINFORESULT_OK)
+                                {
+                                    ok = false;
+                                    break;
+                                }
+                                
                                 endpointDevicesInfo.outputDevicesInfo.push_back(persistentOutputDeviceInfo);
                             }
                         }
 
                         if (!ok)
-                            Sleep(1000);
+                            Sleep(500);
                     }
 
                     if (!ok)

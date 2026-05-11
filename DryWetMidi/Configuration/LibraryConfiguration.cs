@@ -2,6 +2,7 @@
 using Melanchall.DryWetMidi.Multimedia;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.InteropServices;
 
 namespace Melanchall.DryWetMidi.Configuration
@@ -49,17 +50,16 @@ namespace Melanchall.DryWetMidi.Configuration
             AddNativeBackendInfo(resultLines);
 #endif
 
-            const string availableLabel = "available";
-            const string notAvailableLabel = "not available";
-
-            resultLines.AddRange(new[]
+            var capabilities = new Dictionary<string, bool>
             {
-                "Capabilities:",
-                $"- devices watcher API: {(IsDevicesWatcherApiAvailable() ? availableLabel : notAvailableLabel)}",
-                $"- parent device API: {(IsParentDeviceApiAvailable() ? availableLabel : notAvailableLabel)}",
-                $"- virtual device API: {(IsVirtualDeviceApiAvailable() ? availableLabel : notAvailableLabel)}",
-                $"- devices multi-client access: {(IsDevicesMultiClientAccessAvailable() ? availableLabel : notAvailableLabel)}",
-            });
+                ["devices watcher API"] = IsDevicesWatcherApiAvailable(),
+                ["parent device API"] = IsParentDeviceApiAvailable(),
+                ["virtual device API"] = IsVirtualDeviceApiAvailable(),
+                ["devices multi-client access"] = IsDevicesMultiClientAccessAvailable(),
+            };
+
+            resultLines.Add("Capabilities:");
+            resultLines.AddRange(capabilities.Select(kv => $"- {kv.Key}: {(kv.Value ? "available" : "not available")}"));
 
             return string.Join(Environment.NewLine, resultLines).Trim();
         }
@@ -82,11 +82,7 @@ namespace Melanchall.DryWetMidi.Configuration
 #if !NATIVELESS
         private static void AddNativeBackendInfo(List<string> resultLines)
         {
-            var nativeBackendAvailable =
-                RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ||
-                RuntimeInformation.IsOSPlatform(OSPlatform.OSX);
-
-            if (!nativeBackendAvailable)
+            if (!NativeApiUtilities.IsOsSupported())
             {
                 resultLines.Add($"Native backend is not available for the current OS ({RuntimeInformation.OSDescription})");
                 return;

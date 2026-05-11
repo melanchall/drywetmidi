@@ -173,7 +173,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"Failed to work with the synth: {ex.Message}");
+                    Console.WriteLine($"Failed to work with the '{MicrosoftGsWavetableSynth}' synth: {ex.Message}");
                 }
             }
         }
