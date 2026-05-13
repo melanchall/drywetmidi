@@ -14,26 +14,23 @@ namespace Melanchall.DryWetMidi.Configuration
         private static readonly string Version = UnofficialReleaseMarker;
         private static readonly string CommitId = UnofficialReleaseMarker;
 
+        public static bool UseWindowsMidiServices
+        {
+            get => MidiConfiguration.UseWindowsMidiServices;
+            set => MidiConfiguration.UseWindowsMidiServices = value;
+        }
+
         public static bool IsDevicesWatcherApiAvailable() =>
-            IsAdvancedApiAvailable();
+            IsDevicesWatcherApiAvailable(MidiConfiguration.GetConfigurationHandle());
 
         public static bool IsDevicesMultiClientAccessAvailable() =>
-            IsAdvancedApiAvailable();
+            IsDevicesWatcherApiAvailable(MidiConfiguration.GetConfigurationHandle());
 
         public static bool IsParentDeviceApiAvailable() =>
-            IsAdvancedApiAvailable();
+            IsParentDeviceApiAvailable(MidiConfiguration.GetConfigurationHandle());
 
-        public static bool IsVirtualDeviceApiAvailable()
-        {
-#if NATIVELESS
-            return false;
-#else
-            if (!NativeApiUtilities.IsOsSupported())
-                return false;
-
-            return MidiConfigurationApi.Api_IsVirtualDeviceApiAvailable(MidiConfiguration.GetConfigurationHandle());
-#endif
-        }
+        public static bool IsVirtualDeviceApiAvailable() =>
+            IsVirtualDeviceApiAvailable(MidiConfiguration.GetConfigurationHandle());
 
         public static string GetConfigurationSummary()
         {
@@ -64,7 +61,37 @@ namespace Melanchall.DryWetMidi.Configuration
             return string.Join(Environment.NewLine, resultLines).Trim();
         }
 
-        private static bool IsAdvancedApiAvailable()
+        internal static bool IsDevicesWatcherApiAvailable(MidiConfigurationHandle configurationHandle)
+        {
+#if NATIVELESS
+            return false;
+#else
+            if (!NativeApiUtilities.IsOsSupported())
+                return false;
+
+            return MidiConfigurationApi.Api_IsDevicesWatcherApiAvailable(configurationHandle);
+#endif
+        }
+
+        internal static bool IsDevicesMultiClientAccessAvailable(MidiConfigurationHandle configurationHandle) =>
+            IsAdvancedApiAvailable();
+
+        internal static bool IsParentDeviceApiAvailable(MidiConfigurationHandle configurationHandle) =>
+            IsAdvancedApiAvailable();
+
+        internal static bool IsVirtualDeviceApiAvailable(MidiConfigurationHandle configurationHandle)
+        {
+#if NATIVELESS
+            return false;
+#else
+            if (!NativeApiUtilities.IsOsSupported())
+                return false;
+
+            return MidiConfigurationApi.Api_IsVirtualDeviceApiAvailable(configurationHandle);
+#endif
+        }
+
+        internal static bool IsAdvancedApiAvailable()
         {
 #if NATIVELESS
             return false;
@@ -73,7 +100,7 @@ namespace Melanchall.DryWetMidi.Configuration
                 return false;
 
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-                return AreWindowsMidiServicesAvailable(out _, out _, out _, out _, out _);
+                return UseWindowsMidiServices && AreWindowsMidiServicesAvailable(out _, out _, out _, out _, out _);
 
             return true;
 #endif

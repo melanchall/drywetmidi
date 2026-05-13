@@ -54,14 +54,19 @@ API_EXPORT CONFIGURATION_CLEANUPRESULT CleanupConfiguration(Configuration* confi
     return CONFIGURATION_CLEANUPRESULT_OK;
 }
 
-API_EXPORT char IsVirtualDeviceApiAvailable(Configuration* configuration)
+API_EXPORT bool IsVirtualDeviceApiAvailable(Configuration* configuration)
 {
-    return 1;
+    return true;
 }
 
-API_EXPORT char IsDevicesCachingRequired(Configuration* configuration)
+API_EXPORT bool IsDevicesCachingRequired(Configuration* configuration)
 {
-    return 0;
+    return false;
+}
+
+API_EXPORT bool IsDevicesWatcherApiAvailable(Configuration* configuration)
+{
+    return configuration->useWms && configuration->wmsAvailable && configuration->wmsSdkInitialized;
 }
 
 /* ================================

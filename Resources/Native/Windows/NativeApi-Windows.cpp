@@ -181,15 +181,15 @@ API_EXPORT void API_CALL GetNativeEnvironmentInfo_Win(
 
 struct Configuration
 {
-    char useWms{ 0 };
-    char wmsAvailable{0};
-    char basicLoopbackAvailable{0};
-    std::shared_ptr<init::MidiDesktopAppSdkInitializer> wmsSdkInitializer;
-    char wmsSdkInitialized{0};
+    bool useWms{ 0 };
+    bool wmsAvailable{0};
+    bool basicLoopbackAvailable{0};
+    std::shared_ptr<init::MidiDesktopAppSdkInitializer> wmsSdkInitializer{nullptr};
+    bool wmsSdkInitialized{0};
 };
 
 API_EXPORT CONFIGURATION_GETRESULT API_CALL GetConfiguration_Win(
-    char useWms,
+    bool useWms,
     Configuration** configuration,
     int* errorCode)
 {
@@ -248,7 +248,7 @@ API_EXPORT CONFIGURATION_GETRESULT API_CALL GetConfiguration_Win(
                 config->wmsSdkInitializer = wmsSdkInitializer;
                 config->basicLoopbackAvailable = basicLoopback::MidiBasicLoopbackEndpointManager::IsTransportAvailable();
 
-                config->wmsSdkInitialized = 1;
+                config->wmsSdkInitialized = true;
             }
         }
         catch (...)
@@ -267,7 +267,7 @@ API_EXPORT CONFIGURATION_CLEANUPRESULT API_CALL CleanupConfiguration(Configurati
     {
         if (configuration->wmsAvailable)
         {
-            if (configuration->wmsSdkInitializer != nullptr)
+            if (configuration->wmsSdkInitializer != nullptr && configuration->wmsSdkInitialized)
             {
                 configuration->wmsSdkInitializer->ShutdownSdkRuntime();
                 configuration->wmsSdkInitializer.reset();
@@ -286,17 +286,19 @@ API_EXPORT CONFIGURATION_CLEANUPRESULT API_CALL CleanupConfiguration(Configurati
     return CONFIGURATION_CLEANUPRESULT_OK;
 }
 
-API_EXPORT char API_CALL IsVirtualDeviceApiAvailable(Configuration* configuration)
+API_EXPORT bool API_CALL IsVirtualDeviceApiAvailable(Configuration* configuration)
 {
-    if (!configuration->useWms || !configuration->wmsSdkInitialized || !configuration->wmsAvailable)
-        return 0;
-
-    return configuration->basicLoopbackAvailable;
+    return configuration->useWms && configuration->wmsAvailable && configuration->wmsSdkInitialized && configuration->basicLoopbackAvailable;
 }
 
-API_EXPORT char API_CALL IsDevicesCachingRequired(Configuration* configuration)
+API_EXPORT bool API_CALL IsDevicesCachingRequired(Configuration* configuration)
 {
-    return static_cast<bool>(configuration->useWms && configuration->wmsAvailable && configuration->wmsSdkInitialized);
+    return configuration->useWms && configuration->wmsAvailable && configuration->wmsSdkInitialized;
+}
+
+API_EXPORT bool API_CALL IsDevicesWatcherApiAvailable(Configuration* configuration)
+{
+    return configuration->useWms && configuration->wmsAvailable && configuration->wmsSdkInitialized;
 }
 
 /* ================================
@@ -444,7 +446,7 @@ API_EXPORT int API_CALL GetInputDeviceHashCode(InputDeviceInfo* info)
     if (!info->devicePath.empty())
         return std::hash<std::wstring>()(info->devicePath) ^ std::hash<std::wstring>()(info->caps->szPname);
 
-    return info->deviceIndex;
+    return std::hash<std::wstring>()(info->caps->szPname);
 }
 
 API_EXPORT char API_CALL AreInputDevicesEqual(InputDeviceInfo* info1, InputDeviceInfo* info2)
@@ -458,7 +460,7 @@ API_EXPORT char API_CALL AreInputDevicesEqual(InputDeviceInfo* info1, InputDevic
     if (!info1->devicePath.empty() && !info2->devicePath.empty())
         return info1->devicePath == info2->devicePath && wcscmp(info1->caps->szPname, info2->caps->szPname) == 0;
 
-    return 0;
+    return wcscmp(info1->caps->szPname, info2->caps->szPname) == 0;
 }
 
 API_EXPORT IN_GETCOUNTRESULT API_CALL GetInputDevicesCount(int* count)
@@ -571,7 +573,7 @@ API_EXPORT int API_CALL GetOutputDeviceHashCode(OutputDeviceInfo* info)
     if (!info->devicePath.empty())
         return std::hash<std::wstring>()(info->devicePath) ^ std::hash<std::wstring>()(info->caps->szPname);
 
-    return info->deviceIndex;
+    return std::hash<std::wstring>()(info->caps->szPname);
 }
 
 API_EXPORT char API_CALL AreOutputDevicesEqual(OutputDeviceInfo* info1, OutputDeviceInfo* info2)
@@ -588,7 +590,7 @@ API_EXPORT char API_CALL AreOutputDevicesEqual(OutputDeviceInfo* info1, OutputDe
     if (!info1->devicePath.empty() && !info2->devicePath.empty())
         return info1->devicePath == info2->devicePath && wcscmp(info1->caps->szPname, info2->caps->szPname) == 0;
 
-    return 0;
+    return wcscmp(info1->caps->szPname, info2->caps->szPname) == 0;
 }
 
 API_EXPORT OUT_GETCOUNTRESULT API_CALL GetOutputDevicesCount(int* count)

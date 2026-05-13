@@ -16,6 +16,8 @@ namespace Melanchall.DryWetMidi.Configuration
 
         #region Properties
 
+        public static bool UseWindowsMidiServices { get; set; } = true;
+
 #if TEST
         internal static TestCheckpoints TestCheckpoints { get; set; }
 #endif
@@ -37,8 +39,7 @@ namespace Melanchall.DryWetMidi.Configuration
                         int errorCode = 0;
                         var rawHandle = IntPtr.Zero;
 
-                        // TODO: pass useWms
-                        var result = MidiConfigurationApi.Api_GetConfiguration(true, out rawHandle, out errorCode);
+                        var result = MidiConfigurationApi.Api_GetConfiguration(UseWindowsMidiServices, out rawHandle, out errorCode);
                         
                         // TODO: separate from devices
                         MidiDeviceUtilities.HandleDevicesNativeApiResult(result, errorCode);
@@ -56,6 +57,18 @@ namespace Melanchall.DryWetMidi.Configuration
             }
 
             return _handle;
+        }
+
+        internal static void ResetHandle()
+        {
+            lock (_lockObject)
+            {
+                if (_handle != null)
+                {
+                    _handle.Dispose();
+                    _handle = null;
+                }
+            }
         }
 
         private static void OnDomainUnloadOrExit(object sender, EventArgs e)
