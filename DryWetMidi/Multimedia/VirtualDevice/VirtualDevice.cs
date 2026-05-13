@@ -146,10 +146,12 @@ namespace Melanchall.DryWetMidi.Multimedia
         {
             base.OnEnabledChanged(enabled);
 
+            var configuration = MidiConfiguration.GetConfigurationHandle();
+
             if (enabled)
-                VirtualDeviceApi.Api_UnmuteDevice(Handle.DangerousGetHandle());
+                VirtualDeviceApi.Api_UnmuteDevice(Handle.DangerousGetHandle(), configuration);
             else
-                VirtualDeviceApi.Api_MuteDevice(Handle.DangerousGetHandle());
+                VirtualDeviceApi.Api_MuteDevice(Handle.DangerousGetHandle(), configuration);
         }
 
         /// <summary>

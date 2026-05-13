@@ -52,6 +52,56 @@ namespace init = Microsoft::Windows::Devices::Midi2::Initialization;
    Common
 ================================ */
 
+const wchar_t* ToWide(const char* narrow)
+{
+    thread_local static wchar_t buffer[2048]; // Per-thread buffer
+
+    if (!narrow || *narrow == '\0')
+        return L"";
+
+    // Try UTF-8 first
+    int result = MultiByteToWideChar(CP_UTF8, MB_ERR_INVALID_CHARS,
+        narrow, -1, buffer, 2048);
+
+    if (result == 0) // UTF-8 failed, use ANSI (locale-aware)
+        result = MultiByteToWideChar(CP_ACP, 0, narrow, -1, buffer, 2048);
+
+    if (result == 0)
+        return L"";
+
+    return buffer;
+}
+
+const wchar_t* ToWide(const char* narrow, const wchar_t* label)
+{
+    thread_local static wchar_t buffer[2048];
+
+    const wchar_t* converted = ToWide(narrow);
+    swprintf_s(buffer, 2048, L"%s: %s", label, converted);
+
+    return buffer;
+}
+
+const wchar_t* FormatError(const winrt::hresult_error& e, const wchar_t* label)
+{
+    thread_local static wchar_t buffer[2048];
+
+    swprintf_s(
+        buffer,
+        2048,
+        L"%s: %s (HRESULT: 0x%08X)",
+        label,
+        e.message().c_str(),
+        static_cast<unsigned int>(e.code()));
+
+    return buffer;
+}
+
+const wchar_t* FormatError(const std::exception& e, const wchar_t* label)
+{
+    return ToWide(e.what(), label);
+}
+
 typedef int WMSSERVICECHECKRESULT;
 
 #define WMSSERVICECHECKRESULT_OK 0
@@ -179,8 +229,11 @@ API_EXPORT void API_CALL GetNativeEnvironmentInfo_Win(
    Configuration
 ================================ */
 
+typedef void (*NativeApiActivityCallback)(const wchar_t* record);
+
 struct Configuration
 {
+    NativeApiActivityCallback activityCallback;
     bool useWms{ 0 };
     bool wmsAvailable{0};
     bool basicLoopbackAvailable{0};
@@ -190,6 +243,7 @@ struct Configuration
 
 API_EXPORT CONFIGURATION_GETRESULT API_CALL GetConfiguration_Win(
     bool useWms,
+    NativeApiActivityCallback activityCallback,
     Configuration** configuration,
     int* errorCode)
 {
@@ -197,7 +251,7 @@ API_EXPORT CONFIGURATION_GETRESULT API_CALL GetConfiguration_Win(
 
     Configuration* config = new Configuration();
 
-    config->wmsSdkInitialized = 0;
+    config->activityCallback = activityCallback;
     config->useWms = useWms;
 
     if (useWms)
@@ -251,8 +305,19 @@ API_EXPORT CONFIGURATION_GETRESULT API_CALL GetConfiguration_Win(
                 config->wmsSdkInitialized = true;
             }
         }
+        catch (const winrt::hresult_error& e)
+        {
+            config->activityCallback(FormatError(e, L"Initialize WMS SDK"));
+            return CONFIGURATION_GETRESULT_WMSUNKNOWNERROR;
+        }
+        catch (const std::exception& e)
+        {
+            config->activityCallback(FormatError(e, L"Initialize WMS SDK"));
+            return CONFIGURATION_GETRESULT_WMSUNKNOWNERROR;
+        }
         catch (...)
         {
+            config->activityCallback(L"Failed to initialize WMS SDK");
             return CONFIGURATION_GETRESULT_WMSUNKNOWNERROR;
         }
     }
@@ -299,6 +364,35 @@ API_EXPORT bool API_CALL IsDevicesCachingRequired(Configuration* configuration)
 API_EXPORT bool API_CALL IsDevicesWatcherApiAvailable(Configuration* configuration)
 {
     return configuration->useWms && configuration->wmsAvailable && configuration->wmsSdkInitialized;
+}
+
+API_EXPORT void API_CALL CheckNativeApiActivityCallback(Configuration* configuration)
+{
+    configuration->activityCallback(L"Native API activity callback works!");
+}
+
+API_EXPORT void API_CALL CheckWinRtErrorHandling_Win(Configuration* configuration)
+{
+    try
+    {
+        throw winrt::hresult_error(E_FAIL, L"Simulated failure");
+    }
+    catch (const winrt::hresult_error& e)
+    {
+        configuration->activityCallback(FormatError(e, L"WinRT error handling"));
+    }
+}
+
+API_EXPORT void API_CALL CheckStdExceptionHandling_Win(Configuration* configuration)
+{
+    try
+    {
+        throw std::runtime_error("Simulated failure");
+    }
+    catch (const std::exception& e)
+    {
+        configuration->activityCallback(FormatError(e, L"Standard exception handling"));
+    }
 }
 
 /* ================================
@@ -816,6 +910,7 @@ API_EXPORT const wchar_t* API_CALL GetDeviceProduct(WORD productId)
 
 API_EXPORT DEVCOMMON_GETPARENTDEVICEINFORESULT API_CALL GetParentDeviceInfo_Win(
     DeviceInfoBase* deviceInfo,
+    Configuration* configuration,
     const wchar_t** id,
     const wchar_t** name,
     const wchar_t** manufacturer,
@@ -856,8 +951,19 @@ API_EXPORT DEVCOMMON_GETPARENTDEVICEINFORESULT API_CALL GetParentDeviceInfo_Win(
         *id = deviceInfo->parentDeviceId.c_str();
         *name = deviceInfo->parentDeviceName.c_str();
     }
+    catch (const winrt::hresult_error& e)
+    {
+        configuration->activityCallback(FormatError(e, L"Get basic parent device properties"));
+        return DEVCOMMON_GETPARENTDEVICEINFORESULT_UNKNOWNWMSERROR;
+    }
+    catch (const std::exception& e)
+    {
+        configuration->activityCallback(FormatError(e, L"Get basic parent device properties"));
+        return DEVCOMMON_GETPARENTDEVICEINFORESULT_UNKNOWNWMSERROR;
+    }
     catch (...)
     {
+        configuration->activityCallback(L"Failed to get basic parent device properties");
         return DEVCOMMON_GETPARENTDEVICEINFORESULT_UNKNOWNWMSERROR;
     }
 
@@ -881,9 +987,17 @@ API_EXPORT DEVCOMMON_GETPARENTDEVICEINFORESULT API_CALL GetParentDeviceInfo_Win(
             deviceInfo->parentManufacturer = manufacturerH.c_str();
             deviceInfo->parentModel = modelH.c_str();
         }
+        catch (const winrt::hresult_error& e)
+        {
+            configuration->activityCallback(FormatError(e, L"Get additional parent device properties"));
+        }
+        catch (const std::exception& e)
+        {
+            configuration->activityCallback(FormatError(e, L"Get additional parent device properties"));
+        }
         catch (...)
         {
-            // TODO
+            configuration->activityCallback(L"Failed to get additional parent device properties");
         }
 
         *manufacturer = deviceInfo->parentManufacturer.c_str();
@@ -909,6 +1023,8 @@ struct EndpointDevicesInfo
 struct SessionHandle
 {
     const wchar_t* name;
+
+    Configuration* configuration;
 
     InputDeviceCallback inputDeviceCallback;
     OutputDeviceCallback outputDeviceCallback;
@@ -955,6 +1071,7 @@ API_EXPORT SESSION_OPENRESULT API_CALL OpenSession_Win(
 
     SessionHandle* sessionHandle = new SessionHandle();
     sessionHandle->name = name;
+    sessionHandle->configuration = configuration;
     sessionHandle->inputDeviceCallback = inputDeviceCallback;
     sessionHandle->outputDeviceCallback = outputDeviceCallback;
 
@@ -1120,9 +1237,17 @@ API_EXPORT SESSION_OPENRESULT API_CALL OpenSession_Win(
                         sessionHandle->outputDeviceCallback(outputDeviceInfo, 1);
                     }
                 }
+                catch (const winrt::hresult_error& e)
+                {
+                    sessionHandle->configuration->activityCallback(FormatError(e, L"Process endpoint added"));
+                }
+                catch (const std::exception& e)
+                {
+                    sessionHandle->configuration->activityCallback(FormatError(e, L"Process endpoint added"));
+                }
                 catch (...)
                 {
-                    // TODO
+                    sessionHandle->configuration->activityCallback(L"Failed to process endpoint added");
                 }
             };
 
@@ -1157,9 +1282,17 @@ API_EXPORT SESSION_OPENRESULT API_CALL OpenSession_Win(
                         sessionHandle->outputDeviceCallback(outputDeviceInfo, 0);
                     }
                 }
+                catch (const winrt::hresult_error& e)
+                {
+                    sessionHandle->configuration->activityCallback(FormatError(e, L"Process endpoint removed"));
+                }
+                catch (const std::exception& e)
+                {
+                    sessionHandle->configuration->activityCallback(FormatError(e, L"Process endpoint removed"));
+                }
                 catch (...)
                 {
-                    // TODO
+                    sessionHandle->configuration->activityCallback(L"Failed to process endpoint removed");
                 }
             };
 
@@ -1175,9 +1308,19 @@ API_EXPORT SESSION_OPENRESULT API_CALL OpenSession_Win(
             sessionHandle->watcher.Start();
         }
     }
+    catch (const winrt::hresult_error& e)
+    {
+        sessionHandle->configuration->activityCallback(FormatError(e, L"Setup devices watcher"));
+        return SESSION_OPENRESULT_WMSUNKNOWNERROR;
+    }
+    catch (const std::exception& e)
+    {
+        sessionHandle->configuration->activityCallback(FormatError(e, L"Setup devices watcher"));
+        return SESSION_OPENRESULT_WMSUNKNOWNERROR;
+    }
     catch (...)
     {
-        // TODO
+        sessionHandle->configuration->activityCallback(L"Failed to setup devices watcher");
         return SESSION_OPENRESULT_WMSUNKNOWNERROR;
     }
 
@@ -1292,8 +1435,19 @@ API_EXPORT IN_GETALLINFORESULT API_CALL GetInputDevicesInfo(Configuration* confi
 
             return IN_GETALLINFORESULT_OK;
         }
+        catch (const winrt::hresult_error& e)
+        {
+            configuration->activityCallback(FormatError(e, L"Get all input endpoints via WMS"));
+            return IN_GETALLINFORESULT_UNKNOWNWMSERROR;
+        }
+        catch (const std::exception& e)
+        {
+            configuration->activityCallback(FormatError(e, L"Get all input endpoints via WMS"));
+            return IN_GETALLINFORESULT_UNKNOWNWMSERROR;
+        }
         catch (...)
         {
+            configuration->activityCallback(L"Failed to get all input endpoints via WMS");
             return IN_GETALLINFORESULT_UNKNOWNWMSERROR;
         }
     }
@@ -1762,8 +1916,19 @@ API_EXPORT OUT_GETALLINFORESULT API_CALL GetOutputDevicesInfo(Configuration* con
 
             return OUT_GETALLINFORESULT_OK;
         }
+        catch (const winrt::hresult_error& e)
+        {
+            configuration->activityCallback(FormatError(e, L"Get all output endpoints via WMS"));
+            return OUT_GETALLINFORESULT_UNKNOWNWMSERROR;
+        }
+        catch (const std::exception& e)
+        {
+            configuration->activityCallback(FormatError(e, L"Get all output endpoints via WMS"));
+            return OUT_GETALLINFORESULT_UNKNOWNWMSERROR;
+        }
         catch (...)
         {
+            configuration->activityCallback(L"Failed to get all output endpoints via WMS");
             return OUT_GETALLINFORESULT_UNKNOWNWMSERROR;
         }
     }
@@ -2177,9 +2342,17 @@ API_EXPORT VIRTUAL_OPENRESULT API_CALL OpenVirtualDevice_Win(
                 uniqueId = winrt::to_hstring(winrt::Windows::Foundation::GuidHelper::CreateNewGuid());
             }
         }
+        catch (const winrt::hresult_error& e)
+        {
+            configuration->activityCallback(FormatError(e, L"Regenerate unique ID for virtual device"));
+        }
+        catch (const std::exception& e)
+        {
+            configuration->activityCallback(FormatError(e, L"Regenerate unique ID for virtual device"));
+        }
         catch (...)
         {
-            // TODO
+            configuration->activityCallback(L"Failed to regenerate unique ID for virtual device");
         }
 
         virtualDeviceInfo->associationId = winrt::Windows::Foundation::GuidHelper::CreateNewGuid();
@@ -2241,9 +2414,19 @@ API_EXPORT VIRTUAL_OPENRESULT API_CALL OpenVirtualDevice_Win(
 
         virtualDeviceInfo->outputDeviceInfo = outputDeviceInfo;
     }
+    catch (const winrt::hresult_error& e)
+    {
+        configuration->activityCallback(FormatError(e, L"Create virtual device"));
+        return VIRTUAL_OPENRESULT_WMSERROR;
+    }
+    catch (const std::exception& e)
+    {
+        configuration->activityCallback(FormatError(e, L"Create virtual device"));
+        return VIRTUAL_OPENRESULT_WMSERROR;
+    }
     catch (...)
     {
-        delete virtualDeviceInfo;
+        configuration->activityCallback(L"Failed to create virtual device");
         return VIRTUAL_OPENRESULT_WMSERROR;
     }
 
@@ -2268,11 +2451,7 @@ API_EXPORT VIRTUAL_CLOSERESULT API_CALL CloseVirtualDevice(VirtualDeviceInfo* in
         return VIRTUAL_CLOSERESULT_WMSERROR;
     }
 
-    // TODO: analyze why this causes crash
-    // delete virtualDeviceInfo->inputDeviceInfo;
-    // delete virtualDeviceInfo->outputDeviceInfo;
     delete info;
-
     return VIRTUAL_CLOSERESULT_OK;
 }
 
@@ -2286,7 +2465,9 @@ API_EXPORT OutputDeviceInfo* API_CALL GetOutputDeviceInfoFromVirtualDevice(Virtu
     return info->outputDeviceInfo;
 }
 
-API_EXPORT VIRTUAL_MUTERESULT API_CALL MuteVirtualDevice(VirtualDeviceInfo* info)
+API_EXPORT VIRTUAL_MUTERESULT API_CALL MuteVirtualDevice(
+    VirtualDeviceInfo* info,
+    Configuration* configuration)
 {
     try
     {
@@ -2294,15 +2475,28 @@ API_EXPORT VIRTUAL_MUTERESULT API_CALL MuteVirtualDevice(VirtualDeviceInfo* info
         if (!muted)
             return VIRTUAL_MUTERESULT_FAILED;
     }
+    catch (const winrt::hresult_error& e)
+    {
+        configuration->activityCallback(FormatError(e, L"Mute virtual device"));
+        return VIRTUAL_MUTERESULT_WMSERROR;
+    }
+    catch (const std::exception& e)
+    {
+        configuration->activityCallback(FormatError(e, L"Mute virtual device"));
+        return VIRTUAL_MUTERESULT_WMSERROR;
+    }
     catch (...)
     {
+        configuration->activityCallback(L"Failed to mute virtual device");
         return VIRTUAL_MUTERESULT_WMSERROR;
     }
 
     return VIRTUAL_MUTERESULT_OK;
 }
 
-API_EXPORT VIRTUAL_UNMUTERESULT API_CALL UnmuteVirtualDevice(VirtualDeviceInfo* info)
+API_EXPORT VIRTUAL_UNMUTERESULT API_CALL UnmuteVirtualDevice(
+    VirtualDeviceInfo* info,
+    Configuration* configuration)
 {
     try
     {
@@ -2310,8 +2504,19 @@ API_EXPORT VIRTUAL_UNMUTERESULT API_CALL UnmuteVirtualDevice(VirtualDeviceInfo* 
         if (!unmuted)
             return VIRTUAL_UNMUTERESULT_FAILED;
     }
+    catch (const winrt::hresult_error& e)
+    {
+        configuration->activityCallback(FormatError(e, L"Unmute virtual device"));
+        return VIRTUAL_UNMUTERESULT_WMSERROR;
+    }
+    catch (const std::exception& e)
+    {
+        configuration->activityCallback(FormatError(e, L"Unmute virtual device"));
+        return VIRTUAL_UNMUTERESULT_WMSERROR;
+    }
     catch (...)
     {
+        configuration->activityCallback(L"Failed to unmute virtual device");
         return VIRTUAL_UNMUTERESULT_WMSERROR;
     }
 

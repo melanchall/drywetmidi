@@ -135,11 +135,11 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         [LibraryImport(NativeApi.LibraryName)]
         [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-        private static partial VIRTUAL_MUTERESULT MuteVirtualDevice(IntPtr info);
+        private static partial VIRTUAL_MUTERESULT MuteVirtualDevice(IntPtr info, MidiConfigurationHandle configuration);
 
         [LibraryImport(NativeApi.LibraryName)]
         [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-        private static partial VIRTUAL_UNMUTERESULT UnmuteVirtualDevice(IntPtr info);
+        private static partial VIRTUAL_UNMUTERESULT UnmuteVirtualDevice(IntPtr info, MidiConfigurationHandle configuration);
 #else
         [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         private static extern VIRTUAL_OPENRESULT OpenVirtualDevice_Mac(string name, MidiConfigurationHandle configuration, MidiDevicesSessionHandle sessionHandle, Callback_Mac callback, out IntPtr info, out int errorCode);
@@ -160,10 +160,10 @@ namespace Melanchall.DryWetMidi.Multimedia
         private static extern IntPtr GetOutputDeviceInfoFromVirtualDevice(IntPtr info);
 
         [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
-        private static extern VIRTUAL_MUTERESULT MuteVirtualDevice(IntPtr info);
+        private static extern VIRTUAL_MUTERESULT MuteVirtualDevice(IntPtr info, MidiConfigurationHandle configuration);
 
         [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
-        private static extern VIRTUAL_UNMUTERESULT UnmuteVirtualDevice(IntPtr info);
+        private static extern VIRTUAL_UNMUTERESULT UnmuteVirtualDevice(IntPtr info, MidiConfigurationHandle configuration);
 #endif
 
         #endregion
@@ -200,14 +200,14 @@ namespace Melanchall.DryWetMidi.Multimedia
             return GetOutputDeviceInfoFromVirtualDevice(info);
         }
 
-        public static VIRTUAL_MUTERESULT Api_MuteDevice(IntPtr info)
+        public static VIRTUAL_MUTERESULT Api_MuteDevice(IntPtr info, MidiConfigurationHandle configuration)
         {
-            return MuteVirtualDevice(info);
+            return MuteVirtualDevice(info, configuration);
         }
 
-        public static VIRTUAL_UNMUTERESULT Api_UnmuteDevice(IntPtr info)
+        public static VIRTUAL_UNMUTERESULT Api_UnmuteDevice(IntPtr info, MidiConfigurationHandle configuration)
         {
-            return UnmuteVirtualDevice(info);
+            return UnmuteVirtualDevice(info, configuration);
         }
 
         #endregion

@@ -94,6 +94,7 @@
     <Compile Remove="Configuration\MidiConfiguration.cs" />
     <Compile Remove="Configuration\MidiConfigurationCheckpointNames.cs" />
     <Compile Remove="Configuration\MidiConfigurationHandle.cs" />
+    <Compile Remove="Configuration\NativeApiActivityRecordReceivedEventArgs.cs" />
     <Compile Remove="Multimedia\MidiDevice.cs" />
     <Compile Remove="Multimedia\MidiDeviceUtilities.cs" />
     <Compile Remove="Multimedia\InputDevice\InputDevice.cs" />

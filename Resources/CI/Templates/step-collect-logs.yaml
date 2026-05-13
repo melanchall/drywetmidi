@@ -7,7 +7,7 @@ parameters:
 steps:          
 - task: PowerShell@2
   displayName: Collect diagnostic reports
-  condition: and(failed(), eq(variables.VmImage, 'macos-latest'))
+  condition: and(failed(), contains(lower(variables.VmImage), 'macos'))
   inputs:
     targetType: 'inline'
     script: |

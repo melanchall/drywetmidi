@@ -6,11 +6,18 @@ namespace Melanchall.DryWetMidi.Configuration
 {
     internal static class MidiConfiguration
     {
+        #region Events
+
+        internal static event EventHandler<string> NativeApiActivityRecord;
+
+        #endregion
+
         #region Fields
 
         private static readonly object _lockObject = new object();
 
         private static MidiConfigurationHandle _handle;
+        private static MidiConfigurationApi.NativeApiActivityCallback _nativeApiActivityCallback;
 
         #endregion
 
@@ -39,7 +46,8 @@ namespace Melanchall.DryWetMidi.Configuration
                         int errorCode = 0;
                         var rawHandle = IntPtr.Zero;
 
-                        var result = MidiConfigurationApi.Api_GetConfiguration(UseWindowsMidiServices, out rawHandle, out errorCode);
+                        _nativeApiActivityCallback = NativeApiActivityCallback;
+                        var result = MidiConfigurationApi.Api_GetConfiguration(UseWindowsMidiServices, _nativeApiActivityCallback, out rawHandle, out errorCode);
                         
                         // TODO: separate from devices
                         MidiDeviceUtilities.HandleDevicesNativeApiResult(result, errorCode);
@@ -84,6 +92,12 @@ namespace Melanchall.DryWetMidi.Configuration
                     }
                 }
             }
+        }
+
+        private static void NativeApiActivityCallback(IntPtr record)
+        {
+            var text = NativeApi.GetStringFromPointer(record);
+            NativeApiActivityRecord?.Invoke(null, text);
         }
 
         #endregion

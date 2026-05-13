@@ -57,6 +57,7 @@
     <Compile Remove="Attributes\ParentDeviceApiRequiredAttribute.cs" />
     <Compile Remove="Attributes\MultiClientDeviceAccessSupportRequiredAttribute.cs" />
     <Compile Remove="Attributes\AdvancedApiRequiredAttribute.cs" />
+    <Compile Remove="Attributes\NativeApiRequiredAttribute.cs" />
   </ItemGroup>
 
   <Import Project="$(SolutionDir)Melanchall.DryWetMidi.Native.targets" />

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using Melanchall.DryWetMidi.Common;
+using Melanchall.DryWetMidi.Configuration;
+
 
 #if NET7_0_OR_GREATER
 using System.Runtime.CompilerServices;
@@ -36,24 +38,24 @@ namespace Melanchall.DryWetMidi.Multimedia
 #if NET7_0_OR_GREATER
         [LibraryImport(NativeApi.LibraryName)]
         [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-        private static partial DEVCOMMON_GETPARENTDEVICEINFORESULT GetParentDeviceInfo_Win(IntPtr info, out IntPtr id, out IntPtr name, out IntPtr manufacturer, out IntPtr model, out int errorCode);
+        private static partial DEVCOMMON_GETPARENTDEVICEINFORESULT GetParentDeviceInfo_Win(IntPtr info, MidiConfigurationHandle configuration, out IntPtr id, out IntPtr name, out IntPtr manufacturer, out IntPtr model, out int errorCode);
 
         [LibraryImport(NativeApi.LibraryName)]
         [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-        private static partial DEVCOMMON_GETPARENTDEVICEINFORESULT GetParentDeviceInfo_Mac(IntPtr info, out int id, out IntPtr name, out IntPtr manufacturer, out IntPtr model, out int errorCode);
+        private static partial DEVCOMMON_GETPARENTDEVICEINFORESULT GetParentDeviceInfo_Mac(IntPtr info, MidiConfigurationHandle configuration, out int id, out IntPtr name, out IntPtr manufacturer, out IntPtr model, out int errorCode);
 #else
         [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
-        private static extern DEVCOMMON_GETPARENTDEVICEINFORESULT GetParentDeviceInfo_Win(IntPtr info, out IntPtr id, out IntPtr name, out IntPtr manufacturer, out IntPtr model, out int errorCode);
+        private static extern DEVCOMMON_GETPARENTDEVICEINFORESULT GetParentDeviceInfo_Win(IntPtr info, MidiConfigurationHandle configuration, out IntPtr id, out IntPtr name, out IntPtr manufacturer, out IntPtr model, out int errorCode);
 
         [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
-        private static extern DEVCOMMON_GETPARENTDEVICEINFORESULT GetParentDeviceInfo_Mac(IntPtr info, out int id, out IntPtr name, out IntPtr manufacturer, out IntPtr model, out int errorCode);
+        private static extern DEVCOMMON_GETPARENTDEVICEINFORESULT GetParentDeviceInfo_Mac(IntPtr info, MidiConfigurationHandle configuration, out int id, out IntPtr name, out IntPtr manufacturer, out IntPtr model, out int errorCode);
 #endif
 
         #endregion
 
         #region Methods
 
-        public static bool Api_GetParentDeviceInfo(IntPtr info, out string id, out string name, out string manufacturer, out string model)
+        public static bool Api_GetParentDeviceInfo(IntPtr info, MidiConfigurationHandle configuration, out string id, out string name, out string manufacturer, out string model)
         {
             id = null;
             name = null;
@@ -63,14 +65,14 @@ namespace Melanchall.DryWetMidi.Multimedia
             var result = DEVCOMMON_GETPARENTDEVICEINFORESULT.DEVCOMMON_GETPARENTDEVICEINFORESULT_OK;
 
             var apiType = CommonApi.Api_GetApiType();
-            Func<IntPtr, (DEVCOMMON_GETPARENTDEVICEINFORESULT, string, IntPtr, IntPtr, IntPtr, int)> getInfo = apiType switch
+            Func<IntPtr, MidiConfigurationHandle, (DEVCOMMON_GETPARENTDEVICEINFORESULT, string, IntPtr, IntPtr, IntPtr, int)> getInfo = apiType switch
             {
                 CommonApi.API_TYPE.API_TYPE_WIN => GetParentDeviceInfo_Win,
                 CommonApi.API_TYPE.API_TYPE_MAC => GetParentDeviceInfo_Mac,
                 _ => throw new NotSupportedException($"Unsupported API type: {apiType}.")
             };
 
-            var (getInfoResult, idValue, namePointer, manufacturerPointer, modelPointer, errorCode) = getInfo(info);
+            var (getInfoResult, idValue, namePointer, manufacturerPointer, modelPointer, errorCode) = getInfo(info, configuration);
 
             MidiDeviceUtilities.HandleDevicesNativeApiResult(result, errorCode);
 
@@ -82,15 +84,15 @@ namespace Melanchall.DryWetMidi.Multimedia
             return result == DEVCOMMON_GETPARENTDEVICEINFORESULT.DEVCOMMON_GETPARENTDEVICEINFORESULT_OK;
         }
 
-        private static (DEVCOMMON_GETPARENTDEVICEINFORESULT, string, IntPtr, IntPtr, IntPtr, int) GetParentDeviceInfo_Win(IntPtr info)
+        private static (DEVCOMMON_GETPARENTDEVICEINFORESULT, string, IntPtr, IntPtr, IntPtr, int) GetParentDeviceInfo_Win(IntPtr info, MidiConfigurationHandle configuration)
         {
-            var result = GetParentDeviceInfo_Win(info, out var idPointer, out var namePointer, out var manufacturerPointer, out var modelPointer, out var errorCode);
+            var result = GetParentDeviceInfo_Win(info, configuration, out var idPointer, out var namePointer, out var manufacturerPointer, out var modelPointer, out var errorCode);
             return (result, NativeApi.GetStringFromPointer(idPointer), namePointer, manufacturerPointer, modelPointer, errorCode);
         }
 
-        private static (DEVCOMMON_GETPARENTDEVICEINFORESULT, string, IntPtr, IntPtr, IntPtr, int) GetParentDeviceInfo_Mac(IntPtr info)
+        private static (DEVCOMMON_GETPARENTDEVICEINFORESULT, string, IntPtr, IntPtr, IntPtr, int) GetParentDeviceInfo_Mac(IntPtr info, MidiConfigurationHandle configuration)
         {
-            var result = GetParentDeviceInfo_Mac(info, out var id, out var namePointer, out var manufacturerPointer, out var modelPointer, out var errorCode);
+            var result = GetParentDeviceInfo_Mac(info, configuration, out var id, out var namePointer, out var manufacturerPointer, out var modelPointer, out var errorCode);
             return (result, id.ToString(), namePointer, manufacturerPointer, modelPointer, errorCode);
         }
 

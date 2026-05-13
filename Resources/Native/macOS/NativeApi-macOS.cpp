@@ -32,18 +32,27 @@ API_EXPORT API_TYPE GetApiType()
    Configuration
 ================================ */
 
+typedef void (*NativeApiActivityCallback)(const char* record);
+
 struct Configuration
 {
-    char dummy;
+    NativeApiActivityCallback activityCallback;
 };
 
-API_EXPORT CONFIGURATION_GETRESULT GetConfiguration_Mac(Configuration** configuration, int* errorCode)
+API_EXPORT CONFIGURATION_GETRESULT GetConfiguration_Mac(
+    NativeApiActivityCallback activityCallback,
+    Configuration** configuration,
+    int* errorCode)
 {
     *errorCode = 0;
 
     Configuration* config = new Configuration();
 
+    config->activityCallback = activityCallback;
+
     *configuration = config;
+    config->activityCallback("Configuration initialized for macOS");
+
     return CONFIGURATION_GETRESULT_OK;
 }
 
@@ -66,7 +75,12 @@ API_EXPORT bool IsDevicesCachingRequired(Configuration* configuration)
 
 API_EXPORT bool IsDevicesWatcherApiAvailable(Configuration* configuration)
 {
-    return configuration->useWms && configuration->wmsAvailable && configuration->wmsSdkInitialized;
+    return true;
+}
+
+API_EXPORT void CheckNativeApiActivityCallback(Configuration* configuration)
+{
+    configuration->activityCallback("Native API activity callback works!");
 }
 
 /* ================================
@@ -362,6 +376,7 @@ GETSTRINGPROPERTYRESULT GetStringPropertyValue(MIDIObjectRef obj, CFStringRef pr
 
 API_EXPORT DEVCOMMON_GETPARENTDEVICEINFORESULT GetParentDeviceInfo_Mac(
     DeviceInfoBase* deviceInfo,
+    Configuration* configuration,
     int* id,
     const char** name,
     const char** manufacturer,
@@ -1451,14 +1466,18 @@ API_EXPORT OutputDeviceInfo* GetOutputDeviceInfoFromVirtualDevice(VirtualDeviceI
     return info->outputDeviceInfo;
 }
 
-API_EXPORT VIRTUAL_MUTERESULT MuteVirtualDevice(VirtualDeviceInfo* info)
+API_EXPORT VIRTUAL_MUTERESULT MuteVirtualDevice(
+    VirtualDeviceInfo* info,
+    Configuration* configuration)
 {
     // TODO
 
     return VIRTUAL_MUTERESULT_OK;
 }
 
-API_EXPORT VIRTUAL_UNMUTERESULT UnmuteVirtualDevice(VirtualDeviceInfo* info)
+API_EXPORT VIRTUAL_UNMUTERESULT UnmuteVirtualDevice(
+    VirtualDeviceInfo* info,
+    Configuration* configuration)
 {
     // TODO
 

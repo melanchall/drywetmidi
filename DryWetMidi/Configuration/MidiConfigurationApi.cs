@@ -33,16 +33,23 @@ namespace Melanchall.DryWetMidi.Configuration
 
         #endregion
 
+        #region Delegates
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public delegate void NativeApiActivityCallback(IntPtr record);
+
+        #endregion
+
         #region Extern functions
 
 #if NET7_0_OR_GREATER
         [LibraryImport(NativeApi.LibraryName)]
         [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-        private static partial CONFIGURATION_GETRESULT GetConfiguration_Win([MarshalAs(UnmanagedType.U1)] bool useWms, out IntPtr configuration, out int errorCode);
+        private static partial CONFIGURATION_GETRESULT GetConfiguration_Win([MarshalAs(UnmanagedType.U1)] bool useWms, NativeApiActivityCallback activityCallback, out IntPtr configuration, out int errorCode);
 
         [LibraryImport(NativeApi.LibraryName)]
         [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-        private static partial CONFIGURATION_GETRESULT GetConfiguration_Mac(out IntPtr configuration, out int errorCode);
+        private static partial CONFIGURATION_GETRESULT GetConfiguration_Mac(NativeApiActivityCallback activityCallback, out IntPtr configuration, out int errorCode);
 
         [LibraryImport(NativeApi.LibraryName)]
         [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
@@ -62,12 +69,24 @@ namespace Melanchall.DryWetMidi.Configuration
         [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
         [return: MarshalAs(UnmanagedType.U1)]
         private static partial bool IsDevicesWatcherApiAvailable(MidiConfigurationHandle configuration);
+
+        [LibraryImport(NativeApi.LibraryName)]
+        [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
+        private static partial void CheckNativeApiActivityCallback(MidiConfigurationHandle configuration);
+
+        [LibraryImport(NativeApi.LibraryName)]
+        [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
+        private static partial void CheckWinRtErrorHandling_Win(MidiConfigurationHandle configuration);
+
+        [LibraryImport(NativeApi.LibraryName)]
+        [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
+        private static partial void CheckStdExceptionHandling_Win(MidiConfigurationHandle configuration);
 #else
         [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
-        private static extern CONFIGURATION_GETRESULT GetConfiguration_Win([MarshalAs(UnmanagedType.U1)] bool useWms, out IntPtr configuration, out int errorCode);
+        private static extern CONFIGURATION_GETRESULT GetConfiguration_Win([MarshalAs(UnmanagedType.U1)] bool useWms, NativeApiActivityCallback activityCallback, out IntPtr configuration, out int errorCode);
 
         [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
-        private static extern CONFIGURATION_GETRESULT GetConfiguration_Mac(out IntPtr configuration, out int errorCode);
+        private static extern CONFIGURATION_GETRESULT GetConfiguration_Mac(NativeApiActivityCallback activityCallback, out IntPtr configuration, out int errorCode);
 
         [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
         private static extern CONFIGURATION_CLEANUPRESULT CleanupConfiguration(IntPtr configuration);
@@ -83,20 +102,33 @@ namespace Melanchall.DryWetMidi.Configuration
         [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool IsDevicesWatcherApiAvailable(MidiConfigurationHandle configuration);
+
+        [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
+        private static extern void CheckNativeApiActivityCallback(MidiConfigurationHandle configuration);
+
+        [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
+        private static extern void CheckWinRtErrorHandling_Win(MidiConfigurationHandle configuration);
+
+        [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
+        private static extern void CheckStdExceptionHandling_Win(MidiConfigurationHandle configuration);
 #endif
 
         #endregion
 
         #region Methods
 
-        public static CONFIGURATION_GETRESULT Api_GetConfiguration(bool useWms, out IntPtr configuration, out int errorCode)
+        public static CONFIGURATION_GETRESULT Api_GetConfiguration(
+            bool useWms,
+            NativeApiActivityCallback activityCallback,
+            out IntPtr configuration,
+            out int errorCode)
         {
             switch (CommonApi.Api_GetApiType())
             {
                 case CommonApi.API_TYPE.API_TYPE_WIN:
-                    return GetConfiguration_Win(useWms, out configuration, out errorCode);
+                    return GetConfiguration_Win(useWms, activityCallback, out configuration, out errorCode);
                 case CommonApi.API_TYPE.API_TYPE_MAC:
-                    return GetConfiguration_Mac(out configuration, out errorCode);
+                    return GetConfiguration_Mac(activityCallback, out configuration, out errorCode);
             }
 
             // TODO: message
@@ -121,6 +153,21 @@ namespace Melanchall.DryWetMidi.Configuration
         public static bool Api_IsDevicesWatcherApiAvailable(MidiConfigurationHandle configuration)
         {
             return IsDevicesWatcherApiAvailable(configuration);
+        }
+
+        public static void Api_CheckNativeApiActivityCallback(MidiConfigurationHandle configuration)
+        {
+            CheckNativeApiActivityCallback(configuration);
+        }
+
+        public static void Api_CheckWinRtErrorHandling_Win(MidiConfigurationHandle configuration)
+        {
+            CheckWinRtErrorHandling_Win(configuration);
+        }
+
+        public static void Api_CheckStdExceptionHandling_Win(MidiConfigurationHandle configuration)
+        {
+            CheckStdExceptionHandling_Win(configuration);
         }
 
         #endregion

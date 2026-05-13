@@ -133,7 +133,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             if (!LibraryConfiguration.IsParentDeviceApiAvailable())
                 throw new PlatformNotSupportedException("Parent device API is not supported on the current operating system.");
 
-            var result = DevicesCommonApi.Api_GetParentDeviceInfo((Info ?? Handle).DangerousGetHandle(), out var id, out var name, out var manufacturer, out var model);
+            var result = DevicesCommonApi.Api_GetParentDeviceInfo((Info ?? Handle).DangerousGetHandle(), MidiConfiguration.GetConfigurationHandle(), out var id, out var name, out var manufacturer, out var model);
             if (!result)
                 return null;
 

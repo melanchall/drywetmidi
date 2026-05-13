@@ -66,8 +66,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
             //
 
+            MidiConfigurationApi.NativeApiActivityCallback nativeApiActivityCallback = NativeApiActivityCallback;
+
             var getConfigurationResult = MidiConfigurationApi.Api_GetConfiguration(
                 true,
+                nativeApiActivityCallback,
                 out var configurationRawHandle,
                 out _);
 
@@ -251,6 +254,10 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         private static void OutputDeviceCallback(IntPtr info, bool operation)
+        {
+        }
+
+        private static void NativeApiActivityCallback(IntPtr record)
         {
         }
 
