@@ -2352,7 +2352,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var notesEvents = new List<(EventType EventType, Note Note, Note OriginalNote)>();
 
             CheckPlayback(
-                useOutputDevice: false,
+                useOutputEndpoint: false,
                 initialPlaybackObjects: initialPlaybackObjects,
                 actions: actions,
                 expectedReceivedEvents: expectedReceivedEvents,

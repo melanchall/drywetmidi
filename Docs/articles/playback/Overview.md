@@ -4,7 +4,7 @@ uid: a_playback_overview
 
 # Playback – Overview
 
-[Playback](xref:Melanchall.DryWetMidi.Multimedia.Playback) class allows to play MIDI events via an [IOutputDevice](xref:Melanchall.DryWetMidi.Multimedia.IOutputDevice) (see [Output device](xref:a_dev_output) article) or without a device at all (see [Playback without device](#playback-without-device)). To get an instance of the `Playback` you can use its [constructors](xref:Melanchall.DryWetMidi.Multimedia.Playback#constructors) or `GetPlayback` extension methods in [PlaybackUtilities](xref:Melanchall.DryWetMidi.Multimedia.PlaybackUtilities).
+[Playback](xref:Melanchall.DryWetMidi.Multimedia.Playback) class allows to play MIDI events via an [IOutputEndpoint](xref:Melanchall.DryWetMidi.Multimedia.IOutputEndpoint) (see [Output endpoint](xref:a_dev_output) article) or without a device at all (see [Playback without device](#playback-without-device)). To get an instance of the `Playback` you can use its [constructors](xref:Melanchall.DryWetMidi.Multimedia.Playback#constructors) or `GetPlayback` extension methods in [PlaybackUtilities](xref:Melanchall.DryWetMidi.Multimedia.PlaybackUtilities).
 
 Also please note that Playback API provides a way to add, remove or change objects within a playback on the fly, without needing to recreate the Playback instance. More info in the [Dynamic changes](xref:a_playback_dynamic) article.
 
@@ -27,9 +27,9 @@ namespace SimplePlaybackApp
         {
             var midiFile = MidiFile.Read("The Greatest Song Ever.mid");
 
-            var outputDevice = OutputDevice.GetByName("Microsoft GS Wavetable Synth");
+            var outputEndpoint = OutputEndpoint.GetByName("Microsoft GS Wavetable Synth");
 
-            _playback = midiFile.GetPlayback(outputDevice);
+            _playback = midiFile.GetPlayback(outputEndpoint);
             _playback.NotesPlaybackStarted += OnNotesPlaybackStarted;
             _playback.Start();
 
@@ -37,7 +37,7 @@ namespace SimplePlaybackApp
 
             Console.WriteLine("Playback stopped or finished.");
 
-            outputDevice.Dispose();
+            outputEndpoint.Dispose();
             _playback.Dispose();
         }
 
@@ -60,8 +60,8 @@ If you call the [Start](xref:Melanchall.DryWetMidi.Multimedia.Playback.Start) me
 > You should be very careful with `using` block. Example below shows the case where part of MIDI data **will not be played** because of playback is disposed before the last MIDI event will be played:
 > 
 > ```csharp
-> using (var outputDevice = OutputDevice.GetByName("Output MIDI device"))
-> using (var playback = MidiFile.Read("Some MIDI file.mid").GetPlayback(outputDevice))
+> using (var outputEndpoint = OutputEndpoint.GetByName("Output MIDI device"))
+> using (var playback = MidiFile.Read("Some MIDI file.mid").GetPlayback(outputEndpoint))
 > {
 >     playback.Start();
 > 
@@ -73,6 +73,6 @@ If you call the [Start](xref:Melanchall.DryWetMidi.Multimedia.Playback.Start) me
 
 ## Playback without device
 
-There are constructors of [Playback](xref:Melanchall.DryWetMidi.Multimedia.Playback) that don't accept [IOutputDevice](xref:Melanchall.DryWetMidi.Multimedia.IOutputDevice) as an argument. It can be useful, for example, for notes visualization without sound. [Playback](xref:Melanchall.DryWetMidi.Multimedia.Playback) provides events that will be fired with or without an output device (see [Events](xref:Melanchall.DryWetMidi.Multimedia.Playback#events) section of the [Playback](xref:Melanchall.DryWetMidi.Multimedia.Playback) API page). Also all `GetPlayback` extensions methods have overloads without the `outputDevice` parameter.
+There are constructors of [Playback](xref:Melanchall.DryWetMidi.Multimedia.Playback) that don't accept [IOutputEndpoint](xref:Melanchall.DryWetMidi.Multimedia.IOutputEndpoint) as an argument. It can be useful, for example, for notes visualization without sound. [Playback](xref:Melanchall.DryWetMidi.Multimedia.Playback) provides events that will be fired with or without an output endpoint (see [Events](xref:Melanchall.DryWetMidi.Multimedia.Playback#events) section of the [Playback](xref:Melanchall.DryWetMidi.Multimedia.Playback) API page). Also all `GetPlayback` extensions methods have overloads without the `outputEndpoint` parameter.
 
-Also if you don't specify an output device and use a [tick generator](Tick-generator.md) other than [HighPrecisionTickGenerator](xref:Melanchall.DryWetMidi.Multimedia.HighPrecisionTickGenerator), you can use `Playback` in a cross-platform app like Unity game that is supposed to be built for different platforms (you can find currently supported OS in the [Supported OS](xref:a_develop_supported_os) article).
+Also if you don't specify an output endpoint and use a [tick generator](Tick-generator.md) other than [HighPrecisionTickGenerator](xref:Melanchall.DryWetMidi.Multimedia.HighPrecisionTickGenerator), you can use `Playback` in a cross-platform app like Unity game that is supposed to be built for different platforms (you can find currently supported OS in the [Supported OS](xref:a_develop_supported_os) article).

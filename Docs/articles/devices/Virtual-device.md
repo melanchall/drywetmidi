@@ -15,7 +15,7 @@ Thus we have a [loopback](https://en.wikipedia.org/wiki/Loopback) device here. L
 2. in the application you set _MyDevice_ as an output MIDI port, so the application will send MIDI data to the output subdevice of the virtual device;
 3. in the software synthesizer you set _MyDevice_ as an input MIDI port.
 
-So when you create a virtual device an input device and an output one are created with the same name as the one specified on virtual device creation. Subdevices of a virtual device are available via [InputDevice](xref:Melanchall.DryWetMidi.Multimedia.VirtualDevice.InputDevice) and [OutputDevice](xref:Melanchall.DryWetMidi.Multimedia.VirtualDevice.OutputDevice) properties of the [VirtualDevice](xref:Melanchall.DryWetMidi.Multimedia.VirtualDevice) class. Of course you can use those device separately as regular input and output devices:
+So when you create a virtual device an input endpoint and an output one are created with the same name as the one specified on virtual device creation. Endpoints of a virtual device are available via [InputEndpoint](xref:Melanchall.DryWetMidi.Multimedia.VirtualDevice.InputEndpoint) and [OutputEndpoint](xref:Melanchall.DryWetMidi.Multimedia.VirtualDevice.OutputEndpoint) properties of the [VirtualDevice](xref:Melanchall.DryWetMidi.Multimedia.VirtualDevice) class. Of course you can use those endpoints separately as regular input and output endpoints:
 
 ```csharp
 using System;
@@ -28,15 +28,15 @@ namespace DwmExamples
         static void Main(string[] args)
         {
             var virtualDevice = VirtualDevice.Create("MyDevice");
-            Console.WriteLine($"Virtual device {virtualDevice} created with subdevices:");
-            Console.WriteLine($"  input = {virtualDevice.InputDevice.Name}");
-            Console.WriteLine($"  output = {virtualDevice.OutputDevice.Name}");
+            Console.WriteLine($"Virtual device {virtualDevice} created with endpoints:");
+            Console.WriteLine($"  input = {virtualDevice.InputEndpoint.Name}");
+            Console.WriteLine($"  output = {virtualDevice.OutputEndpoint.Name}");
 
-            var inputDevice = InputDevice.GetByName("MyDevice");
-            Console.WriteLine($"Input device {inputDevice.Name} got as regular input device.");
+            var inputEndpoint = InputEndpoint.GetByName("MyDevice");
+            Console.WriteLine($"Input endpoint {inputEndpoint.Name} got as regular input endpoint.");
 
-            var outputDevice = OutputDevice.GetByName("MyDevice");
-            Console.WriteLine($"Output device {outputDevice.Name} got as regular output device.");
+            var outputEndpoint = OutputEndpoint.GetByName("MyDevice");
+            Console.WriteLine($"Output endpoint {outputEndpoint.Name} got as regular output endpoint.");
 
             Console.ReadKey();
         }
@@ -47,11 +47,11 @@ namespace DwmExamples
 Output of the program:
 
 ```text
-Virtual device Virtual device created with subdevices:
+Virtual device Virtual device created with endpoints:
   input = MyDevice
   output = MyDevice
-Input device MyDevice got as regular input device.
-Output device MyDevice got as regular output device.
+Input endpoint MyDevice got as regular input endpoint.
+Output endpoint MyDevice got as regular output endpoint.
 ```
 
 You can even combine virtual devices and [DevicesConnector](xref:a_dev_connector) to broadcast MIDI data to several applications (synthesizers, for example) at the same time:
@@ -69,19 +69,19 @@ namespace DwmExamples
         static void Main(string[] args)
         {
             var rootDevice = VirtualDevice.Create("Root");
-            rootDevice.InputDevice.StartEventsListening(); // Important, don't forget!
+            rootDevice.InputEndpoint.StartEventsListening(); // Important, don't forget!
 
             var leafDevice1 = VirtualDevice.Create("Leaf1");
-            leafDevice1.InputDevice.EventReceived += OnLeafEventReceived;
+            leafDevice1.InputEndpoint.EventReceived += OnLeafEventReceived;
 
             var leafDevice2 = VirtualDevice.Create("Leaf2");
-            leafDevice2.InputDevice.EventReceived += OnLeafEventReceived;
+            leafDevice2.InputEndpoint.EventReceived += OnLeafEventReceived;
 
-            var devicesConnector = rootDevice.InputDevice.Connect(
-                leafDevice1.OutputDevice,
-                leafDevice2.OutputDevice);
-            leafDevice1.InputDevice.StartEventsListening();
-            leafDevice2.InputDevice.StartEventsListening();
+            var devicesConnector = rootDevice.InputEndpoint.Connect(
+                leafDevice1.OutputEndpoint,
+                leafDevice2.OutputEndpoint);
+            leafDevice1.InputEndpoint.StartEventsListening();
+            leafDevice2.InputEndpoint.StartEventsListening();
 
             var midiEvent = new NoteOnEvent((SevenBitNumber)70, (SevenBitNumber)60)
             {
@@ -89,15 +89,15 @@ namespace DwmExamples
             };
 
             Console.WriteLine($"Sending {midiEvent} event...");
-            rootDevice.OutputDevice.SendEvent(midiEvent);
+            rootDevice.OutputEndpoint.SendEvent(midiEvent);
 
             Console.ReadKey();
         }
 
         private static void OnLeafEventReceived(object sender, MidiEventReceivedEventArgs e)
         {
-            var device = (MidiDevice)sender;
-            Console.WriteLine($"Event {e.Event} received on device {device.Name}.");
+            var endpoint = (MidiEndpoint)sender;
+            Console.WriteLine($"Event {e.Event} received on endpoint {endpoint.Name}.");
         }
     }
 }
@@ -107,15 +107,15 @@ This program will print following lines:
 
 ```text
 Sending Note On [5] (70, 60) event...
-Event Note On [5] (70, 60) received on device Leaf1.
-Event Note On [5] (70, 60) received on device Leaf2.
+Event Note On [5] (70, 60) received on endpoint Leaf1.
+Event Note On [5] (70, 60) received on endpoint Leaf2.
 ```
 
 > [!WARNING]
-> As with input and output device you must always [dispose](xref:Melanchall.DryWetMidi.Multimedia.MidiDevice.Dispose) virtual device when you're done with it:
+> As with input and output endpoint you must always [dispose](xref:Melanchall.DryWetMidi.Multimedia.VirtualDevice.Dispose) virtual device when you're done with it:
 >
 > ```csharp
 > virtualDevice.Dispose();
 > ```
 
-You must not explicitly dispose of subdevices of a virtual device. More than that, calling `Dispose` on `virtualDevice.InputDevice` and `virtualDevice.OutputDevice` will throw an exception. But if you got references to the subdevices by regular methods (for example, by [InputDevice.GetByName](xref:Melanchall.DryWetMidi.Multimedia.InputDevice.GetByName(System.String))), you can call `Dispose` on those references of course.
+You must not explicitly dispose of subdevices of a virtual device. More than that, calling `Dispose` on `virtualDevice.InputEndpoint` and `virtualDevice.OutputEndpoint` will throw an exception. But if you got references to the subdevices by regular methods (for example, by [InputEndpoint.GetByName](xref:Melanchall.DryWetMidi.Multimedia.InputEndpoint.GetByName(System.String))), you can call `Dispose` on those references of course.

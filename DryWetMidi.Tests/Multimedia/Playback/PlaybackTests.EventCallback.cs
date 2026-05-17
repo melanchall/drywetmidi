@@ -194,7 +194,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             Action<Playback, ICollection<TimestampedEvent>> additionalChecks = null)
         {
             CheckPlayback(
-                useOutputDevice: false,
+                useOutputEndpoint: false,
                 initialPlaybackObjects: initialPlaybackObjects,
                 actions: actions,
                 expectedReceivedEvents: expectedReceivedEvents,

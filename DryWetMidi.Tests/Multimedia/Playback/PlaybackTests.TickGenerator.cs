@@ -96,7 +96,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             Thread thread = null;
 
             CheckPlayback(
-                useOutputDevice: false,
+                useOutputEndpoint: false,
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new NoteOnEvent((SevenBitNumber)100, (SevenBitNumber)20) { Channel = (FourBitNumber)5 }),
@@ -150,7 +150,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         private void CheckPlayback_TickGenerator(Func<TickGenerator> createTickGeneratorCallback, TimeSpan maximumEventSendReceiveDelay)
         {
             CheckPlayback(
-                useOutputDevice: false,
+                useOutputEndpoint: false,
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new NoteOnEvent((SevenBitNumber)100, (SevenBitNumber)20) { Channel = (FourBitNumber)5 }),

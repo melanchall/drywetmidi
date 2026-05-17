@@ -40,7 +40,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         #region Properties
 
         /// <summary>
-        /// Gets the code of an error represented by the current <see cref="MidiDeviceException"/>.
+        /// Gets the code of an error represented by the current <see cref="TickGeneratorException"/>.
         /// </summary>
         public int MainErrorCode { get; }
 

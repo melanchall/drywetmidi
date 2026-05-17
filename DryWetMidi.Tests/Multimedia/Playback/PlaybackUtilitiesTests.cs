@@ -57,7 +57,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         {
             var programNumber = (SevenBitNumber)100;
             CheckNotesPlayback(
-                (notes, tempoMap, outputDevice) => notes.GetPlayback(tempoMap, outputDevice, programNumber),
+                (notes, tempoMap, outputEndpoint) => notes.GetPlayback(tempoMap, outputEndpoint, programNumber),
                 channel => new[] { new ProgramChangeEvent(programNumber) { Channel = channel } });
         }
 
@@ -67,7 +67,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         {
             var generalMidiProgram = GeneralMidiProgram.Agogo;
             CheckNotesPlayback(
-                (notes, tempoMap, outputDevice) => notes.GetPlayback(tempoMap, outputDevice, generalMidiProgram),
+                (notes, tempoMap, outputEndpoint) => notes.GetPlayback(tempoMap, outputEndpoint, generalMidiProgram),
                 channel => new[] { generalMidiProgram.GetProgramEvent(channel) });
         }
 
@@ -77,7 +77,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         {
             var generalMidi2Program = GeneralMidi2Program.AnalogSynthBrass2;
             CheckNotesPlayback(
-                (notes, tempoMap, outputDevice) => notes.GetPlayback(tempoMap, outputDevice, generalMidi2Program),
+                (notes, tempoMap, outputEndpoint) => notes.GetPlayback(tempoMap, outputEndpoint, generalMidi2Program),
                 channel => generalMidi2Program.GetProgramEvents(channel));
         }
 
@@ -86,7 +86,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         #region Methods
 
         private static void CheckNotesPlayback(
-            Func<IEnumerable<Note>, TempoMap, IOutputDevice, Playback> playbackGetter,
+            Func<IEnumerable<Note>, TempoMap, IOutputEndpoint, Playback> playbackGetter,
             Func<FourBitNumber, IEnumerable<MidiEvent>> programEventsGetter)
         {
             var tempoMap = TempoMap.Default;
@@ -114,7 +114,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
         private static void CheckNotesPlayback(
             IEnumerable<Note> notes,
-            Func<TempoMap, IOutputDevice, Playback> playbackGetter,
+            Func<TempoMap, IOutputEndpoint, Playback> playbackGetter,
             Func<FourBitNumber, IEnumerable<MidiEvent>> programEventsGetter)
         {
             var tempoMap = TempoMap.Default;
@@ -135,11 +135,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
             var sentEvents = new List<TimestampedEvent>();
 
-            using (var outputDevice = TestDeviceManager.GetOutputDevice(SendReceiveUtilities.DeviceToTestOnName))
+            using (var outputEndpoint = TestDeviceManager.GetOutputEndpoint(SendReceiveUtilities.DeviceToTestOnName))
             {
-                outputDevice.EventSent += (_, e) => sentEvents.Add(new TimestampedEvent(e.Event, stopwatch.Elapsed));
+                outputEndpoint.EventSent += (_, e) => sentEvents.Add(new TimestampedEvent(e.Event, stopwatch.Elapsed));
 
-                using (var playback = playbackGetter(tempoMap, outputDevice))
+                using (var playback = playbackGetter(tempoMap, outputEndpoint))
                 {
                     playback.NotesPlaybackStarted += (_, e) => receivedNotesStarted.AddRange(e.Notes.Select(n => new ReceivedNote(n, stopwatch.Elapsed)));
                     playback.NotesPlaybackFinished += (_, e) => receivedNotesFinished.AddRange(e.Notes.Select(n => new ReceivedNote(n, stopwatch.Elapsed)));

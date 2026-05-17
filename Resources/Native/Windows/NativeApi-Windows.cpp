@@ -493,7 +493,7 @@ void EnsureWinMmPortsAvailable()
     midiOutGetNumDevs();
 }
 
-struct DeviceInfoBase
+struct EndpointInfoBase
 {
     std::wstring endpointDeviceId;
 
@@ -503,7 +503,7 @@ struct DeviceInfoBase
     std::wstring parentModel;
 };
 
-struct InputDeviceInfo : DeviceInfoBase
+struct InputEndpointInfo : EndpointInfoBase
 {
     int deviceIndex;
     LPMIDIINCAPSW caps;
@@ -512,9 +512,9 @@ struct InputDeviceInfo : DeviceInfoBase
     std::wstring devicePath;
 };
 
-API_EXPORT void API_CALL CloneInputDeviceInfo(InputDeviceInfo* source, InputDeviceInfo** info)
+API_EXPORT void API_CALL CloneInputEndpointInfo(InputEndpointInfo* source, InputEndpointInfo** info)
 {
-    InputDeviceInfo* result = new InputDeviceInfo();
+    InputEndpointInfo* result = new InputEndpointInfo();
 
     result->deviceIndex = source->deviceIndex;
     result->caps = new MIDIINCAPSW(*source->caps);
@@ -529,7 +529,7 @@ API_EXPORT void API_CALL CloneInputDeviceInfo(InputDeviceInfo* source, InputDevi
     *info = result;
 }
 
-API_EXPORT int API_CALL GetInputDeviceHashCode(InputDeviceInfo* info)
+API_EXPORT int API_CALL GetInputEndpointHashCode(InputEndpointInfo* info)
 {
     if (info == nullptr)
         return 0;
@@ -543,7 +543,7 @@ API_EXPORT int API_CALL GetInputDeviceHashCode(InputDeviceInfo* info)
     return std::hash<std::wstring>()(info->caps->szPname);
 }
 
-API_EXPORT char API_CALL AreInputDevicesEqual(InputDeviceInfo* info1, InputDeviceInfo* info2)
+API_EXPORT char API_CALL AreInputEndpointsEqual(InputEndpointInfo* info1, InputEndpointInfo* info2)
 {
     if (info1 == nullptr || info2 == nullptr)
         return 0;
@@ -557,17 +557,17 @@ API_EXPORT char API_CALL AreInputDevicesEqual(InputDeviceInfo* info1, InputDevic
     return wcscmp(info1->caps->szPname, info2->caps->szPname) == 0;
 }
 
-API_EXPORT IN_GETCOUNTRESULT API_CALL GetInputDevicesCount(int* count)
+API_EXPORT IN_GETCOUNTRESULT API_CALL GetInputEndpointsCount(int* count)
 {
     *count = midiInGetNumDevs();
     return IN_GETCOUNTRESULT_OK;
 }
 
-IN_GETINFORESULT GetInputDeviceInfo(int deviceIndex, InputDeviceInfo** info, int* errorCode)
+IN_GETINFORESULT GetInputEndpointInfo(int deviceIndex, InputEndpointInfo** info, int* errorCode)
 {
     *errorCode = 0;
 
-    InputDeviceInfo* inputDeviceInfo = new InputDeviceInfo();
+    InputEndpointInfo* inputDeviceInfo = new InputEndpointInfo();
 
     inputDeviceInfo->deviceIndex = deviceIndex;
     inputDeviceInfo->caps = new MIDIINCAPSW();
@@ -606,11 +606,11 @@ IN_GETINFORESULT GetInputDeviceInfo(int deviceIndex, InputDeviceInfo** info, int
     return IN_GETINFORESULT_OK;
 }
 
-IN_GETINFORESULT GetInputDeviceInfo(const int deviceIndex, const winrt::hstring& endpointDeviceId, const winrt::hstring& portDeviceId, InputDeviceInfo** info, int* errorCode)
+IN_GETINFORESULT GetInputEndpointInfo(const int deviceIndex, const winrt::hstring& endpointDeviceId, const winrt::hstring& portDeviceId, InputEndpointInfo** info, int* errorCode)
 {
     *errorCode = 0;
 
-    auto result = GetInputDeviceInfo(deviceIndex, info, errorCode);
+    auto result = GetInputEndpointInfo(deviceIndex, info, errorCode);
     if (result == IN_GETINFORESULT_OK && info != nullptr)
     {
         (*info)->endpointDeviceId = endpointDeviceId.c_str();
@@ -620,13 +620,13 @@ IN_GETINFORESULT GetInputDeviceInfo(const int deviceIndex, const winrt::hstring&
     return result;
 }
 
-API_EXPORT void API_CALL DeleteInputDeviceInfo(InputDeviceInfo* info)
+API_EXPORT void API_CALL DeleteInputEndpointInfo(InputEndpointInfo* info)
 {
     delete info->caps;
     delete info;
 }
 
-struct OutputDeviceInfo : DeviceInfoBase
+struct OutputEndpointInfo : EndpointInfoBase
 {
     int deviceIndex;
     LPMIDIOUTCAPSW caps;
@@ -638,9 +638,9 @@ struct OutputDeviceInfo : DeviceInfoBase
     char isMicrosoftGsWavetableSynth = 0;
 };
 
-API_EXPORT void API_CALL CloneOutputDeviceInfo(OutputDeviceInfo* source, OutputDeviceInfo** info)
+API_EXPORT void API_CALL CloneOutputEndpointInfo(OutputEndpointInfo* source, OutputEndpointInfo** info)
 {
-    OutputDeviceInfo* result = new OutputDeviceInfo();
+    OutputEndpointInfo* result = new OutputEndpointInfo();
 
     result->deviceIndex = source->deviceIndex;
     result->caps = new MIDIOUTCAPSW(*source->caps);
@@ -656,7 +656,7 @@ API_EXPORT void API_CALL CloneOutputDeviceInfo(OutputDeviceInfo* source, OutputD
     *info = result;
 }
 
-API_EXPORT int API_CALL GetOutputDeviceHashCode(OutputDeviceInfo* info)
+API_EXPORT int API_CALL GetOutputEndpointHashCode(OutputEndpointInfo* info)
 {
     if (info == nullptr)
         return 0;
@@ -670,7 +670,7 @@ API_EXPORT int API_CALL GetOutputDeviceHashCode(OutputDeviceInfo* info)
     return std::hash<std::wstring>()(info->caps->szPname);
 }
 
-API_EXPORT char API_CALL AreOutputDevicesEqual(OutputDeviceInfo* info1, OutputDeviceInfo* info2)
+API_EXPORT char API_CALL AreOutputEndpointsEqual(OutputEndpointInfo* info1, OutputEndpointInfo* info2)
 {
     if (info1 == nullptr || info2 == nullptr)
         return 0;
@@ -687,17 +687,17 @@ API_EXPORT char API_CALL AreOutputDevicesEqual(OutputDeviceInfo* info1, OutputDe
     return wcscmp(info1->caps->szPname, info2->caps->szPname) == 0;
 }
 
-API_EXPORT OUT_GETCOUNTRESULT API_CALL GetOutputDevicesCount(int* count)
+API_EXPORT OUT_GETCOUNTRESULT API_CALL GetOutputEndpointsCount(int* count)
 {
     *count = midiOutGetNumDevs();
     return OUT_GETCOUNTRESULT_OK;
 }
 
-OUT_GETINFORESULT GetOutputDeviceInfo(int deviceIndex, OutputDeviceInfo** info, int* errorCode)
+OUT_GETINFORESULT GetOutputEndpointInfo(int deviceIndex, OutputEndpointInfo** info, int* errorCode)
 {
     *errorCode = 0;
 
-    OutputDeviceInfo* outputDeviceInfo = new OutputDeviceInfo();
+    OutputEndpointInfo* outputDeviceInfo = new OutputEndpointInfo();
 
     outputDeviceInfo->deviceIndex = deviceIndex;
     outputDeviceInfo->caps = new MIDIOUTCAPSW();
@@ -736,11 +736,11 @@ OUT_GETINFORESULT GetOutputDeviceInfo(int deviceIndex, OutputDeviceInfo** info, 
     return OUT_GETINFORESULT_OK;
 }
 
-OUT_GETINFORESULT GetOutputDeviceInfo(const int deviceIndex, const winrt::hstring& endpointDeviceId, const winrt::hstring& portDeviceId, OutputDeviceInfo** info, int* errorCode)
+OUT_GETINFORESULT GetOutputEndpointInfo(const int deviceIndex, const winrt::hstring& endpointDeviceId, const winrt::hstring& portDeviceId, OutputEndpointInfo** info, int* errorCode)
 {
     *errorCode = 0;
 
-    auto result = GetOutputDeviceInfo(deviceIndex, info, errorCode);
+    auto result = GetOutputEndpointInfo(deviceIndex, info, errorCode);
     if (result == OUT_GETINFORESULT_OK && info != nullptr)
     {
         (*info)->endpointDeviceId = endpointDeviceId.c_str();
@@ -750,7 +750,7 @@ OUT_GETINFORESULT GetOutputDeviceInfo(const int deviceIndex, const winrt::hstrin
     return result;
 }
 
-API_EXPORT void API_CALL DeleteOutputDeviceInfo(OutputDeviceInfo* info)
+API_EXPORT void API_CALL DeleteOutputEndpointInfo(OutputEndpointInfo* info)
 {
     delete info->caps;
     delete info;
@@ -909,7 +909,7 @@ API_EXPORT const wchar_t* API_CALL GetDeviceProduct(WORD productId)
 }
 
 API_EXPORT DEVCOMMON_GETPARENTDEVICEINFORESULT API_CALL GetParentDeviceInfo_Win(
-    DeviceInfoBase* deviceInfo,
+    EndpointInfoBase* deviceInfo,
     Configuration* configuration,
     const wchar_t** id,
     const wchar_t** name,
@@ -1011,13 +1011,13 @@ API_EXPORT DEVCOMMON_GETPARENTDEVICEINFORESULT API_CALL GetParentDeviceInfo_Win(
    Session
 ================================ */
 
-typedef void (*InputDeviceCallback)(void* info, char operation);
-typedef void (*OutputDeviceCallback)(void* info, char operation);
+typedef void (*InputEndpointCallback)(void* info, SESSION_CALLBACKOPERATION operation);
+typedef void (*OutputEndpointCallback)(void* info, SESSION_CALLBACKOPERATION operation);
 
 struct EndpointDevicesInfo
 {
-    std::vector<InputDeviceInfo*> inputDevicesInfo;
-    std::vector<OutputDeviceInfo*> outputDevicesInfo;
+    std::vector<InputEndpointInfo*> inputDevicesInfo;
+    std::vector<OutputEndpointInfo*> outputDevicesInfo;
 };
 
 struct SessionHandle
@@ -1026,8 +1026,8 @@ struct SessionHandle
 
     Configuration* configuration;
 
-    InputDeviceCallback inputDeviceCallback;
-    OutputDeviceCallback outputDeviceCallback;
+    InputEndpointCallback inputEndpointCallback;
+    OutputEndpointCallback outputEndpointCallback;
 
     midi2::MidiEndpointDeviceWatcher watcher{nullptr};
     winrt::event_token revokeOnWatcherDeviceRemoved;
@@ -1039,21 +1039,21 @@ struct SessionHandle
     std::unordered_map<std::wstring, EndpointDevicesInfo> endpointDevicesById;
 };
 
-void DeleteInputDeviceInfos(std::vector<InputDeviceInfo*>& deviceInfos)
+void DeleteInputEndpointInfos(std::vector<InputEndpointInfo*>& deviceInfos)
 {
     for (auto* inputDeviceInfo : deviceInfos)
     {
-        DeleteInputDeviceInfo(inputDeviceInfo);
+        DeleteInputEndpointInfo(inputDeviceInfo);
     }
 
     deviceInfos.clear();
 }
 
-void DeleteOutputDeviceInfos(std::vector<OutputDeviceInfo*>& deviceInfos)
+void DeleteOutputEndpointInfos(std::vector<OutputEndpointInfo*>& deviceInfos)
 {
     for (auto* outputDeviceInfo : deviceInfos)
     {
-        DeleteOutputDeviceInfo(outputDeviceInfo);
+        DeleteOutputEndpointInfo(outputDeviceInfo);
     }
 
     deviceInfos.clear();
@@ -1062,8 +1062,8 @@ void DeleteOutputDeviceInfos(std::vector<OutputDeviceInfo*>& deviceInfos)
 API_EXPORT SESSION_OPENRESULT API_CALL OpenSession_Win(
     const wchar_t* name,
     Configuration* configuration,
-    InputDeviceCallback inputDeviceCallback,
-    OutputDeviceCallback outputDeviceCallback,
+    InputEndpointCallback inputEndpointCallback,
+    OutputEndpointCallback outputEndpointCallback,
     SessionHandle** handle,
     int* errorCode)
 {
@@ -1072,8 +1072,8 @@ API_EXPORT SESSION_OPENRESULT API_CALL OpenSession_Win(
     SessionHandle* sessionHandle = new SessionHandle();
     sessionHandle->name = name;
     sessionHandle->configuration = configuration;
-    sessionHandle->inputDeviceCallback = inputDeviceCallback;
-    sessionHandle->outputDeviceCallback = outputDeviceCallback;
+    sessionHandle->inputEndpointCallback = inputEndpointCallback;
+    sessionHandle->outputEndpointCallback = outputEndpointCallback;
 
     try
     {
@@ -1122,8 +1122,8 @@ API_EXPORT SESSION_OPENRESULT API_CALL OpenSession_Win(
                         }
                     }
 
-                    std::vector<InputDeviceInfo*> inputDevicesInfo;
-                    std::vector<OutputDeviceInfo*> outputDevicesInfo;
+                    std::vector<InputEndpointInfo*> inputDevicesInfo;
+                    std::vector<OutputEndpointInfo*> outputDevicesInfo;
 
                     std::wstring endpointKey = endpointId.c_str();
                     EndpointDevicesInfo endpointDevicesInfo;
@@ -1137,10 +1137,10 @@ API_EXPORT SESSION_OPENRESULT API_CALL OpenSession_Win(
 
                         ok = true;
 
-                        DeleteInputDeviceInfos(inputDevicesInfo);
-                        DeleteInputDeviceInfos(endpointDevicesInfo.inputDevicesInfo);
-                        DeleteOutputDeviceInfos(outputDevicesInfo);
-                        DeleteOutputDeviceInfos(endpointDevicesInfo.outputDevicesInfo);
+                        DeleteInputEndpointInfos(inputDevicesInfo);
+                        DeleteInputEndpointInfos(endpointDevicesInfo.inputDevicesInfo);
+                        DeleteOutputEndpointInfos(outputDevicesInfo);
+                        DeleteOutputEndpointInfos(endpointDevicesInfo.outputDevicesInfo);
 
                         auto endpointInformation = midi2::MidiEndpointDeviceInformation::CreateFromEndpointDeviceId(endpointId);
                         if (endpointInformation == nullptr)
@@ -1158,11 +1158,11 @@ API_EXPORT SESSION_OPENRESULT API_CALL OpenSession_Win(
 
                             for (auto const& port : inputPorts)
                             {
-                                InputDeviceInfo* inputDeviceInfo = nullptr;
+                                InputEndpointInfo* inputDeviceInfo = nullptr;
                                 int errorCode;
 
-                                auto getInputDeviceInfoResult = GetInputDeviceInfo(port.PortNumber(), endpointId, port.PortDeviceId(), &inputDeviceInfo, &errorCode);
-                                if (getInputDeviceInfoResult != IN_GETINFORESULT_OK)
+                                auto getInputEndpointInfoResult = GetInputEndpointInfo(port.PortNumber(), endpointId, port.PortDeviceId(), &inputDeviceInfo, &errorCode);
+                                if (getInputEndpointInfoResult != IN_GETINFORESULT_OK)
                                 {
                                     ok = false;
                                     break;
@@ -1170,15 +1170,15 @@ API_EXPORT SESSION_OPENRESULT API_CALL OpenSession_Win(
 
                                 inputDevicesInfo.push_back(inputDeviceInfo);
 
-                                InputDeviceInfo* persistentInputDeviceInfo;
-                                getInputDeviceInfoResult = GetInputDeviceInfo(port.PortNumber(), endpointId, port.PortDeviceId(), &persistentInputDeviceInfo, &errorCode);
-                                if (getInputDeviceInfoResult != IN_GETINFORESULT_OK)
+                                InputEndpointInfo* persistentInputEndpointInfo;
+                                getInputEndpointInfoResult = GetInputEndpointInfo(port.PortNumber(), endpointId, port.PortDeviceId(), &persistentInputEndpointInfo, &errorCode);
+                                if (getInputEndpointInfoResult != IN_GETINFORESULT_OK)
                                 {
                                     ok = false;
                                     break;
                                 }
                                 
-                                endpointDevicesInfo.inputDevicesInfo.push_back(persistentInputDeviceInfo);
+                                endpointDevicesInfo.inputDevicesInfo.push_back(persistentInputEndpointInfo);
                             }
                         }
 
@@ -1191,11 +1191,11 @@ API_EXPORT SESSION_OPENRESULT API_CALL OpenSession_Win(
 
                             for (auto const& port : outputPorts)
                             {
-                                OutputDeviceInfo* outputDeviceInfo = nullptr;
+                                OutputEndpointInfo* outputDeviceInfo = nullptr;
                                 int errorCode;
 
-                                auto getOutputDeviceInfoResult = GetOutputDeviceInfo(port.PortNumber(), endpointId, port.PortDeviceId(), &outputDeviceInfo, &errorCode);
-                                if (getOutputDeviceInfoResult != OUT_GETINFORESULT_OK)
+                                auto getOutputEndpointInfoResult = GetOutputEndpointInfo(port.PortNumber(), endpointId, port.PortDeviceId(), &outputDeviceInfo, &errorCode);
+                                if (getOutputEndpointInfoResult != OUT_GETINFORESULT_OK)
                                 {
                                     ok = false;
                                     break;
@@ -1203,15 +1203,15 @@ API_EXPORT SESSION_OPENRESULT API_CALL OpenSession_Win(
 
                                 outputDevicesInfo.push_back(outputDeviceInfo);
 
-                                OutputDeviceInfo* persistentOutputDeviceInfo;
-                                getOutputDeviceInfoResult = GetOutputDeviceInfo(port.PortNumber(), endpointId, port.PortDeviceId(), &persistentOutputDeviceInfo, &errorCode);
-                                if (getOutputDeviceInfoResult != OUT_GETINFORESULT_OK)
+                                OutputEndpointInfo* persistentOutputEndpointInfo;
+                                getOutputEndpointInfoResult = GetOutputEndpointInfo(port.PortNumber(), endpointId, port.PortDeviceId(), &persistentOutputEndpointInfo, &errorCode);
+                                if (getOutputEndpointInfoResult != OUT_GETINFORESULT_OK)
                                 {
                                     ok = false;
                                     break;
                                 }
                                 
-                                endpointDevicesInfo.outputDevicesInfo.push_back(persistentOutputDeviceInfo);
+                                endpointDevicesInfo.outputDevicesInfo.push_back(persistentOutputEndpointInfo);
                             }
                         }
 
@@ -1229,12 +1229,12 @@ API_EXPORT SESSION_OPENRESULT API_CALL OpenSession_Win(
 
                     for (auto* inputDeviceInfo : inputDevicesInfo)
                     {
-                        sessionHandle->inputDeviceCallback(inputDeviceInfo, 1);
+                        sessionHandle->inputEndpointCallback(inputDeviceInfo, SESSION_CALLBACKOPERATION_ENDPOINTADDED);
                     }
 
                     for (auto* outputDeviceInfo : outputDevicesInfo)
                     {
-                        sessionHandle->outputDeviceCallback(outputDeviceInfo, 1);
+                        sessionHandle->outputEndpointCallback(outputDeviceInfo, SESSION_CALLBACKOPERATION_ENDPOINTADDED);
                     }
                 }
                 catch (const winrt::hresult_error& e)
@@ -1274,12 +1274,12 @@ API_EXPORT SESSION_OPENRESULT API_CALL OpenSession_Win(
 
                     for (auto* inputDeviceInfo : endpointDevicesInfo.inputDevicesInfo)
                     {
-                        sessionHandle->inputDeviceCallback(inputDeviceInfo, 0);
+                        sessionHandle->inputEndpointCallback(inputDeviceInfo, SESSION_CALLBACKOPERATION_ENDPOINTREMOVED);
                     }
 
                     for (auto* outputDeviceInfo : endpointDevicesInfo.outputDevicesInfo)
                     {
-                        sessionHandle->outputDeviceCallback(outputDeviceInfo, 0);
+                        sessionHandle->outputEndpointCallback(outputDeviceInfo, SESSION_CALLBACKOPERATION_ENDPOINTREMOVED);
                     }
                 }
                 catch (const winrt::hresult_error& e)
@@ -1352,8 +1352,8 @@ API_EXPORT SESSION_CLOSERESULT API_CALL CloseSession(SessionHandle* sessionHandl
 
         for (auto& pair : sessionHandle->endpointDevicesById)
         {
-            DeleteInputDeviceInfos(pair.second.inputDevicesInfo);
-            DeleteOutputDeviceInfos(pair.second.outputDevicesInfo);
+            DeleteInputEndpointInfos(pair.second.inputDevicesInfo);
+            DeleteOutputEndpointInfos(pair.second.outputDevicesInfo);
         }
 
         sessionHandle->endpointDevicesById.clear();
@@ -1369,14 +1369,14 @@ API_EXPORT SESSION_CLOSERESULT API_CALL CloseSession(SessionHandle* sessionHandl
 
 typedef struct
 {
-    InputDeviceInfo* info;
+    InputEndpointInfo* info;
     HMIDIIN handle;
     LPMIDIHDR* sysExHeaders;
     int sysExBufferCount;
     int sysExBufferSize;
     CRITICAL_SECTION lock;
     LONG isClosing;
-} InputDeviceHandle;
+} InputEndpointHandle;
 
 IN_GETALLINFORESULT ConvertToGetAllInInfoResult(IN_GETINFORESULT getInfoResult)
 {
@@ -1390,7 +1390,7 @@ IN_GETALLINFORESULT ConvertToGetAllInInfoResult(IN_GETINFORESULT getInfoResult)
     }
 }
 
-API_EXPORT IN_GETALLINFORESULT API_CALL GetInputDevicesInfo(Configuration* configuration, SessionHandle* sessionHandle, InputDeviceInfo*** devicesInfo, int* devicesCount, int* errorCode)
+API_EXPORT IN_GETALLINFORESULT API_CALL GetInputEndpointsInfo(Configuration* configuration, SessionHandle* sessionHandle, InputEndpointInfo*** devicesInfo, int* devicesCount, int* errorCode)
 {
     *errorCode = 0;
 
@@ -1404,7 +1404,7 @@ API_EXPORT IN_GETALLINFORESULT API_CALL GetInputDevicesInfo(Configuration* confi
                 midi2::MidiEndpointDeviceInformationSortOrder::Name,
                 midi2::MidiEndpointDeviceInformationFilters::AllStandardEndpoints);
 
-            std::vector<InputDeviceInfo*> inputDevicesInfo;
+            std::vector<InputEndpointInfo*> inputDevicesInfo;
 
             for (auto const& endpoint : endpoints)
             {
@@ -1412,18 +1412,18 @@ API_EXPORT IN_GETALLINFORESULT API_CALL GetInputDevicesInfo(Configuration* confi
 
                 for (auto const& port : ports)
                 {
-                    InputDeviceInfo* inputDeviceInfo;
+                    InputEndpointInfo* inputDeviceInfo;
 
-                    auto getInputDeviceInfoResult = GetInputDeviceInfo(port.PortNumber(), endpoint.EndpointDeviceId(), port.PortDeviceId(), &inputDeviceInfo, errorCode);
-                    if (getInputDeviceInfoResult != IN_GETINFORESULT_OK)
-                        return ConvertToGetAllInInfoResult(getInputDeviceInfoResult);
+                    auto getInputEndpointInfoResult = GetInputEndpointInfo(port.PortNumber(), endpoint.EndpointDeviceId(), port.PortDeviceId(), &inputDeviceInfo, errorCode);
+                    if (getInputEndpointInfoResult != IN_GETINFORESULT_OK)
+                        return ConvertToGetAllInInfoResult(getInputEndpointInfoResult);
 
                     inputDevicesInfo.push_back(inputDeviceInfo);
                 }
             }
 
             auto count = inputDevicesInfo.size();
-            auto result = new InputDeviceInfo*[count];
+            auto result = new InputEndpointInfo*[count];
 
             for (auto i = 0; i < count; i++)
             {
@@ -1454,17 +1454,17 @@ API_EXPORT IN_GETALLINFORESULT API_CALL GetInputDevicesInfo(Configuration* confi
 
     // WinMM approach
 
-    GetInputDevicesCount(devicesCount);
+    GetInputEndpointsCount(devicesCount);
 
-    InputDeviceInfo** result = new InputDeviceInfo*[*devicesCount];
+    InputEndpointInfo** result = new InputEndpointInfo*[*devicesCount];
 
     for (int i = 0; i < *devicesCount; i++)
     {
-        InputDeviceInfo* inputDeviceInfo;
+        InputEndpointInfo* inputDeviceInfo;
 
-        auto getInputDeviceInfoResult = GetInputDeviceInfo(i, &inputDeviceInfo, errorCode);
-        if (getInputDeviceInfoResult != IN_GETINFORESULT_OK)
-            return ConvertToGetAllInInfoResult(getInputDeviceInfoResult);
+        auto getInputEndpointInfoResult = GetInputEndpointInfo(i, &inputDeviceInfo, errorCode);
+        if (getInputEndpointInfoResult != IN_GETINFORESULT_OK)
+            return ConvertToGetAllInInfoResult(getInputEndpointInfoResult);
 
         result[i] = inputDeviceInfo;
     }
@@ -1474,13 +1474,13 @@ API_EXPORT IN_GETALLINFORESULT API_CALL GetInputDevicesInfo(Configuration* confi
     return IN_GETALLINFORESULT_OK;
 }
 
-API_EXPORT void API_CALL FreeInputDevicesInfo(InputDeviceInfo** devicesInfo, int devicesCount)
+API_EXPORT void API_CALL FreeInputEndpointsInfo(InputEndpointInfo** devicesInfo, int devicesCount)
 {
     delete[] devicesInfo;
 }
 
 // TODO: WMS API
-API_EXPORT IN_GETPROPERTYRESULT API_CALL GetInputDeviceName(InputDeviceInfo* info, const wchar_t** value, int* errorCode)
+API_EXPORT IN_GETPROPERTYRESULT API_CALL GetInputEndpointName(InputEndpointInfo* info, const wchar_t** value, int* errorCode)
 {
     *errorCode = 0;
 
@@ -1489,7 +1489,7 @@ API_EXPORT IN_GETPROPERTYRESULT API_CALL GetInputDeviceName(InputDeviceInfo* inf
 }
 
 // TODO: WMS API
-API_EXPORT IN_GETPROPERTYRESULT API_CALL GetInputDeviceManufacturer(InputDeviceInfo* info, const wchar_t** value, int* errorCode)
+API_EXPORT IN_GETPROPERTYRESULT API_CALL GetInputEndpointManufacturer(InputEndpointInfo* info, const wchar_t** value, int* errorCode)
 {
     *errorCode = 0;
 
@@ -1498,7 +1498,7 @@ API_EXPORT IN_GETPROPERTYRESULT API_CALL GetInputDeviceManufacturer(InputDeviceI
 }
 
 // TODO: WMS API
-API_EXPORT IN_GETPROPERTYRESULT API_CALL GetInputDeviceProduct(InputDeviceInfo* info, const wchar_t** value, int* errorCode)
+API_EXPORT IN_GETPROPERTYRESULT API_CALL GetInputEndpointProduct(InputEndpointInfo* info, const wchar_t** value, int* errorCode)
 {
     *errorCode = 0;
 
@@ -1507,7 +1507,7 @@ API_EXPORT IN_GETPROPERTYRESULT API_CALL GetInputDeviceProduct(InputDeviceInfo* 
 }
 
 // TODO: WMS API
-API_EXPORT IN_GETPROPERTYRESULT API_CALL GetInputDeviceDriverVersion(InputDeviceInfo* info, int* value, int* errorCode)
+API_EXPORT IN_GETPROPERTYRESULT API_CALL GetInputEndpointDriverVersion(InputEndpointInfo* info, int* value, int* errorCode)
 {
     *errorCode = 0;
 
@@ -1515,11 +1515,11 @@ API_EXPORT IN_GETPROPERTYRESULT API_CALL GetInputDeviceDriverVersion(InputDevice
     return IN_GETPROPERTYRESULT_OK;
 }
 
-API_EXPORT IN_RENEWSYSEXBUFFERRESULT API_CALL RenewInputDeviceSysExBuffer(void* handle, void* headerPointer, int* errorCode)
+API_EXPORT IN_RENEWSYSEXBUFFERRESULT API_CALL RenewInputEndpointSysExBuffer(void* handle, void* headerPointer, int* errorCode)
 {
     *errorCode = 0;
 
-    InputDeviceHandle* inputDeviceHandle = static_cast<InputDeviceHandle*>(handle);
+    InputEndpointHandle* inputDeviceHandle = static_cast<InputEndpointHandle*>(handle);
     LPMIDIHDR header = static_cast<LPMIDIHDR>(headerPointer);
 
     if (header == nullptr)
@@ -1638,14 +1638,14 @@ IN_PREPARESYSEXBUFFERRESULT PrepareSysExBuffer(HMIDIIN deviceHandle, int bufferS
     return IN_PREPARESYSEXBUFFERRESULT_OK;
 }
 
-API_EXPORT IN_OPENRESULT API_CALL OpenInputDevice_Win(InputDeviceInfo* info, void* sessionHandle, DWORD_PTR callback, int sysExBufferSize, int sysExBufferCount, void** handle, int* errorCode)
+API_EXPORT IN_OPENRESULT API_CALL OpenInputEndpoint_Win(InputEndpointInfo* info, void* sessionHandle, DWORD_PTR callback, int sysExBufferSize, int sysExBufferCount, void** handle, int* errorCode)
 {
     *errorCode = 0;
 
     EnsureWinMmPortsAvailable();
 
-    InputDeviceInfo* inputDeviceInfo = info;
-    InputDeviceHandle* inputDeviceHandle = new InputDeviceHandle();
+    InputEndpointInfo* inputDeviceInfo = info;
+    InputEndpointHandle* inputDeviceHandle = new InputEndpointHandle();
     inputDeviceHandle->info = inputDeviceInfo;
     inputDeviceHandle->sysExBufferSize = sysExBufferSize;
     inputDeviceHandle->sysExBufferCount = sysExBufferCount;
@@ -1699,11 +1699,11 @@ API_EXPORT IN_OPENRESULT API_CALL OpenInputDevice_Win(InputDeviceInfo* info, voi
     return IN_OPENRESULT_OK;
 }
 
-API_EXPORT IN_CLOSERESULT API_CALL CloseInputDevice(void* handle, int* errorCode)
+API_EXPORT IN_CLOSERESULT API_CALL CloseInputEndpoint(void* handle, int* errorCode)
 {
     *errorCode = 0;
 
-    InputDeviceHandle* inputDeviceHandle = static_cast<InputDeviceHandle*>(handle);
+    InputEndpointHandle* inputDeviceHandle = static_cast<InputEndpointHandle*>(handle);
 
     EnterCriticalSection(&inputDeviceHandle->lock);
     inputDeviceHandle->isClosing = 1;
@@ -1762,11 +1762,11 @@ API_EXPORT IN_CLOSERESULT API_CALL CloseInputDevice(void* handle, int* errorCode
     return IN_CLOSERESULT_OK;
 }
 
-API_EXPORT IN_CONNECTRESULT API_CALL ConnectToInputDevice(void* handle, int* errorCode)
+API_EXPORT IN_CONNECTRESULT API_CALL ConnectToInputEndpoint(void* handle, int* errorCode)
 {
     *errorCode = 0;
 
-    InputDeviceHandle* inputDeviceHandle = static_cast<InputDeviceHandle*>(handle);
+    InputEndpointHandle* inputDeviceHandle = static_cast<InputEndpointHandle*>(handle);
 
     MMRESULT result = midiInStart(inputDeviceHandle->handle);
     if (result != MMSYSERR_NOERROR)
@@ -1784,11 +1784,11 @@ API_EXPORT IN_CONNECTRESULT API_CALL ConnectToInputDevice(void* handle, int* err
     return IN_CONNECTRESULT_OK;
 }
 
-API_EXPORT IN_DISCONNECTRESULT API_CALL DisconnectFromInputDevice(void* handle, int* errorCode)
+API_EXPORT IN_DISCONNECTRESULT API_CALL DisconnectFromInputEndpoint(void* handle, int* errorCode)
 {
     *errorCode = 0;
 
-    InputDeviceHandle* inputDeviceHandle = static_cast<InputDeviceHandle*>(handle);
+    InputEndpointHandle* inputDeviceHandle = static_cast<InputEndpointHandle*>(handle);
 
     MMRESULT result = midiInStop(inputDeviceHandle->handle);
     if (result != MMSYSERR_NOERROR)
@@ -1806,7 +1806,7 @@ API_EXPORT IN_DISCONNECTRESULT API_CALL DisconnectFromInputDevice(void* handle, 
     return IN_DISCONNECTRESULT_OK;
 }
 
-API_EXPORT IN_GETSYSEXDATARESULT API_CALL GetInputDeviceSysExBufferData(LPMIDIHDR header, LPSTR* data, int* size)
+API_EXPORT IN_GETSYSEXDATARESULT API_CALL GetInputEndpointSysExBufferData(LPMIDIHDR header, LPSTR* data, int* size)
 {
     *data = header->lpData;
     *size = header->dwBytesRecorded;
@@ -1815,7 +1815,7 @@ API_EXPORT IN_GETSYSEXDATARESULT API_CALL GetInputDeviceSysExBufferData(LPMIDIHD
 }
 
 // TODO: WMS API
-API_EXPORT char API_CALL IsInputDevicePropertySupported(IN_PROPERTY property)
+API_EXPORT char API_CALL IsInputEndpointPropertySupported(IN_PROPERTY property)
 {
     switch (property)
     {
@@ -1834,9 +1834,9 @@ API_EXPORT char API_CALL IsInputDevicePropertySupported(IN_PROPERTY property)
 
 typedef struct
 {
-    OutputDeviceInfo* info;
+    OutputEndpointInfo* info;
     HMIDIOUT handle;
-} OutputDeviceHandle;
+} OutputEndpointHandle;
 
 OUT_GETALLINFORESULT ConvertToGetAllOutInfoResult(OUT_GETINFORESULT getInfoResult)
 {
@@ -1850,7 +1850,7 @@ OUT_GETALLINFORESULT ConvertToGetAllOutInfoResult(OUT_GETINFORESULT getInfoResul
     }
 }
 
-API_EXPORT OUT_GETALLINFORESULT API_CALL GetOutputDevicesInfo(Configuration* configuration, SessionHandle* sessionHandle, OutputDeviceInfo*** devicesInfo, int* devicesCount, int* errorCode)
+API_EXPORT OUT_GETALLINFORESULT API_CALL GetOutputEndpointsInfo(Configuration* configuration, SessionHandle* sessionHandle, OutputEndpointInfo*** devicesInfo, int* devicesCount, int* errorCode)
 {
     *errorCode = 0;
 
@@ -1858,18 +1858,18 @@ API_EXPORT OUT_GETALLINFORESULT API_CALL GetOutputDevicesInfo(Configuration* con
 
     if (configuration->useWms && configuration->wmsAvailable && configuration->wmsSdkInitialized)
     {
-        std::vector<OutputDeviceInfo*> outputDevicesInfo;
+        std::vector<OutputEndpointInfo*> outputDevicesInfo;
 
         int initialCount = 0;
-        GetOutputDevicesCount(&initialCount);
+        GetOutputEndpointsCount(&initialCount);
 
         for (int i = 0; i < initialCount; i++)
         {
-            OutputDeviceInfo* outputDeviceInfo;
+            OutputEndpointInfo* outputDeviceInfo;
 
-            auto getOutputDeviceInfoResult = GetOutputDeviceInfo(i, &outputDeviceInfo, errorCode);
-            if (getOutputDeviceInfoResult != OUT_GETINFORESULT_OK)
-                return ConvertToGetAllOutInfoResult(getOutputDeviceInfoResult);
+            auto getOutputEndpointInfoResult = GetOutputEndpointInfo(i, &outputDeviceInfo, errorCode);
+            if (getOutputEndpointInfoResult != OUT_GETINFORESULT_OK)
+                return ConvertToGetAllOutInfoResult(getOutputEndpointInfoResult);
             
             if (wcscmp(outputDeviceInfo->caps->szPname, L"Microsoft GS Wavetable Synth") == 0)
             {
@@ -1893,18 +1893,18 @@ API_EXPORT OUT_GETALLINFORESULT API_CALL GetOutputDevicesInfo(Configuration* con
 
                 for (auto const& port : ports)
                 {
-                    OutputDeviceInfo* outputDeviceInfo;
+                    OutputEndpointInfo* outputDeviceInfo;
 
-                    auto getOutputDeviceInfoResult = GetOutputDeviceInfo(port.PortNumber(), endpoint.EndpointDeviceId(), port.PortDeviceId(), &outputDeviceInfo, errorCode);
-                    if (getOutputDeviceInfoResult != OUT_GETINFORESULT_OK)
-                        return ConvertToGetAllOutInfoResult(getOutputDeviceInfoResult);
+                    auto getOutputEndpointInfoResult = GetOutputEndpointInfo(port.PortNumber(), endpoint.EndpointDeviceId(), port.PortDeviceId(), &outputDeviceInfo, errorCode);
+                    if (getOutputEndpointInfoResult != OUT_GETINFORESULT_OK)
+                        return ConvertToGetAllOutInfoResult(getOutputEndpointInfoResult);
 
                     outputDevicesInfo.push_back(outputDeviceInfo);
                 }
             }
 
             auto count = outputDevicesInfo.size();
-            OutputDeviceInfo** result = new OutputDeviceInfo * [count];
+            OutputEndpointInfo** result = new OutputEndpointInfo * [count];
 
             for (size_t i = 0; i < count; i++)
             {
@@ -1935,18 +1935,18 @@ API_EXPORT OUT_GETALLINFORESULT API_CALL GetOutputDevicesInfo(Configuration* con
 
     // WinMM approach
 
-    GetOutputDevicesCount(devicesCount);
+    GetOutputEndpointsCount(devicesCount);
 
-    OutputDeviceInfo** result = new OutputDeviceInfo * [*devicesCount];
+    OutputEndpointInfo** result = new OutputEndpointInfo * [*devicesCount];
 
     for (int i = 0; i < *devicesCount; i++)
     {
-        OutputDeviceInfo* outputDeviceInfo;
+        OutputEndpointInfo* outputDeviceInfo;
         int errorCode;
 
-        auto getOutputDeviceInfoResult = GetOutputDeviceInfo(i, &outputDeviceInfo, &errorCode);
-        if (getOutputDeviceInfoResult != OUT_GETINFORESULT_OK)
-            return ConvertToGetAllOutInfoResult(getOutputDeviceInfoResult);
+        auto getOutputEndpointInfoResult = GetOutputEndpointInfo(i, &outputDeviceInfo, &errorCode);
+        if (getOutputEndpointInfoResult != OUT_GETINFORESULT_OK)
+            return ConvertToGetAllOutInfoResult(getOutputEndpointInfoResult);
 
         if (wcscmp(outputDeviceInfo->caps->szPname, L"Microsoft GS Wavetable Synth") == 0)
             outputDeviceInfo->isMicrosoftGsWavetableSynth = 1;
@@ -1959,12 +1959,12 @@ API_EXPORT OUT_GETALLINFORESULT API_CALL GetOutputDevicesInfo(Configuration* con
     return OUT_GETALLINFORESULT_OK;
 }
 
-API_EXPORT void API_CALL FreeOutputDevicesInfo(OutputDeviceInfo** devicesInfo, int devicesCount)
+API_EXPORT void API_CALL FreeOutputEndpointsInfo(OutputEndpointInfo** devicesInfo, int devicesCount)
 {
     delete[] devicesInfo;
 }
 
-API_EXPORT OUT_GETPROPERTYRESULT API_CALL GetOutputDeviceName(OutputDeviceInfo* info, const wchar_t** value, int* errorCode)
+API_EXPORT OUT_GETPROPERTYRESULT API_CALL GetOutputEndpointName(OutputEndpointInfo* info, const wchar_t** value, int* errorCode)
 {
     *errorCode = 0;
 
@@ -1973,7 +1973,7 @@ API_EXPORT OUT_GETPROPERTYRESULT API_CALL GetOutputDeviceName(OutputDeviceInfo* 
 }
 
 // TODO: WMS API
-API_EXPORT OUT_GETPROPERTYRESULT API_CALL GetOutputDeviceManufacturer(OutputDeviceInfo* info, const wchar_t** value, int* errorCode)
+API_EXPORT OUT_GETPROPERTYRESULT API_CALL GetOutputEndpointManufacturer(OutputEndpointInfo* info, const wchar_t** value, int* errorCode)
 {
     *errorCode = 0;
 
@@ -1982,7 +1982,7 @@ API_EXPORT OUT_GETPROPERTYRESULT API_CALL GetOutputDeviceManufacturer(OutputDevi
 }
 
 // TODO: WMS API
-API_EXPORT OUT_GETPROPERTYRESULT API_CALL GetOutputDeviceProduct(OutputDeviceInfo* info, const wchar_t** value, int* errorCode)
+API_EXPORT OUT_GETPROPERTYRESULT API_CALL GetOutputEndpointProduct(OutputEndpointInfo* info, const wchar_t** value, int* errorCode)
 {
     *errorCode = 0;
 
@@ -1991,7 +1991,7 @@ API_EXPORT OUT_GETPROPERTYRESULT API_CALL GetOutputDeviceProduct(OutputDeviceInf
 }
 
 // TODO: WMS API
-API_EXPORT OUT_GETPROPERTYRESULT API_CALL GetOutputDeviceDriverVersion(OutputDeviceInfo* info, int* value, int* errorCode)
+API_EXPORT OUT_GETPROPERTYRESULT API_CALL GetOutputEndpointDriverVersion(OutputEndpointInfo* info, int* value, int* errorCode)
 {
     *errorCode = 0;
 
@@ -2000,7 +2000,7 @@ API_EXPORT OUT_GETPROPERTYRESULT API_CALL GetOutputDeviceDriverVersion(OutputDev
 }
 
 // TODO: WMS API
-API_EXPORT OUT_GETPROPERTYRESULT API_CALL GetOutputDeviceTechnology(OutputDeviceInfo* info, OUT_TECHNOLOGY* value, int* errorCode)
+API_EXPORT OUT_GETPROPERTYRESULT API_CALL GetOutputEndpointTechnology(OutputEndpointInfo* info, OUT_TECHNOLOGY* value, int* errorCode)
 {
     *errorCode = 0;
 
@@ -2035,7 +2035,7 @@ API_EXPORT OUT_GETPROPERTYRESULT API_CALL GetOutputDeviceTechnology(OutputDevice
 }
 
 // TODO: WMS API
-API_EXPORT OUT_GETPROPERTYRESULT API_CALL GetOutputDeviceVoicesNumber(OutputDeviceInfo* info, int* value, int* errorCode)
+API_EXPORT OUT_GETPROPERTYRESULT API_CALL GetOutputEndpointVoicesNumber(OutputEndpointInfo* info, int* value, int* errorCode)
 {
     *errorCode = 0;
 
@@ -2044,7 +2044,7 @@ API_EXPORT OUT_GETPROPERTYRESULT API_CALL GetOutputDeviceVoicesNumber(OutputDevi
 }
 
 // TODO: WMS API
-API_EXPORT OUT_GETPROPERTYRESULT API_CALL GetOutputDeviceNotesNumber(OutputDeviceInfo* info, int* value, int* errorCode)
+API_EXPORT OUT_GETPROPERTYRESULT API_CALL GetOutputEndpointNotesNumber(OutputEndpointInfo* info, int* value, int* errorCode)
 {
     *errorCode = 0;
 
@@ -2053,7 +2053,7 @@ API_EXPORT OUT_GETPROPERTYRESULT API_CALL GetOutputDeviceNotesNumber(OutputDevic
 }
 
 // TODO: WMS API
-API_EXPORT OUT_GETPROPERTYRESULT API_CALL GetOutputDeviceChannelsMask(OutputDeviceInfo* info, int* value, int* errorCode)
+API_EXPORT OUT_GETPROPERTYRESULT API_CALL GetOutputEndpointChannelsMask(OutputEndpointInfo* info, int* value, int* errorCode)
 {
     *errorCode = 0;
 
@@ -2062,7 +2062,7 @@ API_EXPORT OUT_GETPROPERTYRESULT API_CALL GetOutputDeviceChannelsMask(OutputDevi
 }
 
 // TODO: WMS API
-API_EXPORT OUT_GETPROPERTYRESULT API_CALL GetOutputDeviceOptions(OutputDeviceInfo* info, OUT_OPTION* value, int* errorCode)
+API_EXPORT OUT_GETPROPERTYRESULT API_CALL GetOutputEndpointOptions(OutputEndpointInfo* info, OUT_OPTION* value, int* errorCode)
 {
     *errorCode = 0;
 
@@ -2083,13 +2083,13 @@ API_EXPORT OUT_GETPROPERTYRESULT API_CALL GetOutputDeviceOptions(OutputDeviceInf
     return OUT_GETPROPERTYRESULT_OK;
 }
 
-API_EXPORT OUT_OPENRESULT API_CALL OpenOutputDevice_Win(OutputDeviceInfo* info, void* sessionHandle, DWORD_PTR callback, void** handle, int* errorCode)
+API_EXPORT OUT_OPENRESULT API_CALL OpenOutputEndpoint_Win(OutputEndpointInfo* info, void* sessionHandle, DWORD_PTR callback, void** handle, int* errorCode)
 {
     *errorCode = 0;
 
     EnsureWinMmPortsAvailable();
 
-    OutputDeviceHandle* outputDeviceHandle = new OutputDeviceHandle();
+    OutputEndpointHandle* outputDeviceHandle = new OutputEndpointHandle();
     outputDeviceHandle->info = info;
 
     auto deviceIndex = FindPortIndex(info->endpointDeviceId, info->portDeviceId, midi2::Midi1PortFlow::MidiMessageDestination);
@@ -2123,11 +2123,11 @@ API_EXPORT OUT_OPENRESULT API_CALL OpenOutputDevice_Win(OutputDeviceInfo* info, 
     return OUT_OPENRESULT_OK;
 }
 
-API_EXPORT OUT_CLOSERESULT API_CALL CloseOutputDevice(void* handle, int* errorCode)
+API_EXPORT OUT_CLOSERESULT API_CALL CloseOutputEndpoint(void* handle, int* errorCode)
 {
     *errorCode = 0;
 
-    OutputDeviceHandle* outputDeviceHandle = static_cast<OutputDeviceHandle*>(handle);
+    OutputEndpointHandle* outputDeviceHandle = static_cast<OutputEndpointHandle*>(handle);
 
     MMRESULT result = midiOutReset(outputDeviceHandle->handle);
     if (result != MMSYSERR_NOERROR)
@@ -2159,7 +2159,7 @@ API_EXPORT OUT_CLOSERESULT API_CALL CloseOutputDevice(void* handle, int* errorCo
 
     // if (outputDeviceHandle->info)
     // {
-    //     DeleteOutputDeviceInfo(outputDeviceHandle->info);
+    //     DeleteOutputEndpointInfo(outputDeviceHandle->info);
     // }
 
     delete outputDeviceHandle;
@@ -2167,11 +2167,11 @@ API_EXPORT OUT_CLOSERESULT API_CALL CloseOutputDevice(void* handle, int* errorCo
     return OUT_CLOSERESULT_OK;
 }
 
-API_EXPORT OUT_SENDSHORTRESULT API_CALL SendShortEventToOutputDevice(void* handle, int message, int* errorCode)
+API_EXPORT OUT_SENDSHORTRESULT API_CALL SendShortEventToOutputEndpoint(void* handle, int message, int* errorCode)
 {
     *errorCode = 0;
 
-    OutputDeviceHandle* outputDeviceHandle = static_cast<OutputDeviceHandle*>(handle);
+    OutputEndpointHandle* outputDeviceHandle = static_cast<OutputEndpointHandle*>(handle);
 
     MMRESULT result = midiOutShortMsg(outputDeviceHandle->handle, (DWORD)message);
     if (result != MMSYSERR_NOERROR)
@@ -2191,11 +2191,11 @@ API_EXPORT OUT_SENDSHORTRESULT API_CALL SendShortEventToOutputDevice(void* handl
     return OUT_SENDSHORTRESULT_OK;
 }
 
-API_EXPORT OUT_SENDSYSEXRESULT API_CALL SendSysExEventToOutputDevice_Win(void* handle, LPSTR data, int size, int* errorCode)
+API_EXPORT OUT_SENDSYSEXRESULT API_CALL SendSysExEventToOutputEndpoint_Win(void* handle, LPSTR data, int size, int* errorCode)
 {
     *errorCode = 0;
 
-    OutputDeviceHandle* outputDeviceHandle = static_cast<OutputDeviceHandle*>(handle);
+    OutputEndpointHandle* outputDeviceHandle = static_cast<OutputEndpointHandle*>(handle);
 
     LPMIDIHDR header = new MIDIHDR();
     header->lpData = data;
@@ -2242,11 +2242,11 @@ API_EXPORT OUT_SENDSYSEXRESULT API_CALL SendSysExEventToOutputDevice_Win(void* h
     return OUT_SENDSYSEXRESULT_OK;
 }
 
-API_EXPORT OUT_GETSYSEXDATARESULT API_CALL GetOutputDeviceSysExBufferData(void* handle, LPMIDIHDR header, LPSTR* data, int* size, int* errorCode)
+API_EXPORT OUT_GETSYSEXDATARESULT API_CALL GetOutputEndpointSysExBufferData(void* handle, LPMIDIHDR header, LPSTR* data, int* size, int* errorCode)
 {
     *errorCode = 0;
 
-    OutputDeviceHandle* outputDeviceHandle = static_cast<OutputDeviceHandle*>(handle);
+    OutputEndpointHandle* outputDeviceHandle = static_cast<OutputEndpointHandle*>(handle);
 
     MMRESULT result = midiOutUnprepareHeader(outputDeviceHandle->handle, header, sizeof(MIDIHDR));
     if (result != MMSYSERR_NOERROR)
@@ -2270,7 +2270,7 @@ API_EXPORT OUT_GETSYSEXDATARESULT API_CALL GetOutputDeviceSysExBufferData(void* 
     return OUT_GETSYSEXDATARESULT_OK;
 }
 
-API_EXPORT char API_CALL IsOutputDevicePropertySupported(OUT_PROPERTY property)
+API_EXPORT char API_CALL IsOutputEndpointPropertySupported(OUT_PROPERTY property)
 {
     switch (property)
     {
@@ -2292,19 +2292,19 @@ API_EXPORT char API_CALL IsOutputDevicePropertySupported(OUT_PROPERTY property)
  Virtual device
  ================================ */
 
-struct VirtualDeviceInfo : DeviceInfoBase
+struct VirtualDeviceInfo
 {
-    InputDeviceInfo* inputDeviceInfo;
-    OutputDeviceInfo* outputDeviceInfo;
+    InputEndpointInfo* inputDeviceInfo;
+    OutputEndpointInfo* outputDeviceInfo;
     const wchar_t* name;
     winrt::guid associationId;
+    std::wstring endpointDeviceId;
 };
 
 const midi2::MidiEndpointAssociatedPortDeviceInformation GetSinglePort(midi2::MidiEndpointDeviceInformation endpointInformation, midi2::Midi1PortFlow flow)
 {
     auto ports = endpointInformation.FindAllAssociatedMidi1PortsForThisEndpoint(flow);
-    midi2::MidiEndpointAssociatedPortDeviceInformation port = ports.GetAt(0);
-    return port;
+    return ports.GetAt(0);
 }
 
 API_EXPORT VIRTUAL_OPENRESULT API_CALL OpenVirtualDevice_Win(
@@ -2366,8 +2366,7 @@ API_EXPORT VIRTUAL_OPENRESULT API_CALL OpenVirtualDevice_Win(
             virtualDeviceInfo->associationId,
             definition);
 
-        basicLoopback::MidiBasicLoopbackEndpointCreationResult result =
-            basicLoopback::MidiBasicLoopbackEndpointManager::CreateTransientLoopbackEndpoint(config);
+        auto result = basicLoopback::MidiBasicLoopbackEndpointManager::CreateTransientLoopbackEndpoint(config);
 
         if (!result.Success())
         {
@@ -2398,19 +2397,26 @@ API_EXPORT VIRTUAL_OPENRESULT API_CALL OpenVirtualDevice_Win(
 
         auto inputPort = GetSinglePort(endpointInformation, midi2::Midi1PortFlow::MidiMessageSource);
 
-        InputDeviceInfo* inputDeviceInfo = nullptr;
-        IN_GETINFORESULT inputResult = GetInputDeviceInfo(inputPort.PortNumber(), endpointId, inputPort.PortDeviceId(), &inputDeviceInfo, errorCode);
+        InputEndpointInfo* inputDeviceInfo = nullptr;
+        IN_GETINFORESULT inputResult = GetInputEndpointInfo(inputPort.PortNumber(), endpointId, inputPort.PortDeviceId(), &inputDeviceInfo, errorCode);
         if (inputResult != IN_GETINFORESULT_OK)
+        {
+            delete virtualDeviceInfo;
             return VIRTUAL_OPENRESULT_FAILEDGETINPUTDEVICEINFO;
+        }
 
         virtualDeviceInfo->inputDeviceInfo = inputDeviceInfo;
 
         auto outputPort = GetSinglePort(endpointInformation, midi2::Midi1PortFlow::MidiMessageDestination);
 
-        OutputDeviceInfo* outputDeviceInfo = nullptr;
-        OUT_GETINFORESULT outputResult = GetOutputDeviceInfo(outputPort.PortNumber(), endpointId, outputPort.PortDeviceId(), &outputDeviceInfo, errorCode);
+        OutputEndpointInfo* outputDeviceInfo = nullptr;
+        OUT_GETINFORESULT outputResult = GetOutputEndpointInfo(outputPort.PortNumber(), endpointId, outputPort.PortDeviceId(), &outputDeviceInfo, errorCode);
         if (outputResult != OUT_GETINFORESULT_OK)
+        {
+            delete virtualDeviceInfo->inputDeviceInfo;
+            delete virtualDeviceInfo;
             return VIRTUAL_OPENRESULT_FAILEDGETOUTPUTDEVICEINFO;
+        }
 
         virtualDeviceInfo->outputDeviceInfo = outputDeviceInfo;
     }
@@ -2455,12 +2461,12 @@ API_EXPORT VIRTUAL_CLOSERESULT API_CALL CloseVirtualDevice(VirtualDeviceInfo* in
     return VIRTUAL_CLOSERESULT_OK;
 }
 
-API_EXPORT InputDeviceInfo* API_CALL GetInputDeviceInfoFromVirtualDevice(VirtualDeviceInfo* info)
+API_EXPORT InputEndpointInfo* API_CALL GetInputEndpointInfoFromVirtualDevice(VirtualDeviceInfo* info)
 {
     return info->inputDeviceInfo;
 }
 
-API_EXPORT OutputDeviceInfo* API_CALL GetOutputDeviceInfoFromVirtualDevice(VirtualDeviceInfo* info)
+API_EXPORT OutputEndpointInfo* API_CALL GetOutputEndpointInfoFromVirtualDevice(VirtualDeviceInfo* info)
 {
     return info->outputDeviceInfo;
 }

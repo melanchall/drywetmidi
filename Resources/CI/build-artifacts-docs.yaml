@@ -50,6 +50,11 @@ steps:
 
 - template: Templates/step-execute-ci-tool.yaml
   parameters:
+    tool: 'CreateOldApiRedirectionPages'
+    toolArguments: '"Docs/_site"'
+
+- template: Templates/step-execute-ci-tool.yaml
+  parameters:
     tool: 'AddGoogleAnalyticsTagForDocs'
     toolArguments: '"$(GoogleAnalytics.MeasurementId.Docs)" "Docs/_site"'
 

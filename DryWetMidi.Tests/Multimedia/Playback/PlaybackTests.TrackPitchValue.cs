@@ -24,7 +24,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var moveTo = TimeSpan.FromMilliseconds(moveToMs);
 
             CheckPlayback(
-                useOutputDevice: false,
+                useOutputEndpoint: false,
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new NoteAftertouchEvent())
@@ -52,7 +52,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var moveTo = TimeSpan.FromMilliseconds(500);
 
             CheckPlayback(
-                useOutputDevice: false,
+                useOutputEndpoint: false,
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new PitchBendEvent(pitchValue))
@@ -83,7 +83,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var moveTo = TimeSpan.Zero;
 
             CheckPlayback(
-                useOutputDevice: false,
+                useOutputEndpoint: false,
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new PitchBendEvent(pitchValue))
@@ -116,7 +116,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var moveTo = TimeSpan.FromMilliseconds(500);
 
             CheckPlayback(
-                useOutputDevice: false,
+                useOutputEndpoint: false,
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 })
@@ -148,7 +148,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var moveTo = TimeSpan.FromMilliseconds(700);
 
             CheckPlayback(
-                useOutputDevice: false,
+                useOutputEndpoint: false,
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 })
@@ -180,7 +180,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var moveTo = TimeSpan.FromMilliseconds(700);
 
             CheckPlayback(
-                useOutputDevice: false,
+                useOutputEndpoint: false,
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 })
@@ -212,7 +212,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var moveTo = TimeSpan.FromMilliseconds(300);
 
             CheckPlayback(
-                useOutputDevice: false,
+                useOutputEndpoint: false,
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 })
@@ -246,7 +246,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var moveTo = TimeSpan.FromMilliseconds(800);
 
             CheckPlayback(
-                useOutputDevice: false,
+                useOutputEndpoint: false,
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 })
@@ -278,7 +278,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var moveTo = TimeSpan.FromMilliseconds(800);
 
             CheckPlayback(
-                useOutputDevice: false,
+                useOutputEndpoint: false,
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 })
@@ -314,7 +314,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var enableAfter = TimeSpan.FromMilliseconds(500);
 
             CheckPlayback(
-                useOutputDevice: false,
+                useOutputEndpoint: false,
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 })
@@ -356,7 +356,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var enableAfter = TimeSpan.FromMilliseconds(150);
 
             CheckPlayback(
-                useOutputDevice: false,
+                useOutputEndpoint: false,
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 })
@@ -393,7 +393,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var moveTo = TimeSpan.FromMilliseconds(moveToMs);
 
             CheckPlayback(
-                useOutputDevice: false,
+                useOutputEndpoint: false,
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new NoteAftertouchEvent())
@@ -422,7 +422,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var moveTo = TimeSpan.FromMilliseconds(500);
 
             CheckPlayback(
-                useOutputDevice: false,
+                useOutputEndpoint: false,
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new PitchBendEvent(pitchValue))
@@ -454,7 +454,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var moveTo = TimeSpan.Zero;
 
             CheckPlayback(
-                useOutputDevice: false,
+                useOutputEndpoint: false,
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new PitchBendEvent(pitchValue))
@@ -488,7 +488,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var moveTo = TimeSpan.FromMilliseconds(500);
 
             CheckPlayback(
-                useOutputDevice: false,
+                useOutputEndpoint: false,
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 })
@@ -521,7 +521,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var moveTo = TimeSpan.FromMilliseconds(700);
 
             CheckPlayback(
-                useOutputDevice: false,
+                useOutputEndpoint: false,
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 })
@@ -553,7 +553,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var moveTo = TimeSpan.FromMilliseconds(700);
 
             CheckPlayback(
-                useOutputDevice: false,
+                useOutputEndpoint: false,
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 })
@@ -586,7 +586,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var moveTo = TimeSpan.FromMilliseconds(300);
 
             CheckPlayback(
-                useOutputDevice: false,
+                useOutputEndpoint: false,
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 })
@@ -620,7 +620,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var moveTo = TimeSpan.FromMilliseconds(800);
 
             CheckPlayback(
-                useOutputDevice: false,
+                useOutputEndpoint: false,
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 })
@@ -653,7 +653,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var moveTo = TimeSpan.FromMilliseconds(800);
 
             CheckPlayback(
-                useOutputDevice: false,
+                useOutputEndpoint: false,
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 })
@@ -690,7 +690,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var disableAfter = TimeSpan.FromMilliseconds(500);
 
             CheckPlayback(
-                useOutputDevice: false,
+                useOutputEndpoint: false,
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 })
@@ -731,7 +731,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var disableAfter = TimeSpan.FromMilliseconds(150);
 
             CheckPlayback(
-                useOutputDevice: false,
+                useOutputEndpoint: false,
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new PitchBendEvent(pitchValue) { Channel = (FourBitNumber)4 })

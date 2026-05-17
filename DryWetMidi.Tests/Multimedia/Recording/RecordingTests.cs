@@ -35,8 +35,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void StartRecording_DeviceNotListeningEvents()
         {
-            using (var inputDevice = InputDevice.GetByName(SendReceiveUtilities.DeviceToTestOnName))
-            using (var recording = new Recording(TempoMap.Default, inputDevice))
+            using (var inputEndpoint = InputEndpoint.GetByName(SendReceiveUtilities.DeviceToTestOnName))
+            using (var recording = new Recording(TempoMap.Default, inputEndpoint))
             {
                 ClassicAssert.Throws<InvalidOperationException>(() => recording.Start(), "Recording started on device which is not listening events.");
             }
@@ -55,17 +55,17 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var receivedEvents = new List<TimestampedEvent>();
             var stopwatch = new Stopwatch();
 
-            var inputDevice = TestDeviceManager.GetInputDevice("A");
-            var outputDevice = TestDeviceManager.GetOutputDevice("A");
+            var inputEndpoint = TestDeviceManager.GetInputEndpoint("A");
+            var outputEndpoint = TestDeviceManager.GetOutputEndpoint("A");
 
-            inputDevice.StartEventsListening();
-            inputDevice.EventReceived += (_, e) => receivedEvents.Add(new TimestampedEvent(e.Event, stopwatch.Elapsed));
+            inputEndpoint.StartEventsListening();
+            inputEndpoint.EventReceived += (_, e) => receivedEvents.Add(new TimestampedEvent(e.Event, stopwatch.Elapsed));
 
-            using (var recording = new Recording(TempoMap.Default, inputDevice))
+            using (var recording = new Recording(TempoMap.Default, inputEndpoint))
             {
                 recording.Start();
                 stopwatch.Start();
-                SendReceiveUtilities.SendEvents(eventsToSend, outputDevice);
+                SendReceiveUtilities.SendEvents(eventsToSend, outputEndpoint);
 
                 var timeout = start + delayFromStart + SendReceiveUtilities.MaximumEventSendReceiveDelay;
                 var areEventsReceived = WaitOperations.Wait(() => receivedEvents.Count == eventsToSend.Length, timeout);
@@ -111,21 +111,21 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
             var timeout = expectedRecordedEvents.Max(e => e.Time) + SendReceiveUtilities.MaximumEventSendReceiveDelay;
 
-            using (var inputDevice = TestDeviceManager.GetInputDevice("A"))
-            using (var outputDevice = TestDeviceManager.GetOutputDevice("A"))
+            using (var inputEndpoint = TestDeviceManager.GetInputEndpoint("A"))
+            using (var outputEndpoint = TestDeviceManager.GetOutputEndpoint("A"))
             {
-                outputDevice.EventSent += (_, e) => sentEvents.Add(new TimestampedEvent(e.Event, stopwatch.Elapsed));
+                outputEndpoint.EventSent += (_, e) => sentEvents.Add(new TimestampedEvent(e.Event, stopwatch.Elapsed));
 
-                inputDevice.StartEventsListening();
-                inputDevice.EventReceived += (_, e) => receivedEvents.Add(new TimestampedEvent(e.Event, stopwatch.Elapsed));
+                inputEndpoint.StartEventsListening();
+                inputEndpoint.EventReceived += (_, e) => receivedEvents.Add(new TimestampedEvent(e.Event, stopwatch.Elapsed));
 
-                using (var recording = new Recording(tempoMap, inputDevice))
+                using (var recording = new Recording(tempoMap, inputEndpoint))
                 {
                     recording.EventRecorded += (_, e) => recordedEvents.Add(new TimestampedEvent(e.Event, stopwatch.Elapsed));
 
                     var sendingThread = new Thread(() =>
                     {
-                        SendReceiveUtilities.SendEvents(eventsToSend, outputDevice);
+                        SendReceiveUtilities.SendEvents(eventsToSend, outputEndpoint);
                     });
 
                     stopwatch.Start();

@@ -7,7 +7,7 @@
     public enum PlaybackErrorSite
     {
         /// <summary>
-        /// Playing a MIDI event (sending to an <see cref="IOutputDevice"/>).
+        /// Playing a MIDI event (sending to an <see cref="IOutputEndpoint"/>).
         /// </summary>
         PlayEvent,
 

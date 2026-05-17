@@ -50,7 +50,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// tempo map and input MIDI device to capture MIDI data from.
         /// </summary>
         /// <param name="tempoMap">Tempo map used to calculate events times.</param>
-        /// <param name="inputDevice">Input MIDI device to capture MIDI data from.</param>
+        /// <param name="inputEndpoint">Input MIDI device to capture MIDI data from.</param>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
@@ -58,18 +58,18 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <description><paramref name="tempoMap"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="inputDevice"/> is <c>null</c>.</description>
+        /// <description><paramref name="inputEndpoint"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
-        public Recording(TempoMap tempoMap, IInputDevice inputDevice)
+        public Recording(TempoMap tempoMap, IInputEndpoint inputEndpoint)
         {
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
-            ThrowIfArgument.IsNull(nameof(inputDevice), inputDevice);
+            ThrowIfArgument.IsNull(nameof(inputEndpoint), inputEndpoint);
 
             TempoMap = tempoMap;
-            InputDevice = inputDevice;
-            InputDevice.EventReceived += OnEventReceived;
+            InputEndpoint = inputEndpoint;
+            InputEndpoint.EventReceived += OnEventReceived;
         }
 
         #endregion
@@ -84,7 +84,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <summary>
         /// Gets the input MIDI device to record MIDI data from.
         /// </summary>
-        public IInputDevice InputDevice { get; }
+        public IInputEndpoint InputEndpoint { get; }
 
         /// <summary>
         /// Gets a value indicating whether recording is currently running or not.
@@ -142,8 +142,8 @@ namespace Melanchall.DryWetMidi.Multimedia
             if (IsRunning)
                 return;
 
-            if (!InputDevice.IsListeningForEvents)
-                throw new InvalidOperationException($"Input device is not listening for MIDI events. Call {nameof(InputDevice.StartEventsListening)} prior to start recording.");
+            if (!InputEndpoint.IsListeningForEvents)
+                throw new InvalidOperationException($"Input device is not listening for MIDI events. Call {nameof(InputEndpoint.StartEventsListening)} prior to start recording.");
 
             _stopwatch.Start();
             OnStarted();
@@ -207,7 +207,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             if (disposing)
             {
                 Stop();
-                InputDevice.EventReceived -= OnEventReceived;
+                InputEndpoint.EventReceived -= OnEventReceived;
             }
 
             _disposed = true;

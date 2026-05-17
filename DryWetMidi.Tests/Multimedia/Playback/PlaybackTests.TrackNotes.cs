@@ -497,7 +497,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var stopPeriod = TimeSpan.Zero;
 
             CheckPlayback(
-                useOutputDevice: false,
+                useOutputEndpoint: false,
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new NoteOnEvent())
@@ -535,7 +535,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var stopPeriod = TimeSpan.Zero;
 
             CheckPlayback(
-                useOutputDevice: false,
+                useOutputEndpoint: false,
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new NoteOnEvent())
@@ -577,7 +577,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var notesFinished = new List<Note>();
 
             CheckPlayback(
-                useOutputDevice: false,
+                useOutputEndpoint: false,
                 initialPlaybackObjects: initialTimedObjects,
                 actions: actions,
                 expectedReceivedEvents: expectedReceivedEvents,

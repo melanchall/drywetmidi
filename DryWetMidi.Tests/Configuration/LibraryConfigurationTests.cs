@@ -32,9 +32,9 @@ namespace Melanchall.DryWetMidi.Tests.Configuration
             {
                 LibraryConfiguration.UseWindowsMidiServices = useWms;
 
-                ClassicAssert.AreEqual(useWms, LibraryConfiguration.IsDevicesMultiClientAccessAvailable(), "Invalid devices multi-client access availability.");
-                ClassicAssert.AreEqual(useWms, LibraryConfiguration.IsDevicesWatcherApiAvailable(), "Invalid devices watcher API availability.");
-                ClassicAssert.AreEqual(useWms, LibraryConfiguration.IsParentDeviceApiAvailable(), "Invalid parent device API availability.");
+                ClassicAssert.AreEqual(useWms, LibraryConfiguration.IsEndpointsMultiClientAccessAvailable(), "Invalid endpoints multi-client access availability.");
+                ClassicAssert.AreEqual(useWms, LibraryConfiguration.IsEndpointsWatcherApiAvailable(), "Invalid endpoints watcher API availability.");
+                ClassicAssert.AreEqual(useWms, LibraryConfiguration.IsDeviceInformationApiAvailable(), "Invalid device information API availability.");
                 ClassicAssert.AreEqual(useWms, LibraryConfiguration.IsVirtualDeviceApiAvailable(), "Invalid virtual device API availability.");
             }
             finally
@@ -47,25 +47,25 @@ namespace Melanchall.DryWetMidi.Tests.Configuration
         [NativeApiRequired]
         [AdvancedApiRequired]
         [Test]
-        public void IsDevicesMultiClientAccessAvailable()
+        public void IsEndpointsMultiClientAccessAvailable()
         {
-            ClassicAssert.IsTrue(LibraryConfiguration.IsDevicesMultiClientAccessAvailable(), "Invalid devices multi-client access availability.");
+            ClassicAssert.IsTrue(LibraryConfiguration.IsEndpointsMultiClientAccessAvailable(), "Invalid endpoints multi-client access availability.");
         }
 
         [NativeApiRequired]
         [AdvancedApiRequired]
         [Test]
-        public void IsDevicesWatcherApiAvailable()
+        public void IsEndpointsWatcherApiAvailable()
         {
-            ClassicAssert.IsTrue(LibraryConfiguration.IsDevicesWatcherApiAvailable(), "Invalid devices watcher API availability.");
+            ClassicAssert.IsTrue(LibraryConfiguration.IsEndpointsWatcherApiAvailable(), "Invalid endpoints watcher API availability.");
         }
 
         [NativeApiRequired]
         [AdvancedApiRequired]
         [Test]
-        public void IsParentDeviceApiAvailable()
+        public void IsDeviceInformationApiAvailable()
         {
-            ClassicAssert.IsTrue(LibraryConfiguration.IsParentDeviceApiAvailable(), "Invalid parent device API availability.");
+            ClassicAssert.IsTrue(LibraryConfiguration.IsDeviceInformationApiAvailable(), "Invalid device information API availability.");
         }
 
         [NativeApiRequired]
@@ -82,7 +82,7 @@ namespace Melanchall.DryWetMidi.Tests.Configuration
         {
             var message = string.Empty;
 
-            LibraryConfiguration.NativeApiMessageReceived += (_, args) => message = args.Message;
+            LibraryConfiguration.LibraryActivityMessageReceived += (_, args) => message = args.Message;
 
             var configurationHandle = MidiConfiguration.GetConfigurationHandle();
             MidiConfigurationApi.Api_CheckNativeApiActivityCallback(configurationHandle);
@@ -100,7 +100,7 @@ namespace Melanchall.DryWetMidi.Tests.Configuration
         {
             var message = string.Empty;
 
-            LibraryConfiguration.NativeApiMessageReceived += (_, args) => message = args.Message;
+            LibraryConfiguration.LibraryActivityMessageReceived += (_, args) => message = args.Message;
 
             var configurationHandle = MidiConfiguration.GetConfigurationHandle();
             MidiConfigurationApi.Api_CheckWinRtErrorHandling_Win(configurationHandle);
@@ -118,7 +118,7 @@ namespace Melanchall.DryWetMidi.Tests.Configuration
         {
             var message = string.Empty;
 
-            LibraryConfiguration.NativeApiMessageReceived += (_, args) => message = args.Message;
+            LibraryConfiguration.LibraryActivityMessageReceived += (_, args) => message = args.Message;
 
             var configurationHandle = MidiConfiguration.GetConfigurationHandle();
             MidiConfigurationApi.Api_CheckStdExceptionHandling_Win(configurationHandle);

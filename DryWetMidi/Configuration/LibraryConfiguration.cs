@@ -12,7 +12,7 @@ namespace Melanchall.DryWetMidi.Configuration
         #region Events
 
 #if !NATIVELESS
-        public static event EventHandler<NativeApiActivityRecordReceivedEventArgs> NativeApiMessageReceived;
+        public static event EventHandler<LibraryActivityMessageReceivedEventArgs> LibraryActivityMessageReceived;
 #endif
 
         #endregion
@@ -31,7 +31,7 @@ namespace Melanchall.DryWetMidi.Configuration
         static LibraryConfiguration()
         {
 #if !NATIVELESS
-            MidiConfiguration.NativeApiActivityRecord += OnNativeApiMessageReceived;
+            MidiConfiguration.NativeApiMessageReceived += OnLibraryActivityMessageReceived;
 #endif
         }
 
@@ -51,53 +51,39 @@ namespace Melanchall.DryWetMidi.Configuration
 
         #region Methods
 
-        public static bool IsDevicesWatcherApiAvailable()
+#if !NATIVELESS
+        public static bool IsEndpointsWatcherApiAvailable()
         {
-#if NATIVELESS
-            return false;
-#else
             if (!NativeApiUtilities.IsOsSupported())
                 return false;
 
-            return IsDevicesWatcherApiAvailable(MidiConfiguration.GetConfigurationHandle());
-#endif
+            return MidiConfigurationApi.Api_IsDevicesWatcherApiAvailable(MidiConfiguration.GetConfigurationHandle());
         }
 
-        public static bool IsDevicesMultiClientAccessAvailable()
+        public static bool IsEndpointsMultiClientAccessAvailable()
         {
-#if NATIVELESS
-            return false;
-#else
             if (!NativeApiUtilities.IsOsSupported())
                 return false;
 
-            return IsDevicesWatcherApiAvailable(MidiConfiguration.GetConfigurationHandle());
-#endif
+            return IsAdvancedApiAvailable();
         }
 
-        public static bool IsParentDeviceApiAvailable()
+        public static bool IsDeviceInformationApiAvailable()
         {
-#if NATIVELESS
-            return false;
-#else
             if (!NativeApiUtilities.IsOsSupported())
                 return false;
 
-            return IsParentDeviceApiAvailable(MidiConfiguration.GetConfigurationHandle());
-#endif
+            return IsAdvancedApiAvailable();
         }
 
         public static bool IsVirtualDeviceApiAvailable()
         {
-#if NATIVELESS
-            return false;
-#else
             if (!NativeApiUtilities.IsOsSupported())
                 return false;
 
-            return IsVirtualDeviceApiAvailable(MidiConfiguration.GetConfigurationHandle());
-#endif
+            return MidiConfigurationApi.Api_IsVirtualDeviceApiAvailable(MidiConfiguration.GetConfigurationHandle());
         }
+#endif
 
         public static string GetConfigurationSummary()
         {
@@ -114,43 +100,23 @@ namespace Melanchall.DryWetMidi.Configuration
             AddNativeBackendInfo(resultLines);
 #endif
 
+#if !NATIVELESS
             var capabilities = new Dictionary<string, bool>
             {
-                ["devices watcher API"] = IsDevicesWatcherApiAvailable(),
-                ["parent device API"] = IsParentDeviceApiAvailable(),
+                ["endpoints watcher API"] = IsEndpointsWatcherApiAvailable(),
+                ["parent device API"] = IsDeviceInformationApiAvailable(),
                 ["virtual device API"] = IsVirtualDeviceApiAvailable(),
-                ["devices multi-client access"] = IsDevicesMultiClientAccessAvailable(),
+                ["endpoints multi-client access"] = IsEndpointsMultiClientAccessAvailable(),
             };
 
             resultLines.Add("Capabilities:");
             resultLines.AddRange(capabilities.Select(kv => $"- {kv.Key}: {(kv.Value ? "available" : "not available")}"));
+#endif
 
             return string.Join(Environment.NewLine, resultLines).Trim();
         }
 
 #if !NATIVELESS
-        internal static bool IsDevicesWatcherApiAvailable(MidiConfigurationHandle configurationHandle)
-        {
-            if (!NativeApiUtilities.IsOsSupported())
-                return false;
-
-            return MidiConfigurationApi.Api_IsDevicesWatcherApiAvailable(configurationHandle);
-        }
-
-        internal static bool IsDevicesMultiClientAccessAvailable(MidiConfigurationHandle configurationHandle) =>
-            IsAdvancedApiAvailable();
-
-        internal static bool IsParentDeviceApiAvailable(MidiConfigurationHandle configurationHandle) =>
-            IsAdvancedApiAvailable();
-
-        internal static bool IsVirtualDeviceApiAvailable(MidiConfigurationHandle configurationHandle)
-        {
-            if (!NativeApiUtilities.IsOsSupported())
-                return false;
-
-            return MidiConfigurationApi.Api_IsVirtualDeviceApiAvailable(configurationHandle);
-        }
-
         internal static bool IsAdvancedApiAvailable()
         {
             if (!NativeApiUtilities.IsOsSupported())
@@ -162,10 +128,10 @@ namespace Melanchall.DryWetMidi.Configuration
             return true;
         }
 
-        private static void OnNativeApiMessageReceived(object sender, string text)
+        private static void OnLibraryActivityMessageReceived(object sender, string text)
         {
-            var eventArgs = new NativeApiActivityRecordReceivedEventArgs(text);
-            NativeApiMessageReceived?.Invoke(null, eventArgs);
+            var eventArgs = new LibraryActivityMessageReceivedEventArgs(text);
+            LibraryActivityMessageReceived?.Invoke(null, eventArgs);
         }
 
         private static void AddNativeBackendInfo(List<string> resultLines)
@@ -241,6 +207,6 @@ namespace Melanchall.DryWetMidi.Configuration
         }
 #endif
 
-        #endregion
+#endregion
     }
 }

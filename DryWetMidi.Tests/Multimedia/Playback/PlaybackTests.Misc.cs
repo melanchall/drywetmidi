@@ -21,13 +21,13 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
     {
         #region Nested classes
 
-        private sealed class OutputDeviceWithExceptionOnSendEvent : IOutputDevice
+        private sealed class OutputEndpointWithExceptionOnSendEvent : IOutputEndpoint
         {
             public event EventHandler<MidiEventSentEventArgs> EventSent;
 
             private readonly Func<Exception> _createException;
 
-            public OutputDeviceWithExceptionOnSendEvent(Func<Exception> createException)
+            public OutputEndpointWithExceptionOnSendEvent(Func<Exception> createException)
             {
                 _createException = createException;
             }
@@ -74,7 +74,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var normalData = new List<string>();
 
             CheckPlayback(
-                useOutputDevice: false,
+                useOutputEndpoint: false,
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new ProgramChangeEvent((SevenBitNumber)33)).SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(200), TempoMap),
@@ -111,7 +111,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var labels = new ConcurrentStack<string>();
 
             CheckPlayback(
-                useOutputDevice: false,
+                useOutputEndpoint: false,
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new ProgramChangeEvent((SevenBitNumber)33)).SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(firstEventTimeMs), TempoMap),
@@ -148,7 +148,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var normalData = new List<string>();
 
             CheckPlayback(
-                useOutputDevice: false,
+                useOutputEndpoint: false,
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new ProgramChangeEvent((SevenBitNumber)33)).SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(200), TempoMap),
@@ -193,7 +193,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var normalData = new List<string>();
 
             CheckPlayback(
-                useOutputDevice: false,
+                useOutputEndpoint: false,
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new ProgramChangeEvent((SevenBitNumber)33)).SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(200), TempoMap),
@@ -231,7 +231,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var normalData = new List<string>();
 
             CheckPlayback(
-                useOutputDevice: false,
+                useOutputEndpoint: false,
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new ProgramChangeEvent((SevenBitNumber)33)).SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(200), TempoMap),
@@ -269,7 +269,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var normalData = new List<string>();
 
             CheckPlayback(
-                useOutputDevice: false,
+                useOutputEndpoint: false,
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new NoteOnEvent()).SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(0), TempoMap),
@@ -307,7 +307,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var normalData = new List<string>();
 
             CheckPlayback(
-                useOutputDevice: false,
+                useOutputEndpoint: false,
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new NoteOnEvent()).SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(0), TempoMap),
@@ -345,7 +345,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var normalData = new List<string>();
 
             CheckPlayback(
-                useOutputDevice: false,
+                useOutputEndpoint: false,
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new ProgramChangeEvent((SevenBitNumber)33)).SetTime((MetricTimeSpan)TimeSpan.FromMilliseconds(200), TempoMap),
@@ -397,8 +397,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     }))));
 
             CheckPlayback(
-                useOutputDevice: false,
-                createPlayback: outputDevice => midiFile.GetPlayback(outputDevice),
+                useOutputEndpoint: false,
+                createPlayback: outputEndpoint => midiFile.GetPlayback(outputEndpoint),
                 actions: Array.Empty<PlaybackAction>(),
                 expectedReceivedEvents: new[]
                 {
@@ -515,9 +515,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         public void CheckPlaybackEvents_DeviceErrorOccurred()
         {
             var exceptionMessage = "AAA";
-            var outputDevice = new OutputDeviceWithExceptionOnSendEvent(() => new Exception(exceptionMessage));
+            var outputEndpoint = new OutputEndpointWithExceptionOnSendEvent(() => new Exception(exceptionMessage));
 
-            using (var playback = new[] { new TextEvent() }.GetPlayback(TempoMap, outputDevice))
+            using (var playback = new[] { new TextEvent() }.GetPlayback(TempoMap, outputEndpoint))
             {
                 Exception exception = null;
 
@@ -589,7 +589,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             };
 
             CheckPlayback(
-                useOutputDevice: false,
+                useOutputEndpoint: false,
                 initialPlaybackObjects: playbackEvents,
                 actions: Array.Empty<PlaybackAction>(),
                 expectedReceivedEvents: playbackEvents
@@ -607,7 +607,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         public void CheckPlayback_CustomPlaybackStart(double speed)
         {
             CheckPlayback(
-                useOutputDevice: false,
+                useOutputEndpoint: false,
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new NoteOnEvent((SevenBitNumber)100, (SevenBitNumber)20) { Channel = (FourBitNumber)5 }),
@@ -644,7 +644,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         public void CheckPlayback_CustomPlaybackEnd(double speed)
         {
             CheckPlayback(
-                useOutputDevice: false,
+                useOutputEndpoint: false,
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new NoteOnEvent((SevenBitNumber)100, (SevenBitNumber)20) { Channel = (FourBitNumber)5 }),
@@ -679,7 +679,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         public void CheckPlayback_CustomPlaybackStartAndEnd(double speed)
         {
             CheckPlayback(
-                useOutputDevice: false,
+                useOutputEndpoint: false,
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new NoteOnEvent((SevenBitNumber)100, (SevenBitNumber)20) { Channel = (FourBitNumber)5 }),
@@ -723,19 +723,19 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
             MidiFile recordedFile = null;
 
-            var inputDevice = TestDeviceManager.GetInputDevice("A");
-            var outputDevice = TestDeviceManager.GetOutputDevice("A");
+            var inputEndpoint = TestDeviceManager.GetInputEndpoint("A");
+            var outputEndpoint = TestDeviceManager.GetOutputEndpoint("A");
 
             var receivedEventsNumber = 0;
 
-            inputDevice.StartEventsListening();
-            inputDevice.EventReceived += (_, __) => receivedEventsNumber++;
+            inputEndpoint.StartEventsListening();
+            inputEndpoint.EventReceived += (_, __) => receivedEventsNumber++;
 
-            using (var recording = new Recording(TempoMap, inputDevice))
+            using (var recording = new Recording(TempoMap, inputEndpoint))
             {
                 var sendingThread = new Thread(() =>
                 {
-                    SendReceiveUtilities.SendEvents(eventsToSend, outputDevice);
+                    SendReceiveUtilities.SendEvents(eventsToSend, outputEndpoint);
                 });
 
                 recording.Start();
@@ -748,7 +748,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             }
 
             CheckPlayback(
-                useOutputDevice: false,
+                useOutputEndpoint: false,
                 initialPlaybackObjects: recordedFile.GetTimedEvents().ToArray(),
                 actions: Array.Empty<PlaybackAction>(),
                 expectedReceivedEvents: new[]
@@ -783,7 +783,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var lastTime = (TimeSpan)playbackObjects.Last().TimeAs<MetricTimeSpan>(TempoMap);
 
             CheckPlayback(
-                useOutputDevice: false,
+                useOutputEndpoint: false,
                 initialPlaybackObjects: playbackObjects,
                 actions: Array.Empty<PlaybackAction>(),
                 expectedReceivedEvents: Enumerable
@@ -821,7 +821,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var playbackStart = new MetricTimeSpan(0, 0, 0, 400);
 
             CheckPlayback(
-                useOutputDevice: false,
+                useOutputEndpoint: false,
                 initialPlaybackObjects: playbackObjects,
                 actions: Array.Empty<PlaybackAction>(),
                 expectedReceivedEvents: Enumerable
@@ -861,7 +861,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var playbackEnd = new MetricTimeSpan(0, 0, 0, 400);
 
             CheckPlayback(
-                useOutputDevice: false,
+                useOutputEndpoint: false,
                 initialPlaybackObjects: playbackObjects,
                 actions: Array.Empty<PlaybackAction>(),
                 expectedReceivedEvents: Enumerable
@@ -907,7 +907,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var windowSize = playbackEnd - playbackStart;
 
             CheckPlayback(
-                useOutputDevice: false,
+                useOutputEndpoint: false,
                 initialPlaybackObjects: playbackObjects,
                 actions: Array.Empty<PlaybackAction>(),
                 expectedReceivedEvents: Enumerable
@@ -958,7 +958,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var windowSize = playbackEnd - playbackStart;
 
             CheckPlayback(
-                useOutputDevice: false,
+                useOutputEndpoint: false,
                 initialPlaybackObjects: playbackObjects,
                 actions: Array.Empty<PlaybackAction>(),
                 expectedReceivedEvents: Enumerable
@@ -984,7 +984,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var stopPeriod = TimeSpan.FromSeconds(1);
 
             CheckPlayback(
-                useOutputDevice: false,
+                useOutputEndpoint: false,
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new NoteOnEvent((SevenBitNumber)100, (SevenBitNumber)20) { Channel = (FourBitNumber)5 })
@@ -1028,7 +1028,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var stopPeriod = TimeSpan.FromMilliseconds(400);
 
             CheckPlayback(
-                useOutputDevice: false,
+                useOutputEndpoint: false,
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new NoteOnEvent())
@@ -1060,7 +1060,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var stopPeriod = TimeSpan.FromMilliseconds(400);
 
             CheckPlayback(
-                useOutputDevice: false,
+                useOutputEndpoint: false,
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new NoteOnEvent())
@@ -1091,7 +1091,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         public void InterruptNotesOnStop_PlaybackEnd()
         {
             CheckPlayback(
-                useOutputDevice: false,
+                useOutputEndpoint: false,
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new NoteOnEvent())
@@ -1119,7 +1119,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var stopPeriod = TimeSpan.FromMilliseconds(400);
 
             CheckPlayback(
-                useOutputDevice: false,
+                useOutputEndpoint: false,
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new NoteOnEvent())
@@ -1149,7 +1149,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         public void DontInterruptNotesOnStop_PlaybackEnd()
         {
             CheckPlayback(
-                useOutputDevice: false,
+                useOutputEndpoint: false,
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new NoteOnEvent())
@@ -1185,7 +1185,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var secondAfterResumeDelay = TimeSpan.FromMilliseconds(400);
 
             CheckPlayback(
-                useOutputDevice: false,
+                useOutputEndpoint: false,
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new NoteOnEvent())
@@ -1252,9 +1252,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
         [MultimediaTestRetry]
         [Test]
-        public void ChangeOutputDeviceDuringPlayback()
+        public void ChangeOutputEndpointDuringPlayback()
         {
-            var changeDeviceAfter = TimeSpan.FromSeconds(1);
+            var changeEndpointAfter = TimeSpan.FromSeconds(1);
             var firstEventDelay = TimeSpan.Zero;
             var secondEventDelay = TimeSpan.FromSeconds(2);
 
@@ -1269,28 +1269,28 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var stopwatch = new Stopwatch();
 
             var receivedEvents1 = new List<TimestampedEvent>();
-            var outputDevice1 = TestDeviceManager.GetOutputDevice("A");
-            outputDevice1.EventSent += (_, e) => receivedEvents1.Add(new TimestampedEvent(e.Event, stopwatch.Elapsed));
+            var outputEndpoint1 = TestDeviceManager.GetOutputEndpoint("A");
+            outputEndpoint1.EventSent += (_, e) => receivedEvents1.Add(new TimestampedEvent(e.Event, stopwatch.Elapsed));
 
             var receivedEvents2 = new List<TimestampedEvent>();
-            var outputDevice2 = TestDeviceManager.GetOutputDevice("B");
-            outputDevice2.EventSent += (_, e) => receivedEvents2.Add(new TimestampedEvent(e.Event, stopwatch.Elapsed));
+            var outputEndpoint2 = TestDeviceManager.GetOutputEndpoint("B");
+            outputEndpoint2.EventSent += (_, e) => receivedEvents2.Add(new TimestampedEvent(e.Event, stopwatch.Elapsed));
 
             ClassicAssert.AreNotSame(
-                outputDevice1,
-                outputDevice2,
-                "Output devices are the same.");
+                outputEndpoint1,
+                outputEndpoint2,
+                "Output endpoints are the same.");
 
             using (var playback = new Playback(playbackObjects, TempoMap))
             {
-                playback.OutputDevice = outputDevice1;
+                playback.OutputEndpoint = outputEndpoint1;
 
                 playback.Start();
                 stopwatch.Start();
 
-                WaitOperations.WaitPrecisely(changeDeviceAfter);
+                WaitOperations.WaitPrecisely(changeEndpointAfter);
 
-                playback.OutputDevice = outputDevice2;
+                playback.OutputEndpoint = outputEndpoint2;
 
                 WaitOperations.Wait(() => !playback.IsRunning);
                 WaitOperations.Wait(SendReceiveUtilities.MaximumEventSendReceiveDelay);
@@ -1321,8 +1321,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var tempoMap = midiFile.GetTempoMap();
 
             CheckPlayback(
-                useOutputDevice: false,
-                createPlayback: outputDevice => midiFile.GetPlayback(outputDevice),
+                useOutputEndpoint: false,
+                createPlayback: outputEndpoint => midiFile.GetPlayback(outputEndpoint),
                 actions: Array.Empty<PlaybackAction>(),
                 expectedReceivedEvents: playbackObjects
                     .Select(e => new TimestampedEvent(e.Event, e.TimeAs<MetricTimeSpan>(tempoMap)))
@@ -1349,8 +1349,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             };
 
             CheckPlayback(
-                useOutputDevice: false,
-                createPlayback: outputDevice => new Playback(playbackObjects, TempoMap, outputDevice),
+                useOutputEndpoint: false,
+                createPlayback: outputEndpoint => new Playback(playbackObjects, TempoMap, outputEndpoint),
                 actions: Array.Empty<PlaybackAction>(),
                 expectedReceivedEvents: new[]
                 {
@@ -1380,8 +1380,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             };
 
             CheckPlayback(
-                useOutputDevice: false,
-                createPlayback: outputDevice => new Playback(playbackObjects, TempoMap, outputDevice, new PlaybackSettings
+                useOutputEndpoint: false,
+                createPlayback: outputEndpoint => new Playback(playbackObjects, TempoMap, outputEndpoint, new PlaybackSettings
                 {
                     CalculateTempoMap = true,
                 }),

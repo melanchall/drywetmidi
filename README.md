@@ -71,16 +71,16 @@ foreach (var note in midiFile.GetNotes())
 Or maybe you want to [record data](https://melanchall.github.io/drywetmidi/articles/recording/Overview.html) from a [MIDI device](https://melanchall.github.io/drywetmidi/articles/devices/Overview.html), then [quantize](https://melanchall.github.io/drywetmidi/articles/tools/Quantizer.html) (see all [tools](https://melanchall.github.io/drywetmidi/articles/tools/Overview.html)) recorded events by the grid with step of 1/8, and [play](https://melanchall.github.io/drywetmidi/articles/playback/Overview.html) the data via the default Windows synth:
 
 ```csharp
-var inputDevice = InputDevice.GetByName("MyMidiKeyboard");
-inputDevice.StartEventsListening();
+var inputEndpoint = InputEndpoint.GetByName("MyMidiKeyboard");
+inputEndpoint.StartEventsListening();
 
-var recording = new Recording(TempoMap.Default, inputDevice);
+var recording = new Recording(TempoMap.Default, inputEndpoint);
 recording.Start();
  
 // ...
  
 recording.Stop();
-inputDevice.Dispose();
+inputEndpoint.Dispose();
  
 var recordedFile = recording.ToFile();
 recording.Dispose();
@@ -89,14 +89,14 @@ recordedFile.QuantizeObjects(
     ObjectType.TimedEvent,
     new SteppedGrid(MusicalTimeSpan.Eighth));
  
-var outputDevice = OutputDevice.GetByName("Microsoft GS Wavetable Synth");
-var playback = recordedFile.GetPlayback(outputDevice);
+var outputEndpoint = OutputEndpoint.GetByName("Microsoft GS Wavetable Synth");
+var playback = recordedFile.GetPlayback(outputEndpoint);
 playback.Start();
  
 // ...
  
 playback.Dispose();
-outputDevice.Dispose();
+outputEndpoint.Dispose();
 ```
 
 You can even [build a musical composition](https://melanchall.github.io/drywetmidi/articles/composing/Pattern.html):
@@ -176,32 +176,32 @@ midiFile.Write("ManyObjects.mid");
 If you are a user of macOS, you can use API to manage [virtual MIDI devices](https://melanchall.github.io/drywetmidi/articles/devices/Virtual-device.html) and to watch [devices plugging/unplugging](https://melanchall.github.io/drywetmidi/articles/devices/Devices-watcher.html):
 
 ```csharp
-DevicesWatcher.Instance.DeviceAdded += OnDeviceAdded;
-DevicesWatcher.Instance.DeviceRemoved += OnDeviceRemoved;
+MidiEndpointsWatcher.Instance.EndpointAdded += OnEndpointAdded;
+MidiEndpointsWatcher.Instance.EndpointRemoved += OnEndpointRemoved;
  
-// Virtual device creation will cause DevicesWatcher.Instance.DeviceAdded
-// will be fired since one input device and one output device
+// Virtual device creation will cause MidiEndpointsWatcher.Instance.EndpointAdded
+// will be fired since one input endpoint and one output endpoint
 // will be created
 var virtualDevice = VirtualDevice.Create("My Virtual Device");
  
-virtualDevice.InputDevice.EventReceived += OnEventReceived;
-virtualDevice.InputDevice.StartEventsListening();
+virtualDevice.InputEndpoint.EventReceived += OnEventReceived;
+virtualDevice.InputEndpoint.StartEventsListening();
  
 // Since virtual device is a loopback device in DryWetMIDI,
-// this event will be received on virtualDevice.InputDevice
-virtualDevice.OutputDevice.SendEvent(new PitchBendEvent(2000));
+// this event will be received on virtualDevice.InputEndpoint
+virtualDevice.OutputEndpoint.SendEvent(new PitchBendEvent(2000));
 
 // Dispose the virtual device when you don't need it anymore
 virtualDevice.Dispose();
 
 // Events handlers
 
-private static void OnDeviceAdded(object? sender, DeviceAddedRemovedEventArgs e)
+private static void OnEndpointAdded(object? sender, EndpointAddedRemovedEventArgs e)
 {
     // ...
 }
  
-private static void OnDeviceRemoved(object? sender, DeviceAddedRemovedEventArgs e)
+private static void OnEndpointRemoved(object? sender, EndpointAddedRemovedEventArgs e)
 {
     // ...
 }

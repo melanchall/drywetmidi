@@ -52,10 +52,10 @@
 
   <ItemGroup Condition="'$(Configuration)'=='ReleaseNativeless' OR '$(Configuration)'=='DebugNativeless'">
     <Compile Remove="Multimedia\**\*.cs" />
-    <Compile Remove="Attributes\DevicesWatcherApiRequiredAttribute.cs" />
+    <Compile Remove="Attributes\EndpointsWatcherApiRequiredAttribute.cs" />
     <Compile Remove="Attributes\VirtualDeviceApiRequiredAttribute.cs" />
-    <Compile Remove="Attributes\ParentDeviceApiRequiredAttribute.cs" />
-    <Compile Remove="Attributes\MultiClientDeviceAccessSupportRequiredAttribute.cs" />
+    <Compile Remove="Attributes\DeviceInformationApiRequiredAttribute.cs" />
+    <Compile Remove="Attributes\MultiClientEndpointsAccessSupportRequiredAttribute.cs" />
     <Compile Remove="Attributes\AdvancedApiRequiredAttribute.cs" />
     <Compile Remove="Attributes\NativeApiRequiredAttribute.cs" />
   </ItemGroup>

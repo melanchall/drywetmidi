@@ -25,7 +25,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// </summary>
         /// <param name="events">MIDI events to play.</param>
         /// <param name="tempoMap">Tempo map used to calculate events times.</param>
-        /// <param name="outputDevice">Output MIDI device to play events through.</param>
+        /// <param name="outputEndpoint">Output MIDI device to play events through.</param>
         /// <param name="playbackSettings">Settings according to which a playback should be created.</param>
         /// <returns>An instance of the <see cref="Playback"/> for playing <paramref name="events"/>.</returns>
         /// <exception cref="ArgumentNullException">
@@ -38,22 +38,22 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <description><paramref name="tempoMap"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="outputDevice"/> is <c>null</c>.</description>
+        /// <description><paramref name="outputEndpoint"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
-        public static Playback GetPlayback(this IEnumerable<MidiEvent> events, TempoMap tempoMap, IOutputDevice outputDevice, PlaybackSettings playbackSettings = null)
+        public static Playback GetPlayback(this IEnumerable<MidiEvent> events, TempoMap tempoMap, IOutputEndpoint outputEndpoint, PlaybackSettings playbackSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(events), events);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
-            ThrowIfArgument.IsNull(nameof(outputDevice), outputDevice);
+            ThrowIfArgument.IsNull(nameof(outputEndpoint), outputEndpoint);
 
             UseNoteEventsDirectly(ref playbackSettings);
 
             var timedObjects = events
                 .GetTimedEventsLazy(playbackSettings?.TimedEventDetectionSettings, 0);
 
-            return new Playback(timedObjects, tempoMap, outputDevice, playbackSettings);
+            return new Playback(timedObjects, tempoMap, outputEndpoint, playbackSettings);
         }
 
         /// <summary>
@@ -94,7 +94,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// </summary>
         /// <param name="trackChunk"><see cref="TrackChunk"/> containing events to play.</param>
         /// <param name="tempoMap">Tempo map used to calculate events times.</param>
-        /// <param name="outputDevice">Output MIDI device to play events through.</param>
+        /// <param name="outputEndpoint">Output MIDI device to play events through.</param>
         /// <param name="playbackSettings">Settings according to which a playback should be created.</param>
         /// <returns>An instance of the <see cref="Playback"/> for playing MIDI events contained in
         /// the <paramref name="trackChunk"/>.</returns>
@@ -108,15 +108,15 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <description><paramref name="tempoMap"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="outputDevice"/> is <c>null</c>.</description>
+        /// <description><paramref name="outputEndpoint"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
-        public static Playback GetPlayback(this TrackChunk trackChunk, TempoMap tempoMap, IOutputDevice outputDevice, PlaybackSettings playbackSettings = null)
+        public static Playback GetPlayback(this TrackChunk trackChunk, TempoMap tempoMap, IOutputEndpoint outputEndpoint, PlaybackSettings playbackSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
-            ThrowIfArgument.IsNull(nameof(outputDevice), outputDevice);
+            ThrowIfArgument.IsNull(nameof(outputEndpoint), outputEndpoint);
 
             UseNoteEventsDirectly(ref playbackSettings);
 
@@ -124,7 +124,7 @@ namespace Melanchall.DryWetMidi.Multimedia
                 .Events
                 .GetTimedEventsLazy(playbackSettings?.TimedEventDetectionSettings, 0);
 
-            return new Playback(timedObjects, tempoMap, outputDevice, playbackSettings);
+            return new Playback(timedObjects, tempoMap, outputEndpoint, playbackSettings);
         }
 
         /// <summary>
@@ -167,7 +167,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// </summary>
         /// <param name="trackChunks">Collection of <see cref="TrackChunk"/> containing events to play.</param>
         /// <param name="tempoMap">Tempo map used to calculate events times.</param>
-        /// <param name="outputDevice">Output MIDI device to play events through.</param>
+        /// <param name="outputEndpoint">Output MIDI device to play events through.</param>
         /// <param name="playbackSettings">Settings according to which a playback should be created.</param>
         /// <returns>An instance of the <see cref="Playback"/> for playing MIDI events contained in
         /// the <paramref name="trackChunks"/>.</returns>
@@ -181,15 +181,15 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <description><paramref name="tempoMap"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="outputDevice"/> is <c>null</c>.</description>
+        /// <description><paramref name="outputEndpoint"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
-        public static Playback GetPlayback(this IEnumerable<TrackChunk> trackChunks, TempoMap tempoMap, IOutputDevice outputDevice, PlaybackSettings playbackSettings = null)
+        public static Playback GetPlayback(this IEnumerable<TrackChunk> trackChunks, TempoMap tempoMap, IOutputEndpoint outputEndpoint, PlaybackSettings playbackSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
-            ThrowIfArgument.IsNull(nameof(outputDevice), outputDevice);
+            ThrowIfArgument.IsNull(nameof(outputEndpoint), outputEndpoint);
 
             UseNoteEventsDirectly(ref playbackSettings);
 
@@ -199,7 +199,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             return new Playback(
                 new SortedLazyCollection<TimedEvent>(timedObjects),
                 tempoMap,
-                outputDevice,
+                outputEndpoint,
                 playbackSettings);
         }
 
@@ -244,7 +244,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// the specified <see cref="MidiFile"/>.
         /// </summary>
         /// <param name="midiFile"><see cref="MidiFile"/> containing events to play.</param>
-        /// <param name="outputDevice">Output MIDI device to play events through.</param>
+        /// <param name="outputEndpoint">Output MIDI device to play events through.</param>
         /// <param name="playbackSettings">Settings according to which a playback should be created.</param>
         /// <returns>An instance of the <see cref="Playback"/> for playing MIDI events contained in
         /// the <paramref name="midiFile"/>.</returns>
@@ -255,16 +255,16 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <description><paramref name="midiFile"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="outputDevice"/> is <c>null</c>.</description>
+        /// <description><paramref name="outputEndpoint"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
-        public static Playback GetPlayback(this MidiFile midiFile, IOutputDevice outputDevice, PlaybackSettings playbackSettings = null)
+        public static Playback GetPlayback(this MidiFile midiFile, IOutputEndpoint outputEndpoint, PlaybackSettings playbackSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
-            ThrowIfArgument.IsNull(nameof(outputDevice), outputDevice);
+            ThrowIfArgument.IsNull(nameof(outputEndpoint), outputEndpoint);
 
-            return GetPlayback(midiFile.GetTrackChunks(), midiFile.GetTempoMap(), outputDevice, playbackSettings);
+            return GetPlayback(midiFile.GetTrackChunks(), midiFile.GetTempoMap(), outputEndpoint, playbackSettings);
         }
 
         /// <summary>
@@ -290,7 +290,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <param name="pattern"><see cref="Pattern"/> producing events to play.</param>
         /// <param name="tempoMap">Tempo map used to calculate events times.</param>
         /// <param name="channel">MIDI channel to play channel events on.</param>
-        /// <param name="outputDevice">Output MIDI device to play events through.</param>
+        /// <param name="outputEndpoint">Output MIDI device to play events through.</param>
         /// <param name="playbackSettings">Settings according to which a playback should be created.</param>
         /// <returns>An instance of the <see cref="Playback"/> for playing MIDI events that will be
         /// produced by the <paramref name="pattern"/>.</returns>
@@ -304,17 +304,17 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <description><paramref name="tempoMap"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="outputDevice"/> is <c>null</c>.</description>
+        /// <description><paramref name="outputEndpoint"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
-        public static Playback GetPlayback(this Pattern pattern, TempoMap tempoMap, FourBitNumber channel, IOutputDevice outputDevice, PlaybackSettings playbackSettings = null)
+        public static Playback GetPlayback(this Pattern pattern, TempoMap tempoMap, FourBitNumber channel, IOutputEndpoint outputEndpoint, PlaybackSettings playbackSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(pattern), pattern);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
-            ThrowIfArgument.IsNull(nameof(outputDevice), outputDevice);
+            ThrowIfArgument.IsNull(nameof(outputEndpoint), outputEndpoint);
 
-            return pattern.ToTrackChunk(tempoMap, channel).GetPlayback(tempoMap, outputDevice, playbackSettings);
+            return pattern.ToTrackChunk(tempoMap, channel).GetPlayback(tempoMap, outputEndpoint, playbackSettings);
         }
 
         /// <summary>
@@ -353,7 +353,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <typeparam name="TObject">The type of objects to play.</typeparam>
         /// <param name="objects">Objects to play.</param>
         /// <param name="tempoMap">Tempo map used to calculate events times.</param>
-        /// <param name="outputDevice">Output MIDI device to play <paramref name="objects"/> through.</param>
+        /// <param name="outputEndpoint">Output MIDI device to play <paramref name="objects"/> through.</param>
         /// <param name="programNumber">Program that should be used to play <paramref name="objects"/>.</param>
         /// <param name="playbackSettings">Settings according to which a playback should be created.</param>
         /// <returns>An instance of the <see cref="Playback"/> for playing <paramref name="objects"/>.</returns>
@@ -367,21 +367,21 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <description><paramref name="tempoMap"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="outputDevice"/> is <c>null</c>.</description>
+        /// <description><paramref name="outputEndpoint"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
-        public static Playback GetPlayback<TObject>(this IEnumerable<TObject> objects, TempoMap tempoMap, IOutputDevice outputDevice, SevenBitNumber programNumber, PlaybackSettings playbackSettings = null)
+        public static Playback GetPlayback<TObject>(this IEnumerable<TObject> objects, TempoMap tempoMap, IOutputEndpoint outputEndpoint, SevenBitNumber programNumber, PlaybackSettings playbackSettings = null)
             where TObject : IMusicalObject, ITimedObject
         {
             ThrowIfArgument.IsNull(nameof(objects), objects);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
-            ThrowIfArgument.IsNull(nameof(outputDevice), outputDevice);
+            ThrowIfArgument.IsNull(nameof(outputEndpoint), outputEndpoint);
 
             return GetMusicalObjectsPlayback(
                 objects,
                 tempoMap,
-                outputDevice,
+                outputEndpoint,
                 channel => new[] { new ProgramChangeEvent(programNumber) { Channel = channel } },
                 playbackSettings);
         }
@@ -393,7 +393,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <typeparam name="TObject">The type of objects to play.</typeparam>
         /// <param name="objects">Objects to play.</param>
         /// <param name="tempoMap">Tempo map used to calculate events times.</param>
-        /// <param name="outputDevice">Output MIDI device to play <paramref name="objects"/> through.</param>
+        /// <param name="outputEndpoint">Output MIDI device to play <paramref name="objects"/> through.</param>
         /// <param name="generalMidiProgram">Program that should be used to play <paramref name="objects"/>.</param>
         /// <param name="playbackSettings">Settings according to which a playback should be created.</param>
         /// <returns>An instance of the <see cref="Playback"/> for playing <paramref name="objects"/>.</returns>
@@ -407,23 +407,23 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <description><paramref name="tempoMap"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="outputDevice"/> is <c>null</c>.</description>
+        /// <description><paramref name="outputEndpoint"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="generalMidiProgram"/> specified an invalid value.</exception>
-        public static Playback GetPlayback<TObject>(this IEnumerable<TObject> objects, TempoMap tempoMap, IOutputDevice outputDevice, GeneralMidiProgram generalMidiProgram, PlaybackSettings playbackSettings = null)
+        public static Playback GetPlayback<TObject>(this IEnumerable<TObject> objects, TempoMap tempoMap, IOutputEndpoint outputEndpoint, GeneralMidiProgram generalMidiProgram, PlaybackSettings playbackSettings = null)
             where TObject : IMusicalObject, ITimedObject
         {
             ThrowIfArgument.IsNull(nameof(objects), objects);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
-            ThrowIfArgument.IsNull(nameof(outputDevice), outputDevice);
+            ThrowIfArgument.IsNull(nameof(outputEndpoint), outputEndpoint);
             ThrowIfArgument.IsInvalidEnumValue(nameof(generalMidiProgram), generalMidiProgram);
 
             return GetMusicalObjectsPlayback(
                 objects,
                 tempoMap,
-                outputDevice,
+                outputEndpoint,
                 channel => new[] { generalMidiProgram.GetProgramEvent(channel) },
                 playbackSettings);
         }
@@ -435,7 +435,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <typeparam name="TObject">The type of objects to play.</typeparam>
         /// <param name="objects">Objects to play.</param>
         /// <param name="tempoMap">Tempo map used to calculate events times.</param>
-        /// <param name="outputDevice">Output MIDI device to play <paramref name="objects"/> through.</param>
+        /// <param name="outputEndpoint">Output MIDI device to play <paramref name="objects"/> through.</param>
         /// <param name="generalMidi2Program">Program that should be used to play <paramref name="objects"/>.</param>
         /// <param name="playbackSettings">Settings according to which a playback should be created.</param>
         /// <returns>An instance of the <see cref="Playback"/> for playing <paramref name="objects"/>.</returns>
@@ -449,23 +449,23 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <description><paramref name="tempoMap"/> is <c>null</c>.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="outputDevice"/> is <c>null</c>.</description>
+        /// <description><paramref name="outputEndpoint"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
         /// </exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="generalMidi2Program"/> specified an invalid value.</exception>
-        public static Playback GetPlayback<TObject>(this IEnumerable<TObject> objects, TempoMap tempoMap, IOutputDevice outputDevice, GeneralMidi2Program generalMidi2Program, PlaybackSettings playbackSettings = null)
+        public static Playback GetPlayback<TObject>(this IEnumerable<TObject> objects, TempoMap tempoMap, IOutputEndpoint outputEndpoint, GeneralMidi2Program generalMidi2Program, PlaybackSettings playbackSettings = null)
             where TObject : IMusicalObject, ITimedObject
         {
             ThrowIfArgument.IsNull(nameof(objects), objects);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
-            ThrowIfArgument.IsNull(nameof(outputDevice), outputDevice);
+            ThrowIfArgument.IsNull(nameof(outputEndpoint), outputEndpoint);
             ThrowIfArgument.IsInvalidEnumValue(nameof(generalMidi2Program), generalMidi2Program);
 
             return GetMusicalObjectsPlayback(
                 objects,
                 tempoMap,
-                outputDevice,
+                outputEndpoint,
                 channel => generalMidi2Program.GetProgramEvents(channel),
                 playbackSettings);
         }
@@ -473,7 +473,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         private static Playback GetMusicalObjectsPlayback<TObject>(
             IEnumerable<TObject> objects,
             TempoMap tempoMap,
-            IOutputDevice outputDevice,
+            IOutputEndpoint outputEndpoint,
             Func<FourBitNumber, IEnumerable<MidiEvent>> programChangeEventsGetter,
             PlaybackSettings playbackSettings)
             where TObject : IMusicalObject, ITimedObject
@@ -487,7 +487,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             return new Playback(
                 programChangeEvents.Concat((IEnumerable<ITimedObject>)objects),
                 tempoMap,
-                outputDevice,
+                outputEndpoint,
                 playbackSettings);
         }
 

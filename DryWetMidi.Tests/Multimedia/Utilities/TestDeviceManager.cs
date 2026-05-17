@@ -9,7 +9,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
     {
         internal sealed class LoopbackDevice
         {
-            public sealed class OutputDevice : IOutputDevice
+            public sealed class OutputEndpoint : IOutputEndpoint
             {
                 public event EventHandler<MidiEventSentEventArgs> EventSent;
 
@@ -27,7 +27,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 }
             }
 
-            public sealed class InputDevice : IInputDevice
+            public sealed class InputEndpoint : IInputEndpoint
             {
                 public event EventHandler<MidiEventReceivedEventArgs> EventReceived;
 
@@ -58,25 +58,25 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 Output.EventSent += (sender, e) => Input.FireEventReceived(e.Event);
             }
 
-            public OutputDevice Output { get; } = new OutputDevice();
+            public OutputEndpoint Output { get; } = new OutputEndpoint();
 
-            public InputDevice Input { get; } = new InputDevice();
+            public InputEndpoint Input { get; } = new InputEndpoint();
         }
 
         private static readonly Dictionary<string, LoopbackDevice> _devices = new Dictionary<string, LoopbackDevice>();
 
-        public static IInputDevice GetInputDevice(string deviceName)
+        public static IInputEndpoint GetInputEndpoint(string endpointName)
         {
-            if (!_devices.TryGetValue(deviceName, out var device))
-                _devices.Add(deviceName, device = new LoopbackDevice());
+            if (!_devices.TryGetValue(endpointName, out var device))
+                _devices.Add(endpointName, device = new LoopbackDevice());
 
             return device.Input;
         }
 
-        public static IOutputDevice GetOutputDevice(string deviceName)
+        public static IOutputEndpoint GetOutputEndpoint(string endpointName)
         {
-            if (!_devices.TryGetValue(deviceName, out var device))
-                _devices.Add(deviceName, device = new LoopbackDevice());
+            if (!_devices.TryGetValue(endpointName, out var device))
+                _devices.Add(endpointName, device = new LoopbackDevice());
 
             return device.Output;
         }

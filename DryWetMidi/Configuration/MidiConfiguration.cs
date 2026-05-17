@@ -1,5 +1,4 @@
 ﻿using Melanchall.DryWetMidi.Common;
-using Melanchall.DryWetMidi.Multimedia;
 using System;
 
 namespace Melanchall.DryWetMidi.Configuration
@@ -8,7 +7,7 @@ namespace Melanchall.DryWetMidi.Configuration
     {
         #region Events
 
-        internal static event EventHandler<string> NativeApiActivityRecord;
+        internal static event EventHandler<string> NativeApiMessageReceived;
 
         #endregion
 
@@ -48,9 +47,7 @@ namespace Melanchall.DryWetMidi.Configuration
 
                         _nativeApiActivityCallback = NativeApiActivityCallback;
                         var result = MidiConfigurationApi.Api_GetConfiguration(UseWindowsMidiServices, _nativeApiActivityCallback, out rawHandle, out errorCode);
-                        
-                        // TODO: separate from devices
-                        MidiDeviceUtilities.HandleDevicesNativeApiResult(result, errorCode);
+                        NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
 
                         _handle = new MidiConfigurationHandle(rawHandle);
 
@@ -97,7 +94,7 @@ namespace Melanchall.DryWetMidi.Configuration
         private static void NativeApiActivityCallback(IntPtr record)
         {
             var text = NativeApi.GetStringFromPointer(record);
-            NativeApiActivityRecord?.Invoke(null, text);
+            NativeApiMessageReceived?.Invoke(null, text);
         }
 
         #endregion

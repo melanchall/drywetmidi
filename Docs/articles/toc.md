@@ -53,11 +53,11 @@
 
 # MIDI devices
 ## [Overview](devices/Overview.md)
-## [Input device](devices/Input-device.md)
-## [Output device](devices/Output-device.md)
-## [Devices connector](devices/Devices-connector.md)
+## [Input endpoint](devices/Input-endpoint.md)
+## [Output endpoint](devices/Output-endpoint.md)
+## [Endpoints connector](devices/Endpoints-connector.md)
 ## [Virtual device](devices/Virtual-device.md)
-## [Devices watcher](devices/Devices-watcher.md)
+## [Endpoints watcher](devices/Endpoints-watcher.md)
 ## [Common problems](devices/Common-problems.md)
 
 # Playback

@@ -25,11 +25,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void CheckEventsReceiving()
         {
-            using (var outputDevice = OutputDevice.GetByName(SendReceiveUtilities.DeviceToTestOnName))
-            using (var inputDevice = InputDevice.GetByName(SendReceiveUtilities.DeviceToTestOnName))
+            using (var outputEndpoint = OutputEndpoint.GetByName(SendReceiveUtilities.DeviceToTestOnName))
+            using (var inputEndpoint = InputEndpoint.GetByName(SendReceiveUtilities.DeviceToTestOnName))
             {
-                outputDevice.PrepareForEventsSending();
-                inputDevice.StartEventsListening();
+                outputEndpoint.PrepareForEventsSending();
+                inputEndpoint.StartEventsListening();
 
                 SendReceiveUtilities.CheckEventsReceiving(
                     new[]
@@ -41,10 +41,10 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                         new TimestampedEvent(new SongSelectEvent((SevenBitNumber)20), TimeSpan.FromSeconds(5)),
                         new TimestampedEvent(new TuneRequestEvent(), TimeSpan.FromMilliseconds(5200)),
                     },
-                    outputDevice,
-                    inputDevice);
+                    outputEndpoint,
+                    inputEndpoint);
 
-                inputDevice.StopEventsListening();
+                inputEndpoint.StopEventsListening();
             }
         }
 
@@ -59,18 +59,18 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
             CollectionAssert.IsNotEmpty(events, "Events collection is empty.");
 
-            using (var outputDevice = OutputDevice.GetByName(SendReceiveUtilities.DeviceToTestOnName))
-            using (var inputDevice = InputDevice.GetByName(SendReceiveUtilities.DeviceToTestOnName))
+            using (var outputEndpoint = OutputEndpoint.GetByName(SendReceiveUtilities.DeviceToTestOnName))
+            using (var inputEndpoint = InputEndpoint.GetByName(SendReceiveUtilities.DeviceToTestOnName))
             {
-                outputDevice.PrepareForEventsSending();
-                inputDevice.StartEventsListening();
+                outputEndpoint.PrepareForEventsSending();
+                inputEndpoint.StartEventsListening();
 
                 SendReceiveUtilities.CheckEventsReceiving(
                     events.Select((e, i) => new TimestampedEvent(e, TimeSpan.FromMilliseconds(50).MultiplyBy(i))).ToArray(),
-                    outputDevice,
-                    inputDevice);
+                    outputEndpoint,
+                    inputEndpoint);
 
-                inputDevice.StopEventsListening();
+                inputEndpoint.StopEventsListening();
             }
         }
 

@@ -35,7 +35,7 @@ It will take just several minutes or even less to run all tests guiding you thro
                 new ReadWriteMidiFileTask(midiFile),
             };
 
-            if (LibraryConfiguration.IsVirtualDeviceApiAvailable() && LibraryConfiguration.IsDevicesWatcherApiAvailable())
+            if (LibraryConfiguration.IsVirtualDeviceApiAvailable() && LibraryConfiguration.IsEndpointsWatcherApiAvailable())
                 tasks.Add(new CreateVirtualDeviceTask());
 
             if (NativeApiUtilities.IsOsSupported())

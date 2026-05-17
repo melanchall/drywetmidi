@@ -45,17 +45,17 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
             var waitTimeout = eventsToSend.Max(e => e.Time) + SendReceiveUtilities.MaximumEventSendReceiveDelay;
 
-            var inputDevice = TestDeviceManager.GetInputDevice("A");
-            var outputDevice = TestDeviceManager.GetOutputDevice("A");
+            var inputEndpoint = TestDeviceManager.GetInputEndpoint("A");
+            var outputEndpoint = TestDeviceManager.GetOutputEndpoint("A");
 
-            inputDevice.StartEventsListening();
-            inputDevice.EventReceived += (_, e) => receivedEvents.Add(new TimestampedEvent(e.Event, stopwatch.Elapsed));
+            inputEndpoint.StartEventsListening();
+            inputEndpoint.EventReceived += (_, e) => receivedEvents.Add(new TimestampedEvent(e.Event, stopwatch.Elapsed));
 
-            using (var recording = new Recording(tempoMap, inputDevice))
+            using (var recording = new Recording(tempoMap, inputEndpoint))
             {
                 var sendingThread = new Thread(() =>
                 {
-                    SendReceiveUtilities.SendEvents(eventsToSend, outputDevice);
+                    SendReceiveUtilities.SendEvents(eventsToSend, outputEndpoint);
                 });
 
                 stopwatch.Start();

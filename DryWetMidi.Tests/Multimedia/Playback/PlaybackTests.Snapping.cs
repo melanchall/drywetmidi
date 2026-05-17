@@ -19,7 +19,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         public void Snapping_AddSnapPoint_WithoutData()
         {
             CheckPlayback(
-                useOutputDevice: false,
+                useOutputEndpoint: false,
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new NoteOnEvent())
@@ -65,7 +65,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         public void Snapping_AddSnapPoint_WithData()
         {
             CheckPlayback(
-                useOutputDevice: false,
+                useOutputEndpoint: false,
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new NoteOnEvent())
@@ -114,7 +114,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             SnapPoint snapPoint = null;
 
             CheckPlayback(
-                useOutputDevice: false,
+                useOutputEndpoint: false,
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new NoteOnEvent())
@@ -168,7 +168,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             SnapPoint<string> snapPoint = null;
 
             CheckPlayback(
-                useOutputDevice: false,
+                useOutputEndpoint: false,
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new NoteOnEvent())
@@ -224,7 +224,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             SnapPoint snapPoint3 = null;
 
             CheckPlayback(
-                useOutputDevice: false,
+                useOutputEndpoint: false,
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new NoteOnEvent()),
@@ -272,7 +272,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             SnapPoint snapPoint3 = null;
 
             CheckPlayback(
-                useOutputDevice: false,
+                useOutputEndpoint: false,
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new NoteOnEvent()),
@@ -331,7 +331,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var endTime = TimeSpan.FromSeconds(4);
 
             CheckPlayback(
-                useOutputDevice: false,
+                useOutputEndpoint: false,
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new NoteOnEvent()),
@@ -381,7 +381,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             SnapPoint snapPoint = null;
 
             CheckPlayback(
-                useOutputDevice: false,
+                useOutputEndpoint: false,
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new NoteOnEvent()),
@@ -428,7 +428,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             SnapPoint snapPoint2 = null;
 
             CheckPlayback(
-                useOutputDevice: false,
+                useOutputEndpoint: false,
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new NoteOnEvent()),
@@ -482,7 +482,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             SnapPoint snapPoint2 = null;
 
             CheckPlayback(
-                useOutputDevice: false,
+                useOutputEndpoint: false,
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new NoteOnEvent()),
@@ -538,7 +538,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             SnapPoint<string> snapPoint3 = null;
 
             CheckPlayback(
-                useOutputDevice: false,
+                useOutputEndpoint: false,
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new NoteOnEvent()),
@@ -601,7 +601,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             SnapPoint<string> snapPoint3 = null;
 
             CheckPlayback(
-                useOutputDevice: false,
+                useOutputEndpoint: false,
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new NoteOnEvent()),
@@ -670,7 +670,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var endTime = TimeSpan.FromSeconds(4);
 
             CheckPlayback(
-                useOutputDevice: false,
+                useOutputEndpoint: false,
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new NoteOnEvent()),
@@ -727,7 +727,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             SnapPointsGroup snapPointsGroup = null;
 
             CheckPlayback(
-                useOutputDevice: false,
+                useOutputEndpoint: false,
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new NoteOnEvent()),
@@ -782,7 +782,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             SnapPointsGroup snapPointsGroup = null;
 
             CheckPlayback(
-                useOutputDevice: false,
+                useOutputEndpoint: false,
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new NoteOnEvent()),
@@ -850,7 +850,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var endTime = TimeSpan.FromSeconds(4);
 
             CheckPlayback(
-                useOutputDevice: false,
+                useOutputEndpoint: false,
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new NoteOnEvent()),
@@ -910,7 +910,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             SnapPoint snapPoint2 = null;
 
             CheckPlayback(
-                useOutputDevice: false,
+                useOutputEndpoint: false,
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new NoteOnEvent()),
@@ -974,7 +974,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             SnapPoint snapPoint2 = null;
 
             CheckPlayback(
-                useOutputDevice: false,
+                useOutputEndpoint: false,
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new NoteOnEvent()),
@@ -1052,7 +1052,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var endTime = TimeSpan.FromSeconds(4);
 
             CheckPlayback(
-                useOutputDevice: false,
+                useOutputEndpoint: false,
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new NoteOnEvent()),
@@ -1105,7 +1105,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             SnapPoint snapPoint2 = null;
 
             CheckPlayback(
-                useOutputDevice: false,
+                useOutputEndpoint: false,
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new NoteOnEvent()),
@@ -1157,7 +1157,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             SnapPoint snapPoint2 = null;
 
             CheckPlayback(
-                useOutputDevice: false,
+                useOutputEndpoint: false,
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new NoteOnEvent()),
@@ -1223,7 +1223,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var endTime = TimeSpan.FromSeconds(4);
 
             CheckPlayback(
-                useOutputDevice: false,
+                useOutputEndpoint: false,
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new NoteOnEvent()),
@@ -1278,7 +1278,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             SnapPointsGroup snapPointsGroup = null;
 
             CheckPlayback(
-                useOutputDevice: false,
+                useOutputEndpoint: false,
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new NoteOnEvent()),
@@ -1345,7 +1345,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var endTime = TimeSpan.FromSeconds(4);
 
             CheckPlayback(
-                useOutputDevice: false,
+                useOutputEndpoint: false,
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new NoteOnEvent()),
@@ -1404,7 +1404,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             SnapPoint snapPoint2 = null;
 
             CheckPlayback(
-                useOutputDevice: false,
+                useOutputEndpoint: false,
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new NoteOnEvent()),
@@ -1469,7 +1469,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var endTime = TimeSpan.FromSeconds(4);
 
             CheckPlayback(
-                useOutputDevice: false,
+                useOutputEndpoint: false,
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new NoteOnEvent()),
@@ -1521,7 +1521,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             SnapPoint snapPoint2 = null;
 
             CheckPlayback(
-                useOutputDevice: false,
+                useOutputEndpoint: false,
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new NoteOnEvent()),
@@ -1563,7 +1563,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         public void Snapping_MoveToNextSnapPoint_ByData_CheckReturnValue_AtZero()
         {
             CheckPlayback(
-                useOutputDevice: false,
+                useOutputEndpoint: false,
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new NoteOnEvent()),
@@ -1610,7 +1610,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var endTime = snapPointTime2 + TimeSpan.FromMilliseconds(1200);
 
             CheckPlayback(
-                useOutputDevice: false,
+                useOutputEndpoint: false,
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new NoteOnEvent((SevenBitNumber)100, (SevenBitNumber)100))
@@ -1671,7 +1671,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             SnapPoint snapPointBeyondDuration = null;
 
             CheckPlayback(
-                useOutputDevice: false,
+                useOutputEndpoint: false,
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new NoteOnEvent())
@@ -1713,7 +1713,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             SnapPoint snapPointBeyondPlaybackEnd = null;
 
             CheckPlayback(
-                useOutputDevice: false,
+                useOutputEndpoint: false,
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new NoteOnEvent())
@@ -1761,7 +1761,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             SnapPoint snapPointBeyondStart = null;
 
             CheckPlayback(
-                useOutputDevice: false,
+                useOutputEndpoint: false,
                 initialPlaybackObjects: new[]
                 {
                     new TimedEvent(new TextEvent("A"))

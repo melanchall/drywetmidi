@@ -54,8 +54,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var collection = new ObservableTimedObjectsCollection(initialObjects);
 
             CheckPlayback(
-                useOutputDevice: false,
-                createPlayback: outputDevice => new Playback(collection, tempoMap ?? TempoMap, outputDevice, new PlaybackSettings
+                useOutputEndpoint: false,
+                createPlayback: outputEndpoint => new Playback(collection, tempoMap ?? TempoMap, outputEndpoint, new PlaybackSettings
                 {
                     CalculateTempoMap = true
                 }),

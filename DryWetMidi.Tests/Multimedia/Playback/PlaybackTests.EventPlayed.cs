@@ -813,7 +813,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var stopwatch = new Stopwatch();
 
             CheckPlayback(
-                useOutputDevice: false,
+                useOutputEndpoint: false,
                 initialPlaybackObjects: initialPlaybackObjects,
                 actions: actions,
                 expectedReceivedEvents: expectedReceivedEvents,

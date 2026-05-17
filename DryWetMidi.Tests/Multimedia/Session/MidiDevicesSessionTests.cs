@@ -15,8 +15,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         #region Delegates
 
         private delegate IntPtr CreateSessionHandleDelegate(
-            MidiDevicesSessionApi.InputDeviceCallback inputDeviceCallback,
-            MidiDevicesSessionApi.OutputDeviceCallback outputDeviceCallback,
+            MidiDevicesSessionApi.InputEndpointCallback inputEndpointCallback,
+            MidiDevicesSessionApi.OutputEndpointCallback outputEndpointCallback,
             int waitAfterSessionCreatedMs);
 
         #endregion
@@ -27,28 +27,28 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void CheckMidiDevicesSession_DisposeManually([Values(0, 50, 5000)] int waitAfterSessionCreatedMs)
         {
-            MidiDevicesSessionApi.InputDeviceCallback inputDeviceCallback = InputDeviceCallback;
-            MidiDevicesSessionApi.OutputDeviceCallback outputDeviceCallback = OutputDeviceCallback;
+            MidiDevicesSessionApi.InputEndpointCallback inputEndpointCallback = InputEndpointCallback;
+            MidiDevicesSessionApi.OutputEndpointCallback outputEndpointCallback = OutputEndpointCallback;
 
-            CheckMidiDevicesSession_DisposeManually(CreateSessionHandle, inputDeviceCallback, outputDeviceCallback, waitAfterSessionCreatedMs);
+            CheckMidiDevicesSession_DisposeManually(CreateSessionHandle, inputEndpointCallback, outputEndpointCallback, waitAfterSessionCreatedMs);
         }
 
         [Test]
         public void CheckMidiDevicesSession_AbandonAndWaitForFinalizer([Values(0, 50, 5000)] int waitAfterSessionCreatedMs)
         {
-            MidiDevicesSessionApi.InputDeviceCallback inputDeviceCallback = InputDeviceCallback;
-            MidiDevicesSessionApi.OutputDeviceCallback outputDeviceCallback = OutputDeviceCallback;
+            MidiDevicesSessionApi.InputEndpointCallback inputEndpointCallback = InputEndpointCallback;
+            MidiDevicesSessionApi.OutputEndpointCallback outputEndpointCallback = OutputEndpointCallback;
 
-            CheckMidiDevicesSession_AbandonAndWaitForFinalizer(CreateSessionHandle, inputDeviceCallback, outputDeviceCallback, waitAfterSessionCreatedMs);
+            CheckMidiDevicesSession_AbandonAndWaitForFinalizer(CreateSessionHandle, inputEndpointCallback, outputEndpointCallback, waitAfterSessionCreatedMs);
         }
 
         [Test]
         public void CheckMidiDevicesSession_CloseViaApi([Values(0, 50, 5000)] int waitAfterSessionCreatedMs)
         {
-            MidiDevicesSessionApi.InputDeviceCallback inputDeviceCallback = InputDeviceCallback;
-            MidiDevicesSessionApi.OutputDeviceCallback outputDeviceCallback = OutputDeviceCallback;
+            MidiDevicesSessionApi.InputEndpointCallback inputEndpointCallback = InputEndpointCallback;
+            MidiDevicesSessionApi.OutputEndpointCallback outputEndpointCallback = OutputEndpointCallback;
 
-            var sessionHandle = CreateSessionHandle(inputDeviceCallback, outputDeviceCallback, waitAfterSessionCreatedMs);
+            var sessionHandle = CreateSessionHandle(inputEndpointCallback, outputEndpointCallback, waitAfterSessionCreatedMs);
             var result = MidiDevicesSessionApi.Api_CloseSession(sessionHandle);
             ClassicAssert.AreEqual(
                 MidiDevicesSessionApi.SESSION_CLOSERESULT.SESSION_CLOSERESULT_OK,
@@ -89,14 +89,14 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
             //
 
-            MidiDevicesSessionApi.InputDeviceCallback inputDeviceCallback = InputDeviceCallback;
-            MidiDevicesSessionApi.OutputDeviceCallback outputDeviceCallback = OutputDeviceCallback;
+            MidiDevicesSessionApi.InputEndpointCallback inputEndpointCallback = InputEndpointCallback;
+            MidiDevicesSessionApi.OutputEndpointCallback outputEndpointCallback = OutputEndpointCallback;
 
             var openSessionResult = MidiDevicesSessionApi.Api_OpenSession(
                 Guid.NewGuid().ToString(),
                 configurationHandle,
-                inputDeviceCallback,
-                outputDeviceCallback,
+                inputEndpointCallback,
+                outputEndpointCallback,
                 out var sessionRawHandle,
                 out _);
 
@@ -161,13 +161,13 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 #if TEST
         private void CheckMidiDevicesSession_DisposeManually(
             CreateSessionHandleDelegate createSessionHandle,
-            MidiDevicesSessionApi.InputDeviceCallback inputDeviceCallback,
-            MidiDevicesSessionApi.OutputDeviceCallback outputDeviceCallback,
+            MidiDevicesSessionApi.InputEndpointCallback inputEndpointCallback,
+            MidiDevicesSessionApi.OutputEndpointCallback outputEndpointCallback,
             int waitAfterSessionCreatedMs)
         {
             var checkpoints = new TestCheckpoints();
 
-            var rawHandle = createSessionHandle(inputDeviceCallback, outputDeviceCallback, waitAfterSessionCreatedMs);
+            var rawHandle = createSessionHandle(inputEndpointCallback, outputEndpointCallback, waitAfterSessionCreatedMs);
             var handle = new MidiDevicesSessionHandle(rawHandle);
             handle.TestCheckpoints = checkpoints;
 
@@ -186,8 +186,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
         private void CheckMidiDevicesSession_AbandonAndWaitForFinalizer(
             CreateSessionHandleDelegate createSessionHandle,
-            MidiDevicesSessionApi.InputDeviceCallback inputDeviceCallback,
-            MidiDevicesSessionApi.OutputDeviceCallback outputDeviceCallback,
+            MidiDevicesSessionApi.InputEndpointCallback inputEndpointCallback,
+            MidiDevicesSessionApi.OutputEndpointCallback outputEndpointCallback,
             int waitAfterSessionCreatedMs)
         {
             var checkpoints = new TestCheckpoints();
@@ -195,8 +195,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             CreateAndAbandonMidiDevicesSession(
                 checkpoints,
                 createSessionHandle,
-                inputDeviceCallback,
-                outputDeviceCallback,
+                inputEndpointCallback,
+                outputEndpointCallback,
                 waitAfterSessionCreatedMs);
 
             GC.Collect();
@@ -212,11 +212,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         private void CreateAndAbandonMidiDevicesSession(
             TestCheckpoints checkpoints,
             CreateSessionHandleDelegate createSessionHandle,
-            MidiDevicesSessionApi.InputDeviceCallback inputDeviceCallback,
-            MidiDevicesSessionApi.OutputDeviceCallback outputDeviceCallback,
+            MidiDevicesSessionApi.InputEndpointCallback inputEndpointCallback,
+            MidiDevicesSessionApi.OutputEndpointCallback outputEndpointCallback,
             int waitAfterSessionCreatedMs)
         {
-            var rawHandle = createSessionHandle(inputDeviceCallback, outputDeviceCallback, waitAfterSessionCreatedMs);
+            var rawHandle = createSessionHandle(inputEndpointCallback, outputEndpointCallback, waitAfterSessionCreatedMs);
             var handle = new MidiDevicesSessionHandle(rawHandle);
             handle.TestCheckpoints = checkpoints;
 
@@ -226,15 +226,15 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 #endif
 
         private static IntPtr CreateSessionHandle(
-            MidiDevicesSessionApi.InputDeviceCallback inputDeviceCallback,
-            MidiDevicesSessionApi.OutputDeviceCallback outputDeviceCallback,
+            MidiDevicesSessionApi.InputEndpointCallback inputEndpointCallback,
+            MidiDevicesSessionApi.OutputEndpointCallback outputEndpointCallback,
             int waitAfterSessionCreatedMs)
         {
             var openSessionResult = MidiDevicesSessionApi.Api_OpenSession(
                 Guid.NewGuid().ToString(),
                 MidiConfiguration.GetConfigurationHandle(),
-                inputDeviceCallback,
-                outputDeviceCallback,
+                inputEndpointCallback,
+                outputEndpointCallback,
                 out var sessionRawHandle,
                 out _);
 
@@ -249,11 +249,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             return sessionRawHandle;
         }
 
-        private static void InputDeviceCallback(IntPtr info, bool operation)
+        private static void InputEndpointCallback(IntPtr info, MidiDevicesSessionApi.SESSION_CALLBACKOPERATION operation)
         {
         }
 
-        private static void OutputDeviceCallback(IntPtr info, bool operation)
+        private static void OutputEndpointCallback(IntPtr info, MidiDevicesSessionApi.SESSION_CALLBACKOPERATION operation)
         {
         }
 

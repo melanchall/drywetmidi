@@ -14,7 +14,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
     {
         #region Constants
 
-        public const string DeviceToTestOnName = MidiDevicesNames.DeviceA;
+        public const string DeviceToTestOnName = MidiEndpoints.A;
         public static readonly TimeSpan MaximumEventSendReceiveDelay = TimeSpan.FromMilliseconds(30);
 
         #endregion
@@ -23,8 +23,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
         public static void CheckEventsReceiving(
             TimestampedEvent[] eventsToSend,
-            IOutputDevice outputDevice,
-            IInputDevice inputDevice,
+            IOutputEndpoint outputEndpoint,
+            IInputEndpoint inputEndpoint,
             TimeSpan? sendReceiveTimeout = null)
         {
             var receivedEvents = new List<TimestampedEvent>();
@@ -37,13 +37,13 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             void OnEventReceived(object sender, MidiEventReceivedEventArgs args) =>
                 receivedEvents.Add(new TimestampedEvent(args.Event, stopwatch.Elapsed));
 
-            outputDevice.EventSent += OnEventSent;
-            inputDevice.EventReceived += OnEventReceived;
+            outputEndpoint.EventSent += OnEventSent;
+            inputEndpoint.EventReceived += OnEventReceived;
 
             stopwatch.Start();
             SendEvents(
                 eventsToSend,
-                outputDevice,
+                outputEndpoint,
                 midiEvent =>
                 {
                     sentEvents.Add(new TimestampedEvent(midiEvent, stopwatch.Elapsed));
@@ -74,14 +74,14 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             }
             finally
             {
-                outputDevice.EventSent -= OnEventSent;
-                inputDevice.EventReceived -= OnEventReceived;
+                outputEndpoint.EventSent -= OnEventSent;
+                inputEndpoint.EventReceived -= OnEventReceived;
             }
         }
 
         public static void SendEvents(
             IEnumerable<TimestampedEvent> eventsToSend,
-            IOutputDevice outputDevice,
+            IOutputEndpoint outputEndpoint,
             Action<MidiEvent> onSent = null)
         {
             var stopwatch = Stopwatch.StartNew();
@@ -97,7 +97,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 if (midiEvent is MetaEvent)
                     onSent?.Invoke(midiEvent);
                 else
-                    outputDevice.SendEvent(midiEvent);
+                    outputEndpoint.SendEvent(midiEvent);
             }
         }
 

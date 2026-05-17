@@ -87,7 +87,7 @@ plugged/unplugged monitoring.";
             try
             {
                 reportWriter.WriteOperationTitle("Subscribing to DeviceAdded event...");
-                DevicesWatcher.Instance.DeviceAdded += (_, e) =>
+                EndpointsWatcher.Instance.EndpointAdded += (_, e) =>
                     deviceEventsFlags.DeviceAdded = true;
                 reportWriter.WriteOperationSubTitle("subscribed");
             }
@@ -104,7 +104,7 @@ plugged/unplugged monitoring.";
             try
             {
                 reportWriter.WriteOperationTitle("Subscribing to DeviceRemoved event...");
-                DevicesWatcher.Instance.DeviceRemoved += (_, e) =>
+                EndpointsWatcher.Instance.EndpointRemoved += (_, e) =>
                     deviceEventsFlags.DeviceRemoved = true;
                 reportWriter.WriteOperationSubTitle("subscribed");
             }

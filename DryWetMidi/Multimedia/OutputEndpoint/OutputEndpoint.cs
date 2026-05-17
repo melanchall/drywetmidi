@@ -1,0 +1,677 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Runtime.InteropServices;
+using Melanchall.DryWetMidi.Common;
+using Melanchall.DryWetMidi.Core;
+
+namespace Melanchall.DryWetMidi.Multimedia
+{
+    /// <summary>
+    /// Represents an output MIDI endpoint. More info in the
+    /// <see href="xref:a_dev_overview">Devices</see> and
+    /// <see href="xref:a_dev_output">Output endpoint</see> articles.
+    /// </summary>
+    public sealed class OutputEndpoint : MidiEndpoint, IOutputEndpoint
+    {
+        #region Constants
+
+        private const int ShortEventBufferSize = 3;
+
+        private static readonly IEventWriter ChannelEventWriter = new ChannelEventWriter();
+        private static readonly IEventWriter SystemRealTimeEventWriter = new SystemRealTimeEventWriter();
+
+        #endregion
+
+        #region Events
+
+        /// <summary>
+        /// Occurs when a MIDI event is sent.
+        /// </summary>
+        public event EventHandler<MidiEventSentEventArgs> EventSent;
+
+        #endregion
+
+        #region Fields
+
+        private static OutputEndpointProperty[] _supportedProperties;
+
+        private readonly MidiEventToBytesConverter _midiEventToBytesConverter = new MidiEventToBytesConverter(ShortEventBufferSize) { BytesFormat = BytesFormat.Device };
+        private readonly BytesToMidiEventConverter _bytesToMidiEventConverter = new BytesToMidiEventConverter { BytesFormat = BytesFormat.Device };
+
+        private OutputEndpointApi.Callback_Win _callback;
+
+        private readonly CommonApi.API_TYPE _apiType;
+        private readonly int _hashCode;
+
+        #endregion
+
+        #region Constructor
+
+        internal OutputEndpoint(IntPtr info, CreationContext context)
+            : base(context)
+        {
+            Info = new OutputEndpointInfo(info);
+            _apiType = CommonApi.Api_GetApiType();
+            _hashCode = OutputEndpointApi.Api_GetDeviceHashCode(info);
+        }
+
+        #endregion
+
+        #region Properties
+
+        /// <summary>
+        /// Gets the name of the current MIDI device.
+        /// </summary>
+        public override string Name
+        {
+            get
+            {
+                EnsureSessionIsCreated();
+                EnsureEndpointIsNotRemoved();
+
+                var result = OutputEndpointApi.Api_GetDeviceName(Info.DangerousGetHandle(), out var name, out var errorCode);
+                NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
+
+                return name;
+            }
+        }
+
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        /// Sends a MIDI event to the current output endpoint.
+        /// </summary>
+        /// <param name="midiEvent">MIDI event to send.</param>
+        /// <exception cref="ObjectDisposedException">The current <see cref="OutputEndpoint"/> is disposed.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="midiEvent"/> is <c>null</c>.</exception>
+        /// <exception cref="NativeApiException">An error occurred on endpoint.</exception>
+        /// <exception cref="ArgumentException"><c>EscapeSysExEvent</c> is prohibited. Use <c>NormalSysExEvent</c> instead.</exception>
+        public void SendEvent(MidiEvent midiEvent)
+        {
+            ThrowIfArgument.IsNull(nameof(midiEvent), midiEvent);
+            ThrowIfArgument.IsOfType<EscapeSysExEvent>(
+                nameof(midiEvent),
+                midiEvent,
+                "EscapeSysExEvent is prohibited. Use NormalSysExEvent instead.");
+
+            if (!IsEnabled)
+                return;
+
+            EnsureEndpointIsNotDisposed();
+            EnsureEndpointIsNotRemoved();
+            EnsureSessionIsCreated();
+            EnsureHandleIsCreated();
+
+            if (midiEvent is ChannelEvent || midiEvent is SystemCommonEvent || midiEvent is SystemRealTimeEvent)
+            {
+                var message = PackShortEvent(midiEvent);
+                var result = OutputEndpointApi.Api_SendShortEvent(Handle.DangerousGetHandle(), message, out var errorCode);
+                NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
+            }
+            else
+            {
+                var sysExEvent = midiEvent as SysExEvent;
+                if (sysExEvent != null)
+                    SendSysExEvent(sysExEvent);
+            }
+
+            OnEventSent(midiEvent);
+        }
+
+        /// <summary>
+        /// Turns off all notes that were turned on by sending Note On events, and which haven't
+        /// yet been turned off by respective Note Off events.
+        /// </summary>
+        /// <exception cref="ObjectDisposedException">The current <see cref="OutputEndpoint"/> is disposed.</exception>
+        /// <exception cref="NativeApiException">An error occurred on device.</exception>
+        public void TurnAllNotesOff()
+        {
+            EnsureEndpointIsNotDisposed();
+            EnsureEndpointIsNotRemoved();
+            EnsureSessionIsCreated();
+            EnsureHandleIsCreated();
+
+            var allNotesOffEvents = from channel in FourBitNumber.Values
+                                    from noteNumber in SevenBitNumber.Values
+                                    select new NoteOffEvent(noteNumber, SevenBitNumber.MinValue) { Channel = channel };
+
+            foreach (var noteOffEvent in allNotesOffEvents)
+            {
+                SendEvent(noteOffEvent);
+            }
+        }
+
+        /// <summary>
+        /// Prepares output MIDI device for sending events to it allocating necessary
+        /// resources.
+        /// </summary>
+        /// <remarks>It is not needed to call this method before actual MIDI data
+        /// sending since first call of <see cref="SendEvent(MidiEvent)"/> will prepare
+        /// the device automatically. But it can take some time so you may decide
+        /// to call <see cref="PrepareForEventsSending"/> before working with device.</remarks>
+        /// <exception cref="NativeApiException">An error occurred on device.</exception>
+        public void PrepareForEventsSending()
+        {
+            EnsureSessionIsCreated();
+            EnsureHandleIsCreated();
+        }
+
+        /// <summary>
+        /// Returns current value of the specified property attached to the current output endpoint.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// To get the list of properties applicable to output endpoints on the current operating system use
+        /// <see cref="GetSupportedProperties"/> method.
+        /// </para>
+        /// <para>
+        /// Following table shows the type of value returned by the method for each property:
+        /// </para>
+        /// <para>
+        /// <list type="table">
+        /// <listheader>
+        /// <term>Property</term>
+        /// <term>Type</term>
+        /// </listheader>
+        /// <item>
+        /// <term><see cref="OutputEndpointProperty.Product"/></term>
+        /// <term><see cref="string"/></term>
+        /// </item>
+        /// <item>
+        /// <term><see cref="OutputEndpointProperty.Manufacturer"/></term>
+        /// <term><see cref="string"/></term>
+        /// </item>
+        /// <item>
+        /// <term><see cref="OutputEndpointProperty.DriverVersion"/></term>
+        /// <term><see cref="int"/></term>
+        /// </item>
+        /// <item>
+        /// <term><see cref="OutputEndpointProperty.UniqueId"/></term>
+        /// <term><see cref="int"/></term>
+        /// </item>
+        /// <item>
+        /// <term><see cref="OutputEndpointProperty.DriverOwner"/></term>
+        /// <term><see cref="string"/></term>
+        /// </item>
+        /// <item>
+        /// <term><see cref="OutputEndpointProperty.Technology"/></term>
+        /// <term><see cref="OutputEndpointTechnology"/></term>
+        /// </item>
+        /// <item>
+        /// <term><see cref="OutputEndpointProperty.VoicesNumber"/></term>
+        /// <term><see cref="int"/></term>
+        /// </item>
+        /// <item>
+        /// <term><see cref="OutputEndpointProperty.NotesNumber"/></term>
+        /// <term><see cref="int"/></term>
+        /// </item>
+        /// <item>
+        /// <term><see cref="OutputEndpointProperty.Channels"/></term>
+        /// <term><see cref="FourBitNumber"/>[]</term>
+        /// </item>
+        /// <item>
+        /// <term><see cref="OutputEndpointProperty.Options"/></term>
+        /// <term><see cref="OutputEndpointOption"/></term>
+        /// </item>
+        /// </list>
+        /// </para>
+        /// </remarks>
+        /// <param name="property">The property to get value of.</param>
+        /// <returns>The current value of the <paramref name="property"/>.</returns>
+        /// <exception cref="InvalidEnumArgumentException"><paramref name="property"/> specified an invalid value.</exception>
+        /// <exception cref="ArgumentException"><paramref name="property"/> is not in the list of the properties
+        /// supported for the current operating system.</exception>
+        /// <exception cref="ObjectDisposedException">The current <see cref="OutputEndpoint"/> is disposed.</exception>
+        /// <exception cref="NativeApiException">An error occurred on the device. One of the cases when this exception can be thrown
+        /// is device is not in the system anymore (for example, unplugged).</exception>
+        /// <exception cref="InvalidOperationException">The current <see cref="OutputEndpoint"/> instance is created by
+        /// <see cref="EndpointsWatcher.EndpointRemoved"/> event and thus considered as removed so you cannot interact with it.</exception>
+        public object GetProperty(OutputEndpointProperty property)
+        {
+            ThrowIfArgument.IsInvalidEnumValue(nameof(property), property);
+
+            EnsureEndpointIsNotDisposed();
+            EnsureEndpointIsNotRemoved();
+            EnsureSessionIsCreated();
+
+            if (!GetSupportedProperties().Contains(property))
+                throw new ArgumentException("Property is not supported.", nameof(property));
+
+            int errorCode;
+
+            switch (property)
+            {
+                case OutputEndpointProperty.Product:
+                    {
+                        var result = OutputEndpointApi.Api_GetDeviceProduct(Info.DangerousGetHandle(), out var product, out errorCode);
+                        NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
+                        return product;
+                    }
+                case OutputEndpointProperty.Manufacturer:
+                    {
+                        var result = OutputEndpointApi.Api_GetDeviceManufacturer(Info.DangerousGetHandle(), out var manufacturer, out errorCode);
+                        NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
+                        return manufacturer;
+                    }
+                case OutputEndpointProperty.DriverVersion:
+                    {
+                        var result = OutputEndpointApi.Api_GetDeviceDriverVersion(Info.DangerousGetHandle(), out var driverVersion, out errorCode);
+                        NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
+                        return driverVersion;
+                    }
+                case OutputEndpointProperty.Technology:
+                    {
+                        OutputEndpointTechnology technology;
+                        var result = OutputEndpointApi.Api_GetDeviceTechnology(Info.DangerousGetHandle(), out technology, out errorCode);
+                        NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
+                        return technology;
+                    }
+                case OutputEndpointProperty.UniqueId:
+                    {
+                        var result = OutputEndpointApi.Api_GetDeviceUniqueId(Info.DangerousGetHandle(), out var uniqueId, out errorCode);
+                        NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
+                        return uniqueId;
+                    }
+                case OutputEndpointProperty.VoicesNumber:
+                    {
+                        var result = OutputEndpointApi.Api_GetDeviceVoicesNumber(Info.DangerousGetHandle(), out var voicesNumber, out errorCode);
+                        NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
+                        return voicesNumber;
+                    }
+                case OutputEndpointProperty.NotesNumber:
+                    {
+                        var result = OutputEndpointApi.Api_GetDeviceNotesNumber(Info.DangerousGetHandle(), out var notesNumber, out errorCode);
+                        NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
+                        return notesNumber;
+                    }
+                case OutputEndpointProperty.Channels:
+                    {
+                        var result = OutputEndpointApi.Api_GetDeviceChannelsMask(Info.DangerousGetHandle(), out var channelsMask, out errorCode);
+                        NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
+                        return (from channel in FourBitNumber.Values
+                                let isChannelSupported = (channelsMask >> channel) & 1
+                                where isChannelSupported == 1
+                                select channel).ToArray();
+                    }
+                case OutputEndpointProperty.Options:
+                    {
+                        var result = OutputEndpointApi.Api_GetDeviceOptions(Info.DangerousGetHandle(), out var option, out errorCode);
+                        NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
+                        return option;
+                    }
+                case OutputEndpointProperty.DriverOwner:
+                    {
+                        var result = OutputEndpointApi.Api_GetDeviceDriverOwner(Info.DangerousGetHandle(), out var driverOwner, out errorCode);
+                        NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
+                        return driverOwner;
+                    }
+                default:
+                    throw new NotSupportedException("Property is not supported.");
+            }
+        }
+
+        /// <summary>
+        /// Retrieves the number of output MIDI devices presented in the system.
+        /// </summary>
+        /// <returns>Number of output MIDI devices presented in the system.</returns>
+        /// <exception cref="NativeApiException">An error occurred.</exception>
+        /// <exception cref="PlatformNotSupportedException">This operation is not supported on the current operating system.</exception>
+        public static int GetEndpointsCount()
+        {
+            NativeApiUtilities.EnsureOsIsSupported();
+            EnsureSessionIsCreated();
+
+            var result = OutputEndpointApi.Api_GetDevicesCount(out var count);
+            NativeApiUtilities.HandleEndpointNativeApiResult(result, 0);
+
+            return count;
+        }
+
+        /// <summary>
+        /// Returns the list of the properties supported by output devices on the current
+        /// operating system.
+        /// </summary>
+        /// <returns>The list of the properties supported by output devices on the current
+        /// operating system.</returns>
+        /// <exception cref="PlatformNotSupportedException">This operation is not supported on the current operating system.</exception>
+        public static OutputEndpointProperty[] GetSupportedProperties()
+        {
+            NativeApiUtilities.EnsureOsIsSupported();
+
+            if (_supportedProperties != null)
+                return _supportedProperties;
+
+            return _supportedProperties = EnumHelper.GetValues<OutputEndpointProperty>()
+                .Where(p => OutputEndpointApi.Api_IsPropertySupported(p))
+                .ToArray();
+        }
+
+        /// <summary>
+        /// Retrieves all output MIDI devices presented in the system.
+        /// </summary>
+        /// <returns>All output MIDI devices presented in the system.</returns>
+        /// <exception cref="NativeApiException">An error occurred.</exception>
+        /// <exception cref="PlatformNotSupportedException">This operation is not supported on the current operating system.</exception>
+        public static ICollection<OutputEndpoint> GetAll()
+        {
+            NativeApiUtilities.EnsureOsIsSupported();
+            EnsureSessionIsCreated();
+
+            return MidiEndpointsManager.Instance.GetAllOutputEndpoints();
+        }
+
+        /// <summary>
+        /// Retrieves a first output MIDI device with the specified name.
+        /// </summary>
+        /// <param name="name">The name of an output MIDI device to retrieve.</param>
+        /// <returns>Output MIDI device with the specified name.</returns>
+        /// <exception cref="ArgumentException">
+        /// <para>One of the following errors occurred:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><paramref name="name"/> is <c>null</c> or contains white-spaces only.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="name"/> specifies an output MIDI device which is not presented in the system.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
+        /// <exception cref="NativeApiException">An error occurred.</exception>
+        /// <exception cref="PlatformNotSupportedException">This operation is not supported on the current operating system.</exception>
+        public static OutputEndpoint GetByName(string name)
+        {
+            ThrowIfArgument.IsNullOrWhiteSpaceString(nameof(name), name, "Device name");
+
+            NativeApiUtilities.EnsureOsIsSupported();
+            EnsureSessionIsCreated();
+
+            var device = MidiEndpointsManager.Instance.GetOutputEndpointByName(name);
+            if (device == null)
+                throw new ArgumentException($"There is no MIDI output device '{name}'.", nameof(name));
+
+            return device;
+        }
+
+        internal void SendData_Win(byte[] data)
+        {
+            EnsureEndpointIsNotDisposed();
+            EnsureEndpointIsNotRemoved();
+            EnsureSessionIsCreated();
+            EnsureHandleIsCreated();
+
+            var bufferLength = data.Length;
+            var bufferPointer = Marshal.AllocHGlobal(bufferLength);
+            Marshal.Copy(data, 0, bufferPointer, data.Length);
+
+            var result = OutputEndpointApi.Api_SendSysExEvent_Win(Handle.DangerousGetHandle(), bufferPointer, bufferLength, out var errorCode);
+            NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
+        }
+
+        private void EnsureHandleIsCreated()
+        {
+            if (Handle != null)
+                return;
+
+            var sessionHandle = MidiDevicesSession.GetSessionHandle();
+            var rawHandle = IntPtr.Zero;
+
+            int errorCode;
+
+            switch (_apiType)
+            {
+                case CommonApi.API_TYPE.API_TYPE_WIN:
+                    {
+                        _callback = OnMessage;
+                        var result = OutputEndpointApi.Api_OpenDevice_Win(Info.DangerousGetHandle(), sessionHandle, _callback, out rawHandle, out errorCode);
+                        NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
+                    }
+                    break;
+                case CommonApi.API_TYPE.API_TYPE_MAC:
+                    {
+                        var result = OutputEndpointApi.Api_OpenDevice_Mac(Info.DangerousGetHandle(), sessionHandle, out rawHandle, out errorCode);
+                        NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
+                    }
+                    break;
+                default:
+                    throw new NotSupportedException($"{_apiType} API is not supported.");
+            }
+
+            Handle = new OutputEndpointHandle(rawHandle);
+
+#if TEST
+            Handle.TestCheckpoints = TestCheckpoints;
+#endif
+        }
+
+        private void SendSysExEvent(SysExEvent sysExEvent)
+        {
+            var data = sysExEvent.Data;
+            if (data == null || !data.Any())
+                return;
+
+            switch (_apiType)
+            {
+                case CommonApi.API_TYPE.API_TYPE_WIN:
+                    SendSysExEventData_Win(data);
+                    break;
+                case CommonApi.API_TYPE.API_TYPE_MAC:
+                    SendSysExEventData_Mac(data);
+                    break;
+                default:
+                    throw new NotSupportedException($"{_apiType} API is not supported.");
+            }
+        }
+
+        private void SendSysExEventData_Win(byte[] data)
+        {
+            if (data == null || data.Length == 0)
+                return;
+
+            var hasStartByte = data[0] == EventStatusBytes.Global.NormalSysEx;
+
+            var bufferLength = hasStartByte
+                ? data.Length
+                : data.Length + 1;
+
+            var bufferPointer = Marshal.AllocHGlobal(bufferLength);
+            if (!hasStartByte)
+                Marshal.WriteByte(bufferPointer, EventStatusBytes.Global.NormalSysEx);
+            
+            Marshal.Copy(
+                data,
+                0,
+                hasStartByte ? bufferPointer : IntPtr.Add(bufferPointer, 1),
+                data.Length);
+
+            var result = OutputEndpointApi.Api_SendSysExEvent_Win(Handle.DangerousGetHandle(), bufferPointer, bufferLength, out var errorCode);
+            NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
+        }
+
+        private void SendSysExEventData_Mac(byte[] data)
+        {
+            if (data == null || data.Length == 0)
+                return;
+
+            var hasStartByte = data[0] == EventStatusBytes.Global.NormalSysEx;
+
+            var buffer = new byte[hasStartByte ? data.Length : data.Length + 1];
+            if (!hasStartByte)
+                buffer[0] = EventStatusBytes.Global.NormalSysEx;
+            
+            Buffer.BlockCopy(
+                data,
+                0,
+                buffer,
+                hasStartByte ? 0 : 1,
+                data.Length);
+
+            var result = OutputEndpointApi.Api_SendSysExEvent_Mac(Handle.DangerousGetHandle(), buffer, (ushort)buffer.Length, out var errorCode);
+            NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
+        }
+
+        private int PackShortEvent(MidiEvent midiEvent)
+        {
+            var channelEvent = midiEvent as ChannelEvent;
+            if (channelEvent != null)
+                return ChannelEventWriter.GetStatusByte(channelEvent) | (channelEvent._dataByte1 << 8) | (channelEvent._dataByte2 << 16);
+
+            var systemRealTimeEvent = midiEvent as SystemRealTimeEvent;
+            if (systemRealTimeEvent != null)
+                return SystemRealTimeEventWriter.GetStatusByte(systemRealTimeEvent);
+
+            var bytes = _midiEventToBytesConverter.Convert(midiEvent, ShortEventBufferSize);
+            return bytes[0] + (bytes[1] << 8) + (bytes[2] << 16);
+        }
+
+        private void OnMessage(IntPtr hMidi, NativeApi.MidiMessage wMsg, IntPtr dwInstance, IntPtr dwParam1, IntPtr dwParam2)
+        {
+            switch (wMsg)
+            {
+                case NativeApi.MidiMessage.MOM_DONE:
+                    OnSysExEventSent(dwParam1);
+                    break;
+            }
+        }
+
+        private void OnSysExEventSent(IntPtr sysExHeaderPointer)
+        {
+            byte[] data = null;
+
+            try
+            {
+                var result = OutputEndpointApi.Api_GetSysExBufferData(Handle.DangerousGetHandle(), sysExHeaderPointer, out var dataPointer, out var size, out var errorCode);
+                NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
+
+                data = new byte[size - 1];
+                Marshal.Copy(IntPtr.Add(dataPointer, 1), data, 0, data.Length);
+                Marshal.FreeHGlobal(dataPointer);
+            }
+            catch (Exception ex)
+            {
+                var exception = new NativeApiException("Failed to parse sent system exclusive event.", ex);
+                exception.Data.Add("Data", data);
+                OnError(exception);
+            }
+        }
+
+        private void OnEventSent(MidiEvent midiEvent)
+        {
+            EventSent?.Invoke(this, new MidiEventSentEventArgs(midiEvent));
+        }
+
+#endregion
+
+        #region Operators
+
+        /// <summary>
+        /// Determines if two <see cref="OutputEndpoint"/> objects are equal.
+        /// </summary>
+        /// <remarks>
+        /// On Windows the operator will just compare objects references. "True" equality check available
+        /// on macOS only.
+        /// </remarks>
+        /// <param name="outputEndpoint1">The first <see cref="OutputEndpoint"/> to compare.</param>
+        /// <param name="outputEndpoint2">The second <see cref="OutputEndpoint"/> to compare.</param>
+        /// <returns><c>true</c> if the devices are equal, <c>false</c> otherwise.</returns>
+        public static bool operator ==(OutputEndpoint outputEndpoint1, OutputEndpoint outputEndpoint2)
+        {
+            if (ReferenceEquals(outputEndpoint1, outputEndpoint2))
+                return true;
+
+            if (ReferenceEquals(null, outputEndpoint1) || ReferenceEquals(null, outputEndpoint2))
+                return false;
+
+            return outputEndpoint1.Equals(outputEndpoint2);
+        }
+
+        /// <summary>
+        /// Determines if two <see cref="OutputEndpoint"/> objects are not equal.
+        /// </summary>
+        /// <remarks>
+        /// On Windows the operator will just compare objects references. "True" inequality check available
+        /// on macOS only.
+        /// </remarks>
+        /// <param name="outputEndpoint1">The first <see cref="OutputEndpoint"/> to compare.</param>
+        /// <param name="outputEndpoint2">The second <see cref="OutputEndpoint"/> to compare.</param>
+        /// <returns><c>false</c> if the devices are equal, <c>true</c> otherwise.</returns>
+        public static bool operator !=(OutputEndpoint outputEndpoint1, OutputEndpoint outputEndpoint2)
+        {
+            return !(outputEndpoint1 == outputEndpoint2);
+        }
+
+        #endregion
+
+        #region Overrides
+
+        /// <summary>
+        /// Determines whether the specified object is equal to the current object.
+        /// </summary>
+        /// <remarks>
+        /// On Windows the method will just compare objects references. "True" equality check available
+        /// on macOS only.
+        /// </remarks>
+        /// <param name="obj">The object to compare with the current object.</param>
+        /// <returns><c>true</c> if the specified object is equal to the current object; otherwise, <c>false</c>.</returns>
+        public override bool Equals(object obj)
+        {
+            var outputEndpoint = obj as OutputEndpoint;
+            if (outputEndpoint == null)
+                return false;
+
+            return OutputEndpointApi.Api_AreDevicesEqual(
+                Info.DangerousGetHandle(),
+                outputEndpoint.Info.DangerousGetHandle());
+        }
+
+        /// <summary>
+        /// Serves as the default hash function.
+        /// </summary>
+        /// <returns>A hash code for the current object.</returns>
+        public override int GetHashCode()
+        {
+            return _hashCode;
+        }
+
+        /// <summary>
+        /// Returns a string that represents the current object.
+        /// </summary>
+        /// <returns>A string that represents the current object.</returns>
+        public override string ToString()
+        {
+            var baseDescription = base.ToString();
+            return $"Output endpoint{(string.IsNullOrWhiteSpace(baseDescription) ? string.Empty : $" ({baseDescription})")}";
+        }
+
+        /// <summary>
+        /// Releases the unmanaged resources used by the MIDI device class and optionally releases
+        /// the managed resources.
+        /// </summary>
+        /// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to
+        /// release only unmanaged resources.</param>
+        internal override void Dispose(bool disposing)
+        {
+            if (_disposed)
+                return;
+
+            if (disposing)
+            {
+                _midiEventToBytesConverter.Dispose();
+                _bytesToMidiEventConverter.Dispose();
+
+                Handle?.Dispose();
+                Handle = null;
+
+                Info?.Dispose();
+                Info = null;
+            }
+
+            _disposed = true;
+        }
+
+        #endregion
+    }
+}

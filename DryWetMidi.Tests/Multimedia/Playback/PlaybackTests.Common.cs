@@ -83,7 +83,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         private void CheckPlayback(
-            bool useOutputDevice,
+            bool useOutputEndpoint,
             ICollection<ITimedObject> initialPlaybackObjects,
             PlaybackAction[] actions,
             ICollection<TimestampedEvent> expectedReceivedEvents,
@@ -96,8 +96,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             bool checkFromFile = true)
         {
             CheckPlayback(
-                useOutputDevice: useOutputDevice,
-                createPlayback: outputDevice => new Playback(initialPlaybackObjects, TempoMap, outputDevice, playbackSettings),
+                useOutputEndpoint: useOutputEndpoint,
+                createPlayback: outputEndpoint => new Playback(initialPlaybackObjects, TempoMap, outputEndpoint, playbackSettings),
                 actions: actions,
                 expectedReceivedEvents: expectedReceivedEvents,
                 setupPlayback: setupPlayback,
@@ -120,8 +120,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             midiFile.ReplaceTempoMap(TempoMap);
 
             CheckPlayback(
-                useOutputDevice: useOutputDevice,
-                createPlayback: outputDevice => midiFile.GetPlayback(outputDevice, playbackSettings),
+                useOutputEndpoint: useOutputEndpoint,
+                createPlayback: outputEndpoint => midiFile.GetPlayback(outputEndpoint, playbackSettings),
                 actions: actions,
                 expectedReceivedEvents: expectedReceivedEvents,
                 setupPlayback: setupPlayback,
@@ -133,8 +133,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         private void CheckPlayback(
-            bool useOutputDevice,
-            Func<IOutputDevice, Playback> createPlayback,
+            bool useOutputEndpoint,
+            Func<IOutputEndpoint, Playback> createPlayback,
             PlaybackAction[] actions,
             ICollection<TimestampedEvent> expectedReceivedEvents,
             Action<Playback> setupPlayback = null,
@@ -144,9 +144,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             TimeSpan? sendReceiveTimeDelta = null,
             string label = null)
         {
-            var outputDevice = useOutputDevice
-                ? OutputDevice.GetByName(SendReceiveUtilities.DeviceToTestOnName)
-                : TestDeviceManager.GetOutputDevice(SendReceiveUtilities.DeviceToTestOnName);
+            var outputEndpoint = useOutputEndpoint
+                ? OutputEndpoint.GetByName(SendReceiveUtilities.DeviceToTestOnName)
+                : TestDeviceManager.GetOutputEndpoint(SendReceiveUtilities.DeviceToTestOnName);
 
             var stopwatch = new Stopwatch();
             var delayStopwatch = new Stopwatch();
@@ -159,12 +159,12 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
             var labelString = string.IsNullOrEmpty(label) ? string.Empty : $"{label}. ";
 
-            using (outputDevice)
+            using (outputEndpoint)
             {
-                outputDevice.EventSent += (_, e) => receivedEvents.Add(new TimestampedEvent(e.Event.Clone(), stopwatch.Elapsed));
-                outputDevice.PrepareForEventsSending();
+                outputEndpoint.EventSent += (_, e) => receivedEvents.Add(new TimestampedEvent(e.Event.Clone(), stopwatch.Elapsed));
+                outputEndpoint.PrepareForEventsSending();
 
-                using (var playback = createPlayback(outputDevice))
+                using (var playback = createPlayback(outputEndpoint))
                 {
                     long Measure(Action action)
                     {
@@ -243,7 +243,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                         SendReceiveUtilities.CheckTimestampedEvents(
                             receivedEvents,
                             expectedReceivedEvents.ToList(),
-                            timestampDelta: sendReceiveTimeDelta ?? (useOutputDevice
+                            timestampDelta: sendReceiveTimeDelta ?? (useOutputEndpoint
                                 ? SendReceiveUtilities.MaximumEventSendReceiveDelay
                                 : TimeSpan.FromMilliseconds(20)),
                             label);

@@ -13,18 +13,18 @@ namespace Melanchall.SendMidiData
     {
         #region Methods
 
-        public static SendResult SendData(IOutputDevice outputDevice)
+        public static SendResult SendData(IOutputEndpoint outputEndpoint)
         {
             UiUtilities.Write("Specify data to send: ");
             var array = UiUtilities.ReadArray();
 
             if (DryWetMidi.MusicTheory.Note.TryParse(array[0], out var musicTheoryNote))
-                return SendNote(array, musicTheoryNote, outputDevice);
+                return SendNote(array, musicTheoryNote, outputEndpoint);
 
-            return SendData(array, outputDevice);
+            return SendData(array, outputEndpoint);
         }
 
-        private static SendResult SendData(string[] array, IOutputDevice outputDevice)
+        private static SendResult SendData(string[] array, IOutputEndpoint outputEndpoint)
         {
             var bytes = new List<byte>();
 
@@ -47,7 +47,7 @@ namespace Melanchall.SendMidiData
                 using (var converter = new BytesToMidiEventConverter())
                 {
                     var midiEvents = converter.ConvertMultiple(bytes.ToArray());
-                    var playback = midiEvents.GetPlayback(TempoMap.Default, outputDevice);
+                    var playback = midiEvents.GetPlayback(TempoMap.Default, outputEndpoint);
 
                     playback.Start();
                     SpinWait.SpinUntil(() => !playback.IsRunning);
@@ -62,7 +62,7 @@ namespace Melanchall.SendMidiData
             }
         }
 
-        private static SendResult SendNote(string[] array, DryWetMidi.MusicTheory.Note musicTheoryNote, IOutputDevice outputDevice)
+        private static SendResult SendNote(string[] array, DryWetMidi.MusicTheory.Note musicTheoryNote, IOutputEndpoint outputEndpoint)
         {
             ITimeSpan length = new MetricTimeSpan(0, 0, 1);
 
@@ -85,7 +85,7 @@ namespace Melanchall.SendMidiData
             }
 
             var note = new Note(musicTheoryNote.NoteNumber).SetLength(length, TempoMap.Default);
-            var playback = new[] { note }.GetPlayback(TempoMap.Default, outputDevice, DryWetMidi.Standards.GeneralMidiProgram.AcousticGrandPiano);
+            var playback = new[] { note }.GetPlayback(TempoMap.Default, outputEndpoint, DryWetMidi.Standards.GeneralMidiProgram.AcousticGrandPiano);
 
             playback.Start();
             SpinWait.SpinUntil(() => !playback.IsRunning);

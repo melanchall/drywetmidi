@@ -31,15 +31,15 @@ namespace DwmNetConsoleApp
             var playedEvents = new List<MidiEvent>();
             var stopwatch = new Stopwatch();
 
-            using var outputDevice = OutputDevice.GetByName("MIDI A");
-            using var inputDevice = InputDevice.GetByName("MIDI A");
-            using var playback = new Playback(eventsToPlay, TempoMap.Default, outputDevice);
+            using var outputEndpoint = OutputEndpoint.GetByName("MIDI A");
+            using var inputEndpoint = InputEndpoint.GetByName("MIDI A");
+            using var playback = new Playback(eventsToPlay, TempoMap.Default, outputEndpoint);
 
-            inputDevice.EventReceived += (_, e) =>
+            inputEndpoint.EventReceived += (_, e) =>
             {
                 Console.WriteLine($"[{stopwatch.ElapsedMilliseconds} ms] Event received: {e.Event}");
             };
-            inputDevice.StartEventsListening();
+            inputEndpoint.StartEventsListening();
 
             playback.EventPlayed += (_, e) =>
             {

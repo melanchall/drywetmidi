@@ -10,33 +10,33 @@ namespace Melanchall.ReceiveMidiData
     {
         private const string AllDevicesName = "ALL DEVICES";
 
-        private static bool _listenToAllDevices = false;
+        private static bool _listenToAllEndpoints = false;
 
         static void Main(string[] args)
         {
             UiUtilities.WriteHello();
             UiUtilities.WriteUtilityDescription(@"
 The tool listens for incoming MIDI data from the selected
-input MIDI device and immediately prints the data");
+input MIDI endpoint and immediately prints the data");
 
-            UiUtilities.WriteLine("Here the list of all input MIDI devices in the system:");
+            UiUtilities.WriteLine("Here the list of all input MIDI endpoints in the system:");
             UiUtilities.WriteLine();
 
-            var inputDevices = InputDevice.GetAll().Concat(new InputDevice[] { null }).ToArray();
-            UiUtilities.WriteNumberedList(inputDevices, d => d?.Name ?? AllDevicesName);
+            var inputEndpoints = InputEndpoint.GetAll().Concat(new InputEndpoint[] { null }).ToArray();
+            UiUtilities.WriteNumberedList(inputEndpoints, d => d?.Name ?? AllDevicesName);
             UiUtilities.WriteLine();
 
-            var inputDevice = UiUtilities.SelectElementByNumber("Select device to listen data from (type number)", inputDevices);
-            _listenToAllDevices = inputDevice == null;
+            var inputEndpoint = UiUtilities.SelectElementByNumber("Select endpoint to listen data from (type number)", inputEndpoints);
+            _listenToAllEndpoints = inputEndpoint == null;
             UiUtilities.WriteLine();
 
-            UiUtilities.WriteLine($"Selected device: {inputDevice?.Name ?? AllDevicesName}");
+            UiUtilities.WriteLine($"Selected endpoint: {inputEndpoint?.Name ?? AllDevicesName}");
             UiUtilities.WriteLine("Starting listening MIDI data...");
 
-            if (_listenToAllDevices)
-                StartEventsListeningOnAllDevices(inputDevices);
+            if (_listenToAllEndpoints)
+                StartEventsListeningOnAllEndpoints(inputEndpoints);
             else
-                StartEventsListeningOnSpecificDevice(inputDevice);
+                StartEventsListeningOnSpecificEndpoint(inputEndpoint);
 
             UiUtilities.WriteLine("Listening... Press Esc to stop the utility");
             UiUtilities.WriteLine();
@@ -45,52 +45,52 @@ input MIDI device and immediately prints the data");
 
             UiUtilities.WriteLine("Releasing the device...");
 
-            if (_listenToAllDevices)
-                StopEventsListeningOnAllDevices(inputDevices);
+            if (_listenToAllEndpoints)
+                StopEventsListeningOnAllEndpoints(inputEndpoints);
             else
-                StopEventsListeningOnSpecificDevice(inputDevice);
+                StopEventsListeningOnSpecificEndpoint(inputEndpoint);
 
             UiUtilities.WriteLine("Exited.");
         }
 
-        private static void StartEventsListeningOnSpecificDevice(InputDevice inputDevice)
+        private static void StartEventsListeningOnSpecificEndpoint(InputEndpoint inputEndpoint)
         {
-            inputDevice.EventReceived += OnEventReceived;
-            inputDevice.StartEventsListening();
+            inputEndpoint.EventReceived += OnEventReceived;
+            inputEndpoint.StartEventsListening();
         }
 
-        private static void StopEventsListeningOnSpecificDevice(InputDevice inputDevice)
+        private static void StopEventsListeningOnSpecificEndpoint(InputEndpoint inputEndpoint)
         {
-            inputDevice.EventReceived -= OnEventReceived;
-            inputDevice.Dispose();
+            inputEndpoint.EventReceived -= OnEventReceived;
+            inputEndpoint.Dispose();
         }
 
-        private static void StartEventsListeningOnAllDevices(ICollection<InputDevice> inputDevices)
+        private static void StartEventsListeningOnAllEndpoints(ICollection<InputEndpoint> inputEndpoints)
         {
-            foreach (var inputDevice in inputDevices)
+            foreach (var inputEndpoint in inputEndpoints)
             {
-                if (inputDevice == null)
+                if (inputEndpoint == null)
                     continue;
 
-                StartEventsListeningOnSpecificDevice(inputDevice);
+                StartEventsListeningOnSpecificEndpoint(inputEndpoint);
             }
         }
 
-        private static void StopEventsListeningOnAllDevices(ICollection<InputDevice> inputDevices)
+        private static void StopEventsListeningOnAllEndpoints(ICollection<InputEndpoint> inputEndpoints)
         {
-            foreach (var inputDevice in inputDevices)
+            foreach (var inputEndpoint in inputEndpoints)
             {
-                if (inputDevice == null)
+                if (inputEndpoint == null)
                     continue;
 
-                StopEventsListeningOnSpecificDevice(inputDevice);
+                StopEventsListeningOnSpecificEndpoint(inputEndpoint);
             }
         }
 
         private static void OnEventReceived(object sender, MidiEventReceivedEventArgs e)
         {
-            var deviceName = _listenToAllDevices ? $"{((InputDevice)sender).Name}: " : string.Empty;
-            UiUtilities.WriteLine($"{deviceName}{e.Event}");
+            var endpointName = _listenToAllEndpoints ? $"{((InputEndpoint)sender).Name}: " : string.Empty;
+            UiUtilities.WriteLine($"{endpointName}{e.Event}");
         }
     }
 }

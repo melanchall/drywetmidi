@@ -41,8 +41,8 @@ and receive them back via the same device.";
             ReportWriter reportWriter)
         {
             VirtualDevice virtualDevice = null;
-            InputDevice inputDevice = null;
-            OutputDevice outputDevice = null;
+            InputEndpoint inputEndpoint = null;
+            OutputEndpoint outputEndpoint = null;
 
             var deviceName = DeviceName;
 
@@ -55,25 +55,25 @@ and receive them back via the same device.";
 
             try
             {
-                inputDevice = InputDevice.GetByName(deviceName);
-                SubscribeToEventReceived(reportWriter, inputDevice, eventsSentReceivedData);
-                inputDevice.StartEventsListening();
+                inputEndpoint = InputEndpoint.GetByName(deviceName);
+                SubscribeToEventReceived(reportWriter, inputEndpoint, eventsSentReceivedData);
+                inputEndpoint.StartEventsListening();
 
-                outputDevice = OutputDevice.GetByName(deviceName);
-                SubscribeToEventSent(reportWriter, outputDevice, eventsSentReceivedData);
+                outputEndpoint = OutputEndpoint.GetByName(deviceName);
+                SubscribeToEventSent(reportWriter, outputEndpoint, eventsSentReceivedData);
 
                 var noteOnEvent = new NoteOnEvent((SevenBitNumber)60, (SevenBitNumber)90)
                 {
                     Channel = (FourBitNumber)4
                 };
 
-                SendEvent(noteOnEvent, reportWriter, outputDevice);
+                SendEvent(noteOnEvent, reportWriter, outputEndpoint);
                 CheckEventSent(noteOnEvent, eventsSentReceivedData, reportWriter);
                 CheckEventReceived(noteOnEvent, eventsSentReceivedData, reportWriter);
 
                 var sysExEvent = new NormalSysExEvent([0x7E, 0x7F, 0x09, 0x01, 0xF7]);
 
-                SendEvent(sysExEvent, reportWriter, outputDevice);
+                SendEvent(sysExEvent, reportWriter, outputEndpoint);
                 CheckEventSent(sysExEvent, eventsSentReceivedData, reportWriter);
                 CheckEventReceived(sysExEvent, eventsSentReceivedData, reportWriter);
             }
@@ -81,8 +81,8 @@ and receive them back via the same device.";
             {
                 if (virtualDevice == null)
                 {
-                    inputDevice?.Dispose();
-                    outputDevice?.Dispose();
+                    inputEndpoint?.Dispose();
+                    outputEndpoint?.Dispose();
                 }
                 else
                 {
@@ -95,9 +95,9 @@ and receive them back via the same device.";
         {
             Console.WriteLine("You need to have a virtual MIDI device in your system.");
 
-            string[] GetCandidateDevicesNames() => InputDevice.GetAll()
+            string[] GetCandidateDevicesNames() => InputEndpoint.GetAll()
                 .Select(d => d.Name)
-                .Intersect(OutputDevice.GetAll().Select(d => d.Name))
+                .Intersect(OutputEndpoint.GetAll().Select(d => d.Name))
                 .ToArray();
 
             string[] candidateDevicesNames = null;
@@ -178,13 +178,13 @@ and receive them back via the same device.";
         private void SendEvent(
             MidiEvent midiEvent,
             ReportWriter reportWriter,
-            OutputDevice outputDevice)
+            IOutputEndpoint outputEndpoint)
         {
             reportWriter.WriteOperationTitle($"Sending MIDI event '{midiEvent}'...");
 
             try
             {
-                outputDevice.SendEvent(midiEvent);
+                outputEndpoint.SendEvent(midiEvent);
                 reportWriter.WriteOperationSubTitle("sent");
             }
             catch (Exception ex)
@@ -195,14 +195,14 @@ and receive them back via the same device.";
 
         private void SubscribeToEventReceived(
             ReportWriter reportWriter,
-            InputDevice inputDevice,
+            InputEndpoint inputEndpoint,
             EventsSentReceivedData eventsData)
         {
             reportWriter.WriteOperationTitle("Subscribing to MIDI event received...");
 
             try
             {
-                inputDevice.EventReceived += (_, e) =>
+                inputEndpoint.EventReceived += (_, e) =>
                 {
                     reportWriter.WriteEventInfo($"MIDI event received: '{e.Event}'.");
                     if (e.Event is NoteOnEvent noteOnEvent)
@@ -220,14 +220,14 @@ and receive them back via the same device.";
 
         private void SubscribeToEventSent(
             ReportWriter reportWriter,
-            OutputDevice outputDevice,
+            OutputEndpoint outputEndpoint,
             EventsSentReceivedData eventsData)
         {
             reportWriter.WriteOperationTitle("Subscribing to MIDI event sent...");
             
             try
             {
-                outputDevice.EventSent += (_, e) =>
+                outputEndpoint.EventSent += (_, e) =>
                 {
                     reportWriter.WriteEventInfo($"MIDI event sent: '{e.Event}'.");
                     if (e.Event is NoteOnEvent noteOnEvent)

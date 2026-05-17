@@ -13,7 +13,7 @@ Let's see what each method is needed for.
 
 ## TryPlayEvent
 
-`TryPlayEvent` method called by playback each time an event should be played. Result value of the method tells playback whether the event was played or not. Default implementation of the method just sends a MIDI event to an [output device](xref:Melanchall.DryWetMidi.Multimedia.Playback.OutputDevice) and returns `true`.
+`TryPlayEvent` method called by playback each time an event should be played. Result value of the method tells playback whether the event was played or not. Default implementation of the method just sends a MIDI event to an [output endpoint](xref:Melanchall.DryWetMidi.Multimedia.Playback.OutputEndpoint) and returns `true`.
 
 So you can implement your own logic of playing a MIDI event. Please pay attention to the second parameter of the method – `metadata`. If input objects of playback implement [IMetadata](xref:Melanchall.DryWetMidi.Common.IMetadata) interface, metadata will be passed via that parameter. For example, you can subclass from `TimedEvent` and implement `IMetadata` on a new class, and then create your own playback on instances of that class.
 
@@ -43,7 +43,7 @@ private sealed class MyPlayback : Playback
         if (metadata == 0)
             return false;
 
-        OutputDevice?.SendEvent(midiEvent);
+        OutputEndpoint?.SendEvent(midiEvent);
         return true;
     }
 }

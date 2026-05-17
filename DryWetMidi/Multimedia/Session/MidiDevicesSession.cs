@@ -8,10 +8,10 @@ namespace Melanchall.DryWetMidi.Multimedia
     {
         #region Events
 
-        internal static event EventHandler<IntPtr> InputDeviceAdded;
-        internal static event EventHandler<IntPtr> InputDeviceRemoved;
-        internal static event EventHandler<IntPtr> OutputDeviceAdded;
-        internal static event EventHandler<IntPtr> OutputDeviceRemoved;
+        internal static event EventHandler<IntPtr> InputEndpointAdded;
+        internal static event EventHandler<IntPtr> InputEndpointRemoved;
+        internal static event EventHandler<IntPtr> OutputEndpointAdded;
+        internal static event EventHandler<IntPtr> OutputEndpointRemoved;
 
         #endregion
 
@@ -21,8 +21,8 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         private static MidiDevicesSessionHandle _handle;
 
-        private static MidiDevicesSessionApi.InputDeviceCallback _inputDeviceCallback;
-        private static MidiDevicesSessionApi.OutputDeviceCallback _outputDeviceCallback;
+        private static MidiDevicesSessionApi.InputEndpointCallback _inputEndpointCallback;
+        private static MidiDevicesSessionApi.OutputEndpointCallback _outputEndpointCallback;
 
         #endregion
 
@@ -46,11 +46,11 @@ namespace Melanchall.DryWetMidi.Multimedia
                 {
                     if (_handle == null || _handle.IsInvalid)
                     {
-                        _inputDeviceCallback = InputDeviceCallback;
-                        _outputDeviceCallback = OutputDeviceCallback;
+                        _inputEndpointCallback = InputEndpointCallback;
+                        _outputEndpointCallback = OutputEndpointCallback;
 
-                        var openResult = MidiDevicesSessionApi.Api_OpenSession(Guid.NewGuid().ToString(), MidiConfiguration.GetConfigurationHandle(), _inputDeviceCallback, _outputDeviceCallback, out var rawHandle, out var errorCode);
-                        MidiDeviceUtilities.HandleDevicesNativeApiResult(openResult, errorCode);
+                        var openResult = MidiDevicesSessionApi.Api_OpenSession(Guid.NewGuid().ToString(), MidiConfiguration.GetConfigurationHandle(), _inputEndpointCallback, _outputEndpointCallback, out var rawHandle, out var errorCode);
+                        NativeApiUtilities.HandleEndpointNativeApiResult(openResult, errorCode);
 
                         _handle = new MidiDevicesSessionHandle(rawHandle);
                         _handle.IsDevicesCachingRequired = MidiConfigurationApi.Api_IsDevicesCachingRequired(MidiConfiguration.GetConfigurationHandle());
@@ -83,20 +83,20 @@ namespace Melanchall.DryWetMidi.Multimedia
             }
         }
 
-        private static void InputDeviceCallback(IntPtr info, bool operation)
+        private static void InputEndpointCallback(IntPtr info, MidiDevicesSessionApi.SESSION_CALLBACKOPERATION operation)
         {
-            if (operation)
-                InputDeviceAdded?.Invoke(null, info);
+            if (operation == MidiDevicesSessionApi.SESSION_CALLBACKOPERATION.SESSION_CALLBACKOPERATION_ENDPOINTADDED)
+                InputEndpointAdded?.Invoke(null, info);
             else
-                InputDeviceRemoved?.Invoke(null, info);
+                InputEndpointRemoved?.Invoke(null, info);
         }
 
-        private static void OutputDeviceCallback(IntPtr info, bool operation)
+        private static void OutputEndpointCallback(IntPtr info, MidiDevicesSessionApi.SESSION_CALLBACKOPERATION operation)
         {
-            if (operation)
-                OutputDeviceAdded?.Invoke(null, info);
+            if (operation == MidiDevicesSessionApi.SESSION_CALLBACKOPERATION.SESSION_CALLBACKOPERATION_ENDPOINTADDED)
+                OutputEndpointAdded?.Invoke(null, info);
             else
-                OutputDeviceRemoved?.Invoke(null, info);
+                OutputEndpointRemoved?.Invoke(null, info);
         }
 
         #endregion

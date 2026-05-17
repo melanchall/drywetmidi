@@ -16,8 +16,8 @@ Can be used on any platform .NET supports. You can find the list of the supporte
 
 Can be used currently on Windows and macOS only. Here the list of the key classes:
 
-* [InputDevice](xref:Melanchall.DryWetMidi.Multimedia.InputDevice);
-* [OutputDevice](xref:Melanchall.DryWetMidi.Multimedia.OutputDevice);
-* [VirtualDevice](xref:Melanchall.DryWetMidi.Multimedia.VirtualDevice) (implemented for **macOS** only);
-* [DevicesWatcher](xref:Melanchall.DryWetMidi.Multimedia.DevicesWatcher) (implemented for **macOS** only);
+* [InputEndpoint](xref:Melanchall.DryWetMidi.Multimedia.InputEndpoint);
+* [OutputEndpoint](xref:Melanchall.DryWetMidi.Multimedia.OutputEndpoint);
+* [VirtualDevice](xref:Melanchall.DryWetMidi.Multimedia.VirtualDevice);
+* [EndpointsWatcher](xref:Melanchall.DryWetMidi.Multimedia.EndpointsWatcher);
 * [HighPrecisionTickGenerator](xref:Melanchall.DryWetMidi.Multimedia.HighPrecisionTickGenerator).

@@ -11,20 +11,20 @@ namespace Melanchall.SendMidiData
             UiUtilities.WriteHello();
             UiUtilities.WriteUtilityDescription(@"
 The tool sends note and other events to the selected
-output MIDI device");
+output MIDI endpoint");
 
-            UiUtilities.WriteLine("Here the list of all output MIDI devices in the system:");
+            UiUtilities.WriteLine("Here the list of all output MIDI endpoints in the system:");
             UiUtilities.WriteLine();
 
-            var outputDevices = OutputDevice.GetAll();
-            UiUtilities.WriteNumberedList(outputDevices, d => d.Name);
+            var outputEndpoints = OutputEndpoint.GetAll();
+            UiUtilities.WriteNumberedList(outputEndpoints, d => d.Name);
             UiUtilities.WriteLine();
 
-            var outputDevice = UiUtilities.SelectElementByNumber("Select device to send data to (type number)", outputDevices);
+            var outputEndpoint = UiUtilities.SelectElementByNumber("Select endpoint to send data to (type number)", outputEndpoints);
             UiUtilities.WriteLine();
 
-            UiUtilities.WriteLine($"Selected device: {outputDevice.Name}");
-            outputDevice.EventSent += OnEventSent;
+            UiUtilities.WriteLine($"Selected endpoint: {outputEndpoint.Name}");
+            outputEndpoint.EventSent += OnEventSent;
 
             while (true)
             {
@@ -40,15 +40,15 @@ output MIDI device");
 
                 while (true)
                 {
-                    var result = DataSender.SendData(outputDevice);
+                    var result = DataSender.SendData(outputEndpoint);
                     if (result == SendResult.Sent)
                         break;
                 }
             }
 
-            UiUtilities.WriteLine("Releasing the device...");
-            outputDevice.EventSent -= OnEventSent;
-            outputDevice.Dispose();
+            UiUtilities.WriteLine("Releasing the endpoint...");
+            outputEndpoint.EventSent -= OnEventSent;
+            outputEndpoint.Dispose();
             UiUtilities.WriteLine("Exited.");
         }
 
