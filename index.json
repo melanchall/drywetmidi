@@ -1,4 +1,9 @@
 {
+  "404.html": {
+    "href": "404.html",
+    "title": "There is no such page | DryWetMIDI",
+    "keywords": "There is no such page The page you are looking for does not exist. Please check the URL or return to the home page. Also note that there were big changes in the library API so some pages have been moved/renamed. For most old pages redirection rules were created. If you are absolutely sure this page should exist, please create an issue or start a discussion on GitHub."
+  },
   "api/Melanchall.DryWetMidi.Common.ControlName.html": {
     "href": "api/Melanchall.DryWetMidi.Common.ControlName.html",
     "title": "Enum ControlName | DryWetMIDI",

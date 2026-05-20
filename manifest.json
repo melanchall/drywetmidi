@@ -11,10 +11,10 @@
       }
     },
     {
-      "type": "Resource",
-      "source_relative_path": "404.html",
+      "type": "Conceptual",
+      "source_relative_path": "404.md",
       "output": {
-        "resource": {
+        ".html": {
           "relative_path": "404.html"
         }
       },
