@@ -11,6 +11,16 @@
       }
     },
     {
+      "type": "Resource",
+      "source_relative_path": "404.html",
+      "output": {
+        "resource": {
+          "relative_path": "404.html"
+        }
+      },
+      "version": ""
+    },
+    {
       "type": "Conceptual",
       "source_relative_path": "articles/composing/Pattern.md",
       "output": {
