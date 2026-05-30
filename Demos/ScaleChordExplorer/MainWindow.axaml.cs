@@ -69,7 +69,7 @@ public partial class MainWindow : Window
     private readonly Dictionary<int, Border> _keyBorders = new();   // midiNote → border
     private readonly HashSet<int> _inScaleKeys    = new();
     private readonly HashSet<int> _playingKeys    = new();
-    private OutputEndpoint? _outputDevice;
+    private OutputEndpoint? _outputEndpoint;
     private Playback? _activePlayback;
     private readonly object _playbackLock = new();
 
@@ -329,8 +329,8 @@ public partial class MainWindow : Window
     private async void OnKeyPressed(int midi, PointerPressedEventArgs e)
     {
         e.Handled = true;
-        var device = EnsureOutputDevice();
-        if (device is null)
+        var outputEndpoint = EnsureOutputEndpoint();
+        if (outputEndpoint is null)
         {
             SetStatus("No MIDI output selected — key presses are silent.");
             return;
@@ -345,16 +345,19 @@ public partial class MainWindow : Window
 
         // Light up key
         if (!_playingKeys.Add(midi))
+        {
+            SetStatus($"Already sounding: {name}{octave}  (MIDI {midi})");
             return;
+        }
 
         SetKeyColorSimple(midi);
         TxtPlayingNote.Text = $"{name}{octave}";
 
         try
         {
-            device.SendEvent(new NoteOnEvent((SevenBitNumber)midi, (SevenBitNumber)velocity));
+            outputEndpoint.SendEvent(new NoteOnEvent((SevenBitNumber)midi, (SevenBitNumber)velocity));
             await Task.Delay(noteMs);
-            device.SendEvent(new NoteOffEvent((SevenBitNumber)midi, SevenBitNumber.MinValue));
+            outputEndpoint.SendEvent(new NoteOffEvent((SevenBitNumber)midi, SevenBitNumber.MinValue));
         }
         catch (Exception ex)
         {
@@ -379,8 +382,8 @@ public partial class MainWindow : Window
     private void StartScalePlayback(bool descending)
     {
         StopPlayback();
-        var device = EnsureOutputDevice();
-        if (device is null)
+        var outputEndpoint = EnsureOutputEndpoint();
+        if (outputEndpoint is null)
         {
             SetStatus("No MIDI output selected — cannot play back.");
             return;
@@ -416,7 +419,7 @@ public partial class MainWindow : Window
         Playback playback;
         try
         {
-            playback = pattern.GetPlayback(tempoMap, FourBitNumber.MinValue, device);
+            playback = pattern.GetPlayback(tempoMap, FourBitNumber.MinValue, outputEndpoint);
         }
         catch (Exception ex)
         {
@@ -435,8 +438,8 @@ public partial class MainWindow : Window
     private void StartProgressionPlayback()
     {
         StopPlayback();
-        var device = EnsureOutputDevice();
-        if (device is null)
+        var outputEndpoint = EnsureOutputEndpoint();
+        if (outputEndpoint is null)
         {
             SetStatus("No MIDI output selected — cannot play back.");
             return;
@@ -488,7 +491,7 @@ public partial class MainWindow : Window
         Playback playback;
         try
         {
-            playback = pattern.GetPlayback(tempoMap, FourBitNumber.MinValue, device);
+            playback = pattern.GetPlayback(tempoMap, FourBitNumber.MinValue, outputEndpoint);
         }
         catch (Exception ex)
         {
@@ -590,7 +593,7 @@ public partial class MainWindow : Window
     }
 
     // ── MIDI device management ───────────────────────────────────────────────
-    private OutputEndpoint? EnsureOutputDevice()
+    private OutputEndpoint? EnsureOutputEndpoint()
     {
         int idx = CmbMidiOut.SelectedIndex;
         if (idx <= 0) return null;  // index 0 == "(No output — silent)"
@@ -598,22 +601,22 @@ public partial class MainWindow : Window
         string? name = CmbMidiOut.Items[idx] as string;
         if (name is null) return null;
 
-        if (_outputDevice?.Name == name && _outputDevice is not null)
-            return _outputDevice;
+        if (_outputEndpoint?.Name == name && _outputEndpoint is not null)
+            return _outputEndpoint;
 
-        _outputDevice?.Dispose();
-        _outputDevice = null;
+        _outputEndpoint?.Dispose();
+        _outputEndpoint = null;
 
         try
         {
-            _outputDevice = OutputEndpoint.GetAll().FirstOrDefault(ep => ep.Name == name);
+            _outputEndpoint = OutputEndpoint.GetAll().FirstOrDefault(ep => ep.Name == name);
         }
         catch (Exception ex)
         {
             SetStatus($"Could not open MIDI device \"{name}\": {ex.Message}");
         }
 
-        return _outputDevice;
+        return _outputEndpoint;
     }
 
     // ── Helpers ──────────────────────────────────────────────────────────────
@@ -623,6 +626,6 @@ public partial class MainWindow : Window
     private void OnClosed(object? sender, EventArgs e)
     {
         StopPlayback();
-        _outputDevice?.Dispose();
+        _outputEndpoint?.Dispose();
     }
 }
