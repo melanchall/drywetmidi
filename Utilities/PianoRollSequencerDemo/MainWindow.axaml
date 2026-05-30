@@ -2,32 +2,52 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         x:Class="Melanchall.PianoRollSequencerDemo.MainWindow"
         Title="DryWetMidi Avalonia Piano Roll Demo"
-        Width="1240"
-        Height="760"
-        MinWidth="900"
-        MinHeight="540">
+        Width="1320"
+        Height="780"
+        MinWidth="980"
+        MinHeight="560">
   <DockPanel>
     <Border DockPanel.Dock="Top" Background="#1E1E1E" Padding="12">
-      <StackPanel Spacing="8">
-        <StackPanel Orientation="Horizontal" Spacing="8">
-          <Button x:Name="PlayButton" Content="Play" MinWidth="90" />
-          <Button x:Name="StopButton" Content="Stop" MinWidth="90" />
-          <Button x:Name="ClearButton" Content="Clear" MinWidth="90" />
-          <TextBlock x:Name="StatusText"
-                     VerticalAlignment="Center"
-                     Foreground="#E8E8E8"
-                     Text="Ready" />
-        </StackPanel>
+      <StackPanel Spacing="10">
+        <WrapPanel Orientation="Horizontal" ItemHeight="34" VerticalAlignment="Center">
+          <Button x:Name="PlayButton" Content="Play" MinWidth="90" Margin="0,0,8,0" />
+          <Button x:Name="StopButton" Content="Stop" MinWidth="90" Margin="0,0,8,0" />
+          <Button x:Name="ResetButton" Content="Reset Position" MinWidth="120" Margin="0,0,8,0" />
+          <Button x:Name="ClearButton" Content="Clear" MinWidth="90" Margin="0,0,16,0" />
+
+          <TextBlock VerticalAlignment="Center" Foreground="#D0D0D0" Text="Grid:" Margin="0,0,6,0" />
+          <ComboBox x:Name="GridStepComboBox" MinWidth="120" Margin="0,0,12,0" />
+
+          <TextBlock VerticalAlignment="Center" Foreground="#D0D0D0" Text="Time format:" Margin="0,0,6,0" />
+          <ComboBox x:Name="TimeFormatComboBox" MinWidth="160" Margin="0,0,12,0" />
+
+          <TextBlock VerticalAlignment="Center" Foreground="#D0D0D0" Text="Time signature:" Margin="0,0,6,0" />
+          <ComboBox x:Name="TimeSignatureComboBox" MinWidth="120" />
+        </WrapPanel>
+
+        <Border Background="#2A2A2A" Padding="8" CornerRadius="4">
+          <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8">
+            <TextBlock Foreground="#A9A9A9" Text="Current playback time:" VerticalAlignment="Center" />
+            <TextBlock x:Name="CurrentTimeText" Grid.Column="1" Foreground="#8BE9FD" FontWeight="SemiBold" VerticalAlignment="Center" Text="0" />
+          </Grid>
+        </Border>
+
         <TextBlock Foreground="#A9A9A9"
-                   Text="Left drag on empty space to draw a note. Left drag note to move. Right click a note to remove. All edits are applied while playback is running." />
+                   Text="Double-click to create a note with current grid step. Left drag a note to move. Left drag on empty space to draw a custom note length. Right click note to remove. You can edit while playback is running." />
+
+        <TextBlock x:Name="StatusText" Foreground="#E8E8E8" Text="Ready" />
       </StackPanel>
     </Border>
 
     <ScrollViewer HorizontalScrollBarVisibility="Auto"
                   VerticalScrollBarVisibility="Auto">
-      <Grid x:Name="PianoRollHost" Background="#151515">
-        <Canvas x:Name="GridCanvas" IsHitTestVisible="False" />
-        <Canvas x:Name="NotesCanvas" Background="Transparent" />
+      <Grid x:Name="PianoRollHost" ColumnDefinitions="96,*" Background="#151515">
+        <Canvas x:Name="KeysCanvas" Background="#131313" />
+
+        <Grid Grid.Column="1">
+          <Canvas x:Name="GridCanvas" IsHitTestVisible="False" />
+          <Canvas x:Name="NotesCanvas" Background="Transparent" />
+        </Grid>
       </Grid>
     </ScrollViewer>
   </DockPanel>

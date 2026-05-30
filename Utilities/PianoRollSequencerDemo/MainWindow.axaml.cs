@@ -5,6 +5,7 @@ using Avalonia.Input;
 using Avalonia.Media;
 using Avalonia.Threading;
 using Melanchall.DryWetMidi.Common;
+using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
 using Melanchall.DryWetMidi.Multimedia;
 using System;
@@ -16,7 +17,6 @@ namespace Melanchall.PianoRollSequencerDemo;
 public partial class MainWindow : Window
 {
     private const int TicksPerBeat = 480;
-    private const int SnapStepTicks = TicksPerBeat / 4;
     private const double PixelsPerBeat = 64;
     private const double RowHeight = 18;
     private const int LowestNoteNumber = 48;
@@ -24,17 +24,48 @@ public partial class MainWindow : Window
     private const int VisibleBeats = 48;
     private const long DefaultNoteLength = TicksPerBeat;
 
+    private static readonly GridStepOption[] GridStepOptions =
+    [
+        new("1/4", TicksPerBeat),
+        new("1/8", TicksPerBeat / 2),
+        new("1/16", TicksPerBeat / 4),
+        new("1/32", TicksPerBeat / 8)
+    ];
+
+    private static readonly TimeFormatOption[] TimeFormatOptions =
+    [
+        new("Metric", TimeSpanType.Metric),
+        new("Musical", TimeSpanType.Musical),
+        new("Bar/Beat/Ticks", TimeSpanType.BarBeatTicks),
+        new("Bar/Beat/Fraction", TimeSpanType.BarBeatFraction),
+        new("MIDI", TimeSpanType.Midi)
+    ];
+
+    private static readonly TimeSignatureOption[] TimeSignatureOptions =
+    [
+        new("4/4", 4, 4),
+        new("3/4", 3, 4),
+        new("5/8", 5, 8),
+        new("6/8", 6, 8)
+    ];
+
     private readonly ObservableTimedObjectsCollection _collection = [];
     private readonly Dictionary<Note, Border> _noteViews = [];
-    private readonly TempoMap _tempoMap = TempoMap.Default;
     private readonly DispatcherTimer _uiTimer;
+
+    private long _gridStepTicks = TicksPerBeat / 4;
+    private TimeFormatOption _selectedTimeFormat = TimeFormatOptions[2];
+    private TimeSignatureOption _selectedTimeSignature = TimeSignatureOptions[0];
+    private TempoMap _tempoMap;
 
     private Playback? _playback;
     private OutputEndpoint? _outputEndpoint;
 
+    private Canvas _keysCanvas = null!;
     private Canvas _gridCanvas = null!;
     private Canvas _notesCanvas = null!;
     private TextBlock _statusText = null!;
+    private TextBlock _currentTimeText = null!;
 
     private Line _playhead = null!;
 
@@ -51,39 +82,70 @@ public partial class MainWindow : Window
     {
         InitializeComponent();
 
+        _tempoMap = TempoMap.Create(
+            new TicksPerQuarterNoteTimeDivision(TicksPerBeat),
+            new TimeSignature(_selectedTimeSignature.Numerator, _selectedTimeSignature.Denominator));
+
         _uiTimer = new DispatcherTimer
         {
             Interval = TimeSpan.FromMilliseconds(33)
         };
 
-        _uiTimer.Tick += (_, _) => UpdatePlayhead();
+        _uiTimer.Tick += (_, _) => UpdatePlaybackVisuals();
 
         InitializeControls();
         InitializeGrid();
         InitializePlayback();
         SeedNotes();
+        UpdatePlaybackVisuals();
         UpdateStatus();
     }
 
     private void InitializeControls()
     {
+        _keysCanvas = this.FindControl<Canvas>("KeysCanvas")
+            ?? throw new InvalidOperationException("KeysCanvas is not found.");
         _gridCanvas = this.FindControl<Canvas>("GridCanvas")
             ?? throw new InvalidOperationException("GridCanvas is not found.");
         _notesCanvas = this.FindControl<Canvas>("NotesCanvas")
             ?? throw new InvalidOperationException("NotesCanvas is not found.");
         _statusText = this.FindControl<TextBlock>("StatusText")
             ?? throw new InvalidOperationException("StatusText is not found.");
+        _currentTimeText = this.FindControl<TextBlock>("CurrentTimeText")
+            ?? throw new InvalidOperationException("CurrentTimeText is not found.");
 
         var playButton = this.FindControl<Button>("PlayButton")
             ?? throw new InvalidOperationException("PlayButton is not found.");
         var stopButton = this.FindControl<Button>("StopButton")
             ?? throw new InvalidOperationException("StopButton is not found.");
+        var resetButton = this.FindControl<Button>("ResetButton")
+            ?? throw new InvalidOperationException("ResetButton is not found.");
         var clearButton = this.FindControl<Button>("ClearButton")
             ?? throw new InvalidOperationException("ClearButton is not found.");
 
+        var gridStepComboBox = this.FindControl<ComboBox>("GridStepComboBox")
+            ?? throw new InvalidOperationException("GridStepComboBox is not found.");
+        var timeFormatComboBox = this.FindControl<ComboBox>("TimeFormatComboBox")
+            ?? throw new InvalidOperationException("TimeFormatComboBox is not found.");
+        var timeSignatureComboBox = this.FindControl<ComboBox>("TimeSignatureComboBox")
+            ?? throw new InvalidOperationException("TimeSignatureComboBox is not found.");
+
         playButton.Click += (_, _) => StartPlayback();
         stopButton.Click += (_, _) => StopPlayback();
+        resetButton.Click += (_, _) => ResetPlaybackPosition();
         clearButton.Click += (_, _) => ClearNotes();
+
+        gridStepComboBox.ItemsSource = GridStepOptions.Select(option => option.Name).ToArray();
+        gridStepComboBox.SelectedIndex = Array.FindIndex(GridStepOptions, option => option.Ticks == _gridStepTicks);
+        gridStepComboBox.SelectionChanged += (_, _) => OnGridStepChanged(gridStepComboBox.SelectedIndex);
+
+        timeFormatComboBox.ItemsSource = TimeFormatOptions.Select(option => option.Name).ToArray();
+        timeFormatComboBox.SelectedIndex = Array.FindIndex(TimeFormatOptions, option => option.Type == _selectedTimeFormat.Type);
+        timeFormatComboBox.SelectionChanged += (_, _) => OnTimeFormatChanged(timeFormatComboBox.SelectedIndex);
+
+        timeSignatureComboBox.ItemsSource = TimeSignatureOptions.Select(option => option.Name).ToArray();
+        timeSignatureComboBox.SelectedIndex = Array.FindIndex(TimeSignatureOptions, option => option.Name == _selectedTimeSignature.Name);
+        timeSignatureComboBox.SelectionChanged += (_, _) => OnTimeSignatureChanged(timeSignatureComboBox.SelectedIndex);
 
         _notesCanvas.PointerPressed += NotesCanvasOnPointerPressed;
         _notesCanvas.PointerMoved += NotesCanvasOnPointerMoved;
@@ -96,13 +158,14 @@ public partial class MainWindow : Window
         var width = VisibleBeats * PixelsPerBeat;
         var height = totalRows * RowHeight;
 
+        _keysCanvas.Width = 96;
+        _keysCanvas.Height = height;
         _gridCanvas.Width = width;
         _gridCanvas.Height = height;
         _notesCanvas.Width = width;
         _notesCanvas.Height = height;
 
-        DrawBackground(totalRows, width);
-        DrawGridLines(totalRows, width);
+        RedrawGrid();
 
         _playhead = new Line
         {
@@ -110,10 +173,62 @@ public partial class MainWindow : Window
             EndPoint = new Point(0, height),
             Stroke = new SolidColorBrush(Color.Parse("#7FEA4E")),
             StrokeThickness = 2,
-            IsHitTestVisible = false
+            IsHitTestVisible = false,
+            ZIndex = 1000
         };
 
         _notesCanvas.Children.Add(_playhead);
+    }
+
+    private void RedrawGrid()
+    {
+        var totalRows = HighestNoteNumber - LowestNoteNumber + 1;
+        var width = VisibleBeats * PixelsPerBeat;
+
+        _keysCanvas.Children.Clear();
+        _gridCanvas.Children.Clear();
+
+        DrawPianoKeys(totalRows);
+        DrawBackground(totalRows, width);
+        DrawGridLines(totalRows, width);
+    }
+
+    private void DrawPianoKeys(int totalRows)
+    {
+        for (var row = 0; row < totalRows; row++)
+        {
+            var noteNumber = HighestNoteNumber - row;
+            var isBlack = IsBlackKey(noteNumber);
+
+            _keysCanvas.Children.Add(new Rectangle
+            {
+                Width = 96,
+                Height = RowHeight,
+                Fill = new SolidColorBrush(Color.Parse(isBlack ? "#1B1B1B" : "#F2F2F2")),
+                IsHitTestVisible = false
+            });
+            Canvas.SetTop(_keysCanvas.Children[^1], row * RowHeight);
+
+            var noteLabel = GetNoteLabel(noteNumber);
+            _keysCanvas.Children.Add(new TextBlock
+            {
+                Text = noteLabel,
+                Foreground = new SolidColorBrush(Color.Parse(isBlack ? "#C5C5C5" : "#111111")),
+                FontSize = 10,
+                IsHitTestVisible = false
+            });
+            Canvas.SetTop(_keysCanvas.Children[^1], row * RowHeight + 2);
+            Canvas.SetLeft(_keysCanvas.Children[^1], 6);
+        }
+
+        _keysCanvas.Children.Add(new Line
+        {
+            StartPoint = new Point(95, 0),
+            EndPoint = new Point(95, totalRows * RowHeight),
+            Stroke = new SolidColorBrush(Color.Parse("#3B3B3B")),
+            StrokeThickness = 1,
+            IsHitTestVisible = false
+        });
     }
 
     private void DrawBackground(int totalRows, double width)
@@ -149,26 +264,35 @@ public partial class MainWindow : Window
             });
         }
 
-        for (var beat = 0; beat <= VisibleBeats; beat++)
+        var totalTicks = VisibleBeats * TicksPerBeat;
+        var barLengthTicks = GetBarLengthTicks();
+        var beatLengthTicks = GetBeatLengthTicks();
+
+        for (var ticks = 0L; ticks <= totalTicks; ticks += _gridStepTicks)
         {
-            var isBar = beat % 4 == 0;
+            var x = ticks / (double)TicksPerBeat * PixelsPerBeat;
+            var isBar = ticks % barLengthTicks == 0;
+            var isBeat = ticks % beatLengthTicks == 0;
 
             _gridCanvas.Children.Add(new Line
             {
-                StartPoint = new Point(beat * PixelsPerBeat, 0),
-                EndPoint = new Point(beat * PixelsPerBeat, totalRows * RowHeight),
-                Stroke = new SolidColorBrush(Color.Parse(isBar ? "#505050" : "#3A3A3A")),
+                StartPoint = new Point(x, 0),
+                EndPoint = new Point(x, totalRows * RowHeight),
+                Stroke = new SolidColorBrush(Color.Parse(isBar ? "#5A5A5A" : isBeat ? "#4A4A4A" : "#3A3A3A")),
                 StrokeThickness = isBar ? 1.5 : 1,
                 IsHitTestVisible = false
             });
         }
     }
 
-    private void InitializePlayback()
+    private void InitializePlayback(long? currentTickTime = null)
     {
+        _playback?.Stop();
+        _playback?.Dispose();
+
         try
         {
-            _outputEndpoint = OutputEndpoint.GetAll().FirstOrDefault();
+            _outputEndpoint ??= OutputEndpoint.GetAll().FirstOrDefault();
         }
         catch
         {
@@ -180,6 +304,9 @@ public partial class MainWindow : Window
             : new Playback(_collection, _tempoMap);
 
         _playback.Loop = true;
+
+        if (currentTickTime.HasValue)
+            _playback.MoveToTime(new MidiTimeSpan(currentTickTime.Value));
     }
 
     private void SeedNotes()
@@ -188,7 +315,7 @@ public partial class MainWindow : Window
 
         for (var i = 0; i < seed.Length; i++)
         {
-            AddNote(i * TicksPerBeat, TicksPerBeat, seed[i]);
+            AddNote(i * TicksPerBeat, DefaultNoteLength, seed[i]);
         }
     }
 
@@ -196,6 +323,7 @@ public partial class MainWindow : Window
     {
         _playback?.Start();
         _uiTimer.Start();
+        UpdatePlaybackVisuals();
         UpdateStatus();
     }
 
@@ -203,6 +331,14 @@ public partial class MainWindow : Window
     {
         _playback?.Stop();
         _uiTimer.Stop();
+        UpdatePlaybackVisuals();
+        UpdateStatus();
+    }
+
+    private void ResetPlaybackPosition()
+    {
+        _playback?.MoveToStart();
+        UpdatePlaybackVisuals();
         UpdateStatus();
     }
 
@@ -215,6 +351,52 @@ public partial class MainWindow : Window
         }
 
         UpdateStatus();
+    }
+
+    private void OnGridStepChanged(int selectedIndex)
+    {
+        if (selectedIndex < 0 || selectedIndex >= GridStepOptions.Length)
+            return;
+
+        _gridStepTicks = GridStepOptions[selectedIndex].Ticks;
+        RedrawGrid();
+        UpdatePlaybackVisuals();
+        UpdateStatus();
+    }
+
+    private void OnTimeFormatChanged(int selectedIndex)
+    {
+        if (selectedIndex < 0 || selectedIndex >= TimeFormatOptions.Length)
+            return;
+
+        _selectedTimeFormat = TimeFormatOptions[selectedIndex];
+        UpdatePlaybackVisuals();
+    }
+
+    private void OnTimeSignatureChanged(int selectedIndex)
+    {
+        if (selectedIndex < 0 || selectedIndex >= TimeSignatureOptions.Length)
+            return;
+
+        _selectedTimeSignature = TimeSignatureOptions[selectedIndex];
+
+        var currentTicks = _playback?.GetCurrentTime<MidiTimeSpan>().TimeSpan;
+        var wasRunning = _playback?.IsRunning == true;
+
+        _tempoMap = TempoMap.Create(
+            new TicksPerQuarterNoteTimeDivision(TicksPerBeat),
+            new TimeSignature(_selectedTimeSignature.Numerator, _selectedTimeSignature.Denominator));
+
+        InitializePlayback(currentTicks);
+        RedrawGrid();
+        UpdatePlaybackVisuals();
+        UpdateStatus();
+
+        if (wasRunning)
+        {
+            _playback?.Start();
+            _uiTimer.Start();
+        }
     }
 
     private void NotesCanvasOnPointerPressed(object? sender, PointerPressedEventArgs e)
@@ -238,6 +420,14 @@ public partial class MainWindow : Window
                 e.Pointer.Capture(_notesCanvas);
             }
 
+            return;
+        }
+
+        if (e.GetCurrentPoint(_notesCanvas).Properties.IsLeftButtonPressed && e.ClickCount == 2)
+        {
+            var noteNumber = PositionToNoteNumber(point.Y);
+            var startTicks = SnapTicks(PositionToTicks(point.X));
+            AddNote(startTicks, _gridStepTicks, noteNumber);
             return;
         }
 
@@ -269,9 +459,7 @@ public partial class MainWindow : Window
         }
 
         if (_isDrawing)
-        {
             UpdateDrawPreview(point);
-        }
     }
 
     private void NotesCanvasOnPointerReleased(object? sender, PointerReleasedEventArgs e)
@@ -294,7 +482,7 @@ public partial class MainWindow : Window
         if (endTicks < startTicks)
             (startTicks, endTicks) = (endTicks, startTicks);
 
-        var length = Math.Max(SnapStepTicks, endTicks - startTicks);
+        var length = Math.Max(_gridStepTicks, endTicks - startTicks);
         var noteNumber = PositionToNoteNumber(_drawStartPoint.Y);
 
         AddNote(startTicks, length, noteNumber);
@@ -309,7 +497,7 @@ public partial class MainWindow : Window
         var note = new Note((SevenBitNumber)noteNumber)
         {
             Time = Math.Max(0, time),
-            Length = Math.Max(SnapStepTicks, length),
+            Length = Math.Max(_gridStepTicks, length),
             Velocity = (SevenBitNumber)90
         };
 
@@ -328,7 +516,7 @@ public partial class MainWindow : Window
     private void ChangeNote(Note note, long time, long length, int noteNumber)
     {
         var updatedTime = Math.Max(0, time);
-        var updatedLength = Math.Max(SnapStepTicks, length);
+        var updatedLength = Math.Max(_gridStepTicks, length);
         var updatedNoteNumber = ClampNoteNumber(noteNumber);
 
         _collection.ChangeObject(
@@ -352,7 +540,7 @@ public partial class MainWindow : Window
         _playhead.ZIndex = 1000;
     }
 
-    private Border CreateNoteView(Note note)
+    private static Border CreateNoteView(Note note)
     {
         return new Border
         {
@@ -411,7 +599,7 @@ public partial class MainWindow : Window
         var startTicks = SnapTicks(PositionToTicks(_drawStartPoint.X));
         var endTicks = SnapTicks(PositionToTicks(point.X));
         var startX = Math.Min(startTicks, endTicks) / (double)TicksPerBeat * PixelsPerBeat;
-        var width = Math.Max(SnapStepTicks, Math.Abs(endTicks - startTicks)) / (double)TicksPerBeat * PixelsPerBeat;
+        var width = Math.Max(_gridStepTicks, Math.Abs(endTicks - startTicks)) / (double)TicksPerBeat * PixelsPerBeat;
 
         var noteNumber = PositionToNoteNumber(_drawStartPoint.Y);
 
@@ -420,7 +608,7 @@ public partial class MainWindow : Window
         Canvas.SetTop(_drawPreview, NoteNumberToRow(noteNumber) * RowHeight + 1.5);
     }
 
-    private void UpdatePlayhead()
+    private void UpdatePlaybackVisuals()
     {
         if (_playback == null)
             return;
@@ -430,13 +618,38 @@ public partial class MainWindow : Window
 
         _playhead.StartPoint = new Point(x, 0);
         _playhead.EndPoint = new Point(x, _notesCanvas.Height);
+
+        var currentTime = _playback.GetCurrentTime(_selectedTimeFormat.Type);
+        _currentTimeText.Text = currentTime.ToString();
     }
 
     private void UpdateStatus()
     {
         var outputEndpointName = _outputEndpoint?.Name ?? "No output endpoint (silent playback)";
 
-        _statusText.Text = $"Notes: {_noteViews.Count} | Output: {outputEndpointName}";
+        _statusText.Text = $"Notes: {_noteViews.Count} | Grid: {GetGridStepName()} | Signature: {_selectedTimeSignature.Name} | Output: {outputEndpointName}";
+    }
+
+    private string GetGridStepName()
+    {
+        return GridStepOptions.FirstOrDefault(option => option.Ticks == _gridStepTicks).Name ?? _gridStepTicks.ToString();
+    }
+
+    private long GetBeatLengthTicks()
+    {
+        return TicksPerBeat * 4L / _selectedTimeSignature.Denominator;
+    }
+
+    private long GetBarLengthTicks()
+    {
+        return GetBeatLengthTicks() * _selectedTimeSignature.Numerator;
+    }
+
+    private static string GetNoteLabel(int noteNumber)
+    {
+        string[] noteNames = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
+        var octave = noteNumber / 12 - 1;
+        return $"{noteNames[noteNumber % 12]}{octave}";
     }
 
     private static bool IsBlackKey(int noteNumber)
@@ -454,9 +667,9 @@ public partial class MainWindow : Window
         return Math.Clamp(noteNumber, LowestNoteNumber, HighestNoteNumber);
     }
 
-    private static long SnapTicks(long ticks)
+    private long SnapTicks(long ticks)
     {
-        return Math.Max(0, (long)Math.Round(ticks / (double)SnapStepTicks) * SnapStepTicks);
+        return Math.Max(0, (long)Math.Round(ticks / (double)_gridStepTicks) * _gridStepTicks);
     }
 
     private static long PositionToTicks(double x)
@@ -481,4 +694,10 @@ public partial class MainWindow : Window
 
         base.OnClosed(e);
     }
+
+    private readonly record struct GridStepOption(string Name, long Ticks);
+
+    private readonly record struct TimeFormatOption(string Name, TimeSpanType Type);
+
+    private readonly record struct TimeSignatureOption(string Name, byte Numerator, byte Denominator);
 }
