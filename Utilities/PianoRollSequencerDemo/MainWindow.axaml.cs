@@ -425,8 +425,8 @@ public partial class MainWindow : Window
         if (_playback == null)
             return;
 
-        var currentTicks = _playback.GetCurrentTime<MidiTimeSpan>().TimeSpan;
-        var x = currentTicks / (double)TicksPerBeat * PixelsPerBeat;
+        var currentTickTime = _playback.GetCurrentTime<MidiTimeSpan>().TimeSpan;
+        var x = currentTickTime / (double)TicksPerBeat * PixelsPerBeat;
 
         _playhead.StartPoint = new Point(x, 0);
         _playhead.EndPoint = new Point(x, _notesCanvas.Height);

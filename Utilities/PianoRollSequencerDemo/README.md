@@ -12,7 +12,7 @@ Avalonia demo app that shows a simple DAW-like piano roll powered by `Melanchall
 ## Run
 
 ```bash
-dotnet run --project /tmp/workspace/melanchall/drywetmidi/Utilities/PianoRollSequencerDemo/Melanchall.PianoRollSequencerDemo.csproj
+dotnet run --project Utilities/PianoRollSequencerDemo/Melanchall.PianoRollSequencerDemo.csproj
 ```
 
 ## Screenshots
