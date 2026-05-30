@@ -17,6 +17,10 @@ dotnet run --project Utilities/PianoRollSequencerDemo/Melanchall.PianoRollSequen
 
 ## Screenshots
 
+### Animated demo
+
+![Animated piano roll demo](Screenshots/pianoroll-demo.gif)
+
 ### Overview
 
 ![Piano roll overview](Screenshots/pianoroll-overview.png)
