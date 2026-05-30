@@ -2,8 +2,6 @@
 
 A cross-platform GUI demo (Windows & macOS) for the [DryWetMidi](https://melanchall.github.io/drywetmidi) library, built with [Avalonia UI](https://avaloniaui.net/).
 
-![Screenshot placeholder](docs/screenshot.png)
-
 ## What it demonstrates
 
 | Feature | DryWetMidi API used |

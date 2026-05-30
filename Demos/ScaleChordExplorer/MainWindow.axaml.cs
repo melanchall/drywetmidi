@@ -69,7 +69,7 @@ public partial class MainWindow : Window
     private readonly Dictionary<int, Border> _keyBorders = new();   // midiNote → border
     private readonly HashSet<int> _inScaleKeys    = new();
     private readonly HashSet<int> _playingKeys    = new();
-    private OutputDevice? _outputDevice;
+    private OutputEndpoint? _outputDevice;
     private Playback? _activePlayback;
     private readonly object _playbackLock = new();
 
@@ -136,7 +136,7 @@ public partial class MainWindow : Window
 
         try
         {
-            foreach (var ep in OutputDevice.GetAll())
+            foreach (var ep in OutputEndpoint.GetAll())
                 CmbMidiOut.Items.Add(ep.Name);
         }
         catch
@@ -344,7 +344,9 @@ public partial class MainWindow : Window
         SetStatus($"Pressed: {name}{octave}  (MIDI {midi})");
 
         // Light up key
-        _playingKeys.Add(midi);
+        if (!_playingKeys.Add(midi))
+            return;
+
         SetKeyColorSimple(midi);
         TxtPlayingNote.Text = $"{name}{octave}";
 
@@ -588,7 +590,7 @@ public partial class MainWindow : Window
     }
 
     // ── MIDI device management ───────────────────────────────────────────────
-    private OutputDevice? EnsureOutputDevice()
+    private OutputEndpoint? EnsureOutputDevice()
     {
         int idx = CmbMidiOut.SelectedIndex;
         if (idx <= 0) return null;  // index 0 == "(No output — silent)"
@@ -604,7 +606,7 @@ public partial class MainWindow : Window
 
         try
         {
-            _outputDevice = OutputDevice.GetAll().FirstOrDefault(ep => ep.Name == name);
+            _outputDevice = OutputEndpoint.GetAll().FirstOrDefault(ep => ep.Name == name);
         }
         catch (Exception ex)
         {
