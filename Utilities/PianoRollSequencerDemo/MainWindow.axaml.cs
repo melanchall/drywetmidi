@@ -632,12 +632,13 @@ public partial class MainWindow : Window
 
     private string GetGridStepName()
     {
-        return GridStepOptions.FirstOrDefault(option => option.Ticks == _gridStepTicks).Name ?? _gridStepTicks.ToString();
+        var index = Array.FindIndex(GridStepOptions, option => option.Ticks == _gridStepTicks);
+        return index >= 0 ? GridStepOptions[index].Name : _gridStepTicks.ToString();
     }
 
     private long GetBeatLengthTicks()
     {
-        return TicksPerBeat * 4L / _selectedTimeSignature.Denominator;
+        return (long)Math.Round(TicksPerBeat * 4.0 / _selectedTimeSignature.Denominator);
     }
 
     private long GetBarLengthTicks()
