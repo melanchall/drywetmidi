@@ -69,7 +69,7 @@ public partial class MainWindow : Window
     private readonly Dictionary<int, Border> _keyBorders = new();   // midiNote → border
     private readonly HashSet<int> _inScaleKeys    = new();
     private readonly HashSet<int> _playingKeys    = new();
-    private OutputEndpoint? _outputDevice;
+    private OutputDevice? _outputDevice;
     private Playback? _activePlayback;
     private readonly object _playbackLock = new();
 
@@ -136,7 +136,7 @@ public partial class MainWindow : Window
 
         try
         {
-            foreach (var ep in OutputEndpoint.GetAll())
+            foreach (var ep in OutputDevice.GetAll())
                 CmbMidiOut.Items.Add(ep.Name);
         }
         catch
@@ -588,7 +588,7 @@ public partial class MainWindow : Window
     }
 
     // ── MIDI device management ───────────────────────────────────────────────
-    private OutputEndpoint? EnsureOutputDevice()
+    private OutputDevice? EnsureOutputDevice()
     {
         int idx = CmbMidiOut.SelectedIndex;
         if (idx <= 0) return null;  // index 0 == "(No output — silent)"
@@ -604,7 +604,7 @@ public partial class MainWindow : Window
 
         try
         {
-            _outputDevice = OutputEndpoint.GetAll().FirstOrDefault(ep => ep.Name == name);
+            _outputDevice = OutputDevice.GetAll().FirstOrDefault(ep => ep.Name == name);
         }
         catch (Exception ex)
         {

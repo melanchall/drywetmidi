@@ -15,21 +15,7 @@
     <PackageReference Include="Avalonia" Version="11.2.7" />
     <PackageReference Include="Avalonia.Desktop" Version="11.2.7" />
     <PackageReference Include="Avalonia.Themes.Fluent" Version="11.2.7" />
+    <PackageReference Include="Melanchall.DryWetMidi" Version="8.0.3" />
   </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\DryWetMidi\Melanchall.DryWetMidi.csproj">
-      <DefineConstants>FULL</DefineConstants>
-    </ProjectReference>
-  </ItemGroup>
-
-  <!--
-    Import native library targets so the platform-specific MIDI native library
-    (Melanchall_DryWetMidi_Native.dll / .dylib) is copied to the output directory.
-    The targets file uses Exists() conditions so the build won't fail if the
-    Native folder is absent (e.g. in a fresh source-only clone).
-  -->
-  <Import Project="$(SolutionDir)Melanchall.DryWetMidi.Native.targets"
-          Condition="Exists('$(SolutionDir)Melanchall.DryWetMidi.Native.targets')" />
 
 </Project>

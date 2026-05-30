@@ -31,8 +31,7 @@ A cross-platform GUI demo (Windows & macOS) for the [DryWetMidi](https://melanch
 dotnet run --project Demos/ScaleChordExplorer/ScaleChordExplorer.csproj
 ```
 
-Or open `Melanchall.DryWetMidi.slnx` in Visual Studio / Rider and set
-**ScaleChordExplorer** as the startup project.
+Or open `Demos/ScaleChordExplorer/ScaleChordExplorer.csproj` directly in Visual Studio / Rider.
 
 ## User interface
 
