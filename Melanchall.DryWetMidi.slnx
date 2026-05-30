@@ -41,4 +41,5 @@
   </Folder>
   <Project Path="DryWetMidi.Tests/Melanchall.DryWetMidi.Tests.csproj" />
   <Project Path="DryWetMidi/Melanchall.DryWetMidi.csproj" />
+  <Project Path="Demos/ScaleChordExplorer/ScaleChordExplorer.csproj" />
 </Solution>

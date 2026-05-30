@@ -1,0 +1,144 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="ScaleChordExplorer.MainWindow"
+        Title="Scale &amp; Chord Explorer — DryWetMidi Demo"
+        Width="760" Height="510"
+        MinWidth="760" MinHeight="510"
+        Background="#1A1A2E"
+        WindowStartupLocation="CenterScreen"
+        CanResize="False">
+
+  <DockPanel>
+
+    <!-- ── Header ── -->
+    <Border DockPanel.Dock="Top" Background="#0F0F23" Padding="16,10,16,10">
+      <Grid ColumnDefinitions="*,Auto">
+        <StackPanel Grid.Column="0" Orientation="Vertical" Spacing="2">
+          <TextBlock Text="🎹  Scale &amp; Chord Explorer"
+                     FontSize="20" FontWeight="Bold"
+                     Foreground="#C5C6F0"/>
+          <TextBlock Text="Interactive music theory demo powered by DryWetMidi"
+                     FontSize="11" Foreground="#6668A0"/>
+        </StackPanel>
+        <TextBlock Grid.Column="1" x:Name="TxtVersion"
+                   Text="DryWetMidi" FontSize="10" Foreground="#44446A"
+                   VerticalAlignment="Bottom"/>
+      </Grid>
+    </Border>
+
+    <!-- ── Bottom buttons ── -->
+    <Border DockPanel.Dock="Bottom" Background="#0F0F23" Padding="16,10">
+      <Grid ColumnDefinitions="*,Auto">
+        <TextBlock Grid.Column="0" x:Name="TxtStatus"
+                   Text="Ready — select a scale, then click keys or use the playback buttons below."
+                   Foreground="#666688" FontSize="11"
+                   VerticalAlignment="Center" TextWrapping="Wrap"/>
+        <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="8">
+          <Button x:Name="BtnPlayAscending"
+                  Content="▶  Play Scale  ↑"
+                  Click="BtnPlayAscending_Click"
+                  Width="128" Height="30" FontSize="12"/>
+          <Button x:Name="BtnPlayBoth"
+                  Content="▶  Play Scale  ↑↓"
+                  Click="BtnPlayBoth_Click"
+                  Width="136" Height="30" FontSize="12"/>
+          <Button x:Name="BtnPlayProgression"
+                  Content="▶  Chord Progression"
+                  Click="BtnPlayProgression_Click"
+                  Width="160" Height="30" FontSize="12"/>
+          <Button x:Name="BtnStop"
+                  Content="■  Stop"
+                  Click="BtnStop_Click"
+                  Width="76" Height="30" FontSize="12"
+                  Background="#8B0000" Foreground="White"/>
+        </StackPanel>
+      </Grid>
+    </Border>
+
+    <!-- ── Main content ── -->
+    <Grid RowDefinitions="Auto,Auto,Auto,Auto" Margin="16,10,16,10">
+
+      <!-- Row 0: Controls -->
+      <Grid Grid.Row="0"
+            ColumnDefinitions="Auto,8,Auto,20,Auto,8,Auto,20,Auto,8,*,8,Auto"
+            Margin="0,0,0,10">
+
+        <TextBlock Grid.Column="0" Text="Root:" Foreground="#9999CC"
+                   VerticalAlignment="Center" FontSize="13"/>
+        <ComboBox Grid.Column="2" x:Name="CmbRoot" Width="74" FontSize="13"/>
+
+        <TextBlock Grid.Column="4" Text="Scale:" Foreground="#9999CC"
+                   VerticalAlignment="Center" FontSize="13"/>
+        <ComboBox Grid.Column="6" x:Name="CmbScale" Width="172" FontSize="13"/>
+
+        <TextBlock Grid.Column="8" Text="MIDI Out:" Foreground="#9999CC"
+                   VerticalAlignment="Center" FontSize="13"/>
+        <ComboBox Grid.Column="10" x:Name="CmbMidiOut" FontSize="12"/>
+        <Button Grid.Column="12" x:Name="BtnRefreshDevices"
+                Content="↺" Click="BtnRefreshDevices_Click"
+                Width="28" Height="28" FontSize="14"
+                VerticalAlignment="Center"/>
+      </Grid>
+
+      <!-- Row 1: Piano keyboard -->
+      <Border Grid.Row="1" Background="#0A0A1A" CornerRadius="8"
+              Padding="12,10,12,10" Margin="0,0,0,10">
+        <ScrollViewer HorizontalScrollBarVisibility="Auto"
+                      VerticalScrollBarVisibility="Disabled">
+          <Canvas x:Name="PianoCanvas" Height="124"/>
+        </ScrollViewer>
+      </Border>
+
+      <!-- Row 2: Scale info -->
+      <Grid Grid.Row="2" ColumnDefinitions="Auto,10,*,20,Auto,10,*"
+            Margin="0,0,0,8">
+        <TextBlock Grid.Column="0" Text="Scale notes:"
+                   Foreground="#666688" FontSize="12" VerticalAlignment="Center"/>
+        <TextBlock Grid.Column="2" x:Name="TxtScaleNotes"
+                   Foreground="#BBBBEE" FontSize="12" FontWeight="SemiBold"
+                   VerticalAlignment="Center" TextWrapping="Wrap"/>
+        <TextBlock Grid.Column="4" Text="Playing:"
+                   Foreground="#666688" FontSize="12" VerticalAlignment="Center"/>
+        <TextBlock Grid.Column="6" x:Name="TxtPlayingNote" Text="—"
+                   Foreground="#FFD600" FontSize="13" FontWeight="Bold"
+                   VerticalAlignment="Center"/>
+      </Grid>
+
+      <!-- Row 3: Sliders -->
+      <Grid Grid.Row="3"
+            ColumnDefinitions="Auto,100,40,20,Auto,100,40,20,Auto,100,40">
+        <!-- Velocity -->
+        <TextBlock Grid.Column="0" Text="Velocity:" Foreground="#666688"
+                   FontSize="12" VerticalAlignment="Center"/>
+        <Slider Grid.Column="1" x:Name="SliderVelocity"
+                Minimum="1" Maximum="127" Value="80"
+                TickFrequency="1" IsSnapToTickEnabled="True"
+                Margin="6,0" VerticalAlignment="Center"/>
+        <TextBlock Grid.Column="2" x:Name="TxtVelocity" Text="80"
+                   Foreground="#AAAACC" FontSize="12" VerticalAlignment="Center"/>
+
+        <!-- BPM -->
+        <TextBlock Grid.Column="4" Text="BPM:" Foreground="#666688"
+                   FontSize="12" VerticalAlignment="Center"/>
+        <Slider Grid.Column="5" x:Name="SliderBpm"
+                Minimum="40" Maximum="220" Value="120"
+                TickFrequency="1" IsSnapToTickEnabled="True"
+                Margin="6,0" VerticalAlignment="Center"/>
+        <TextBlock Grid.Column="6" x:Name="TxtBpm" Text="120"
+                   Foreground="#AAAACC" FontSize="12" VerticalAlignment="Center"/>
+
+        <!-- Note duration -->
+        <TextBlock Grid.Column="8" Text="Note ms:" Foreground="#666688"
+                   FontSize="12" VerticalAlignment="Center"/>
+        <Slider Grid.Column="9" x:Name="SliderNoteMs"
+                Minimum="50" Maximum="1200" Value="350"
+                TickFrequency="10" IsSnapToTickEnabled="True"
+                Margin="6,0" VerticalAlignment="Center"/>
+        <TextBlock Grid.Column="10" x:Name="TxtNoteMs" Text="350"
+                   Foreground="#AAAACC" FontSize="12" VerticalAlignment="Center"/>
+      </Grid>
+
+    </Grid>
+
+  </DockPanel>
+</Window>
