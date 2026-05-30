@@ -1,0 +1,34 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="Melanchall.PianoRollSequencerDemo.MainWindow"
+        Title="DryWetMidi Avalonia Piano Roll Demo"
+        Width="1240"
+        Height="760"
+        MinWidth="900"
+        MinHeight="540">
+  <DockPanel>
+    <Border DockPanel.Dock="Top" Background="#1E1E1E" Padding="12">
+      <StackPanel Spacing="8">
+        <StackPanel Orientation="Horizontal" Spacing="8">
+          <Button x:Name="PlayButton" Content="Play" MinWidth="90" />
+          <Button x:Name="StopButton" Content="Stop" MinWidth="90" />
+          <Button x:Name="ClearButton" Content="Clear" MinWidth="90" />
+          <TextBlock x:Name="StatusText"
+                     VerticalAlignment="Center"
+                     Foreground="#E8E8E8"
+                     Text="Ready" />
+        </StackPanel>
+        <TextBlock Foreground="#A9A9A9"
+                   Text="Left drag on empty space to draw a note. Left drag note to move. Right click a note to remove. All edits are applied while playback is running." />
+      </StackPanel>
+    </Border>
+
+    <ScrollViewer HorizontalScrollBarVisibility="Auto"
+                  VerticalScrollBarVisibility="Auto">
+      <Grid x:Name="PianoRollHost" Background="#151515">
+        <Canvas x:Name="GridCanvas" IsHitTestVisible="False" />
+        <Canvas x:Name="NotesCanvas" Background="Transparent" />
+      </Grid>
+    </ScrollViewer>
+  </DockPanel>
+</Window>

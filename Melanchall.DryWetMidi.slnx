@@ -22,6 +22,14 @@
       <BuildType Solution="ReleaseTestFull|*" Project="Release" />
       <BuildType Solution="ReleaseTest|*" Project="Release" />
     </Project>
+    <Project Path="Utilities/PianoRollSequencerDemo/Melanchall.PianoRollSequencerDemo.csproj">
+      <BuildType Solution="DebugNativeless|*" Project="Debug" />
+      <BuildType Solution="ReleaseNativeless|*" Project="Release" />
+      <BuildType Solution="ReleaseTestFull|*" Project="Release" />
+      <BuildType Solution="ReleaseTest|*" Project="Release" />
+      <Build Solution="DebugNativeless|*" Project="false" />
+      <Build Solution="ReleaseNativeless|*" Project="false" />
+    </Project>
     <Project Path="Utilities/ReceiveMidiData/Melanchall.ReceiveMidiData.csproj">
       <BuildType Solution="DebugNativeless|*" Project="Debug" />
       <BuildType Solution="ReleaseNativeless|*" Project="Release" />
