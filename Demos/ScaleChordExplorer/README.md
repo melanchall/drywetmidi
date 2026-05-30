@@ -2,6 +2,14 @@
 
 A cross-platform GUI demo (Windows & macOS) for the [DryWetMidi](https://melanchall.github.io/drywetmidi) library, built with [Avalonia UI](https://avaloniaui.net/).
 
+## Preview
+
+![ScaleChordExplorer demo animation](docs/app-demo.gif)
+
+| Overview | Controls updated |
+|---|---|
+| ![App overview](docs/app-overview.png) | ![App controls interaction state](docs/app-controls-updated.png) |
+
 ## What it demonstrates
 
 | Feature | DryWetMidi API used |

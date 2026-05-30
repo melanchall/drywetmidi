@@ -228,7 +228,6 @@ public partial class MainWindow : Window
             BorderThickness = new Thickness(1),
             CornerRadius    = new CornerRadius(0, 0, 4, 4),
             Cursor          = new Cursor(StandardCursorType.Hand),
-            Child           = label,
         };
 
         // Align label to bottom of key
