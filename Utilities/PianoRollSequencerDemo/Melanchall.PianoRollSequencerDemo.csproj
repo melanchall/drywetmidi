@@ -18,4 +18,8 @@
     </PackageReference>
     <PackageReference Include="Melanchall.DryWetMidi" Version="9.0.0-prerelease8" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Assets/Cursors/*.png" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
 </Project>

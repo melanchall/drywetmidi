@@ -56,7 +56,7 @@
       <Grid x:Name="PianoRollHost" ColumnDefinitions="96,*" Background="#0E1624">
         <Canvas x:Name="KeysCanvas" Background="#131313" />
 
-        <Grid Grid.Column="1">
+        <Grid Grid.Column="1" ClipToBounds="True">
           <Canvas x:Name="GridCanvas" IsHitTestVisible="False" />
           <Canvas x:Name="NotesCanvas" Background="Transparent" />
         </Grid>

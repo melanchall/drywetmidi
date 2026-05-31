@@ -16,8 +16,9 @@ Avalonia demo app that shows a simple DAW-like piano roll powered by `Melanchall
 - Left-side piano keys are displayed.
 - Output endpoint can be selected from available MIDI outputs.
 - Tool palette uses dedicated icon buttons for draw (`✏`) and cut (`✂`) tools.
+- Tool-specific mouse cursors are used: brush for draw and knife for cut.
 - Cut tool splits notes at the cursor position.
-- Snapping can be toggled; cursor position is shown by a light vertical guide line.
+- Snapping can be toggled; cursor position is shown by a light vertical guide line that follows the mouse and snaps by grid steps when snapping is enabled.
 - Double-clicking a note opens a velocity editor (`0`-`127`).
 - Pressing `Enter` or clicking outside the editor applies the value and closes the editor.
 - Default note velocity is `100`; note color brightness reflects velocity.

@@ -3,6 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.Shapes;
 using Avalonia.Input;
 using Avalonia.Media;
+using Avalonia.Media.Imaging;
 using Avalonia.Threading;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
@@ -107,6 +108,10 @@ public partial class MainWindow : Window
     private Button _drawToolButton = null!;
     private Button _cutToolButton = null!;
     private CheckBox _snapCheckBox = null!;
+    private Cursor? _drawCursor;
+    private Cursor? _cutCursor;
+    private Bitmap? _drawCursorBitmap;
+    private Bitmap? _cutCursorBitmap;
 
     private Line _playhead = null!;
     private Line _cursorLine = null!;
@@ -115,6 +120,7 @@ public partial class MainWindow : Window
     private Point _dragStartPoint;
     private long _dragOriginalTime;
     private int _dragOriginalNoteNumber;
+    private double _lastPointerX;
 
     private bool _isDrawing;
     private Point _drawStartPoint;
@@ -199,11 +205,14 @@ public partial class MainWindow : Window
         _drawToolButton.Click += (_, _) => SetTool(ToolMode.Draw);
         _cutToolButton.Click += (_, _) => SetTool(ToolMode.Cut);
         UpdateToolButtons();
+        InitializeToolCursors();
 
         _snapCheckBox.IsChecked = _isSnappingEnabled;
         _snapCheckBox.IsCheckedChanged += (_, _) =>
         {
             _isSnappingEnabled = _snapCheckBox.IsChecked ?? false;
+            if (_cursorLine is { IsVisible: true })
+                UpdateCursorLine(_lastPointerX);
             UpdatePlaybackVisuals();
             UpdateStatus();
         };
@@ -211,10 +220,13 @@ public partial class MainWindow : Window
         _notesCanvas.PointerPressed += NotesCanvasOnPointerPressed;
         _notesCanvas.PointerMoved += NotesCanvasOnPointerMoved;
         _notesCanvas.PointerReleased += NotesCanvasOnPointerReleased;
+        _notesCanvas.PointerEntered += NotesCanvasOnPointerEntered;
+        _notesCanvas.PointerExited += NotesCanvasOnPointerExited;
         KeyDown += MainWindowOnKeyDown;
 
         UpdateTimeSignatureAvailability();
         UpdatePlayButtonState();
+        UpdateToolCursor();
     }
 
     private void InitializeGrid()
@@ -250,6 +262,7 @@ public partial class MainWindow : Window
             StrokeThickness = 1,
             Opacity = 0.75,
             IsHitTestVisible = false,
+            IsVisible = false,
             ZIndex = 900
         };
 
@@ -297,17 +310,14 @@ public partial class MainWindow : Window
             Canvas.SetTop(_keysCanvas.Children[^1], row * RowHeight + 2);
             Canvas.SetLeft(_keysCanvas.Children[^1], 6);
 
-            if (!isBlack && row < totalRows - 1 && !IsBlackKey(noteNumber - 1))
+            _keysCanvas.Children.Add(new Line
             {
-                _keysCanvas.Children.Add(new Line
-                {
-                    StartPoint = new Point(0, (row + 1) * RowHeight),
-                    EndPoint = new Point(95, (row + 1) * RowHeight),
-                    Stroke = new SolidColorBrush(Color.Parse("#CFCFCF")),
-                    StrokeThickness = 0.8,
-                    IsHitTestVisible = false
-                });
-            }
+                StartPoint = new Point(0, (row + 1) * RowHeight),
+                EndPoint = new Point(95, (row + 1) * RowHeight),
+                Stroke = new SolidColorBrush(Color.Parse("#6B7280")),
+                StrokeThickness = 1,
+                IsHitTestVisible = false
+            });
         }
 
         _keysCanvas.Children.Add(new Line
@@ -432,7 +442,7 @@ public partial class MainWindow : Window
             ? new Playback(_collection, _tempoMap, _outputEndpoint)
             : new Playback(_collection, _tempoMap);
 
-        _playback.Loop = true;
+        _playback.Loop = false;
 
         if (currentTickTime.HasValue)
             _playback.MoveToTime(new MidiTimeSpan(currentTickTime.Value));
@@ -585,6 +595,8 @@ public partial class MainWindow : Window
         _gridStepTicks = _activeGridStepOptions[selectedIndex].Ticks;
         _selectedGridStepName = _activeGridStepOptions[selectedIndex].Name;
         RedrawGrid();
+        if (_cursorLine is { IsVisible: true })
+            UpdateCursorLine(_lastPointerX);
         UpdatePlaybackVisuals();
         UpdateStatus();
     }
@@ -598,6 +610,8 @@ public partial class MainWindow : Window
         UpdateTimeSignatureAvailability();
         RefreshGridStepOptions();
         RedrawGrid();
+        if (_cursorLine is { IsVisible: true })
+            UpdateCursorLine(_lastPointerX);
         UpdatePlaybackVisuals();
         UpdateStatus();
     }
@@ -619,6 +633,8 @@ public partial class MainWindow : Window
         InitializePlayback(currentTicks);
         RefreshGridStepOptions();
         RedrawGrid();
+        if (_cursorLine is { IsVisible: true })
+            UpdateCursorLine(_lastPointerX);
         UpdatePlaybackVisuals();
         UpdateStatus();
 
@@ -685,7 +701,60 @@ public partial class MainWindow : Window
     {
         _selectedTool = toolMode;
         UpdateToolButtons();
+        UpdateToolCursor();
         UpdateStatus();
+    }
+
+    private void UpdateToolCursor()
+    {
+        _notesCanvas.Cursor = _selectedTool switch
+        {
+            ToolMode.Cut => _cutCursor ?? new Cursor(StandardCursorType.Cross),
+            _ => _drawCursor ?? new Cursor(StandardCursorType.Cross)
+        };
+    }
+
+    private void InitializeToolCursors()
+    {
+        _drawCursor = CreateCursorFromFile(
+            "Assets/Cursors/draw-brush-cursor.png",
+            new PixelPoint(3, 29),
+            StandardCursorType.Cross,
+            out _drawCursorBitmap);
+
+        _cutCursor = CreateCursorFromFile(
+            "Assets/Cursors/cut-knife-cursor.png",
+            new PixelPoint(3, 29),
+            StandardCursorType.No,
+            out _cutCursorBitmap);
+    }
+
+    private static Cursor CreateCursorFromFile(
+        string relativePath,
+        PixelPoint hotSpot,
+        StandardCursorType fallbackCursorType,
+        out Bitmap? bitmap)
+    {
+        bitmap = null;
+        var absolutePath = System.IO.Path.Combine(
+            AppContext.BaseDirectory,
+            relativePath.Replace('/', System.IO.Path.DirectorySeparatorChar));
+        if (System.IO.File.Exists(absolutePath))
+        {
+            try
+            {
+                bitmap = new Bitmap(absolutePath);
+                return new Cursor(bitmap, hotSpot);
+            }
+            catch
+            {
+                bitmap?.Dispose();
+                bitmap = null;
+                // Custom cursor is optional for the demo; fall back to a standard cursor if loading fails.
+            }
+        }
+
+        return new Cursor(fallbackCursorType);
     }
 
     private void NotesCanvasOnPointerPressed(object? sender, PointerPressedEventArgs e)
@@ -694,6 +763,7 @@ public partial class MainWindow : Window
             ApplyVelocityEditor();
 
         var point = e.GetPosition(_notesCanvas);
+        _lastPointerX = point.X;
         UpdateCursorLine(point.X);
 
         if (e.Source is Border { Tag: Note note })
@@ -752,6 +822,7 @@ public partial class MainWindow : Window
     private void NotesCanvasOnPointerMoved(object? sender, PointerEventArgs e)
     {
         var point = e.GetPosition(_notesCanvas);
+        _lastPointerX = point.X;
         UpdateCursorLine(point.X);
 
         if (_draggedNote != null)
@@ -799,6 +870,19 @@ public partial class MainWindow : Window
         _drawPreview?.SetValue(IsVisibleProperty, false);
         _isDrawing = false;
         e.Pointer.Capture(null);
+    }
+
+    private void NotesCanvasOnPointerEntered(object? sender, PointerEventArgs e)
+    {
+        var point = e.GetPosition(_notesCanvas);
+        _lastPointerX = point.X;
+        _cursorLine.IsVisible = true;
+        UpdateCursorLine(point.X);
+    }
+
+    private void NotesCanvasOnPointerExited(object? sender, PointerEventArgs e)
+    {
+        _cursorLine.IsVisible = false;
     }
 
     private void AddNote(long time, long length, int noteNumber, int velocity = DefaultNoteVelocity)
@@ -1204,6 +1288,10 @@ public partial class MainWindow : Window
         _playback?.Stop();
         _playback?.Dispose();
         _outputEndpoint?.Dispose();
+        _drawCursor?.Dispose();
+        _cutCursor?.Dispose();
+        _drawCursorBitmap?.Dispose();
+        _cutCursorBitmap?.Dispose();
 
         base.OnClosed(e);
     }
