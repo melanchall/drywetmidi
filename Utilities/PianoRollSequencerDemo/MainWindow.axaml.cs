@@ -803,12 +803,12 @@ public partial class MainWindow : Window
 
     private void AddNote(long time, long length, int noteNumber, int velocity = DefaultNoteVelocity)
     {
-        var sanitizedVelocity = Math.Clamp(velocity, SevenBitNumber.MinValue, SevenBitNumber.MaxValue);
+        var clampedVelocity = Math.Clamp(velocity, SevenBitNumber.MinValue, SevenBitNumber.MaxValue);
         var note = new Note((SevenBitNumber)noteNumber)
         {
             Time = Math.Max(0, time),
             Length = Math.Max(_gridStepTicks, length),
-            Velocity = (SevenBitNumber)sanitizedVelocity
+            Velocity = (SevenBitNumber)clampedVelocity
         };
 
         _collection.Add(note);
@@ -1111,9 +1111,9 @@ public partial class MainWindow : Window
 
     private static (Color Background, Color Border) GetNoteColors(SevenBitNumber velocity)
     {
-        var factor = velocity / (double)SevenBitNumber.MaxValue;
-        var background = InterpolateColor(Color.Parse("#1E3A8A"), Color.Parse("#60A5FA"), factor);
-        var border = InterpolateColor(Color.Parse("#172554"), Color.Parse("#1D4ED8"), factor);
+        var velocityFactor = velocity / (double)SevenBitNumber.MaxValue;
+        var background = InterpolateColor(Color.Parse("#1E3A8A"), Color.Parse("#60A5FA"), velocityFactor);
+        var border = InterpolateColor(Color.Parse("#172554"), Color.Parse("#1D4ED8"), velocityFactor);
         return (background, border);
     }
 

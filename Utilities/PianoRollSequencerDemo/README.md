@@ -18,7 +18,9 @@ Avalonia demo app that shows a simple DAW-like piano roll powered by `Melanchall
 - Tool palette uses dedicated icon buttons for draw (`✏`) and cut (`✂`) tools.
 - Cut tool splits notes at the cursor position.
 - Snapping can be toggled; cursor position is shown by a light vertical guide line.
-- Double-clicking a note opens a velocity editor (`0`-`127`), enter/outside-click applies value, default velocity is `100`, and note color brightness reflects velocity.
+- Double-clicking a note opens a velocity editor (`0`-`127`).
+- Pressing `Enter` or clicking outside the editor applies the value and closes the editor.
+- Default note velocity is `100`; note color brightness reflects velocity.
 - Notes can be moved or removed, and edits are applied while playback is running through `ObservableTimedObjectsCollection` used by `Playback`.
 
 ## Run
