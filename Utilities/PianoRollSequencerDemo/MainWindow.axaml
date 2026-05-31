@@ -7,33 +7,43 @@
         MinWidth="980"
         MinHeight="560">
   <DockPanel>
-    <Border DockPanel.Dock="Top" Background="#1E1E1E" Padding="12">
+    <Border DockPanel.Dock="Top" Background="#0F1626" Padding="12" BorderBrush="#2C4F8A" BorderThickness="0,0,0,1">
       <StackPanel Spacing="10">
         <WrapPanel Orientation="Horizontal" ItemHeight="34" VerticalAlignment="Center">
-          <Button x:Name="PlayButton" Content="Play" MinWidth="90" Margin="0,0,8,0" />
-          <Button x:Name="StopButton" Content="Stop" MinWidth="90" Margin="0,0,8,0" />
-          <Button x:Name="ResetButton" Content="Reset Position" MinWidth="120" Margin="0,0,8,0" />
-          <Button x:Name="ClearButton" Content="Clear" MinWidth="90" Margin="0,0,16,0" />
+          <Button x:Name="PlayButton" Content="Play" MinWidth="90" Margin="0,0,8,0" Background="#1D4ED8" Foreground="White" />
+          <Button x:Name="StopButton" Content="Stop" MinWidth="90" Margin="0,0,8,0" Background="#B91C1C" Foreground="White" />
+          <Button x:Name="ResetButton" Content="Reset Position" MinWidth="120" Margin="0,0,8,0" Background="#1E3A8A" Foreground="White" />
+          <Button x:Name="ClearButton" Content="Clear" MinWidth="90" Margin="0,0,16,0" Background="#991B1B" Foreground="White" />
 
-          <TextBlock VerticalAlignment="Center" Foreground="#D0D0D0" Text="Grid:" Margin="0,0,6,0" />
+          <TextBlock VerticalAlignment="Center" Foreground="#D4E2FF" Text="Grid:" Margin="0,0,6,0" />
           <ComboBox x:Name="GridStepComboBox" MinWidth="120" Margin="0,0,12,0" />
 
-          <TextBlock VerticalAlignment="Center" Foreground="#D0D0D0" Text="Time format:" Margin="0,0,6,0" />
+          <TextBlock VerticalAlignment="Center" Foreground="#D4E2FF" Text="Time format:" Margin="0,0,6,0" />
           <ComboBox x:Name="TimeFormatComboBox" MinWidth="160" Margin="0,0,12,0" />
 
-          <TextBlock VerticalAlignment="Center" Foreground="#D0D0D0" Text="Time signature:" Margin="0,0,6,0" />
+          <TextBlock VerticalAlignment="Center" Foreground="#D4E2FF" Text="Time signature:" Margin="0,0,6,0" />
           <ComboBox x:Name="TimeSignatureComboBox" MinWidth="120" />
         </WrapPanel>
 
-        <Border Background="#2A2A2A" Padding="8" CornerRadius="4">
+        <WrapPanel Orientation="Horizontal" ItemHeight="34" VerticalAlignment="Center">
+          <TextBlock VerticalAlignment="Center" Foreground="#D4E2FF" Text="Output:" Margin="0,0,6,0" />
+          <ComboBox x:Name="OutputEndpointComboBox" MinWidth="260" Margin="0,0,12,0" />
+
+          <TextBlock VerticalAlignment="Center" Foreground="#D4E2FF" Text="Tool:" Margin="0,0,6,0" />
+          <ComboBox x:Name="ToolComboBox" MinWidth="140" Margin="0,0,12,0" />
+
+          <CheckBox x:Name="SnapCheckBox" Content="Snap to grid" Foreground="#D4E2FF" VerticalAlignment="Center" IsChecked="True" />
+        </WrapPanel>
+
+        <Border Background="#102746" Padding="8" CornerRadius="4" BorderBrush="#2E62AE" BorderThickness="1">
           <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8">
-            <TextBlock Foreground="#A9A9A9" Text="Current playback time:" VerticalAlignment="Center" />
-            <TextBlock x:Name="CurrentTimeText" Grid.Column="1" Foreground="#8BE9FD" FontWeight="SemiBold" VerticalAlignment="Center" Text="0" />
+            <TextBlock Foreground="#C7D9FF" Text="Current playback time:" VerticalAlignment="Center" />
+            <TextBlock x:Name="CurrentTimeText" Grid.Column="1" Foreground="#60A5FA" FontWeight="SemiBold" VerticalAlignment="Center" Text="0" />
           </Grid>
         </Border>
 
-        <TextBlock Foreground="#A9A9A9"
-                   Text="Double-click to create a note with current grid step. Left drag a note to move. Left drag on empty space to draw a custom note length. Right click note to remove. You can edit while playback is running." />
+        <TextBlock Foreground="#BFD0F1"
+                   Text="Draw tool: double-click or drag to create notes, drag notes to move, right-click to remove. Cut tool: click a note to split at cursor. Snap keeps edits on grid." />
 
         <TextBlock x:Name="StatusText" Foreground="#E8E8E8" Text="Ready" />
       </StackPanel>
@@ -41,7 +51,7 @@
 
     <ScrollViewer HorizontalScrollBarVisibility="Auto"
                   VerticalScrollBarVisibility="Auto">
-      <Grid x:Name="PianoRollHost" ColumnDefinitions="96,*" Background="#151515">
+      <Grid x:Name="PianoRollHost" ColumnDefinitions="96,*" Background="#0E1624">
         <Canvas x:Name="KeysCanvas" Background="#131313" />
 
         <Grid Grid.Column="1">

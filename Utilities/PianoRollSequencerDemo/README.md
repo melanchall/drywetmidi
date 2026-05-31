@@ -6,12 +6,16 @@ Avalonia demo app that shows a simple DAW-like piano roll powered by `Melanchall
 
 - Vertical playhead line moves during playback and remains at stop position.
 - Reset playback position button moves playhead to the start.
-- Grid step can be changed (`1/4`, `1/8`, `1/16`, `1/32`).
+- Grid step can be changed (for example `1/4`, `1/8`, `1/16`, `1/32` in bar/beat formats).
 - Displayed playback time format can be changed (`Metric`, `Musical`, `Bar/Beat/Ticks`, `Bar/Beat/Fraction`, `MIDI`).
-- Time signature can be switched (`4/4`, `3/4`, `5/8`, `6/8`) and grid updates accordingly.
+- Grid step options follow selected time format (metric steps in milliseconds/seconds, musical steps in note lengths, bar/beat steps as note fractions).
+- Time signature can be switched (`4/4`, `3/4`, `5/8`, `6/8`) for bar/beat-based time formats and grid updates accordingly.
 - Current playback time is shown in a dedicated pane using selected format.
 - Double-click on piano roll creates a note with current grid-step length.
 - Left-side piano keys are displayed.
+- Output endpoint can be selected from available MIDI outputs.
+- Tool palette includes draw and cut tools (cut splits notes at cursor position).
+- Snapping can be toggled; cursor position is shown by a light vertical guide line.
 - Notes can be moved or removed, and edits are applied while playback is running through `ObservableTimedObjectsCollection` used by `Playback`.
 
 ## Run
