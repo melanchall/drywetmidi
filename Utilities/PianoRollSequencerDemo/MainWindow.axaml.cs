@@ -352,12 +352,12 @@ public partial class MainWindow : Window
 
     private void DrawGridStepLines(int totalRows, long totalTicks, Color color, double opacity, double thickness)
     {
+        if (_gridStepTicks <= 0)
+            return;
+
         for (var ticks = 0L; ticks <= totalTicks; ticks += _gridStepTicks)
         {
             AddVerticalGridLine(totalRows, ticks, color, opacity, thickness);
-
-            if (_gridStepTicks <= 0)
-                break;
         }
     }
 
@@ -365,6 +365,8 @@ public partial class MainWindow : Window
     {
         var barLengthTicks = GetBarLengthTicks();
         var beatLengthTicks = GetBeatLengthTicks();
+        if (barLengthTicks <= 0 || beatLengthTicks <= 0)
+            return;
 
         for (var ticks = 0L; ticks <= totalTicks; ticks += beatLengthTicks)
         {
@@ -375,9 +377,6 @@ public partial class MainWindow : Window
                 Color.Parse(isBar ? "#EF4444" : "#93C5FD"),
                 isBar ? 0.95 : 0.8,
                 isBar ? 2 : 1.3);
-
-            if (beatLengthTicks <= 0)
-                break;
         }
     }
 
@@ -908,7 +907,8 @@ public partial class MainWindow : Window
     {
         var outputEndpointName = _outputEndpoint?.Name ?? "No output endpoint (silent playback)";
         var signatureText = _timeSignatureComboBox.IsEnabled ? _selectedTimeSignature.Name : "N/A";
-        var toolName = ToolOptions.First(option => option.Mode == _selectedTool).Name;
+        var selectedToolOption = ToolOptions.FirstOrDefault(option => option.Mode == _selectedTool);
+        var toolName = string.IsNullOrEmpty(selectedToolOption.Name) ? "Unknown" : selectedToolOption.Name;
         var snapText = _isSnappingEnabled ? "On" : "Off";
 
         _statusText.Text = $"Notes: {_noteViews.Count} | Grid: {GetGridStepName()} | Signature: {signatureText} | Tool: {toolName} | Snap: {snapText} | Output: {outputEndpointName}";
