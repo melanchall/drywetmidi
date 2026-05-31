@@ -5,7 +5,8 @@
         Width="1320"
         Height="780"
         MinWidth="980"
-        MinHeight="560">
+        MinHeight="560"
+        UseLayoutRounding="True">
   <DockPanel>
     <Border DockPanel.Dock="Top" Background="#0F1626" Padding="12" BorderBrush="#2C4F8A" BorderThickness="0,0,0,1">
       <StackPanel Spacing="10">

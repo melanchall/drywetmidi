@@ -830,7 +830,8 @@ public partial class MainWindow : Window
             var deltaX = point.X - _dragStartPoint.X;
             var deltaY = point.Y - _dragStartPoint.Y;
 
-            var newTime = NormalizeInteractionTicks((long)Math.Round((_dragOriginalTime / (double)TicksPerBeat * PixelsPerBeat + deltaX) / PixelsPerBeat * TicksPerBeat));
+            var deltaTicks = (long)Math.Round(deltaX / PixelsPerBeat * TicksPerBeat);
+            var newTime = NormalizeInteractionTicks(_dragOriginalTime + deltaTicks);
             var noteNumberDelta = (int)Math.Round(deltaY / RowHeight);
             var newNoteNumber = ClampNoteNumber(_dragOriginalNoteNumber - noteNumberDelta);
 
@@ -951,7 +952,7 @@ public partial class MainWindow : Window
         return new Border
         {
             Tag = note,
-            Height = RowHeight - 3,
+            Height = RowHeight - 2,
             CornerRadius = new CornerRadius(2),
             BorderBrush = new SolidColorBrush(borderColor),
             BorderThickness = new Thickness(1),
@@ -964,9 +965,9 @@ public partial class MainWindow : Window
         if (!_noteViews.TryGetValue(note, out var view))
             return;
 
-        view.Width = Math.Max(10, note.Length / (double)TicksPerBeat * PixelsPerBeat - 2);
-        Canvas.SetLeft(view, note.Time / (double)TicksPerBeat * PixelsPerBeat + 1);
-        Canvas.SetTop(view, NoteNumberToRow(note.NoteNumber) * RowHeight + 1.5);
+        view.Width = Math.Round(Math.Max(10, note.Length / (double)TicksPerBeat * PixelsPerBeat - 2));
+        Canvas.SetLeft(view, Math.Round(note.Time / (double)TicksPerBeat * PixelsPerBeat + 1));
+        Canvas.SetTop(view, Math.Round(NoteNumberToRow(note.NoteNumber) * RowHeight + 1));
 
         var (backgroundColor, borderColor) = GetNoteColors(note.Velocity);
         view.Background = new SolidColorBrush(backgroundColor);
@@ -1070,7 +1071,7 @@ public partial class MainWindow : Window
 
         _drawPreview = new Border
         {
-            Height = RowHeight - 3,
+            Height = RowHeight - 2,
             BorderThickness = new Thickness(1),
             CornerRadius = new CornerRadius(2),
             BorderBrush = new SolidColorBrush(Color.Parse("#EF4444")),
@@ -1095,9 +1096,9 @@ public partial class MainWindow : Window
 
         var noteNumber = PositionToNoteNumber(_drawStartPoint.Y);
 
-        _drawPreview.Width = Math.Max(10, width - 2);
-        Canvas.SetLeft(_drawPreview, startX + 1);
-        Canvas.SetTop(_drawPreview, NoteNumberToRow(noteNumber) * RowHeight + 1.5);
+        _drawPreview.Width = Math.Round(Math.Max(10, width - 2));
+        Canvas.SetLeft(_drawPreview, Math.Round(startX + 1));
+        Canvas.SetTop(_drawPreview, Math.Round(NoteNumberToRow(noteNumber) * RowHeight + 1));
     }
 
     private void UpdatePlaybackVisuals()

@@ -32,11 +32,7 @@ dotnet run --project Utilities/PianoRollSequencerDemo/Melanchall.PianoRollSequen
 
 ## Screenshots
 
-### Animated demo
-
-![Animated piano roll demo](Screenshots/pianoroll-demo.gif)
-
-### Low-rate video
+### Demo video (720p)
 
 <video src="Screenshots/pianoroll-demo-lowrate.mp4" controls muted loop></video>
 
