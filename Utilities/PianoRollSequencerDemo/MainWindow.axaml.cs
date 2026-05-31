@@ -25,6 +25,7 @@ public partial class MainWindow : Window
     private const int VisibleBeats = 48;
     private const long DefaultNoteLength = TicksPerBeat;
     private const byte DefaultNoteVelocity = 100;
+    private const double NoteVisualOffset = 1;
     private const string SilentOutputOption = "Silent (no output)";
 
     private static readonly GridStepOption[] GridStepOptions =
@@ -966,8 +967,8 @@ public partial class MainWindow : Window
             return;
 
         view.Width = Math.Round(Math.Max(10, note.Length / (double)TicksPerBeat * PixelsPerBeat - 2));
-        Canvas.SetLeft(view, Math.Round(note.Time / (double)TicksPerBeat * PixelsPerBeat + 1));
-        Canvas.SetTop(view, Math.Round(NoteNumberToRow(note.NoteNumber) * RowHeight + 1));
+        Canvas.SetLeft(view, Math.Round(note.Time / (double)TicksPerBeat * PixelsPerBeat + NoteVisualOffset));
+        Canvas.SetTop(view, Math.Round(NoteNumberToRow(note.NoteNumber) * RowHeight + NoteVisualOffset));
 
         var (backgroundColor, borderColor) = GetNoteColors(note.Velocity);
         view.Background = new SolidColorBrush(backgroundColor);
@@ -1097,8 +1098,8 @@ public partial class MainWindow : Window
         var noteNumber = PositionToNoteNumber(_drawStartPoint.Y);
 
         _drawPreview.Width = Math.Round(Math.Max(10, width - 2));
-        Canvas.SetLeft(_drawPreview, Math.Round(startX + 1));
-        Canvas.SetTop(_drawPreview, Math.Round(NoteNumberToRow(noteNumber) * RowHeight + 1));
+        Canvas.SetLeft(_drawPreview, Math.Round(startX + NoteVisualOffset));
+        Canvas.SetTop(_drawPreview, Math.Round(NoteNumberToRow(noteNumber) * RowHeight + NoteVisualOffset));
     }
 
     private void UpdatePlaybackVisuals()
