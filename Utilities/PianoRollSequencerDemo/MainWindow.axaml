@@ -11,9 +11,9 @@
     <Border DockPanel.Dock="Top" Background="#0F1626" Padding="12" BorderBrush="#2C4F8A" BorderThickness="0,0,0,1">
       <StackPanel Spacing="10">
         <WrapPanel Orientation="Horizontal" ItemHeight="34" VerticalAlignment="Center">
-          <Button x:Name="PlayButton" Content="▶ Play" MinWidth="110" Margin="0,0,8,0" Background="#1D4ED8" Foreground="White" />
-          <Button x:Name="ResetButton" Content="Reset Position" MinWidth="120" Margin="0,0,8,0" Background="#1E3A8A" Foreground="White" />
-          <Button x:Name="ClearButton" Content="Clear" MinWidth="90" Margin="0,0,16,0" Background="#991B1B" Foreground="White" />
+          <Button x:Name="PlayButton" Content="▶ Play" MinWidth="116" Padding="10,4" Margin="0,0,8,0" Background="#1D4ED8" Foreground="White" />
+          <Button x:Name="ResetButton" Content="Reset Position" MinWidth="136" Padding="10,4" Margin="0,0,8,0" Background="#1E3A8A" Foreground="White" />
+          <Button x:Name="ClearButton" Content="Clear" MinWidth="92" Padding="10,4" Margin="0,0,16,0" Background="#991B1B" Foreground="White" />
 
           <TextBlock VerticalAlignment="Center" Foreground="#D4E2FF" Text="Grid:" Margin="0,0,6,0" />
           <ComboBox x:Name="GridStepComboBox" MinWidth="120" Margin="0,0,12,0" />
@@ -31,8 +31,18 @@
 
           <TextBlock VerticalAlignment="Center" Foreground="#D4E2FF" Text="Tools:" Margin="0,0,6,0" />
           <StackPanel Orientation="Horizontal" Spacing="6" Margin="0,0,12,0">
-            <Button x:Name="DrawToolButton" Content="✏ Draw" MinWidth="88" />
-            <Button x:Name="CutToolButton" Content="✂ Cut" MinWidth="78" />
+            <Button x:Name="DrawToolButton" MinWidth="96" Padding="8,4">
+              <StackPanel Orientation="Horizontal" Spacing="6">
+                <Path Width="12" Height="12" Stretch="Uniform" Fill="White" Data="M1,10 L2.4,11.4 L0,12 Z M3.2,10.6 L1.4,8.8 L8.7,1.5 C9.4,0.8 10.5,0.8 11.2,1.5 L11.7,2 C12.4,2.7 12.4,3.8 11.7,4.5 Z" />
+                <TextBlock Text="Draw" VerticalAlignment="Center" />
+              </StackPanel>
+            </Button>
+            <Button x:Name="CutToolButton" MinWidth="84" Padding="8,4">
+              <StackPanel Orientation="Horizontal" Spacing="6">
+                <Path Width="12" Height="12" Stretch="Uniform" Fill="White" Data="M2.2,1.2 C3.2,1.2 4,2 4,3 C4,4 3.2,4.8 2.2,4.8 C1.2,4.8 0.4,4 0.4,3 C0.4,2 1.2,1.2 2.2,1.2 Z M2.2,7.2 C3.2,7.2 4,8 4,9 C4,10 3.2,10.8 2.2,10.8 C1.2,10.8 0.4,10 0.4,9 C0.4,8 1.2,7.2 2.2,7.2 Z M3.8,4.4 L12,12 M3.8,7.6 L12,0" />
+                <TextBlock Text="Cut" VerticalAlignment="Center" />
+              </StackPanel>
+            </Button>
           </StackPanel>
 
           <CheckBox x:Name="SnapCheckBox" Content="Snap to grid" Foreground="#D4E2FF" VerticalAlignment="Center" IsChecked="True" />
@@ -52,8 +62,8 @@
       </StackPanel>
     </Border>
 
-    <ScrollViewer HorizontalScrollBarVisibility="Auto"
-                  VerticalScrollBarVisibility="Auto">
+    <ScrollViewer HorizontalScrollBarVisibility="Visible"
+                  VerticalScrollBarVisibility="Visible">
       <Grid x:Name="PianoRollHost" ColumnDefinitions="96,*" Background="#0E1624">
         <Canvas x:Name="KeysCanvas" Background="#131313" />
 

@@ -20,9 +20,9 @@ public partial class MainWindow : Window
     private const int TicksPerBeat = 480;
     private const double PixelsPerBeat = 64;
     private const double RowHeight = 18;
-    private const int LowestNoteNumber = 48;
-    private const int HighestNoteNumber = 84;
-    private const int VisibleBeats = 48;
+    private const int LowestNoteNumber = 0;
+    private const int HighestNoteNumber = 127;
+    private const double TimelineDurationSeconds = 10;
     private const long DefaultNoteLength = TicksPerBeat;
     private const byte DefaultNoteVelocity = 100;
     private const double NoteVisualOffset = 1;
@@ -34,24 +34,6 @@ public partial class MainWindow : Window
         new("1/8", TicksPerBeat / 2),
         new("1/16", TicksPerBeat / 4),
         new("1/32", TicksPerBeat / 8)
-    ];
-
-    private static readonly GridStepOption[] MetricGridStepOptions =
-    [
-        new("100 ms", TimeConverter.ConvertFrom((MetricTimeSpan)TimeSpan.FromMilliseconds(100), TempoMap.Default)),
-        new("500 ms", TimeConverter.ConvertFrom((MetricTimeSpan)TimeSpan.FromMilliseconds(500), TempoMap.Default)),
-        new("1 sec", TimeConverter.ConvertFrom((MetricTimeSpan)TimeSpan.FromSeconds(1), TempoMap.Default)),
-        new("2 sec", TimeConverter.ConvertFrom((MetricTimeSpan)TimeSpan.FromSeconds(2), TempoMap.Default)),
-        new("5 sec", TimeConverter.ConvertFrom((MetricTimeSpan)TimeSpan.FromSeconds(5), TempoMap.Default))
-    ];
-
-    private static readonly GridStepOption[] MusicalGridStepOptions =
-    [
-        new("Whole", TimeConverter.ConvertFrom(MusicalTimeSpan.Whole, TempoMap.Default)),
-        new("Half", TimeConverter.ConvertFrom(MusicalTimeSpan.Half, TempoMap.Default)),
-        new("Quarter", TimeConverter.ConvertFrom(MusicalTimeSpan.Quarter, TempoMap.Default)),
-        new("Eighth", TimeConverter.ConvertFrom(MusicalTimeSpan.Eighth, TempoMap.Default)),
-        new("Sixteenth", TimeConverter.ConvertFrom(MusicalTimeSpan.Sixteenth, TempoMap.Default))
     ];
 
     private static readonly GridStepOption[] MidiGridStepOptions =
@@ -233,7 +215,7 @@ public partial class MainWindow : Window
     private void InitializeGrid()
     {
         var totalRows = HighestNoteNumber - LowestNoteNumber + 1;
-        var width = VisibleBeats * PixelsPerBeat;
+        var width = GetTimelineWidth();
         var height = totalRows * RowHeight;
 
         _keysCanvas.Width = 96;
@@ -274,7 +256,7 @@ public partial class MainWindow : Window
     private void RedrawGrid()
     {
         var totalRows = HighestNoteNumber - LowestNoteNumber + 1;
-        var width = VisibleBeats * PixelsPerBeat;
+        var width = GetTimelineWidth();
 
         _keysCanvas.Children.Clear();
         _gridCanvas.Children.Clear();
@@ -364,7 +346,7 @@ public partial class MainWindow : Window
             });
         }
 
-        var totalTicks = VisibleBeats * TicksPerBeat;
+        var totalTicks = GetTimelineTicks();
         DrawGridStepLines(totalRows, totalTicks, Color.Parse("#2E62AE"), 0.7, 1);
 
         if (UsesBarBeatFormat(_selectedTimeFormat.Type))
@@ -670,11 +652,35 @@ public partial class MainWindow : Window
     {
         return _selectedTimeFormat.Type switch
         {
-            TimeSpanType.Metric => MetricGridStepOptions,
-            TimeSpanType.Musical => MusicalGridStepOptions,
+            TimeSpanType.Metric => CreateMetricGridStepOptions(),
+            TimeSpanType.Musical => CreateMusicalGridStepOptions(),
             TimeSpanType.Midi => MidiGridStepOptions,
             _ => GridStepOptions
         };
+    }
+
+    private GridStepOption[] CreateMetricGridStepOptions()
+    {
+        return
+        [
+            new("100 ms", TimeConverter.ConvertFrom((MetricTimeSpan)TimeSpan.FromMilliseconds(100), _tempoMap)),
+            new("500 ms", TimeConverter.ConvertFrom((MetricTimeSpan)TimeSpan.FromMilliseconds(500), _tempoMap)),
+            new("1 sec", TimeConverter.ConvertFrom((MetricTimeSpan)TimeSpan.FromSeconds(1), _tempoMap)),
+            new("2 sec", TimeConverter.ConvertFrom((MetricTimeSpan)TimeSpan.FromSeconds(2), _tempoMap)),
+            new("5 sec", TimeConverter.ConvertFrom((MetricTimeSpan)TimeSpan.FromSeconds(5), _tempoMap))
+        ];
+    }
+
+    private GridStepOption[] CreateMusicalGridStepOptions()
+    {
+        return
+        [
+            new("Whole", TimeConverter.ConvertFrom(MusicalTimeSpan.Whole, _tempoMap)),
+            new("Half", TimeConverter.ConvertFrom(MusicalTimeSpan.Half, _tempoMap)),
+            new("Quarter", TimeConverter.ConvertFrom(MusicalTimeSpan.Quarter, _tempoMap)),
+            new("Eighth", TimeConverter.ConvertFrom(MusicalTimeSpan.Eighth, _tempoMap)),
+            new("Sixteenth", TimeConverter.ConvertFrom(MusicalTimeSpan.Sixteenth, _tempoMap))
+        ];
     }
 
     private static int GetDefaultGridStepIndex(TimeSpanType timeSpanType)
@@ -889,11 +895,15 @@ public partial class MainWindow : Window
 
     private void AddNote(long time, long length, int noteNumber, int velocity = DefaultNoteVelocity)
     {
+        var timelineTicks = GetTimelineTicks();
+        var clampedTime = Math.Clamp(time, 0, Math.Max(0, timelineTicks - _gridStepTicks));
+        var maxLength = Math.Max(_gridStepTicks, timelineTicks - clampedTime);
+        var clampedLength = Math.Clamp(length, _gridStepTicks, maxLength);
         var clampedVelocity = Math.Clamp(velocity, SevenBitNumber.MinValue, SevenBitNumber.MaxValue);
         var note = new Note((SevenBitNumber)noteNumber)
         {
-            Time = Math.Max(0, time),
-            Length = Math.Max(_gridStepTicks, length),
+            Time = clampedTime,
+            Length = clampedLength,
             Velocity = (SevenBitNumber)clampedVelocity
         };
 
@@ -911,8 +921,10 @@ public partial class MainWindow : Window
 
     private void ChangeNote(Note note, long time, long length, int noteNumber)
     {
-        var updatedTime = Math.Max(0, time);
-        var updatedLength = Math.Max(_gridStepTicks, length);
+        var timelineTicks = GetTimelineTicks();
+        var updatedTime = Math.Clamp(time, 0, Math.Max(0, timelineTicks - _gridStepTicks));
+        var maxLength = Math.Max(_gridStepTicks, timelineTicks - updatedTime);
+        var updatedLength = Math.Clamp(length, _gridStepTicks, maxLength);
         var updatedNoteNumber = ClampNoteNumber(noteNumber);
 
         _collection.ChangeObject(
@@ -1108,7 +1120,7 @@ public partial class MainWindow : Window
             return;
 
         var currentTickTime = _playback.GetCurrentTime<MidiTimeSpan>().TimeSpan;
-        var x = currentTickTime / (double)TicksPerBeat * PixelsPerBeat;
+        var x = Math.Clamp(currentTickTime, 0, GetTimelineTicks()) / (double)TicksPerBeat * PixelsPerBeat;
 
         _playhead.StartPoint = new Point(x, 0);
         _playhead.EndPoint = new Point(x, _notesCanvas.Height);
@@ -1244,9 +1256,9 @@ public partial class MainWindow : Window
         return _isSnappingEnabled ? SnapTicks(clampedTicks) : clampedTicks;
     }
 
-    private static long PositionToTicks(double x)
+    private long PositionToTicks(double x)
     {
-        var clamped = Math.Clamp(x, 0, VisibleBeats * PixelsPerBeat);
+        var clamped = Math.Clamp(x, 0, _notesCanvas.Width);
         return (long)Math.Round(clamped / PixelsPerBeat * TicksPerBeat);
     }
 
@@ -1270,7 +1282,7 @@ public partial class MainWindow : Window
         var splitTicks = NormalizeInteractionTicks(PositionToTicks(positionX));
         var minSplit = note.Time + _gridStepTicks;
         var maxSplit = note.EndTime - _gridStepTicks;
-        if (splitTicks <= minSplit || splitTicks >= maxSplit)
+        if (splitTicks < minSplit || splitTicks > maxSplit)
             return;
 
         var noteNumber = (int)note.NoteNumber;
@@ -1296,6 +1308,16 @@ public partial class MainWindow : Window
         _cutCursorBitmap?.Dispose();
 
         base.OnClosed(e);
+    }
+
+    private long GetTimelineTicks()
+    {
+        return TimeConverter.ConvertFrom((MetricTimeSpan)TimeSpan.FromSeconds(TimelineDurationSeconds), _tempoMap);
+    }
+
+    private double GetTimelineWidth()
+    {
+        return GetTimelineTicks() / (double)TicksPerBeat * PixelsPerBeat;
     }
 
     private readonly record struct GridStepOption(string Name, long Ticks);
