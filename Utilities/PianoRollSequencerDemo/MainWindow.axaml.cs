@@ -23,6 +23,7 @@ public partial class MainWindow : Window
     private const int HighestNoteNumber = 84;
     private const int VisibleBeats = 48;
     private const long DefaultNoteLength = TicksPerBeat;
+    private const byte DefaultNoteVelocity = 100;
     private const string SilentOutputOption = "Silent (no output)";
 
     private static readonly GridStepOption[] GridStepOptions =
@@ -76,12 +77,6 @@ public partial class MainWindow : Window
         new("6/8", 6, 8)
     ];
 
-    private static readonly ToolOption[] ToolOptions =
-    [
-        new("Draw notes", ToolMode.Draw),
-        new("Cut notes", ToolMode.Cut)
-    ];
-
     private readonly ObservableTimedObjectsCollection _collection = [];
     private readonly Dictionary<Note, Border> _noteViews = [];
     private readonly List<string> _outputEndpointNames = [];
@@ -108,7 +103,9 @@ public partial class MainWindow : Window
     private ComboBox _gridStepComboBox = null!;
     private ComboBox _timeSignatureComboBox = null!;
     private ComboBox _outputEndpointComboBox = null!;
-    private ComboBox _toolComboBox = null!;
+    private Button _playButton = null!;
+    private Button _drawToolButton = null!;
+    private Button _cutToolButton = null!;
     private CheckBox _snapCheckBox = null!;
 
     private Line _playhead = null!;
@@ -122,6 +119,8 @@ public partial class MainWindow : Window
     private bool _isDrawing;
     private Point _drawStartPoint;
     private Border? _drawPreview;
+    private TextBox? _velocityEditor;
+    private Note? _velocityEditingNote;
 
     public MainWindow()
     {
@@ -160,10 +159,8 @@ public partial class MainWindow : Window
         _currentTimeText = this.FindControl<TextBlock>("CurrentTimeText")
             ?? throw new InvalidOperationException("CurrentTimeText is not found.");
 
-        var playButton = this.FindControl<Button>("PlayButton")
+        _playButton = this.FindControl<Button>("PlayButton")
             ?? throw new InvalidOperationException("PlayButton is not found.");
-        var stopButton = this.FindControl<Button>("StopButton")
-            ?? throw new InvalidOperationException("StopButton is not found.");
         var resetButton = this.FindControl<Button>("ResetButton")
             ?? throw new InvalidOperationException("ResetButton is not found.");
         var clearButton = this.FindControl<Button>("ClearButton")
@@ -177,13 +174,14 @@ public partial class MainWindow : Window
             ?? throw new InvalidOperationException("TimeSignatureComboBox is not found.");
         _outputEndpointComboBox = this.FindControl<ComboBox>("OutputEndpointComboBox")
             ?? throw new InvalidOperationException("OutputEndpointComboBox is not found.");
-        _toolComboBox = this.FindControl<ComboBox>("ToolComboBox")
-            ?? throw new InvalidOperationException("ToolComboBox is not found.");
+        _drawToolButton = this.FindControl<Button>("DrawToolButton")
+            ?? throw new InvalidOperationException("DrawToolButton is not found.");
+        _cutToolButton = this.FindControl<Button>("CutToolButton")
+            ?? throw new InvalidOperationException("CutToolButton is not found.");
         _snapCheckBox = this.FindControl<CheckBox>("SnapCheckBox")
             ?? throw new InvalidOperationException("SnapCheckBox is not found.");
 
-        playButton.Click += (_, _) => StartPlayback();
-        stopButton.Click += (_, _) => StopPlayback();
+        _playButton.Click += (_, _) => TogglePlayback();
         resetButton.Click += (_, _) => ResetPlaybackPosition();
         clearButton.Click += (_, _) => ClearNotes();
 
@@ -198,9 +196,9 @@ public partial class MainWindow : Window
         _timeSignatureComboBox.SelectedIndex = Array.FindIndex(TimeSignatureOptions, option => option.Name == _selectedTimeSignature.Name);
         _timeSignatureComboBox.SelectionChanged += (_, _) => OnTimeSignatureChanged(_timeSignatureComboBox.SelectedIndex);
 
-        _toolComboBox.ItemsSource = ToolOptions.Select(option => option.Name).ToArray();
-        _toolComboBox.SelectedIndex = 0;
-        _toolComboBox.SelectionChanged += (_, _) => OnToolChanged(_toolComboBox.SelectedIndex);
+        _drawToolButton.Click += (_, _) => SetTool(ToolMode.Draw);
+        _cutToolButton.Click += (_, _) => SetTool(ToolMode.Cut);
+        UpdateToolButtons();
 
         _snapCheckBox.IsChecked = _isSnappingEnabled;
         _snapCheckBox.IsCheckedChanged += (_, _) =>
@@ -213,8 +211,10 @@ public partial class MainWindow : Window
         _notesCanvas.PointerPressed += NotesCanvasOnPointerPressed;
         _notesCanvas.PointerMoved += NotesCanvasOnPointerMoved;
         _notesCanvas.PointerReleased += NotesCanvasOnPointerReleased;
+        KeyDown += MainWindowOnKeyDown;
 
         UpdateTimeSignatureAvailability();
+        UpdatePlayButtonState();
     }
 
     private void InitializeGrid()
@@ -237,7 +237,7 @@ public partial class MainWindow : Window
             StartPoint = new Point(0, 0),
             EndPoint = new Point(0, height),
             Stroke = new SolidColorBrush(Color.Parse("#EF4444")),
-            StrokeThickness = 2,
+            StrokeThickness = 3.5,
             IsHitTestVisible = false,
             ZIndex = 1000
         };
@@ -296,6 +296,18 @@ public partial class MainWindow : Window
             });
             Canvas.SetTop(_keysCanvas.Children[^1], row * RowHeight + 2);
             Canvas.SetLeft(_keysCanvas.Children[^1], 6);
+
+            if (!isBlack && row < totalRows - 1 && !IsBlackKey(noteNumber - 1))
+            {
+                _keysCanvas.Children.Add(new Line
+                {
+                    StartPoint = new Point(0, (row + 1) * RowHeight),
+                    EndPoint = new Point(95, (row + 1) * RowHeight),
+                    Stroke = new SolidColorBrush(Color.Parse("#CFCFCF")),
+                    StrokeThickness = 0.8,
+                    IsHitTestVisible = false
+                });
+            }
         }
 
         _keysCanvas.Children.Add(new Line
@@ -520,11 +532,20 @@ public partial class MainWindow : Window
         }
     }
 
+    private void TogglePlayback()
+    {
+        if (_playback?.IsRunning == true)
+            StopPlayback();
+        else
+            StartPlayback();
+    }
+
     private void StartPlayback()
     {
         _playback?.Start();
         _uiTimer.Start();
         UpdatePlaybackVisuals();
+        UpdatePlayButtonState();
         UpdateStatus();
     }
 
@@ -533,6 +554,7 @@ public partial class MainWindow : Window
         _playback?.Stop();
         _uiTimer.Stop();
         UpdatePlaybackVisuals();
+        UpdatePlayButtonState();
         UpdateStatus();
     }
 
@@ -540,6 +562,7 @@ public partial class MainWindow : Window
     {
         _playback?.MoveToStart();
         UpdatePlaybackVisuals();
+        UpdatePlayButtonState();
         UpdateStatus();
     }
 
@@ -658,22 +681,29 @@ public partial class MainWindow : Window
         return timeSpanType == TimeSpanType.BarBeatTicks || timeSpanType == TimeSpanType.BarBeatFraction;
     }
 
-    private void OnToolChanged(int selectedIndex)
+    private void SetTool(ToolMode toolMode)
     {
-        if (selectedIndex < 0 || selectedIndex >= ToolOptions.Length)
-            return;
-
-        _selectedTool = ToolOptions[selectedIndex].Mode;
+        _selectedTool = toolMode;
+        UpdateToolButtons();
         UpdateStatus();
     }
 
     private void NotesCanvasOnPointerPressed(object? sender, PointerPressedEventArgs e)
     {
+        if (_velocityEditor?.IsVisible == true && !ReferenceEquals(e.Source, _velocityEditor))
+            ApplyVelocityEditor();
+
         var point = e.GetPosition(_notesCanvas);
         UpdateCursorLine(point.X);
 
         if (e.Source is Border { Tag: Note note })
         {
+            if (e.GetCurrentPoint(_notesCanvas).Properties.IsLeftButtonPressed && e.ClickCount == 2)
+            {
+                OpenVelocityEditor(note);
+                return;
+            }
+
             if (_selectedTool == ToolMode.Cut && e.GetCurrentPoint(_notesCanvas).Properties.IsLeftButtonPressed)
             {
                 SplitNote(note, point.X);
@@ -771,13 +801,14 @@ public partial class MainWindow : Window
         e.Pointer.Capture(null);
     }
 
-    private void AddNote(long time, long length, int noteNumber)
+    private void AddNote(long time, long length, int noteNumber, int velocity = DefaultNoteVelocity)
     {
+        var sanitizedVelocity = Math.Clamp(velocity, SevenBitNumber.MinValue, SevenBitNumber.MaxValue);
         var note = new Note((SevenBitNumber)noteNumber)
         {
             Time = Math.Max(0, time),
             Length = Math.Max(_gridStepTicks, length),
-            Velocity = (SevenBitNumber)90
+            Velocity = (SevenBitNumber)sanitizedVelocity
         };
 
         _collection.Add(note);
@@ -810,6 +841,16 @@ public partial class MainWindow : Window
         UpdateNoteView(note);
     }
 
+    private void ChangeNoteVelocity(Note note, int velocity)
+    {
+        var updatedVelocity = Math.Clamp(velocity, SevenBitNumber.MinValue, SevenBitNumber.MaxValue);
+        _collection.ChangeObject(
+            note,
+            _ => note.Velocity = (SevenBitNumber)updatedVelocity);
+
+        UpdateNoteView(note);
+    }
+
     private void AddNoteView(Note note)
     {
         var view = CreateNoteView(note);
@@ -822,14 +863,15 @@ public partial class MainWindow : Window
 
     private static Border CreateNoteView(Note note)
     {
+        var (backgroundColor, borderColor) = GetNoteColors(note.Velocity);
         return new Border
         {
             Tag = note,
             Height = RowHeight - 3,
             CornerRadius = new CornerRadius(2),
-            BorderBrush = new SolidColorBrush(Color.Parse("#1E3A8A")),
+            BorderBrush = new SolidColorBrush(borderColor),
             BorderThickness = new Thickness(1),
-            Background = new SolidColorBrush(Color.Parse("#3B82F6"))
+            Background = new SolidColorBrush(backgroundColor)
         };
     }
 
@@ -841,6 +883,10 @@ public partial class MainWindow : Window
         view.Width = Math.Max(10, note.Length / (double)TicksPerBeat * PixelsPerBeat - 2);
         Canvas.SetLeft(view, note.Time / (double)TicksPerBeat * PixelsPerBeat + 1);
         Canvas.SetTop(view, NoteNumberToRow(note.NoteNumber) * RowHeight + 1.5);
+
+        var (backgroundColor, borderColor) = GetNoteColors(note.Velocity);
+        view.Background = new SolidColorBrush(backgroundColor);
+        view.BorderBrush = new SolidColorBrush(borderColor);
     }
 
     private void RemoveNoteView(Note note)
@@ -849,6 +895,88 @@ public partial class MainWindow : Window
             return;
 
         _notesCanvas.Children.Remove(view);
+    }
+
+    private void OpenVelocityEditor(Note note)
+    {
+        if (!_noteViews.TryGetValue(note, out var view))
+            return;
+
+        if (_velocityEditor == null)
+        {
+            _velocityEditor = new TextBox
+            {
+                Width = 54,
+                Height = 24,
+                Background = new SolidColorBrush(Color.Parse("#0F172A")),
+                Foreground = Brushes.White,
+                BorderBrush = new SolidColorBrush(Color.Parse("#60A5FA")),
+                BorderThickness = new Thickness(1),
+                HorizontalContentAlignment = Avalonia.Layout.HorizontalAlignment.Center,
+                VerticalContentAlignment = Avalonia.Layout.VerticalAlignment.Center
+            };
+
+            _velocityEditor.KeyDown += VelocityEditorOnKeyDown;
+            _velocityEditor.LostFocus += (_, _) => ApplyVelocityEditor();
+            _notesCanvas.Children.Add(_velocityEditor);
+        }
+
+        _velocityEditingNote = note;
+        _velocityEditor.Text = ((int)note.Velocity).ToString();
+
+        var noteLeft = Canvas.GetLeft(view);
+        var noteTop = Canvas.GetTop(view);
+        var noteWidth = view.Width;
+
+        var left = Math.Min(_notesCanvas.Width - _velocityEditor.Width - 4, noteLeft + noteWidth + 4);
+        left = Math.Max(2, left);
+
+        var top = Math.Max(0, Math.Min(_notesCanvas.Height - _velocityEditor.Height - 1, noteTop));
+
+        Canvas.SetLeft(_velocityEditor, left);
+        Canvas.SetTop(_velocityEditor, top);
+        _velocityEditor.IsVisible = true;
+        _velocityEditor.Focus();
+        _velocityEditor.SelectAll();
+    }
+
+    private void VelocityEditorOnKeyDown(object? sender, KeyEventArgs e)
+    {
+        if (e.Key == Key.Enter)
+        {
+            ApplyVelocityEditor();
+            e.Handled = true;
+            return;
+        }
+
+        if (e.Key == Key.Escape)
+        {
+            CloseVelocityEditor();
+            e.Handled = true;
+        }
+    }
+
+    private void ApplyVelocityEditor()
+    {
+        if (_velocityEditor?.IsVisible != true || _velocityEditingNote == null)
+            return;
+
+        var velocity = int.TryParse(_velocityEditor.Text, out var parsedVelocity)
+            ? parsedVelocity
+            : (int)_velocityEditingNote.Velocity;
+
+        ChangeNoteVelocity(_velocityEditingNote, velocity);
+        CloseVelocityEditor();
+    }
+
+    private void CloseVelocityEditor()
+    {
+        if (_velocityEditor == null)
+            return;
+
+        _velocityEditor.IsVisible = false;
+        _velocityEditingNote = null;
+        _notesCanvas.Focus();
     }
 
     private void EnsureDrawPreview()
@@ -903,12 +1031,45 @@ public partial class MainWindow : Window
         _currentTimeText.Text = currentTime.ToString();
     }
 
+    private void UpdatePlayButtonState()
+    {
+        if (_playback?.IsRunning == true)
+        {
+            _playButton.Content = "■ Stop";
+            _playButton.Background = new SolidColorBrush(Color.Parse("#B91C1C"));
+        }
+        else
+        {
+            _playButton.Content = "▶ Play";
+            _playButton.Background = new SolidColorBrush(Color.Parse("#1D4ED8"));
+        }
+    }
+
+    private void UpdateToolButtons()
+    {
+        var activeBackground = new SolidColorBrush(Color.Parse("#2563EB"));
+        var inactiveBackground = new SolidColorBrush(Color.Parse("#1E3A8A"));
+        var activeBorder = new SolidColorBrush(Color.Parse("#60A5FA"));
+        var inactiveBorder = new SolidColorBrush(Color.Parse("#2E62AE"));
+
+        var drawActive = _selectedTool == ToolMode.Draw;
+        _drawToolButton.Background = drawActive ? activeBackground : inactiveBackground;
+        _drawToolButton.BorderBrush = drawActive ? activeBorder : inactiveBorder;
+        _drawToolButton.BorderThickness = new Thickness(1.2);
+        _drawToolButton.Foreground = Brushes.White;
+
+        var cutActive = _selectedTool == ToolMode.Cut;
+        _cutToolButton.Background = cutActive ? activeBackground : inactiveBackground;
+        _cutToolButton.BorderBrush = cutActive ? activeBorder : inactiveBorder;
+        _cutToolButton.BorderThickness = new Thickness(1.2);
+        _cutToolButton.Foreground = Brushes.White;
+    }
+
     private void UpdateStatus()
     {
         var outputEndpointName = _outputEndpoint?.Name ?? "No output endpoint (silent playback)";
         var signatureText = _timeSignatureComboBox.IsEnabled ? _selectedTimeSignature.Name : "N/A";
-        var selectedToolOption = ToolOptions.FirstOrDefault(option => option.Mode == _selectedTool);
-        var toolName = string.IsNullOrEmpty(selectedToolOption.Name) ? "Unknown" : selectedToolOption.Name;
+        var toolName = _selectedTool == ToolMode.Draw ? "Draw notes" : "Cut notes";
         var snapText = _isSnappingEnabled ? "On" : "Off";
 
         _statusText.Text = $"Notes: {_noteViews.Count} | Grid: {GetGridStepName()} | Signature: {signatureText} | Tool: {toolName} | Snap: {snapText} | Output: {outputEndpointName}";
@@ -917,6 +1078,18 @@ public partial class MainWindow : Window
     private string GetGridStepName()
     {
         return _selectedGridStepName;
+    }
+
+    private void MainWindowOnKeyDown(object? sender, KeyEventArgs e)
+    {
+        if (e.Key != Key.Space)
+            return;
+
+        if (_velocityEditor?.IsFocused == true)
+            return;
+
+        TogglePlayback();
+        e.Handled = true;
     }
 
     private long GetBeatLengthTicks()
@@ -934,6 +1107,29 @@ public partial class MainWindow : Window
         string[] noteNames = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
         var octave = noteNumber / 12 - 1;
         return $"{noteNames[noteNumber % 12]}{octave}";
+    }
+
+    private static (Color Background, Color Border) GetNoteColors(SevenBitNumber velocity)
+    {
+        var factor = velocity / (double)SevenBitNumber.MaxValue;
+        var background = InterpolateColor(Color.Parse("#1E3A8A"), Color.Parse("#60A5FA"), factor);
+        var border = InterpolateColor(Color.Parse("#172554"), Color.Parse("#1D4ED8"), factor);
+        return (background, border);
+    }
+
+    private static Color InterpolateColor(Color start, Color end, double factor)
+    {
+        var clamped = Math.Clamp(factor, 0, 1);
+        return Color.FromArgb(
+            InterpolateByte(start.A, end.A, clamped),
+            InterpolateByte(start.R, end.R, clamped),
+            InterpolateByte(start.G, end.G, clamped),
+            InterpolateByte(start.B, end.B, clamped));
+    }
+
+    private static byte InterpolateByte(byte start, byte end, double factor)
+    {
+        return (byte)Math.Round(start + (end - start) * factor);
     }
 
     private static bool IsBlackKey(int noteNumber)
@@ -992,12 +1188,13 @@ public partial class MainWindow : Window
             return;
 
         var noteNumber = (int)note.NoteNumber;
+        var velocity = (int)note.Velocity;
         var firstLength = splitTicks - note.Time;
         var secondLength = note.EndTime - splitTicks;
 
         RemoveNote(note);
-        AddNote(note.Time, firstLength, noteNumber);
-        AddNote(splitTicks, secondLength, noteNumber);
+        AddNote(note.Time, firstLength, noteNumber, velocity);
+        AddNote(splitTicks, secondLength, noteNumber, velocity);
     }
 
     protected override void OnClosed(EventArgs e)
@@ -1016,8 +1213,6 @@ public partial class MainWindow : Window
     private readonly record struct TimeFormatOption(string Name, TimeSpanType Type);
 
     private readonly record struct TimeSignatureOption(string Name, byte Numerator, byte Denominator);
-
-    private readonly record struct ToolOption(string Name, ToolMode Mode);
 
     private enum ToolMode
     {

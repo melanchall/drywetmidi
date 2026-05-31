@@ -10,8 +10,7 @@
     <Border DockPanel.Dock="Top" Background="#0F1626" Padding="12" BorderBrush="#2C4F8A" BorderThickness="0,0,0,1">
       <StackPanel Spacing="10">
         <WrapPanel Orientation="Horizontal" ItemHeight="34" VerticalAlignment="Center">
-          <Button x:Name="PlayButton" Content="Play" MinWidth="90" Margin="0,0,8,0" Background="#1D4ED8" Foreground="White" />
-          <Button x:Name="StopButton" Content="Stop" MinWidth="90" Margin="0,0,8,0" Background="#B91C1C" Foreground="White" />
+          <Button x:Name="PlayButton" Content="▶ Play" MinWidth="110" Margin="0,0,8,0" Background="#1D4ED8" Foreground="White" />
           <Button x:Name="ResetButton" Content="Reset Position" MinWidth="120" Margin="0,0,8,0" Background="#1E3A8A" Foreground="White" />
           <Button x:Name="ClearButton" Content="Clear" MinWidth="90" Margin="0,0,16,0" Background="#991B1B" Foreground="White" />
 
@@ -29,8 +28,11 @@
           <TextBlock VerticalAlignment="Center" Foreground="#D4E2FF" Text="Output:" Margin="0,0,6,0" />
           <ComboBox x:Name="OutputEndpointComboBox" MinWidth="260" Margin="0,0,12,0" />
 
-          <TextBlock VerticalAlignment="Center" Foreground="#D4E2FF" Text="Tool:" Margin="0,0,6,0" />
-          <ComboBox x:Name="ToolComboBox" MinWidth="140" Margin="0,0,12,0" />
+          <TextBlock VerticalAlignment="Center" Foreground="#D4E2FF" Text="Tools:" Margin="0,0,6,0" />
+          <StackPanel Orientation="Horizontal" Spacing="6" Margin="0,0,12,0">
+            <Button x:Name="DrawToolButton" Content="✏ Draw" MinWidth="88" />
+            <Button x:Name="CutToolButton" Content="✂ Cut" MinWidth="78" />
+          </StackPanel>
 
           <CheckBox x:Name="SnapCheckBox" Content="Snap to grid" Foreground="#D4E2FF" VerticalAlignment="Center" IsChecked="True" />
         </WrapPanel>
