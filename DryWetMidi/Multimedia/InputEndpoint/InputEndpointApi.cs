@@ -395,26 +395,43 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         public static IN_GETPROPERTYRESULT Api_GetDeviceName(IntPtr info, out string name, out int errorCode)
         {
-            // out var + check result; see in many places
-            IntPtr namePointer;
-            var result = GetInputEndpointName(info, out namePointer, out errorCode);
+            name = string.Empty;
+
+            var result = GetInputEndpointName(info, out var namePointer, out errorCode);
+            if (result != IN_GETPROPERTYRESULT.IN_GETPROPERTYRESULT_OK)
+                return result;
+
             name = NativeApi.GetStringFromPointer(namePointer);
+            NativeApi.FreeStringPointer(namePointer);
+
             return result;
         }
 
         public static IN_GETPROPERTYRESULT Api_GetDeviceManufacturer(IntPtr info, out string manufacturer, out int errorCode)
         {
-            IntPtr manufacturerPointer;
-            var result = GetInputEndpointManufacturer(info, out manufacturerPointer, out errorCode);
+            manufacturer = string.Empty;
+
+            var result = GetInputEndpointManufacturer(info, out var manufacturerPointer, out errorCode);
+            if (result != IN_GETPROPERTYRESULT.IN_GETPROPERTYRESULT_OK)
+                return result;
+
             manufacturer = NativeApi.GetStringFromPointer(manufacturerPointer);
+            NativeApi.FreeStringPointer(manufacturerPointer);
+
             return result;
         }
 
         public static IN_GETPROPERTYRESULT Api_GetDeviceProduct(IntPtr info, out string product, out int errorCode)
         {
-            IntPtr productPointer;
-            var result = GetInputEndpointProduct(info, out productPointer, out errorCode);
+            product = string.Empty;
+
+            var result = GetInputEndpointProduct(info, out var productPointer, out errorCode);
+            if (result != IN_GETPROPERTYRESULT.IN_GETPROPERTYRESULT_OK)
+                return result;
+
             product = NativeApi.GetStringFromPointer(productPointer);
+            NativeApi.FreeStringPointer(productPointer);
+
             return result;
         }
 
@@ -430,9 +447,15 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         public static IN_GETPROPERTYRESULT Api_GetDeviceDriverOwner(IntPtr info, out string driverOwner, out int errorCode)
         {
-            IntPtr driverOwnerPointer;
-            var result = GetInputEndpointDriverOwner(info, out driverOwnerPointer, out errorCode);
+            driverOwner = string.Empty;
+
+            var result = GetInputEndpointDriverOwner(info, out var driverOwnerPointer, out errorCode);
+            if (result != IN_GETPROPERTYRESULT.IN_GETPROPERTYRESULT_OK)
+                return result;
+
             driverOwner = NativeApi.GetStringFromPointer(driverOwnerPointer);
+            NativeApi.FreeStringPointer(driverOwnerPointer);
+
             return result;
         }
 

@@ -28,6 +28,11 @@ API_EXPORT API_TYPE GetApiType()
     return API_TYPE_MAC;
 }
 
+API_EXPORT void FreeBuffer(const char* buffer)
+{
+    delete[] buffer;
+}
+
 /* ================================
    Configuration
 ================================ */
@@ -343,27 +348,6 @@ API_EXPORT void DeleteOutputEndpointInfo(OutputEndpointInfo* info)
     delete info;
 }
 
-OSStatus GetDevicePropertyValue(MIDIEndpointRef endpointRef, CFStringRef propertyID, const char** value)
-{
-    CFStringRef stringRef = nullptr;
-    OSStatus status = MIDIObjectGetStringProperty(endpointRef, propertyID, &stringRef);
-    if (status == noErr && stringRef != nullptr)
-    {
-        char* buffer = new char[PROPERTY_VALUE_BUFFER_SIZE];
-        if (!CFStringGetCString(stringRef, buffer, PROPERTY_VALUE_BUFFER_SIZE, kCFStringEncodingUTF8))
-        {
-            delete [] buffer;
-            CFRelease(stringRef);
-            return SMALL_BUFFER_ERROR;
-        }
-
-        *value = buffer;
-        CFRelease(stringRef);
-    }
-
-    return status;
-}
-
 OSStatus GetDeviceDriverVersion(MIDIEndpointRef endpointRef, int* value)
 {
     SInt32 driverVersion;
@@ -374,13 +358,18 @@ OSStatus GetDeviceDriverVersion(MIDIEndpointRef endpointRef, int* value)
     return status;
 }
 
-GETSTRINGPROPERTYRESULT GetStringPropertyValue(MIDIObjectRef obj, CFStringRef property, const char** value)
+GETSTRINGPROPERTYRESULT GetStringPropertyValue(MIDIObjectRef obj, CFStringRef property, const char** value, int* errorCode)
 {
+    *errorCode = 0;
+
     CFStringRef stringRef = nullptr;
     OSStatus status = MIDIObjectGetStringProperty(obj, property, &stringRef);
 
     if (status != noErr)
+    {
+        *errorCode = status;
         return GETSTRINGPROPERTYRESULT_FAILEDGETVALUE;
+    }
 
     CFIndex length = CFStringGetLength(stringRef);
     CFIndex maxSize = CFStringGetMaximumSizeForEncoding(length, kCFStringEncodingUTF8) + 1;
@@ -454,7 +443,7 @@ API_EXPORT DEVCOMMON_GETPARENTDEVICEINFORESULT GetParentDeviceInfo_Mac(
 
     if (deviceInfo->parentDeviceName == nullptr)
     {
-        auto getNameResult = GetStringPropertyValue(device, kMIDIPropertyName, name);
+        auto getNameResult = GetStringPropertyValue(device, kMIDIPropertyName, name, errorCode);
         if (getNameResult != GETSTRINGPROPERTYRESULT_OK)
         {
             *errorCode = getNameResult;
@@ -471,7 +460,7 @@ API_EXPORT DEVCOMMON_GETPARENTDEVICEINFORESULT GetParentDeviceInfo_Mac(
 
     if (deviceInfo->parentDeviceManufacturer == nullptr)
     {
-        auto getManufacturerResult = GetStringPropertyValue(device, kMIDIPropertyManufacturer, manufacturer);
+        auto getManufacturerResult = GetStringPropertyValue(device, kMIDIPropertyManufacturer, manufacturer, errorCode);
         if (getManufacturerResult != GETSTRINGPROPERTYRESULT_OK)
         {
             *errorCode = getManufacturerResult;
@@ -486,7 +475,7 @@ API_EXPORT DEVCOMMON_GETPARENTDEVICEINFORESULT GetParentDeviceInfo_Mac(
 
     if (deviceInfo->parentDeviceModel == nullptr)
     {
-        auto getModelResult = GetStringPropertyValue(device, kMIDIPropertyModel, model);
+        auto getModelResult = GetStringPropertyValue(device, kMIDIPropertyModel, model, errorCode);
         if (getModelResult != GETSTRINGPROPERTYRESULT_OK)
         {
             *errorCode = getModelResult;
@@ -694,6 +683,7 @@ API_EXPORT SESSION_OPENRESULT OpenSession_Mac(const char* name, Configuration* c
     if ((pthreadCreateResult = pthread_create(&sessionHandle->thread, nullptr, ThreadProc, sessionHandle)) != 0)
     {
         *errorCode = pthreadCreateResult;
+        delete sessionHandle;
         return SESSION_OPENRESULT_THREADSTARTERROR;
     }
     
@@ -794,7 +784,10 @@ API_EXPORT IN_GETALLINFORESULT GetInputEndpointsInfo(Configuration* configuratio
 
         auto getInputEndpointInfoResult = GetInputEndpointInfo(i, &inputDeviceInfo, errorCode);
         if (getInputEndpointInfoResult != IN_GETINFORESULT_OK)
+        {
+            delete[] result;
             return IN_GETALLINFORESULT_UNKNOWNERRORONGETINFO;
+        }
 
         result[i] = inputDeviceInfo;
     }
@@ -830,20 +823,9 @@ IN_GETPROPERTYRESULT GetInputEndpointStringPropertyValue(InputEndpointInfo* inpu
 {
     *errorCode = 0;
 
-    OSStatus status = GetDevicePropertyValue(inputDeviceInfo->endpointRef, propertyID, value);
-    if (status != noErr)
-    {
-        *errorCode = status;
-
-        switch (status)
-        {
-            case kMIDIUnknownEndpoint: return IN_GETPROPERTYRESULT_UNKNOWNENDPOINT;
-            case SMALL_BUFFER_ERROR: return IN_GETPROPERTYRESULT_TOOLONG;
-            case kMIDIUnknownProperty: return IN_GETPROPERTYRESULT_UNKNOWNPROPERTY;
-        }
-        
+    auto result = GetStringPropertyValue(inputDeviceInfo->endpointRef, propertyID, value, errorCode);
+    if (result != GETSTRINGPROPERTYRESULT_OK)
         return IN_GETPROPERTYRESULT_UNKNOWNERROR;
-    }
     
     return IN_GETPROPERTYRESULT_OK;
 }
@@ -1079,7 +1061,10 @@ API_EXPORT OUT_GETALLINFORESULT GetOutputEndpointsInfo(Configuration* configurat
 
         auto getOutputEndpointInfoResult = GetOutputEndpointInfo(i, &outputDeviceInfo, errorCode);
         if (getOutputEndpointInfoResult != OUT_GETINFORESULT_OK)
+        {
+            delete[] result;
             return OUT_GETALLINFORESULT_UNKNOWNERRORONGETINFO;
+        }
 
         result[i] = outputDeviceInfo;
     }
@@ -1114,20 +1099,9 @@ OUT_GETPROPERTYRESULT GetOutputEndpointStringPropertyValue(OutputEndpointInfo* o
 {
     *errorCode = 0;
 
-    OSStatus status = GetDevicePropertyValue(outputDeviceInfo->endpointRef, propertyID, value);
-    if (status != noErr)
-    {
-        *errorCode = status;
-
-        switch (status)
-        {
-            case kMIDIUnknownEndpoint: return OUT_GETPROPERTYRESULT_UNKNOWNENDPOINT;
-            case SMALL_BUFFER_ERROR: return OUT_GETPROPERTYRESULT_TOOLONG;
-            case kMIDIUnknownProperty: return OUT_GETPROPERTYRESULT_UNKNOWNPROPERTY;
-        }
-        
+    auto result = GetStringPropertyValue(outputDeviceInfo->endpointRef, propertyID, value, errorCode);
+    if (result != GETSTRINGPROPERTYRESULT_OK)
         return OUT_GETPROPERTYRESULT_UNKNOWNERROR;
-    }
     
     return OUT_GETPROPERTYRESULT_OK;
 }
@@ -1355,7 +1329,10 @@ API_EXPORT VIRTUAL_OPENRESULT OpenVirtualDevice_Mac(
     
     CFStringRef nameRef = CFStringCreateWithCString(nullptr, name, kCFStringEncodingUTF8);
     if (!nameRef)
+    {
+        delete virtualDeviceInfo;
         return VIRTUAL_OPENRESULT_CREATESOURCE_FAILEDPROCESSNAME;
+    }
     
     MIDIEndpointRef sourceRef;
     OSStatus status = MIDISourceCreate(sessionHandle->clientRef, nameRef, &sourceRef);
@@ -1385,7 +1362,12 @@ API_EXPORT VIRTUAL_OPENRESULT OpenVirtualDevice_Mac(
     
     CFStringRef nameRef2 = CFStringCreateWithCString(nullptr, name, kCFStringEncodingUTF8);
     if (!nameRef2)
+    {
+        delete inputDeviceInfo;
+        delete virtualDeviceInfo;
+
         return VIRTUAL_OPENRESULT_CREATEDESTINATION_FAILEDPROCESSNAME;
+    }
     
     MIDIEndpointRef destinationRef;
     status = MIDIDestinationCreate(sessionHandle->clientRef, nameRef2, callback, inputDeviceInfo, &destinationRef);

@@ -1,5 +1,6 @@
-﻿using System.Runtime.InteropServices;
-using Melanchall.DryWetMidi.Common;
+﻿using Melanchall.DryWetMidi.Common;
+using System;
+using System.Runtime.InteropServices;
 
 #if NET7_0_OR_GREATER
 using System.Runtime.CompilerServices;
@@ -45,6 +46,10 @@ namespace Melanchall.DryWetMidi.Multimedia
             [MarshalAs(UnmanagedType.U1)] out bool comCheckResult,
             out WMSSERVICECHECKRESULT serviceCheckResult,
             [MarshalAs(UnmanagedType.U1)] out bool sdkCheckResult);
+
+        [LibraryImport(NativeApi.LibraryName)]
+        [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
+        private static partial void FreeBuffer(IntPtr buffer);
 #else
         [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
         private static extern API_TYPE GetApiType();
@@ -56,6 +61,9 @@ namespace Melanchall.DryWetMidi.Multimedia
             [MarshalAs(UnmanagedType.U1)] out bool comCheckResult,
             out WMSSERVICECHECKRESULT serviceCheckResult,
             [MarshalAs(UnmanagedType.U1)] out bool sdkCheckResult);
+
+        [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
+        private static extern void FreeBuffer(IntPtr buffer);
 #endif
 
         #endregion
@@ -80,6 +88,11 @@ namespace Melanchall.DryWetMidi.Multimedia
                 out comCheckResult,
                 out serviceCheckResult,
                 out sdkCheckResult);
+        }
+
+        public static void Api_FreeBuffer(IntPtr buffer)
+        {
+            FreeBuffer(buffer);
         }
 
         #endregion

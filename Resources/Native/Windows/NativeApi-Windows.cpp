@@ -1310,17 +1310,20 @@ API_EXPORT SESSION_OPENRESULT API_CALL OpenSession_Win(
     }
     catch (const winrt::hresult_error& e)
     {
-        sessionHandle->configuration->activityCallback(FormatError(e, L"Setup devices watcher"));
+        configuration->activityCallback(FormatError(e, L"Setup devices watcher"));
+        delete sessionHandle;
         return SESSION_OPENRESULT_WMSUNKNOWNERROR;
     }
     catch (const std::exception& e)
     {
-        sessionHandle->configuration->activityCallback(FormatError(e, L"Setup devices watcher"));
+        configuration->activityCallback(FormatError(e, L"Setup devices watcher"));
+        delete sessionHandle;
         return SESSION_OPENRESULT_WMSUNKNOWNERROR;
     }
     catch (...)
     {
-        sessionHandle->configuration->activityCallback(L"Failed to setup devices watcher");
+        configuration->activityCallback(L"Failed to setup devices watcher");
+        delete sessionHandle;
         return SESSION_OPENRESULT_WMSUNKNOWNERROR;
     }
 
@@ -1464,7 +1467,10 @@ API_EXPORT IN_GETALLINFORESULT API_CALL GetInputEndpointsInfo(Configuration* con
 
         auto getInputEndpointInfoResult = GetInputEndpointInfo(i, &inputDeviceInfo, errorCode);
         if (getInputEndpointInfoResult != IN_GETINFORESULT_OK)
+        {
+            delete[] result;
             return ConvertToGetAllInInfoResult(getInputEndpointInfoResult);
+        }
 
         result[i] = inputDeviceInfo;
     }
@@ -1690,7 +1696,7 @@ API_EXPORT IN_OPENRESULT API_CALL OpenInputEndpoint_Win(InputEndpointInfo* info,
         int prepareErrorCode;
         IN_PREPARESYSEXBUFFERRESULT prepareResult = PrepareSysExBuffer(inputDeviceHandle->handle, sysExBufferSize, &inputDeviceHandle->sysExHeaders[i], &prepareErrorCode);
 
-        if (result != IN_PREPARESYSEXBUFFERRESULT_OK)
+        if (prepareResult != IN_PREPARESYSEXBUFFERRESULT_OK)
         {
             // TODO
         }
@@ -1946,7 +1952,10 @@ API_EXPORT OUT_GETALLINFORESULT API_CALL GetOutputEndpointsInfo(Configuration* c
 
         auto getOutputEndpointInfoResult = GetOutputEndpointInfo(i, &outputDeviceInfo, &errorCode);
         if (getOutputEndpointInfoResult != OUT_GETINFORESULT_OK)
+        {
+            delete[] result;
             return ConvertToGetAllOutInfoResult(getOutputEndpointInfoResult);
+        }
 
         if (wcscmp(outputDeviceInfo->caps->szPname, L"Microsoft GS Wavetable Synth") == 0)
             outputDeviceInfo->isMicrosoftGsWavetableSynth = 1;

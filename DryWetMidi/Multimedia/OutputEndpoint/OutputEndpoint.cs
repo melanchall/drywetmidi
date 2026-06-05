@@ -408,6 +408,9 @@ namespace Melanchall.DryWetMidi.Multimedia
             Marshal.Copy(data, 0, bufferPointer, data.Length);
 
             var result = OutputEndpointApi.Api_SendSysExEvent_Win(Handle.DangerousGetHandle(), bufferPointer, bufferLength, out var errorCode);
+            if (result != OutputEndpointApi.OUT_SENDSYSEXRESULT.OUT_SENDSYSEXRESULT_OK)
+                Marshal.FreeHGlobal(bufferPointer);
+            
             NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
         }
 
@@ -488,6 +491,9 @@ namespace Melanchall.DryWetMidi.Multimedia
                 data.Length);
 
             var result = OutputEndpointApi.Api_SendSysExEvent_Win(Handle.DangerousGetHandle(), bufferPointer, bufferLength, out var errorCode);
+            if (result != OutputEndpointApi.OUT_SENDSYSEXRESULT.OUT_SENDSYSEXRESULT_OK)
+                Marshal.FreeHGlobal(bufferPointer);
+            
             NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
         }
 

@@ -85,6 +85,8 @@ namespace Melanchall.DryWetMidi.Common
             if (stringPointer == IntPtr.Zero)
                 return string.Empty;
 
+            var result = string.Empty;
+
             switch (CommonApi.Api_GetApiType())
             {
                 case CommonApi.API_TYPE.API_TYPE_WIN:
@@ -93,7 +95,15 @@ namespace Melanchall.DryWetMidi.Common
                     return Marshal.PtrToStringAnsi(stringPointer) ?? string.Empty;
             }
 
-            return string.Empty;
+            return result;
+        }
+
+        public static void FreeStringPointer(IntPtr stringPointer)
+        {
+            if (stringPointer == IntPtr.Zero || CommonApi.Api_GetApiType() != CommonApi.API_TYPE.API_TYPE_MAC)
+                return;
+
+            CommonApi.Api_FreeBuffer(stringPointer);
         }
 
         public static void HandleResult<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicFields | DynamicallyAccessedMemberTypes.Interfaces)] TResult, TException>(
