@@ -58,6 +58,11 @@ steps:
     tool: 'AddGoogleAnalyticsTagForDocs'
     toolArguments: '"$(GoogleAnalytics.MeasurementId.Docs)" "Docs/_site"'
 
+- template: Templates/step-execute-ci-tool.yaml
+  parameters:
+    tool: 'Setup404'
+    toolArguments: '"Docs/_site/404.html"'
+
 - task: PublishPipelineArtifact@1
   displayName: Publish 'Docs' artifact
   inputs:
