@@ -162,13 +162,13 @@ public sealed class TickGeneratorException : MidiException, ISerializable</code>
   <h3 id="constructors">Constructors
 </h3>
   <a id="Melanchall_DryWetMidi_Multimedia_TickGeneratorException__ctor_" data-uid="Melanchall.DryWetMidi.Multimedia.TickGeneratorException.#ctor*"></a>
-  <h4 id="Melanchall_DryWetMidi_Multimedia_TickGeneratorException__ctor_System_String_System_Int32_" data-uid="Melanchall.DryWetMidi.Multimedia.TickGeneratorException.#ctor(System.String,System.Int32)">TickGeneratorException(string, int)</h4>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_TickGeneratorException__ctor_System_String_System_Int32_System_Int32_" data-uid="Melanchall.DryWetMidi.Multimedia.TickGeneratorException.#ctor(System.String,System.Int32,System.Int32)">TickGeneratorException(string, int, int)</h4>
   <div class="markdown level1 summary">Initializes a new instance of the <a class="xref" href="Melanchall.DryWetMidi.Multimedia.TickGeneratorException.html">TickGeneratorException</a> class with the
 specified error message and an error code.</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="declaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public TickGeneratorException(string message, int errorCode)</code></pre>
+    <pre><code class="lang-csharp hljs">public TickGeneratorException(string message, int mainErrorCode, int additionalErrorCode)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-condensed">
@@ -187,20 +187,48 @@ specified error message and an error code.</div>
       </tr>
       <tr>
         <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></td>
-        <td><span class="parametername">errorCode</span></td>
+        <td><span class="parametername">mainErrorCode</span></td>
         <td>The error code.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></td>
+        <td><span class="parametername">additionalErrorCode</span></td>
+        <td></td>
       </tr>
     </tbody>
   </table>
   <h3 id="properties">Properties
 </h3>
-  <a id="Melanchall_DryWetMidi_Multimedia_TickGeneratorException_ErrorCode_" data-uid="Melanchall.DryWetMidi.Multimedia.TickGeneratorException.ErrorCode*"></a>
-  <h4 id="Melanchall_DryWetMidi_Multimedia_TickGeneratorException_ErrorCode" data-uid="Melanchall.DryWetMidi.Multimedia.TickGeneratorException.ErrorCode">ErrorCode</h4>
-  <div class="markdown level1 summary">Gets the code of an error represented by the current <a class="xref" href="Melanchall.DryWetMidi.Multimedia.MidiDeviceException.html">MidiDeviceException</a>.</div>
+  <a id="Melanchall_DryWetMidi_Multimedia_TickGeneratorException_AdditionalErrorCode_" data-uid="Melanchall.DryWetMidi.Multimedia.TickGeneratorException.AdditionalErrorCode*"></a>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_TickGeneratorException_AdditionalErrorCode" data-uid="Melanchall.DryWetMidi.Multimedia.TickGeneratorException.AdditionalErrorCode">AdditionalErrorCode</h4>
+  <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="declaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public int ErrorCode { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">public int AdditionalErrorCode { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Multimedia_TickGeneratorException_MainErrorCode_" data-uid="Melanchall.DryWetMidi.Multimedia.TickGeneratorException.MainErrorCode*"></a>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_TickGeneratorException_MainErrorCode" data-uid="Melanchall.DryWetMidi.Multimedia.TickGeneratorException.MainErrorCode">MainErrorCode</h4>
+  <div class="markdown level1 summary">Gets the code of an error represented by the current <a class="xref" href="Melanchall.DryWetMidi.Multimedia.TickGeneratorException.html">TickGeneratorException</a>.</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int MainErrorCode { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-condensed">

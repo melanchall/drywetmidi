@@ -179,6 +179,7 @@ code, kbd, pre, samp {
 
 a code {
     background-color: #3B3A39;
+    color: rgb(77, 178, 255);
 }
 
 hr {

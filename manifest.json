@@ -202,40 +202,40 @@
     },
     {
       "type": "Conceptual",
-      "source_relative_path": "articles/devices/Devices-connector.md",
+      "source_relative_path": "articles/devices/Endpoints-connector.md",
       "output": {
         ".html": {
-          "relative_path": "articles/devices/Devices-connector.html"
+          "relative_path": "articles/devices/Endpoints-connector.html"
         }
       },
       "version": ""
     },
     {
       "type": "Conceptual",
-      "source_relative_path": "articles/devices/Devices-watcher.md",
+      "source_relative_path": "articles/devices/Endpoints-watcher.md",
       "output": {
         ".html": {
-          "relative_path": "articles/devices/Devices-watcher.html"
+          "relative_path": "articles/devices/Endpoints-watcher.html"
         }
       },
       "version": ""
     },
     {
       "type": "Conceptual",
-      "source_relative_path": "articles/devices/Input-device.md",
+      "source_relative_path": "articles/devices/Input-endpoint.md",
       "output": {
         ".html": {
-          "relative_path": "articles/devices/Input-device.html"
+          "relative_path": "articles/devices/Input-endpoint.html"
         }
       },
       "version": ""
     },
     {
       "type": "Conceptual",
-      "source_relative_path": "articles/devices/Output-device.md",
+      "source_relative_path": "articles/devices/Output-endpoint.md",
       "output": {
         ".html": {
-          "relative_path": "articles/devices/Output-device.html"
+          "relative_path": "articles/devices/Output-endpoint.html"
         }
       },
       "version": ""
@@ -262,10 +262,10 @@
     },
     {
       "type": "Resource",
-      "source_relative_path": "articles/devices/images/CustomInputDevice.png",
+      "source_relative_path": "articles/devices/images/CustomInputEndpoint.png",
       "output": {
         "resource": {
-          "relative_path": "articles/devices/images/CustomInputDevice.png"
+          "relative_path": "articles/devices/images/CustomInputEndpoint.png"
         }
       },
       "version": ""
@@ -1495,6 +1495,16 @@
     },
     {
       "type": "ManagedReference",
+      "source_relative_path": "obj/api/Melanchall.DryWetMidi.Common.NativeApiException.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Melanchall.DryWetMidi.Common.NativeApiException.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
       "source_relative_path": "obj/api/Melanchall.DryWetMidi.Common.SevenBitNumber.yml",
       "output": {
         ".html": {
@@ -1669,6 +1679,36 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Composing.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/Melanchall.DryWetMidi.Configuration.LibraryActivityMessageReceivedEventArgs.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Melanchall.DryWetMidi.Configuration.LibraryActivityMessageReceivedEventArgs.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/Melanchall.DryWetMidi.Configuration.LibraryConfiguration.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Melanchall.DryWetMidi.Configuration.LibraryConfiguration.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/Melanchall.DryWetMidi.Configuration.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Melanchall.DryWetMidi.Configuration.html"
         }
       },
       "version": ""
@@ -2885,6 +2925,16 @@
     },
     {
       "type": "ManagedReference",
+      "source_relative_path": "obj/api/Melanchall.DryWetMidi.Core.VlqNumberOverflowException.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Melanchall.DryWetMidi.Core.VlqNumberOverflowException.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
       "source_relative_path": "obj/api/Melanchall.DryWetMidi.Core.WriterSettings.yml",
       "output": {
         ".html": {
@@ -3159,16 +3209,6 @@
       "output": {
         ".html": {
           "relative_path": "api/Melanchall.DryWetMidi.Interaction.LengthConverter.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "obj/api/Melanchall.DryWetMidi.Interaction.LengthedObjectPart.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Melanchall.DryWetMidi.Interaction.LengthedObjectPart.html"
         }
       },
       "version": ""
@@ -3765,50 +3805,60 @@
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "obj/api/Melanchall.DryWetMidi.Multimedia.DeviceAddedRemovedEventArgs.yml",
+      "source_relative_path": "obj/api/Melanchall.DryWetMidi.Multimedia.DeviceInformation.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Melanchall.DryWetMidi.Multimedia.DeviceAddedRemovedEventArgs.html"
+          "relative_path": "api/Melanchall.DryWetMidi.Multimedia.DeviceInformation.html"
         }
       },
       "version": ""
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "obj/api/Melanchall.DryWetMidi.Multimedia.DevicesConnector.yml",
+      "source_relative_path": "obj/api/Melanchall.DryWetMidi.Multimedia.EndpointAddedRemovedEventArgs.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Melanchall.DryWetMidi.Multimedia.DevicesConnector.html"
+          "relative_path": "api/Melanchall.DryWetMidi.Multimedia.EndpointAddedRemovedEventArgs.html"
         }
       },
       "version": ""
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "obj/api/Melanchall.DryWetMidi.Multimedia.DevicesConnectorEventCallback.yml",
+      "source_relative_path": "obj/api/Melanchall.DryWetMidi.Multimedia.EndpointsConnector.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Melanchall.DryWetMidi.Multimedia.DevicesConnectorEventCallback.html"
+          "relative_path": "api/Melanchall.DryWetMidi.Multimedia.EndpointsConnector.html"
         }
       },
       "version": ""
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "obj/api/Melanchall.DryWetMidi.Multimedia.DevicesConnectorUtilities.yml",
+      "source_relative_path": "obj/api/Melanchall.DryWetMidi.Multimedia.EndpointsConnectorEventCallback.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Melanchall.DryWetMidi.Multimedia.DevicesConnectorUtilities.html"
+          "relative_path": "api/Melanchall.DryWetMidi.Multimedia.EndpointsConnectorEventCallback.html"
         }
       },
       "version": ""
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "obj/api/Melanchall.DryWetMidi.Multimedia.DevicesWatcher.yml",
+      "source_relative_path": "obj/api/Melanchall.DryWetMidi.Multimedia.EndpointsConnectorUtilities.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Melanchall.DryWetMidi.Multimedia.DevicesWatcher.html"
+          "relative_path": "api/Melanchall.DryWetMidi.Multimedia.EndpointsConnectorUtilities.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/Melanchall.DryWetMidi.Multimedia.EndpointsWatcher.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Melanchall.DryWetMidi.Multimedia.EndpointsWatcher.html"
         }
       },
       "version": ""
@@ -3855,40 +3905,40 @@
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "obj/api/Melanchall.DryWetMidi.Multimedia.IInputDevice.yml",
+      "source_relative_path": "obj/api/Melanchall.DryWetMidi.Multimedia.IInputEndpoint.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Melanchall.DryWetMidi.Multimedia.IInputDevice.html"
+          "relative_path": "api/Melanchall.DryWetMidi.Multimedia.IInputEndpoint.html"
         }
       },
       "version": ""
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "obj/api/Melanchall.DryWetMidi.Multimedia.IOutputDevice.yml",
+      "source_relative_path": "obj/api/Melanchall.DryWetMidi.Multimedia.IOutputEndpoint.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Melanchall.DryWetMidi.Multimedia.IOutputDevice.html"
+          "relative_path": "api/Melanchall.DryWetMidi.Multimedia.IOutputEndpoint.html"
         }
       },
       "version": ""
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "obj/api/Melanchall.DryWetMidi.Multimedia.InputDevice.yml",
+      "source_relative_path": "obj/api/Melanchall.DryWetMidi.Multimedia.InputEndpoint.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Melanchall.DryWetMidi.Multimedia.InputDevice.html"
+          "relative_path": "api/Melanchall.DryWetMidi.Multimedia.InputEndpoint.html"
         }
       },
       "version": ""
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "obj/api/Melanchall.DryWetMidi.Multimedia.InputDeviceProperty.yml",
+      "source_relative_path": "obj/api/Melanchall.DryWetMidi.Multimedia.InputEndpointProperty.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Melanchall.DryWetMidi.Multimedia.InputDeviceProperty.html"
+          "relative_path": "api/Melanchall.DryWetMidi.Multimedia.InputEndpointProperty.html"
         }
       },
       "version": ""
@@ -3915,20 +3965,10 @@
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "obj/api/Melanchall.DryWetMidi.Multimedia.MidiDevice.yml",
+      "source_relative_path": "obj/api/Melanchall.DryWetMidi.Multimedia.MidiEndpoint.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Melanchall.DryWetMidi.Multimedia.MidiDevice.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "obj/api/Melanchall.DryWetMidi.Multimedia.MidiDeviceException.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Melanchall.DryWetMidi.Multimedia.MidiDeviceException.html"
+          "relative_path": "api/Melanchall.DryWetMidi.Multimedia.MidiEndpoint.html"
         }
       },
       "version": ""
@@ -4015,40 +4055,40 @@
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "obj/api/Melanchall.DryWetMidi.Multimedia.OutputDevice.yml",
+      "source_relative_path": "obj/api/Melanchall.DryWetMidi.Multimedia.OutputEndpoint.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Melanchall.DryWetMidi.Multimedia.OutputDevice.html"
+          "relative_path": "api/Melanchall.DryWetMidi.Multimedia.OutputEndpoint.html"
         }
       },
       "version": ""
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "obj/api/Melanchall.DryWetMidi.Multimedia.OutputDeviceOption.yml",
+      "source_relative_path": "obj/api/Melanchall.DryWetMidi.Multimedia.OutputEndpointOption.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Melanchall.DryWetMidi.Multimedia.OutputDeviceOption.html"
+          "relative_path": "api/Melanchall.DryWetMidi.Multimedia.OutputEndpointOption.html"
         }
       },
       "version": ""
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "obj/api/Melanchall.DryWetMidi.Multimedia.OutputDeviceProperty.yml",
+      "source_relative_path": "obj/api/Melanchall.DryWetMidi.Multimedia.OutputEndpointProperty.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Melanchall.DryWetMidi.Multimedia.OutputDeviceProperty.html"
+          "relative_path": "api/Melanchall.DryWetMidi.Multimedia.OutputEndpointProperty.html"
         }
       },
       "version": ""
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "obj/api/Melanchall.DryWetMidi.Multimedia.OutputDeviceTechnology.yml",
+      "source_relative_path": "obj/api/Melanchall.DryWetMidi.Multimedia.OutputEndpointTechnology.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Melanchall.DryWetMidi.Multimedia.OutputDeviceTechnology.html"
+          "relative_path": "api/Melanchall.DryWetMidi.Multimedia.OutputEndpointTechnology.html"
         }
       },
       "version": ""
@@ -5532,6 +5572,36 @@
       "output": {
         ".html": {
           "relative_path": "obsolete/OBS2/old.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "obsolete/OBS20/description.md",
+      "output": {
+        ".html": {
+          "relative_path": "obsolete/OBS20/description.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "obsolete/OBS20/new.md",
+      "output": {
+        ".html": {
+          "relative_path": "obsolete/OBS20/new.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "obsolete/OBS20/old.md",
+      "output": {
+        ".html": {
+          "relative_path": "obsolete/OBS20/old.html"
         }
       },
       "version": ""

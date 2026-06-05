@@ -140,13 +140,13 @@ Please see <a class="xref" href="../articles/playback/Custom-playback.html">Cust
   <h3 id="constructors">Constructors
 </h3>
   <a id="Melanchall_DryWetMidi_Multimedia_Playback__ctor_" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.#ctor*"></a>
-  <h4 id="Melanchall_DryWetMidi_Multimedia_Playback__ctor_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_ITimedObject__Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Multimedia_IOutputDevice_Melanchall_DryWetMidi_Multimedia_PlaybackSettings_" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.#ctor(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Interaction.ITimedObject},Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Multimedia.IOutputDevice,Melanchall.DryWetMidi.Multimedia.PlaybackSettings)">Playback(IEnumerable&lt;ITimedObject&gt;, TempoMap, IOutputDevice, PlaybackSettings)</h4>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_Playback__ctor_System_Collections_Generic_IEnumerable_Melanchall_DryWetMidi_Interaction_ITimedObject__Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Multimedia_IOutputEndpoint_Melanchall_DryWetMidi_Multimedia_PlaybackSettings_" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.#ctor(System.Collections.Generic.IEnumerable{Melanchall.DryWetMidi.Interaction.ITimedObject},Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Multimedia.IOutputEndpoint,Melanchall.DryWetMidi.Multimedia.PlaybackSettings)">Playback(IEnumerable&lt;ITimedObject&gt;, TempoMap, IOutputEndpoint, PlaybackSettings)</h4>
   <div class="markdown level1 summary">Initializes a new instance of the <a class="xref" href="Melanchall.DryWetMidi.Multimedia.Playback.html">Playback</a> with the specified
 collection of timed objects, tempo map and output MIDI device to play events through.</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="declaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Playback(IEnumerable&lt;ITimedObject&gt; timedObjects, TempoMap tempoMap, IOutputDevice outputDevice, PlaybackSettings playbackSettings = null)</code></pre>
+    <pre><code class="lang-csharp hljs">public Playback(IEnumerable&lt;ITimedObject&gt; timedObjects, TempoMap tempoMap, IOutputEndpoint outputEndpoint, PlaybackSettings playbackSettings = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-condensed">
@@ -169,8 +169,8 @@ collection of timed objects, tempo map and output MIDI device to play events thr
         <td>Tempo map used to calculate events times.</td>
       </tr>
       <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Multimedia.IOutputDevice.html">IOutputDevice</a></td>
-        <td><span class="parametername">outputDevice</span></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Multimedia.IOutputEndpoint.html">IOutputEndpoint</a></td>
+        <td><span class="parametername">outputEndpoint</span></td>
         <td>Output MIDI device to play <code class="paramref">timedObjects</code> through.</td>
       </tr>
       <tr>
@@ -195,7 +195,7 @@ collection of timed objects, tempo map and output MIDI device to play events thr
 <ul><li>
       <code class="paramref">timedObjects</code> is <code>null</code>.</li><li>
       <code class="paramref">tempoMap</code> is <code>null</code>.</li><li>
-      <code class="paramref">outputDevice</code> is <code>null</code>.</li></ul></td>
+      <code class="paramref">outputEndpoint</code> is <code>null</code>.</li></ul></td>
       </tr>
     </tbody>
   </table>
@@ -420,7 +420,7 @@ from the first event after the last one played.</div>
   <p>
 In the following example every note to be played will be transposed by <code>10</code> half-steps up:
 </p>
-<pre><code class="lang-csharp">var playback = midiFile.GetPlayback(outputDevice);
+<pre><code class="lang-csharp">var playback = midiFile.GetPlayback(outputEndpoint);
 playback.NoteCallback = (rawNoteData, rawTime, rawLength, playbackTime) =&gt;
     new NotePlaybackData(
         (SevenBitNumber)(rawNoteData.NoteNumber + 10),
@@ -436,13 +436,13 @@ Next example shows how you can filter out notes with velocity below <code>100</c
     rawNoteData.Velocity &lt; 100
         ? null
         : rawNoteData;</code></pre>
-  <a id="Melanchall_DryWetMidi_Multimedia_Playback_OutputDevice_" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.OutputDevice*"></a>
-  <h4 id="Melanchall_DryWetMidi_Multimedia_Playback_OutputDevice" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.OutputDevice">OutputDevice</h4>
+  <a id="Melanchall_DryWetMidi_Multimedia_Playback_OutputEndpoint_" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.OutputEndpoint*"></a>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_Playback_OutputEndpoint" data-uid="Melanchall.DryWetMidi.Multimedia.Playback.OutputEndpoint">OutputEndpoint</h4>
   <div class="markdown level1 summary">Gets or sets the output MIDI device to play MIDI data through.</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="declaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public IOutputDevice OutputDevice { get; set; }</code></pre>
+    <pre><code class="lang-csharp hljs">public IOutputEndpoint OutputEndpoint { get; set; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-condensed">
@@ -454,7 +454,7 @@ Next example shows how you can filter out notes with velocity below <code>100</c
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Multimedia.IOutputDevice.html">IOutputDevice</a></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Multimedia.IOutputEndpoint.html">IOutputEndpoint</a></td>
         <td></td>
       </tr>
     </tbody>
@@ -1191,8 +1191,8 @@ custom input object.</div>
         <td>The current <a class="xref" href="Melanchall.DryWetMidi.Multimedia.Playback.html">Playback</a> is disposed.</td>
       </tr>
       <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Multimedia.MidiDeviceException.html">MidiDeviceException</a></td>
-        <td>An error occurred on device.</td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Common.NativeApiException.html">NativeApiException</a></td>
+        <td>An error occurred on MIDI device endpoint.</td>
       </tr>
     </tbody>
   </table>
@@ -1239,8 +1239,8 @@ custom input object.</div>
         <td>The current <a class="xref" href="Melanchall.DryWetMidi.Multimedia.Playback.html">Playback</a> is disposed.</td>
       </tr>
       <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Multimedia.MidiDeviceException.html">MidiDeviceException</a></td>
-        <td>An error occurred on device.</td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Common.NativeApiException.html">NativeApiException</a></td>
+        <td>An error occurred on MIDI device endpoint.</td>
       </tr>
     </tbody>
   </table>
@@ -1282,8 +1282,8 @@ otherwise, <code>false</code>.</td>
         <td>The current <a class="xref" href="Melanchall.DryWetMidi.Multimedia.Playback.html">Playback</a> is disposed.</td>
       </tr>
       <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Multimedia.MidiDeviceException.html">MidiDeviceException</a></td>
-        <td>An error occurred on device.</td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Common.NativeApiException.html">NativeApiException</a></td>
+        <td>An error occurred on MIDI device endpoint.</td>
       </tr>
     </tbody>
   </table>
@@ -1357,8 +1357,8 @@ with the specified data; otherwise, <code>false</code>.</td>
         <td>The current <a class="xref" href="Melanchall.DryWetMidi.Multimedia.Playback.html">Playback</a> is disposed.</td>
       </tr>
       <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Multimedia.MidiDeviceException.html">MidiDeviceException</a></td>
-        <td>An error occurred on device.</td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Common.NativeApiException.html">NativeApiException</a></td>
+        <td>An error occurred on MIDI device endpoint.</td>
       </tr>
     </tbody>
   </table>
@@ -1401,8 +1401,8 @@ otherwise, <code>false</code>.</td>
         <td>The current <a class="xref" href="Melanchall.DryWetMidi.Multimedia.Playback.html">Playback</a> is disposed.</td>
       </tr>
       <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Multimedia.MidiDeviceException.html">MidiDeviceException</a></td>
-        <td>An error occurred on device.</td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Common.NativeApiException.html">NativeApiException</a></td>
+        <td>An error occurred on MIDI device endpoint.</td>
       </tr>
     </tbody>
   </table>
@@ -1467,8 +1467,8 @@ within <code class="paramref">snapPointsGroup</code>; otherwise, <code>false</co
         <td>The current <a class="xref" href="Melanchall.DryWetMidi.Multimedia.Playback.html">Playback</a> is disposed.</td>
       </tr>
       <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Multimedia.MidiDeviceException.html">MidiDeviceException</a></td>
-        <td>An error occurred on device.</td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Common.NativeApiException.html">NativeApiException</a></td>
+        <td>An error occurred on MIDI device endpoint.</td>
       </tr>
     </tbody>
   </table>
@@ -1543,8 +1543,8 @@ with the specified data; otherwise, <code>false</code>.</td>
         <td>The current <a class="xref" href="Melanchall.DryWetMidi.Multimedia.Playback.html">Playback</a> is disposed.</td>
       </tr>
       <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Multimedia.MidiDeviceException.html">MidiDeviceException</a></td>
-        <td>An error occurred on device.</td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Common.NativeApiException.html">NativeApiException</a></td>
+        <td>An error occurred on MIDI device endpoint.</td>
       </tr>
     </tbody>
   </table>
@@ -1587,8 +1587,8 @@ otherwise, <code>false</code>.</td>
         <td>The current <a class="xref" href="Melanchall.DryWetMidi.Multimedia.Playback.html">Playback</a> is disposed.</td>
       </tr>
       <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Multimedia.MidiDeviceException.html">MidiDeviceException</a></td>
-        <td>An error occurred on device.</td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Common.NativeApiException.html">NativeApiException</a></td>
+        <td>An error occurred on MIDI device endpoint.</td>
       </tr>
     </tbody>
   </table>
@@ -1653,8 +1653,8 @@ within <code class="paramref">snapPointsGroup</code>; otherwise, <code>false</co
         <td>The current <a class="xref" href="Melanchall.DryWetMidi.Multimedia.Playback.html">Playback</a> is disposed.</td>
       </tr>
       <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Multimedia.MidiDeviceException.html">MidiDeviceException</a></td>
-        <td>An error occurred on device.</td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Common.NativeApiException.html">NativeApiException</a></td>
+        <td>An error occurred on MIDI device endpoint.</td>
       </tr>
     </tbody>
   </table>
@@ -1729,8 +1729,8 @@ with the specified data; otherwise, <code>false</code>.</td>
         <td>The current <a class="xref" href="Melanchall.DryWetMidi.Multimedia.Playback.html">Playback</a> is disposed.</td>
       </tr>
       <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Multimedia.MidiDeviceException.html">MidiDeviceException</a></td>
-        <td>An error occurred on device.</td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Common.NativeApiException.html">NativeApiException</a></td>
+        <td>An error occurred on MIDI device endpoint.</td>
       </tr>
     </tbody>
   </table>
@@ -1793,8 +1793,8 @@ otherwise, <code>false</code>.</td>
         <td>The current <a class="xref" href="Melanchall.DryWetMidi.Multimedia.Playback.html">Playback</a> is disposed.</td>
       </tr>
       <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Multimedia.MidiDeviceException.html">MidiDeviceException</a></td>
-        <td>An error occurred on device.</td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Common.NativeApiException.html">NativeApiException</a></td>
+        <td>An error occurred on MIDI device endpoint.</td>
       </tr>
     </tbody>
   </table>
@@ -1820,8 +1820,8 @@ otherwise, <code>false</code>.</td>
         <td>The current <a class="xref" href="Melanchall.DryWetMidi.Multimedia.Playback.html">Playback</a> is disposed.</td>
       </tr>
       <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Multimedia.MidiDeviceException.html">MidiDeviceException</a></td>
-        <td>An error occurred on device.</td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Common.NativeApiException.html">NativeApiException</a></td>
+        <td>An error occurred on MIDI device endpoint.</td>
       </tr>
     </tbody>
   </table>
@@ -1868,8 +1868,8 @@ otherwise, <code>false</code>.</td>
         <td>The current <a class="xref" href="Melanchall.DryWetMidi.Multimedia.Playback.html">Playback</a> is disposed.</td>
       </tr>
       <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Multimedia.MidiDeviceException.html">MidiDeviceException</a></td>
-        <td>An error occurred on device.</td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Common.NativeApiException.html">NativeApiException</a></td>
+        <td>An error occurred on MIDI device endpoint.</td>
       </tr>
     </tbody>
   </table>
@@ -2100,8 +2100,8 @@ can use this predicate: <code>e =&gt; e.EventType == MidiEventType.Marker</code>
         <td>The current <a class="xref" href="Melanchall.DryWetMidi.Multimedia.Playback.html">Playback</a> is disposed.</td>
       </tr>
       <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Multimedia.MidiDeviceException.html">MidiDeviceException</a></td>
-        <td>An error occurred on device.</td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Common.NativeApiException.html">NativeApiException</a></td>
+        <td>An error occurred on MIDI device endpoint.</td>
       </tr>
     </tbody>
   </table>
@@ -2128,8 +2128,8 @@ call <a class="xref" href="Melanchall.DryWetMidi.Multimedia.Playback.html#Melanc
         <td>The current <a class="xref" href="Melanchall.DryWetMidi.Multimedia.Playback.html">Playback</a> is disposed.</td>
       </tr>
       <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Multimedia.MidiDeviceException.html">MidiDeviceException</a></td>
-        <td>An error occurred on device.</td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Common.NativeApiException.html">NativeApiException</a></td>
+        <td>An error occurred on MIDI device endpoint.</td>
       </tr>
     </tbody>
   </table>

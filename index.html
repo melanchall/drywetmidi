@@ -106,7 +106,7 @@
 <li>Build musical compositions (see <a href="https://melanchall.github.io/drywetmidi/articles/composing/Pattern.html">Pattern</a> page of the library docs) and use music theory API (see <a href="https://melanchall.github.io/drywetmidi/articles/music-theory/Overview.html">Music Theory - Overview</a> article).</li>
 <li>Perform complex tasks like quantizing, notes splitting or converting MIDI file to CSV representation (see <a href="https://melanchall.github.io/drywetmidi/articles/tools/Overview.html">Tools</a> page of the library docs).</li>
 </ul>
-<p>Please see <a href="#getting-started">Getting started</a> section below for quick jump into the library.</p>
+<p>Please see <a href="#getting-started">Getting started</a> section below for quick jump into the library. Or you can dive into the <a href="https://melanchall.github.io/drywetmidi">full documentation</a>.</p>
 <div class="WARNING">
 <h5>Warning</h5>
 <p>If you want to create an issue or a discussion, read this article first – <a href="https://melanchall.github.io/drywetmidi/articles/dev/Support.html">Support</a>.</p>
@@ -131,8 +131,8 @@ Using Rustissimo you can create a concert with your friends and play instruments
 </ul>
 <p>If you find that DryWetMIDI has been useful for your project, please put a link to the library in your project's <em>About</em> section or something like that.</p>
 <h2 id="getting-started">Getting Started</h2>
-<p>Let's see small examples of what you can do with the library.</p>
-<p>It's possible to <a href="https://melanchall.github.io/drywetmidi/articles/file-reading-writing/MIDI-file-reading.html">read a MIDI file</a>, then <a href="https://melanchall.github.io/drywetmidi/articles/high-level-managing/Getting-objects.html">collect all notes</a> from it and print their time and length in the <a href="https://melanchall.github.io/drywetmidi/articles/high-level-managing/Time-and-length.html">metric</a> (hours, minutes, second, ...) format:</p>
+<p>Let's see small examples of what you can do with the library. Full docs available <a href="https://melanchall.github.io/drywetmidi">here</a>.</p>
+<p>Simple task: <a href="https://melanchall.github.io/drywetmidi/articles/file-reading-writing/MIDI-file-reading.html">read a MIDI file</a>, then <a href="https://melanchall.github.io/drywetmidi/articles/high-level-managing/Getting-objects.html">collect all notes</a> from it and print their times and lengths in the <a href="https://melanchall.github.io/drywetmidi/articles/high-level-managing/Time-and-length.html">metric</a> (hours, minutes, second, ...) format:</p>
 <pre><code class="lang-csharp">var midiFile = MidiFile.Read(&quot;MyFile.mid&quot;);
 var tempoMap = midiFile.GetTempoMap();
  
@@ -143,17 +143,17 @@ foreach (var note in midiFile.GetNotes())
     Console.WriteLine($&quot;{note} at {time} with length of {length}&quot;);
 }
 </code></pre>
-<p>Or maybe you want to <a href="https://melanchall.github.io/drywetmidi/articles/recording/Overview.html">record data</a> from a <a href="https://melanchall.github.io/drywetmidi/articles/devices/Overview.html">MIDI device</a>, then <a href="https://melanchall.github.io/drywetmidi/articles/tools/Overview.html">quantize</a> recorded events by the grid with step of 1/8, and <a href="https://melanchall.github.io/drywetmidi/articles/playback/Overview.html">play</a> the data via the default Windows synth:</p>
-<pre><code class="lang-csharp">var inputDevice = InputDevice.GetByName(&quot;MyMidiKeyboard&quot;);
-inputDevice.StartEventsListening();
+<p>Or maybe you want to <a href="https://melanchall.github.io/drywetmidi/articles/recording/Overview.html">record data</a> from a <a href="https://melanchall.github.io/drywetmidi/articles/devices/Overview.html">MIDI device</a>, then <a href="https://melanchall.github.io/drywetmidi/articles/tools/Quantizer.html">quantize</a> (see all <a href="https://melanchall.github.io/drywetmidi/articles/tools/Overview.html">tools</a>) recorded events by the grid with step of 1/8, and <a href="https://melanchall.github.io/drywetmidi/articles/playback/Overview.html">play</a> the data via the default Windows synth:</p>
+<pre><code class="lang-csharp">var inputEndpoint = InputEndpoint.GetByName(&quot;MyMidiKeyboard&quot;);
+inputEndpoint.StartEventsListening();
 
-var recording = new Recording(TempoMap.Default, inputDevice);
+var recording = new Recording(TempoMap.Default, inputEndpoint);
 recording.Start();
  
 // ...
  
 recording.Stop();
-inputDevice.Dispose();
+inputEndpoint.Dispose();
  
 var recordedFile = recording.ToFile();
 recording.Dispose();
@@ -162,14 +162,14 @@ recordedFile.QuantizeObjects(
     ObjectType.TimedEvent,
     new SteppedGrid(MusicalTimeSpan.Eighth));
  
-var outputDevice = OutputDevice.GetByName(&quot;Microsoft GS Wavetable Synth&quot;);
-var playback = recordedFile.GetPlayback(outputDevice);
+var outputEndpoint = OutputEndpoint.GetByName(&quot;Microsoft GS Wavetable Synth&quot;);
+var playback = recordedFile.GetPlayback(outputEndpoint);
 playback.Start();
  
 // ...
  
 playback.Dispose();
-outputDevice.Dispose();
+outputEndpoint.Dispose();
 </code></pre>
 <p>You can even <a href="https://melanchall.github.io/drywetmidi/articles/composing/Pattern.html">build a musical composition</a>:</p>
 <pre><code class="lang-csharp">var pattern = new PatternBuilder()
@@ -201,6 +201,79 @@ outputDevice.Dispose();
 
 var midiFile = pattern.ToFile(TempoMap.Create(Tempo.FromBeatsPerMinute(240)));
 midiFile.Write(&quot;DrumPattern.mid&quot;);
+</code></pre>
+<p>Slightly more crazy example:</p>
+<ol>
+<li>create 100 <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Interaction.Note.html">notes</a> prepended with text <a href="https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Interaction.TimedEvent.html">events</a> containing note numbers (each note starts at the <a href="https://melanchall.github.io/drywetmidi/articles/high-level-managing/Time-and-length.html#bars-beats-and-ticks">beginning of a new bar</a> and has length of <a href="https://melanchall.github.io/drywetmidi/articles/high-level-managing/Time-and-length.html#bars-beats-and-fraction">1.5 beats</a>);</li>
+<li><a href="https://melanchall.github.io/drywetmidi/articles/tools/Splitter.html">split</a> all created objects into four parts;</li>
+<li><a href="https://melanchall.github.io/drywetmidi/articles/tools/Repeater.html">repeat</a> (see all <a href="https://melanchall.github.io/drywetmidi/articles/tools/Overview.html">tools</a>) the resulting objects nine times, starting each part at the beginning of the nearest bar after the previous part;</li>
+<li><a href="https://melanchall.github.io/drywetmidi/articles/file-reading-writing/MIDI-file-writing.html">write</a> the resulting objects to a MIDI file.</li>
+</ol>
+<p>Here is how it can be done:</p>
+<pre><code class="lang-csharp">var tempoMap = TempoMap.Default;
+var noteLength = new BarBeatFractionTimeSpan(0, 1.5);
+ 
+var objects = Enumerable
+    .Range(0, 100)
+    .SelectMany(i =&gt;
+    {
+        var time = new BarBeatTicksTimeSpan(i);
+        return new ITimedObject[]
+        {
+            new TimedEvent(new TextEvent(i.ToString()))
+                .SetTime(time, tempoMap),
+            new Melanchall.DryWetMidi.Interaction.Note((SevenBitNumber)i)
+                .SetTime(time, tempoMap)
+                .SetLength(noteLength, tempoMap),
+        };
+    });
+ 
+var manyObjects = objects
+    .SplitObjectsByPartsNumber(4, TimeSpanType.BarBeatTicks, tempoMap)
+    .Repeat(9, tempoMap, new RepeatingSettings
+    {
+        ShiftRoundingPolicy = TimeSpanRoundingPolicy.RoundUp,
+        ShiftRoundingStep = new BarBeatTicksTimeSpan(1)
+    });
+ 
+var midiFile = objects.ToFile();
+midiFile.Write(&quot;ManyObjects.mid&quot;);
+</code></pre>
+<p>If you are a user of macOS, you can use API to manage <a href="https://melanchall.github.io/drywetmidi/articles/devices/Virtual-device.html">virtual MIDI devices</a> and to watch <a href="https://melanchall.github.io/drywetmidi/articles/devices/Devices-watcher.html">devices plugging/unplugging</a>:</p>
+<pre><code class="lang-csharp">MidiEndpointsWatcher.Instance.EndpointAdded += OnEndpointAdded;
+MidiEndpointsWatcher.Instance.EndpointRemoved += OnEndpointRemoved;
+ 
+// Virtual device creation will cause MidiEndpointsWatcher.Instance.EndpointAdded
+// will be fired since one input endpoint and one output endpoint
+// will be created
+var virtualDevice = VirtualDevice.Create(&quot;My Virtual Device&quot;);
+ 
+virtualDevice.InputEndpoint.EventReceived += OnEventReceived;
+virtualDevice.InputEndpoint.StartEventsListening();
+ 
+// Since virtual device is a loopback device in DryWetMIDI,
+// this event will be received on virtualDevice.InputEndpoint
+virtualDevice.OutputEndpoint.SendEvent(new PitchBendEvent(2000));
+
+// Dispose the virtual device when you don't need it anymore
+virtualDevice.Dispose();
+
+// Events handlers
+
+private static void OnEndpointAdded(object? sender, EndpointAddedRemovedEventArgs e)
+{
+    // ...
+}
+ 
+private static void OnEndpointRemoved(object? sender, EndpointAddedRemovedEventArgs e)
+{
+    // ...
+}
+ 
+private static void OnEventReceived(object sender, MidiEventReceivedEventArgs e)
+{
+    // ...
+}
 </code></pre>
 <p>Also you can check out sample applications from <a href="https://github.com/CIRCE-EYES">CIRCE-EYES</a> (see the profile, VB.NET is used)</p>
 

@@ -133,13 +133,13 @@
   <h3 id="constructors">Constructors
 </h3>
   <a id="Melanchall_DryWetMidi_Multimedia_Recording__ctor_" data-uid="Melanchall.DryWetMidi.Multimedia.Recording.#ctor*"></a>
-  <h4 id="Melanchall_DryWetMidi_Multimedia_Recording__ctor_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Multimedia_IInputDevice_" data-uid="Melanchall.DryWetMidi.Multimedia.Recording.#ctor(Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Multimedia.IInputDevice)">Recording(TempoMap, IInputDevice)</h4>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_Recording__ctor_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Multimedia_IInputEndpoint_" data-uid="Melanchall.DryWetMidi.Multimedia.Recording.#ctor(Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Multimedia.IInputEndpoint)">Recording(TempoMap, IInputEndpoint)</h4>
   <div class="markdown level1 summary">Initializes a new instance of the <a class="xref" href="Melanchall.DryWetMidi.Multimedia.Recording.html">Recording</a> with the specified
 tempo map and input MIDI device to capture MIDI data from.</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="declaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Recording(TempoMap tempoMap, IInputDevice inputDevice)</code></pre>
+    <pre><code class="lang-csharp hljs">public Recording(TempoMap tempoMap, IInputEndpoint inputEndpoint)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-condensed">
@@ -157,8 +157,8 @@ tempo map and input MIDI device to capture MIDI data from.</div>
         <td>Tempo map used to calculate events times.</td>
       </tr>
       <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Multimedia.IInputDevice.html">IInputDevice</a></td>
-        <td><span class="parametername">inputDevice</span></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Multimedia.IInputEndpoint.html">IInputEndpoint</a></td>
+        <td><span class="parametername">inputEndpoint</span></td>
         <td>Input MIDI device to capture MIDI data from.</td>
       </tr>
     </tbody>
@@ -177,19 +177,19 @@ tempo map and input MIDI device to capture MIDI data from.</div>
         <td><p>One of the following errors occurred:</p>
 <ul><li>
       <code class="paramref">tempoMap</code> is <code>null</code>.</li><li>
-      <code class="paramref">inputDevice</code> is <code>null</code>.</li></ul></td>
+      <code class="paramref">inputEndpoint</code> is <code>null</code>.</li></ul></td>
       </tr>
     </tbody>
   </table>
   <h3 id="properties">Properties
 </h3>
-  <a id="Melanchall_DryWetMidi_Multimedia_Recording_InputDevice_" data-uid="Melanchall.DryWetMidi.Multimedia.Recording.InputDevice*"></a>
-  <h4 id="Melanchall_DryWetMidi_Multimedia_Recording_InputDevice" data-uid="Melanchall.DryWetMidi.Multimedia.Recording.InputDevice">InputDevice</h4>
+  <a id="Melanchall_DryWetMidi_Multimedia_Recording_InputEndpoint_" data-uid="Melanchall.DryWetMidi.Multimedia.Recording.InputEndpoint*"></a>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_Recording_InputEndpoint" data-uid="Melanchall.DryWetMidi.Multimedia.Recording.InputEndpoint">InputEndpoint</h4>
   <div class="markdown level1 summary">Gets the input MIDI device to record MIDI data from.</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="declaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public IInputDevice InputDevice { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">public IInputEndpoint InputEndpoint { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-condensed">
@@ -201,7 +201,7 @@ tempo map and input MIDI device to capture MIDI data from.</div>
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Multimedia.IInputDevice.html">IInputDevice</a></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Multimedia.IInputEndpoint.html">IInputEndpoint</a></td>
         <td></td>
       </tr>
     </tbody>

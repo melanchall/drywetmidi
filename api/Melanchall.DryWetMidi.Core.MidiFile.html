@@ -731,6 +731,10 @@ and <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.io.strea
 is <code>null</code> in case of <a class="xref" href="Melanchall.DryWetMidi.Core.ReaderSettings.html#Melanchall_DryWetMidi_Core_ReaderSettings_BufferingPolicy">BufferingPolicy</a> set to
 <a class="xref" href="Melanchall.DryWetMidi.Core.BufferingPolicy.html#Melanchall_DryWetMidi_Core_BufferingPolicy_UseCustomBuffer">UseCustomBuffer</a>.</td>
       </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.VlqNumberOverflowException.html">VlqNumberOverflowException</a></td>
+        <td>A variable-length quantity (VLQ) number in the file is too large.</td>
+      </tr>
     </tbody>
   </table>
   <h5 id="Melanchall_DryWetMidi_Core_MidiFile_Read_System_IO_Stream_Melanchall_DryWetMidi_Core_ReadingSettings__seealso">See Also</h5>
@@ -894,6 +898,10 @@ contains only white space, or contains one or more invalid characters as defined
         <td><a class="xref" href="Melanchall.DryWetMidi.Core.ReaderSettings.html#Melanchall_DryWetMidi_Core_ReaderSettings_Buffer">Buffer</a> of <code class="paramref">settings</code>
 is <code>null</code> in case of <a class="xref" href="Melanchall.DryWetMidi.Core.ReaderSettings.html#Melanchall_DryWetMidi_Core_ReaderSettings_BufferingPolicy">BufferingPolicy</a> set to
 <a class="xref" href="Melanchall.DryWetMidi.Core.BufferingPolicy.html#Melanchall_DryWetMidi_Core_BufferingPolicy_UseCustomBuffer">UseCustomBuffer</a>.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Core.VlqNumberOverflowException.html">VlqNumberOverflowException</a></td>
+        <td>A variable-length quantity (VLQ) number in the file is too large.</td>
       </tr>
     </tbody>
   </table>
@@ -1592,7 +1600,7 @@ contains only white space, or contains one or more invalid characters as defined
       <a class="xref" href="Melanchall.DryWetMidi.Interaction.TimedObjectUtilities.html#Melanchall_DryWetMidi_Interaction_TimedObjectUtilities_RemoveObjects_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Interaction_ObjectType_System_Predicate_Melanchall_DryWetMidi_Interaction_ITimedObject__Melanchall_DryWetMidi_Interaction_ObjectDetectionSettings_">TimedObjectUtilities.RemoveObjects(MidiFile, ObjectType, Predicate&lt;ITimedObject&gt;, ObjectDetectionSettings)</a>
   </div>
   <div>
-      <a class="xref" href="Melanchall.DryWetMidi.Multimedia.PlaybackUtilities.html#Melanchall_DryWetMidi_Multimedia_PlaybackUtilities_GetPlayback_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Multimedia_IOutputDevice_Melanchall_DryWetMidi_Multimedia_PlaybackSettings_">PlaybackUtilities.GetPlayback(MidiFile, IOutputDevice, PlaybackSettings)</a>
+      <a class="xref" href="Melanchall.DryWetMidi.Multimedia.PlaybackUtilities.html#Melanchall_DryWetMidi_Multimedia_PlaybackUtilities_GetPlayback_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Multimedia_IOutputEndpoint_Melanchall_DryWetMidi_Multimedia_PlaybackSettings_">PlaybackUtilities.GetPlayback(MidiFile, IOutputEndpoint, PlaybackSettings)</a>
   </div>
   <div>
       <a class="xref" href="Melanchall.DryWetMidi.Multimedia.PlaybackUtilities.html#Melanchall_DryWetMidi_Multimedia_PlaybackUtilities_GetPlayback_Melanchall_DryWetMidi_Core_MidiFile_Melanchall_DryWetMidi_Multimedia_PlaybackSettings_">PlaybackUtilities.GetPlayback(MidiFile, PlaybackSettings)</a>

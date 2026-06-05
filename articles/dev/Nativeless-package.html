@@ -97,21 +97,21 @@
 <p>First one is the version containing all the features of the library and you should use it in most cases. But some things require platform-specific code which is placed in native binaries packed along with the main library. If you've encountered problems with such code and you don't need an API that depends on native binaries, you can use <a href="https://www.nuget.org/packages/Melanchall.DryWetMidi.Nativeless">Melanchall.DryWetMidi.Nativeless</a> package where such things are cut out. Following types are unavailable in the nativeless package:</p>
 <ul>
 <li><a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.VirtualDevice.html">VirtualDevice</a>;</li>
-<li><a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.DevicesWatcher.html">DevicesWatcher</a>;</li>
-<li><a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.DeviceAddedRemovedEventArgs.html">DeviceAddedRemovedEventArgs</a>;</li>
-<li><a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.MidiDevice.html">MidiDevice</a>;</li>
-<li><a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.InputDevice.html">InputDevice</a>;</li>
-<li><a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.InputDeviceProperty.html">InputDeviceProperty</a>;</li>
+<li><a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.EndpointsWatcher.html">EndpointsWatcher</a>;</li>
+<li><a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.EndpointAddedRemovedEventArgs.html">EndpointAddedRemovedEventArgs</a>;</li>
+<li><a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.MidiEndpoint.html">MidiEndpoint</a>;</li>
+<li><a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.InputEndpoint.html">InputEndpoint</a>;</li>
+<li><a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.InputEndpointProperty.html">InputEndpointProperty</a>;</li>
 <li><a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.MidiTimeCodeReceivedEventArgs.html">MidiTimeCodeReceivedEventArgs</a>;</li>
-<li><a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.OutputDevice.html">OutputDevice</a>;</li>
-<li><a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.OutputDeviceOption.html">OutputDeviceOption</a>;</li>
-<li><a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.OutputDeviceProperty.html">OutputDeviceProperty</a>;</li>
-<li><a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.OutputDeviceTechnology.html">OutputDeviceTechnology</a>;</li>
+<li><a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.OutputEndpoint.html">OutputEndpoint</a>;</li>
+<li><a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.OutputEndpointOption.html">OutputEndpointOption</a>;</li>
+<li><a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.OutputEndpointProperty.html">OutputEndpointProperty</a>;</li>
+<li><a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.OutputEndpointTechnology.html">OutputEndpointTechnology</a>;</li>
 <li><a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.TickGeneratorException.html">TickGeneratorException</a>;</li>
 <li><a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.HighPrecisionTickGenerator.html">HighPrecisionTickGenerator</a>.</li>
 </ul>
 <p>Also default tick generator for <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.Playback.html">Playback</a> there is <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.RegularPrecisionTickGenerator.html">RegularPrecisionTickGenerator</a> instead of <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.HighPrecisionTickGenerator.html">HighPrecisionTickGenerator</a>.</p>
-<p>Although built-in implementations of <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.IInputDevice.html">IInputDevice</a> and <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.IOutputDevice.html">IOutputDevice</a> are unavailable in the nativeless package, you are still able to create your own implementations and use them across the library API (in <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.Playback.html">Playback</a> for example).</p>
+<p>Although built-in implementations of <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.IInputEndpoint.html">IInputEndpoint</a> and <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.IOutputEndpoint.html">IOutputEndpoint</a> are unavailable in the nativeless package, you are still able to create your own implementations and use them across the library API (in <a class="xref" href="../../api/Melanchall.DryWetMidi.Multimedia.Playback.html">Playback</a> for example).</p>
 
 </article>
           </div>
