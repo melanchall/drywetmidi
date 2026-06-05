@@ -123,7 +123,9 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             {
                 _factory.GetNote("0", "20"),
                 _factory.GetNote("50", "20"),
-                _factory.GetTimedEvent("93")
+                _factory.GetNote("80", "30"),
+                _factory.GetNote("120", "10"),
+                _factory.GetTimedEvent("143")
             };
 
             CheckRandomize(
@@ -143,9 +145,17 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 {
                     (0, 10),
                     (10, 30),
+
                     (40, 60),
                     (60, 80),
-                    (93, 93),
+
+                    (70, 90),
+                    (100, 120),
+
+                    (110, 130),
+                    (120, 140),
+
+                    (143, 143),
                 });
         }
 

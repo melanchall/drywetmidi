@@ -85,18 +85,26 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         private static void InputEndpointCallback(IntPtr info, MidiDevicesSessionApi.SESSION_CALLBACKOPERATION operation)
         {
-            if (operation == MidiDevicesSessionApi.SESSION_CALLBACKOPERATION.SESSION_CALLBACKOPERATION_ENDPOINTADDED)
-                InputEndpointAdded?.Invoke(null, info);
+            var handler = operation == MidiDevicesSessionApi.SESSION_CALLBACKOPERATION.SESSION_CALLBACKOPERATION_ENDPOINTADDED
+                ? InputEndpointAdded
+                : InputEndpointRemoved;
+
+            if (handler != null)
+                handler.Invoke(null, info);
             else
-                InputEndpointRemoved?.Invoke(null, info);
+                InputEndpointApi.Api_DeleteDeviceInfo(info);
         }
 
         private static void OutputEndpointCallback(IntPtr info, MidiDevicesSessionApi.SESSION_CALLBACKOPERATION operation)
         {
-            if (operation == MidiDevicesSessionApi.SESSION_CALLBACKOPERATION.SESSION_CALLBACKOPERATION_ENDPOINTADDED)
-                OutputEndpointAdded?.Invoke(null, info);
+            var handler = operation == MidiDevicesSessionApi.SESSION_CALLBACKOPERATION.SESSION_CALLBACKOPERATION_ENDPOINTADDED
+                ? OutputEndpointAdded
+                : OutputEndpointRemoved;
+
+            if (handler != null)
+                handler.Invoke(null, info);
             else
-                OutputEndpointRemoved?.Invoke(null, info);
+                OutputEndpointApi.Api_DeleteDeviceInfo(info);
         }
 
         #endregion

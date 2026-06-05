@@ -107,22 +107,38 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         private void OnInputEndpointAdded(object sender, IntPtr info)
         {
-            EndpointAdded?.Invoke(this, new EndpointAddedRemovedEventArgs(new InputEndpoint(info, MidiEndpoint.CreationContext.AddedEndpoint)));
+            var endpointAddded = EndpointAdded;
+            if (endpointAddded != null)
+                endpointAddded.Invoke(this, new EndpointAddedRemovedEventArgs(new InputEndpoint(info, MidiEndpoint.CreationContext.AddedEndpoint)));
+            else
+                InputEndpointApi.Api_DeleteDeviceInfo(info);
         }
 
         private void OnInputEndpointRemoved(object sender, IntPtr info)
         {
-            EndpointRemoved?.Invoke(this, new EndpointAddedRemovedEventArgs(new InputEndpoint(info, MidiEndpoint.CreationContext.RemovedEndpoint)));
+            var endpointRemoved = EndpointRemoved;
+            if (endpointRemoved != null)
+                endpointRemoved.Invoke(this, new EndpointAddedRemovedEventArgs(new InputEndpoint(info, MidiEndpoint.CreationContext.RemovedEndpoint)));
+            else
+                InputEndpointApi.Api_DeleteDeviceInfo(info);
         }
 
         private void OnOutputEndpointAdded(object sender, IntPtr info)
         {
-            EndpointAdded?.Invoke(this, new EndpointAddedRemovedEventArgs(new OutputEndpoint(info, MidiEndpoint.CreationContext.AddedEndpoint)));
+            var endpointAdded = EndpointAdded;
+            if (endpointAdded != null)
+                endpointAdded.Invoke(this, new EndpointAddedRemovedEventArgs(new OutputEndpoint(info, MidiEndpoint.CreationContext.AddedEndpoint)));
+            else
+                OutputEndpointApi.Api_DeleteDeviceInfo(info);
         }
 
         private void OnOutputEndpointRemoved(object sender, IntPtr info)
         {
-            EndpointRemoved?.Invoke(this, new EndpointAddedRemovedEventArgs(new OutputEndpoint(info, MidiEndpoint.CreationContext.RemovedEndpoint)));
+            var endpointRemoved = EndpointRemoved;
+            if (endpointRemoved != null)
+                endpointRemoved.Invoke(this, new EndpointAddedRemovedEventArgs(new OutputEndpoint(info, MidiEndpoint.CreationContext.RemovedEndpoint)));
+            else
+                OutputEndpointApi.Api_DeleteDeviceInfo(info);
         }
 
         #endregion

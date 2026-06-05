@@ -116,9 +116,11 @@ namespace Melanchall.DryWetMidi.Common
             if (resultCode == 0)
                 return;
 
-            var attribute = typeof(TResult)
+            var field = typeof(TResult)
                 .GetFields(BindingFlags.Static | BindingFlags.Public)
-                .First(f => f.GetValue(null).Equals(result))
+                .FirstOrDefault(f => f.GetValue(null).Equals(result));
+
+            var attribute = field?
                 .GetCustomAttributes(typeof(NativeErrorTypeAttribute))
                 .FirstOrDefault() as NativeErrorTypeAttribute;
 

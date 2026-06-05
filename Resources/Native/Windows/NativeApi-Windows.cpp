@@ -1088,6 +1088,18 @@ API_EXPORT SESSION_OPENRESULT API_CALL OpenSession_Win(
 
                 std::lock_guard<std::mutex> lock(sessionHandle->endpointDevicesLock);
 
+                std::vector<InputEndpointInfo*> inputDevicesInfo;
+                std::vector<OutputEndpointInfo*> outputDevicesInfo;
+                EndpointDevicesInfo endpointDevicesInfo;
+
+                auto cleanupAllDeviceInfos = [&]()
+                {
+                    DeleteInputEndpointInfos(inputDevicesInfo);
+                    DeleteInputEndpointInfos(endpointDevicesInfo.inputDevicesInfo);
+                    DeleteOutputEndpointInfos(outputDevicesInfo);
+                    DeleteOutputEndpointInfos(endpointDevicesInfo.outputDevicesInfo);
+                };
+
                 try
                 {
                     EnsureWinMmPortsAvailable();
@@ -1122,11 +1134,7 @@ API_EXPORT SESSION_OPENRESULT API_CALL OpenSession_Win(
                         }
                     }
 
-                    std::vector<InputEndpointInfo*> inputDevicesInfo;
-                    std::vector<OutputEndpointInfo*> outputDevicesInfo;
-
                     std::wstring endpointKey = endpointId.c_str();
-                    EndpointDevicesInfo endpointDevicesInfo;
 
                     auto ok = false;
                     int attempts = 0;
@@ -1137,10 +1145,7 @@ API_EXPORT SESSION_OPENRESULT API_CALL OpenSession_Win(
 
                         ok = true;
 
-                        DeleteInputEndpointInfos(inputDevicesInfo);
-                        DeleteInputEndpointInfos(endpointDevicesInfo.inputDevicesInfo);
-                        DeleteOutputEndpointInfos(outputDevicesInfo);
-                        DeleteOutputEndpointInfos(endpointDevicesInfo.outputDevicesInfo);
+                        cleanupAllDeviceInfos();
 
                         auto endpointInformation = midi2::MidiEndpointDeviceInformation::CreateFromEndpointDeviceId(endpointId);
                         if (endpointInformation == nullptr)
@@ -1221,7 +1226,7 @@ API_EXPORT SESSION_OPENRESULT API_CALL OpenSession_Win(
 
                     if (!ok)
                     {
-                        // TODO
+                        cleanupAllDeviceInfos();
                         return;
                     }
 
@@ -1401,13 +1406,21 @@ API_EXPORT IN_GETALLINFORESULT API_CALL GetInputEndpointsInfo(Configuration* con
 
     if (configuration->useWms && configuration->wmsAvailable && configuration->wmsSdkInitialized)
     {
+        std::vector<InputEndpointInfo*> inputDevicesInfo;
+
+        auto cleanupInputDevices = [&inputDevicesInfo]()
+        {
+            for (auto& info : inputDevicesInfo)
+            {
+                DeleteInputEndpointInfo(info);
+            }
+        };
+
         try
         {
             auto endpoints = midi2::MidiEndpointDeviceInformation::FindAll(
                 midi2::MidiEndpointDeviceInformationSortOrder::Name,
                 midi2::MidiEndpointDeviceInformationFilters::AllStandardEndpoints);
-
-            std::vector<InputEndpointInfo*> inputDevicesInfo;
 
             for (auto const& endpoint : endpoints)
             {
@@ -1419,7 +1432,10 @@ API_EXPORT IN_GETALLINFORESULT API_CALL GetInputEndpointsInfo(Configuration* con
 
                     auto getInputEndpointInfoResult = GetInputEndpointInfo(port.PortNumber(), endpoint.EndpointDeviceId(), port.PortDeviceId(), &inputDeviceInfo, errorCode);
                     if (getInputEndpointInfoResult != IN_GETINFORESULT_OK)
+                    {
+                        cleanupInputDevices();
                         return ConvertToGetAllInInfoResult(getInputEndpointInfoResult);
+                    }
 
                     inputDevicesInfo.push_back(inputDeviceInfo);
                 }
@@ -1440,16 +1456,22 @@ API_EXPORT IN_GETALLINFORESULT API_CALL GetInputEndpointsInfo(Configuration* con
         }
         catch (const winrt::hresult_error& e)
         {
+            cleanupInputDevices();
+
             configuration->activityCallback(FormatError(e, L"Get all input endpoints via WMS"));
             return IN_GETALLINFORESULT_UNKNOWNWMSERROR;
         }
         catch (const std::exception& e)
         {
+            cleanupInputDevices();
+
             configuration->activityCallback(FormatError(e, L"Get all input endpoints via WMS"));
             return IN_GETALLINFORESULT_UNKNOWNWMSERROR;
         }
         catch (...)
         {
+            cleanupInputDevices();
+
             configuration->activityCallback(L"Failed to get all input endpoints via WMS");
             return IN_GETALLINFORESULT_UNKNOWNWMSERROR;
         }
@@ -1468,7 +1490,13 @@ API_EXPORT IN_GETALLINFORESULT API_CALL GetInputEndpointsInfo(Configuration* con
         auto getInputEndpointInfoResult = GetInputEndpointInfo(i, &inputDeviceInfo, errorCode);
         if (getInputEndpointInfoResult != IN_GETINFORESULT_OK)
         {
+            for (int j = 0; j < i; j++)
+            {
+                DeleteInputEndpointInfo(result[j]);
+            }
+
             delete[] result;
+
             return ConvertToGetAllInInfoResult(getInputEndpointInfoResult);
         }
 
@@ -1644,7 +1672,7 @@ IN_PREPARESYSEXBUFFERRESULT PrepareSysExBuffer(HMIDIIN deviceHandle, int bufferS
     return IN_PREPARESYSEXBUFFERRESULT_OK;
 }
 
-API_EXPORT IN_OPENRESULT API_CALL OpenInputEndpoint_Win(InputEndpointInfo* info, void* sessionHandle, DWORD_PTR callback, int sysExBufferSize, int sysExBufferCount, void** handle, int* errorCode)
+API_EXPORT IN_OPENRESULT API_CALL OpenInputEndpoint_Win(InputEndpointInfo* info, SessionHandle* sessionHandle, DWORD_PTR callback, int sysExBufferSize, int sysExBufferCount, void** handle, int* errorCode)
 {
     *errorCode = 0;
 
@@ -1665,8 +1693,6 @@ API_EXPORT IN_OPENRESULT API_CALL OpenInputEndpoint_Win(InputEndpointInfo* info,
     InitializeCriticalSection(&inputDeviceHandle->lock);
     inputDeviceHandle->isClosing = 0;
 
-    *handle = inputDeviceHandle;
-
     auto deviceIndex = FindPortIndex(inputDeviceInfo->endpointDeviceId, inputDeviceInfo->portDeviceId, midi2::Midi1PortFlow::MidiMessageSource);
     if (deviceIndex < 0)
         deviceIndex = inputDeviceInfo->deviceIndex;
@@ -1674,6 +1700,7 @@ API_EXPORT IN_OPENRESULT API_CALL OpenInputEndpoint_Win(InputEndpointInfo* info,
     MMRESULT result = midiInOpen(&inputDeviceHandle->handle, deviceIndex, callback, 0, CALLBACK_FUNCTION);
     if (result != MMSYSERR_NOERROR)
     {
+        delete[] inputDeviceHandle->sysExHeaders;
         DeleteCriticalSection(&inputDeviceHandle->lock);
         delete inputDeviceHandle;
 
@@ -1691,6 +1718,8 @@ API_EXPORT IN_OPENRESULT API_CALL OpenInputEndpoint_Win(InputEndpointInfo* info,
         return IN_OPENRESULT_UNKNOWNERROR;
     }
 
+    auto preparedBuffersCount = 0;
+
     for (int i = 0; i < sysExBufferCount; i++)
     {
         int prepareErrorCode;
@@ -1698,9 +1727,31 @@ API_EXPORT IN_OPENRESULT API_CALL OpenInputEndpoint_Win(InputEndpointInfo* info,
 
         if (prepareResult != IN_PREPARESYSEXBUFFERRESULT_OK)
         {
-            // TODO
+            auto errorMessage = L"Failed to prepare SysEx buffer " +
+                std::to_wstring(i) +
+                L" for input endpoint (" +
+                std::to_wstring(prepareResult) +
+                L", " +
+                std::to_wstring(prepareErrorCode) +
+                L")";
+            sessionHandle->configuration->activityCallback(errorMessage.c_str());
+            inputDeviceHandle->sysExHeaders[i] = nullptr;
+            continue;
         }
+
+        preparedBuffersCount++;
     }
+
+    if (preparedBuffersCount == 0)
+    {
+        midiInClose(inputDeviceHandle->handle);
+        delete[] inputDeviceHandle->sysExHeaders;
+        DeleteCriticalSection(&inputDeviceHandle->lock);
+        delete inputDeviceHandle;
+        return IN_OPENRESULT_FAILEDPREPARESYSEXBUFFERS;
+    }
+
+    *handle = inputDeviceHandle;
 
     return IN_OPENRESULT_OK;
 }
@@ -1714,11 +1765,36 @@ API_EXPORT IN_CLOSERESULT API_CALL CloseInputEndpoint(void* handle, int* errorCo
     EnterCriticalSection(&inputDeviceHandle->lock);
     inputDeviceHandle->isClosing = 1;
 
+    auto cleanupSysExHeaders = [&inputDeviceHandle]()
+    {
+        for (int i = 0; i < inputDeviceHandle->sysExBufferCount; i++)
+        {
+            if (inputDeviceHandle->sysExHeaders[i] == nullptr)
+                continue;
+
+            LPMIDIHDR header = inputDeviceHandle->sysExHeaders[i];
+            midiInUnprepareHeader(inputDeviceHandle->handle, header, sizeof(MIDIHDR));
+
+            delete[] header->lpData;
+            delete header;
+
+            inputDeviceHandle->sysExHeaders[i] = nullptr;
+        }
+
+        delete[] inputDeviceHandle->sysExHeaders;
+    };
+
     MMRESULT result = midiInReset(inputDeviceHandle->handle);
     if (result != MMSYSERR_NOERROR)
     {
         LeaveCriticalSection(&inputDeviceHandle->lock);
+        DeleteCriticalSection(&inputDeviceHandle->lock);
+
         *errorCode = result;
+
+        cleanupSysExHeaders();
+        midiInClose(inputDeviceHandle->handle);
+        delete inputDeviceHandle;
 
         switch (result)
         {
@@ -1728,27 +1804,17 @@ API_EXPORT IN_CLOSERESULT API_CALL CloseInputEndpoint(void* handle, int* errorCo
         return IN_CLOSERESULT_RESET_UNKNOWNERROR;
     }
 
-    for (int i = 0; i < inputDeviceHandle->sysExBufferCount; i++)
-    {
-        if (inputDeviceHandle->sysExHeaders[i] == nullptr)
-            continue;
-
-        LPMIDIHDR header = inputDeviceHandle->sysExHeaders[i];
-        midiInUnprepareHeader(inputDeviceHandle->handle, header, sizeof(MIDIHDR));
-
-        delete[] header->lpData;
-        delete header;
-
-        inputDeviceHandle->sysExHeaders[i] = nullptr;
-    }
-
-    delete[] inputDeviceHandle->sysExHeaders;
+    cleanupSysExHeaders();
 
     result = midiInClose(inputDeviceHandle->handle);
     if (result != MMSYSERR_NOERROR)
     {
         LeaveCriticalSection(&inputDeviceHandle->lock);
+        DeleteCriticalSection(&inputDeviceHandle->lock);
+
         *errorCode = result;
+
+        delete inputDeviceHandle;
 
         switch (result)
         {
@@ -1866,6 +1932,14 @@ API_EXPORT OUT_GETALLINFORESULT API_CALL GetOutputEndpointsInfo(Configuration* c
     {
         std::vector<OutputEndpointInfo*> outputDevicesInfo;
 
+        auto cleanupOutputDevices = [&outputDevicesInfo]()
+        {
+            for (auto& info : outputDevicesInfo)
+            {
+                DeleteOutputEndpointInfo(info);
+            }
+        };
+
         int initialCount = 0;
         GetOutputEndpointsCount(&initialCount);
 
@@ -1875,7 +1949,10 @@ API_EXPORT OUT_GETALLINFORESULT API_CALL GetOutputEndpointsInfo(Configuration* c
 
             auto getOutputEndpointInfoResult = GetOutputEndpointInfo(i, &outputDeviceInfo, errorCode);
             if (getOutputEndpointInfoResult != OUT_GETINFORESULT_OK)
+            {
+                cleanupOutputDevices();
                 return ConvertToGetAllOutInfoResult(getOutputEndpointInfoResult);
+            }
             
             if (wcscmp(outputDeviceInfo->caps->szPname, L"Microsoft GS Wavetable Synth") == 0)
             {
@@ -1884,7 +1961,7 @@ API_EXPORT OUT_GETALLINFORESULT API_CALL GetOutputEndpointsInfo(Configuration* c
                 break;
             }
 
-            delete outputDeviceInfo;
+            DeleteOutputEndpointInfo(outputDeviceInfo);
         }
 
         try
@@ -1903,7 +1980,10 @@ API_EXPORT OUT_GETALLINFORESULT API_CALL GetOutputEndpointsInfo(Configuration* c
 
                     auto getOutputEndpointInfoResult = GetOutputEndpointInfo(port.PortNumber(), endpoint.EndpointDeviceId(), port.PortDeviceId(), &outputDeviceInfo, errorCode);
                     if (getOutputEndpointInfoResult != OUT_GETINFORESULT_OK)
+                    {
+                        cleanupOutputDevices();
                         return ConvertToGetAllOutInfoResult(getOutputEndpointInfoResult);
+                    }
 
                     outputDevicesInfo.push_back(outputDeviceInfo);
                 }
@@ -1924,16 +2004,22 @@ API_EXPORT OUT_GETALLINFORESULT API_CALL GetOutputEndpointsInfo(Configuration* c
         }
         catch (const winrt::hresult_error& e)
         {
+            cleanupOutputDevices();
+
             configuration->activityCallback(FormatError(e, L"Get all output endpoints via WMS"));
             return OUT_GETALLINFORESULT_UNKNOWNWMSERROR;
         }
         catch (const std::exception& e)
         {
+            cleanupOutputDevices();
+
             configuration->activityCallback(FormatError(e, L"Get all output endpoints via WMS"));
             return OUT_GETALLINFORESULT_UNKNOWNWMSERROR;
         }
         catch (...)
         {
+            cleanupOutputDevices();
+
             configuration->activityCallback(L"Failed to get all output endpoints via WMS");
             return OUT_GETALLINFORESULT_UNKNOWNWMSERROR;
         }
@@ -1953,7 +2039,13 @@ API_EXPORT OUT_GETALLINFORESULT API_CALL GetOutputEndpointsInfo(Configuration* c
         auto getOutputEndpointInfoResult = GetOutputEndpointInfo(i, &outputDeviceInfo, &errorCode);
         if (getOutputEndpointInfoResult != OUT_GETINFORESULT_OK)
         {
+            for (int j = 0; j < i; j++)
+            {
+                DeleteOutputEndpointInfo(result[j]);
+            }
+
             delete[] result;
+
             return ConvertToGetAllOutInfoResult(getOutputEndpointInfoResult);
         }
 
@@ -2143,6 +2235,9 @@ API_EXPORT OUT_CLOSERESULT API_CALL CloseOutputEndpoint(void* handle, int* error
     {
         *errorCode = result;
 
+        midiOutClose(outputDeviceHandle->handle);
+        delete outputDeviceHandle;
+
         switch (result)
         {
             case MMSYSERR_INVALHANDLE: return OUT_CLOSERESULT_RESET_INVALIDHANDLE;
@@ -2156,6 +2251,8 @@ API_EXPORT OUT_CLOSERESULT API_CALL CloseOutputEndpoint(void* handle, int* error
     {
         *errorCode = result;
 
+        delete outputDeviceHandle;
+
         switch (result)
         {
             case MIDIERR_STILLPLAYING: return OUT_CLOSERESULT_CLOSE_STILLPLAYING;
@@ -2165,11 +2262,6 @@ API_EXPORT OUT_CLOSERESULT API_CALL CloseOutputEndpoint(void* handle, int* error
 
         return OUT_CLOSERESULT_CLOSE_UNKNOWNERROR;
     }
-
-    // if (outputDeviceHandle->info)
-    // {
-    //     DeleteOutputEndpointInfo(outputDeviceHandle->info);
-    // }
 
     delete outputDeviceHandle;
 
@@ -2303,8 +2395,8 @@ API_EXPORT char API_CALL IsOutputEndpointPropertySupported(OUT_PROPERTY property
 
 struct VirtualDeviceInfo
 {
-    InputEndpointInfo* inputDeviceInfo;
-    OutputEndpointInfo* outputDeviceInfo;
+    InputEndpointInfo* inputDeviceInfo = nullptr;
+    OutputEndpointInfo* outputDeviceInfo = nullptr;
     const wchar_t* name;
     winrt::guid associationId;
     std::wstring endpointDeviceId;
@@ -2340,29 +2432,20 @@ API_EXPORT VIRTUAL_OPENRESULT API_CALL OpenVirtualDevice_Win(
         return VIRTUAL_OPENRESULT_WMSBASICLOOPBACKUNAVAILABLE;
     }
 
+    auto cleanupVirtualDevice = [&virtualDeviceInfo]()
+    {
+        if (virtualDeviceInfo->inputDeviceInfo != nullptr)
+            DeleteInputEndpointInfo(virtualDeviceInfo->inputDeviceInfo);
+
+        if (virtualDeviceInfo->outputDeviceInfo != nullptr)
+            DeleteOutputEndpointInfo(virtualDeviceInfo->outputDeviceInfo);
+
+        delete virtualDeviceInfo;
+    };
+
     try
     {
         winrt::hstring uniqueId = winrt::to_hstring(winrt::Windows::Foundation::GuidHelper::CreateNewGuid());
-
-        try
-        {
-            while (basicLoopback::MidiBasicLoopbackEndpointManager::DoesLoopbackExist(uniqueId));
-            {
-                uniqueId = winrt::to_hstring(winrt::Windows::Foundation::GuidHelper::CreateNewGuid());
-            }
-        }
-        catch (const winrt::hresult_error& e)
-        {
-            configuration->activityCallback(FormatError(e, L"Regenerate unique ID for virtual device"));
-        }
-        catch (const std::exception& e)
-        {
-            configuration->activityCallback(FormatError(e, L"Regenerate unique ID for virtual device"));
-        }
-        catch (...)
-        {
-            configuration->activityCallback(L"Failed to regenerate unique ID for virtual device");
-        }
 
         virtualDeviceInfo->associationId = winrt::Windows::Foundation::GuidHelper::CreateNewGuid();
 
@@ -2381,6 +2464,8 @@ API_EXPORT VIRTUAL_OPENRESULT API_CALL OpenVirtualDevice_Win(
         {
             *errorCode = static_cast<int>(result.ErrorCode());
 
+            delete virtualDeviceInfo;
+
             switch (result.ErrorCode())
             {
                 case basicLoopback::MidiBasicLoopbackEndpointCreationResultErrorCode::InvalidOrMissingName:
@@ -2393,7 +2478,6 @@ API_EXPORT VIRTUAL_OPENRESULT API_CALL OpenVirtualDevice_Win(
                     return VIRTUAL_OPENRESULT_UNIQUEIDINUSE;
             }
 
-            delete virtualDeviceInfo;
             return VIRTUAL_OPENRESULT_FAILED;
         }
 
@@ -2422,7 +2506,7 @@ API_EXPORT VIRTUAL_OPENRESULT API_CALL OpenVirtualDevice_Win(
         OUT_GETINFORESULT outputResult = GetOutputEndpointInfo(outputPort.PortNumber(), endpointId, outputPort.PortDeviceId(), &outputDeviceInfo, errorCode);
         if (outputResult != OUT_GETINFORESULT_OK)
         {
-            delete virtualDeviceInfo->inputDeviceInfo;
+            DeleteInputEndpointInfo(virtualDeviceInfo->inputDeviceInfo);
             delete virtualDeviceInfo;
             return VIRTUAL_OPENRESULT_FAILEDGETOUTPUTDEVICEINFO;
         }
@@ -2431,16 +2515,19 @@ API_EXPORT VIRTUAL_OPENRESULT API_CALL OpenVirtualDevice_Win(
     }
     catch (const winrt::hresult_error& e)
     {
+        cleanupVirtualDevice();
         configuration->activityCallback(FormatError(e, L"Create virtual device"));
         return VIRTUAL_OPENRESULT_WMSERROR;
     }
     catch (const std::exception& e)
     {
+        cleanupVirtualDevice();
         configuration->activityCallback(FormatError(e, L"Create virtual device"));
         return VIRTUAL_OPENRESULT_WMSERROR;
     }
     catch (...)
     {
+        cleanupVirtualDevice();
         configuration->activityCallback(L"Failed to create virtual device");
         return VIRTUAL_OPENRESULT_WMSERROR;
     }
@@ -2459,10 +2546,14 @@ API_EXPORT VIRTUAL_CLOSERESULT API_CALL CloseVirtualDevice(VirtualDeviceInfo* in
             basicLoopback::MidiBasicLoopbackEndpointRemovalConfig{ info->associationId });
 
         if (!removed)
+        {
+            delete info;
             return VIRTUAL_CLOSERESULT_FAILED;
+        }
     }
     catch (...)
     {
+        delete info;
         return VIRTUAL_CLOSERESULT_WMSERROR;
     }
 

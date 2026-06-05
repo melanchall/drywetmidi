@@ -3,12 +3,13 @@
 #include <pthread.h>
 #include <mach/mach_time.h>
 #include <mach/mach.h>
-
 #include <atomic>
 #include <vector>
 #include <new>
 #include <cstdint>
 #include <cstring>
+#include <chrono>
+#include <thread>
 
 #include "../Common/NativeApi-Constants.h"
 
@@ -31,6 +32,17 @@ API_EXPORT API_TYPE GetApiType()
 API_EXPORT void FreeBuffer(const char* buffer)
 {
     delete[] buffer;
+}
+
+const char* CloneCString(const char* value)
+{
+    if (value == nullptr)
+        return nullptr;
+
+    auto length = std::strlen(value);
+    char* copy = new char[length + 1];
+    std::memcpy(copy, value, length + 1);
+    return copy;
 }
 
 /* ================================
@@ -101,6 +113,7 @@ struct TickGeneratorSessionHandle
     CFRunLoopRef runLoopRef;
     TGSESSION_OPENRESULT threadStartResult;
     int threadStartError;
+    CFRunLoopTimerRef timerRef = nullptr;
 };
 
 struct TickGeneratorInfo
@@ -127,8 +140,11 @@ void* TickGeneratorSessionThreadRoutine(void* data)
         SessionCallback,
         &context);
 
+    sessionHandle->timerRef = timerRef;
+
     CFRunLoopRef runLoopRef = CFRunLoopGetCurrent();
     CFRunLoopAddTimer(runLoopRef, timerRef, kCFRunLoopDefaultMode);
+    CFRelease(timerRef);
     
     // Set realtime priority
     // (thanks to https://stackoverflow.com/a/44310370/2975589)
@@ -137,6 +153,8 @@ void* TickGeneratorSessionThreadRoutine(void* data)
     kern_return_t kr = mach_timebase_info(&timebase);
     if (kr != KERN_SUCCESS)
     {
+        CFRunLoopRemoveTimer(runLoopRef, timerRef, kCFRunLoopDefaultMode);
+        sessionHandle->timerRef = nullptr;
         sessionHandle->threadStartError = kr;
         sessionHandle->threadStartResult = TGSESSION_OPENRESULT_FAILEDTOGETTIMEBASEINFO;
         return nullptr;
@@ -153,6 +171,8 @@ void* TickGeneratorSessionThreadRoutine(void* data)
     kr = thread_policy_set(threadId, THREAD_TIME_CONSTRAINT_POLICY, (thread_policy_t)&constraintPolicy, THREAD_TIME_CONSTRAINT_POLICY_COUNT);
     if (kr != KERN_SUCCESS)
     {
+        CFRunLoopRemoveTimer(runLoopRef, timerRef, kCFRunLoopDefaultMode);
+        sessionHandle->timerRef = nullptr;
         sessionHandle->threadStartError = kr;
         sessionHandle->threadStartResult = TGSESSION_OPENRESULT_FAILEDTOSETREALTIMEPRIORITY;
         return nullptr;
@@ -160,8 +180,8 @@ void* TickGeneratorSessionThreadRoutine(void* data)
 
     //
 
-    sessionHandle->active.store(1);
     sessionHandle->runLoopRef = (CFRunLoopRef)CFRetain(runLoopRef);
+    sessionHandle->active.store(1);
 
     CFRunLoopRun();
 
@@ -220,8 +240,20 @@ API_EXPORT TGSESSION_CLOSERESULT CloseTickGeneratorSession(void* handle, int* er
 
     TickGeneratorSessionHandle* sessionHandle = static_cast<TickGeneratorSessionHandle*>(handle);
 
-    if (sessionHandle->sessionClosed.exchange(1) == 1 || sessionHandle->runLoopRef == nullptr)
+    if (sessionHandle->sessionClosed.exchange(1) == 1)
         return SESSION_CLOSERESULT_OK;
+
+    if (sessionHandle->runLoopRef == nullptr)
+    {
+        delete sessionHandle;
+        return SESSION_CLOSERESULT_OK;
+    }
+
+    if (sessionHandle->timerRef != nullptr)
+    {
+        CFRunLoopRemoveTimer(sessionHandle->runLoopRef, sessionHandle->timerRef, kCFRunLoopDefaultMode);
+        sessionHandle->timerRef = nullptr;
+    }
 
     if (sessionHandle->runLoopRef != nullptr)
         CFRunLoopStop(sessionHandle->runLoopRef);
@@ -286,6 +318,8 @@ API_EXPORT TG_STOPRESULT StopHighPrecisionTickGenerator(TickGeneratorSessionHand
     *errorCode = 0;
 
     CFRunLoopRemoveTimer(sessionHandle->runLoopRef, tickGeneratorInfo->timerRef, kCFRunLoopDefaultMode);
+    CFRelease(tickGeneratorInfo->timerRef);
+
     delete tickGeneratorInfo;
     return TG_STOPRESULT_OK;
 }
@@ -304,6 +338,21 @@ struct EndpointInfoBase
     const char* parentDeviceModel = nullptr;
 };
 
+void FreeParentDeviceInfoStrings(EndpointInfoBase* info)
+{
+    if (info == nullptr)
+        return;
+
+    delete[] info->parentDeviceName;
+    delete[] info->parentDeviceManufacturer;
+    delete[] info->parentDeviceModel;
+
+    info->parentDeviceName = nullptr;
+    info->parentDeviceManufacturer = nullptr;
+    info->parentDeviceModel = nullptr;
+    info->parentDeviceId = -1;
+}
+
 struct InputEndpointInfo : EndpointInfoBase
 {
 };
@@ -314,15 +363,16 @@ API_EXPORT void CloneInputEndpointInfo(InputEndpointInfo* source, InputEndpointI
 
     result->endpointRef = source->endpointRef;
     result->parentDeviceId = source->parentDeviceId;
-    result->parentDeviceName = source->parentDeviceName;
-    result->parentDeviceManufacturer = source->parentDeviceManufacturer;
-    result->parentDeviceModel = source->parentDeviceModel;
+    result->parentDeviceName = CloneCString(source->parentDeviceName);
+    result->parentDeviceManufacturer = CloneCString(source->parentDeviceManufacturer);
+    result->parentDeviceModel = CloneCString(source->parentDeviceModel);
 
     *info = result;
 }
 
 API_EXPORT void DeleteInputEndpointInfo(InputEndpointInfo* info)
 {
+    FreeParentDeviceInfoStrings(info);
     delete info;
 }
 
@@ -336,15 +386,16 @@ API_EXPORT void CloneOutputEndpointInfo(OutputEndpointInfo* source, OutputEndpoi
 
     result->endpointRef = source->endpointRef;
     result->parentDeviceId = source->parentDeviceId;
-    result->parentDeviceName = source->parentDeviceName;
-    result->parentDeviceManufacturer = source->parentDeviceManufacturer;
-    result->parentDeviceModel = source->parentDeviceModel;
+    result->parentDeviceName = CloneCString(source->parentDeviceName);
+    result->parentDeviceManufacturer = CloneCString(source->parentDeviceManufacturer);
+    result->parentDeviceModel = CloneCString(source->parentDeviceModel);
 
     *info = result;
 }
 
 API_EXPORT void DeleteOutputEndpointInfo(OutputEndpointInfo* info)
 {
+    FreeParentDeviceInfoStrings(info);
     delete info;
 }
 
@@ -365,7 +416,7 @@ GETSTRINGPROPERTYRESULT GetStringPropertyValue(MIDIObjectRef obj, CFStringRef pr
     CFStringRef stringRef = nullptr;
     OSStatus status = MIDIObjectGetStringProperty(obj, property, &stringRef);
 
-    if (status != noErr)
+    if (status != noErr || stringRef == nullptr)
     {
         *errorCode = status;
         return GETSTRINGPROPERTYRESULT_FAILEDGETVALUE;
@@ -517,11 +568,12 @@ void HandleSource(MIDIEndpointRef source, SessionHandle* sessionHandle, SESSION_
     if (sessionHandle->sessionClosed.load() == 1)
         return;
 
+    if (sessionHandle->inputDeviceCallback == nullptr)
+        return;
+
     InputEndpointInfo* inputDeviceInfo = new InputEndpointInfo();
     inputDeviceInfo->endpointRef = source;
-
-    if (sessionHandle->inputDeviceCallback != nullptr)
-        sessionHandle->inputDeviceCallback(inputDeviceInfo, operation);
+    sessionHandle->inputDeviceCallback(inputDeviceInfo, operation);
 }
 
 void HandleDestination(MIDIEndpointRef destination, SessionHandle* sessionHandle, SESSION_CALLBACKOPERATION operation)
@@ -529,11 +581,12 @@ void HandleDestination(MIDIEndpointRef destination, SessionHandle* sessionHandle
     if (sessionHandle->sessionClosed.load() == 1)
         return;
 
+    if (sessionHandle->outputDeviceCallback == nullptr)
+        return;
+
     OutputEndpointInfo* outputDeviceInfo = new OutputEndpointInfo();
     outputDeviceInfo->endpointRef = destination;
-
-    if (sessionHandle->outputDeviceCallback != nullptr)
-        sessionHandle->outputDeviceCallback(outputDeviceInfo, operation);
+    sessionHandle->outputDeviceCallback(outputDeviceInfo, operation);
 }
 
 void HandleEntitySources(MIDIEntityRef entity, SessionHandle* sessionHandle, SESSION_CALLBACKOPERATION operation)
@@ -644,14 +697,22 @@ void NotifyProc(const MIDINotification* message, void* refCon)
 void* ThreadProc(void* data)
 {
     SessionHandle* sessionHandle = static_cast<SessionHandle*>(data);
+    sessionHandle->runLoopRef = (CFRunLoopRef)CFRetain(CFRunLoopGetCurrent());
     
     CFStringRef nameRef = CFStringCreateWithCString(kCFAllocatorDefault, sessionHandle->name, kCFStringEncodingUTF8);
-    sessionHandle->clientCreationStatus = MIDIClientCreate(nameRef, NotifyProc, data, &sessionHandle->clientRef);
-    sessionHandle->clientCreated.store(1);
-    sessionHandle->runLoopRef = (CFRunLoopRef)CFRetain(CFRunLoopGetCurrent());
+    if (!nameRef)
+    {
+        CFRelease(sessionHandle->runLoopRef);
+        sessionHandle->runLoopRef = nullptr;
+        sessionHandle->clientCreationStatus = kMIDIUnknownError;
+        sessionHandle->clientCreated.store(1);
+        return nullptr;
+    }
 
-    if (nameRef)
-        CFRelease(nameRef);
+    sessionHandle->clientCreationStatus = MIDIClientCreate(nameRef, NotifyProc, data, &sessionHandle->clientRef);
+    CFRelease(nameRef);
+    
+    sessionHandle->clientCreated.store(1);
     
     CFRunLoopRun();
 
@@ -686,8 +747,24 @@ API_EXPORT SESSION_OPENRESULT OpenSession_Mac(const char* name, Configuration* c
         delete sessionHandle;
         return SESSION_OPENRESULT_THREADSTARTERROR;
     }
-    
-    while (sessionHandle->clientCreated.load() == 0) {}
+
+    auto startTime = std::chrono::steady_clock::now();
+    const auto timeoutMs = 5000;
+
+    while (sessionHandle->clientCreated.load() == 0)
+    {
+        std::this_thread::sleep_for(std::chrono::milliseconds(1));
+
+        auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(
+            std::chrono::steady_clock::now() - startTime
+        ).count();
+
+        if (elapsed >= timeoutMs)
+        {
+            pthread_cancel(sessionHandle->thread);
+            return SESSION_OPENRESULT_CLIENTCREATIONTIMEOUT;
+        }
+    }
 
     if (sessionHandle->clientCreationStatus != noErr)
     {
@@ -785,7 +862,13 @@ API_EXPORT IN_GETALLINFORESULT GetInputEndpointsInfo(Configuration* configuratio
         auto getInputEndpointInfoResult = GetInputEndpointInfo(i, &inputDeviceInfo, errorCode);
         if (getInputEndpointInfoResult != IN_GETINFORESULT_OK)
         {
+            for (int j = 0; j < i; j++)
+            {
+                DeleteInputEndpointInfo(result[j]);
+            }
+
             delete[] result;
+
             return IN_GETALLINFORESULT_UNKNOWNERRORONGETINFO;
         }
 
@@ -1062,7 +1145,13 @@ API_EXPORT OUT_GETALLINFORESULT GetOutputEndpointsInfo(Configuration* configurat
         auto getOutputEndpointInfoResult = GetOutputEndpointInfo(i, &outputDeviceInfo, errorCode);
         if (getOutputEndpointInfoResult != OUT_GETINFORESULT_OK)
         {
+            for (int j = 0; j < i; j++)
+            {
+                DeleteOutputEndpointInfo(result[j]);
+            }
+
             delete[] result;
+
             return OUT_GETALLINFORESULT_UNKNOWNERRORONGETINFO;
         }
 
@@ -1307,11 +1396,12 @@ API_EXPORT char IsOutputEndpointPropertySupported(OUT_PROPERTY property)
  Virtual device
  ================================ */
 
-struct VirtualDeviceInfo : EndpointInfoBase
+struct VirtualDeviceInfo
 {
-    InputEndpointInfo* inputDeviceInfo;
-    OutputEndpointInfo* outputDeviceInfo;
+    InputEndpointInfo* inputDeviceInfo = nullptr;
+    OutputEndpointInfo* outputDeviceInfo = nullptr;
     const char* name;
+    bool isMuted = false;
 };
 
 API_EXPORT VIRTUAL_OPENRESULT OpenVirtualDevice_Mac(
@@ -1338,8 +1428,6 @@ API_EXPORT VIRTUAL_OPENRESULT OpenVirtualDevice_Mac(
     OSStatus status = MIDISourceCreate(sessionHandle->clientRef, nameRef, &sourceRef);
     CFRelease(nameRef);
 
-    virtualDeviceInfo->endpointRef = sourceRef;
-    
     if (status != noErr)
     {
         delete virtualDeviceInfo;
@@ -1363,6 +1451,7 @@ API_EXPORT VIRTUAL_OPENRESULT OpenVirtualDevice_Mac(
     CFStringRef nameRef2 = CFStringCreateWithCString(nullptr, name, kCFStringEncodingUTF8);
     if (!nameRef2)
     {
+        MIDIEndpointDispose(sourceRef);
         delete inputDeviceInfo;
         delete virtualDeviceInfo;
 
@@ -1370,11 +1459,12 @@ API_EXPORT VIRTUAL_OPENRESULT OpenVirtualDevice_Mac(
     }
     
     MIDIEndpointRef destinationRef;
-    status = MIDIDestinationCreate(sessionHandle->clientRef, nameRef2, callback, inputDeviceInfo, &destinationRef);
+    status = MIDIDestinationCreate(sessionHandle->clientRef, nameRef2, callback, virtualDeviceInfo, &destinationRef);
     CFRelease(nameRef2);
     
     if (status != noErr)
     {
+        MIDIEndpointDispose(sourceRef);
         delete inputDeviceInfo;
         delete virtualDeviceInfo;
 
@@ -1408,6 +1498,8 @@ API_EXPORT VIRTUAL_CLOSERESULT CloseVirtualDevice(VirtualDeviceInfo* info, int* 
     {
         *errorCode = status;
 
+        delete info;
+
         switch (status)
         {
             case kMIDIUnknownEndpoint: return VIRTUAL_CLOSERESULT_DISPOSESOURCE_UNKNOWNENDPOINT;
@@ -1422,6 +1514,8 @@ API_EXPORT VIRTUAL_CLOSERESULT CloseVirtualDevice(VirtualDeviceInfo* info, int* 
     {
         *errorCode = status;
 
+        delete info;
+
         switch (status)
         {
             case kMIDIUnknownEndpoint: return VIRTUAL_CLOSERESULT_DISPOSEDESTINATION_UNKNOWNENDPOINT;
@@ -1431,9 +1525,6 @@ API_EXPORT VIRTUAL_CLOSERESULT CloseVirtualDevice(VirtualDeviceInfo* info, int* 
         return VIRTUAL_CLOSERESULT_DISPOSEDESTINATION_UNKNOWNERROR;
     }
     
-    // TODO: check
-    // delete info->inputDeviceInfo;
-    // delete info->outputDeviceInfo;
     delete info;
     
     return VIRTUAL_CLOSERESULT_OK;
@@ -1443,9 +1534,11 @@ API_EXPORT VIRTUAL_SENDBACKRESULT SendDataBackFromVirtualDevice(const MIDIPacket
 {
     *errorCode = 0;
 
-    InputEndpointInfo* inputDeviceInfo = static_cast<InputEndpointInfo*>(readProcRefCon);
+    VirtualDeviceInfo* virtualDeviceInfo = static_cast<VirtualDeviceInfo*>(readProcRefCon);
+    if (virtualDeviceInfo->isMuted)
+        return VIRTUAL_SENDBACKRESULT_OK;
     
-    OSStatus status = MIDIReceived(inputDeviceInfo->endpointRef, pktlist);
+    OSStatus status = MIDIReceived(virtualDeviceInfo->inputDeviceInfo->endpointRef, pktlist);
     if (status != noErr)
     {
         *errorCode = status;
@@ -1480,7 +1573,7 @@ API_EXPORT VIRTUAL_MUTERESULT MuteVirtualDevice(
     VirtualDeviceInfo* info,
     Configuration* configuration)
 {
-    // TODO
+    info->isMuted = true;
 
     return VIRTUAL_MUTERESULT_OK;
 }
@@ -1489,7 +1582,7 @@ API_EXPORT VIRTUAL_UNMUTERESULT UnmuteVirtualDevice(
     VirtualDeviceInfo* info,
     Configuration* configuration)
 {
-    // TODO
+    info->isMuted = false;
 
     return VIRTUAL_UNMUTERESULT_OK;
 }

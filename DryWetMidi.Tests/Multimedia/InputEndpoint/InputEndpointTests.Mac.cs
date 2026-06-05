@@ -2,6 +2,7 @@
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Multimedia;
 using Melanchall.DryWetMidi.Tests.Attributes;
+using Melanchall.DryWetMidi.Tests.Utilities;
 using NUnit.Framework;
 using NUnit.Framework.Legacy;
 using System;
@@ -295,7 +296,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var indices = new[] { 0 };
 
             using (var dataSender = new DataSender(deviceName))
-            using (var inputEndpoint = InputEndpoint.GetByName(deviceName))
+            using (var inputEndpoint = DevicesUtilities.GetInputEndpoint(deviceName))
             {
                 Exception exception = null;
 
@@ -336,7 +337,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [MacOnly]
         public void GetInputEndpointProperty_Product_Mac()
         {
-            var inputEndpoint = InputEndpoint.GetByName(MidiEndpoints.A);
+            var inputEndpoint = DevicesUtilities.GetInputEndpoint(MidiEndpoints.A);
             ClassicAssert.AreEqual("InputProduct", inputEndpoint.GetProperty(InputEndpointProperty.Product), "Product is invalid.");
         }
 
@@ -344,7 +345,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [MacOnly]
         public void GetInputEndpointProperty_Manufacturer_Mac()
         {
-            var inputEndpoint = InputEndpoint.GetByName(MidiEndpoints.A);
+            var inputEndpoint = DevicesUtilities.GetInputEndpoint(MidiEndpoints.A);
             ClassicAssert.AreEqual("InputManufacturer", inputEndpoint.GetProperty(InputEndpointProperty.Manufacturer), "Manufacturer is invalid.");
         }
 
@@ -352,7 +353,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [MacOnly]
         public void GetInputEndpointProperty_DriverVersion_Mac()
         {
-            var inputEndpoint = InputEndpoint.GetByName(MidiEndpoints.A);
+            var inputEndpoint = DevicesUtilities.GetInputEndpoint(MidiEndpoints.A);
             ClassicAssert.AreEqual(100, inputEndpoint.GetProperty(InputEndpointProperty.DriverVersion), "Driver version is invalid.");
         }
 
@@ -360,7 +361,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [MacOnly]
         public void GetInputEndpointProperty_UniqueId_Mac()
         {
-            var inputEndpoint = InputEndpoint.GetByName(MidiEndpoints.A);
+            var inputEndpoint = DevicesUtilities.GetInputEndpoint(MidiEndpoints.A);
             ClassicAssert.IsNotNull(inputEndpoint.GetProperty(InputEndpointProperty.UniqueId), "Endpoint unique ID is null.");
         }
 
@@ -368,7 +369,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [MacOnly]
         public void GetInputEndpointProperty_DriverOwner_Mac()
         {
-            var inputEndpoint = InputEndpoint.GetByName(MidiEndpoints.A);
+            var inputEndpoint = DevicesUtilities.GetInputEndpoint(MidiEndpoints.A);
             ClassicAssert.AreEqual("InputDriverOwner", inputEndpoint.GetProperty(InputEndpointProperty.DriverOwner), "Driver owner is invalid.");
         }
 

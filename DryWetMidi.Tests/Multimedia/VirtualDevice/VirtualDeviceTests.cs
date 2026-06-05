@@ -282,8 +282,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         public void CheckVirtualDeviceEndpointsEquality_SameEndpoints()
         {
             using (var virtualDevice = GetVirtualDevice())
-            using (var inputEndpoint = InputEndpoint.GetByName(virtualDevice.Name))
-            using (var outputEndpoint = OutputEndpoint.GetByName(virtualDevice.Name))
+            using (var inputEndpoint = DevicesUtilities.GetInputEndpoint(virtualDevice.Name))
+            using (var outputEndpoint = DevicesUtilities.GetOutputEndpoint(virtualDevice.Name))
             {
                 ClassicAssert.AreEqual(virtualDevice.InputEndpoint, inputEndpoint, "Input endpoint is not equal to virtual input endpoint.");
                 ClassicAssert.AreEqual(virtualDevice.OutputEndpoint, outputEndpoint, "Output endpoint is not equal to virtual output endpoint.");
@@ -294,8 +294,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         public void CheckVirtualDeviceEndpointsEquality_DifferentEndpoints()
         {
             using (var virtualDevice = GetVirtualDevice())
-            using (var inputEndpoint = InputEndpoint.GetByName(MidiEndpoints.A))
-            using (var outputEndpoint = OutputEndpoint.GetByName(MidiEndpoints.B))
+            using (var inputEndpoint = DevicesUtilities.GetInputEndpoint(MidiEndpoints.A))
+            using (var outputEndpoint = DevicesUtilities.GetOutputEndpoint(MidiEndpoints.B))
             {
                 ClassicAssert.AreNotEqual(virtualDevice.InputEndpoint, inputEndpoint, "Input endpoint is equal to virtual input endpoint.");
                 ClassicAssert.AreNotEqual(virtualDevice.OutputEndpoint, outputEndpoint, "Output endpoint is equal to virtual output endpoint.");
@@ -411,7 +411,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         {
             var previousNames = Enumerable
                 .Range(0, previousCount)
-                .Select(i => Guid.NewGuid().ToString())
+                .Select(i => DevicesUtilities.GetVirtualDeviceName())
                 .ToArray();
 
             var virtualDevices = new VirtualDevice[previousCount];
@@ -423,7 +423,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
             Thread.Sleep(2000);
 
-            const string lastVirtualDeviceName = "Last virtual device";
+            var lastVirtualDeviceName = DevicesUtilities.GetVirtualDeviceName();
 
             using (var lastVirtualDevice = VirtualDevice.Create(lastVirtualDeviceName))
             {
@@ -453,7 +453,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
         private VirtualDevice GetVirtualDevice(string name = null)
         {
-            var deviceName = name ?? Guid.NewGuid().ToString().Replace("-", string.Empty).Substring(0, 10);
+            var deviceName = name ?? DevicesUtilities.GetVirtualDeviceName();
             return VirtualDevice.Create(deviceName);
         }
 

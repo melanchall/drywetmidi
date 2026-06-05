@@ -546,21 +546,23 @@ namespace Melanchall.DryWetMidi.Multimedia
         private void OnSysExEventSent(IntPtr sysExHeaderPointer)
         {
             byte[] data = null;
+            IntPtr dataPointer = IntPtr.Zero;
 
             try
             {
-                var result = OutputEndpointApi.Api_GetSysExBufferData(Handle.DangerousGetHandle(), sysExHeaderPointer, out var dataPointer, out var size, out var errorCode);
+                var result = OutputEndpointApi.Api_GetSysExBufferData(Handle.DangerousGetHandle(), sysExHeaderPointer, out dataPointer, out var size, out var errorCode);
                 NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
-
-                data = new byte[size - 1];
-                Marshal.Copy(IntPtr.Add(dataPointer, 1), data, 0, data.Length);
-                Marshal.FreeHGlobal(dataPointer);
             }
             catch (Exception ex)
             {
                 var exception = new NativeApiException("Failed to parse sent system exclusive event.", ex);
                 exception.Data.Add("Data", data);
                 OnError(exception);
+            }
+            finally
+            {
+                if (dataPointer != IntPtr.Zero)
+                    Marshal.FreeHGlobal(dataPointer);
             }
         }
 

@@ -61,8 +61,6 @@ namespace Melanchall.DryWetMidi.Multimedia
             manufacturer = null;
             model = null;
 
-            var result = DEVCOMMON_GETPARENTDEVICEINFORESULT.DEVCOMMON_GETPARENTDEVICEINFORESULT_OK;
-
             var apiType = CommonApi.Api_GetApiType();
             Func<IntPtr, MidiConfigurationHandle, (DEVCOMMON_GETPARENTDEVICEINFORESULT, string, IntPtr, IntPtr, IntPtr, int)> getInfo = apiType switch
             {
@@ -72,15 +70,19 @@ namespace Melanchall.DryWetMidi.Multimedia
             };
 
             var (getInfoResult, idValue, namePointer, manufacturerPointer, modelPointer, errorCode) = getInfo(info, configuration);
+            if (getInfoResult != DEVCOMMON_GETPARENTDEVICEINFORESULT.DEVCOMMON_GETPARENTDEVICEINFORESULT_OK &&
+                getInfoResult != DEVCOMMON_GETPARENTDEVICEINFORESULT.DEVCOMMON_GETPARENTDEVICEINFORESULT_NOINFO)
+                NativeApiUtilities.HandleEndpointNativeApiResult(getInfoResult, errorCode);
 
-            NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
+            if (getInfoResult != DEVCOMMON_GETPARENTDEVICEINFORESULT.DEVCOMMON_GETPARENTDEVICEINFORESULT_OK)
+                return false;
 
             id = idValue;
             name = NativeApi.GetStringFromPointer(namePointer);
             manufacturer = NativeApi.GetStringFromPointer(manufacturerPointer);
             model = NativeApi.GetStringFromPointer(modelPointer);
 
-            return result == DEVCOMMON_GETPARENTDEVICEINFORESULT.DEVCOMMON_GETPARENTDEVICEINFORESULT_OK;
+            return true;
         }
 
         private static (DEVCOMMON_GETPARENTDEVICEINFORESULT, string, IntPtr, IntPtr, IntPtr, int) GetParentDeviceInfo_Win(IntPtr info, MidiConfigurationHandle configuration)

@@ -12,7 +12,7 @@ using Melanchall.DryWetMidi.Tests.Attributes;
 namespace Melanchall.DryWetMidi.Tests.Multimedia
 {
     [TestFixture]
-    public sealed class MidiEndpointsConnectorTests
+    public sealed class EndpointsConnectorTests
     {
         #region Constants
 
