@@ -76,9 +76,15 @@ namespace Melanchall.DryWetMidi.Multimedia
             NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
 
             id = idValue;
+
             name = NativeApi.GetStringFromPointer(namePointer);
+            NativeApi.FreeStringPointer(namePointer);
+
             manufacturer = NativeApi.GetStringFromPointer(manufacturerPointer);
+            NativeApi.FreeStringPointer(manufacturerPointer);
+
             model = NativeApi.GetStringFromPointer(modelPointer);
+            NativeApi.FreeStringPointer(modelPointer);
 
             return result == DEVCOMMON_GETPARENTDEVICEINFORESULT.DEVCOMMON_GETPARENTDEVICEINFORESULT_OK;
         }
