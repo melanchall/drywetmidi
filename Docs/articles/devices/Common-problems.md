@@ -6,7 +6,7 @@ uid: a_devices_commonproblems
 
 ## `StartCoroutine` can only be called from the main thread in Unity
 
-Sometimes you want to start Unity coroutine in a handler of the [EventReceived](xref:Melanchall.DryWetMidi.Multimedia.IInputEndpoint.EventReceived) event of [InputEndpoint](xref:Melanchall.DryWetMidi.Multimedia.InputEndpoint). Your code can be executed on a separate thread in this case. It can happen because events are received by endpoint on a separate (system) thread.
+Sometimes you want to start Unity coroutine in a handler of the [`EventReceived`](xref:Melanchall.DryWetMidi.Multimedia.IInputEndpoint.EventReceived) event of [`InputEndpoint`](xref:Melanchall.DryWetMidi.Multimedia.InputEndpoint). Your code can be executed on a separate thread in this case. It can happen because events are received by endpoint on a separate (system) thread.
 
 But UI related things like call of `StartCoroutine` can be executed on UI thread only. You can use the solution from here: https://stackoverflow.com/a/56715254.
 
@@ -14,7 +14,7 @@ Related question on StackOverflow: [Catching and processing multiple keyboard in
 
 ## `InputEndpoint` declared as a local variable
 
-If an instance of the [InputEndpoint](xref:Melanchall.DryWetMidi.Multimedia.InputEndpoint) is declared as a local variable and you’ve subscribed to its [EventReceived](xref:Melanchall.DryWetMidi.Multimedia.IInputEndpoint.EventReceived) event, the event handler won’t be called or you can get undefined behavior. For example, let’s look at this code:
+If an instance of the [`InputEndpoint`](xref:Melanchall.DryWetMidi.Multimedia.InputEndpoint) is declared as a local variable and you’ve subscribed to its [`EventReceived`](xref:Melanchall.DryWetMidi.Multimedia.IInputEndpoint.EventReceived) event, the event handler won’t be called or you can get undefined behavior. For example, let’s look at this code:
 
 ```csharp
 private void StartListening()
@@ -35,7 +35,7 @@ What happens when the `StartListening` method exits? Right, all local variables 
 * [InputEndpoint event listening crash](https://github.com/melanchall/drywetmidi/issues/262)
 * [Crash when running in Unity on M2 MacBook](https://github.com/melanchall/drywetmidi/issues/267)
 
-Input endpoint **must** be stored in a class field:
+Input endpoint **must always** be stored in a class field:
 
 ```csharp
 private InputEndpoint _inputEndpoint;
@@ -48,4 +48,20 @@ private void StartListening()
 }
 ```
 
-And don't forget to dispose of the endpoint when you're done with it. Please read the [Input endpoint](xref:a_dev_input) article to learn more.
+And don't forget to dispose the endpoint when you're done with it. Please read the [Input endpoint](xref:a_dev_input) article to learn more.
+
+## `OutputEndpoint` declared as a local variable
+
+The same story is with the [`OutputEndpoint`](xref:Melanchall.DryWetMidi.Multimedia.OutputEndpoint) class. If you declare an instance of `OutputEndpoint` as a local variable, you can get undefined behavior when trying to send MIDI events to it. For example:
+
+```csharp
+private void SendEvent()
+{
+    var outputEndpoint = OutputEndpoint.GetByName("My Device");
+    outputEndpoint.SendEvent(new NoteOnEvent((SevenBitNumber)70, (SevenBitNumber)60));
+}
+```
+
+`SendEvent` sends MIDI event to a device driver where it will be processed. If `outputEndpoint` collected by GC during sending an event to the driver, undefined behavior possible including app crash.
+
+As with input endpoint, output endpoint **must always** be stored in a class field. Don't forget to dispose the endpoint when you're done with it. Please read the [Output endpoint](xref:a_dev_output) article to learn more.

@@ -3,7 +3,7 @@
 namespace Melanchall.DryWetMidi.Multimedia
 {
     /// <summary>
-    /// Optional functionality supported by an output device on Windows (see <c>dwSupport</c> field
+    /// Optional functionality supported by an output endpoint on Windows (see <c>dwSupport</c> field
     /// description in <see href="https://docs.microsoft.com/en-us/windows/win32/api/mmeapi/ns-mmeapi-midioutcaps">
     /// MIDIOUTCAPS</see>).
     /// </summary>

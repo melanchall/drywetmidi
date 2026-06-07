@@ -25,7 +25,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// </summary>
         /// <param name="events">MIDI events to play.</param>
         /// <param name="tempoMap">Tempo map used to calculate events times.</param>
-        /// <param name="outputEndpoint">Output MIDI device to play events through.</param>
+        /// <param name="outputEndpoint">Output MIDI endpoint to play events through.</param>
         /// <param name="playbackSettings">Settings according to which a playback should be created.</param>
         /// <returns>An instance of the <see cref="Playback"/> for playing <paramref name="events"/>.</returns>
         /// <exception cref="ArgumentNullException">
@@ -94,7 +94,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// </summary>
         /// <param name="trackChunk"><see cref="TrackChunk"/> containing events to play.</param>
         /// <param name="tempoMap">Tempo map used to calculate events times.</param>
-        /// <param name="outputEndpoint">Output MIDI device to play events through.</param>
+        /// <param name="outputEndpoint">Output MIDI endpoint to play events through.</param>
         /// <param name="playbackSettings">Settings according to which a playback should be created.</param>
         /// <returns>An instance of the <see cref="Playback"/> for playing MIDI events contained in
         /// the <paramref name="trackChunk"/>.</returns>
@@ -167,7 +167,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// </summary>
         /// <param name="trackChunks">Collection of <see cref="TrackChunk"/> containing events to play.</param>
         /// <param name="tempoMap">Tempo map used to calculate events times.</param>
-        /// <param name="outputEndpoint">Output MIDI device to play events through.</param>
+        /// <param name="outputEndpoint">Output MIDI endpoint to play events through.</param>
         /// <param name="playbackSettings">Settings according to which a playback should be created.</param>
         /// <returns>An instance of the <see cref="Playback"/> for playing MIDI events contained in
         /// the <paramref name="trackChunks"/>.</returns>
@@ -244,7 +244,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// the specified <see cref="MidiFile"/>.
         /// </summary>
         /// <param name="midiFile"><see cref="MidiFile"/> containing events to play.</param>
-        /// <param name="outputEndpoint">Output MIDI device to play events through.</param>
+        /// <param name="outputEndpoint">Output MIDI endpoint to play events through.</param>
         /// <param name="playbackSettings">Settings according to which a playback should be created.</param>
         /// <returns>An instance of the <see cref="Playback"/> for playing MIDI events contained in
         /// the <paramref name="midiFile"/>.</returns>
@@ -290,7 +290,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <param name="pattern"><see cref="Pattern"/> producing events to play.</param>
         /// <param name="tempoMap">Tempo map used to calculate events times.</param>
         /// <param name="channel">MIDI channel to play channel events on.</param>
-        /// <param name="outputEndpoint">Output MIDI device to play events through.</param>
+        /// <param name="outputEndpoint">Output MIDI endpoint to play events through.</param>
         /// <param name="playbackSettings">Settings according to which a playback should be created.</param>
         /// <returns>An instance of the <see cref="Playback"/> for playing MIDI events that will be
         /// produced by the <paramref name="pattern"/>.</returns>
@@ -353,7 +353,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <typeparam name="TObject">The type of objects to play.</typeparam>
         /// <param name="objects">Objects to play.</param>
         /// <param name="tempoMap">Tempo map used to calculate events times.</param>
-        /// <param name="outputEndpoint">Output MIDI device to play <paramref name="objects"/> through.</param>
+        /// <param name="outputEndpoint">Output MIDI endpoint to play <paramref name="objects"/> through.</param>
         /// <param name="programNumber">Program that should be used to play <paramref name="objects"/>.</param>
         /// <param name="playbackSettings">Settings according to which a playback should be created.</param>
         /// <returns>An instance of the <see cref="Playback"/> for playing <paramref name="objects"/>.</returns>
@@ -393,7 +393,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <typeparam name="TObject">The type of objects to play.</typeparam>
         /// <param name="objects">Objects to play.</param>
         /// <param name="tempoMap">Tempo map used to calculate events times.</param>
-        /// <param name="outputEndpoint">Output MIDI device to play <paramref name="objects"/> through.</param>
+        /// <param name="outputEndpoint">Output MIDI endpoint to play <paramref name="objects"/> through.</param>
         /// <param name="generalMidiProgram">Program that should be used to play <paramref name="objects"/>.</param>
         /// <param name="playbackSettings">Settings according to which a playback should be created.</param>
         /// <returns>An instance of the <see cref="Playback"/> for playing <paramref name="objects"/>.</returns>
@@ -435,7 +435,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <typeparam name="TObject">The type of objects to play.</typeparam>
         /// <param name="objects">Objects to play.</param>
         /// <param name="tempoMap">Tempo map used to calculate events times.</param>
-        /// <param name="outputEndpoint">Output MIDI device to play <paramref name="objects"/> through.</param>
+        /// <param name="outputEndpoint">Output MIDI endpoint to play <paramref name="objects"/> through.</param>
         /// <param name="generalMidi2Program">Program that should be used to play <paramref name="objects"/>.</param>
         /// <param name="playbackSettings">Settings according to which a playback should be created.</param>
         /// <returns>An instance of the <see cref="Playback"/> for playing <paramref name="objects"/>.</returns>

@@ -135,7 +135,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
             var sentEvents = new List<TimestampedEvent>();
 
-            using (var outputEndpoint = TestDeviceManager.GetOutputEndpoint(SendReceiveUtilities.DeviceToTestOnName))
+            using (var outputEndpoint = TestDeviceManager.GetOutputEndpoint(SendReceiveUtilities.EndpointToTestOnName))
             {
                 outputEndpoint.EventSent += (_, e) => sentEvents.Add(new TimestampedEvent(e.Event, stopwatch.Elapsed));
 

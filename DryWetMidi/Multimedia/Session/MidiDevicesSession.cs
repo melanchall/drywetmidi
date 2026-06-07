@@ -92,7 +92,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             if (handler != null)
                 handler.Invoke(null, info);
             else
-                InputEndpointApi.Api_DeleteDeviceInfo(info);
+                InputEndpointApi.Api_DeleteEndpointInfo(info);
         }
 
         private static void OutputEndpointCallback(IntPtr info, MidiDevicesSessionApi.SESSION_CALLBACKOPERATION operation)
@@ -104,7 +104,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             if (handler != null)
                 handler.Invoke(null, info);
             else
-                OutputEndpointApi.Api_DeleteDeviceInfo(info);
+                OutputEndpointApi.Api_DeleteEndpointInfo(info);
         }
 
         #endregion

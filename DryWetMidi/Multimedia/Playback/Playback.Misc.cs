@@ -12,7 +12,7 @@ using NotePlaybackEventMetadataCollection = Melanchall.DryWetMidi.Common.Interva
 namespace Melanchall.DryWetMidi.Multimedia
 {
     /// <summary>
-    /// Provides a way to play MIDI data through the specified output MIDI device. More info in the
+    /// Provides a way to play MIDI data through the specified output MIDI endpoint. More info in the
     /// <see href="xref:a_playback_overview">Playback</see> article.
     /// </summary>
     /// <remarks>
@@ -147,11 +147,11 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Playback"/> with the specified
-        /// collection of timed objects, tempo map and output MIDI device to play events through.
+        /// collection of timed objects, tempo map and output MIDI endpoint to play events through.
         /// </summary>
         /// <param name="timedObjects">Collection of timed objects to play.</param>
         /// <param name="tempoMap">Tempo map used to calculate events times.</param>
-        /// <param name="outputEndpoint">Output MIDI device to play <paramref name="timedObjects"/> through.</param>
+        /// <param name="outputEndpoint">Output MIDI endpoint to play <paramref name="timedObjects"/> through.</param>
         /// <param name="playbackSettings">Settings according to which a playback should be created.</param>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occurred:</para>
@@ -199,7 +199,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         public TempoMap TempoMap { get; }
 
         /// <summary>
-        /// Gets or sets the output MIDI device to play MIDI data through.
+        /// Gets or sets the output MIDI endpoint to play MIDI data through.
         /// </summary>
         public IOutputEndpoint OutputEndpoint { get; set; }
 
@@ -470,7 +470,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// Starts playing of the MIDI data. This method is non-blocking.
         /// </summary>
         /// <exception cref="ObjectDisposedException">The current <see cref="Playback"/> is disposed.</exception>
-        /// <exception cref="NativeApiException">An error occurred on MIDI device endpoint.</exception>
+        /// <exception cref="NativeApiException">An error occurred on MIDI output endpoint.</exception>
         public void Start()
         {
             EnsureIsNotDisposed();
@@ -502,7 +502,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// call <see cref="Start"/>, playing will be resumed from the point where <see cref="Stop"/> was called.
         /// </summary>
         /// <exception cref="ObjectDisposedException">The current <see cref="Playback"/> is disposed.</exception>
-        /// <exception cref="NativeApiException">An error occurred on MIDI device endpoint.</exception>
+        /// <exception cref="NativeApiException">An error occurred on MIDI output endpoint.</exception>
         public void Stop()
         {
             EnsureIsNotDisposed();
@@ -529,7 +529,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// otherwise, <c>false</c>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="snapPoint"/> is <c>null</c>.</exception>
         /// <exception cref="ObjectDisposedException">The current <see cref="Playback"/> is disposed.</exception>
-        /// <exception cref="NativeApiException">An error occurred on MIDI device endpoint.</exception>
+        /// <exception cref="NativeApiException">An error occurred on MIDI output endpoint.</exception>
         public bool MoveToSnapPoint(SnapPoint snapPoint)
         {
             ThrowIfArgument.IsNull(nameof(snapPoint), snapPoint);
@@ -549,7 +549,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <returns><c>true</c> if playback position successfully changed to the time of first snap point;
         /// otherwise, <c>false</c>.</returns>
         /// <exception cref="ObjectDisposedException">The current <see cref="Playback"/> is disposed.</exception>
-        /// <exception cref="NativeApiException">An error occurred on MIDI device endpoint.</exception>
+        /// <exception cref="NativeApiException">An error occurred on MIDI output endpoint.</exception>
         public bool MoveToFirstSnapPoint()
         {
             EnsureIsNotDisposed();
@@ -567,7 +567,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <returns><c>true</c> if playback position successfully changed to the time of first snap point
         /// with the specified data; otherwise, <c>false</c>.</returns>
         /// <exception cref="ObjectDisposedException">The current <see cref="Playback"/> is disposed.</exception>
-        /// <exception cref="NativeApiException">An error occurred on MIDI device endpoint.</exception>
+        /// <exception cref="NativeApiException">An error occurred on MIDI output endpoint.</exception>
         public bool MoveToFirstSnapPoint<TData>(TData data)
         {
             EnsureIsNotDisposed();
@@ -588,7 +588,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// within <paramref name="snapPointsGroup"/>; otherwise, <c>false</c>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="snapPointsGroup"/> is <c>null</c>.</exception>
         /// <exception cref="ObjectDisposedException">The current <see cref="Playback"/> is disposed.</exception>
-        /// <exception cref="NativeApiException">An error occurred on MIDI device endpoint.</exception>
+        /// <exception cref="NativeApiException">An error occurred on MIDI output endpoint.</exception>
         public bool MoveToPreviousSnapPoint(SnapPointsGroup snapPointsGroup)
         {
             ThrowIfArgument.IsNull(nameof(snapPointsGroup), snapPointsGroup);
@@ -607,7 +607,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <returns><c>true</c> if playback position successfully changed to the time of a previous snap point;
         /// otherwise, <c>false</c>.</returns>
         /// <exception cref="ObjectDisposedException">The current <see cref="Playback"/> is disposed.</exception>
-        /// <exception cref="NativeApiException">An error occurred on MIDI device endpoint.</exception>
+        /// <exception cref="NativeApiException">An error occurred on MIDI output endpoint.</exception>
         public bool MoveToPreviousSnapPoint()
         {
             EnsureIsNotDisposed();
@@ -626,7 +626,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <returns><c>true</c> if playback position successfully changed to the time of a previous snap point
         /// with the specified data; otherwise, <c>false</c>.</returns>
         /// <exception cref="ObjectDisposedException">The current <see cref="Playback"/> is disposed.</exception>
-        /// <exception cref="NativeApiException">An error occurred on MIDI device endpoint.</exception>
+        /// <exception cref="NativeApiException">An error occurred on MIDI output endpoint.</exception>
         public bool MoveToPreviousSnapPoint<TData>(TData data)
         {
             EnsureIsNotDisposed();
@@ -647,7 +647,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// within <paramref name="snapPointsGroup"/>; otherwise, <c>false</c>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="snapPointsGroup"/> is <c>null</c>.</exception>
         /// <exception cref="ObjectDisposedException">The current <see cref="Playback"/> is disposed.</exception>
-        /// <exception cref="NativeApiException">An error occurred on MIDI device endpoint.</exception>
+        /// <exception cref="NativeApiException">An error occurred on MIDI output endpoint.</exception>
         public bool MoveToNextSnapPoint(SnapPointsGroup snapPointsGroup)
         {
             ThrowIfArgument.IsNull(nameof(snapPointsGroup), snapPointsGroup);
@@ -666,7 +666,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <returns><c>true</c> if playback position successfully changed to the time of a next snap point;
         /// otherwise, <c>false</c>.</returns>
         /// <exception cref="ObjectDisposedException">The current <see cref="Playback"/> is disposed.</exception>
-        /// <exception cref="NativeApiException">An error occurred on MIDI device endpoint.</exception>
+        /// <exception cref="NativeApiException">An error occurred on MIDI output endpoint.</exception>
         public bool MoveToNextSnapPoint()
         {
             EnsureIsNotDisposed();
@@ -684,7 +684,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <returns><c>true</c> if playback position successfully changed to the time of a next snap point
         /// with the specified data; otherwise, <c>false</c>.</returns>
         /// <exception cref="ObjectDisposedException">The current <see cref="Playback"/> is disposed.</exception>
-        /// <exception cref="NativeApiException">An error occurred on MIDI device endpoint.</exception>
+        /// <exception cref="NativeApiException">An error occurred on MIDI output endpoint.</exception>
         public bool MoveToNextSnapPoint<TData>(TData data)
         {
             EnsureIsNotDisposed();
@@ -699,7 +699,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// Sets playback position to the beginning of the MIDI data.
         /// </summary>
         /// <exception cref="ObjectDisposedException">The current <see cref="Playback"/> is disposed.</exception>
-        /// <exception cref="NativeApiException">An error occurred on MIDI device endpoint.</exception>
+        /// <exception cref="NativeApiException">An error occurred on MIDI output endpoint.</exception>
         public void MoveToStart()
         {
             EnsureIsNotDisposed();
@@ -717,7 +717,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <param name="time">Time from the beginning of the MIDI data to set playback position to.</param>
         /// <exception cref="ArgumentNullException"><paramref name="time"/> is <c>null</c>.</exception>
         /// <exception cref="ObjectDisposedException">The current <see cref="Playback"/> is disposed.</exception>
-        /// <exception cref="NativeApiException">An error occurred on MIDI device endpoint.</exception>
+        /// <exception cref="NativeApiException">An error occurred on MIDI output endpoint.</exception>
         public void MoveToTime(ITimeSpan time)
         {
             TraceAction("move to time...");
@@ -733,7 +733,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <param name="step">Amount of time to shift playback position by.</param>
         /// <exception cref="ArgumentNullException"><paramref name="step"/> is <c>null</c>.</exception>
         /// <exception cref="ObjectDisposedException">The current <see cref="Playback"/> is disposed.</exception>
-        /// <exception cref="NativeApiException">An error occurred on MIDI device endpoint.</exception>
+        /// <exception cref="NativeApiException">An error occurred on MIDI output endpoint.</exception>
         public void MoveForward(ITimeSpan step)
         {
             ThrowIfArgument.IsNull(nameof(step), step);
@@ -753,7 +753,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <param name="step">Amount of time to shift playback position by.</param>
         /// <exception cref="ArgumentNullException"><paramref name="step"/> is <c>null</c>.</exception>
         /// <exception cref="ObjectDisposedException">The current <see cref="Playback"/> is disposed.</exception>
-        /// <exception cref="NativeApiException">An error occurred on MIDI device endpoint.</exception>
+        /// <exception cref="NativeApiException">An error occurred on MIDI output endpoint.</exception>
         public void MoveBack(ITimeSpan step)
         {
             ThrowIfArgument.IsNull(nameof(step), step);
@@ -777,7 +777,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         }
 
         /// <summary>
-        /// Tries to play the specified MIDI event. By default just sends the event to output device
+        /// Tries to play the specified MIDI event. By default it just sends the event to MIDI output endpoint
         /// returning <c>true</c>.
         /// </summary>
         /// <remarks>

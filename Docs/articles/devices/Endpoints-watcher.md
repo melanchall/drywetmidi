@@ -5,11 +5,13 @@ uid: a_dev_watcher
 # Endpoints watcher
 
 > [!WARNING]
-> Endpoints watching API is a platform-specific one so please refer to the [Supported OS](xref:a_develop_supported_os) article to learn more.
+> <os-specific-api Endpoints watching API/>
+> 
+> <advanced-windows-api/>
 
-DryWetMIDI allows to track whether a MIDI endpoint is added to or removed from the system. There is the [EndpointsWatcher](xref:Melanchall.DryWetMidi.Multimedia.EndpointsWatcher) class for that purpose. The class is singleton and you can get the instance with [Instance](xref:Melanchall.DryWetMidi.Multimedia.EndpointsWatcher.Instance) property.
+DryWetMIDI allows to track whether a MIDI endpoint is added to or removed from the system. There is the [`EndpointsWatcher`](xref:Melanchall.DryWetMidi.Multimedia.EndpointsWatcher) class for that purpose. The class is singleton and you can get the instance with [`Instance`](xref:Melanchall.DryWetMidi.Multimedia.EndpointsWatcher.Instance) property.
 
-`EndpointsWatcher` provides two events: [EndpointAdded](xref:Melanchall.DryWetMidi.Multimedia.EndpointsWatcher.EndpointAdded) and [EndpointRemoved](xref:Melanchall.DryWetMidi.Multimedia.EndpointsWatcher.EndpointRemoved). First one will be fired when a MIDI endpoint is added to the system, and second one – when a MIDI endpoint is removed from it. You can then cast a device instance from the event's arguments to [InputEndpoint](xref:Melanchall.DryWetMidi.Multimedia.InputEndpoint) or [OutputEndpoint](xref:Melanchall.DryWetMidi.Multimedia.OutputEndpoint). See following sample program:
+`EndpointsWatcher` provides two events: [`EndpointAdded`](xref:Melanchall.DryWetMidi.Multimedia.EndpointsWatcher.EndpointAdded) and [`EndpointRemoved`](xref:Melanchall.DryWetMidi.Multimedia.EndpointsWatcher.EndpointRemoved). First one will be fired when a MIDI endpoint is added to the system, and second one – when a MIDI endpoint is removed from it. You can then cast a device instance from the event's arguments to [`InputEndpoint`](xref:Melanchall.DryWetMidi.Multimedia.InputEndpoint) or [`OutputEndpoint`](xref:Melanchall.DryWetMidi.Multimedia.OutputEndpoint). See following sample program:
 
 ```csharp
 using System;
@@ -38,12 +40,12 @@ namespace DwmExamples
 
         private static void OnEndpointRemoved(object sender, EndpointAddedRemovedEventArgs e)
         {
-            Console.WriteLine($"Endpoint removed: {e.Endpoint.GetType()}");
+            Console.WriteLine($"Endpoint removed: {e.Endpoint.GetType().Name}");
         }
 
         private static void OnEndpointAdded(object sender, EndpointAddedRemovedEventArgs e)
         {
-            Console.WriteLine($"Endpoint added: {e.Endpoint.GetType()} ({e.Endpoint.Name})");
+            Console.WriteLine($"Endpoint added: {e.Endpoint.GetType().Name} ({e.Endpoint.Name})");
         }
     }
 }
@@ -53,14 +55,14 @@ Running the program we'll see following output:
 
 ```text
 Adding device...
-Endpoint added: Melanchall.DryWetMidi.Multimedia.InputEndpoint (MyDevice)
-Endpoint added: Melanchall.DryWetMidi.Multimedia.OutputEndpoint (MyDevice)
+Endpoint added: InputEndpoint (MyDevice)
+Endpoint added: OutputEndpoint (MyDevice)
 Removing device...
-Endpoint removed: Melanchall.DryWetMidi.Multimedia.InputEndpoint
-Endpoint removed: Melanchall.DryWetMidi.Multimedia.OutputEndpoint
+Endpoint removed: InputEndpoint
+Endpoint removed: OutputEndpoint
 ```
 
-When an endpoint is added you can immediately interact with it using an instance from the `EndpointAdded` event's arguments. But an instance from the `EndpointRemoved` event's arguments is non-interactable, because the endpoint is removed and doesn't exist in the system anymore. Any attempt to call methods or properties on that instance will throw an exception:
+When an endpoint is added you can immediately interact with it using an instance from the `EndpointAdded` event's arguments. But an instance from the `EndpointRemoved` event's arguments is non-interactable, because the endpoint is removed and doesn't exist in the system anymore. Any attempt to use its properties on that instance will throw an exception:
 
 ```csharp
 using System;
@@ -101,7 +103,7 @@ Endpoint removed. Getting its name...
 Unhandled exception. System.InvalidOperationException: Operation can't be performed on removed endpoint.
 ```
 
-But you can compare endpoint instances via `Equals` to know whether two instances of `MidiEndpoint` are equal or not. Following example shows how you can get the name of a removed endpoint via info about endpoints stored at the start of the program:
+You can compare endpoint instances via `Equals` to know whether two instances of `MidiEndpoint` are equal or not. Following example shows how you can get the name of a removed endpoint via info about endpoints stored at the start of the program:
 
 ```csharp
 using System;

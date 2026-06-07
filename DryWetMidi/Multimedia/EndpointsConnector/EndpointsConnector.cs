@@ -5,9 +5,9 @@ using Melanchall.DryWetMidi.Common;
 namespace Melanchall.DryWetMidi.Multimedia
 {
     /// <summary>
-    /// Provides a way to connect an input MIDI device to an output MIDI devices to redirect all
-    /// incoming events from the input device to the output ones. More info in the
-    /// <see href="xref:a_dev_connector">Devices connector</see> article.
+    /// Provides a way to connect an input MIDI endpoint to output MIDI endpoints to redirect all
+    /// incoming events from the input endpoint to the output endpoints. More info in the
+    /// <see href="xref:a_dev_connector">Endpoints connector</see> article.
     /// </summary>
     public sealed class EndpointsConnector
     {
@@ -15,15 +15,15 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EndpointsConnector"/> with the specified
-        /// input and output MIDI devices.
+        /// input and output MIDI endpoints.
         /// </summary>
         /// <remarks>
         /// <paramref name="inputEndpoint"/> will not be actually connected to <paramref name="outputEndpoints"/> after
         /// an instance of <see cref="EndpointsConnector"/> is created. You must call <see cref="Connect"/> method
-        /// to establish connection between devices.
+        /// to establish connection between endpoints.
         /// </remarks>
-        /// <param name="inputEndpoint">Input MIDI device to connect to <paramref name="outputEndpoints"/>.</param>
-        /// <param name="outputEndpoints">Output MIDI devices to connect <paramref name="inputEndpoint"/> to.</param>
+        /// <param name="inputEndpoint">Input MIDI endpoint to connect to <paramref name="outputEndpoints"/>.</param>
+        /// <param name="outputEndpoints">Output MIDI endpoints to connect <paramref name="inputEndpoint"/> to.</param>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
@@ -51,12 +51,12 @@ namespace Melanchall.DryWetMidi.Multimedia
         #region Properties
 
         /// <summary>
-        /// Gets an input MIDI device to connect to <see cref="OutputEndpoints"/>.
+        /// Gets an input MIDI endpoint to connect to <see cref="OutputEndpoints"/>.
         /// </summary>
         public IInputEndpoint InputEndpoint { get; }
 
         /// <summary>
-        /// Gets output MIDI devices to connect <see cref="InputEndpoint"/> to.
+        /// Gets output MIDI endpoints to connect <see cref="InputEndpoint"/> to.
         /// </summary>
         public IReadOnlyCollection<IOutputEndpoint> OutputEndpoints { get; }
 
@@ -79,7 +79,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         /// <summary>
         /// Connects <see cref="InputEndpoint"/> to <see cref="OutputEndpoints"/> so all events coming from
-        /// the input device will be redirected to the output ones.
+        /// the input endpoint will be redirected to the output endpoints.
         /// </summary>
         public void Connect()
         {
@@ -92,7 +92,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         /// <summary>
         /// Disconnects <see cref="InputEndpoint"/> from <see cref="OutputEndpoints"/> so events coming from
-        /// the input device will not be redirected to the output ones.
+        /// the input endpoint will not be redirected to the output endpoints.
         /// </summary>
         public void Disconnect()
         {

@@ -76,11 +76,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [WinOnly]
         public void InputEndpointIsInUse()
         {
-            using (var inputEndpoint1 = DevicesUtilities.GetInputEndpoint(MidiEndpoints.A))
+            using (var inputEndpoint1 = InputEndpoint.GetByName(MidiEndpoints.A))
             {
                 inputEndpoint1.StartEventsListening();
 
-                using (var inputEndpoint2 = DevicesUtilities.GetInputEndpoint(MidiEndpoints.A))
+                using (var inputEndpoint2 = InputEndpoint.GetByName(MidiEndpoints.A))
                 {
                     ClassicAssert.Throws<NativeApiException>(() => inputEndpoint2.StartEventsListening());
                 }
@@ -106,7 +106,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [WinOnly]
         public void GetInputEndpointProperty_Product_Win()
         {
-            var inputEndpoint = DevicesUtilities.GetInputEndpoint(MidiEndpoints.A);
+            var inputEndpoint = InputEndpoint.GetByName(MidiEndpoints.A);
             ClassicAssert.IsNotNull(inputEndpoint.GetProperty(InputEndpointProperty.Product), "Product is null.");
         }
 
@@ -114,7 +114,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [WinOnly]
         public void GetInputEndpointProperty_Manufacturer_Win()
         {
-            var inputEndpoint = DevicesUtilities.GetInputEndpoint(MidiEndpoints.A);
+            var inputEndpoint = InputEndpoint.GetByName(MidiEndpoints.A);
             ClassicAssert.IsNotNull(inputEndpoint.GetProperty(InputEndpointProperty.Manufacturer), "Manufacturer is null.");
         }
 
@@ -122,7 +122,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [WinOnly]
         public void GetInputEndpointProperty_DriverVersion_Win()
         {
-            var inputEndpoint = DevicesUtilities.GetInputEndpoint(MidiEndpoints.A);
+            var inputEndpoint = InputEndpoint.GetByName(MidiEndpoints.A);
             ClassicAssert.IsNotNull(inputEndpoint.GetProperty(InputEndpointProperty.DriverVersion), "Driver version is invalid.");
         }
 
@@ -131,7 +131,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [WinOnly]
         public void GetInputEndpointProperty_UniqueId_Win()
         {
-            var inputEndpoint = DevicesUtilities.GetInputEndpoint(MidiEndpoints.A);
+            var inputEndpoint = InputEndpoint.GetByName(MidiEndpoints.A);
             ClassicAssert.Throws<ArgumentException>(() => inputEndpoint.GetProperty(InputEndpointProperty.UniqueId), "Device unique ID is supported.");
         }
 
@@ -139,7 +139,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [WinOnly]
         public void GetInputEndpointProperty_DriverOwner_Win()
         {
-            var inputEndpoint = DevicesUtilities.GetInputEndpoint(MidiEndpoints.A);
+            var inputEndpoint = InputEndpoint.GetByName(MidiEndpoints.A);
             ClassicAssert.Throws<ArgumentException>(() => inputEndpoint.GetProperty(InputEndpointProperty.DriverOwner), "Driver owner is supported.");
         }
 

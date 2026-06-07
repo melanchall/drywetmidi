@@ -70,7 +70,7 @@ namespace Melanchall.DryWetMidi.Common
         private static readonly Dictionary<NativeErrorType, string> ErrorsDescriptions = new Dictionary<NativeErrorType, string>
         {
             [NativeErrorType.NoMemory] = "There is no memory in the system to complete the operation",
-            [NativeErrorType.InUse] = "Device is already in use",
+            [NativeErrorType.InUse] = "Endpoint is already in use",
             [NativeErrorType.NotPermitted] = "The process doesn’t have privileges for the requested operation",
             [NativeErrorType.Busy] = "The hardware is busy with other data",
             [NativeErrorType.WmsError] = "Windows MIDI Services error"

@@ -8,6 +8,10 @@ namespace Melanchall.DryWetMidi.Multimedia
     /// Represents a virtual loopback MIDI device (MIDI cable). More info in the
     /// <see href="xref:a_dev_virtual">Virtual device</see> article.
     /// </summary>
+    /// <remarks>
+    /// <os-specific-api/>
+    /// <advanced-windows-api/>
+    /// </remarks>
     public sealed class VirtualDevice : IDisposable
     {
         #region Events

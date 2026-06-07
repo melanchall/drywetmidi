@@ -39,6 +39,8 @@ stages:
     - template: Templates/step-generate-doc-links.yaml
     
     - template: Templates/step-generate-obsolete-api-hints.yaml
+
+    - template: Templates/step-generate-platform-specific-api-descriptions.yaml
         
     - template: Templates/step-setup-nativeless-project.yaml
     

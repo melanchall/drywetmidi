@@ -2,6 +2,7 @@
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Multimedia;
 using Melanchall.DryWetMidi.Tests.Attributes;
+using Melanchall.DryWetMidi.Tests.Utilities;
 using NUnit.Framework;
 using NUnit.Framework.Legacy;
 using System;
@@ -23,12 +24,12 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         {
             Action<TestCheckpoints> check = checkpoints =>
             {
-                var addedDevices = new List<MidiEndpoint>();
-                var removedDevices = new List<MidiEndpoint>();
+                var addedEndpoints = new List<MidiEndpoint>();
+                var removedEndpoints = new List<MidiEndpoint>();
 
                 EventHandler<EndpointAddedRemovedEventArgs> addedHandler = (_, e) =>
                 {
-                    addedDevices.Add(e.Endpoint);
+                    addedEndpoints.Add(e.Endpoint);
 
 #if TEST
                     e.Endpoint.TestCheckpoints = checkpoints;
@@ -39,7 +40,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
                 EventHandler<EndpointAddedRemovedEventArgs> removedHandler = (_, e) =>
                 {
-                    removedDevices.Add(e.Endpoint);
+                    removedEndpoints.Add(e.Endpoint);
 
 #if TEST
                     e.Endpoint.TestCheckpoints = checkpoints;
@@ -53,51 +54,51 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
                 using (var virtualDevice = VirtualDevice.Create(deviceName))
                 {
-                    var added = WaitOperations.Wait(() => addedDevices.Count >= 2, timeout);
+                    var added = WaitOperations.Wait(() => addedEndpoints.Count >= 2, timeout);
                     ClassicAssert.IsTrue(added, $"Endpoints weren't added for [{timeout}].");
 
-                    ClassicAssert.AreEqual(2, addedDevices.Count, $"Invalid count of added endpoints ({string.Join(", ", addedDevices.Select(d => $"{d.Context}"))}).");
+                    ClassicAssert.AreEqual(2, addedEndpoints.Count, $"Invalid count of added endpoints ({string.Join(", ", addedEndpoints.Select(d => $"{d.Context}"))}).");
 
-                    var firstAddedDevice = addedDevices.First();
-                    ClassicAssert.IsInstanceOf<InputEndpoint>(firstAddedDevice, "Invalid type of the first added endpoint.");
-                    ClassicAssert.AreEqual(deviceName, firstAddedDevice.Name, "Invalid name of the first added endpoint.");
-                    ClassicAssert.AreEqual("Input endpoint (from 'Device added' notification)", firstAddedDevice.ToString(), "Added input endpoint string representation is invalid.");
+                    var firstAddedEndpoint = addedEndpoints.First();
+                    ClassicAssert.IsInstanceOf<InputEndpoint>(firstAddedEndpoint, "Invalid type of the first added endpoint.");
+                    ClassicAssert.AreEqual(deviceName, firstAddedEndpoint.Name, "Invalid name of the first added endpoint.");
+                    ClassicAssert.AreEqual("Input endpoint (from 'Endpoint added' notification)", firstAddedEndpoint.ToString(), "Added input endpoint string representation is invalid.");
 
-                    var lastAddedDevice = addedDevices.Last();
-                    ClassicAssert.IsInstanceOf<OutputEndpoint>(lastAddedDevice, "Invalid type of the last added endpoint.");
-                    ClassicAssert.AreEqual(deviceName, lastAddedDevice.Name, "Invalid name of the last added endpoint.");
-                    ClassicAssert.AreEqual("Output endpoint (from 'Device added' notification)", lastAddedDevice.ToString(), "Added output endpoint string representation is invalid.");
+                    var lastAddedEndpoint = addedEndpoints.Last();
+                    ClassicAssert.IsInstanceOf<OutputEndpoint>(lastAddedEndpoint, "Invalid type of the last added endpoint.");
+                    ClassicAssert.AreEqual(deviceName, lastAddedEndpoint.Name, "Invalid name of the last added endpoint.");
+                    ClassicAssert.AreEqual("Output endpoint (from 'Endpoint added' notification)", lastAddedEndpoint.ToString(), "Added output endpoint string representation is invalid.");
                 }
 
-                var removed = WaitOperations.Wait(() => removedDevices.Count >= 2, timeout);
+                var removed = WaitOperations.Wait(() => removedEndpoints.Count >= 2, timeout);
                 ClassicAssert.IsTrue(removed, $"Endpoints weren't removed for [{timeout}].");
 
-                ClassicAssert.AreEqual(2, removedDevices.Count, "Invalid count of removed endpoints.");
+                ClassicAssert.AreEqual(2, removedEndpoints.Count, "Invalid count of removed endpoints.");
 
-                var firstRemovedDevice = removedDevices.First();
-                ClassicAssert.IsInstanceOf<InputEndpoint>(firstRemovedDevice, "Invalid type of the first removed endpoint.");
-                ClassicAssert.AreEqual("Input endpoint (from 'Device removed' notification)", firstRemovedDevice.ToString(), "Removed input endpoint string representation is invalid.");
+                var firstRemovedEndpoint = removedEndpoints.First();
+                ClassicAssert.IsInstanceOf<InputEndpoint>(firstRemovedEndpoint, "Invalid type of the first removed endpoint.");
+                ClassicAssert.AreEqual("Input endpoint (from 'Endpoint removed' notification)", firstRemovedEndpoint.ToString(), "Removed input endpoint string representation is invalid.");
                 ClassicAssert.Throws<InvalidOperationException>(
-                    () => { var name = firstRemovedDevice.Name; },
+                    () => { var name = firstRemovedEndpoint.Name; },
                     "Can get name of removed input endpoint.");
                 ClassicAssert.Throws<InvalidOperationException>(
-                    () => { var name = ((InputEndpoint)firstRemovedDevice).GetProperty(InputEndpointProperty.Product); },
+                    () => { var name = ((InputEndpoint)firstRemovedEndpoint).GetProperty(InputEndpointProperty.Product); },
                     "Can get property value of removed input endpoint.");
                 ClassicAssert.Throws<InvalidOperationException>(
-                    () => ((InputEndpoint)firstRemovedDevice).StartEventsListening(),
+                    () => ((InputEndpoint)firstRemovedEndpoint).StartEventsListening(),
                     "Can start events listening on removed input endpoint.");
 
-                var lastRemovedDevice = removedDevices.Last();
-                ClassicAssert.IsInstanceOf<OutputEndpoint>(lastRemovedDevice, "Invalid type of the last removed endpoint.");
-                ClassicAssert.AreEqual("Output endpoint (from 'Device removed' notification)", lastRemovedDevice.ToString(), "Removed output endpoint string representation is invalid.");
+                var lastRemovedEndpoint = removedEndpoints.Last();
+                ClassicAssert.IsInstanceOf<OutputEndpoint>(lastRemovedEndpoint, "Invalid type of the last removed endpoint.");
+                ClassicAssert.AreEqual("Output endpoint (from 'Endpoint removed' notification)", lastRemovedEndpoint.ToString(), "Removed output endpoint string representation is invalid.");
                 ClassicAssert.Throws<InvalidOperationException>(
-                    () => { var name = lastRemovedDevice.Name; },
+                    () => { var name = lastRemovedEndpoint.Name; },
                     "Can get name of removed output endpoint.");
                 ClassicAssert.Throws<InvalidOperationException>(
-                    () => { var name = ((OutputEndpoint)lastRemovedDevice).GetProperty(OutputEndpointProperty.Product); },
+                    () => { var name = ((OutputEndpoint)lastRemovedEndpoint).GetProperty(OutputEndpointProperty.Product); },
                     "Can get property value of removed output endpoint.");
                 ClassicAssert.Throws<InvalidOperationException>(
-                    () => ((OutputEndpoint)lastRemovedDevice).SendEvent(new NoteOnEvent()),
+                    () => ((OutputEndpoint)lastRemovedEndpoint).SendEvent(new NoteOnEvent()),
                     "Can send event via removed output endpoint.");
 
                 EndpointsWatcher.Instance.EndpointAdded -= addedHandler;
@@ -131,54 +132,54 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void CheckEndpointAdded()
         {
-            var addedDevices1 = new List<MidiEndpoint>();
-            var addedDevices2 = new List<MidiEndpoint>();
+            var addedEndpoints1 = new List<MidiEndpoint>();
+            var addedEndpoints2 = new List<MidiEndpoint>();
 
-            EventHandler<EndpointAddedRemovedEventArgs> addedHandler1 = (_, e) => addedDevices1.Add(e.Endpoint);
-            EventHandler<EndpointAddedRemovedEventArgs> addedHandler2 = (_, e) => addedDevices2.Add(e.Endpoint);
+            EventHandler<EndpointAddedRemovedEventArgs> addedHandler1 = (_, e) => addedEndpoints1.Add(e.Endpoint);
+            EventHandler<EndpointAddedRemovedEventArgs> addedHandler2 = (_, e) => addedEndpoints2.Add(e.Endpoint);
             
             EndpointsWatcher.Instance.EndpointAdded += addedHandler1;
             EndpointsWatcher.Instance.EndpointAdded += addedHandler2;
 
-            var deviceName = "VD8";
+            var deviceName = DevicesUtilities.GetVirtualDeviceName();
             var timeout = TimeSpan.FromSeconds(5);
 
             using (var virtualDevice = VirtualDevice.Create(deviceName))
             {
-                var added1 = WaitOperations.Wait(() => addedDevices1.Count >= 2, timeout);
-                var added2 = WaitOperations.Wait(() => addedDevices2.Count >= 2, timeout);
+                var added1 = WaitOperations.Wait(() => addedEndpoints1.Count >= 2, timeout);
+                var added2 = WaitOperations.Wait(() => addedEndpoints2.Count >= 2, timeout);
                 ClassicAssert.IsTrue(added1, $"[A] Endpoints weren't added for [{timeout}] on first collection.");
-                ClassicAssert.AreEqual(2, addedDevices1.Count, $"[A] Invalid first count of added endpoints.");
+                ClassicAssert.AreEqual(2, addedEndpoints1.Count, $"[A] Invalid first count of added endpoints.");
                 ClassicAssert.IsTrue(added2, $"[A] Endpoints weren't added for [{timeout}] on second collection.");
-                ClassicAssert.AreEqual(2, addedDevices2.Count, $"[A] Invalid second count of added endpoints.");
+                ClassicAssert.AreEqual(2, addedEndpoints2.Count, $"[A] Invalid second count of added endpoints.");
             }
 
             EndpointsWatcher.Instance.EndpointAdded -= addedHandler1;
-            addedDevices1.Clear();
-            addedDevices2.Clear();
+            addedEndpoints1.Clear();
+            addedEndpoints2.Clear();
 
             using (var virtualDevice = VirtualDevice.Create(deviceName))
             {
-                var added1 = WaitOperations.Wait(() => addedDevices1.Count > 0, timeout);
-                var added2 = WaitOperations.Wait(() => addedDevices2.Count >= 2, timeout);
+                var added1 = WaitOperations.Wait(() => addedEndpoints1.Count > 0, timeout);
+                var added2 = WaitOperations.Wait(() => addedEndpoints2.Count >= 2, timeout);
                 ClassicAssert.IsFalse(added1, $"[B] Endpoints were added on first collection.");
-                ClassicAssert.AreEqual(0, addedDevices1.Count, $"[B] Invalid first count of added endpoints.");
+                ClassicAssert.AreEqual(0, addedEndpoints1.Count, $"[B] Invalid first count of added endpoints.");
                 ClassicAssert.IsTrue(added2, $"[B] Endpoints weren't added for [{timeout}] on second collection.");
-                ClassicAssert.AreEqual(2, addedDevices2.Count, $"[B] Invalid second count of added endpoints.");
+                ClassicAssert.AreEqual(2, addedEndpoints2.Count, $"[B] Invalid second count of added endpoints.");
             }
 
             EndpointsWatcher.Instance.EndpointAdded -= addedHandler2;
-            addedDevices1.Clear();
-            addedDevices2.Clear();
+            addedEndpoints1.Clear();
+            addedEndpoints2.Clear();
 
             using (var virtualDevice = VirtualDevice.Create(deviceName))
             {
-                var added1 = WaitOperations.Wait(() => addedDevices1.Count > 0, timeout);
-                var added2 = WaitOperations.Wait(() => addedDevices2.Count > 0, timeout);
+                var added1 = WaitOperations.Wait(() => addedEndpoints1.Count > 0, timeout);
+                var added2 = WaitOperations.Wait(() => addedEndpoints2.Count > 0, timeout);
                 ClassicAssert.IsFalse(added1, $"[C] Endpoints were added on first collection.");
-                ClassicAssert.AreEqual(0, addedDevices1.Count, $"[C] Invalid first count of added endpoints.");
+                ClassicAssert.AreEqual(0, addedEndpoints1.Count, $"[C] Invalid first count of added endpoints.");
                 ClassicAssert.IsFalse(added2, $"[C] Endpoints were added on second collection.");
-                ClassicAssert.AreEqual(0, addedDevices2.Count, $"[C] Invalid second count of added endpoints.");
+                ClassicAssert.AreEqual(0, addedEndpoints2.Count, $"[C] Invalid second count of added endpoints.");
             }
         }
 
@@ -194,7 +195,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             EndpointsWatcher.Instance.EndpointRemoved += removedHandler1;
             EndpointsWatcher.Instance.EndpointRemoved += removedHandler2;
 
-            var deviceName = "VD8";
+            var deviceName = DevicesUtilities.GetVirtualDeviceName();
             var timeout = TimeSpan.FromSeconds(5);
 
             Thread.Sleep(5000);
@@ -262,7 +263,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             EventHandler<EndpointAddedRemovedEventArgs> removedHandler = (_, e) => removedEndpoints.Add(e.Endpoint);
             EndpointsWatcher.Instance.EndpointRemoved += removedHandler;
 
-            var deviceName = "VD8";
+            var deviceName = DevicesUtilities.GetVirtualDeviceName();
             var timeout = TimeSpan.FromSeconds(5);
 
             using (var virtualDevice = VirtualDevice.Create(deviceName))
@@ -292,7 +293,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             EventHandler<EndpointAddedRemovedEventArgs> removedHandler = (_, e) => removedEndpoints.Add(e.Endpoint);
             EndpointsWatcher.Instance.EndpointRemoved += removedHandler;
 
-            var deviceName = "VD8";
+            var deviceName = DevicesUtilities.GetVirtualDeviceName();
             var timeout = TimeSpan.FromSeconds(5);
 
             using (var virtualDevice = VirtualDevice.Create(deviceName))

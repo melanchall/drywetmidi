@@ -33,12 +33,12 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         #region Test methods
 
         [Test]
-        public void StartRecording_DeviceNotListeningEvents()
+        public void StartRecording_EndpointNotListeningEvents()
         {
-            using (var inputEndpoint = InputEndpoint.GetByName(SendReceiveUtilities.DeviceToTestOnName))
+            using (var inputEndpoint = InputEndpoint.GetByName(SendReceiveUtilities.EndpointToTestOnName))
             using (var recording = new Recording(TempoMap.Default, inputEndpoint))
             {
-                ClassicAssert.Throws<InvalidOperationException>(() => recording.Start(), "Recording started on device which is not listening events.");
+                ClassicAssert.Throws<InvalidOperationException>(() => recording.Start(), "Recording started on endpoint which is not listening events.");
             }
         }
 

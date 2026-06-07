@@ -10,10 +10,13 @@ using Melanchall.DryWetMidi.Core;
 namespace Melanchall.DryWetMidi.Multimedia
 {
     /// <summary>
-    /// Represents an input MIDI device. More info in the
+    /// Represents an input MIDI endpoint. More info in the
     /// <see href="xref:a_dev_overview">Devices</see> and
-    /// <see href="xref:a_dev_input">Input device</see> articles.
+    /// <see href="xref:a_dev_input">Input endpoint</see> articles.
     /// </summary>
+    /// <remarks>
+    /// <os-specific-api/>
+    /// </remarks>
     public sealed class InputEndpoint : MidiEndpoint, IInputEndpoint
     {
         #region Constants
@@ -79,7 +82,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         {
             Info = new InputEndpointInfo(info);
             _apiType = CommonApi.Api_GetApiType();
-            _hashCode = InputEndpointApi.Api_GetDeviceHashCode(info);
+            _hashCode = InputEndpointApi.Api_GetEndpointHashCode(info);
             _bytesToMidiEventConverter.SilentNoteOnPolicy = SilentNoteOnPolicy.NoteOn;
         }
 
@@ -88,7 +91,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         #region Properties
 
         /// <summary>
-        /// Gets the name of the current MIDI device.
+        /// Gets the name of the current MIDI endpoint.
         /// </summary>
         public override string Name
         {
@@ -98,7 +101,7 @@ namespace Melanchall.DryWetMidi.Multimedia
                 EnsureEndpointIsNotRemoved();
 
                 // TODO: cache the name and provide method to invalidate cache
-                var result = InputEndpointApi.Api_GetDeviceName(Info.DangerousGetHandle(), out var name, out var errorCode);
+                var result = InputEndpointApi.Api_GetEndpointName(Info.DangerousGetHandle(), out var name, out var errorCode);
                 NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
 
                 return name;
@@ -117,7 +120,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// </summary>
         /// <remarks>
         /// <para>
-        /// Some MIDI devices and MIDI subsystems of operating systems can split a system exclusive
+        /// Some MIDI endpoints and MIDI subsystems of operating systems can split a system exclusive
         /// event into several parts on sending the event. If <see cref="WaitForCompleteSysExEvent"/> is
         /// set to <c>true</c> (default value), DryWetMIDI will wait until last part received, then the library
         /// will combine all event's parts into single MIDI event and fire the <see cref="EventReceived"/> event.
@@ -155,7 +158,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         public bool IsListeningForEvents { get; private set; }
 
         /// <summary>
-        /// Gets or sets reaction of the input device on <c>Note On</c> events with velocity of zero.
+        /// Gets or sets reaction of the input endpoint on <c>Note On</c> events with velocity of zero.
         /// The default is <see cref="SilentNoteOnPolicy.NoteOn"/>.
         /// </summary>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="value"/> specified an invalid value.</exception>
@@ -229,10 +232,10 @@ namespace Melanchall.DryWetMidi.Multimedia
         #region Methods
 
         /// <summary>
-        /// Starts listening for incoming MIDI events on the current input device.
+        /// Starts listening for incoming MIDI events on the current input endpoint.
         /// </summary>
         /// <exception cref="ObjectDisposedException">The current <see cref="InputEndpoint"/> is disposed.</exception>
-        /// <exception cref="NativeApiException">An error occurred on device.</exception>
+        /// <exception cref="NativeApiException">An error occurred on endpoint.</exception>
         /// <exception cref="InvalidOperationException">The current <see cref="InputEndpoint"/> instance is created by
         /// <see cref="EndpointsWatcher.EndpointRemoved"/> event and thus considered as removed so you cannot interact with it.</exception>
         public void StartEventsListening()
@@ -252,10 +255,10 @@ namespace Melanchall.DryWetMidi.Multimedia
         }
 
         /// <summary>
-        /// Stops listening for incoming MIDI events on the current input device.
+        /// Stops listening for incoming MIDI events on the current input endpoint.
         /// </summary>
         /// <exception cref="ObjectDisposedException">The current <see cref="InputEndpoint"/> is disposed.</exception>
-        /// <exception cref="NativeApiException">An error occurred on device.</exception>
+        /// <exception cref="NativeApiException">An error occurred on endpoint.</exception>
         /// <exception cref="InvalidOperationException">The current <see cref="InputEndpoint"/> instance is created by
         /// <see cref="EndpointsWatcher.EndpointRemoved"/> event and thus considered as removed so you cannot interact with it.</exception>
         public void StopEventsListening()
@@ -272,11 +275,11 @@ namespace Melanchall.DryWetMidi.Multimedia
         }
 
         /// <summary>
-        /// Returns current value of the specified property attached to the current input device.
+        /// Returns current value of the specified property attached to the current input endpoint.
         /// </summary>
         /// <remarks>
         /// <para>
-        /// To get the list of properties applicable to input devices on the current operating system use
+        /// To get the list of properties applicable to input endpoints on the current operating system use
         /// <see cref="GetSupportedProperties"/> method.
         /// </para>
         /// <para>
@@ -317,8 +320,8 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <exception cref="ArgumentException"><paramref name="property"/> is not in the list of the properties
         /// supported for the current operating system.</exception>
         /// <exception cref="ObjectDisposedException">The current <see cref="InputEndpoint"/> is disposed.</exception>
-        /// <exception cref="NativeApiException">An error occurred on the device. One of the cases when this exception can be thrown
-        /// is device is not in the system anymore (for example, unplugged).</exception>
+        /// <exception cref="NativeApiException">An error occurred on the endpoint. One of the cases when this exception can be thrown
+        /// is endpoint is not in the system anymore (for example, unplugged).</exception>
         /// <exception cref="InvalidOperationException">The current <see cref="InputEndpoint"/> instance is created by
         /// <see cref="EndpointsWatcher.EndpointRemoved"/> event and thus considered as removed so you cannot interact with it.</exception>
         public object GetProperty(InputEndpointProperty property)
@@ -338,31 +341,31 @@ namespace Melanchall.DryWetMidi.Multimedia
             {
                 case InputEndpointProperty.Product:
                     {
-                        var result = InputEndpointApi.Api_GetDeviceProduct(Info.DangerousGetHandle(), out var product, out errorCode);
+                        var result = InputEndpointApi.Api_GetEndpointProduct(Info.DangerousGetHandle(), out var product, out errorCode);
                         NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
                         return product;
                     }
                 case InputEndpointProperty.Manufacturer:
                     {
-                        var result = InputEndpointApi.Api_GetDeviceManufacturer(Info.DangerousGetHandle(), out var manufacturer, out errorCode);
+                        var result = InputEndpointApi.Api_GetEndpointManufacturer(Info.DangerousGetHandle(), out var manufacturer, out errorCode);
                         NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
                         return manufacturer;
                     }
                 case InputEndpointProperty.DriverVersion:
                     {
-                        var result = InputEndpointApi.Api_GetDeviceDriverVersion(Info.DangerousGetHandle(), out var driverVersion, out errorCode);
+                        var result = InputEndpointApi.Api_GetEndpointDriverVersion(Info.DangerousGetHandle(), out var driverVersion, out errorCode);
                         NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
                         return driverVersion;
                     }
                 case InputEndpointProperty.UniqueId:
                     {
-                        var result = InputEndpointApi.Api_GetDeviceUniqueId(Info.DangerousGetHandle(), out var uniqueId, out errorCode);
+                        var result = InputEndpointApi.Api_GetEndpointUniqueId(Info.DangerousGetHandle(), out var uniqueId, out errorCode);
                         NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
                         return uniqueId;
                     }
                 case InputEndpointProperty.DriverOwner:
                     {
-                        var result = InputEndpointApi.Api_GetDeviceDriverOwner(Info.DangerousGetHandle(), out var driverOwner, out errorCode);
+                        var result = InputEndpointApi.Api_GetEndpointDriverOwner(Info.DangerousGetHandle(), out var driverOwner, out errorCode);
                         NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
                         return driverOwner;
                     }
@@ -372,10 +375,10 @@ namespace Melanchall.DryWetMidi.Multimedia
         }
 
         /// <summary>
-        /// Returns the list of the properties supported by input devices on the current
+        /// Returns the list of the properties supported by input endpoints on the current
         /// operating system.
         /// </summary>
-        /// <returns>The list of the properties supported by input devices on the current
+        /// <returns>The list of the properties supported by input endpoints on the current
         /// operating system.</returns>
         /// <exception cref="PlatformNotSupportedException">This operation is not supported on the current operating system.</exception>
         public static InputEndpointProperty[] GetSupportedProperties()
@@ -392,9 +395,9 @@ namespace Melanchall.DryWetMidi.Multimedia
         }
 
         /// <summary>
-        /// Retrieves the number of input MIDI devices presented in the system.
+        /// Retrieves the number of input MIDI endpoints presented in the system.
         /// </summary>
-        /// <returns>Number of input MIDI devices presented in the system.</returns>
+        /// <returns>Number of input MIDI endpoints presented in the system.</returns>
         /// <exception cref="NativeApiException">An error occurred.</exception>
         /// <exception cref="PlatformNotSupportedException">This operation is not supported on the current operating system.</exception>
         public static int GetEndpointsCount()
@@ -402,16 +405,16 @@ namespace Melanchall.DryWetMidi.Multimedia
             NativeApiUtilities.EnsureOsIsSupported();
             EnsureSessionIsCreated();
 
-            var result = InputEndpointApi.Api_GetDevicesCount(out var count);
+            var result = InputEndpointApi.Api_GetEndpointsCount(out var count);
             NativeApiUtilities.HandleEndpointNativeApiResult(result, 0);
             
             return count;
         }
 
         /// <summary>
-        /// Retrieves all input MIDI devices presented in the system.
+        /// Retrieves all input MIDI endpoints presented in the system.
         /// </summary>
-        /// <returns>All input MIDI devices presented in the system.</returns>
+        /// <returns>All input MIDI endpoints presented in the system.</returns>
         /// <exception cref="NativeApiException">An error occurred.</exception>
         /// <exception cref="PlatformNotSupportedException">This operation is not supported on the current operating system.</exception>
         public static ICollection<InputEndpoint> GetAll()
@@ -423,10 +426,10 @@ namespace Melanchall.DryWetMidi.Multimedia
         }
 
         /// <summary>
-        /// Retrieves a first input MIDI device with the specified name.
+        /// Retrieves a first input MIDI endpoint with the specified name.
         /// </summary>
-        /// <param name="name">The name of an input MIDI device to retrieve.</param>
-        /// <returns>Input MIDI device with the specified name.</returns>
+        /// <param name="name">The name of an input MIDI endpoint to retrieve.</param>
+        /// <returns>Input MIDI endpoint with the specified name.</returns>
         /// <exception cref="ArgumentException">
         /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
@@ -434,7 +437,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <description><paramref name="name"/> is <c>null</c> or contains white-spaces only.</description>
         /// </item>
         /// <item>
-        /// <description><paramref name="name"/> specifies an input MIDI device which is not presented in the system.</description>
+        /// <description><paramref name="name"/> specifies an input MIDI endpoint which is not presented in the system.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -442,16 +445,16 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <exception cref="PlatformNotSupportedException">This operation is not supported on the current operating system.</exception>
         public static InputEndpoint GetByName(string name)
         {
-            ThrowIfArgument.IsNullOrWhiteSpaceString(nameof(name), name, "Device name");
+            ThrowIfArgument.IsNullOrWhiteSpaceString(nameof(name), name, "Endpoint name");
 
             NativeApiUtilities.EnsureOsIsSupported();
             EnsureSessionIsCreated();
 
-            var device = MidiEndpointsManager.Instance.GetInputEndpointByName(name);
-            if (device == null)
-                throw new ArgumentException($"There is no MIDI input device '{name}'.", nameof(name));
+            var endpoint = MidiEndpointsManager.Instance.GetInputEndpointByName(name);
+            if (endpoint == null)
+                throw new ArgumentException($"There is no MIDI input endpoint '{name}'.", nameof(name));
 
-            return device;
+            return endpoint;
         }
 
         private void OnEventReceived(MidiEvent midiEvent)
@@ -487,14 +490,14 @@ namespace Melanchall.DryWetMidi.Multimedia
                     case CommonApi.API_TYPE.API_TYPE_WIN:
                         {
                             _callbackWin = OnMessage_Win;
-                            var result = InputEndpointApi.Api_OpenDevice_Win(Info.DangerousGetHandle(), sessionHandle, _callbackWin, SysExBufferSize, SysExBuffersCount, out rawHandle, out errorCode);
+                            var result = InputEndpointApi.Api_OpenEndpoint_Win(Info.DangerousGetHandle(), sessionHandle, _callbackWin, SysExBufferSize, SysExBuffersCount, out rawHandle, out errorCode);
                             NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
                         }
                         break;
                     case CommonApi.API_TYPE.API_TYPE_MAC:
                         {
                             _callbackMac = OnMessage_Mac;
-                            var result = InputEndpointApi.Api_OpenDevice_Mac(Info.DangerousGetHandle(), sessionHandle, _callbackMac, out rawHandle, out errorCode);
+                            var result = InputEndpointApi.Api_OpenEndpoint_Mac(Info.DangerousGetHandle(), sessionHandle, _callbackMac, out rawHandle, out errorCode);
                             NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
                         }
                         break;
@@ -821,7 +824,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// </remarks>
         /// <param name="inputEndpoint1">The first <see cref="InputEndpoint"/> to compare.</param>
         /// <param name="inputEndpoint2">The second <see cref="InputEndpoint"/> to compare.</param>
-        /// <returns><c>true</c> if the devices are equal, <c>false</c> otherwise.</returns>
+        /// <returns><c>true</c> if the endpoints are equal, <c>false</c> otherwise.</returns>
         public static bool operator ==(InputEndpoint inputEndpoint1, InputEndpoint inputEndpoint2)
         {
             if (ReferenceEquals(inputEndpoint1, inputEndpoint2))
@@ -842,7 +845,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// </remarks>
         /// <param name="inputEndpoint1">The first <see cref="InputEndpoint"/> to compare.</param>
         /// <param name="inputEndpoint2">The second <see cref="InputEndpoint"/> to compare.</param>
-        /// <returns><c>false</c> if the devices are equal, <c>true</c> otherwise.</returns>
+        /// <returns><c>false</c> if the endpoints are equal, <c>true</c> otherwise.</returns>
         public static bool operator !=(InputEndpoint inputEndpoint1, InputEndpoint inputEndpoint2)
         {
             return !(inputEndpoint1 == inputEndpoint2);
@@ -867,7 +870,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             if (inputEndpoint == null)
                 return false;
 
-            return InputEndpointApi.Api_AreDevicesEqual(
+            return InputEndpointApi.Api_AreEndpointsEqual(
                 Info.DangerousGetHandle(),
                 inputEndpoint.Info.DangerousGetHandle());
         }
@@ -891,12 +894,6 @@ namespace Melanchall.DryWetMidi.Multimedia
             return $"Input endpoint{(string.IsNullOrWhiteSpace(baseDescription) ? string.Empty : $" ({baseDescription})")}";
         }
 
-        /// <summary>
-        /// Releases the unmanaged resources used by the MIDI device class and optionally releases
-        /// the managed resources.
-        /// </summary>
-        /// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to
-        /// release only unmanaged resources.</param>
         internal override void Dispose(bool disposing)
         {
             if (_disposed)

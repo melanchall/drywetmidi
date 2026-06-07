@@ -156,36 +156,36 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         private ICollection<InputEndpoint> GetAllInputEndpointsInternal()
         {
-            var result = InputEndpointApi.Api_GetDevicesInfo(MidiConfiguration.GetConfigurationHandle(), MidiDevicesSession.GetSessionHandle(), out var devicesInfo, out var size, out var errorCode);
+            var result = InputEndpointApi.Api_GetEndpointsInfo(MidiConfiguration.GetConfigurationHandle(), MidiDevicesSession.GetSessionHandle(), out var endpointsInfo, out var endpointsCount, out var errorCode);
             NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
 
-            var endpoints = new InputEndpoint[size];
+            var endpoints = new InputEndpoint[endpointsCount];
 
-            for (int i = 0; i < size; i++)
+            for (int i = 0; i < endpointsCount; i++)
             {
-                var info = Marshal.ReadIntPtr(devicesInfo, i * IntPtr.Size);
+                var info = Marshal.ReadIntPtr(endpointsInfo, i * IntPtr.Size);
                 endpoints[i] = new InputEndpoint(info, MidiEndpoint.CreationContext.User);
             }
 
-            InputEndpointApi.Api_FreeDevicesInfo(devicesInfo, size);
+            InputEndpointApi.Api_FreeEndpointsInfo(endpointsInfo, endpointsCount);
 
             return endpoints;
         }
 
         private ICollection<OutputEndpoint> GetAllOutputEndpointsInternal()
         {
-            var result = OutputEndpointApi.Api_GetDevicesInfo(MidiConfiguration.GetConfigurationHandle(), MidiDevicesSession.GetSessionHandle(), out var devicesInfoArray, out var size, out var error);
+            var result = OutputEndpointApi.Api_GetEndpointsInfo(MidiConfiguration.GetConfigurationHandle(), MidiDevicesSession.GetSessionHandle(), out var endpointsInfo, out var endpointsCount, out var error);
             NativeApiUtilities.HandleEndpointNativeApiResult(result, error);
 
-            var endpoints = new OutputEndpoint[size];
+            var endpoints = new OutputEndpoint[endpointsCount];
 
-            for (int i = 0; i < size; i++)
+            for (int i = 0; i < endpointsCount; i++)
             {
-                var info = Marshal.ReadIntPtr(devicesInfoArray, i * IntPtr.Size);
+                var info = Marshal.ReadIntPtr(endpointsInfo, i * IntPtr.Size);
                 endpoints[i] = new OutputEndpoint(info, MidiEndpoint.CreationContext.User);
             }
 
-            OutputEndpointApi.Api_FreeDevicesInfo(devicesInfoArray, size);
+            OutputEndpointApi.Api_FreeEndpointsInfo(endpointsInfo, endpointsCount);
 
             return endpoints;
         }

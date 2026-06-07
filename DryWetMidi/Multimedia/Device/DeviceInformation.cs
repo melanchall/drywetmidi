@@ -3,6 +3,12 @@ using System.Linq;
 
 namespace Melanchall.DryWetMidi.Multimedia
 {
+    /// <summary>
+    /// // TODO
+    /// </summary>
+    /// <remarks>
+    /// <os-specific-api/>
+    /// </remarks>
     public sealed class DeviceInformation
     {
         #region Constants
@@ -43,6 +49,26 @@ namespace Melanchall.DryWetMidi.Multimedia
                 return null;
 
             return DevicesCache.GetOrAdd(id, _ => new DeviceInformation(id, name, manufacturer, model));
+        }
+
+        #endregion
+
+        #region Operators
+
+        public static bool operator ==(DeviceInformation deviceInformation1, DeviceInformation deviceInformation2)
+        {
+            if (ReferenceEquals(deviceInformation1, deviceInformation2))
+                return true;
+
+            if (ReferenceEquals(null, deviceInformation1) || ReferenceEquals(null, deviceInformation2))
+                return false;
+
+            return deviceInformation1.Id == deviceInformation2.Id;
+        }
+
+        public static bool operator !=(DeviceInformation deviceInformation1, DeviceInformation deviceInformation2)
+        {
+            return !(deviceInformation1 == deviceInformation2);
         }
 
         #endregion

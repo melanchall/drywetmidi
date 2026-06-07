@@ -8,6 +8,9 @@ namespace Melanchall.DryWetMidi.Multimedia
     /// <summary>
     /// Represents a MIDI endpoint.
     /// </summary>
+    /// <remarks>
+    /// <os-specific-api/>
+    /// </remarks>
     public abstract class MidiEndpoint : IDisposable
     {
         #region Nested enums
@@ -37,8 +40,8 @@ namespace Melanchall.DryWetMidi.Multimedia
         {
             [CreationContext.User] = string.Empty,
             [CreationContext.VirtualDevice] = "endpoint of a virtual device",
-            [CreationContext.AddedEndpoint] = "from 'Device added' notification",
-            [CreationContext.RemovedEndpoint] = "from 'Device removed' notification",
+            [CreationContext.AddedEndpoint] = "from 'Endpoint added' notification",
+            [CreationContext.RemovedEndpoint] = "from 'Endpoint removed' notification",
         };
 
         #endregion

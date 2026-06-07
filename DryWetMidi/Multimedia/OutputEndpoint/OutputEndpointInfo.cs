@@ -23,7 +23,7 @@ namespace Melanchall.DryWetMidi.Multimedia
                 TestCheckpoints?.SetCheckpointReached(OutputEndpointCheckpointsNames.ReleaseInfoHandleEntered);
 #endif
 
-                OutputEndpointApi.Api_DeleteDeviceInfo(handle);
+                OutputEndpointApi.Api_DeleteEndpointInfo(handle);
 
 #if TEST
                 TestCheckpoints?.SetCheckpointReached(OutputEndpointCheckpointsNames.InfoDeletedInReleaseInfoHandle);

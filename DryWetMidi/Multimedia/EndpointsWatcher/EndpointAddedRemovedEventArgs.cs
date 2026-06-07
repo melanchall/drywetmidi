@@ -10,9 +10,9 @@ namespace Melanchall.DryWetMidi.Multimedia
     {
         #region Constructor
 
-        internal EndpointAddedRemovedEventArgs(MidiEndpoint device)
+        internal EndpointAddedRemovedEventArgs(MidiEndpoint endpoint)
         {
-            Endpoint = device;
+            Endpoint = endpoint;
         }
 
         #endregion

@@ -294,8 +294,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         public void CheckVirtualDeviceEndpointsEquality_DifferentEndpoints()
         {
             using (var virtualDevice = GetVirtualDevice())
-            using (var inputEndpoint = DevicesUtilities.GetInputEndpoint(MidiEndpoints.A))
-            using (var outputEndpoint = DevicesUtilities.GetOutputEndpoint(MidiEndpoints.B))
+            using (var inputEndpoint = InputEndpoint.GetByName(MidiEndpoints.A))
+            using (var outputEndpoint = OutputEndpoint.GetByName(MidiEndpoints.B))
             {
                 ClassicAssert.AreNotEqual(virtualDevice.InputEndpoint, inputEndpoint, "Input endpoint is equal to virtual input endpoint.");
                 ClassicAssert.AreNotEqual(virtualDevice.OutputEndpoint, outputEndpoint, "Output endpoint is equal to virtual output endpoint.");

@@ -74,6 +74,8 @@ jobs:
   - template: step-generate-doc-links.yaml
   
   - template: step-generate-obsolete-api-hints.yaml
+
+  - template: step-generate-platform-specific-api-descriptions.yaml
   
   - ${{ if eq(parameters.packageType, 'Nativeless') }}:  
     - template: step-setup-nativeless-project.yaml

@@ -4,8 +4,8 @@ using Melanchall.DryWetMidi.Common;
 namespace Melanchall.DryWetMidi.Multimedia
 {
     /// <summary>
-    /// Provides methods to connect MIDI devices. More info in the
-    /// <see href="xref:a_dev_connector">Devices connector</see> article.
+    /// Provides methods to connect MIDI endpoints. More info in the
+    /// <see href="xref:a_dev_connector">Endpoints connector</see> article.
     /// </summary>
     public static class EndpointsConnectorUtilities
     {
@@ -34,9 +34,9 @@ namespace Melanchall.DryWetMidi.Multimedia
             ThrowIfArgument.IsNull(nameof(outputEndpoints), outputEndpoints);
             ThrowIfArgument.ContainsNull(nameof(outputEndpoints), outputEndpoints);
 
-            var devicesConnector = new EndpointsConnector(inputEndpoint, outputEndpoints);
-            devicesConnector.Connect();
-            return devicesConnector;
+            var endpointsConnector = new EndpointsConnector(inputEndpoint, outputEndpoints);
+            endpointsConnector.Connect();
+            return endpointsConnector;
         }
 
         #endregion

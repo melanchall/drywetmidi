@@ -333,42 +333,42 @@ namespace Melanchall.DryWetMidi.Multimedia
             CloneOutputEndpointInfo(source, out info);
         }
 
-        public static OUT_GETCOUNTRESULT Api_GetDevicesCount(out int count)
+        public static OUT_GETCOUNTRESULT Api_GetEndpointsCount(out int count)
         {
             return GetOutputEndpointsCount(out count);
         }
 
-        public static OUT_GETALLINFORESULT Api_GetDevicesInfo(MidiConfigurationHandle configuration, MidiDevicesSessionHandle sessionHandle, out IntPtr devicesInfo, out int devicesCount, out int errorCode)
+        public static OUT_GETALLINFORESULT Api_GetEndpointsInfo(MidiConfigurationHandle configuration, MidiDevicesSessionHandle sessionHandle, out IntPtr devicesInfo, out int devicesCount, out int errorCode)
         {
             return GetOutputEndpointsInfo(configuration, sessionHandle, out devicesInfo, out devicesCount, out errorCode);
         }
 
-        public static void Api_FreeDevicesInfo(IntPtr array, int size)
+        public static void Api_FreeEndpointsInfo(IntPtr array, int size)
         {
             FreeOutputEndpointsInfo(array, size);
         }
 
-        public static int Api_GetDeviceHashCode(IntPtr info)
+        public static int Api_GetEndpointHashCode(IntPtr info)
         {
             return GetOutputEndpointHashCode(info);
         }
 
-        public static bool Api_AreDevicesEqual(IntPtr info1, IntPtr info2)
+        public static bool Api_AreEndpointsEqual(IntPtr info1, IntPtr info2)
         {
             return AreOutputEndpointsEqual(info1, info2);
         }
 
-        public static OUT_OPENRESULT Api_OpenDevice_Win(IntPtr info, MidiDevicesSessionHandle sessionHandle, Callback_Win callback, out IntPtr handle, out int errorCode)
+        public static OUT_OPENRESULT Api_OpenEndpoint_Win(IntPtr info, MidiDevicesSessionHandle sessionHandle, Callback_Win callback, out IntPtr handle, out int errorCode)
         {
             return OpenOutputEndpoint_Win(info, sessionHandle, callback, out handle, out errorCode);
         }
 
-        public static OUT_OPENRESULT Api_OpenDevice_Mac(IntPtr info, MidiDevicesSessionHandle sessionHandle, out IntPtr handle, out int errorCode)
+        public static OUT_OPENRESULT Api_OpenEndpoint_Mac(IntPtr info, MidiDevicesSessionHandle sessionHandle, out IntPtr handle, out int errorCode)
         {
             return OpenOutputEndpoint_Mac(info, sessionHandle, out handle, out errorCode);
         }
 
-        public static OUT_CLOSERESULT Api_CloseDevice(IntPtr handle, out int errorCode)
+        public static OUT_CLOSERESULT Api_CloseEndpoint(IntPtr handle, out int errorCode)
         {
             return CloseOutputEndpoint(handle, out errorCode);
         }
@@ -398,7 +398,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             return IsOutputEndpointPropertySupported(property);
         }
 
-        public static OUT_GETPROPERTYRESULT Api_GetDeviceName(IntPtr info, out string name, out int errorCode)
+        public static OUT_GETPROPERTYRESULT Api_GetEndpointName(IntPtr info, out string name, out int errorCode)
         {
             name = string.Empty;
 
@@ -412,7 +412,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             return result;
         }
 
-        public static OUT_GETPROPERTYRESULT Api_GetDeviceManufacturer(IntPtr info, out string manufacturer, out int errorCode)
+        public static OUT_GETPROPERTYRESULT Api_GetEndpointManufacturer(IntPtr info, out string manufacturer, out int errorCode)
         {
             manufacturer = string.Empty;
 
@@ -426,7 +426,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             return result;
         }
 
-        public static OUT_GETPROPERTYRESULT Api_GetDeviceProduct(IntPtr info, out string product, out int errorCode)
+        public static OUT_GETPROPERTYRESULT Api_GetEndpointProduct(IntPtr info, out string product, out int errorCode)
         {
             product = string.Empty;
 
@@ -440,42 +440,42 @@ namespace Melanchall.DryWetMidi.Multimedia
             return result;
         }
 
-        public static OUT_GETPROPERTYRESULT Api_GetDeviceDriverVersion(IntPtr info, out int driverVersion, out int errorCode)
+        public static OUT_GETPROPERTYRESULT Api_GetEndpointDriverVersion(IntPtr info, out int driverVersion, out int errorCode)
         {
             return GetOutputEndpointDriverVersion(info, out driverVersion, out errorCode);
         }
 
-        public static OUT_GETPROPERTYRESULT Api_GetDeviceTechnology(IntPtr info, out OutputEndpointTechnology deviceType, out int errorCode)
+        public static OUT_GETPROPERTYRESULT Api_GetEndpointTechnology(IntPtr info, out OutputEndpointTechnology deviceType, out int errorCode)
         {
             return GetOutputEndpointTechnology(info, out deviceType, out errorCode);
         }
 
-        public static OUT_GETPROPERTYRESULT Api_GetDeviceUniqueId(IntPtr info, out int uniqueId, out int errorCode)
+        public static OUT_GETPROPERTYRESULT Api_GetEndpointUniqueId(IntPtr info, out int uniqueId, out int errorCode)
         {
             return GetOutputEndpointUniqueId(info, out uniqueId, out errorCode);
         }
 
-        public static OUT_GETPROPERTYRESULT Api_GetDeviceVoicesNumber(IntPtr info, out int voicesNumber, out int errorCode)
+        public static OUT_GETPROPERTYRESULT Api_GetEndpointVoicesNumber(IntPtr info, out int voicesNumber, out int errorCode)
         {
             return GetOutputEndpointVoicesNumber(info, out voicesNumber, out errorCode);
         }
 
-        public static OUT_GETPROPERTYRESULT Api_GetDeviceNotesNumber(IntPtr info, out int notesNumber, out int errorCode)
+        public static OUT_GETPROPERTYRESULT Api_GetEndpointNotesNumber(IntPtr info, out int notesNumber, out int errorCode)
         {
             return GetOutputEndpointNotesNumber(info, out notesNumber, out errorCode);
         }
 
-        public static OUT_GETPROPERTYRESULT Api_GetDeviceChannelsMask(IntPtr info, out int channelsMask, out int errorCode)
+        public static OUT_GETPROPERTYRESULT Api_GetEndpointChannelsMask(IntPtr info, out int channelsMask, out int errorCode)
         {
             return GetOutputEndpointChannelsMask(info, out channelsMask, out errorCode);
         }
 
-        public static OUT_GETPROPERTYRESULT Api_GetDeviceOptions(IntPtr info, out OutputEndpointOption option, out int errorCode)
+        public static OUT_GETPROPERTYRESULT Api_GetEndpointOptions(IntPtr info, out OutputEndpointOption option, out int errorCode)
         {
             return GetOutputEndpointOptions(info, out option, out errorCode);
         }
 
-        public static OUT_GETPROPERTYRESULT Api_GetDeviceDriverOwner(IntPtr info, out string driverOwner, out int errorCode)
+        public static OUT_GETPROPERTYRESULT Api_GetEndpointDriverOwner(IntPtr info, out string driverOwner, out int errorCode)
         {
             driverOwner = string.Empty;
 
@@ -489,7 +489,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             return result;
         }
 
-        public static void Api_DeleteDeviceInfo(IntPtr info)
+        public static void Api_DeleteEndpointInfo(IntPtr info)
         {
             DeleteOutputEndpointInfo(info);
         }

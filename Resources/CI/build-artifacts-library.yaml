@@ -44,6 +44,8 @@ stages:
     - template: Templates/step-copy-native-libraries-near-csproj.yaml
     
     - template: Templates/step-generate-obsolete-api-hints.yaml
+
+    - template: Templates/step-generate-platform-specific-api-descriptions.yaml
     
     - task: DotNetCoreCLI@2
       displayName: Build project

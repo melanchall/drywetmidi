@@ -3,7 +3,7 @@
 namespace Melanchall.DryWetMidi.Multimedia
 {
     /// <summary>
-    /// Provides data for an event indicating an error occurred on a device.
+    /// Provides data for an event indicating an error occurred.
     /// </summary>
     public sealed class ErrorOccurredEventArgs : EventArgs
     {

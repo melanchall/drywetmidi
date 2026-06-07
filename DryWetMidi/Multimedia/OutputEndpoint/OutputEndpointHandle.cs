@@ -21,16 +21,16 @@ namespace Melanchall.DryWetMidi.Multimedia
             TestCheckpoints?.SetCheckpointReached(OutputEndpointCheckpointsNames.ReleaseHandleEntered);
 #endif
 
-            var closeResult = OutputEndpointApi.Api_CloseDevice(handle, out var errorCode);
+            var closeResult = OutputEndpointApi.Api_CloseEndpoint(handle, out var errorCode);
             var closed = closeResult == OutputEndpointApi.OUT_CLOSERESULT.OUT_CLOSERESULT_OK;
 
 #if TEST
-            TestCheckpoints?.SetCheckpointReached(OutputEndpointCheckpointsNames.CloseDeviceExecutedInReleaseHandle);
+            TestCheckpoints?.SetCheckpointReached(OutputEndpointCheckpointsNames.CloseEndpointExecutedInReleaseHandle);
 
             if (closed)
-                TestCheckpoints?.SetCheckpointReached(OutputEndpointCheckpointsNames.CloseDeviceSuccessInReleaseHandle);
+                TestCheckpoints?.SetCheckpointReached(OutputEndpointCheckpointsNames.CloseEndpointSuccessInReleaseHandle);
             else
-                TestCheckpoints?.SetErrorReached($"Failed to close output device: {closeResult} ({errorCode}).");
+                TestCheckpoints?.SetErrorReached($"Failed to close output endpoint: {closeResult} ({errorCode}).");
 #endif
 
             return closed;

@@ -145,8 +145,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             string label = null)
         {
             var outputEndpoint = useOutputEndpoint
-                ? OutputEndpoint.GetByName(SendReceiveUtilities.DeviceToTestOnName)
-                : TestDeviceManager.GetOutputEndpoint(SendReceiveUtilities.DeviceToTestOnName);
+                ? OutputEndpoint.GetByName(SendReceiveUtilities.EndpointToTestOnName)
+                : TestDeviceManager.GetOutputEndpoint(SendReceiveUtilities.EndpointToTestOnName);
 
             var stopwatch = new Stopwatch();
             var delayStopwatch = new Stopwatch();

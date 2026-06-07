@@ -1,7 +1,7 @@
 ﻿namespace Melanchall.DryWetMidi.Multimedia
 {
     /// <summary>
-    /// Type of a MIDI output device on Windows (see <c>wTechnology</c> field
+    /// Type of a MIDI output endpoint on Windows (see <c>wTechnology</c> field
     /// description in <see href="https://docs.microsoft.com/en-us/windows/win32/api/mmeapi/ns-mmeapi-midioutcaps">
     /// MIDIOUTCAPS</see>).
     /// </summary>

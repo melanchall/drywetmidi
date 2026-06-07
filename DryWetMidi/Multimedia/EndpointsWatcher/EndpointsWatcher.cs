@@ -7,17 +7,21 @@ namespace Melanchall.DryWetMidi.Multimedia
     /// Provides a way to watch endpoints adding/removing in the system. More info in the
     /// <see href="xref:a_dev_watcher">Endpoints watcher</see> article.
     /// </summary>
+    /// <remarks>
+    /// <os-specific-api/>
+    /// <advanced-windows-api/>
+    /// </remarks>
     public sealed class EndpointsWatcher
     {
         #region Events
 
         /// <summary>
-        /// Occurs when a MIDI device has been added to the system.
+        /// Occurs when a MIDI endpoint has been added to the system.
         /// </summary>
         public event EventHandler<EndpointAddedRemovedEventArgs> EndpointAdded;
 
         /// <summary>
-        /// Occurs when a MIDI device has been removed from the system.
+        /// Occurs when a MIDI endpoint has been removed from the system.
         /// </summary>
         public event EventHandler<EndpointAddedRemovedEventArgs> EndpointRemoved;
 
@@ -111,7 +115,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             if (endpointAddded != null)
                 endpointAddded.Invoke(this, new EndpointAddedRemovedEventArgs(new InputEndpoint(info, MidiEndpoint.CreationContext.AddedEndpoint)));
             else
-                InputEndpointApi.Api_DeleteDeviceInfo(info);
+                InputEndpointApi.Api_DeleteEndpointInfo(info);
         }
 
         private void OnInputEndpointRemoved(object sender, IntPtr info)
@@ -120,7 +124,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             if (endpointRemoved != null)
                 endpointRemoved.Invoke(this, new EndpointAddedRemovedEventArgs(new InputEndpoint(info, MidiEndpoint.CreationContext.RemovedEndpoint)));
             else
-                InputEndpointApi.Api_DeleteDeviceInfo(info);
+                InputEndpointApi.Api_DeleteEndpointInfo(info);
         }
 
         private void OnOutputEndpointAdded(object sender, IntPtr info)
@@ -129,7 +133,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             if (endpointAdded != null)
                 endpointAdded.Invoke(this, new EndpointAddedRemovedEventArgs(new OutputEndpoint(info, MidiEndpoint.CreationContext.AddedEndpoint)));
             else
-                OutputEndpointApi.Api_DeleteDeviceInfo(info);
+                OutputEndpointApi.Api_DeleteEndpointInfo(info);
         }
 
         private void OnOutputEndpointRemoved(object sender, IntPtr info)
@@ -138,7 +142,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             if (endpointRemoved != null)
                 endpointRemoved.Invoke(this, new EndpointAddedRemovedEventArgs(new OutputEndpoint(info, MidiEndpoint.CreationContext.RemovedEndpoint)));
             else
-                OutputEndpointApi.Api_DeleteDeviceInfo(info);
+                OutputEndpointApi.Api_DeleteEndpointInfo(info);
         }
 
         #endregion

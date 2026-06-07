@@ -115,67 +115,78 @@ stages:
         projects: 'Resources/PackageIntegrationTestUtilities/DwmNetConsoleApp/DwmNetConsoleApp/DwmNetConsoleApp.csproj'
         arguments: '--configuration $(BuildConfiguration) -property:SolutionDir="$(Build.SourcesDirectory)/"'
 
-    - ${{ each psf in split('true,false',',') }}:
-      - ${{ each prtr in split('true,false',',') }}:
-        - ${{ each inlfse in split('true,false',',') }}:
-          - ${{ each sc in split('true,false',',') }}:
-            - ${{ each pt in split('true,false',',') }}:
-              - task: PowerShell@2
-                displayName: Begin publish test (SC=${{ sc }}, PSF=${{ psf }}, PRTR=${{ prtr }}, INLFSE=${{ inlfse }}, PT=${{ pt }})
-                inputs:
-                  targetType: 'inline'
-                  script: |
+    - task: PowerShell@2
+      displayName: Publish and run
+      inputs:
+        targetType: 'inline'
+        script: |
+          $projectPath = "Resources/PackageIntegrationTestUtilities/DwmNetConsoleApp/DwmNetConsoleApp/DwmNetConsoleApp.csproj"
+    
+          foreach ($psf in @('true', 'false')) {
+            foreach ($prtr in @('true', 'false')) {
+              foreach ($inlfse in @('true', 'false')) {
+                foreach ($sc in @('true', 'false')) {
+                  foreach ($pt in @('true', 'false')) {
                     $publishOptions = @"
-                    SelfContained = ${{ sc }}
-                    PublishSingleFile = ${{ psf }}
-                    PublishReadyToRun = ${{ prtr }}
-                    IncludeNativeLibrariesForSelfExtract = ${{ inlfse }}
-                    PublishTrimmed = ${{ pt }}
-                    "@
+          SelfContained = $sc
+          PublishSingleFile = $psf
+          PublishReadyToRun = $prtr
+          IncludeNativeLibrariesForSelfExtract = $inlfse
+          PublishTrimmed = $pt
+          "@
                     Write-Host "$publishOptions"
-              
-                    $publishedAppPath = "$(Build.ArtifactStagingDirectory)/publish/sc-${{ sc }}-psf-${{ psf }}-prtr-${{ prtr }}-inlfse-${{ inlfse }}-pt-${{ pt }}"
-                    Write-Host "##vso[task.setvariable variable=publishedAppPath;]$publishedAppPath"
-                    Write-Host "Output path set to '$publishedAppPath'"
-              
-              - task: DotNetCoreCLI@2
-                displayName: Publish app
-                inputs:
-                  command: 'publish'
-                  publishWebProjects: false
-                  zipAfterPublish: false
-                  modifyOutputPath: false
-                  projects: 'Resources/PackageIntegrationTestUtilities/DwmNetConsoleApp/DwmNetConsoleApp/DwmNetConsoleApp.csproj'
-                  arguments: >
-                    --configuration $(BuildConfiguration)
-                    --runtime $(rid)
-                    --self-contained ${{ sc }}
-                    -p:PublishSingleFile=${{ psf }}
-                    -p:PublishReadyToRun=${{ prtr }}
-                    -p:IncludeNativeLibrariesForSelfExtract=${{ inlfse }}
-                    -p:PublishTrimmed=${{ pt }}
-                    -p:SolutionDir="$(Build.SourcesDirectory)/"
-                    --output $(publishedAppPath)
-              
-              - task: PowerShell@2
-                displayName: Run published app
-                inputs:
-                  targetType: 'inline'
-                  script: |
+
+                    if (($pt -eq 'true' -and $sc -eq 'false') -or
+                        ($sc -eq 'false' -and $inlfse -eq 'true') -or
+                        ($prtr -eq 'true' -and $psf -eq 'true' -and $sc -eq 'false')) {
+                      Write-Host "Invalid configuration; skipped."
+                      continue;
+                    }
+                    
+                    $outputPath = "$(Build.ArtifactStagingDirectory)/publish/$(rid)/sc-$sc-psf-$psf-prtr-$prtr-inlfse-$inlfse-pt-$pt"
+                    Write-Host "Output path set to '$outputPath'"
+                    
+                    Write-Host "Publishing the app..."
+                    dotnet publish `
+                      --configuration $(BuildConfiguration) `
+                      --runtime $(rid) `
+                      --self-contained=$sc `
+                      -p:PublishSingleFile=$psf `
+                      -p:PublishReadyToRun=$prtr `
+                      -p:IncludeNativeLibrariesForSelfExtract=$inlfse `
+                      -p:PublishTrimmed=$pt `
+                      -p:SolutionDir="$(Build.SourcesDirectory)/" `
+                      --output $outputPath `
+                      $projectPath
+                    
+                    if ($LASTEXITCODE -ne 0) {
+                      Write-Error "Publish failed with exit code $LASTEXITCODE"
+                      exit $LASTEXITCODE
+                    }
+                    
                     Write-Host "Listing published files..."
                     Write-Host ""
-                    Get-ChildItem -Recurse -Force -Path "$(publishedAppPath)" | Format-Table @{Label="File Name"; Expression={$_.Name}}, @{Label="Size (KB)"; Expression={"{0:N2}" -f ($_.Length / 1KB)}}
+                    Get-ChildItem -Recurse -Force -Path "$outputPath" | Format-Table @{Label="File Name"; Expression={$_.Name}}, @{Label="Size (KB)"; Expression={"{0:N2}" -f ($_.Length / 1KB)}}
                     Write-Host ""
-
+                    
                     Write-Host "Running the app..."
                     Write-Host ""
                     if ($IsWindows) {
-                      & "$(publishedAppPath)/DwmNetConsoleApp.exe"
+                      & "$outputPath/DwmNetConsoleApp.exe"
                     } else {
-                      & "$(publishedAppPath)/DwmNetConsoleApp"
+                      & "$outputPath/DwmNetConsoleApp"
                     }
-              
+                    
                     if ($LASTEXITCODE -ne 0) {
                       Write-Error "App execution failed with exit code $LASTEXITCODE"
                       exit $LASTEXITCODE
                     }
+                    
+                    Write-Host ""
+                    Write-Host "Configuration test completed successfully"
+                    Write-Host ""
+                  }
+                }
+              }
+            }
+          }

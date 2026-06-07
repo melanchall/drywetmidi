@@ -25,8 +25,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void CheckEventsReceiving()
         {
-            using (var outputEndpoint = OutputEndpoint.GetByName(SendReceiveUtilities.DeviceToTestOnName))
-            using (var inputEndpoint = InputEndpoint.GetByName(SendReceiveUtilities.DeviceToTestOnName))
+            using (var outputEndpoint = OutputEndpoint.GetByName(SendReceiveUtilities.EndpointToTestOnName))
+            using (var inputEndpoint = InputEndpoint.GetByName(SendReceiveUtilities.EndpointToTestOnName))
             {
                 outputEndpoint.PrepareForEventsSending();
                 inputEndpoint.StartEventsListening();
@@ -59,8 +59,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
             CollectionAssert.IsNotEmpty(events, "Events collection is empty.");
 
-            using (var outputEndpoint = OutputEndpoint.GetByName(SendReceiveUtilities.DeviceToTestOnName))
-            using (var inputEndpoint = InputEndpoint.GetByName(SendReceiveUtilities.DeviceToTestOnName))
+            using (var outputEndpoint = OutputEndpoint.GetByName(SendReceiveUtilities.EndpointToTestOnName))
+            using (var inputEndpoint = InputEndpoint.GetByName(SendReceiveUtilities.EndpointToTestOnName))
             {
                 outputEndpoint.PrepareForEventsSending();
                 inputEndpoint.StartEventsListening();

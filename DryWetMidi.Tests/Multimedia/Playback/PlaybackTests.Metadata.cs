@@ -2461,7 +2461,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
             var actualEvents = new List<(MidiEvent, object)>();
 
-            using (var playback = new Playback(timedEvents, TempoMap, TestDeviceManager.GetOutputEndpoint(SendReceiveUtilities.DeviceToTestOnName)))
+            using (var playback = new Playback(timedEvents, TempoMap, TestDeviceManager.GetOutputEndpoint(SendReceiveUtilities.EndpointToTestOnName)))
             {
                 setupPlayback?.Invoke(playback);
 

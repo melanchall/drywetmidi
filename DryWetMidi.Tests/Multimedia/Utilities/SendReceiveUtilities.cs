@@ -14,7 +14,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
     {
         #region Constants
 
-        public const string DeviceToTestOnName = MidiEndpoints.A;
+        public const string EndpointToTestOnName = MidiEndpoints.A;
         public static readonly TimeSpan MaximumEventSendReceiveDelay = TimeSpan.FromMilliseconds(30);
 
         #endregion

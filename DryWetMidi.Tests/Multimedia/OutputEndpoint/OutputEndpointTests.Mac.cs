@@ -33,7 +33,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [MacOnly]
         public void GetOutputEndpointProperty_Product_Mac()
         {
-            var outputEndpoint = DevicesUtilities.GetOutputEndpoint(MidiEndpoints.A);
+            var outputEndpoint = OutputEndpoint.GetByName(MidiEndpoints.A);
             ClassicAssert.AreEqual("OutputProduct", outputEndpoint.GetProperty(OutputEndpointProperty.Product), "Product is invalid.");
         }
 
@@ -41,7 +41,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [MacOnly]
         public void GetOutputEndpointProperty_Manufacturer_Mac()
         {
-            var outputEndpoint = DevicesUtilities.GetOutputEndpoint(MidiEndpoints.A);
+            var outputEndpoint = OutputEndpoint.GetByName(MidiEndpoints.A);
             ClassicAssert.AreEqual("OutputManufacturer", outputEndpoint.GetProperty(OutputEndpointProperty.Manufacturer), "Manufacturer is invalid.");
         }
 
@@ -49,7 +49,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [MacOnly]
         public void GetOutputEndpointProperty_DriverVersion_Mac()
         {
-            var outputEndpoint = DevicesUtilities.GetOutputEndpoint(MidiEndpoints.A);
+            var outputEndpoint = OutputEndpoint.GetByName(MidiEndpoints.A);
             ClassicAssert.AreEqual(200, outputEndpoint.GetProperty(OutputEndpointProperty.DriverVersion), "Driver version is invalid.");
         }
 
@@ -57,7 +57,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [MacOnly]
         public void GetOutputEndpointProperty_Technology_Mac()
         {
-            var outputEndpoint = DevicesUtilities.GetOutputEndpoint(MidiEndpoints.A);
+            var outputEndpoint = OutputEndpoint.GetByName(MidiEndpoints.A);
             ClassicAssert.Throws<ArgumentException>(() => outputEndpoint.GetProperty(OutputEndpointProperty.Technology), "Technology is supported.");
         }
 
@@ -65,7 +65,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [MacOnly]
         public void GetOutputEndpointProperty_UniqueId_Mac()
         {
-            var outputEndpoint = DevicesUtilities.GetOutputEndpoint(MidiEndpoints.A);
+            var outputEndpoint = OutputEndpoint.GetByName(MidiEndpoints.A);
             ClassicAssert.IsNotNull(outputEndpoint.GetProperty(OutputEndpointProperty.UniqueId), "Device unique ID is null.");
         }
 
@@ -73,7 +73,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [MacOnly]
         public void GetOutputEndpointProperty_VoicesNumber_Mac()
         {
-            var outputEndpoint = DevicesUtilities.GetOutputEndpoint(MidiEndpoints.A);
+            var outputEndpoint = OutputEndpoint.GetByName(MidiEndpoints.A);
             ClassicAssert.Throws<ArgumentException>(() => outputEndpoint.GetProperty(OutputEndpointProperty.VoicesNumber), "Voices number is supported.");
         }
 
@@ -81,7 +81,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [MacOnly]
         public void GetOutputEndpointProperty_NotesNumber_Mac()
         {
-            var outputEndpoint = DevicesUtilities.GetOutputEndpoint(MidiEndpoints.A);
+            var outputEndpoint = OutputEndpoint.GetByName(MidiEndpoints.A);
             ClassicAssert.Throws<ArgumentException>(() => outputEndpoint.GetProperty(OutputEndpointProperty.NotesNumber), "Notes number is supported.");
         }
 
@@ -89,7 +89,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [MacOnly]
         public void GetOutputEndpointProperty_Channels_Mac()
         {
-            var outputEndpoint = DevicesUtilities.GetOutputEndpoint(MidiEndpoints.A);
+            var outputEndpoint = OutputEndpoint.GetByName(MidiEndpoints.A);
             ClassicAssert.Throws<ArgumentException>(() => outputEndpoint.GetProperty(OutputEndpointProperty.Channels), "Channels is supported.");
         }
 
@@ -97,7 +97,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [MacOnly]
         public void GetOutputEndpointProperty_Options_Mac()
         {
-            var outputEndpoint = DevicesUtilities.GetOutputEndpoint(MidiEndpoints.A);
+            var outputEndpoint = OutputEndpoint.GetByName(MidiEndpoints.A);
             ClassicAssert.Throws<ArgumentException>(() => outputEndpoint.GetProperty(OutputEndpointProperty.Options), "Options is supported.");
         }
 
@@ -105,7 +105,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [MacOnly]
         public void GetOutputEndpointProperty_DriverOwner_Mac()
         {
-            var outputEndpoint = DevicesUtilities.GetOutputEndpoint(MidiEndpoints.A);
+            var outputEndpoint = OutputEndpoint.GetByName(MidiEndpoints.A);
             ClassicAssert.AreEqual("OutputDriverOwner", outputEndpoint.GetProperty(OutputEndpointProperty.DriverOwner), "Driver owner is invalid.");
         }
 

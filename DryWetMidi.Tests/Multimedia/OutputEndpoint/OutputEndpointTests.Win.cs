@@ -26,11 +26,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [WinOnly]
         public void OutputEndpointIsInUse()
         {
-            using (var outputEndpoint1 = DevicesUtilities.GetOutputEndpoint(MidiEndpoints.A))
+            using (var outputEndpoint1 = OutputEndpoint.GetByName(MidiEndpoints.A))
             {
                 outputEndpoint1.SendEvent(new NoteOnEvent());
 
-                using (var outputEndpoint2 = DevicesUtilities.GetOutputEndpoint(MidiEndpoints.A))
+                using (var outputEndpoint2 = OutputEndpoint.GetByName(MidiEndpoints.A))
                 {
                     ClassicAssert.Throws<NativeApiException>(() => outputEndpoint2.SendEvent(new NoteOnEvent()));
                 }
@@ -61,7 +61,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [WinOnly]
         public void GetOutputEndpointProperty_Product_Win()
         {
-            var outputEndpoint = DevicesUtilities.GetOutputEndpoint(MidiEndpoints.A);
+            var outputEndpoint = OutputEndpoint.GetByName(MidiEndpoints.A);
             ClassicAssert.IsNotNull(outputEndpoint.GetProperty(OutputEndpointProperty.Product), "Product is null.");
         }
 
@@ -69,7 +69,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [WinOnly]
         public void GetOutputEndpointProperty_Manufacturer_Win()
         {
-            var outputEndpoint = DevicesUtilities.GetOutputEndpoint(MidiEndpoints.A);
+            var outputEndpoint = OutputEndpoint.GetByName(MidiEndpoints.A);
             ClassicAssert.IsNotNull(outputEndpoint.GetProperty(OutputEndpointProperty.Manufacturer), "Manufacturer is null.");
         }
 
@@ -77,7 +77,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [WinOnly]
         public void GetOutputEndpointProperty_DriverVersion_Win()
         {
-            var outputEndpoint = DevicesUtilities.GetOutputEndpoint(MidiEndpoints.A);
+            var outputEndpoint = OutputEndpoint.GetByName(MidiEndpoints.A);
             ClassicAssert.IsNotNull(outputEndpoint.GetProperty(OutputEndpointProperty.DriverVersion), "Driver version is null.");
         }
 
@@ -85,7 +85,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [WinOnly]
         public void GetOutputEndpointProperty_Technology_Win()
         {
-            var outputEndpoint = DevicesUtilities.GetOutputEndpoint(MidiEndpoints.A);
+            var outputEndpoint = OutputEndpoint.GetByName(MidiEndpoints.A);
             ClassicAssert.IsNotNull(outputEndpoint.GetProperty(OutputEndpointProperty.Technology), "Technology is null.");
         }
 
@@ -93,7 +93,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [WinOnly]
         public void GetOutputEndpointProperty_UniqueId_Win()
         {
-            var outputEndpoint = DevicesUtilities.GetOutputEndpoint(MidiEndpoints.A);
+            var outputEndpoint = OutputEndpoint.GetByName(MidiEndpoints.A);
             ClassicAssert.Throws<ArgumentException>(() => outputEndpoint.GetProperty(OutputEndpointProperty.UniqueId), "Device unique ID is supported.");
         }
 
@@ -101,7 +101,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [WinOnly]
         public void GetOutputEndpointProperty_VoicesNumber_Win()
         {
-            var outputEndpoint = DevicesUtilities.GetOutputEndpoint(MidiEndpoints.A);
+            var outputEndpoint = OutputEndpoint.GetByName(MidiEndpoints.A);
             ClassicAssert.IsNotNull(outputEndpoint.GetProperty(OutputEndpointProperty.VoicesNumber), "Voices number is null.");
         }
 
@@ -109,7 +109,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [WinOnly]
         public void GetOutputEndpointProperty_NotesNumber_Win()
         {
-            var outputEndpoint = DevicesUtilities.GetOutputEndpoint(MidiEndpoints.A);
+            var outputEndpoint = OutputEndpoint.GetByName(MidiEndpoints.A);
             ClassicAssert.IsNotNull(outputEndpoint.GetProperty(OutputEndpointProperty.NotesNumber), "Notes number is null.");
         }
 
@@ -117,7 +117,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [WinOnly]
         public void GetOutputEndpointProperty_Channels_Win()
         {
-            var outputEndpoint = DevicesUtilities.GetOutputEndpoint(MidiEndpoints.A);
+            var outputEndpoint = OutputEndpoint.GetByName(MidiEndpoints.A);
 
             object result;
             ClassicAssert.IsNotNull(result = outputEndpoint.GetProperty(OutputEndpointProperty.Channels), "Channels is null.");
@@ -128,7 +128,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [WinOnly]
         public void GetOutputEndpointProperty_Options_Win()
         {
-            var outputEndpoint = DevicesUtilities.GetOutputEndpoint(MidiEndpoints.A);
+            var outputEndpoint = OutputEndpoint.GetByName(MidiEndpoints.A);
             ClassicAssert.IsNotNull(outputEndpoint.GetProperty(OutputEndpointProperty.Options), "Options is null.");
         }
 
@@ -136,7 +136,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [WinOnly]
         public void GetOutputEndpointProperty_DriverOwner_Win()
         {
-            var outputEndpoint = DevicesUtilities.GetOutputEndpoint(MidiEndpoints.A);
+            var outputEndpoint = OutputEndpoint.GetByName(MidiEndpoints.A);
             ClassicAssert.Throws<ArgumentException>(() => outputEndpoint.GetProperty(OutputEndpointProperty.DriverOwner), "Driver owner is supported.");
         }
 
@@ -193,7 +193,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         public void CheckMicrosoftGsWavetableSynthEquality_DifferentEndpoints()
         {
             var outputEndpoint1 = DevicesUtilities.GetOutputEndpoint(MicrosoftGsWavetableSynth);
-            var outputEndpoint2 = DevicesUtilities.GetOutputEndpoint(MidiEndpoints.A);
+            var outputEndpoint2 = OutputEndpoint.GetByName(MidiEndpoints.A);
             ClassicAssert.AreNotEqual(outputEndpoint1, outputEndpoint2, "Endpoints are equal.");
         }
 

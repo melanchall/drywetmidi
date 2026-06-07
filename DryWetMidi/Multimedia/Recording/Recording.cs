@@ -10,7 +10,7 @@ using Melanchall.DryWetMidi.Interaction;
 namespace Melanchall.DryWetMidi.Multimedia
 {
     /// <summary>
-    /// Provides a way to record MIDI data received by an input MIDI device. More info in the
+    /// Provides a way to record MIDI data received by an input MIDI endpoint. More info in the
     /// <see href="xref:a_recording_overview">Recording</see> article.
     /// </summary>
     public sealed class Recording : IDisposable
@@ -47,10 +47,10 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Recording"/> with the specified
-        /// tempo map and input MIDI device to capture MIDI data from.
+        /// tempo map and input MIDI endpoint to capture MIDI data from.
         /// </summary>
         /// <param name="tempoMap">Tempo map used to calculate events times.</param>
-        /// <param name="inputEndpoint">Input MIDI device to capture MIDI data from.</param>
+        /// <param name="inputEndpoint">Input MIDI endpoint to capture MIDI data from.</param>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
@@ -82,7 +82,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         public TempoMap TempoMap { get; }
 
         /// <summary>
-        /// Gets the input MIDI device to record MIDI data from.
+        /// Gets the input MIDI endpoint to record MIDI data from.
         /// </summary>
         public IInputEndpoint InputEndpoint { get; }
 
@@ -136,14 +136,14 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <summary>
         /// Starts MIDI data recording.
         /// </summary>
-        /// <exception cref="InvalidOperationException">Input device is not listening for MIDI events.</exception>
+        /// <exception cref="InvalidOperationException">Input MIDI endpoint is not listening for MIDI events.</exception>
         public void Start()
         {
             if (IsRunning)
                 return;
 
             if (!InputEndpoint.IsListeningForEvents)
-                throw new InvalidOperationException($"Input device is not listening for MIDI events. Call {nameof(InputEndpoint.StartEventsListening)} prior to start recording.");
+                throw new InvalidOperationException($"Input MIDI endpoint is not listening for MIDI events. Call {nameof(InputEndpoint.StartEventsListening)} prior to start recording.");
 
             _stopwatch.Start();
             OnStarted();

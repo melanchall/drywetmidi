@@ -93,7 +93,7 @@ jobs:
           $path = Resolve-Path 'Resources/PackageIntegrationTestUtilities/DwmNativelessNetConsoleApp/DwmNativelessNetConsoleApp/DwmNativelessNetConsoleApp.csproj'
           dotnet run --project "$path" --configuration ${{ vars.BUILD_CONFIGURATION }}
 
-      - name: Run app after publish
+      - name: Publish and run
         shell: pwsh
         run: |
           $projectPath = "Resources/PackageIntegrationTestUtilities/DwmNativelessNetConsoleApp/DwmNativelessNetConsoleApp/DwmNativelessNetConsoleApp.csproj"
@@ -111,6 +111,13 @@ jobs:
           PublishTrimmed = $pt
           "@
                     Write-Host "$publishOptions"
+
+                    if (($pt -eq 'true' -and $sc -eq 'false') -or
+                        ($sc -eq 'false' -and $inlfse -eq 'true') -or
+                        ($prtr -eq 'true' -and $psf -eq 'true' -and $sc -eq 'false')) {
+                      Write-Host "Invalid configuration; skipped."
+                      continue;
+                    }
                     
                     $outputPath = "${{ runner.temp }}/publish/$rid/sc-$sc-psf-$psf-prtr-$prtr-inlfse-$inlfse-pt-$pt"
                     Write-Host "Output path set to '$outputPath'"

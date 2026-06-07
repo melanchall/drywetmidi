@@ -91,8 +91,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void CheckInputEndpointMultiClientAccess()
         {
-            using (var inputEndpoint1 = DevicesUtilities.GetInputEndpoint(MidiEndpoints.A))
-            using (var inputEndpoint2 = DevicesUtilities.GetInputEndpoint(MidiEndpoints.A))
+            using (var inputEndpoint1 = InputEndpoint.GetByName(MidiEndpoints.A))
+            using (var inputEndpoint2 = InputEndpoint.GetByName(MidiEndpoints.A))
             using (var outputEndpoint = OutputEndpoint.GetByName(MidiEndpoints.A))
             {
                 var receivedEventsCount = 0;
@@ -161,7 +161,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             };
 
             using (var outputEndpoint = OutputEndpoint.GetByName(MidiEndpoints.A))
-            using (var inputEndpoint = DevicesUtilities.GetInputEndpoint(MidiEndpoints.A))
+            using (var inputEndpoint = InputEndpoint.GetByName(MidiEndpoints.A))
             {
                 inputEndpoint.MidiTimeCodeReceived += (_, e) => midiTimeCodeReceived = new MidiTimeCode(e.Format, e.Hours, e.Minutes, e.Seconds, e.Frames);
 
@@ -192,17 +192,17 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             {
                 var checkpoints = new TestCheckpoints();
 
-                var inputEndpoint = DevicesUtilities.GetInputEndpoint(MidiEndpoints.A);
+                var inputEndpoint = InputEndpoint.GetByName(MidiEndpoints.A);
                 inputEndpoint.TestCheckpoints = checkpoints;
 
                 ClassicAssert.DoesNotThrow(() => inputEndpoint.StartEventsListening());
 
                 checkpoints.CheckCheckpointsAreNotReached(
                     InputEndpointCheckpointsNames.ReleaseHandleEntered,
-                    InputEndpointCheckpointsNames.DisconnectDeviceExecutedInReleaseHandle,
-                    InputEndpointCheckpointsNames.DisconnectDeviceSuccessInReleaseHandle,
-                    InputEndpointCheckpointsNames.CloseDeviceExecutedInReleaseHandle,
-                    InputEndpointCheckpointsNames.CloseDeviceSuccessInReleaseHandle,
+                    InputEndpointCheckpointsNames.DisconnectEndpointExecutedInReleaseHandle,
+                    InputEndpointCheckpointsNames.DisconnectEndpointSuccessInReleaseHandle,
+                    InputEndpointCheckpointsNames.CloseEndpointExecutedInReleaseHandle,
+                    InputEndpointCheckpointsNames.CloseEndpointSuccessInReleaseHandle,
                     InputEndpointCheckpointsNames.ReleaseInfoHandleEntered,
                     InputEndpointCheckpointsNames.InfoDeletedInReleaseInfoHandle);
 
@@ -210,10 +210,10 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
                 checkpoints.CheckCheckpointsReached(
                     InputEndpointCheckpointsNames.ReleaseHandleEntered,
-                    InputEndpointCheckpointsNames.DisconnectDeviceExecutedInReleaseHandle,
-                    InputEndpointCheckpointsNames.DisconnectDeviceSuccessInReleaseHandle,
-                    InputEndpointCheckpointsNames.CloseDeviceExecutedInReleaseHandle,
-                    InputEndpointCheckpointsNames.CloseDeviceSuccessInReleaseHandle,
+                    InputEndpointCheckpointsNames.DisconnectEndpointExecutedInReleaseHandle,
+                    InputEndpointCheckpointsNames.DisconnectEndpointSuccessInReleaseHandle,
+                    InputEndpointCheckpointsNames.CloseEndpointExecutedInReleaseHandle,
+                    InputEndpointCheckpointsNames.CloseEndpointSuccessInReleaseHandle,
                     InputEndpointCheckpointsNames.ReleaseInfoHandleEntered,
                     InputEndpointCheckpointsNames.InfoDeletedInReleaseInfoHandle);
             }
@@ -224,7 +224,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         {
             Func<TestCheckpoints, bool> openEndpoint = testCheckpoints =>
             {
-                var inputEndpoint = DevicesUtilities.GetInputEndpoint(MidiEndpoints.A);
+                var inputEndpoint = InputEndpoint.GetByName(MidiEndpoints.A);
                 inputEndpoint.TestCheckpoints = testCheckpoints;
 
                 try
@@ -244,10 +244,10 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
                 checkpoints.CheckCheckpointsAreNotReached(
                     InputEndpointCheckpointsNames.ReleaseHandleEntered,
-                    InputEndpointCheckpointsNames.DisconnectDeviceExecutedInReleaseHandle,
-                    InputEndpointCheckpointsNames.DisconnectDeviceSuccessInReleaseHandle,
-                    InputEndpointCheckpointsNames.CloseDeviceExecutedInReleaseHandle,
-                    InputEndpointCheckpointsNames.CloseDeviceSuccessInReleaseHandle,
+                    InputEndpointCheckpointsNames.DisconnectEndpointExecutedInReleaseHandle,
+                    InputEndpointCheckpointsNames.DisconnectEndpointSuccessInReleaseHandle,
+                    InputEndpointCheckpointsNames.CloseEndpointExecutedInReleaseHandle,
+                    InputEndpointCheckpointsNames.CloseEndpointSuccessInReleaseHandle,
                     InputEndpointCheckpointsNames.ReleaseInfoHandleEntered,
                     InputEndpointCheckpointsNames.InfoDeletedInReleaseInfoHandle);
 
@@ -259,10 +259,10 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
                 checkpoints.CheckCheckpointsReached(
                     InputEndpointCheckpointsNames.ReleaseHandleEntered,
-                    InputEndpointCheckpointsNames.DisconnectDeviceExecutedInReleaseHandle,
-                    InputEndpointCheckpointsNames.DisconnectDeviceSuccessInReleaseHandle,
-                    InputEndpointCheckpointsNames.CloseDeviceExecutedInReleaseHandle,
-                    InputEndpointCheckpointsNames.CloseDeviceSuccessInReleaseHandle,
+                    InputEndpointCheckpointsNames.DisconnectEndpointExecutedInReleaseHandle,
+                    InputEndpointCheckpointsNames.DisconnectEndpointSuccessInReleaseHandle,
+                    InputEndpointCheckpointsNames.CloseEndpointExecutedInReleaseHandle,
+                    InputEndpointCheckpointsNames.CloseEndpointSuccessInReleaseHandle,
                     InputEndpointCheckpointsNames.ReleaseInfoHandleEntered,
                     InputEndpointCheckpointsNames.InfoDeletedInReleaseInfoHandle);
             }
@@ -273,7 +273,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         public void DisableEnableInputEndpoint()
         {
             using (var outputEndpoint = OutputEndpoint.GetByName(MidiEndpoints.A))
-            using (var inputEndpoint = DevicesUtilities.GetInputEndpoint(MidiEndpoints.A))
+            using (var inputEndpoint = InputEndpoint.GetByName(MidiEndpoints.A))
             {
                 ClassicAssert.IsTrue(inputEndpoint.IsEnabled, "Endpoint is not enabled initially.");
 
@@ -306,7 +306,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void InputEndpointToString_User()
         {
-            var inputEndpoint = DevicesUtilities.GetInputEndpoint(MidiEndpoints.A);
+            var inputEndpoint = InputEndpoint.GetByName(MidiEndpoints.A);
             ClassicAssert.AreEqual("Input endpoint", inputEndpoint.ToString(), "Endpoint string representation is invalid.");
         }
 
@@ -326,7 +326,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var timeout = SendReceiveUtilities.MaximumEventSendReceiveDelay + SendReceiveUtilities.MaximumEventSendReceiveDelay;
 
             using (var outputEndpoint = OutputEndpoint.GetByName(MidiEndpoints.A))
-            using (var inputEndpoint = DevicesUtilities.GetInputEndpoint(MidiEndpoints.A))
+            using (var inputEndpoint = InputEndpoint.GetByName(MidiEndpoints.A))
             {
                 inputEndpoint.EventReceived += (_, __) => receivedEventsCount++;
 
@@ -369,7 +369,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var timeout = SendReceiveUtilities.MaximumEventSendReceiveDelay;
 
             using (var outputEndpoint = OutputEndpoint.GetByName(MidiEndpoints.A))
-            using (var inputEndpoint = DevicesUtilities.GetInputEndpoint(MidiEndpoints.A))
+            using (var inputEndpoint = InputEndpoint.GetByName(MidiEndpoints.A))
             {
                 MidiEvent midiEvent = null;
 
@@ -398,7 +398,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void SysExBufferSize_Invalid([Values(0, 16, 31)] int bufferSize)
         {
-            using (var inputEndpoint = DevicesUtilities.GetInputEndpoint(MidiEndpoints.A))
+            using (var inputEndpoint = InputEndpoint.GetByName(MidiEndpoints.A))
             {
                 ClassicAssert.Throws<ArgumentOutOfRangeException>(
                     () => inputEndpoint.SysExBufferSize = bufferSize,
@@ -410,7 +410,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void SysExBufferSize_AfterStartEventListening()
         {
-            using (var inputEndpoint = DevicesUtilities.GetInputEndpoint(MidiEndpoints.A))
+            using (var inputEndpoint = InputEndpoint.GetByName(MidiEndpoints.A))
             {
                 inputEndpoint.StartEventsListening();
                 ClassicAssert.Throws<InvalidOperationException>(
@@ -423,7 +423,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void SysExBuffersCount_Invalid([Values(0, 1)] int buffersCount)
         {
-            using (var inputEndpoint = DevicesUtilities.GetInputEndpoint(MidiEndpoints.A))
+            using (var inputEndpoint = InputEndpoint.GetByName(MidiEndpoints.A))
             {
                 ClassicAssert.Throws<ArgumentOutOfRangeException>(
                     () => inputEndpoint.SysExBuffersCount = buffersCount,
@@ -435,7 +435,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void SysExBuffersCount_AfterStartEventListening()
         {
-            using (var inputEndpoint = DevicesUtilities.GetInputEndpoint(MidiEndpoints.A))
+            using (var inputEndpoint = InputEndpoint.GetByName(MidiEndpoints.A))
             {
                 inputEndpoint.StartEventsListening();
                 ClassicAssert.Throws<InvalidOperationException>(
@@ -487,8 +487,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void CheckInputEndpointsEquality_ViaEquals_SameEndpoints()
         {
-            var inputEndpoint1 = DevicesUtilities.GetInputEndpoint(MidiEndpoints.A);
-            var inputEndpoint2 = DevicesUtilities.GetInputEndpoint(MidiEndpoints.A);
+            var inputEndpoint1 = InputEndpoint.GetByName(MidiEndpoints.A);
+            var inputEndpoint2 = InputEndpoint.GetByName(MidiEndpoints.A);
 
             ClassicAssert.AreEqual(inputEndpoint1, inputEndpoint2, "Endpoints are not equal.");
         }
@@ -496,8 +496,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void CheckInputEndpointsEquality_ViaEquals_DifferentEndpoints()
         {
-            var inputEndpoint1 = DevicesUtilities.GetInputEndpoint(MidiEndpoints.A);
-            var inputEndpoint2 = DevicesUtilities.GetInputEndpoint(MidiEndpoints.B);
+            var inputEndpoint1 = InputEndpoint.GetByName(MidiEndpoints.A);
+            var inputEndpoint2 = InputEndpoint.GetByName(MidiEndpoints.B);
 
             ClassicAssert.AreNotEqual(inputEndpoint1, inputEndpoint2, "Endpoints are equal.");
         }
@@ -505,8 +505,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void CheckInputEndpointsEquality_ViaOperator_SameEndpoints()
         {
-            var inputEndpoint1 = DevicesUtilities.GetInputEndpoint(MidiEndpoints.A);
-            var inputEndpoint2 = DevicesUtilities.GetInputEndpoint(MidiEndpoints.A);
+            var inputEndpoint1 = InputEndpoint.GetByName(MidiEndpoints.A);
+            var inputEndpoint2 = InputEndpoint.GetByName(MidiEndpoints.A);
 
             ClassicAssert.IsTrue(inputEndpoint1 == inputEndpoint2, "Endpoints are not equal via equality.");
             ClassicAssert.IsFalse(inputEndpoint1 != inputEndpoint2, "Endpoints are not equal via inequality.");
@@ -515,8 +515,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void CheckInputEndpointsEquality_ViaOperator_DifferentEndpoints()
         {
-            var inputEndpoint1 = DevicesUtilities.GetInputEndpoint(MidiEndpoints.A);
-            var inputEndpoint2 = DevicesUtilities.GetInputEndpoint(MidiEndpoints.B);
+            var inputEndpoint1 = InputEndpoint.GetByName(MidiEndpoints.A);
+            var inputEndpoint2 = InputEndpoint.GetByName(MidiEndpoints.B);
 
             ClassicAssert.IsFalse(inputEndpoint1 == inputEndpoint2, "Endpoints are equal via equality.");
             ClassicAssert.IsTrue(inputEndpoint1 != inputEndpoint2, "Endpoints are equal via inequality.");
@@ -528,10 +528,10 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var label = "X";
             var dictionary = new Dictionary<MidiEndpoint, string>
             {
-                [DevicesUtilities.GetInputEndpoint(MidiEndpoints.A)] = label
+                [InputEndpoint.GetByName(MidiEndpoints.A)] = label
             };
 
-            var inputEndpoint = DevicesUtilities.GetInputEndpoint(MidiEndpoints.A);
+            var inputEndpoint = InputEndpoint.GetByName(MidiEndpoints.A);
             ClassicAssert.IsTrue(dictionary.TryGetValue(inputEndpoint, out var value), "Failed to find endpoint in dictionary.");
             ClassicAssert.AreEqual(label, value, "Endpoint label is invalid.");
         }

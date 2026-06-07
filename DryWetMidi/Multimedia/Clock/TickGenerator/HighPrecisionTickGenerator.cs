@@ -7,6 +7,9 @@ namespace Melanchall.DryWetMidi.Multimedia
     /// Tick generator providing most accurate ticking, allowing firing intervals of 1 ms which
     /// is the smallest possible one.
     /// </summary>
+    /// <remarks>
+    /// <os-specific-api/>
+    /// </remarks>
     public sealed class HighPrecisionTickGenerator : TickGenerator
     {
         #region Constants

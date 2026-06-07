@@ -1,0 +1,5 @@
+steps:
+- template: step-execute-ci-tool.yaml
+  parameters:
+    tool: 'GeneratePlatformSpecificApiDescriptions'
+    toolArguments: '"Docs" "DryWetMidi"'
