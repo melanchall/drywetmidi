@@ -1,6 +1,5 @@
 ﻿using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
-using Melanchall.DryWetMidi.Multimedia;
 using Melanchall.DryWetMidi.Tests.Attributes;
 using Melanchall.DryWetMidi.Tests.Utilities;
 using NUnit.Framework;
@@ -314,63 +313,6 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             }
 
             WaitAfterReceiveData();
-        }
-
-        [Test]
-        [MacOnly]
-        public void GetInputEndpointSupportedProperties_Mac()
-        {
-            CollectionAssert.AreEquivalent(
-                new[]
-                {
-                    InputEndpointProperty.Product,
-                    InputEndpointProperty.Manufacturer,
-                    InputEndpointProperty.DriverVersion,
-                    InputEndpointProperty.UniqueId,
-                    InputEndpointProperty.DriverOwner,
-                },
-                InputEndpoint.GetSupportedProperties(),
-                "Invalid collection of supported properties.");
-        }
-
-        [Test]
-        [MacOnly]
-        public void GetInputEndpointProperty_Product_Mac()
-        {
-            var inputEndpoint = InputEndpoint.GetByName(MidiEndpoints.A);
-            ClassicAssert.AreEqual("InputProduct", inputEndpoint.GetProperty(InputEndpointProperty.Product), "Product is invalid.");
-        }
-
-        [Test]
-        [MacOnly]
-        public void GetInputEndpointProperty_Manufacturer_Mac()
-        {
-            var inputEndpoint = InputEndpoint.GetByName(MidiEndpoints.A);
-            ClassicAssert.AreEqual("InputManufacturer", inputEndpoint.GetProperty(InputEndpointProperty.Manufacturer), "Manufacturer is invalid.");
-        }
-
-        [Test]
-        [MacOnly]
-        public void GetInputEndpointProperty_DriverVersion_Mac()
-        {
-            var inputEndpoint = InputEndpoint.GetByName(MidiEndpoints.A);
-            ClassicAssert.AreEqual(100, inputEndpoint.GetProperty(InputEndpointProperty.DriverVersion), "Driver version is invalid.");
-        }
-
-        [Test]
-        [MacOnly]
-        public void GetInputEndpointProperty_UniqueId_Mac()
-        {
-            var inputEndpoint = InputEndpoint.GetByName(MidiEndpoints.A);
-            ClassicAssert.IsNotNull(inputEndpoint.GetProperty(InputEndpointProperty.UniqueId), "Endpoint unique ID is null.");
-        }
-
-        [Test]
-        [MacOnly]
-        public void GetInputEndpointProperty_DriverOwner_Mac()
-        {
-            var inputEndpoint = InputEndpoint.GetByName(MidiEndpoints.A);
-            ClassicAssert.AreEqual("InputDriverOwner", inputEndpoint.GetProperty(InputEndpointProperty.DriverOwner), "Driver owner is invalid.");
         }
 
         #endregion

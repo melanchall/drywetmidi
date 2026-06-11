@@ -123,10 +123,10 @@ namespace Melanchall.DryWetMidi.Multimedia
         public enum IN_GETPROPERTYRESULT
         {
             IN_GETPROPERTYRESULT_OK = 0,
-            IN_GETPROPERTYRESULT_UNKNOWNENDPOINT = 101,
-            IN_GETPROPERTYRESULT_TOOLONG = 102,
-            IN_GETPROPERTYRESULT_UNKNOWNPROPERTY = 103,
-            IN_GETPROPERTYRESULT_UNKNOWNERROR = 104
+
+            IN_GETPROPERTYRESULT_PROPERTYUNAVAILABLE = 101,
+            IN_GETPROPERTYRESULT_FAILEDGETVALUE = 102,
+            IN_GETPROPERTYRESULT_FAILEDFILLVALUEBUFFER = 103,
         }
 
         #endregion
@@ -162,28 +162,15 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         [LibraryImport(NativeApi.LibraryName)]
         [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-        private static partial int GetInputEndpointHashCode(IntPtr info);
-
-        [LibraryImport(NativeApi.LibraryName)]
-        [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-        [return: MarshalAs(UnmanagedType.U1)]
-        private static partial bool AreInputEndpointsEqual(IntPtr info1, IntPtr info2);
-
-        [LibraryImport(NativeApi.LibraryName)]
-        [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
         private static partial IN_GETPROPERTYRESULT GetInputEndpointName(IntPtr info, out IntPtr value, out int errorCode);
 
         [LibraryImport(NativeApi.LibraryName)]
         [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-        private static partial IN_GETPROPERTYRESULT GetInputEndpointManufacturer(IntPtr info, out IntPtr value, out int errorCode);
+        private static partial IN_GETPROPERTYRESULT GetInputEndpointId_Win(IntPtr info, out IntPtr value, out int errorCode);
 
         [LibraryImport(NativeApi.LibraryName)]
         [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-        private static partial IN_GETPROPERTYRESULT GetInputEndpointProduct(IntPtr info, out IntPtr value, out int errorCode);
-
-        [LibraryImport(NativeApi.LibraryName)]
-        [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-        private static partial IN_GETPROPERTYRESULT GetInputEndpointDriverVersion(IntPtr info, out int value, out int errorCode);
+        private static partial IN_GETPROPERTYRESULT GetInputEndpointId_Mac(IntPtr info, out int value, out int errorCode);
 
         [LibraryImport(NativeApi.LibraryName)]
         [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
@@ -219,19 +206,6 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         [LibraryImport(NativeApi.LibraryName)]
         [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-        [return: MarshalAs(UnmanagedType.U1)]
-        private static partial bool IsInputEndpointPropertySupported(InputEndpointProperty property);
-
-        [LibraryImport(NativeApi.LibraryName)]
-        [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-        private static partial IN_GETPROPERTYRESULT GetInputEndpointUniqueId(IntPtr info, out int value, out int errorCode);
-
-        [LibraryImport(NativeApi.LibraryName)]
-        [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-        private static partial IN_GETPROPERTYRESULT GetInputEndpointDriverOwner(IntPtr info, out IntPtr value, out int errorCode);
-
-        [LibraryImport(NativeApi.LibraryName)]
-        [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
         private static partial void DeleteInputEndpointInfo(IntPtr info);
 #else
         [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
@@ -247,23 +221,13 @@ namespace Melanchall.DryWetMidi.Multimedia
         private static extern void FreeInputEndpointsInfo(IntPtr array, int size);
 
         [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
-        private static extern int GetInputEndpointHashCode(IntPtr info);
-
-        [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
-        [return: MarshalAs(UnmanagedType.U1)]
-        private static extern bool AreInputEndpointsEqual(IntPtr info1, IntPtr info2);
-
-        [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
         private static extern IN_GETPROPERTYRESULT GetInputEndpointName(IntPtr info, out IntPtr value, out int errorCode);
 
         [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
-        private static extern IN_GETPROPERTYRESULT GetInputEndpointManufacturer(IntPtr info, out IntPtr value, out int errorCode);
+        private static extern IN_GETPROPERTYRESULT GetInputEndpointId_Win(IntPtr info, out IntPtr value, out int errorCode);
 
         [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
-        private static extern IN_GETPROPERTYRESULT GetInputEndpointProduct(IntPtr info, out IntPtr value, out int errorCode);
-
-        [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
-        private static extern IN_GETPROPERTYRESULT GetInputEndpointDriverVersion(IntPtr info, out int value, out int errorCode);
+        private static extern IN_GETPROPERTYRESULT GetInputEndpointId_Mac(IntPtr info, out int value, out int errorCode);
 
         [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
         private static extern IN_OPENRESULT OpenInputEndpoint_Win(IntPtr info, MidiDevicesSessionHandle sessionHandle, Callback_Win callback, int sysExBufferSize, int sysExBufferCount, out IntPtr handle, out int errorCode);
@@ -288,16 +252,6 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
         private static extern IN_GETSYSEXDATARESULT GetInputEndpointSysExBufferData(IntPtr header, out IntPtr data, out int size);
-
-        [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
-        [return: MarshalAs(UnmanagedType.U1)]
-        private static extern bool IsInputEndpointPropertySupported(InputEndpointProperty property);
-
-        [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
-        private static extern IN_GETPROPERTYRESULT GetInputEndpointUniqueId(IntPtr info, out int value, out int errorCode);
-
-        [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
-        private static extern IN_GETPROPERTYRESULT GetInputEndpointDriverOwner(IntPtr info, out IntPtr value, out int errorCode);
 
         [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
         private static extern void DeleteInputEndpointInfo(IntPtr info);
@@ -325,16 +279,6 @@ namespace Melanchall.DryWetMidi.Multimedia
         public static void Api_FreeEndpointsInfo(IntPtr array, int size)
         {
             FreeInputEndpointsInfo(array, size);
-        }
-
-        public static int Api_GetEndpointHashCode(IntPtr info)
-        {
-            return GetInputEndpointHashCode(info);
-        }
-
-        public static bool Api_AreEndpointsEqual(IntPtr info1, IntPtr info2)
-        {
-            return AreInputEndpointsEqual(info1, info2);
         }
 
         public static IN_OPENRESULT Api_OpenEndpoint_Win(IntPtr info, MidiDevicesSessionHandle sessionHandle, Callback_Win callback, int sysExBufferSize, int sysExBufferCount, out IntPtr handle, out int errorCode)
@@ -377,11 +321,6 @@ namespace Melanchall.DryWetMidi.Multimedia
             return GetInputEndpointSysExBufferData(header, out data, out size);
         }
 
-        public static bool Api_IsPropertySupported(InputEndpointProperty property)
-        {
-            return IsInputEndpointPropertySupported(property);
-        }
-
         public static IN_GETPROPERTYRESULT Api_GetEndpointName(IntPtr info, out string name, out int errorCode)
         {
             name = string.Empty;
@@ -396,54 +335,31 @@ namespace Melanchall.DryWetMidi.Multimedia
             return result;
         }
 
-        public static IN_GETPROPERTYRESULT Api_GetEndpointManufacturer(IntPtr info, out string manufacturer, out int errorCode)
+        public static IN_GETPROPERTYRESULT Api_GetEndpointId(IntPtr info, out string id, out int errorCode)
         {
-            manufacturer = string.Empty;
+            errorCode = 0;
+            id = string.Empty;
 
-            var result = GetInputEndpointManufacturer(info, out var manufacturerPointer, out errorCode);
-            if (result != IN_GETPROPERTYRESULT.IN_GETPROPERTYRESULT_OK)
-                return result;
+            IN_GETPROPERTYRESULT result = default;
 
-            manufacturer = NativeApi.GetStringFromPointer(manufacturerPointer);
-            NativeApi.FreeStringPointer(manufacturerPointer);
+            var apiType = CommonApi.Api_GetApiType();
 
-            return result;
-        }
-
-        public static IN_GETPROPERTYRESULT Api_GetEndpointProduct(IntPtr info, out string product, out int errorCode)
-        {
-            product = string.Empty;
-
-            var result = GetInputEndpointProduct(info, out var productPointer, out errorCode);
-            if (result != IN_GETPROPERTYRESULT.IN_GETPROPERTYRESULT_OK)
-                return result;
-
-            product = NativeApi.GetStringFromPointer(productPointer);
-            NativeApi.FreeStringPointer(productPointer);
-
-            return result;
-        }
-
-        public static IN_GETPROPERTYRESULT Api_GetEndpointDriverVersion(IntPtr info, out int driverVersion, out int errorCode)
-        {
-            return GetInputEndpointDriverVersion(info, out driverVersion, out errorCode);
-        }
-
-        public static IN_GETPROPERTYRESULT Api_GetEndpointUniqueId(IntPtr info, out int uniqueId, out int errorCode)
-        {
-            return GetInputEndpointUniqueId(info, out uniqueId, out errorCode);
-        }
-
-        public static IN_GETPROPERTYRESULT Api_GetEndpointDriverOwner(IntPtr info, out string driverOwner, out int errorCode)
-        {
-            driverOwner = string.Empty;
-
-            var result = GetInputEndpointDriverOwner(info, out var driverOwnerPointer, out errorCode);
-            if (result != IN_GETPROPERTYRESULT.IN_GETPROPERTYRESULT_OK)
-                return result;
-
-            driverOwner = NativeApi.GetStringFromPointer(driverOwnerPointer);
-            NativeApi.FreeStringPointer(driverOwnerPointer);
+            if (apiType == CommonApi.API_TYPE.API_TYPE_WIN)
+            {
+                result = GetInputEndpointId_Win(info, out var idPointer, out errorCode);
+                if (result == IN_GETPROPERTYRESULT.IN_GETPROPERTYRESULT_OK)
+                    id = NativeApi.GetStringFromPointer(idPointer);
+            }
+            else if (apiType == CommonApi.API_TYPE.API_TYPE_MAC)
+            {
+                result = GetInputEndpointId_Mac(info, out var idValue, out errorCode);
+                if (result == IN_GETPROPERTYRESULT.IN_GETPROPERTYRESULT_OK)
+                    id = idValue.ToString();
+            }
+            else
+            {
+                // TODO
+            }
 
             return result;
         }

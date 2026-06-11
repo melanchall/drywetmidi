@@ -34,7 +34,6 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         #region Test methods
 
         [WinOnly]
-        [DeviceInformationApiRequired]
         [Test]
         public void CheckOutputEndpointDeviceInformation([Values(MidiEndpoints.A, MidiEndpoints.B, MidiEndpoints.C)] string endpointName)
         {
@@ -45,6 +44,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
             ClassicAssert.IsNotNull(deviceInformation, "There is no device information.");
             ClassicAssert.IsNotNull(deviceInformation.Id, "Device ID is null.");
+            ClassicAssert.IsNotEmpty(deviceInformation.Id, "Device ID is empty.");
             ClassicAssert.IsNotNull(deviceInformation.Name, "Device name is null.");
             ClassicAssert.IsNotEmpty(deviceInformation.Name, "Device name is empty.");
             ClassicAssert.IsNotNull(deviceInformation.Manufacturer, "Device manufacturer is null.");
@@ -80,11 +80,21 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             }
         }
 
-        [TestCase(MidiEndpoints.A)]
-        [TestCase(MidiEndpoints.B)]
-        public void GetOutputEndpointByName(string endpointName)
+        [Test]
+        public void GetOutputEndpointByName([Values(MidiEndpoints.A, MidiEndpoints.B, MidiEndpoints.C)] string endpointName)
         {
             ClassicAssert.IsNotNull(DevicesUtilities.GetOutputEndpoint(endpointName), "There is no endpoint.");
+        }
+
+        [Test]
+        public void CheckOutputEndpointId([Values(MidiEndpoints.A, MidiEndpoints.B, MidiEndpoints.C)] string endpointName)
+        {
+            var outputEndpoint = DevicesUtilities.GetOutputEndpoint(endpointName);
+            ClassicAssert.IsNotNull(outputEndpoint, "There is no endpoint.");
+            ClassicAssert.IsNotNull(outputEndpoint.Id, "Endpoint ID is null.");
+            ClassicAssert.IsNotEmpty(outputEndpoint.Id, "Endpoint ID is empty.");
+
+            Console.WriteLine($"Output endpoint ID for [{endpointName}]: [{outputEndpoint.Id}]");
         }
 
         [Test]

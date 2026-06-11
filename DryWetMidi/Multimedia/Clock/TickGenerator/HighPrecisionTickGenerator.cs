@@ -61,6 +61,8 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// [<see cref="MinInterval"/>; <see cref="MaxInterval"/>] range.</exception>
         protected override void Start(TimeSpan interval)
         {
+            NativeApiUtilities.EnsureOsIsSupported();
+
             ThrowIfArgument.IsOutOfRange(
                 nameof(interval),
                 interval,

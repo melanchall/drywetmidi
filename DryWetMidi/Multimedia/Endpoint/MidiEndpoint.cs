@@ -104,6 +104,8 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// </summary>
         public abstract string Name { get; }
 
+        public abstract string Id { get; }
+
         internal CreationContext Context { get; }
 
         internal NativeHandle Handle { get; set; }
@@ -133,14 +135,12 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         public DeviceInformation GetDeviceInformation()
         {
-            if (!LibraryConfiguration.IsDeviceInformationApiAvailable())
-                throw new PlatformNotSupportedException("Device information API is not supported on the current operating system.");
+            NativeApiUtilities.EnsureOsIsSupported();
 
-            var result = DeviceApi.Api_GetParentDeviceInfo((Info ?? Handle).DangerousGetHandle(), MidiConfiguration.GetConfigurationHandle(), out var id, out var name, out var manufacturer, out var model);
-            if (!result)
-                return null;
+            var result = DeviceApi.Api_GetDeviceInformation((Info ?? Handle).DangerousGetHandle(), MidiConfiguration.GetConfigurationHandle(), out var id, out var name, out var manufacturer, out var model, out var deviceDriver, out var errorCode);
+            NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
 
-            return DeviceInformation.Get(id, name, manufacturer, model);
+            return DeviceInformation.Get(id, name, manufacturer, model, deviceDriver);
         }
 
         internal void EnsureEndpointIsNotDisposed()
@@ -164,7 +164,6 @@ namespace Melanchall.DryWetMidi.Multimedia
         {
         }
 
-        // TODO: check all calls, looks like some not needed
         internal static MidiDevicesSessionHandle EnsureSessionIsCreated() =>
             MidiDevicesSession.GetSessionHandle();
 

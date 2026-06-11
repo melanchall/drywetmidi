@@ -6,6 +6,12 @@ namespace Melanchall.DryWetMidi.Tests.Utilities
 {
     internal static class DevicesUtilities
     {
+        #region Constants
+
+        public static readonly TimeSpan EndpointsSearchTimeout = TimeSpan.FromSeconds(10);
+
+        #endregion
+
         #region Methods
 
         public static string GetVirtualDeviceName()
@@ -25,7 +31,6 @@ namespace Melanchall.DryWetMidi.Tests.Utilities
 
         public static InputEndpoint GetInputEndpoint(string name)
         {
-            var timeout = TimeSpan.FromSeconds(5);
             var inputEndpoint = default(InputEndpoint);
             
             var success = WaitOperations.Wait(
@@ -34,16 +39,15 @@ namespace Melanchall.DryWetMidi.Tests.Utilities
                     inputEndpoint = InputEndpoint.GetByName(name);
                     return inputEndpoint != null;
                 },
-                timeout);
+                EndpointsSearchTimeout);
 
-            ClassicAssert.IsTrue(success, $"Input endpoint with name '{name}' was not found for {timeout}.");
+            ClassicAssert.IsTrue(success, $"Input endpoint with name '{name}' was not found for {EndpointsSearchTimeout}.");
 
             return inputEndpoint;
         }
 
         public static OutputEndpoint GetOutputEndpoint(string name)
         {
-            var timeout = TimeSpan.FromSeconds(5);
             var outputEndpoint = default(OutputEndpoint);
 
             var success = WaitOperations.Wait(
@@ -52,9 +56,9 @@ namespace Melanchall.DryWetMidi.Tests.Utilities
                     outputEndpoint = OutputEndpoint.GetByName(name);
                     return outputEndpoint != null;
                 },
-                timeout);
+                EndpointsSearchTimeout);
 
-            ClassicAssert.IsTrue(success, $"Output endpoint with name '{name}' was not found for {timeout}.");
+            ClassicAssert.IsTrue(success, $"Output endpoint with name '{name}' was not found for {EndpointsSearchTimeout}.");
 
             return outputEndpoint;
         }

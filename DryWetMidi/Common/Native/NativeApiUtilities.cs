@@ -12,13 +12,13 @@ namespace Melanchall.DryWetMidi.Common
             RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ||
             RuntimeInformation.IsOSPlatform(OSPlatform.OSX);
 
-        // TODO: customize message
+        // TODO: add exception info in triple-slash comments
         public static void EnsureOsIsSupported()
         {
             if (IsOsSupported())
                 return;
 
-            throw new PlatformNotSupportedException("This operation is not supported on the current operating system.");
+            throw new PlatformNotSupportedException("Current operating system is not supported.");
         }
 
         public static void HandleEndpointNativeApiResult<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicFields | DynamicallyAccessedMemberTypes.Interfaces)] TResult>(

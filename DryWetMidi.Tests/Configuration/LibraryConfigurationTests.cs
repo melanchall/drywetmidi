@@ -34,7 +34,6 @@ namespace Melanchall.DryWetMidi.Tests.Configuration
 
                 ClassicAssert.AreEqual(useWms, LibraryConfiguration.IsEndpointsMultiClientAccessAvailable(), "Invalid endpoints multi-client access availability.");
                 ClassicAssert.AreEqual(useWms, LibraryConfiguration.IsEndpointsWatcherApiAvailable(), "Invalid endpoints watcher API availability.");
-                ClassicAssert.AreEqual(useWms, LibraryConfiguration.IsDeviceInformationApiAvailable(), "Invalid device information API availability.");
                 ClassicAssert.AreEqual(useWms, LibraryConfiguration.IsVirtualDeviceApiAvailable(), "Invalid virtual device API availability.");
             }
             finally
@@ -58,14 +57,6 @@ namespace Melanchall.DryWetMidi.Tests.Configuration
         public void IsEndpointsWatcherApiAvailable()
         {
             ClassicAssert.IsTrue(LibraryConfiguration.IsEndpointsWatcherApiAvailable(), "Invalid endpoints watcher API availability.");
-        }
-
-        [NativeApiRequired]
-        [AdvancedApiRequired]
-        [Test]
-        public void IsDeviceInformationApiAvailable()
-        {
-            ClassicAssert.IsTrue(LibraryConfiguration.IsDeviceInformationApiAvailable(), "Invalid device information API availability.");
         }
 
         [NativeApiRequired]

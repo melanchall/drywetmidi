@@ -69,7 +69,6 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         #region Test methods
 
         [WinOnly]
-        [DeviceInformationApiRequired]
         [Test]
         public void CheckInputEndpointDeviceInformation([Values(MidiEndpoints.A, MidiEndpoints.B, MidiEndpoints.C)] string endpointName)
         {
@@ -80,6 +79,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
             ClassicAssert.IsNotNull(deviceInformation, "There is no device information.");
             ClassicAssert.IsNotNull(deviceInformation.Id, "Device ID is null.");
+            ClassicAssert.IsNotEmpty(deviceInformation.Id, "Device ID is empty.");
             ClassicAssert.IsNotNull(deviceInformation.Name, "Device name is null.");
             ClassicAssert.IsNotEmpty(deviceInformation.Name, "Device name is empty.");
             ClassicAssert.IsNotNull(deviceInformation.Manufacturer, "Device manufacturer is null.");
@@ -112,11 +112,22 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             }
         }
 
-        [TestCase(MidiEndpoints.A)]
-        [TestCase(MidiEndpoints.B)]
-        public void GetInputEndpointByName(string endpointName)
+        [Test]
+        public void GetInputEndpointByName([Values(MidiEndpoints.A, MidiEndpoints.B, MidiEndpoints.C)] string endpointName)
         {
             ClassicAssert.IsNotNull(DevicesUtilities.GetInputEndpoint(endpointName), "There is no endpoint.");
+        }
+
+        [Test]
+        public void CheckInputEndpointId(
+            [Values(MidiEndpoints.A, MidiEndpoints.B, MidiEndpoints.C)] string endpointName)
+        {
+            var inputEndpoint = DevicesUtilities.GetInputEndpoint(endpointName);
+            ClassicAssert.IsNotNull(inputEndpoint, "There is no endpoint.");
+            ClassicAssert.IsNotNull(inputEndpoint.Id, "Endpoint ID is null.");
+            ClassicAssert.IsNotEmpty(inputEndpoint.Id, "Endpoint ID is empty.");
+
+            Console.WriteLine($"Input endpoint ID for [{endpointName}]: [{inputEndpoint.Id}]");
         }
 
         [Test]

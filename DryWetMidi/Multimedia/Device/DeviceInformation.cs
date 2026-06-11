@@ -19,12 +19,13 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         #region Constructor
 
-        private DeviceInformation(string id, string name, string manufacturer, string model)
+        private DeviceInformation(string id, string name, string manufacturer, string model, string driverVersion)
         {
             Id = id;
             Name = name;
             Manufacturer = manufacturer;
             Model = model;
+            DriverVersion = driverVersion;
         }
 
         #endregion
@@ -39,16 +40,18 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         public string Model { get; }
 
+        public string DriverVersion { get; }
+
         #endregion
 
         #region Methods
 
-        internal static DeviceInformation Get(string id, string name, string manufacturer, string model)
+        internal static DeviceInformation Get(string id, string name, string manufacturer, string model, string driverVersion)
         {
             if (string.IsNullOrWhiteSpace(id))
                 return null;
 
-            return DevicesCache.GetOrAdd(id, _ => new DeviceInformation(id, name, manufacturer, model));
+            return DevicesCache.GetOrAdd(id, _ => new DeviceInformation(id, name, manufacturer, model, driverVersion));
         }
 
         #endregion
@@ -86,10 +89,11 @@ namespace Melanchall.DryWetMidi.Multimedia
         {
             var manufacturerPart = string.IsNullOrEmpty(Manufacturer) ? string.Empty : $"manufacturer = {Manufacturer}";
             var modelPart = string.IsNullOrEmpty(Model) ? string.Empty : $"model = {Model}";
+            var driverVersionPart = string.IsNullOrEmpty(DriverVersion) ? string.Empty : $"driver version = {DriverVersion}";
 
             var additionalInfoString = string.Join(
                 ", ",
-                new[] { manufacturerPart, modelPart }.Where(s => !string.IsNullOrEmpty(s)));
+                new[] { manufacturerPart, modelPart, driverVersionPart }.Where(s => !string.IsNullOrEmpty(s)));
 
             return $"{Name} (ID = {Id}{(string.IsNullOrEmpty(additionalInfoString) ? string.Empty : $", {additionalInfoString}")})";
         }

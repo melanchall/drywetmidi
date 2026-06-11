@@ -13,9 +13,6 @@
 
 #include "../Common/NativeApi-Constants.h"
 
-#define PROPERTY_VALUE_BUFFER_SIZE 256
-#define SMALL_BUFFER_ERROR 10000
-
 #pragma clang diagnostic ignored "-Wswitch"
 
 #define API_EXPORT extern "C" __attribute__((visibility("default")))
@@ -332,10 +329,11 @@ struct EndpointInfoBase
 {
     MIDIEndpointRef endpointRef;
 
-    int parentDeviceId = -1;
-    const char* parentDeviceName = nullptr;
-    const char* parentDeviceManufacturer = nullptr;
-    const char* parentDeviceModel = nullptr;
+    const char* deviceId = nullptr;
+    const char* deviceName = nullptr;
+    const char* deviceManufacturer = nullptr;
+    const char* deviceModel = nullptr;
+    const char* deviceDriverVersion = nullptr;
 };
 
 void FreeParentDeviceInfoStrings(EndpointInfoBase* info)
@@ -343,14 +341,17 @@ void FreeParentDeviceInfoStrings(EndpointInfoBase* info)
     if (info == nullptr)
         return;
 
-    delete[] info->parentDeviceName;
-    delete[] info->parentDeviceManufacturer;
-    delete[] info->parentDeviceModel;
+    delete[] info->deviceId;
+    delete[] info->deviceName;
+    delete[] info->deviceManufacturer;
+    delete[] info->deviceModel;
+    delete[] info->deviceDriverVersion;
 
-    info->parentDeviceName = nullptr;
-    info->parentDeviceManufacturer = nullptr;
-    info->parentDeviceModel = nullptr;
-    info->parentDeviceId = -1;
+    info->deviceName = nullptr;
+    info->deviceManufacturer = nullptr;
+    info->deviceModel = nullptr;
+    info->deviceId = nullptr;
+    info->deviceDriverVersion = nullptr;
 }
 
 struct InputEndpointInfo : EndpointInfoBase
@@ -362,10 +363,11 @@ API_EXPORT void CloneInputEndpointInfo(InputEndpointInfo* source, InputEndpointI
     InputEndpointInfo* result = new InputEndpointInfo();
 
     result->endpointRef = source->endpointRef;
-    result->parentDeviceId = source->parentDeviceId;
-    result->parentDeviceName = CloneCString(source->parentDeviceName);
-    result->parentDeviceManufacturer = CloneCString(source->parentDeviceManufacturer);
-    result->parentDeviceModel = CloneCString(source->parentDeviceModel);
+    result->deviceId = CloneCString(source->deviceId);
+    result->deviceName = CloneCString(source->deviceName);
+    result->deviceManufacturer = CloneCString(source->deviceManufacturer);
+    result->deviceModel = CloneCString(source->deviceModel);
+    result->deviceDriverVersion = CloneCString(source->deviceDriverVersion);
 
     *info = result;
 }
@@ -385,10 +387,11 @@ API_EXPORT void CloneOutputEndpointInfo(OutputEndpointInfo* source, OutputEndpoi
     OutputEndpointInfo* result = new OutputEndpointInfo();
 
     result->endpointRef = source->endpointRef;
-    result->parentDeviceId = source->parentDeviceId;
-    result->parentDeviceName = CloneCString(source->parentDeviceName);
-    result->parentDeviceManufacturer = CloneCString(source->parentDeviceManufacturer);
-    result->parentDeviceModel = CloneCString(source->parentDeviceModel);
+    result->deviceId = CloneCString(source->deviceId);
+    result->deviceName = CloneCString(source->deviceName);
+    result->deviceManufacturer = CloneCString(source->deviceManufacturer);
+    result->deviceModel = CloneCString(source->deviceModel);
+    result->deviceDriverVersion = CloneCString(source->deviceDriverVersion);
 
     *info = result;
 }
@@ -399,22 +402,17 @@ API_EXPORT void DeleteOutputEndpointInfo(OutputEndpointInfo* info)
     delete info;
 }
 
-OSStatus GetDeviceDriverVersion(MIDIEndpointRef endpointRef, int* value)
-{
-    SInt32 driverVersion;
-    OSStatus status = MIDIObjectGetIntegerProperty(endpointRef, kMIDIPropertyDriverVersion, &driverVersion);
-
-    *value = driverVersion;
-
-    return status;
-}
-
 GETSTRINGPROPERTYRESULT GetStringPropertyValue(MIDIObjectRef obj, CFStringRef property, const char** value, int* errorCode)
 {
     *errorCode = 0;
 
     CFStringRef stringRef = nullptr;
     OSStatus status = MIDIObjectGetStringProperty(obj, property, &stringRef);
+    if (status == kMIDIUnknownProperty)
+    {
+        *errorCode = status;
+        return GETSTRINGPROPERTYRESULT_PROPERTYUNAVAILABLE;
+    }
 
     if (status != noErr || stringRef == nullptr)
     {
@@ -440,28 +438,27 @@ GETSTRINGPROPERTYRESULT GetStringPropertyValue(MIDIObjectRef obj, CFStringRef pr
     return GETSTRINGPROPERTYRESULT_OK;
 }
 
-API_EXPORT DEVCOMMON_GETPARENTDEVICEINFORESULT GetParentDeviceInfo_Mac(
+API_EXPORT DEVICE_GETDEVICEINFORESULT GetDeviceInformation(
     EndpointInfoBase* deviceInfo,
     Configuration* configuration,
-    int* id,
+    const char** id,
     const char** name,
     const char** manufacturer,
     const char** model,
+    const char** driverVersion,
     int* errorCode)
 {
     *errorCode = 0;
 
-    if (deviceInfo == nullptr || deviceInfo->endpointRef == 0)
-        return DEVCOMMON_GETPARENTDEVICEINFORESULT_NOINFO;
-
-    if (deviceInfo->parentDeviceId >= 0)
+    if (deviceInfo->deviceId != nullptr)
     {
-        *id = deviceInfo->parentDeviceId;
-        *name = deviceInfo->parentDeviceName;
-        *manufacturer = deviceInfo->parentDeviceManufacturer;
-        *model = deviceInfo->parentDeviceModel;
+        *id = deviceInfo->deviceId;
+        *name = deviceInfo->deviceName;
+        *manufacturer = deviceInfo->deviceManufacturer;
+        *model = deviceInfo->deviceModel;
+        *driverVersion = deviceInfo->deviceDriverVersion;
 
-        return DEVCOMMON_GETPARENTDEVICEINFORESULT_OK;
+        return DEVICE_GETDEVICEINFORESULT_OK;
     }
 
     MIDIEntityRef entity = 0;
@@ -469,7 +466,7 @@ API_EXPORT DEVCOMMON_GETPARENTDEVICEINFORESULT GetParentDeviceInfo_Mac(
     if (status != noErr || entity == 0)
     {
         *errorCode = status;
-        return DEVCOMMON_GETPARENTDEVICEINFORESULT_NOINFO;
+        return DEVICE_GETDEVICEINFORESULT_FAILEDGETENTITY;
     }
 
     MIDIDeviceRef device = 0;
@@ -477,69 +474,99 @@ API_EXPORT DEVCOMMON_GETPARENTDEVICEINFORESULT GetParentDeviceInfo_Mac(
     if (status != noErr || device == 0)
     {
         *errorCode = status;
-        return DEVCOMMON_GETPARENTDEVICEINFORESULT_NOINFO;
+        return DEVICE_GETDEVICEINFORESULT_FAILEDGETDEVICE;
     }
 
-    if (deviceInfo->parentDeviceId < 0)
-    {
-        status = MIDIObjectGetIntegerProperty(device, kMIDIPropertyUniqueID, id);
-        if (status != noErr)
-        {
-            *errorCode = status;
-            return DEVCOMMON_GETPARENTDEVICEINFORESULT_FAILEDGETID;
-        }
+    // ID
 
-        deviceInfo->parentDeviceId = *id;
+    int rawId = 0;
+    auto getIdResult = MIDIObjectGetIntegerProperty(device, kMIDIPropertyUniqueID, &rawId);
+    if (getIdResult != noErr)
+    {
+        *errorCode = getIdResult;
+        return DEVICE_GETDEVICEINFORESULT_FAILEDGETID;
     }
 
-    if (deviceInfo->parentDeviceName == nullptr)
+    char* buffer = new char[16];
+    snprintf(buffer, 16, "%d", rawId);
+    *id = buffer;
+    deviceInfo->deviceId = *id;
+
+    // Name
+
+    auto getNameResult = GetStringPropertyValue(device, kMIDIPropertyDisplayName, name, errorCode);
+    if (getNameResult != GETSTRINGPROPERTYRESULT_OK)
     {
-        auto getNameResult = GetStringPropertyValue(device, kMIDIPropertyName, name, errorCode);
+        getNameResult = GetStringPropertyValue(device, kMIDIPropertyName, name, errorCode);
         if (getNameResult != GETSTRINGPROPERTYRESULT_OK)
         {
             *errorCode = getNameResult;
 
             switch (getNameResult)
             {
-                case GETSTRINGPROPERTYRESULT_FAILEDGETVALUE: return DEVCOMMON_GETPARENTDEVICEINFORESULT_NAME_FAILEDGETVALUE;
-                case GETSTRINGPROPERTYRESULT_FAILEDFILLVALUEBUFFER: return DEVCOMMON_GETPARENTDEVICEINFORESULT_NAME_FAILEDFILLVALUEBUFFER;
+                case GETSTRINGPROPERTYRESULT_PROPERTYUNAVAILABLE: return DEVICE_GETDEVICEINFORESULT_NAME_UNAVAILABLE;
+                case GETSTRINGPROPERTYRESULT_FAILEDGETVALUE: return DEVICE_GETDEVICEINFORESULT_NAME_FAILEDGETVALUE;
+                case GETSTRINGPROPERTYRESULT_FAILEDFILLVALUEBUFFER: return DEVICE_GETDEVICEINFORESULT_NAME_FAILEDFILLVALUEBUFFER;
             }
         }
-
-        deviceInfo->parentDeviceName = *name;
     }
 
-    if (deviceInfo->parentDeviceManufacturer == nullptr)
+    deviceInfo->deviceName = *name;
+
+    // Manufacturer
+
+    if (deviceInfo->deviceManufacturer == nullptr)
     {
         auto getManufacturerResult = GetStringPropertyValue(device, kMIDIPropertyManufacturer, manufacturer, errorCode);
         if (getManufacturerResult != GETSTRINGPROPERTYRESULT_OK)
         {
-            *errorCode = getManufacturerResult;
-            switch (getManufacturerResult)
-            {
-                case GETSTRINGPROPERTYRESULT_FAILEDGETVALUE: return DEVCOMMON_GETPARENTDEVICEINFORESULT_MANUFACTURER_FAILEDGETVALUE;
-                case GETSTRINGPROPERTYRESULT_FAILEDFILLVALUEBUFFER: return DEVCOMMON_GETPARENTDEVICEINFORESULT_MANUFACTURER_FAILEDFILLVALUEBUFFER;
-            }
+            char buffer[256];
+            snprintf(buffer, sizeof(buffer), "Failed to get device manufacturer (%d)", getManufacturerResult);
+            configuration->activityCallback(buffer);
         }
-        deviceInfo->parentDeviceManufacturer = *manufacturer;
+        else
+            deviceInfo->deviceManufacturer = *manufacturer;
     }
 
-    if (deviceInfo->parentDeviceModel == nullptr)
+    // Model
+
+    if (deviceInfo->deviceModel == nullptr)
     {
         auto getModelResult = GetStringPropertyValue(device, kMIDIPropertyModel, model, errorCode);
         if (getModelResult != GETSTRINGPROPERTYRESULT_OK)
         {
-            *errorCode = getModelResult;
-            switch (getModelResult)
-            {
-                case GETSTRINGPROPERTYRESULT_FAILEDGETVALUE: return DEVCOMMON_GETPARENTDEVICEINFORESULT_MODEL_FAILEDGETVALUE;
-                case GETSTRINGPROPERTYRESULT_FAILEDFILLVALUEBUFFER: return DEVCOMMON_GETPARENTDEVICEINFORESULT_MODEL_FAILEDFILLVALUEBUFFER;
-            }
+            char buffer[256];
+            snprintf(buffer, sizeof(buffer), "Failed to get device model (%d)", getModelResult);
+            configuration->activityCallback(buffer);
         }
-        deviceInfo->parentDeviceModel = *model;
+        else
+            deviceInfo->deviceModel = *model;
     }
 
-    return DEVCOMMON_GETPARENTDEVICEINFORESULT_OK;
+    // Driver version
+
+    if (deviceInfo->deviceDriverVersion == nullptr)
+    {
+        int rawDriverVersion = 0;
+        auto getDriverVersionResult = MIDIObjectGetIntegerProperty(device, kMIDIPropertyDriverVersion, &rawDriverVersion);
+        if (getDriverVersionResult != noErr)
+        {
+            char buffer[256];
+            snprintf(buffer, sizeof(buffer), "Failed to get device driver version (%d)", getDriverVersionResult);
+            configuration->activityCallback(buffer);
+        }
+        else
+        {
+            char* buffer = new char[16];
+            snprintf(buffer, 16, "%d", rawDriverVersion);
+            *driverVersion = buffer;
+            deviceInfo->deviceDriverVersion = *driverVersion;
+        }
+    }
+
+    //
+
+    return DEVICE_GETDEVICEINFORESULT_OK;
 }
 
 /* ================================
@@ -891,77 +918,34 @@ API_EXPORT IN_GETCOUNTRESULT GetInputEndpointsCount(int* count)
     return IN_GETCOUNTRESULT_OK;
 }
 
-API_EXPORT int GetInputEndpointHashCode(InputEndpointInfo* info)
+API_EXPORT IN_GETPROPERTYRESULT GetInputEndpointName(InputEndpointInfo* info, const char** value, int* errorCode)
 {
-    InputEndpointInfo* inputDeviceInfo = static_cast<InputEndpointInfo*>(info);
-    return static_cast<int>(inputDeviceInfo->endpointRef);
-}
-
-API_EXPORT char AreInputEndpointsEqual(InputEndpointInfo* info1, InputEndpointInfo* info2)
-{
-    return static_cast<char>(info1->endpointRef == info2->endpointRef);
-}
-
-IN_GETPROPERTYRESULT GetInputEndpointStringPropertyValue(InputEndpointInfo* inputDeviceInfo, CFStringRef propertyID, const char** value, int* errorCode)
-{
-    *errorCode = 0;
-
-    auto result = GetStringPropertyValue(inputDeviceInfo->endpointRef, propertyID, value, errorCode);
+    auto result = GetStringPropertyValue(info->endpointRef, kMIDIPropertyDisplayName, value, errorCode);
     if (result != GETSTRINGPROPERTYRESULT_OK)
-        return IN_GETPROPERTYRESULT_UNKNOWNERROR;
-    
+        result = GetStringPropertyValue(info->endpointRef, kMIDIPropertyName, value, errorCode);
+
+    switch (result)
+    {
+        case GETSTRINGPROPERTYRESULT_PROPERTYUNAVAILABLE: return IN_GETPROPERTYRESULT_PROPERTYUNAVAILABLE;
+        case GETSTRINGPROPERTYRESULT_FAILEDGETVALUE: return IN_GETPROPERTYRESULT_FAILEDGETVALUE;
+        case GETSTRINGPROPERTYRESULT_FAILEDFILLVALUEBUFFER: return IN_GETPROPERTYRESULT_FAILEDFILLVALUEBUFFER;
+    }
+
     return IN_GETPROPERTYRESULT_OK;
 }
 
-IN_GETPROPERTYRESULT GetInputEndpointIntPropertyValue(InputEndpointInfo* inputDeviceInfo, CFStringRef propertyID, int* value, int* errorCode)
+API_EXPORT IN_GETPROPERTYRESULT GetInputEndpointId_Mac(InputEndpointInfo* info, int* value, int* errorCode)
 {
     *errorCode = 0;
 
-    OSStatus status = MIDIObjectGetIntegerProperty(inputDeviceInfo->endpointRef, propertyID, value);
+    OSStatus status = MIDIObjectGetIntegerProperty(info->endpointRef, kMIDIPropertyUniqueID, value);
     if (status != noErr)
     {
         *errorCode = status;
-
-        switch (status)
-        {
-            case kMIDIUnknownEndpoint: return IN_GETPROPERTYRESULT_UNKNOWNENDPOINT;
-            case kMIDIUnknownProperty: return IN_GETPROPERTYRESULT_UNKNOWNPROPERTY;
-        }
-        
-        return IN_GETPROPERTYRESULT_UNKNOWNERROR;
+        return IN_GETPROPERTYRESULT_FAILEDGETVALUE;
     }
-    
+
     return IN_GETPROPERTYRESULT_OK;
-}
-
-API_EXPORT IN_GETPROPERTYRESULT GetInputEndpointName(InputEndpointInfo* info, const char** value, int* errorCode)
-{
-    return GetInputEndpointStringPropertyValue(info, kMIDIPropertyDisplayName, value, errorCode);
-}
-
-API_EXPORT IN_GETPROPERTYRESULT GetInputEndpointManufacturer(InputEndpointInfo* info, const char** value, int* errorCode)
-{
-    return GetInputEndpointStringPropertyValue(info, kMIDIPropertyManufacturer, value, errorCode);
-}
-
-API_EXPORT IN_GETPROPERTYRESULT GetInputEndpointProduct(InputEndpointInfo* info, const char** value, int* errorCode)
-{
-    return GetInputEndpointStringPropertyValue(info, kMIDIPropertyModel, value, errorCode);
-}
-
-API_EXPORT IN_GETPROPERTYRESULT GetInputEndpointDriverVersion(InputEndpointInfo* info, int* value, int* errorCode)
-{
-    return GetInputEndpointIntPropertyValue(info, kMIDIPropertyDriverVersion, value, errorCode);
-}
-
-API_EXPORT IN_GETPROPERTYRESULT GetInputEndpointUniqueId(InputEndpointInfo* info, int* value, int* errorCode)
-{
-    return GetInputEndpointIntPropertyValue(info, kMIDIPropertyUniqueID, value, errorCode);
-}
-
-API_EXPORT IN_GETPROPERTYRESULT GetInputEndpointDriverOwner(InputEndpointInfo* info, const char** value, int* errorCode)
-{
-    return GetInputEndpointStringPropertyValue(info, kMIDIPropertyDriverOwner, value, errorCode);
 }
 
 API_EXPORT IN_OPENRESULT OpenInputEndpoint_Mac(InputEndpointInfo* info, void* sessionHandle, MIDIReadProc callback, void** handle, int* errorCode)
@@ -1003,7 +987,6 @@ API_EXPORT IN_CLOSERESULT CloseInputEndpoint(void* handle, int* errorCode)
     InputEndpointHandle* inputDeviceHandle = static_cast<InputEndpointHandle*>(handle);
     MIDIPortDispose(inputDeviceHandle->portRef);
 
-    // delete inputDeviceHandle->info;
     delete inputDeviceHandle;
 
     return IN_CLOSERESULT_OK;
@@ -1086,21 +1069,6 @@ API_EXPORT IN_GETEVENTDATARESULT GetEventDataFromInputEndpoint(MIDIPacketList* p
     return IN_GETEVENTDATARESULT_OK;
 }
 
-API_EXPORT char IsInputEndpointPropertySupported(IN_PROPERTY property)
-{
-    switch (property)
-    {
-        case IN_PROPERTY_PRODUCT:
-        case IN_PROPERTY_MANUFACTURER:
-        case IN_PROPERTY_DRIVERVERSION:
-        case IN_PROPERTY_UNIQUEID:
-        case IN_PROPERTY_DRIVEROWNER:
-            return 1;
-    }
-    
-    return 0;
-}
-
 /* ================================
    Output device
  ================================ */
@@ -1174,76 +1142,34 @@ API_EXPORT OUT_GETCOUNTRESULT GetOutputEndpointsCount(int* count)
     return OUT_GETCOUNTRESULT_OK;
 }
 
-API_EXPORT int GetOutputEndpointHashCode(OutputEndpointInfo* info)
+API_EXPORT OUT_GETPROPERTYRESULT GetOutputEndpointName(OutputEndpointInfo* info, const char** value, int* errorCode)
 {
-    return static_cast<int>(info->endpointRef);
-}
-
-API_EXPORT char AreOutputEndpointsEqual(OutputEndpointInfo* info1, OutputEndpointInfo* info2)
-{
-    return static_cast<char>(info1->endpointRef == info2->endpointRef);
-}
-
-OUT_GETPROPERTYRESULT GetOutputEndpointStringPropertyValue(OutputEndpointInfo* outputDeviceInfo, CFStringRef propertyID, const char** value, int* errorCode)
-{
-    *errorCode = 0;
-
-    auto result = GetStringPropertyValue(outputDeviceInfo->endpointRef, propertyID, value, errorCode);
+    auto result = GetStringPropertyValue(info->endpointRef, kMIDIPropertyDisplayName, value, errorCode);
     if (result != GETSTRINGPROPERTYRESULT_OK)
-        return OUT_GETPROPERTYRESULT_UNKNOWNERROR;
-    
+        result = GetStringPropertyValue(info->endpointRef, kMIDIPropertyName, value, errorCode);
+
+    switch (result)
+    {
+        case GETSTRINGPROPERTYRESULT_PROPERTYUNAVAILABLE: return OUT_GETPROPERTYRESULT_PROPERTYUNAVAILABLE;
+        case GETSTRINGPROPERTYRESULT_FAILEDGETVALUE: return OUT_GETPROPERTYRESULT_FAILEDGETVALUE;
+        case GETSTRINGPROPERTYRESULT_FAILEDFILLVALUEBUFFER: return OUT_GETPROPERTYRESULT_FAILEDFILLVALUEBUFFER;
+    }
+
     return OUT_GETPROPERTYRESULT_OK;
 }
 
-OUT_GETPROPERTYRESULT GetOutputEndpointIntPropertyValue(OutputEndpointInfo* outputDeviceInfo, CFStringRef propertyID, int* value, int* errorCode)
+API_EXPORT OUT_GETPROPERTYRESULT GetOutputEndpointId_Mac(OutputEndpointInfo* info, int* value, int* errorCode)
 {
     *errorCode = 0;
 
-    OSStatus status = MIDIObjectGetIntegerProperty(outputDeviceInfo->endpointRef, propertyID, value);
+    OSStatus status = MIDIObjectGetIntegerProperty(info->endpointRef, kMIDIPropertyUniqueID, value);
     if (status != noErr)
     {
         *errorCode = status;
-
-        switch (status)
-        {
-            case kMIDIUnknownEndpoint: return OUT_GETPROPERTYRESULT_UNKNOWNENDPOINT;
-            case kMIDIUnknownProperty: return OUT_GETPROPERTYRESULT_UNKNOWNPROPERTY;
-        }
-        
-        return OUT_GETPROPERTYRESULT_UNKNOWNERROR;
+        return OUT_GETPROPERTYRESULT_FAILEDGETVALUE;
     }
-    
+
     return OUT_GETPROPERTYRESULT_OK;
-}
-
-API_EXPORT OUT_GETPROPERTYRESULT GetOutputEndpointName(OutputEndpointInfo* info, const char** value, int* errorCode)
-{
-    return GetOutputEndpointStringPropertyValue(info, kMIDIPropertyDisplayName, value, errorCode);
-}
-
-API_EXPORT OUT_GETPROPERTYRESULT GetOutputEndpointManufacturer(OutputEndpointInfo* info, const char** value, int* errorCode)
-{
-    return GetOutputEndpointStringPropertyValue(info, kMIDIPropertyManufacturer, value, errorCode);
-}
-
-API_EXPORT OUT_GETPROPERTYRESULT GetOutputEndpointProduct(OutputEndpointInfo* info, const char** value, int* errorCode)
-{
-    return GetOutputEndpointStringPropertyValue(info, kMIDIPropertyModel, value, errorCode);
-}
-
-API_EXPORT OUT_GETPROPERTYRESULT GetOutputEndpointDriverVersion(OutputEndpointInfo* info, int* value, int* errorCode)
-{
-    return GetOutputEndpointIntPropertyValue(info, kMIDIPropertyDriverVersion, value, errorCode);
-}
-
-API_EXPORT OUT_GETPROPERTYRESULT GetOutputEndpointUniqueId(OutputEndpointInfo* info, int* value, int* errorCode)
-{
-    return GetOutputEndpointIntPropertyValue(info, kMIDIPropertyUniqueID, value, errorCode);
-}
-
-API_EXPORT OUT_GETPROPERTYRESULT GetOutputEndpointDriverOwner(OutputEndpointInfo* info, const char** value, int* errorCode)
-{
-    return GetOutputEndpointStringPropertyValue(info, kMIDIPropertyDriverOwner, value, errorCode);
 }
 
 API_EXPORT OUT_OPENRESULT OpenOutputEndpoint_Mac(OutputEndpointInfo* info, void* sessionHandle, void** handle, int* errorCode)
@@ -1375,21 +1301,6 @@ API_EXPORT OUT_SENDSYSEXRESULT SendSysExEventToOutputEndpoint_Mac(void* handle, 
     }
 
     return OUT_SENDSYSEXRESULT_OK;
-}
-
-API_EXPORT char IsOutputEndpointPropertySupported(OUT_PROPERTY property)
-{
-    switch (property)
-    {
-        case OUT_PROPERTY_PRODUCT:
-        case OUT_PROPERTY_MANUFACTURER:
-        case OUT_PROPERTY_DRIVERVERSION:
-        case OUT_PROPERTY_UNIQUEID:
-        case OUT_PROPERTY_DRIVEROWNER:
-            return 1;
-    }
-    
-    return 0;
 }
 
 /* ================================

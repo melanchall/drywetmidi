@@ -38,15 +38,12 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         #region Fields
 
-        private static OutputEndpointProperty[] _supportedProperties;
-
         private readonly MidiEventToBytesConverter _midiEventToBytesConverter = new MidiEventToBytesConverter(ShortEventBufferSize) { BytesFormat = BytesFormat.Device };
         private readonly BytesToMidiEventConverter _bytesToMidiEventConverter = new BytesToMidiEventConverter { BytesFormat = BytesFormat.Device };
 
         private OutputEndpointApi.Callback_Win _callback;
 
         private readonly CommonApi.API_TYPE _apiType;
-        private readonly int _hashCode;
 
         #endregion
 
@@ -57,7 +54,6 @@ namespace Melanchall.DryWetMidi.Multimedia
         {
             Info = new OutputEndpointInfo(info);
             _apiType = CommonApi.Api_GetApiType();
-            _hashCode = OutputEndpointApi.Api_GetEndpointHashCode(info);
         }
 
         #endregion
@@ -78,6 +74,17 @@ namespace Melanchall.DryWetMidi.Multimedia
                 NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
 
                 return name;
+            }
+        }
+
+        public override string Id
+        {
+            get
+            {
+                var result = OutputEndpointApi.Api_GetEndpointId(Info.DangerousGetHandle(), out var id, out var errorCode);
+                NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
+
+                return id;
             }
         }
 
@@ -164,160 +171,6 @@ namespace Melanchall.DryWetMidi.Multimedia
         }
 
         /// <summary>
-        /// Returns current value of the specified property attached to the current output endpoint.
-        /// </summary>
-        /// <remarks>
-        /// <para>
-        /// To get the list of properties applicable to output endpoints on the current operating system use
-        /// <see cref="GetSupportedProperties"/> method.
-        /// </para>
-        /// <para>
-        /// Following table shows the type of value returned by the method for each property:
-        /// </para>
-        /// <para>
-        /// <list type="table">
-        /// <listheader>
-        /// <term>Property</term>
-        /// <term>Type</term>
-        /// </listheader>
-        /// <item>
-        /// <term><see cref="OutputEndpointProperty.Product"/></term>
-        /// <term><see cref="string"/></term>
-        /// </item>
-        /// <item>
-        /// <term><see cref="OutputEndpointProperty.Manufacturer"/></term>
-        /// <term><see cref="string"/></term>
-        /// </item>
-        /// <item>
-        /// <term><see cref="OutputEndpointProperty.DriverVersion"/></term>
-        /// <term><see cref="int"/></term>
-        /// </item>
-        /// <item>
-        /// <term><see cref="OutputEndpointProperty.UniqueId"/></term>
-        /// <term><see cref="int"/></term>
-        /// </item>
-        /// <item>
-        /// <term><see cref="OutputEndpointProperty.DriverOwner"/></term>
-        /// <term><see cref="string"/></term>
-        /// </item>
-        /// <item>
-        /// <term><see cref="OutputEndpointProperty.Technology"/></term>
-        /// <term><see cref="OutputEndpointTechnology"/></term>
-        /// </item>
-        /// <item>
-        /// <term><see cref="OutputEndpointProperty.VoicesNumber"/></term>
-        /// <term><see cref="int"/></term>
-        /// </item>
-        /// <item>
-        /// <term><see cref="OutputEndpointProperty.NotesNumber"/></term>
-        /// <term><see cref="int"/></term>
-        /// </item>
-        /// <item>
-        /// <term><see cref="OutputEndpointProperty.Channels"/></term>
-        /// <term><see cref="FourBitNumber"/>[]</term>
-        /// </item>
-        /// <item>
-        /// <term><see cref="OutputEndpointProperty.Options"/></term>
-        /// <term><see cref="OutputEndpointOption"/></term>
-        /// </item>
-        /// </list>
-        /// </para>
-        /// </remarks>
-        /// <param name="property">The property to get value of.</param>
-        /// <returns>The current value of the <paramref name="property"/>.</returns>
-        /// <exception cref="InvalidEnumArgumentException"><paramref name="property"/> specified an invalid value.</exception>
-        /// <exception cref="ArgumentException"><paramref name="property"/> is not in the list of the properties
-        /// supported for the current operating system.</exception>
-        /// <exception cref="ObjectDisposedException">The current <see cref="OutputEndpoint"/> is disposed.</exception>
-        /// <exception cref="NativeApiException">An error occurred on the endpoint. One of the cases when this exception can be thrown
-        /// is endpoint is not in the system anymore (for example, a device unplugged).</exception>
-        /// <exception cref="InvalidOperationException">The current <see cref="OutputEndpoint"/> instance is created by
-        /// <see cref="EndpointsWatcher.EndpointRemoved"/> event and thus considered as removed so you cannot interact with it.</exception>
-        public object GetProperty(OutputEndpointProperty property)
-        {
-            ThrowIfArgument.IsInvalidEnumValue(nameof(property), property);
-
-            EnsureEndpointIsNotDisposed();
-            EnsureEndpointIsNotRemoved();
-            EnsureSessionIsCreated();
-
-            if (!GetSupportedProperties().Contains(property))
-                throw new ArgumentException("Property is not supported.", nameof(property));
-
-            int errorCode;
-
-            switch (property)
-            {
-                case OutputEndpointProperty.Product:
-                    {
-                        var result = OutputEndpointApi.Api_GetEndpointProduct(Info.DangerousGetHandle(), out var product, out errorCode);
-                        NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
-                        return product;
-                    }
-                case OutputEndpointProperty.Manufacturer:
-                    {
-                        var result = OutputEndpointApi.Api_GetEndpointManufacturer(Info.DangerousGetHandle(), out var manufacturer, out errorCode);
-                        NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
-                        return manufacturer;
-                    }
-                case OutputEndpointProperty.DriverVersion:
-                    {
-                        var result = OutputEndpointApi.Api_GetEndpointDriverVersion(Info.DangerousGetHandle(), out var driverVersion, out errorCode);
-                        NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
-                        return driverVersion;
-                    }
-                case OutputEndpointProperty.Technology:
-                    {
-                        OutputEndpointTechnology technology;
-                        var result = OutputEndpointApi.Api_GetEndpointTechnology(Info.DangerousGetHandle(), out technology, out errorCode);
-                        NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
-                        return technology;
-                    }
-                case OutputEndpointProperty.UniqueId:
-                    {
-                        var result = OutputEndpointApi.Api_GetEndpointUniqueId(Info.DangerousGetHandle(), out var uniqueId, out errorCode);
-                        NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
-                        return uniqueId;
-                    }
-                case OutputEndpointProperty.VoicesNumber:
-                    {
-                        var result = OutputEndpointApi.Api_GetEndpointVoicesNumber(Info.DangerousGetHandle(), out var voicesNumber, out errorCode);
-                        NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
-                        return voicesNumber;
-                    }
-                case OutputEndpointProperty.NotesNumber:
-                    {
-                        var result = OutputEndpointApi.Api_GetEndpointNotesNumber(Info.DangerousGetHandle(), out var notesNumber, out errorCode);
-                        NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
-                        return notesNumber;
-                    }
-                case OutputEndpointProperty.Channels:
-                    {
-                        var result = OutputEndpointApi.Api_GetEndpointChannelsMask(Info.DangerousGetHandle(), out var channelsMask, out errorCode);
-                        NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
-                        return (from channel in FourBitNumber.Values
-                                let isChannelSupported = (channelsMask >> channel) & 1
-                                where isChannelSupported == 1
-                                select channel).ToArray();
-                    }
-                case OutputEndpointProperty.Options:
-                    {
-                        var result = OutputEndpointApi.Api_GetEndpointOptions(Info.DangerousGetHandle(), out var option, out errorCode);
-                        NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
-                        return option;
-                    }
-                case OutputEndpointProperty.DriverOwner:
-                    {
-                        var result = OutputEndpointApi.Api_GetEndpointDriverOwner(Info.DangerousGetHandle(), out var driverOwner, out errorCode);
-                        NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
-                        return driverOwner;
-                    }
-                default:
-                    throw new NotSupportedException("Property is not supported.");
-            }
-        }
-
-        /// <summary>
         /// Retrieves the number of output MIDI endpoints presented in the system.
         /// </summary>
         /// <returns>Number of output MIDI endpoints presented in the system.</returns>
@@ -332,25 +185,6 @@ namespace Melanchall.DryWetMidi.Multimedia
             NativeApiUtilities.HandleEndpointNativeApiResult(result, 0);
 
             return count;
-        }
-
-        /// <summary>
-        /// Returns the list of the properties supported by output endpoints on the current
-        /// operating system.
-        /// </summary>
-        /// <returns>The list of the properties supported by output endpoints on the current
-        /// operating system.</returns>
-        /// <exception cref="PlatformNotSupportedException">This operation is not supported on the current operating system.</exception>
-        public static OutputEndpointProperty[] GetSupportedProperties()
-        {
-            NativeApiUtilities.EnsureOsIsSupported();
-
-            if (_supportedProperties != null)
-                return _supportedProperties;
-
-            return _supportedProperties = EnumHelper.GetValues<OutputEndpointProperty>()
-                .Where(p => OutputEndpointApi.Api_IsPropertySupported(p))
-                .ToArray();
         }
 
         /// <summary>
@@ -633,9 +467,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             if (outputEndpoint == null)
                 return false;
 
-            return OutputEndpointApi.Api_AreEndpointsEqual(
-                Info.DangerousGetHandle(),
-                outputEndpoint.Info.DangerousGetHandle());
+            return Id == outputEndpoint.Id;
         }
 
         /// <summary>
@@ -644,7 +476,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <returns>A hash code for the current object.</returns>
         public override int GetHashCode()
         {
-            return _hashCode;
+            return Id.GetHashCode();
         }
 
         /// <summary>

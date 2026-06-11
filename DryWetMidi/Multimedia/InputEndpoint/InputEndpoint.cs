@@ -67,7 +67,6 @@ namespace Melanchall.DryWetMidi.Multimedia
         private readonly List<byte[]> _sysExParts = new List<byte[]>();
 
         private readonly CommonApi.API_TYPE _apiType;
-        private readonly int _hashCode;
 
         private readonly object _handleLock = new object();
         private readonly object _eventProcessingLock = new object();
@@ -82,7 +81,6 @@ namespace Melanchall.DryWetMidi.Multimedia
         {
             Info = new InputEndpointInfo(info);
             _apiType = CommonApi.Api_GetApiType();
-            _hashCode = InputEndpointApi.Api_GetEndpointHashCode(info);
             _bytesToMidiEventConverter.SilentNoteOnPolicy = SilentNoteOnPolicy.NoteOn;
         }
 
@@ -105,6 +103,17 @@ namespace Melanchall.DryWetMidi.Multimedia
                 NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
 
                 return name;
+            }
+        }
+
+        public override string Id
+        {
+            get
+            {
+                var result = InputEndpointApi.Api_GetEndpointId(Info.DangerousGetHandle(), out var id, out var errorCode);
+                NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
+
+                return id;
             }
         }
 
@@ -272,126 +281,6 @@ namespace Melanchall.DryWetMidi.Multimedia
 
             var result = StopEventsListeningSilently(out var errorCode);
             NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
-        }
-
-        /// <summary>
-        /// Returns current value of the specified property attached to the current input endpoint.
-        /// </summary>
-        /// <remarks>
-        /// <para>
-        /// To get the list of properties applicable to input endpoints on the current operating system use
-        /// <see cref="GetSupportedProperties"/> method.
-        /// </para>
-        /// <para>
-        /// Following table shows the type of value returned by the method for each property:
-        /// </para>
-        /// <para>
-        /// <list type="table">
-        /// <listheader>
-        /// <term>Property</term>
-        /// <term>Type</term>
-        /// </listheader>
-        /// <item>
-        /// <term><see cref="InputEndpointProperty.Product"/></term>
-        /// <term><see cref="string"/></term>
-        /// </item>
-        /// <item>
-        /// <term><see cref="InputEndpointProperty.Manufacturer"/></term>
-        /// <term><see cref="string"/></term>
-        /// </item>
-        /// <item>
-        /// <term><see cref="InputEndpointProperty.DriverVersion"/></term>
-        /// <term><see cref="int"/></term>
-        /// </item>
-        /// <item>
-        /// <term><see cref="InputEndpointProperty.UniqueId"/></term>
-        /// <term><see cref="int"/></term>
-        /// </item>
-        /// <item>
-        /// <term><see cref="InputEndpointProperty.DriverOwner"/></term>
-        /// <term><see cref="string"/></term>
-        /// </item>
-        /// </list>
-        /// </para>
-        /// </remarks>
-        /// <param name="property">The property to get value of.</param>
-        /// <returns>The current value of the <paramref name="property"/>.</returns>
-        /// <exception cref="InvalidEnumArgumentException"><paramref name="property"/> specified an invalid value.</exception>
-        /// <exception cref="ArgumentException"><paramref name="property"/> is not in the list of the properties
-        /// supported for the current operating system.</exception>
-        /// <exception cref="ObjectDisposedException">The current <see cref="InputEndpoint"/> is disposed.</exception>
-        /// <exception cref="NativeApiException">An error occurred on the endpoint. One of the cases when this exception can be thrown
-        /// is endpoint is not in the system anymore (for example, unplugged).</exception>
-        /// <exception cref="InvalidOperationException">The current <see cref="InputEndpoint"/> instance is created by
-        /// <see cref="EndpointsWatcher.EndpointRemoved"/> event and thus considered as removed so you cannot interact with it.</exception>
-        public object GetProperty(InputEndpointProperty property)
-        {
-            ThrowIfArgument.IsInvalidEnumValue(nameof(property), property);
-
-            EnsureEndpointIsNotDisposed();
-            EnsureEndpointIsNotRemoved();
-            EnsureSessionIsCreated();
-
-            if (!GetSupportedProperties().Contains(property))
-                throw new ArgumentException("Property is not supported.", nameof(property));
-
-            int errorCode;
-
-            switch (property)
-            {
-                case InputEndpointProperty.Product:
-                    {
-                        var result = InputEndpointApi.Api_GetEndpointProduct(Info.DangerousGetHandle(), out var product, out errorCode);
-                        NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
-                        return product;
-                    }
-                case InputEndpointProperty.Manufacturer:
-                    {
-                        var result = InputEndpointApi.Api_GetEndpointManufacturer(Info.DangerousGetHandle(), out var manufacturer, out errorCode);
-                        NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
-                        return manufacturer;
-                    }
-                case InputEndpointProperty.DriverVersion:
-                    {
-                        var result = InputEndpointApi.Api_GetEndpointDriverVersion(Info.DangerousGetHandle(), out var driverVersion, out errorCode);
-                        NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
-                        return driverVersion;
-                    }
-                case InputEndpointProperty.UniqueId:
-                    {
-                        var result = InputEndpointApi.Api_GetEndpointUniqueId(Info.DangerousGetHandle(), out var uniqueId, out errorCode);
-                        NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
-                        return uniqueId;
-                    }
-                case InputEndpointProperty.DriverOwner:
-                    {
-                        var result = InputEndpointApi.Api_GetEndpointDriverOwner(Info.DangerousGetHandle(), out var driverOwner, out errorCode);
-                        NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
-                        return driverOwner;
-                    }
-                default:
-                    throw new NotSupportedException("Property is not supported.");
-            }
-        }
-
-        /// <summary>
-        /// Returns the list of the properties supported by input endpoints on the current
-        /// operating system.
-        /// </summary>
-        /// <returns>The list of the properties supported by input endpoints on the current
-        /// operating system.</returns>
-        /// <exception cref="PlatformNotSupportedException">This operation is not supported on the current operating system.</exception>
-        public static InputEndpointProperty[] GetSupportedProperties()
-        {
-            NativeApiUtilities.EnsureOsIsSupported();
-
-            if (_supportedProperties != null)
-                return _supportedProperties;
-
-            return _supportedProperties = EnumHelper
-                .GetValues<InputEndpointProperty>()
-                .Where(p => InputEndpointApi.Api_IsPropertySupported(p))
-                .ToArray();
         }
 
         /// <summary>
@@ -870,9 +759,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             if (inputEndpoint == null)
                 return false;
 
-            return InputEndpointApi.Api_AreEndpointsEqual(
-                Info.DangerousGetHandle(),
-                inputEndpoint.Info.DangerousGetHandle());
+            return Id == inputEndpoint.Id;
         }
 
         /// <summary>
@@ -881,7 +768,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <returns>A hash code for the current object.</returns>
         public override int GetHashCode()
         {
-            return _hashCode;
+            return Id.GetHashCode();
         }
 
         /// <summary>

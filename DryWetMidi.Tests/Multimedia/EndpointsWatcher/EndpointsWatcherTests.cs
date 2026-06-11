@@ -50,7 +50,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 EndpointsWatcher.Instance.EndpointRemoved += removedHandler;
 
                 var deviceName = "VD10";
-                var timeout = TimeSpan.FromSeconds(5);
+                var timeout = DevicesUtilities.EndpointsSearchTimeout;
 
                 using (var virtualDevice = VirtualDevice.Create(deviceName))
                 {
@@ -82,9 +82,6 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     () => { var name = firstRemovedEndpoint.Name; },
                     "Can get name of removed input endpoint.");
                 ClassicAssert.Throws<InvalidOperationException>(
-                    () => { var name = ((InputEndpoint)firstRemovedEndpoint).GetProperty(InputEndpointProperty.Product); },
-                    "Can get property value of removed input endpoint.");
-                ClassicAssert.Throws<InvalidOperationException>(
                     () => ((InputEndpoint)firstRemovedEndpoint).StartEventsListening(),
                     "Can start events listening on removed input endpoint.");
 
@@ -94,9 +91,6 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 ClassicAssert.Throws<InvalidOperationException>(
                     () => { var name = lastRemovedEndpoint.Name; },
                     "Can get name of removed output endpoint.");
-                ClassicAssert.Throws<InvalidOperationException>(
-                    () => { var name = ((OutputEndpoint)lastRemovedEndpoint).GetProperty(OutputEndpointProperty.Product); },
-                    "Can get property value of removed output endpoint.");
                 ClassicAssert.Throws<InvalidOperationException>(
                     () => ((OutputEndpoint)lastRemovedEndpoint).SendEvent(new NoteOnEvent()),
                     "Can send event via removed output endpoint.");
@@ -142,7 +136,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             EndpointsWatcher.Instance.EndpointAdded += addedHandler2;
 
             var deviceName = DevicesUtilities.GetVirtualDeviceName();
-            var timeout = TimeSpan.FromSeconds(5);
+            var timeout = DevicesUtilities.EndpointsSearchTimeout;
 
             using (var virtualDevice = VirtualDevice.Create(deviceName))
             {
@@ -196,7 +190,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             EndpointsWatcher.Instance.EndpointRemoved += removedHandler2;
 
             var deviceName = DevicesUtilities.GetVirtualDeviceName();
-            var timeout = TimeSpan.FromSeconds(5);
+            var timeout = DevicesUtilities.EndpointsSearchTimeout;
 
             Thread.Sleep(5000);
             removedEndpoints1.Clear();
@@ -264,7 +258,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             EndpointsWatcher.Instance.EndpointRemoved += removedHandler;
 
             var deviceName = DevicesUtilities.GetVirtualDeviceName();
-            var timeout = TimeSpan.FromSeconds(5);
+            var timeout = DevicesUtilities.EndpointsSearchTimeout;
 
             using (var virtualDevice = VirtualDevice.Create(deviceName))
             {
@@ -294,7 +288,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             EndpointsWatcher.Instance.EndpointRemoved += removedHandler;
 
             var deviceName = DevicesUtilities.GetVirtualDeviceName();
-            var timeout = TimeSpan.FromSeconds(5);
+            var timeout = DevicesUtilities.EndpointsSearchTimeout;
 
             using (var virtualDevice = VirtualDevice.Create(deviceName))
             {

@@ -123,7 +123,8 @@ namespace Melanchall.DryWetMidi.Configuration
             out IntPtr configuration,
             out int errorCode)
         {
-            switch (CommonApi.Api_GetApiType())
+            var apiType = CommonApi.Api_GetApiType();
+            switch (apiType)
             {
                 case CommonApi.API_TYPE.API_TYPE_WIN:
                     return GetConfiguration_Win(useWms, activityCallback, out configuration, out errorCode);
@@ -131,8 +132,7 @@ namespace Melanchall.DryWetMidi.Configuration
                     return GetConfiguration_Mac(activityCallback, out configuration, out errorCode);
             }
 
-            // TODO: message
-            throw new NotSupportedException();
+            throw new NotImplementedException($"API type {apiType} not supported.");
         }
 
         public static CONFIGURATION_CLEANUPRESULT Api_CleanupConfiguration(IntPtr configuration)

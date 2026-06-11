@@ -54,7 +54,6 @@
     <Compile Remove="Multimedia\**\*.cs" />
     <Compile Remove="Attributes\EndpointsWatcherApiRequiredAttribute.cs" />
     <Compile Remove="Attributes\VirtualDeviceApiRequiredAttribute.cs" />
-    <Compile Remove="Attributes\DeviceInformationApiRequiredAttribute.cs" />
     <Compile Remove="Attributes\MultiClientEndpointsAccessSupportRequiredAttribute.cs" />
     <Compile Remove="Attributes\AdvancedApiRequiredAttribute.cs" />
     <Compile Remove="Attributes\NativeApiRequiredAttribute.cs" />

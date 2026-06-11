@@ -68,14 +68,6 @@ namespace Melanchall.DryWetMidi.Configuration
             return IsAdvancedApiAvailable();
         }
 
-        public static bool IsDeviceInformationApiAvailable()
-        {
-            if (!NativeApiUtilities.IsOsSupported())
-                return false;
-
-            return IsAdvancedApiAvailable();
-        }
-
         public static bool IsVirtualDeviceApiAvailable()
         {
             if (!NativeApiUtilities.IsOsSupported())
@@ -104,7 +96,6 @@ namespace Melanchall.DryWetMidi.Configuration
             var capabilities = new Dictionary<string, bool>
             {
                 ["endpoints watcher API"] = IsEndpointsWatcherApiAvailable(),
-                ["parent device API"] = IsDeviceInformationApiAvailable(),
                 ["virtual device API"] = IsVirtualDeviceApiAvailable(),
                 ["endpoints multi-client access"] = IsEndpointsMultiClientAccessAvailable(),
             };

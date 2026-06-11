@@ -1,4 +1,5 @@
 #pragma comment(lib, "winmm.lib")
+#pragma comment(lib, "setupapi.lib")
 
 #ifndef NOMINMAX
 #define NOMINMAX
@@ -12,9 +13,12 @@
 #define DRV_QUERYDEVICEINTERFACE 0x80C
 #endif
 
+#include <initguid.h>
 #include <windows.h>
 #include <mmsystem.h>
 #include <mmreg.h>
+#include <setupapi.h>
+#include <devpkey.h>
 
 #include <algorithm>
 #include <new>
@@ -307,12 +311,12 @@ API_EXPORT CONFIGURATION_GETRESULT API_CALL GetConfiguration_Win(
         }
         catch (const winrt::hresult_error& e)
         {
-            config->activityCallback(FormatError(e, L"Initialize WMS SDK"));
+            config->activityCallback(FormatError(e, L"Failed to initialize WMS SDK"));
             return CONFIGURATION_GETRESULT_WMSUNKNOWNERROR;
         }
         catch (const std::exception& e)
         {
-            config->activityCallback(FormatError(e, L"Initialize WMS SDK"));
+            config->activityCallback(FormatError(e, L"Failed to initialize WMS SDK"));
             return CONFIGURATION_GETRESULT_WMSUNKNOWNERROR;
         }
         catch (...)
@@ -495,21 +499,24 @@ void EnsureWinMmPortsAvailable()
 
 struct EndpointInfoBase
 {
+    std::wstring endpointId;
+
     std::wstring endpointDeviceId;
 
-    std::wstring parentDeviceId;
-    std::wstring parentDeviceName;
-    std::wstring parentManufacturer;
-    std::wstring parentModel;
+    std::wstring portDeviceId;
+    std::wstring devicePath;
+
+    std::wstring deviceId;
+    std::wstring deviceName;
+    std::wstring deviceManufacturer;
+    std::wstring deviceModel;
+    std::wstring deviceDriverInformation;
 };
 
 struct InputEndpointInfo : EndpointInfoBase
 {
     int deviceIndex;
     LPMIDIINCAPSW caps;
-
-    std::wstring portDeviceId;
-    std::wstring devicePath;
 };
 
 API_EXPORT void API_CALL CloneInputEndpointInfo(InputEndpointInfo* source, InputEndpointInfo** info)
@@ -521,40 +528,13 @@ API_EXPORT void API_CALL CloneInputEndpointInfo(InputEndpointInfo* source, Input
     result->portDeviceId = source->portDeviceId;
     result->devicePath = source->devicePath;
     result->endpointDeviceId = source->endpointDeviceId;
-    result->parentDeviceId = source->parentDeviceId;
-    result->parentDeviceName = source->parentDeviceName;
-    result->parentManufacturer = source->parentManufacturer;
-    result->parentModel = source->parentModel;
+    result->deviceId = source->deviceId;
+    result->deviceName = source->deviceName;
+    result->deviceManufacturer = source->deviceManufacturer;
+    result->deviceModel = source->deviceModel;
+    result->deviceDriverInformation = source->deviceDriverInformation;
 
     *info = result;
-}
-
-API_EXPORT int API_CALL GetInputEndpointHashCode(InputEndpointInfo* info)
-{
-    if (info == nullptr)
-        return 0;
-
-    if (!info->endpointDeviceId.empty() && !info->portDeviceId.empty())
-        return std::hash<std::wstring>()(info->endpointDeviceId) ^ std::hash<std::wstring>()(info->portDeviceId);
-
-    if (!info->devicePath.empty())
-        return std::hash<std::wstring>()(info->devicePath) ^ std::hash<std::wstring>()(info->caps->szPname);
-
-    return std::hash<std::wstring>()(info->caps->szPname);
-}
-
-API_EXPORT char API_CALL AreInputEndpointsEqual(InputEndpointInfo* info1, InputEndpointInfo* info2)
-{
-    if (info1 == nullptr || info2 == nullptr)
-        return 0;
-
-    if (!info1->endpointDeviceId.empty() && !info1->portDeviceId.empty() && !info2->endpointDeviceId.empty() && !info2->portDeviceId.empty())
-        return info1->endpointDeviceId == info2->endpointDeviceId && info1->portDeviceId == info2->portDeviceId;
-    
-    if (!info1->devicePath.empty() && !info2->devicePath.empty())
-        return info1->devicePath == info2->devicePath && wcscmp(info1->caps->szPname, info2->caps->szPname) == 0;
-
-    return wcscmp(info1->caps->szPname, info2->caps->szPname) == 0;
 }
 
 API_EXPORT IN_GETCOUNTRESULT API_CALL GetInputEndpointsCount(int* count)
@@ -631,10 +611,6 @@ struct OutputEndpointInfo : EndpointInfoBase
     int deviceIndex;
     LPMIDIOUTCAPSW caps;
 
-    std::wstring portDeviceId;
-
-    std::wstring devicePath;
-
     char isMicrosoftGsWavetableSynth = 0;
 };
 
@@ -648,43 +624,13 @@ API_EXPORT void API_CALL CloneOutputEndpointInfo(OutputEndpointInfo* source, Out
     result->devicePath = source->devicePath;
     result->isMicrosoftGsWavetableSynth = source->isMicrosoftGsWavetableSynth;
     result->endpointDeviceId = source->endpointDeviceId;
-    result->parentDeviceId = source->parentDeviceId;
-    result->parentDeviceName = source->parentDeviceName;
-    result->parentManufacturer = source->parentManufacturer;
-    result->parentModel = source->parentModel;
+    result->deviceId = source->deviceId;
+    result->deviceName = source->deviceName;
+    result->deviceManufacturer = source->deviceManufacturer;
+    result->deviceModel = source->deviceModel;
+    result->deviceDriverInformation = source->deviceDriverInformation;
 
     *info = result;
-}
-
-API_EXPORT int API_CALL GetOutputEndpointHashCode(OutputEndpointInfo* info)
-{
-    if (info == nullptr)
-        return 0;
-
-    if (!info->endpointDeviceId.empty() && !info->portDeviceId.empty())
-        return std::hash<std::wstring>()(info->endpointDeviceId) ^ std::hash<std::wstring>()(info->portDeviceId);
-
-    if (!info->devicePath.empty())
-        return std::hash<std::wstring>()(info->devicePath) ^ std::hash<std::wstring>()(info->caps->szPname);
-
-    return std::hash<std::wstring>()(info->caps->szPname);
-}
-
-API_EXPORT char API_CALL AreOutputEndpointsEqual(OutputEndpointInfo* info1, OutputEndpointInfo* info2)
-{
-    if (info1 == nullptr || info2 == nullptr)
-        return 0;
-
-    if (info1->isMicrosoftGsWavetableSynth && info2->isMicrosoftGsWavetableSynth)
-        return 1;
-
-    if (!info1->endpointDeviceId.empty() && !info1->portDeviceId.empty() && !info2->endpointDeviceId.empty() && !info2->portDeviceId.empty())
-        return info1->endpointDeviceId == info2->endpointDeviceId && info1->portDeviceId == info2->portDeviceId;
-
-    if (!info1->devicePath.empty() && !info2->devicePath.empty())
-        return info1->devicePath == info2->devicePath && wcscmp(info1->caps->szPname, info2->caps->szPname) == 0;
-
-    return wcscmp(info1->caps->szPname, info2->caps->szPname) == 0;
 }
 
 API_EXPORT OUT_GETCOUNTRESULT API_CALL GetOutputEndpointsCount(int* count)
@@ -777,234 +723,205 @@ int FindPortIndex(const std::wstring& endpointDeviceId, const std::wstring& port
     return -1;
 }
 
-// TODO: WMS API
-API_EXPORT const wchar_t* API_CALL GetDeviceManufacturer(WORD manufacturerId)
+std::wstring ReadStringProp(HDEVINFO hDev, SP_DEVINFO_DATA& devData, const DEVPROPKEY& key)
 {
-    // https://docs.microsoft.com/en-us/windows/win32/multimedia/manufacturer-identifiers
-    switch (manufacturerId)
-    {
-        case MM_GRAVIS: return L"Advanced Gravis Computer Technology, Ltd.";
-        case MM_ANTEX: return L"Antex Electronics Corporation";
-        case MM_APPS: return L"APPS Software";
-        case MM_ARTISOFT: return L"Artisoft, Inc.";
-        case MM_AST: return L"AST Research, Inc.";
-        case MM_ATI: return L"ATI Technologies, Inc.";
-        case MM_AUDIOFILE: return L"Audio, Inc.";
-        case MM_APT: return L"Audio Processing Technology";
-        case MM_AUDIOPT: return L"Audio Processing Technology";
-        case MM_AURAVISION: return L"Auravision Corporation";
-        case MM_AZTECH: return L"Aztech Labs, Inc.";
-        case MM_CANOPUS: return L"Canopus, Co., Ltd.";
-        case MM_COMPUSIC: return L"Compusic";
-        case MM_CAT: return L"Computer Aided Technology, Inc.";
-        case MM_COMPUTER_FRIENDS: return L"Computer Friends, Inc.";
-        case MM_CONTROLRES: return L"Control Resources Corporation";
-        case MM_CREATIVE: return L"Creative Labs, Inc.";
-        case MM_DIALOGIC: return L"Dialogic Corporation";
-        case MM_DOLBY: return L"Dolby Laboratories, Inc.";
-        case MM_DSP_GROUP: return L"DSP Group, Inc.";
-        case MM_DSP_SOLUTIONS: return L"DSP Solutions, Inc.";
-        case MM_ECHO: return L"Echo Speech Corporation";
-        case MM_ESS: return L"ESS Technology, Inc.";
-        case MM_EVEREX: return L"Everex Systems, Inc.";
-        case MM_EXAN: return L"EXAN, Ltd.";
-        case MM_FUJITSU: return L"Fujitsu, Ltd.";
-        case MM_IOMAGIC: return L"I/O Magic Corporation";
-        case MM_ICL_PS: return L"ICL Personal Systems";
-        case MM_OLIVETTI: return L"Ing. C. Olivetti & C., S.p.A.";
-        case MM_ICS: return L"Integrated Circuit Systems, Inc.";
-        case MM_INTEL: return L"Intel Corporation";
-        case MM_INTERACTIVE: return L"InterActive, Inc.";
-        case MM_IBM: return L"International Business Machines";
-        case MM_ITERATEDSYS: return L"Iterated Systems, Inc.";
-        case MM_LOGITECH: return L"Logitech, Inc.";
-        case MM_LYRRUS: return L"Lyrrus, Inc.";
-        case MM_MATSUSHITA: return L"Matsushita Electric Corporation of America";
-        case MM_MEDIAVISION: return L"Media Vision, Inc.";
-        case MM_METHEUS: return L"Metheus Corporation";
-        case MM_MELABS: return L"microEngineering Labs";
-        case MM_MICROSOFT: return L"Microsoft Corporation";
-        case MM_MOSCOM: return L"MOSCOM Corporation";
-        case MM_MOTOROLA: return L"Motorola, Inc.";
-        case MM_NMS: return L"Natural MicroSystems Corporation";
-        case MM_NCR: return L"NCR Corporation";
-        case MM_NEC: return L"NEC Corporation";
-        case MM_NEWMEDIA: return L"New Media Corporation";
-        case MM_OKI: return L"OKI";
-        case MM_OPTI: return L"OPTi, Inc.";
-        case MM_ROLAND: return L"Roland Corporation";
-        case MM_SCALACS: return L"SCALACS";
-        case MM_EPSON: return L"Seiko Epson Corporation, Inc.";
-        case MM_SIERRA: return L"Sierra Semiconductor Corporation";
-        case MM_SILICONSOFT: return L"Silicon Software, Inc.";
-        case MM_SONICFOUNDRY: return L"Sonic Foundry";
-        case MM_SPEECHCOMP: return L"Speech Compression";
-        case MM_SUPERMAC: return L"Supermac Technology, Inc.";
-        case MM_TANDY: return L"Tandy Corporation";
-        case MM_KORG: return L"Toshihiko Okuhura, Korg, Inc.";
-        case MM_TRUEVISION: return L"Truevision, Inc.";
-        case MM_TURTLE_BEACH: return L"Turtle Beach Systems";
-        case MM_VAL: return L"Video Associates Labs, Inc.";
-        case MM_VIDEOLOGIC: return L"VideoLogic, Inc.";
-        case MM_VITEC: return L"Visual Information Technologies, Inc.";
-        case MM_VOCALTEC: return L"VocalTec, Inc.";
-        case MM_VOYETRA: return L"Voyetra Technologies";
-        case MM_WANGLABS: return L"Wang Laboratories";
-        case MM_WILLOWPOND: return L"Willow Pond Corporation";
-        case MM_WINNOV: return L"Winnov, LP";
-        case MM_XEBEC: return L"Xebec Multimedia Solutions Limited";
-        case MM_YAMAHA: return L"Yamaha Corporation of America";
-    }
+    DEVPROPTYPE propType;
+    DWORD bufSize = 0;
+    SetupDiGetDevicePropertyW(hDev, &devData, &key, &propType, nullptr, 0, &bufSize, 0);
+    if (bufSize == 0)
+        return {};
 
-    return L"Unknown";
+    std::vector<BYTE> buf(bufSize);
+    if (!SetupDiGetDevicePropertyW(hDev, &devData, &key, &propType, buf.data(), bufSize, nullptr, 0))
+        return {};
+
+    if (propType != DEVPROP_TYPE_STRING)
+        return {};
+    
+    return std::wstring(reinterpret_cast<const wchar_t*>(buf.data()));
 }
 
-// TODO: WMS API
-API_EXPORT const wchar_t* API_CALL GetDeviceProduct(WORD productId)
-{
-    // https://docs.microsoft.com/en-us/windows/win32/multimedia/microsoft-corporation-product-identifiers
-    switch (productId)
-    {
-        case MM_ADLIB: return L"Adlib-compatible synthesizer";
-        case MM_MSFT_ACM_G711: return L"G.711 codec";
-        case MM_MSFT_ACM_GSM610: return L"GSM 610 codec";
-        case MM_MSFT_ACM_IMAADPCM: return L"IMA ADPCM codec";
-        case MM_PC_JOYSTICK: return L"Joystick adapter";
-        case MM_MIDI_MAPPER: return L"MIDI mapper";
-        case MM_MPU401_MIDIIN: return L"MPU 401-compatible MIDI input port";
-        case MM_MPU401_MIDIOUT: return L"MPU 401-compatible MIDI output port";
-        case MM_MSFT_ACM_MSADPCM: return L"MS ADPCM codec";
-        case MM_MSFT_WSS_FMSYNTH_STEREO: return L"MS audio board stereo FM synthesizer";
-        case MM_MSFT_WSS_AUX: return L"MS audio board aux port";
-        case MM_MSFT_WSS_MIXER: return L"MS audio board mixer driver";
-        case MM_MSFT_WSS_WAVEIN: return L"MS audio board waveform input";
-        case MM_MSFT_WSS_WAVEOUT: return L"MS audio board waveform output";
-        case MM_MSFT_MSACM: return L"MS audio compression manager";
-        case MM_MSFT_ACM_MSFILTER: return L"MS filter";
-        case MM_MSFT_WSS_OEM_AUX: return L"MS OEM audio aux port";
-        case MM_MSFT_WSS_OEM_MIXER: return L"MS OEM audio board mixer driver";
-        case MM_MSFT_WSS_OEM_FMSYNTH_STEREO: return L"MS OEM audio board stereo FM synthesizer";
-        case MM_MSFT_WSS_OEM_WAVEIN: return L"MS OEM audio board waveform input";
-        case MM_MSFT_WSS_OEM_WAVEOUT: return L"MS OEM audio board waveform output";
-        case MM_MSFT_GENERIC_AUX_CD: return L"MS vanilla driver aux (CD)";
-        case MM_MSFT_GENERIC_AUX_LINE: return L"MS vanilla driver aux (line in)";
-        case MM_MSFT_GENERIC_AUX_MIC: return L"MS vanilla driver aux (mic)";
-        case MM_MSFT_GENERIC_MIDIOUT: return L"MS vanilla driver MIDI external out";
-        case MM_MSFT_GENERIC_MIDIIN: return L"MS vanilla driver MIDI in";
-        case MM_MSFT_GENERIC_MIDISYNTH: return L"MS vanilla driver MIDI synthesizer";
-        case MM_MSFT_GENERIC_WAVEIN: return L"MS vanilla driver waveform input";
-        case MM_MSFT_GENERIC_WAVEOUT: return L"MS vanilla driver wavefrom output";
-        case MM_PCSPEAKER_WAVEOUT: return L"PC speaker waveform output";
-        case MM_MSFT_ACM_PCM: return L"PCM converter";
-        case MM_SNDBLST_SYNTH: return L"Sound Blaster internal synthesizer";
-        case MM_SNDBLST_MIDIIN: return L"Sound Blaster MIDI input port";
-        case MM_SNDBLST_MIDIOUT: return L"Sound Blaster MIDI output port";
-        case MM_SNDBLST_WAVEIN: return L"Sound Blaster waveform input";
-        case MM_SNDBLST_WAVEOUT: return L"Sound Blaster waveform output";
-        case MM_WAVE_MAPPER: return L"Wave mapper";
-    }
-
-    // add from https://docs.microsoft.com/en-us/windows/win32/multimedia/product-identifiers
-    return L"Unknown";
-}
-
-API_EXPORT DEVCOMMON_GETPARENTDEVICEINFORESULT API_CALL GetParentDeviceInfo_Win(
+API_EXPORT DEVICE_GETDEVICEINFORESULT API_CALL GetDeviceInformation(
     EndpointInfoBase* deviceInfo,
     Configuration* configuration,
     const wchar_t** id,
     const wchar_t** name,
     const wchar_t** manufacturer,
     const wchar_t** model,
+    const wchar_t** driverVersion,
     int* errorCode)
 {
     *errorCode = 0;
 
-    if (deviceInfo == nullptr || deviceInfo->endpointDeviceId.empty())
-        return DEVCOMMON_GETPARENTDEVICEINFORESULT_NOINFO;
-
-    if (!deviceInfo->parentDeviceId.empty())
+    if (!deviceInfo->deviceId.empty())
     {
-        *id = deviceInfo->parentDeviceId.c_str();
-        *name = deviceInfo->parentDeviceName.c_str();
-        *manufacturer = deviceInfo->parentManufacturer.c_str();
-        *model = deviceInfo->parentModel.c_str();
+        *id = deviceInfo->deviceId.c_str();
+        *name = deviceInfo->deviceName.c_str();
+        *manufacturer = deviceInfo->deviceManufacturer.c_str();
+        *model = deviceInfo->deviceModel.c_str();
+        *driverVersion = deviceInfo->deviceDriverInformation.c_str();
 
-        return DEVCOMMON_GETPARENTDEVICEINFORESULT_OK;
+        return DEVICE_GETDEVICEINFORESULT_OK;
     }
 
-    winrt::Windows::Devices::Enumeration::DeviceInformation parentInformation = nullptr;
-
-    try
+    if (!deviceInfo->endpointDeviceId.empty())
     {
-        auto endpointInformation = midi2::MidiEndpointDeviceInformation::CreateFromEndpointDeviceId(winrt::hstring{ deviceInfo->endpointDeviceId });
-        if (endpointInformation == nullptr)
-            return DEVCOMMON_GETPARENTDEVICEINFORESULT_FAILEDTOGETINFO;
+        winrt::Windows::Devices::Enumeration::DeviceInformation parentInformation = nullptr;
 
-        parentInformation = endpointInformation.GetParentDeviceInformation();
-        if (parentInformation == nullptr)
-            return DEVCOMMON_GETPARENTDEVICEINFORESULT_NOINFO;
-
-        deviceInfo->parentDeviceId = parentInformation.Id().c_str();
-        deviceInfo->parentDeviceName = parentInformation.Name().c_str();
-
-        // TODO: dangerous to return pointers to internal strings - need to copy them instead?
-        *id = deviceInfo->parentDeviceId.c_str();
-        *name = deviceInfo->parentDeviceName.c_str();
-    }
-    catch (const winrt::hresult_error& e)
-    {
-        configuration->activityCallback(FormatError(e, L"Get basic parent device properties"));
-        return DEVCOMMON_GETPARENTDEVICEINFORESULT_UNKNOWNWMSERROR;
-    }
-    catch (const std::exception& e)
-    {
-        configuration->activityCallback(FormatError(e, L"Get basic parent device properties"));
-        return DEVCOMMON_GETPARENTDEVICEINFORESULT_UNKNOWNWMSERROR;
-    }
-    catch (...)
-    {
-        configuration->activityCallback(L"Failed to get basic parent device properties");
-        return DEVCOMMON_GETPARENTDEVICEINFORESULT_UNKNOWNWMSERROR;
-    }
-
-    if (parentInformation != nullptr)
-    {
         try
         {
-            auto manufacturerPropertyName = L"System.Devices.DeviceManufacturer";
-            auto modelPropertyName = L"System.Devices.ModelName";
+            auto endpointInformation = midi2::MidiEndpointDeviceInformation::CreateFromEndpointDeviceId(winrt::hstring{ deviceInfo->endpointDeviceId });
+            if (endpointInformation == nullptr)
+                return DEVICE_GETDEVICEINFORESULT_FAILEDGETENDPOINTINFO;
 
-            auto properties = parentInformation.Properties();
+            parentInformation = endpointInformation.GetParentDeviceInformation();
+            if (parentInformation == nullptr)
+                return DEVICE_GETDEVICEINFORESULT_FAILEDGETPARENTDEVICEINFO;
 
-            auto manufacturerH = properties.HasKey(manufacturerPropertyName)
-                ? winrt::unbox_value_or<winrt::hstring>(properties.Lookup(manufacturerPropertyName), L"")
-                : L"";
+            deviceInfo->deviceId = parentInformation.Id().c_str();
+            deviceInfo->deviceName = parentInformation.Name().c_str();
 
-            auto modelH = properties.HasKey(modelPropertyName)
-                ? winrt::unbox_value_or<winrt::hstring>(properties.Lookup(modelPropertyName), L"")
-                : L"";
-
-            deviceInfo->parentManufacturer = manufacturerH.c_str();
-            deviceInfo->parentModel = modelH.c_str();
+            *id = deviceInfo->deviceId.c_str();
+            *name = deviceInfo->deviceName.c_str();
         }
         catch (const winrt::hresult_error& e)
         {
-            configuration->activityCallback(FormatError(e, L"Get additional parent device properties"));
+            configuration->activityCallback(FormatError(e, L"Failed to get basic parent device properties"));
+            return DEVICE_GETDEVICEINFORESULT_UNKNOWNWMSERROR;
         }
         catch (const std::exception& e)
         {
-            configuration->activityCallback(FormatError(e, L"Get additional parent device properties"));
+            configuration->activityCallback(FormatError(e, L"Failed to get basic parent device properties"));
+            return DEVICE_GETDEVICEINFORESULT_UNKNOWNWMSERROR;
         }
         catch (...)
         {
-            configuration->activityCallback(L"Failed to get additional parent device properties");
+            configuration->activityCallback(L"Failed to get basic parent device properties");
+            return DEVICE_GETDEVICEINFORESULT_UNKNOWNWMSERROR;
         }
 
-        *manufacturer = deviceInfo->parentManufacturer.c_str();
-        *model = deviceInfo->parentModel.c_str();
+        if (parentInformation != nullptr)
+        {
+            try
+            {
+                auto properties = parentInformation.Properties();
+
+                auto manufacturerPropertyName = L"System.Devices.DeviceManufacturer";
+                if (properties.HasKey(manufacturerPropertyName))
+                {
+                    auto unboxed = winrt::unbox_value_or<winrt::hstring>(properties.Lookup(manufacturerPropertyName), L"");
+                    deviceInfo->deviceManufacturer = unboxed.c_str();
+                }
+                else
+                    configuration->activityCallback(L"Device manufacturer property is not set");
+
+                auto modelPropertyName = L"System.Devices.ModelName";
+                if (properties.HasKey(modelPropertyName))
+                {
+                    auto unboxed = winrt::unbox_value_or<winrt::hstring>(properties.Lookup(modelPropertyName), L"");
+                    deviceInfo->deviceModel = unboxed.c_str();
+                }
+                else
+                    configuration->activityCallback(L"Device model property is not set");
+
+                auto driverVersionPropertyName = L"{A8B865DD-2E3D-4094-AD97-E593A70C75D6} 3";
+                if (properties.HasKey(driverVersionPropertyName))
+                {
+                    auto unboxed = winrt::unbox_value_or<winrt::hstring>(properties.Lookup(driverVersionPropertyName), L"");
+                    deviceInfo->deviceDriverInformation = unboxed.c_str();
+                }
+                else
+                    configuration->activityCallback(L"Device driver version property is not set");
+            }
+            catch (const winrt::hresult_error& e)
+            {
+                configuration->activityCallback(FormatError(e, L"Failed to get additional parent device properties"));
+            }
+            catch (const std::exception& e)
+            {
+                configuration->activityCallback(FormatError(e, L"Failed to get additional parent device properties"));
+            }
+            catch (...)
+            {
+                configuration->activityCallback(L"Failed to get additional parent device properties");
+            }
+
+            *manufacturer = deviceInfo->deviceManufacturer.c_str();
+            *model = deviceInfo->deviceModel.c_str();
+            *driverVersion = deviceInfo->deviceDriverInformation.c_str();
+        }
+    }
+    else if (!deviceInfo->devicePath.empty())
+    {
+        // TODO: check returns
+
+        HDEVINFO hDev = SetupDiCreateDeviceInfoListExW(nullptr, nullptr, nullptr, nullptr);
+        if (hDev == INVALID_HANDLE_VALUE)
+            return DEVICE_GETDEVICEINFORESULT_FAILEDPREPAREDEVICEINFO;
+
+        SP_DEVICE_INTERFACE_DATA ifaceData{};
+        ifaceData.cbSize = sizeof(ifaceData);
+
+        if (!SetupDiOpenDeviceInterfaceW(hDev, deviceInfo->devicePath.c_str(), 0, &ifaceData))
+        {
+            SetupDiDestroyDeviceInfoList(hDev);
+            return DEVICE_GETDEVICEINFORESULT_FAILEDGETDEVICEINFO;
+        }
+
+        SP_DEVINFO_DATA devData{};
+        devData.cbSize = sizeof(devData);
+        DWORD reqSize = 0;
+        SetupDiGetDeviceInterfaceDetailW(hDev, &ifaceData, nullptr, 0, &reqSize, &devData);
+
+        deviceInfo->deviceName = ReadStringProp(hDev, devData, DEVPKEY_Device_FriendlyName);
+        if (deviceInfo->deviceName.empty())
+            deviceInfo->deviceName = ReadStringProp(hDev, devData, DEVPKEY_Device_DeviceDesc);
+
+        *name = deviceInfo->deviceName.c_str();
+
+        deviceInfo->deviceManufacturer = ReadStringProp(hDev, devData, DEVPKEY_Device_Manufacturer);
+        *manufacturer = deviceInfo->deviceManufacturer.c_str();
+
+        std::wstring parentInstanceId = ReadStringProp(hDev, devData, DEVPKEY_Device_Parent);
+        SetupDiDestroyDeviceInfoList(hDev);
+
+        // TODO: another error
+        if (parentInstanceId.empty())
+            return DEVICE_GETDEVICEINFORESULT_FAILEDGETPARENTDEVICEINFO;
+
+        deviceInfo->deviceId = parentInstanceId;
+        *id = deviceInfo->deviceId.c_str();
+
+        HDEVINFO hParent = SetupDiCreateDeviceInfoListExW(nullptr, nullptr, nullptr, nullptr);
+        if (hParent == INVALID_HANDLE_VALUE)
+            return DEVICE_GETDEVICEINFORESULT_FAILEDPREPAREPARENTDEVICEINFO;
+
+        SP_DEVINFO_DATA parentData{};
+        parentData.cbSize = sizeof(parentData);
+
+        if (!SetupDiOpenDeviceInfoW(hParent, parentInstanceId.c_str(), nullptr, 0, &parentData))
+        {
+            SetupDiDestroyDeviceInfoList(hParent);
+            return DEVICE_GETDEVICEINFORESULT_FAILEDGETPARENTDEVICEINFO;
+        }
+
+        if (deviceInfo->deviceName.empty())
+            deviceInfo->deviceName = ReadStringProp(hParent, parentData, DEVPKEY_Device_BusReportedDeviceDesc);
+        if (deviceInfo->deviceName.empty())
+            deviceInfo->deviceName = ReadStringProp(hParent, parentData, DEVPKEY_Device_DeviceDesc);
+
+        *name = deviceInfo->deviceName.c_str();
+
+        deviceInfo->deviceModel = ReadStringProp(hParent, parentData, DEVPKEY_Device_BusReportedDeviceDesc);
+        *model = deviceInfo->deviceModel.c_str();
+        
+        deviceInfo->deviceDriverInformation = ReadStringProp(hParent, parentData, DEVPKEY_Device_DriverVersion);
+        *driverVersion = deviceInfo->deviceDriverInformation.c_str();
+
+        SetupDiDestroyDeviceInfoList(hParent);
     }
 
-    return DEVCOMMON_GETPARENTDEVICEINFORESULT_OK;
+    return DEVICE_GETDEVICEINFORESULT_OK;
 }
 
 /* ================================
@@ -1244,11 +1161,11 @@ API_EXPORT SESSION_OPENRESULT API_CALL OpenSession_Win(
                 }
                 catch (const winrt::hresult_error& e)
                 {
-                    sessionHandle->configuration->activityCallback(FormatError(e, L"Process endpoint added"));
+                    sessionHandle->configuration->activityCallback(FormatError(e, L"Failed to process endpoint added"));
                 }
                 catch (const std::exception& e)
                 {
-                    sessionHandle->configuration->activityCallback(FormatError(e, L"Process endpoint added"));
+                    sessionHandle->configuration->activityCallback(FormatError(e, L"Failed to process endpoint added"));
                 }
                 catch (...)
                 {
@@ -1289,11 +1206,11 @@ API_EXPORT SESSION_OPENRESULT API_CALL OpenSession_Win(
                 }
                 catch (const winrt::hresult_error& e)
                 {
-                    sessionHandle->configuration->activityCallback(FormatError(e, L"Process endpoint removed"));
+                    sessionHandle->configuration->activityCallback(FormatError(e, L"Failed to process endpoint removed"));
                 }
                 catch (const std::exception& e)
                 {
-                    sessionHandle->configuration->activityCallback(FormatError(e, L"Process endpoint removed"));
+                    sessionHandle->configuration->activityCallback(FormatError(e, L"Failed to process endpoint removed"));
                 }
                 catch (...)
                 {
@@ -1315,13 +1232,13 @@ API_EXPORT SESSION_OPENRESULT API_CALL OpenSession_Win(
     }
     catch (const winrt::hresult_error& e)
     {
-        configuration->activityCallback(FormatError(e, L"Setup devices watcher"));
+        configuration->activityCallback(FormatError(e, L"Failed to setup devices watcher"));
         delete sessionHandle;
         return SESSION_OPENRESULT_WMSUNKNOWNERROR;
     }
     catch (const std::exception& e)
     {
-        configuration->activityCallback(FormatError(e, L"Setup devices watcher"));
+        configuration->activityCallback(FormatError(e, L"Failed to setup devices watcher"));
         delete sessionHandle;
         return SESSION_OPENRESULT_WMSUNKNOWNERROR;
     }
@@ -1458,14 +1375,14 @@ API_EXPORT IN_GETALLINFORESULT API_CALL GetInputEndpointsInfo(Configuration* con
         {
             cleanupInputDevices();
 
-            configuration->activityCallback(FormatError(e, L"Get all input endpoints via WMS"));
+            configuration->activityCallback(FormatError(e, L"Failed to get all input endpoints via WMS"));
             return IN_GETALLINFORESULT_UNKNOWNWMSERROR;
         }
         catch (const std::exception& e)
         {
             cleanupInputDevices();
 
-            configuration->activityCallback(FormatError(e, L"Get all input endpoints via WMS"));
+            configuration->activityCallback(FormatError(e, L"Failed to get all input endpoints via WMS"));
             return IN_GETALLINFORESULT_UNKNOWNWMSERROR;
         }
         catch (...)
@@ -1522,30 +1439,23 @@ API_EXPORT IN_GETPROPERTYRESULT API_CALL GetInputEndpointName(InputEndpointInfo*
     return IN_GETPROPERTYRESULT_OK;
 }
 
-// TODO: WMS API
-API_EXPORT IN_GETPROPERTYRESULT API_CALL GetInputEndpointManufacturer(InputEndpointInfo* info, const wchar_t** value, int* errorCode)
+API_EXPORT IN_GETPROPERTYRESULT API_CALL GetInputEndpointId_Win(InputEndpointInfo* info, const wchar_t** value, int* errorCode)
 {
     *errorCode = 0;
+    *value = L"";
 
-    *value = GetDeviceManufacturer(info->caps->wMid);
-    return IN_GETPROPERTYRESULT_OK;
-}
+    if (info == nullptr)
+        return IN_GETPROPERTYRESULT_OK;
 
-// TODO: WMS API
-API_EXPORT IN_GETPROPERTYRESULT API_CALL GetInputEndpointProduct(InputEndpointInfo* info, const wchar_t** value, int* errorCode)
-{
-    *errorCode = 0;
+    if (!info->endpointDeviceId.empty() && !info->portDeviceId.empty())
+        info->endpointId = info->endpointDeviceId + L"_" + info->portDeviceId;
+    else if (!info->devicePath.empty())
+        info->endpointId = info->devicePath + L"_" + info->caps->szPname;
+    else
+        info->endpointId = info->caps->szPname;
 
-    *value = GetDeviceProduct(info->caps->wPid);
-    return IN_GETPROPERTYRESULT_OK;
-}
+    *value = info->endpointId.c_str();
 
-// TODO: WMS API
-API_EXPORT IN_GETPROPERTYRESULT API_CALL GetInputEndpointDriverVersion(InputEndpointInfo* info, int* value, int* errorCode)
-{
-    *errorCode = 0;
-
-    *value = info->caps->vDriverVersion;
     return IN_GETPROPERTYRESULT_OK;
 }
 
@@ -1886,20 +1796,6 @@ API_EXPORT IN_GETSYSEXDATARESULT API_CALL GetInputEndpointSysExBufferData(LPMIDI
     return IN_GETSYSEXDATARESULT_OK;
 }
 
-// TODO: WMS API
-API_EXPORT char API_CALL IsInputEndpointPropertySupported(IN_PROPERTY property)
-{
-    switch (property)
-    {
-        case IN_PROPERTY_PRODUCT:
-        case IN_PROPERTY_MANUFACTURER:
-        case IN_PROPERTY_DRIVERVERSION:
-            return 1;
-    }
-
-    return 0;
-}
-
 /* ================================
    Output device
 ================================ */
@@ -2006,14 +1902,14 @@ API_EXPORT OUT_GETALLINFORESULT API_CALL GetOutputEndpointsInfo(Configuration* c
         {
             cleanupOutputDevices();
 
-            configuration->activityCallback(FormatError(e, L"Get all output endpoints via WMS"));
+            configuration->activityCallback(FormatError(e, L"Failed to get all output endpoints via WMS"));
             return OUT_GETALLINFORESULT_UNKNOWNWMSERROR;
         }
         catch (const std::exception& e)
         {
             cleanupOutputDevices();
 
-            configuration->activityCallback(FormatError(e, L"Get all output endpoints via WMS"));
+            configuration->activityCallback(FormatError(e, L"Failed to get all output endpoints via WMS"));
             return OUT_GETALLINFORESULT_UNKNOWNWMSERROR;
         }
         catch (...)
@@ -2069,117 +1965,29 @@ API_EXPORT OUT_GETPROPERTYRESULT API_CALL GetOutputEndpointName(OutputEndpointIn
 {
     *errorCode = 0;
 
+    // TODO: WMS
     *value = info->caps->szPname;
     return OUT_GETPROPERTYRESULT_OK;
 }
 
-// TODO: WMS API
-API_EXPORT OUT_GETPROPERTYRESULT API_CALL GetOutputEndpointManufacturer(OutputEndpointInfo* info, const wchar_t** value, int* errorCode)
+API_EXPORT OUT_GETPROPERTYRESULT API_CALL GetOutputEndpointId_Win(OutputEndpointInfo* info, const wchar_t** value, int* errorCode)
 {
     *errorCode = 0;
+    *value = L"";
 
-    *value = GetDeviceManufacturer(info->caps->wMid);
-    return OUT_GETPROPERTYRESULT_OK;
-}
+    if (info == nullptr)
+        return OUT_GETPROPERTYRESULT_OK;
 
-// TODO: WMS API
-API_EXPORT OUT_GETPROPERTYRESULT API_CALL GetOutputEndpointProduct(OutputEndpointInfo* info, const wchar_t** value, int* errorCode)
-{
-    *errorCode = 0;
+    if (!info->endpointDeviceId.empty() && !info->portDeviceId.empty())
+        info->endpointId = info->endpointDeviceId + L"_" + info->portDeviceId;
+    else if (!info->devicePath.empty())
+        info->endpointId = info->devicePath + L"_" + info->caps->szPname;
+    else if (info->isMicrosoftGsWavetableSynth)
+        info->endpointId = L"Microsoft_GS_Wavetable_Synth";
+    else
+        info->endpointId = info->caps->szPname;
 
-    *value = GetDeviceProduct(info->caps->wPid);
-    return OUT_GETPROPERTYRESULT_OK;
-}
-
-// TODO: WMS API
-API_EXPORT OUT_GETPROPERTYRESULT API_CALL GetOutputEndpointDriverVersion(OutputEndpointInfo* info, int* value, int* errorCode)
-{
-    *errorCode = 0;
-
-    *value = info->caps->vDriverVersion;
-    return OUT_GETPROPERTYRESULT_OK;
-}
-
-// TODO: WMS API
-API_EXPORT OUT_GETPROPERTYRESULT API_CALL GetOutputEndpointTechnology(OutputEndpointInfo* info, OUT_TECHNOLOGY* value, int* errorCode)
-{
-    *errorCode = 0;
-
-    *value = OUT_TECHNOLOGY_UNKNOWN;
-
-    switch (info->caps->wTechnology)
-    {
-        case MOD_MIDIPORT:
-            *value = OUT_TECHNOLOGY_MIDIPORT;
-            break;
-        case MOD_SYNTH:
-            *value = OUT_TECHNOLOGY_SYNTH;
-            break;
-        case MOD_SQSYNTH:
-            *value = OUT_TECHNOLOGY_SQSYNTH;
-            break;
-        case MOD_FMSYNTH:
-            *value = OUT_TECHNOLOGY_FMSYNTH;
-            break;
-        case MOD_MAPPER:
-            *value = OUT_TECHNOLOGY_MAPPER;
-            break;
-        case MOD_WAVETABLE:
-            *value = OUT_TECHNOLOGY_WAVETABLE;
-            break;
-        case MOD_SWSYNTH:
-            *value = OUT_TECHNOLOGY_SWSYNTH;
-            break;
-    }
-
-    return OUT_GETPROPERTYRESULT_OK;
-}
-
-// TODO: WMS API
-API_EXPORT OUT_GETPROPERTYRESULT API_CALL GetOutputEndpointVoicesNumber(OutputEndpointInfo* info, int* value, int* errorCode)
-{
-    *errorCode = 0;
-
-    *value = info->caps->wVoices;
-    return OUT_GETPROPERTYRESULT_OK;
-}
-
-// TODO: WMS API
-API_EXPORT OUT_GETPROPERTYRESULT API_CALL GetOutputEndpointNotesNumber(OutputEndpointInfo* info, int* value, int* errorCode)
-{
-    *errorCode = 0;
-
-    *value = info->caps->wNotes;
-    return OUT_GETPROPERTYRESULT_OK;
-}
-
-// TODO: WMS API
-API_EXPORT OUT_GETPROPERTYRESULT API_CALL GetOutputEndpointChannelsMask(OutputEndpointInfo* info, int* value, int* errorCode)
-{
-    *errorCode = 0;
-
-    *value = info->caps->wChannelMask;
-    return OUT_GETPROPERTYRESULT_OK;
-}
-
-// TODO: WMS API
-API_EXPORT OUT_GETPROPERTYRESULT API_CALL GetOutputEndpointOptions(OutputEndpointInfo* info, OUT_OPTION* value, int* errorCode)
-{
-    *errorCode = 0;
-
-    int result = OUT_OPTION_UNKNOWN;
-
-    DWORD support = info->caps->dwSupport;
-    if ((support & MIDICAPS_CACHE) != 0)
-        result = result | OUT_OPTION_CACHE;
-    if ((support & MIDICAPS_LRVOLUME) != 0)
-        result = result | OUT_OPTION_LRVOLUME;
-    if ((support & MIDICAPS_STREAM) != 0)
-        result = result | OUT_OPTION_STREAM;
-    if ((support & MIDICAPS_VOLUME) != 0)
-        result = result | OUT_OPTION_VOLUME;
-
-    *value = result;
+    *value = info->endpointId.c_str();
 
     return OUT_GETPROPERTYRESULT_OK;
 }
@@ -2371,24 +2179,6 @@ API_EXPORT OUT_GETSYSEXDATARESULT API_CALL GetOutputEndpointSysExBufferData(void
     return OUT_GETSYSEXDATARESULT_OK;
 }
 
-API_EXPORT char API_CALL IsOutputEndpointPropertySupported(OUT_PROPERTY property)
-{
-    switch (property)
-    {
-        case OUT_PROPERTY_PRODUCT:
-        case OUT_PROPERTY_MANUFACTURER:
-        case OUT_PROPERTY_DRIVERVERSION:
-        case OUT_PROPERTY_TECHNOLOGY:
-        case OUT_PROPERTY_VOICESNUMBER:
-        case OUT_PROPERTY_NOTESNUMBER:
-        case OUT_PROPERTY_CHANNELS:
-        case OUT_PROPERTY_OPTIONS:
-            return 1;
-    }
-
-    return 0;
-}
-
 /* ================================
  Virtual device
  ================================ */
@@ -2405,6 +2195,8 @@ struct VirtualDeviceInfo
 const midi2::MidiEndpointAssociatedPortDeviceInformation GetSinglePort(midi2::MidiEndpointDeviceInformation endpointInformation, midi2::Midi1PortFlow flow)
 {
     auto ports = endpointInformation.FindAllAssociatedMidi1PortsForThisEndpoint(flow);
+
+    // TODO: check there are at least 1 port and not more than 1 port, and return error if not
     return ports.GetAt(0);
 }
 
@@ -2516,13 +2308,13 @@ API_EXPORT VIRTUAL_OPENRESULT API_CALL OpenVirtualDevice_Win(
     catch (const winrt::hresult_error& e)
     {
         cleanupVirtualDevice();
-        configuration->activityCallback(FormatError(e, L"Create virtual device"));
+        configuration->activityCallback(FormatError(e, L"Failed to create virtual device"));
         return VIRTUAL_OPENRESULT_WMSERROR;
     }
     catch (const std::exception& e)
     {
         cleanupVirtualDevice();
-        configuration->activityCallback(FormatError(e, L"Create virtual device"));
+        configuration->activityCallback(FormatError(e, L"Failed to create virtual device"));
         return VIRTUAL_OPENRESULT_WMSERROR;
     }
     catch (...)
@@ -2583,12 +2375,12 @@ API_EXPORT VIRTUAL_MUTERESULT API_CALL MuteVirtualDevice(
     }
     catch (const winrt::hresult_error& e)
     {
-        configuration->activityCallback(FormatError(e, L"Mute virtual device"));
+        configuration->activityCallback(FormatError(e, L"Failed to mute virtual device"));
         return VIRTUAL_MUTERESULT_WMSERROR;
     }
     catch (const std::exception& e)
     {
-        configuration->activityCallback(FormatError(e, L"Mute virtual device"));
+        configuration->activityCallback(FormatError(e, L"Failed to mute virtual device"));
         return VIRTUAL_MUTERESULT_WMSERROR;
     }
     catch (...)
@@ -2612,12 +2404,12 @@ API_EXPORT VIRTUAL_UNMUTERESULT API_CALL UnmuteVirtualDevice(
     }
     catch (const winrt::hresult_error& e)
     {
-        configuration->activityCallback(FormatError(e, L"Unmute virtual device"));
+        configuration->activityCallback(FormatError(e, L"Failed to unmute virtual device"));
         return VIRTUAL_UNMUTERESULT_WMSERROR;
     }
     catch (const std::exception& e)
     {
-        configuration->activityCallback(FormatError(e, L"Unmute virtual device"));
+        configuration->activityCallback(FormatError(e, L"Failed to unmute virtual device"));
         return VIRTUAL_UNMUTERESULT_WMSERROR;
     }
     catch (...)
