@@ -74,6 +74,10 @@ Write-Host "Probably installed..."
 $env:PATH += ";C:\Program Files\Windows MIDI Services\Tools\Console"
 midi service status
 
+#######
+
+midi service restart
+
 ###########
 
 Write-Host "Ports names string: $portsNames"
@@ -85,10 +89,6 @@ ForEach ($port in $ports)
   midi basic-loopback create --name "$port"
   Write-Host "$port is up."
 }
-
-#######
-
-midi service restart
 
 ####
 
