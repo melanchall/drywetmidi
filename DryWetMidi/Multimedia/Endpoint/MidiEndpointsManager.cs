@@ -114,7 +114,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             {
                 lock (_inputEndpointsLock)
                 {
-                    var result = _inputEndpoints.FirstOrDefault(d => d.Name == name);
+                    var result = _inputEndpoints.FirstOrDefault(d => d.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
                     if (result == null)
                         return null;
 
@@ -122,7 +122,7 @@ namespace Melanchall.DryWetMidi.Multimedia
                 }
             }
 
-            return GetAllInputEndpointsInternal().FirstOrDefault(d => d.Name == name);
+            return GetAllInputEndpointsInternal().FirstOrDefault(d => d.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
         }
 
         public OutputEndpoint GetOutputEndpointByName(string name)
@@ -131,7 +131,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             {
                 lock (_outputEndpointsLock)
                 {
-                    var result = _outputEndpoints.FirstOrDefault(d => d.Name == name);
+                    var result = _outputEndpoints.FirstOrDefault(d => d.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
                     if (result == null)
                         return null;
 
@@ -139,7 +139,7 @@ namespace Melanchall.DryWetMidi.Multimedia
                 }
             }
 
-            return GetAllOutputEndpointsInternal().FirstOrDefault(d => d.Name == name);
+            return GetAllOutputEndpointsInternal().FirstOrDefault(d => d.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
         }
 
         private InputEndpoint CloneInputEndpoint(InputEndpoint inputEndpoint)

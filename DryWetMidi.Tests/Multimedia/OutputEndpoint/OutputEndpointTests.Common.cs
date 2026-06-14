@@ -83,7 +83,15 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void GetOutputEndpointByName([Values(MidiEndpoints.A, MidiEndpoints.B, MidiEndpoints.C)] string endpointName)
         {
-            ClassicAssert.IsNotNull(DevicesUtilities.GetOutputEndpoint(endpointName), "There is no endpoint.");
+            ClassicAssert.IsNotNull(
+                DevicesUtilities.GetOutputEndpoint(endpointName),
+                "There is no endpoint by exact name.");
+            ClassicAssert.IsNotNull(
+                DevicesUtilities.GetOutputEndpoint(endpointName.ToLower()),
+                "There is no endpoint by lower name.");
+            ClassicAssert.IsNotNull(
+                DevicesUtilities.GetOutputEndpoint(endpointName.ToUpper()),
+                "There is no endpoint by upper name.");
         }
 
         [Test]
