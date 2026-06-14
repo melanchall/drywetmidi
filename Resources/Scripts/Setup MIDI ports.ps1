@@ -25,11 +25,12 @@ if (-not (Test-Path $targetPath))
     exit 1
 }
 
+Write-Host "Installing and waiting..."
 & "$targetPath" /install /quiet /norestart
+Start-Sleep -Seconds 60
+Write-Host "Probably installed..."
 
-Start-Sleep -Seconds 10
-
-midi
+midi time
 
 ####
 
