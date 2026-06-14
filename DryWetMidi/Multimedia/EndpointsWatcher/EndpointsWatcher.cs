@@ -1,4 +1,5 @@
-﻿using Melanchall.DryWetMidi.Configuration;
+﻿using Melanchall.DryWetMidi.Common;
+using Melanchall.DryWetMidi.Configuration;
 using System;
 
 namespace Melanchall.DryWetMidi.Multimedia
@@ -49,14 +50,13 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <summary>
         /// Gets the instance of <see cref="EndpointsWatcher"/>.
         /// </summary>
-        /// <exception cref="PlatformNotSupportedException">Endpoints watcher API is not supported on the current operating system.</exception>
+        /// <exception cref="FeatureNotAvailableException">Endpoints watcher API is not available.</exception>
         public static EndpointsWatcher Instance
         {
             get
             {
-                // TODO: better exception
                 if (!LibraryConfiguration.IsEndpointsWatcherApiAvailable())
-                    throw new PlatformNotSupportedException("Endpoints watcher API is not supported on the current operating system.");
+                    throw new FeatureNotAvailableException("Endpoints watcher API is not available.");
 
                 if (_instance == null)
                 {

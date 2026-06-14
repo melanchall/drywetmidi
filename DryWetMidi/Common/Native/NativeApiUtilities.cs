@@ -18,7 +18,7 @@ namespace Melanchall.DryWetMidi.Common
             if (IsOsSupported())
                 return;
 
-            throw new PlatformNotSupportedException("Current operating system is not supported.");
+            throw new FeatureNotAvailableException("Current operating system is not supported.");
         }
 
         public static void HandleEndpointNativeApiResult<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicFields | DynamicallyAccessedMemberTypes.Interfaces)] TResult>(

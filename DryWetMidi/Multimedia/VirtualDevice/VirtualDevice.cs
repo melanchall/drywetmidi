@@ -152,7 +152,6 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <param name="name">The name of a virtual device to create.</param>
         /// <returns>An instance of the <see cref="VirtualDevice"/> with name of <paramref name="name"/>.</returns>
         /// <exception cref="ArgumentException"><paramref name="name"/> is <c>null</c> or contains white-spaces only.</exception>
-        /// <exception cref="PlatformNotSupportedException">This operation is not supported on the current operating system.</exception>
         /// <exception cref="NativeApiException">An error occurred on device creation.</exception>
         public static VirtualDevice Create(string name)
         {
@@ -160,7 +159,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
             // TODO: choose exception type and document it above
             if (!LibraryConfiguration.IsVirtualDeviceApiAvailable())
-                throw new NotSupportedException("Virtual device API is not available on the current operating system.");
+                throw new FeatureNotAvailableException("Virtual device API is not available.");
 
             ThrowIfArgument.IsNullOrWhiteSpaceString(nameof(name), name, "Device name");
 

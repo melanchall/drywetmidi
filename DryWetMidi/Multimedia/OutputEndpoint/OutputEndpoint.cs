@@ -175,7 +175,6 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// </summary>
         /// <returns>Number of output MIDI endpoints presented in the system.</returns>
         /// <exception cref="NativeApiException">An error occurred.</exception>
-        /// <exception cref="PlatformNotSupportedException">This operation is not supported on the current operating system.</exception>
         public static int GetEndpointsCount()
         {
             NativeApiUtilities.EnsureOsIsSupported();
@@ -192,7 +191,6 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// </summary>
         /// <returns>All output MIDI endpoints presented in the system.</returns>
         /// <exception cref="NativeApiException">An error occurred.</exception>
-        /// <exception cref="PlatformNotSupportedException">This operation is not supported on the current operating system.</exception>
         public static ICollection<OutputEndpoint> GetAll()
         {
             NativeApiUtilities.EnsureOsIsSupported();
@@ -218,7 +216,6 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// </list>
         /// </exception>
         /// <exception cref="NativeApiException">An error occurred.</exception>
-        /// <exception cref="PlatformNotSupportedException">This operation is not supported on the current operating system.</exception>
         public static OutputEndpoint GetByName(string name)
         {
             ThrowIfArgument.IsNullOrWhiteSpaceString(nameof(name), name, "Endpoint name");
