@@ -30,10 +30,12 @@ Write-Host "Installing and waiting..."
 Start-Sleep -Seconds 120
 Write-Host "Probably installed..."
 
-$content = Get-Content -Path "$location\install.log" -Raw
-Write-Host "Installation log content: $content"
+#$content = Get-Content -Path "$location\install.log" -Raw
+#Write-Host "Installation log content: $content"
 
 $env:PATH += ";C:\Program Files\Windows MIDI Services\Tools\Console"
+
+midi time
 
 ###########
 
@@ -54,8 +56,8 @@ Write-Host "Installing and waiting..."
 Start-Sleep -Seconds 120
 Write-Host "Probably installed..."
 
-$content = Get-Content -Path "$location\install2.log" -Raw
-Write-Host "Installation log content: $content"
+#$content = Get-Content -Path "$location\install2.log" -Raw
+#Write-Host "Installation log content: $content"
 
 ###########
 
