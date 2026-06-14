@@ -2258,6 +2258,9 @@ API_EXPORT VIRTUAL_OPENRESULT API_CALL OpenVirtualDevice_Win(
         {
             *errorCode = static_cast<int>(result.ErrorCode());
 
+            auto info = result.ErrorInformation().c_str();
+            configuration->activityCallback(info);
+
             delete virtualDeviceInfo;
 
             switch (result.ErrorCode())

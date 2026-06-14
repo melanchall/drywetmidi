@@ -1,4 +1,5 @@
 ﻿using Melanchall.DryWetMidi.Common;
+using Melanchall.DryWetMidi.Configuration;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Multimedia;
 using Melanchall.DryWetMidi.Tests.Attributes;
@@ -126,6 +127,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void CheckEndpointAdded()
         {
+            LibraryConfiguration.LibraryActivityMessageReceived += (_, e) => Console.WriteLine($"ERROR: {e.Message}");
+
             var addedEndpoints1 = new List<MidiEndpoint>();
             var addedEndpoints2 = new List<MidiEndpoint>();
 
