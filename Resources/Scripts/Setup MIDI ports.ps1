@@ -27,7 +27,7 @@ if (-not (Test-Path $targetPath))
 
 Write-Host "Installing and waiting..."
 & "$targetPath" /install /quiet /norestart /log "$location\install.log"
-Start-Sleep -Seconds 60
+Start-Sleep -Seconds 120
 Write-Host "Probably installed..."
 
 $content = Get-Content -Path "$location\install.log" -Raw
