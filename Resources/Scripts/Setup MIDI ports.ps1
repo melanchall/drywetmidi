@@ -12,8 +12,18 @@ Write-Host "Current location: $location"
 # Set error handling preference
 $ErrorActionPreference = "Stop"
 
+$targetPath = Join-Path $location "RuntimeAndToolsInstaller.exe"
+Write-Host "Downloading Windows MIDI Services SDK Runtime and Tools installer to $targetPath..."
+
 # Source variables
-Invoke-WebRequest -Uri "https://github.com/microsoft/MIDI/releases/download/rc-4/Windows.MIDI.Services.SDK.Runtime.and.Tools.1.0.17-rc.4.25-arm64.exe" -OutFile "$location\RuntimeAndToolsInstaller.exe"
+Invoke-WebRequest -Uri "https://github.com/microsoft/MIDI/releases/download/rc-4/Windows.MIDI.Services.SDK.Runtime.and.Tools.1.0.17-rc.4.25-arm64.exe" -OutFile $targetPath
+Write-Host "Downloaded."
+
+if (-not (Test-Path $targetPath))
+{
+    Write-Error "Failed to download the installer."
+    exit 1
+}
 
 # Start the installation process, hide windows, and wait for completion
 $process = Start-Process -FilePath "$location\RuntimeAndToolsInstaller.exe" -NoNewWindow -Wait -ArgumentList "/install /quiet /norestart"
