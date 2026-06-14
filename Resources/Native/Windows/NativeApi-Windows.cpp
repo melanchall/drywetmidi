@@ -1750,6 +1750,8 @@ API_EXPORT IN_CONNECTRESULT API_CALL ConnectToInputEndpoint(void* handle, int* e
 
     InputEndpointHandle* inputDeviceHandle = static_cast<InputEndpointHandle*>(handle);
 
+    EnsureWinMmPortsAvailable();
+
     MMRESULT result = midiInStart(inputDeviceHandle->handle);
     if (result != MMSYSERR_NOERROR)
     {

@@ -86,6 +86,10 @@ ForEach ($port in $ports)
   Write-Host "$port is up."
 }
 
+#######
+
+midi service restart
+
 ####
 
 #Write-Host "Checking Audio/MIDI service status..."
