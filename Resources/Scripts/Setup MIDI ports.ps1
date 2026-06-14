@@ -12,30 +12,13 @@ Write-Host "Current location: $location"
 # Set error handling preference
 $ErrorActionPreference = "Stop"
 
-$targetPath = Join-Path $location "RuntimeAndToolsInstaller.exe"
-Write-Host "Downloading Windows MIDI Services SDK Runtime and Tools installer to $targetPath..."
+###########
 
-# Source variables
-Invoke-WebRequest -Uri "https://github.com/microsoft/MIDI/releases/download/rc-4/Windows.MIDI.Services.SDK.Runtime.and.Tools.1.0.17-rc.4.25-arm64.exe" -OutFile "$targetPath"
-Write-Host "Downloaded."
+# 1. Enable app sideloading
+Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock" -Name "AllowAllTrustedApps" -Value 1
 
-if (-not (Test-Path $targetPath))
-{
-    Write-Error "Failed to download the installer."
-    exit 1
-}
-
-Write-Host "Installing and waiting..."
-& "$targetPath" /install /quiet /norestart /log "$location\install.log"
-Start-Sleep -Seconds 120
-Write-Host "Probably installed..."
-
-#$content = Get-Content -Path "$location\install.log" -Raw
-#Write-Host "Installation log content: $content"
-
-$env:PATH += ";C:\Program Files\Windows MIDI Services\Tools\Console"
-
-midi time
+# 2. Enable Developer Mode features
+Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock" -Name "AllowDevelopmentWithoutDevLicense" -Value 1
 
 ###########
 
@@ -58,6 +41,38 @@ Write-Host "Probably installed..."
 
 #$content = Get-Content -Path "$location\install2.log" -Raw
 #Write-Host "Installation log content: $content"
+
+###########
+
+Restart-Service -Name "midisrv" -Force
+
+###########
+
+$targetPath = Join-Path $location "RuntimeAndToolsInstaller.exe"
+Write-Host "Downloading Windows MIDI Services SDK Runtime and Tools installer to $targetPath..."
+
+# Source variables
+Invoke-WebRequest -Uri "https://github.com/microsoft/MIDI/releases/download/rc-4/Windows.MIDI.Services.SDK.Runtime.and.Tools.1.0.17-rc.4.25-arm64.exe" -OutFile "$targetPath"
+Write-Host "Downloaded."
+
+if (-not (Test-Path $targetPath))
+{
+    Write-Error "Failed to download the installer."
+    exit 1
+}
+
+Write-Host "Installing and waiting..."
+& "$targetPath" /install /quiet /norestart /log "$location\install.log"
+Start-Sleep -Seconds 120
+Write-Host "Probably installed..."
+
+#$content = Get-Content -Path "$location\install.log" -Raw
+#Write-Host "Installation log content: $content"
+
+###########
+
+$env:PATH += ";C:\Program Files\Windows MIDI Services\Tools\Console"
+midi service status
 
 ###########
 
