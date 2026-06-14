@@ -53,10 +53,10 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          #- os: windows-11-arm
-          #  framework: Net
-          - os: macos-latest
-            framework:  Net
+          - os: windows-11-arm
+            framework: Net
+          #- os: macos-latest
+          #  framework:  Net
     
     steps:
       - name:  Checkout
