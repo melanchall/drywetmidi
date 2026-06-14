@@ -9,60 +9,20 @@ Write-Host "Current location: $location"
 
 ####
 
-#
+# Set error handling preference
 $ErrorActionPreference = "Stop"
 
-#
-$url = "https://aka.ms/MidiServicesLatestSdkRuntimeInstaller_DirectArm64"
-$tempDir = [System.IO.Path]::GetTempPath()
+# Source variables
+Invoke-WebRequest -Uri "https://github.com/microsoft/MIDI/releases/download/rc-4/Windows.MIDI.Services.SDK.Runtime.and.Tools.1.0.17-rc.4.25-arm64.exe" -OutFile "$location\RuntimeAndToolsInstaller.exe"
 
-Write-Host "1..." -ForegroundColor Cyan
+# Start the installation process, hide windows, and wait for completion
+$process = Start-Process -FilePath "$location\RuntimeAndToolsInstaller.exe" -NoNewWindow -Wait -ArgumentList "/install /quiet /norestart"
 
-try {
-    #
-    $request = [System.Net.WebRequest]::Create($url)
-    $request.Method = "HEAD"
-    $response = $request.GetResponse()
-    $realUri = $response.ResponseUri.AbsoluteUri
-    $response.Close()
-    
-    #
-    $fileName = [System.IO.Path]::GetFileName($realUri)
-    
-    #
-    if ([string]::IsNullOrWhiteSpace($fileName) -or $fileName -notlike "*.exe*") {
-        $fileName = "MidiServicesSdkRuntimeInstaller_Arm64.exe"
-    }
-}
-catch {
-    Write-Warning "ERR 1"
-    $fileName = "MidiServicesSdkRuntimeInstaller_Arm64.exe"
-}
-
-$destinationPath = Join-Path $tempDir $fileName
-Write-Host "File will be saved as: $fileName" -ForegroundColor Gray
-
-Write-Host "2..." -ForegroundColor Cyan
-#
-Invoke-WebRequest -Uri $url -OutFile $destinationPath -UseBasicParsing
-
-Write-Host "3..." -ForegroundColor Cyan
-$installArgs = "/install /quiet /norestart"
-
-#
-$process = Start-Process -FilePath $destinationPath -ArgumentList $installArgs -NoNewWindow -PassThru -Wait
-
-#
+# Verify the exit code (0 = success, 3010 = success but reboot required)
 if ($process.ExitCode -eq 0 -or $process.ExitCode -eq 3010) {
-    Write-Host "Success: $($process.ExitCode)" -ForegroundColor Green
+    Write-Host "Installation completed successfully! (Exit code: $($process.ExitCode))" -ForegroundColor Green
 } else {
-    Write-Error "Failed: $($process.ExitCode)"
-}
-
-#
-if (Test-Path $destinationPath) {
-    Remove-Item $destinationPath -Force
-    Write-Host "4..." -ForegroundColor Gray
+    Write-Error "Installation failed. Exit code: $($process.ExitCode)"
 }
 
 ####
