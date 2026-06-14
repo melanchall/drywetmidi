@@ -40,9 +40,6 @@ jobs:
           - os: windows-11-arm
             framework: Net
             rid: win-arm64
-          - os: macos-latest
-            framework: Net
-            rid: osx-arm64
     
     steps:
       - name:  Checkout

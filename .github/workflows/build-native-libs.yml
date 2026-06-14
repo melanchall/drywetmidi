@@ -6,7 +6,7 @@ on:
 jobs:
   build-dll:
     name: Build ${{ matrix.platform }} dll
-    runs-on: windows-latest
+    runs-on: windows-2022
     strategy:
       matrix:
         include:

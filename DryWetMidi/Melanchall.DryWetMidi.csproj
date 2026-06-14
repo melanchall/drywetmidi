@@ -79,6 +79,8 @@
   <ItemGroup Label="Native">
     <None Include="..\Native\win_x64\Melanchall_DryWetMidi_Native.dll" Pack="true" PackagePath="runtimes/win-x64/native" />
     <None Include="..\Native\win_arm64\Melanchall_DryWetMidi_Native.dll" Pack="true" PackagePath="runtimes/win-arm64/native" />
+    <None Include="..\Native\macos_x64_arm64\Melanchall_DryWetMidi_Native.dylib" Pack="true" PackagePath="runtimes/osx-x64/native" />
+    <None Include="..\Native\macos_x64_arm64\Melanchall_DryWetMidi_Native.dylib" Pack="true" PackagePath="runtimes/osx-arm64/native" />
     <None Include="..\Native\macos_x64_arm64\Melanchall_DryWetMidi_Native.dylib" Pack="true" PackagePath="build\" />
     <None Include="Melanchall.DryWetMidi.targets" Pack="true" PackagePath="build\" />
   </ItemGroup>

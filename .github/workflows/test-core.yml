@@ -49,8 +49,6 @@ jobs:
         include:
           - os: windows-11-arm
             framework: Net
-          - os: macos-latest
-            framework: Net
           - os: ubuntu-24.04-arm
             framework: Net
     
