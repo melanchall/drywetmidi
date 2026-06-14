@@ -33,6 +33,8 @@ Write-Host "Probably installed..."
 $content = Get-Content -Path "$location\install.log" -Raw
 Write-Host "Installation log content: $content"
 
+$env:PATH += ";C:\Program Files\Windows MIDI Services\Tools\Console"
+
 midi time
 
 ####
