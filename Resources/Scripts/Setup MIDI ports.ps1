@@ -35,7 +35,36 @@ Write-Host "Installation log content: $content"
 
 $env:PATH += ";C:\Program Files\Windows MIDI Services\Tools\Console"
 
-midi time
+###########
+
+$targetPath = Join-Path $location "BasicLoopbackInstaller.exe"
+Write-Host "Downloading basic loopback plugin installer to $targetPath..."
+
+Invoke-WebRequest -Uri "https://github.com/microsoft/MIDI/releases/download/rc-3/Windows.MIDI.Services.Basic.MIDI.1.0.Loopback.Preview.1.0.0-preview.1.2-arm64.exe" -OutFile "$targetPath"
+Write-Host "Downloaded."
+
+if (-not (Test-Path $targetPath))
+{
+    Write-Error "Failed to download the installer."
+    exit 1
+}
+
+Write-Host "Installing and waiting..."
+& "$targetPath" /install /quiet /norestart /log "$location\install2.log"
+Start-Sleep -Seconds 120
+Write-Host "Probably installed..."
+
+$content = Get-Content -Path "$location\install2.log" -Raw
+Write-Host "Installation log content: $content"
+
+###########
+
+ForEach ($port in $ports)
+{
+  Write-Host "Running $port port..."
+  midi basic-loopback create --name "$port"
+  Write-Host "$port is up."
+}
 
 ####
 
