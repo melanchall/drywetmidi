@@ -61,6 +61,9 @@ Write-Host "Probably installed..."
 
 ###########
 
+Write-Host "Ports names string: $portsNames"
+$ports = $portsNames.Split(',')
+
 ForEach ($port in $ports)
 {
   Write-Host "Running $port port..."
