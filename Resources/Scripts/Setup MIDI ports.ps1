@@ -16,7 +16,7 @@ $targetPath = Join-Path $location "RuntimeAndToolsInstaller.exe"
 Write-Host "Downloading Windows MIDI Services SDK Runtime and Tools installer to $targetPath..."
 
 # Source variables
-Invoke-WebRequest -Uri "https://github.com/microsoft/MIDI/releases/download/rc-4/Windows.MIDI.Services.SDK.Runtime.and.Tools.1.0.17-rc.4.25-arm64.exe" -OutFile $targetPath
+Invoke-WebRequest -Uri "https://github.com/microsoft/MIDI/releases/download/rc-4/Windows.MIDI.Services.SDK.Runtime.and.Tools.1.0.17-rc.4.25-arm64.exe" -OutFile "$targetPath"
 Write-Host "Downloaded."
 
 if (-not (Test-Path $targetPath))
@@ -25,15 +25,11 @@ if (-not (Test-Path $targetPath))
     exit 1
 }
 
-# Start the installation process, hide windows, and wait for completion
-$process = Start-Process -FilePath "$location\RuntimeAndToolsInstaller.exe" -NoNewWindow -Wait -ArgumentList "/install /quiet /norestart"
+& "$targetPath" /install /quiet /norestart
 
-# Verify the exit code (0 = success, 3010 = success but reboot required)
-if ($process.ExitCode -eq 0 -or $process.ExitCode -eq 3010) {
-    Write-Host "Installation completed successfully! (Exit code: $($process.ExitCode))" -ForegroundColor Green
-} else {
-    Write-Error "Installation failed. Exit code: $($process.ExitCode)"
-}
+Start-Sleep -Seconds 10
+
+midi
 
 ####
 
