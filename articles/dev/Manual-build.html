@@ -99,36 +99,31 @@
 <li>somehow else.</li>
 </ul>
 </li>
-</ol>
-<p>If you want to build full version of the library (see steps below to build <a class="xref" href="Nativeless-package.html">nativeless version</a>):</p>
-<ol start="3">
-<li>Download native binaries required to work with Multimedia API:
+<li>Download native binaries required to work with MIDI devices and default playback:
 <ul>
 <li>for <em>master</em> branch take <em>DryWetMIDI.&lt;release_number&gt;-bin-native.zip</em> archive from <a href="https://github.com/melanchall/drywetmidi/releases">Releases</a> (&lt;release_number&gt; is the number of the library release you want to build);</li>
 <li>for <em>develop</em> branch go to <a href="https://dev.azure.com/Melanchall/DryWetMIDI/_build/latest?definitionId=6&amp;branchName=develop">https://dev.azure.com/Melanchall/DryWetMIDI/_build/latest?definitionId=6&amp;branchName=develop</a> and download <em>DryWetMIDI.&lt;release_number&gt;-bin-native.zip</em> from <code>Artifacts</code> → <code>Binaries</code>.</li>
 </ul>
 </li>
-<li>Extract the archive and place extracted content in <code>&lt;your_local_folder_with_repository&gt;\Native</code> folder.</li>
+<li>Extract the archive and place extracted files near <code>&lt;your_local_folder_with_repository&gt;\DryWetMidi\Melanchall.DryWetMidi.csproj</code>.</li>
+<li>Build the solution <code>&lt;your_local_folder_with_repository&gt;\Melanchall.DryWetMidi.sln</code>.</li>
 </ol>
-<p>If you want to build <a class="xref" href="Nativeless-package.html">nativeless version</a> of the library, skip two steps above and just use <code>DebugNativeless</code> or <code>ReleaseNativeless</code> build configuration.</p>
-<p>Now you should be able to build the solution <code>&lt;your_local_folder_with_repository&gt;\Melanchall.DryWetMidi.slnx</code>. For build you can use any tool you want: <code>dotnet</code> CLI, Visual Studio, Rider and so on. The library uses &quot;new&quot; csproj format so your build tools should be modern enough.</p>
+<p>For build you can use any tool you want: <code>dotnet</code> CLI, Visual Studio, Rider and so on. The library uses &quot;new&quot; csproj format so your build tools should be modern enough.</p>
 <p><em>master</em> branch contains code that the library releases built on. <em>develop</em> one is for current development so if you need the latest code, use this branch.</p>
 <h2 id="build-configuration">Build configuration</h2>
 <p>There are four build configurations available:</p>
 <ul>
 <li><code>Debug</code> – for development, debugging and testing. The library is not optimized and contains all debug information. <a href="#traces">Traces</a> are generated.</li>
-<li><code>DebugNativeless</code> – the same as <code>Debug</code> but with native API cut out. Use it to build nativeless version of the library.</li>
 <li><code>Release</code> – for production. The library is optimized and does not contain debug information. It's the configuration used to build official releases. <a href="#traces">Traces</a> are disabled.</li>
 <li><code>ReleaseTest</code> – for running tests in release mode. The library is optimized and does not contains debug information. Additional tests are enabled in this configuration. Use it to run tests without generating additional files on your machine. <a href="#traces">Traces</a> are disabled.</li>
 <li><code>ReleaseTestFull</code> – for running tests in release mode with gathering additional information (playback traces, for example). The library is optimized and does not contain debug information. <a href="#traces">Traces</a> are generated.</li>
-<li><code>ReleaseNativeless</code> – the same as <code>Release</code> but with native API cut out. Use it to build nativeless version of the library.</li>
 </ul>
 <h3 id="traces">Traces</h3>
 <p>When you build the library in <code>Debug</code> or <code>ReleaseTestFull</code> configuration and run tests that use playback functionality, the following happens:</p>
 <ul>
-<li><code>PlaybackTraces</code> and <code>SysExTraces</code> folders are created in the temp folder of your machine (you can get the path to it by calling <code>Path.GetTempPath()</code> method);</li>
-<li>folders corresponding to separate tests will be inside each one;</li>
-<li>inside a test folder files for diagnostics will be created.</li>
+<li><code>PlaybackTraces</code> folder is created in the temp folder of your machine (you can get the path to it by calling <code>Path.GetTempPath()</code> method);</li>
+<li>inside the folder <em>log</em> files are created that contain information about playback events (when playback started, when it stopped, what events were sent to the output device and when they were sent, etc.);</li>
+<li>inside the folder <em>png</em> files are created that contain timelines of playback events along with MIDI clock ticks times and delays.</li>
 </ul>
 
 </article>

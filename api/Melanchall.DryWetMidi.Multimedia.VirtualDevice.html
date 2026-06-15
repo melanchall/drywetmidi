@@ -97,7 +97,8 @@
   <div class="inheritance">
     <h5>Inheritance</h5>
     <div class="level0"><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></div>
-    <div class="level1"><span class="xref">VirtualDevice</span></div>
+    <div class="level1"><a class="xref" href="Melanchall.DryWetMidi.Multimedia.MidiDevice.html">MidiDevice</a></div>
+    <div class="level2"><span class="xref">VirtualDevice</span></div>
   </div>
   <div class="implements">
     <h5>Implements</h5>
@@ -105,6 +106,15 @@
   </div>
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Multimedia.MidiDevice.html#Melanchall_DryWetMidi_Multimedia_MidiDevice_ErrorOccurred">MidiDevice.ErrorOccurred</a>
+    </div>
+    <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Multimedia.MidiDevice.html#Melanchall_DryWetMidi_Multimedia_MidiDevice_IsEnabled">MidiDevice.IsEnabled</a>
+    </div>
+    <div>
+      <a class="xref" href="Melanchall.DryWetMidi.Multimedia.MidiDevice.html#Melanchall_DryWetMidi_Multimedia_MidiDevice_Dispose">MidiDevice.Dispose()</a>
+    </div>
     <div>
       <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)">object.Equals(object)</a>
     </div>
@@ -125,17 +135,17 @@
   <h6><strong>Assembly</strong>: Melanchall.DryWetMidi.dll</h6>
   <h5 id="Melanchall_DryWetMidi_Multimedia_VirtualDevice_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public sealed class VirtualDevice : IDisposable</code></pre>
+    <pre><code class="lang-csharp hljs">public sealed class VirtualDevice : MidiDevice, IDisposable</code></pre>
   </div>
   <h3 id="properties">Properties
 </h3>
-  <a id="Melanchall_DryWetMidi_Multimedia_VirtualDevice_InputEndpoint_" data-uid="Melanchall.DryWetMidi.Multimedia.VirtualDevice.InputEndpoint*"></a>
-  <h4 id="Melanchall_DryWetMidi_Multimedia_VirtualDevice_InputEndpoint" data-uid="Melanchall.DryWetMidi.Multimedia.VirtualDevice.InputEndpoint">InputEndpoint</h4>
-  <div class="markdown level1 summary">Gets the input endpoint of the current <a class="xref" href="Melanchall.DryWetMidi.Multimedia.VirtualDevice.html">VirtualDevice</a>.</div>
+  <a id="Melanchall_DryWetMidi_Multimedia_VirtualDevice_InputDevice_" data-uid="Melanchall.DryWetMidi.Multimedia.VirtualDevice.InputDevice*"></a>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_VirtualDevice_InputDevice" data-uid="Melanchall.DryWetMidi.Multimedia.VirtualDevice.InputDevice">InputDevice</h4>
+  <div class="markdown level1 summary">Gets the input subdevice of the current <a class="xref" href="Melanchall.DryWetMidi.Multimedia.VirtualDevice.html">VirtualDevice</a>.</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="declaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public InputEndpoint InputEndpoint { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">public InputDevice InputDevice { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-condensed">
@@ -147,41 +157,18 @@
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Multimedia.InputEndpoint.html">InputEndpoint</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <a id="Melanchall_DryWetMidi_Multimedia_VirtualDevice_IsEnabled_" data-uid="Melanchall.DryWetMidi.Multimedia.VirtualDevice.IsEnabled*"></a>
-  <h4 id="Melanchall_DryWetMidi_Multimedia_VirtualDevice_IsEnabled" data-uid="Melanchall.DryWetMidi.Multimedia.VirtualDevice.IsEnabled">IsEnabled</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="declaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public bool IsEnabled { get; set; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Multimedia.InputDevice.html">InputDevice</a></td>
         <td></td>
       </tr>
     </tbody>
   </table>
   <a id="Melanchall_DryWetMidi_Multimedia_VirtualDevice_Name_" data-uid="Melanchall.DryWetMidi.Multimedia.VirtualDevice.Name*"></a>
   <h4 id="Melanchall_DryWetMidi_Multimedia_VirtualDevice_Name" data-uid="Melanchall.DryWetMidi.Multimedia.VirtualDevice.Name">Name</h4>
-  <div class="markdown level1 summary">Gets the name of the current virtual MIDI device.</div>
+  <div class="markdown level1 summary">Gets the name of the current MIDI device.</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="declaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public string Name { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">public override string Name { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-condensed">
@@ -198,13 +185,15 @@
       </tr>
     </tbody>
   </table>
-  <a id="Melanchall_DryWetMidi_Multimedia_VirtualDevice_OutputEndpoint_" data-uid="Melanchall.DryWetMidi.Multimedia.VirtualDevice.OutputEndpoint*"></a>
-  <h4 id="Melanchall_DryWetMidi_Multimedia_VirtualDevice_OutputEndpoint" data-uid="Melanchall.DryWetMidi.Multimedia.VirtualDevice.OutputEndpoint">OutputEndpoint</h4>
-  <div class="markdown level1 summary">Gets the output endpoint of the current <a class="xref" href="Melanchall.DryWetMidi.Multimedia.VirtualDevice.html">VirtualDevice</a>.</div>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Melanchall.DryWetMidi.Multimedia.MidiDevice.html#Melanchall_DryWetMidi_Multimedia_MidiDevice_Name">MidiDevice.Name</a></div>
+  <a id="Melanchall_DryWetMidi_Multimedia_VirtualDevice_OutputDevice_" data-uid="Melanchall.DryWetMidi.Multimedia.VirtualDevice.OutputDevice*"></a>
+  <h4 id="Melanchall_DryWetMidi_Multimedia_VirtualDevice_OutputDevice" data-uid="Melanchall.DryWetMidi.Multimedia.VirtualDevice.OutputDevice">OutputDevice</h4>
+  <div class="markdown level1 summary">Gets the output subdevice of the current <a class="xref" href="Melanchall.DryWetMidi.Multimedia.VirtualDevice.html">VirtualDevice</a>.</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="declaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public OutputEndpoint OutputEndpoint { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">public OutputDevice OutputDevice { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-condensed">
@@ -216,7 +205,7 @@
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Multimedia.OutputEndpoint.html">OutputEndpoint</a></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Multimedia.OutputDevice.html">OutputDevice</a></td>
         <td></td>
       </tr>
     </tbody>
@@ -277,31 +266,15 @@
         <td><code class="paramref">name</code> is <code>null</code> or contains white-spaces only.</td>
       </tr>
       <tr>
-        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.platformnotsupportedexception">PlatformNotSupportedException</a></td>
-        <td>This operation is not supported on the current operating system.</td>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.notsupportedexception">NotSupportedException</a></td>
+        <td>Virtual device creation is not supported on the current operating system.</td>
       </tr>
       <tr>
-        <td><a class="xref" href="Melanchall.DryWetMidi.Common.NativeApiException.html">NativeApiException</a></td>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Multimedia.MidiDeviceException.html">MidiDeviceException</a></td>
         <td>An error occurred on device creation.</td>
       </tr>
     </tbody>
   </table>
-  <a id="Melanchall_DryWetMidi_Multimedia_VirtualDevice_Dispose_" data-uid="Melanchall.DryWetMidi.Multimedia.VirtualDevice.Dispose*"></a>
-  <h4 id="Melanchall_DryWetMidi_Multimedia_VirtualDevice_Dispose" data-uid="Melanchall.DryWetMidi.Multimedia.VirtualDevice.Dispose">Dispose()</h4>
-  <div class="markdown level1 summary">Releases all resources used by the MIDI device class instance.</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="declaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void Dispose()</code></pre>
-  </div>
-  <a id="Melanchall_DryWetMidi_Multimedia_VirtualDevice_Finalize_" data-uid="Melanchall.DryWetMidi.Multimedia.VirtualDevice.Finalize*"></a>
-  <h4 id="Melanchall_DryWetMidi_Multimedia_VirtualDevice_Finalize" data-uid="Melanchall.DryWetMidi.Multimedia.VirtualDevice.Finalize">~VirtualDevice()</h4>
-  <div class="markdown level1 summary">Finalizes the current instance of the virtual MIDI device class.</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="declaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected ~VirtualDevice()</code></pre>
-  </div>
   <a id="Melanchall_DryWetMidi_Multimedia_VirtualDevice_ToString_" data-uid="Melanchall.DryWetMidi.Multimedia.VirtualDevice.ToString*"></a>
   <h4 id="Melanchall_DryWetMidi_Multimedia_VirtualDevice_ToString" data-uid="Melanchall.DryWetMidi.Multimedia.VirtualDevice.ToString">ToString()</h4>
   <div class="markdown level1 summary">Returns a string that represents the current object.</div>
@@ -326,31 +299,7 @@
     </tbody>
   </table>
   <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.tostring">object.ToString()</a></div>
-  <h3 id="events">Events
-</h3>
-  <h4 id="Melanchall_DryWetMidi_Multimedia_VirtualDevice_ErrorOccurred" data-uid="Melanchall.DryWetMidi.Multimedia.VirtualDevice.ErrorOccurred">ErrorOccurred</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="declaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public event EventHandler&lt;ErrorOccurredEventArgs&gt; ErrorOccurred</code></pre>
-  </div>
-  <h5 class="eventType">Event Type</h5>
-  <table class="table table-bordered table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.eventhandler-1">EventHandler</a>&lt;<a class="xref" href="Melanchall.DryWetMidi.Multimedia.ErrorOccurredEventArgs.html">ErrorOccurredEventArgs</a>&gt;</td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
+  <div><a class="xref" href="Melanchall.DryWetMidi.Multimedia.MidiDevice.html#Melanchall_DryWetMidi_Multimedia_MidiDevice_ToString">MidiDevice.ToString()</a></div>
   <h3 id="implements">Implements</h3>
   <div>
       <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.idisposable">IDisposable</a>

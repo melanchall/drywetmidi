@@ -148,6 +148,9 @@
     <div>
       <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.referenceequals">object.ReferenceEquals(object, object)</a>
     </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.tostring">object.ToString()</a>
+    </div>
   </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="Melanchall.html">Melanchall</a>.<a class="xref" href="Melanchall.DryWetMidi.html">DryWetMidi</a>.<a class="xref" href="Melanchall.DryWetMidi.Core.html">Core</a></h6>
   <h6><strong>Assembly</strong>: Melanchall.DryWetMidi.dll</h6>
@@ -161,12 +164,12 @@ or as an "escape" to specify any arbitrary bytes to be transmitted.</div>
   <h3 id="constructors">Constructors
 </h3>
   <a id="Melanchall_DryWetMidi_Core_SysExEvent__ctor_" data-uid="Melanchall.DryWetMidi.Core.SysExEvent.#ctor*"></a>
-  <h4 id="Melanchall_DryWetMidi_Core_SysExEvent__ctor_Melanchall_DryWetMidi_Core_MidiEventType_System_Byte_" data-uid="Melanchall.DryWetMidi.Core.SysExEvent.#ctor(Melanchall.DryWetMidi.Core.MidiEventType,System.Byte)">SysExEvent(MidiEventType, byte)</h4>
+  <h4 id="Melanchall_DryWetMidi_Core_SysExEvent__ctor_Melanchall_DryWetMidi_Core_MidiEventType_" data-uid="Melanchall.DryWetMidi.Core.SysExEvent.#ctor(Melanchall.DryWetMidi.Core.MidiEventType)">SysExEvent(MidiEventType)</h4>
   <div class="markdown level1 summary">Initializes a new instance of the <a class="xref" href="Melanchall.DryWetMidi.Core.SysExEvent.html">SysExEvent</a> with the specified event type.</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="declaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected SysExEvent(MidiEventType eventType, byte statusByte)</code></pre>
+    <pre><code class="lang-csharp hljs">protected SysExEvent(MidiEventType eventType)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-condensed">
@@ -182,11 +185,6 @@ or as an "escape" to specify any arbitrary bytes to be transmitted.</div>
         <td><a class="xref" href="Melanchall.DryWetMidi.Core.MidiEventType.html">MidiEventType</a></td>
         <td><span class="parametername">eventType</span></td>
         <td>The type of event.</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">byte</a></td>
-        <td><span class="parametername">statusByte</span></td>
-        <td></td>
       </tr>
     </tbody>
   </table>
@@ -262,33 +260,6 @@ or as an "escape" to specify any arbitrary bytes to be transmitted.</div>
       </tr>
     </tbody>
   </table>
-  <h3 id="methods">Methods
-</h3>
-  <a id="Melanchall_DryWetMidi_Core_SysExEvent_ToString_" data-uid="Melanchall.DryWetMidi.Core.SysExEvent.ToString*"></a>
-  <h4 id="Melanchall_DryWetMidi_Core_SysExEvent_ToString" data-uid="Melanchall.DryWetMidi.Core.SysExEvent.ToString">ToString()</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="declaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public override string ToString()</code></pre>
-  </div>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.tostring">object.ToString()</a></div>
 
 </article>
           </div>

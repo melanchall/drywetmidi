@@ -130,6 +130,370 @@
   </div>
   <h3 id="methods">Methods
 </h3>
+  <a id="Melanchall_DryWetMidi_Interaction_LengthedObjectUtilities_AtTime_" data-uid="Melanchall.DryWetMidi.Interaction.LengthedObjectUtilities.AtTime*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_LengthedObjectUtilities_AtTime__1_System_Collections_Generic_IEnumerable___0__Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Interaction_LengthedObjectPart_" data-uid="Melanchall.DryWetMidi.Interaction.LengthedObjectUtilities.AtTime``1(System.Collections.Generic.IEnumerable{``0},Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Interaction.TempoMap,Melanchall.DryWetMidi.Interaction.LengthedObjectPart)">AtTime&lt;TObject&gt;(IEnumerable&lt;TObject&gt;, ITimeSpan, TempoMap, LengthedObjectPart)</h4>
+  <div class="markdown level1 summary">Filters collection of <a class="xref" href="Melanchall.DryWetMidi.Interaction.ILengthedObject.html">ILengthedObject</a> to return objects at the specified time.</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static IEnumerable&lt;TObject&gt; AtTime&lt;TObject&gt;(this IEnumerable&lt;TObject&gt; objects, ITimeSpan time, TempoMap tempoMap, LengthedObjectPart matchBy) where TObject : ILengthedObject</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;TObject&gt;</td>
+        <td><span class="parametername">objects</span></td>
+        <td>A collection to filter.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a></td>
+        <td><span class="parametername">time</span></td>
+        <td>Time to filter objects by.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TempoMap.html">TempoMap</a></td>
+        <td><span class="parametername">tempoMap</span></td>
+        <td>Tempo map to filter <code class="paramref">objects</code> by <code class="paramref">time</code>.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.LengthedObjectPart.html">LengthedObjectPart</a></td>
+        <td><span class="parametername">matchBy</span></td>
+        <td>Part of an object which have to be at <code class="paramref">time</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;TObject&gt;</td>
+        <td>A collection that contains objects from the input sequence that are at the specified time.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">TObject</span></td>
+        <td>The type of the elements of <code class="paramref">objects</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Melanchall_DryWetMidi_Interaction_LengthedObjectUtilities_AtTime__1_System_Collections_Generic_IEnumerable___0__Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TempoMap_Melanchall_DryWetMidi_Interaction_LengthedObjectPart__remarks">Remarks</h5>
+  <div class="markdown level1 remarks">Note that changes made on the objects returned by this method will not be saved to an underlying
+data source (events collection, track chunk, file). To change properties of lengthed objects and
+save them you need to use a manager appropriate for an object's type.</div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><p>One of the following errors occurred:</p>
+<ul><li>
+      <code class="paramref">objects</code> is <code>null</code>.</li><li>
+      <code class="paramref">time</code> is <code>null</code>.</li><li>
+      <code class="paramref">tempoMap</code> is <code>null</code>.</li><li>One of the objects is <code>null</code>.</li></ul></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
+        <td><code class="paramref">matchBy</code> specified an invalid value.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Interaction_LengthedObjectUtilities_AtTime_" data-uid="Melanchall.DryWetMidi.Interaction.LengthedObjectUtilities.AtTime*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_LengthedObjectUtilities_AtTime__1_System_Collections_Generic_IEnumerable___0__System_Int64_Melanchall_DryWetMidi_Interaction_LengthedObjectPart_" data-uid="Melanchall.DryWetMidi.Interaction.LengthedObjectUtilities.AtTime``1(System.Collections.Generic.IEnumerable{``0},System.Int64,Melanchall.DryWetMidi.Interaction.LengthedObjectPart)">AtTime&lt;TObject&gt;(IEnumerable&lt;TObject&gt;, long, LengthedObjectPart)</h4>
+  <div class="markdown level1 summary">Filters collection of <a class="xref" href="Melanchall.DryWetMidi.Interaction.ILengthedObject.html">ILengthedObject</a> to return objects at the specified time.</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static IEnumerable&lt;TObject&gt; AtTime&lt;TObject&gt;(this IEnumerable&lt;TObject&gt; objects, long time, LengthedObjectPart matchBy) where TObject : ILengthedObject</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;TObject&gt;</td>
+        <td><span class="parametername">objects</span></td>
+        <td>A collection to filter.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int64">long</a></td>
+        <td><span class="parametername">time</span></td>
+        <td>Time to filter objects by.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.LengthedObjectPart.html">LengthedObjectPart</a></td>
+        <td><span class="parametername">matchBy</span></td>
+        <td>Part of an object which have to be at <code class="paramref">time</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;TObject&gt;</td>
+        <td>A collection that contains objects from the input sequence that are at the specified time.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">TObject</span></td>
+        <td>The type of the elements of <code class="paramref">objects</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Melanchall_DryWetMidi_Interaction_LengthedObjectUtilities_AtTime__1_System_Collections_Generic_IEnumerable___0__System_Int64_Melanchall_DryWetMidi_Interaction_LengthedObjectPart__remarks">Remarks</h5>
+  <div class="markdown level1 remarks">Note that changes made on the objects returned by this method will not be saved to an underlying
+data source (events collection, track chunk, file). To change properties of lengthed objects and
+save them you need to use a manager appropriate for an object's type.</div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><p>One of the following errors occurred:</p>
+<ul><li>
+      <code class="paramref">objects</code> is <code>null</code>.</li><li>One of the objects is <code>null</code>.</li></ul></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td><code class="paramref">time</code> is negative.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.componentmodel.invalidenumargumentexception">InvalidEnumArgumentException</a></td>
+        <td><code class="paramref">matchBy</code> specified an invalid value.</td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Interaction_LengthedObjectUtilities_EndAtTime_" data-uid="Melanchall.DryWetMidi.Interaction.LengthedObjectUtilities.EndAtTime*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_LengthedObjectUtilities_EndAtTime__1_System_Collections_Generic_IEnumerable___0__Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TempoMap_" data-uid="Melanchall.DryWetMidi.Interaction.LengthedObjectUtilities.EndAtTime``1(System.Collections.Generic.IEnumerable{``0},Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Interaction.TempoMap)">EndAtTime&lt;TObject&gt;(IEnumerable&lt;TObject&gt;, ITimeSpan, TempoMap)</h4>
+  <div class="markdown level1 summary">Filters collection of <a class="xref" href="Melanchall.DryWetMidi.Interaction.ILengthedObject.html">ILengthedObject</a> to return objects that end at the specified time.</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static IEnumerable&lt;TObject&gt; EndAtTime&lt;TObject&gt;(this IEnumerable&lt;TObject&gt; objects, ITimeSpan time, TempoMap tempoMap) where TObject : ILengthedObject</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;TObject&gt;</td>
+        <td><span class="parametername">objects</span></td>
+        <td>A collection to filter.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a></td>
+        <td><span class="parametername">time</span></td>
+        <td>End time to filter objects by.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TempoMap.html">TempoMap</a></td>
+        <td><span class="parametername">tempoMap</span></td>
+        <td>Tempo map to filter <code class="paramref">objects</code> by <code class="paramref">time</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;TObject&gt;</td>
+        <td>A collection that contains objects from the input sequence that end at the specified time.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">TObject</span></td>
+        <td>The type of the elements of <code class="paramref">objects</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Melanchall_DryWetMidi_Interaction_LengthedObjectUtilities_EndAtTime__1_System_Collections_Generic_IEnumerable___0__Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TempoMap__remarks">Remarks</h5>
+  <div class="markdown level1 remarks">Note that changes made on the objects returned by this method will not be saved to an underlying
+data source (events collection, track chunk, file). To change properties of lengthed objects and
+save them you need to use a manager appropriate for an object's type.</div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><p>One of the following errors occurred:</p>
+<ul><li>
+      <code class="paramref">objects</code> is <code>null</code>.</li><li>
+      <code class="paramref">time</code> is <code>null</code>.</li><li>
+      <code class="paramref">tempoMap</code> is <code>null</code>.</li><li>One of the objects is <code>null</code>.</li></ul></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Interaction_LengthedObjectUtilities_EndAtTime_" data-uid="Melanchall.DryWetMidi.Interaction.LengthedObjectUtilities.EndAtTime*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_LengthedObjectUtilities_EndAtTime__1_System_Collections_Generic_IEnumerable___0__System_Int64_" data-uid="Melanchall.DryWetMidi.Interaction.LengthedObjectUtilities.EndAtTime``1(System.Collections.Generic.IEnumerable{``0},System.Int64)">EndAtTime&lt;TObject&gt;(IEnumerable&lt;TObject&gt;, long)</h4>
+  <div class="markdown level1 summary">Filters collection of <a class="xref" href="Melanchall.DryWetMidi.Interaction.ILengthedObject.html">ILengthedObject</a> to return objects that end at the specified time.</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static IEnumerable&lt;TObject&gt; EndAtTime&lt;TObject&gt;(this IEnumerable&lt;TObject&gt; objects, long time) where TObject : ILengthedObject</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;TObject&gt;</td>
+        <td><span class="parametername">objects</span></td>
+        <td>A collection to filter.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int64">long</a></td>
+        <td><span class="parametername">time</span></td>
+        <td>End time to filter objects by.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;TObject&gt;</td>
+        <td>A collection that contains objects from the input sequence that end at the specified time.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">TObject</span></td>
+        <td>The type of the elements of <code class="paramref">objects</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Melanchall_DryWetMidi_Interaction_LengthedObjectUtilities_EndAtTime__1_System_Collections_Generic_IEnumerable___0__System_Int64__remarks">Remarks</h5>
+  <div class="markdown level1 remarks">Note that changes made on the objects returned by this method will not be saved to an underlying
+data source (events collection, track chunk, file). To change properties of lengthed objects and
+save them you need to use a manager appropriate for an object's type.</div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><p>One of the following errors occurred:</p>
+<ul><li>
+      <code class="paramref">objects</code> is <code>null</code>.</li><li>One of the objects is <code>null</code>.</li></ul></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td><code class="paramref">time</code> is negative.</td>
+      </tr>
+    </tbody>
+  </table>
   <a id="Melanchall_DryWetMidi_Interaction_LengthedObjectUtilities_EndTimeAs_" data-uid="Melanchall.DryWetMidi.Interaction.LengthedObjectUtilities.EndTimeAs*"></a>
   <h4 id="Melanchall_DryWetMidi_Interaction_LengthedObjectUtilities_EndTimeAs_Melanchall_DryWetMidi_Interaction_ILengthedObject_Melanchall_DryWetMidi_Interaction_TimeSpanType_Melanchall_DryWetMidi_Interaction_TempoMap_" data-uid="Melanchall.DryWetMidi.Interaction.LengthedObjectUtilities.EndTimeAs(Melanchall.DryWetMidi.Interaction.ILengthedObject,Melanchall.DryWetMidi.Interaction.TimeSpanType,Melanchall.DryWetMidi.Interaction.TempoMap)">EndTimeAs(ILengthedObject, TimeSpanType, TempoMap)</h4>
   <div class="markdown level1 summary">Gets end time of an <a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimedObject.html">ITimedObject</a> as an instance of time span defined by the
@@ -525,6 +889,179 @@ implements the <a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan
       <code class="paramref">obj</code> is <code>null</code>.</li><li>
       <code class="paramref">length</code> is <code>null</code>.</li><li>
       <code class="paramref">tempoMap</code> is <code>null</code>.</li><li>One of the objects is <code>null</code>.</li></ul></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Interaction_LengthedObjectUtilities_StartAtTime_" data-uid="Melanchall.DryWetMidi.Interaction.LengthedObjectUtilities.StartAtTime*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_LengthedObjectUtilities_StartAtTime__1_System_Collections_Generic_IEnumerable___0__Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TempoMap_" data-uid="Melanchall.DryWetMidi.Interaction.LengthedObjectUtilities.StartAtTime``1(System.Collections.Generic.IEnumerable{``0},Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Interaction.TempoMap)">StartAtTime&lt;TObject&gt;(IEnumerable&lt;TObject&gt;, ITimeSpan, TempoMap)</h4>
+  <div class="markdown level1 summary">Filters collection of <a class="xref" href="Melanchall.DryWetMidi.Interaction.ILengthedObject.html">ILengthedObject</a> to return objects that start at the specified time.</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static IEnumerable&lt;TObject&gt; StartAtTime&lt;TObject&gt;(this IEnumerable&lt;TObject&gt; objects, ITimeSpan time, TempoMap tempoMap) where TObject : ILengthedObject</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;TObject&gt;</td>
+        <td><span class="parametername">objects</span></td>
+        <td>A collection to filter.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.ITimeSpan.html">ITimeSpan</a></td>
+        <td><span class="parametername">time</span></td>
+        <td>Start time to filter objects by.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Melanchall.DryWetMidi.Interaction.TempoMap.html">TempoMap</a></td>
+        <td><span class="parametername">tempoMap</span></td>
+        <td>Tempo map to filter <code class="paramref">objects</code> by <code class="paramref">time</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;TObject&gt;</td>
+        <td>A collection that contains objects from the input sequence that start at the specified time.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">TObject</span></td>
+        <td>The type of the elements of <code class="paramref">objects</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Melanchall_DryWetMidi_Interaction_LengthedObjectUtilities_StartAtTime__1_System_Collections_Generic_IEnumerable___0__Melanchall_DryWetMidi_Interaction_ITimeSpan_Melanchall_DryWetMidi_Interaction_TempoMap__remarks">Remarks</h5>
+  <div class="markdown level1 remarks">Note that changes made on the objects returned by this method will not be saved to an underlying
+data source (events collection, track chunk, file). To change properties of lengthed objects and
+save them you need to use a manager appropriate for an object's type.</div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><p>One of the following errors occurred:</p>
+<ul><li>
+      <code class="paramref">objects</code> is <code>null</code>.</li><li>
+      <code class="paramref">time</code> is <code>null</code>.</li><li>
+      <code class="paramref">tempoMap</code> is <code>null</code>.</li><li>One of the objects is <code>null</code>.</li></ul></td>
+      </tr>
+    </tbody>
+  </table>
+  <a id="Melanchall_DryWetMidi_Interaction_LengthedObjectUtilities_StartAtTime_" data-uid="Melanchall.DryWetMidi.Interaction.LengthedObjectUtilities.StartAtTime*"></a>
+  <h4 id="Melanchall_DryWetMidi_Interaction_LengthedObjectUtilities_StartAtTime__1_System_Collections_Generic_IEnumerable___0__System_Int64_" data-uid="Melanchall.DryWetMidi.Interaction.LengthedObjectUtilities.StartAtTime``1(System.Collections.Generic.IEnumerable{``0},System.Int64)">StartAtTime&lt;TObject&gt;(IEnumerable&lt;TObject&gt;, long)</h4>
+  <div class="markdown level1 summary">Filters collection of <a class="xref" href="Melanchall.DryWetMidi.Interaction.ILengthedObject.html">ILengthedObject</a> to return objects that start at the specified time.</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="declaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static IEnumerable&lt;TObject&gt; StartAtTime&lt;TObject&gt;(this IEnumerable&lt;TObject&gt; objects, long time) where TObject : ILengthedObject</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;TObject&gt;</td>
+        <td><span class="parametername">objects</span></td>
+        <td>A collection to filter.</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int64">long</a></td>
+        <td><span class="parametername">time</span></td>
+        <td>Start time to filter objects by.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;TObject&gt;</td>
+        <td>A collection that contains objects from the input sequence that start at the specified time.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">TObject</span></td>
+        <td>The type of the elements of <code class="paramref">objects</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Melanchall_DryWetMidi_Interaction_LengthedObjectUtilities_StartAtTime__1_System_Collections_Generic_IEnumerable___0__System_Int64__remarks">Remarks</h5>
+  <div class="markdown level1 remarks">Note that changes made on the objects returned by this method will not be saved to an underlying
+data source (events collection, track chunk, file). To change properties of lengthed objects and
+save them you need to use a manager appropriate for an object's type.</div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">ArgumentNullException</a></td>
+        <td><p>One of the following errors occurred:</p>
+<ul><li>
+      <code class="paramref">objects</code> is <code>null</code>.</li><li>One of the objects is <code>null</code>.</li></ul></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.argumentoutofrangeexception">ArgumentOutOfRangeException</a></td>
+        <td><code class="paramref">time</code> is negative.</td>
       </tr>
     </tbody>
   </table>

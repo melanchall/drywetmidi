@@ -83,42 +83,12 @@
 <h1 id="obsolete-api">Obsolete API</h1>
 
 <p>Here the table of API that is obsolete and thus either will be removed from the library by a next release or already removed from the DryWetMIDI. Title of each obsolete API is just ID, please see description to see an old API and new replacement.</p>
-<h3 id="obs20">OBS20</h3>
-<div class="WARNING">
-<h5>Warning</h5>
-<p>API removed from the library by 9.0.0 release.</p>
-</div>
-<p>Different methods to search timed objects at the specified time have been replaced with single <a class="xref" href="../api/Melanchall.DryWetMidi.Interaction.TimedObjectUtilities.html#Melanchall_DryWetMidi_Interaction_TimedObjectUtilities_AtTime_"><code>TimedObjectUtilities.AtTime</code></a>. It takes <a class="xref" href="../api/Melanchall.DryWetMidi.Interaction.ITimeSpan.html"><code>ITimeSpan</code></a> and has no overload where time is represented by <code>long</code>. If you want to search timed objects by time in MIDI ticks, you just need to use <a class="xref" href="../api/Melanchall.DryWetMidi.Interaction.MidiTimeSpan.html"><code>MidiTimeSpan</code></a>:</p>
-<pre><code class="lang-csharp">var objectsAtTime = timedObjects.AtTime(new MidiTimeSpan(1000), tempoMap);
-</code></pre>
-<p>And yes, you need to pass <a class="xref" href="../api/Melanchall.DryWetMidi.Interaction.TempoMap.html"><code>TempoMap</code></a> always.</p>
-<p>More than that, the single method allows to search objects of different types at the same time, no separate methods for collections of just <a class="xref" href="../api/Melanchall.DryWetMidi.Interaction.ITimedObject.html"><code>ITimedObject</code></a> and <a class="xref" href="../api/Melanchall.DryWetMidi.Interaction.ILengthedObject.html"><code>ILengthedObject</code></a> instances. Since <code>AtTime</code>, <code>StartAtTime</code> and <code>EndAtTime</code> methods for <a class="xref" href="../api/Melanchall.DryWetMidi.Interaction.ILengthedObject.html"><code>ILengthedObject</code></a> are removed now, there is a question: &quot;<em>How can we match only start time of an object or end one?</em>&quot;. The answer is: the new method takes <strong>entire object</strong> into account. So if you want to exclude objects which endpoint is exactly at the specified time, you need to do it manually. For example:</p>
-<pre><code class="lang-csharp">var timeInTicks = 1000;
-var notesWithMiddleAtTime = timedObjects
-    .AtTime(new MidiTimeSpan(timeInTicks), tempoMap)
-    .Where(o =&gt; o.Time != timeInTicks &amp;&amp; o.EndTime != timeInTicks);
-</code></pre>
-<p>Obsolete from version <strong>9.0.0</strong>.</p>
-<p><strong>Old API</strong></p>
-<ul>
-<li><code>TimedObjectUtilities.AtTime&lt;TObject&gt;(this IEnumerable&lt;TObject&gt; objects, long time)</code></li>
-<li><code>LengthedObjectUtilities.StartAtTime&lt;TObject&gt;(this IEnumerable&lt;TObject&gt; objects, long time)</code></li>
-<li><code>LengthedObjectUtilities.StartAtTime&lt;TObject&gt;(this IEnumerable&lt;TObject&gt; objects, ITimeSpan time, TempoMap tempoMap)</code></li>
-<li><code>LengthedObjectUtilities.EndAtTime&lt;TObject&gt;(this IEnumerable&lt;TObject&gt; objects, long time)</code></li>
-<li><code>LengthedObjectUtilities.EndAtTime&lt;TObject&gt;(this IEnumerable&lt;TObject&gt; objects, ITimeSpan time, TempoMap tempoMap)</code></li>
-<li><code>LengthedObjectUtilities.AtTime&lt;TObject&gt;(this IEnumerable&lt;TObject&gt; objects, long time, LengthedObjectPart matchBy)</code></li>
-<li><code>LengthedObjectUtilities.AtTime&lt;TObject&gt;(this IEnumerable&lt;TObject&gt; objects, ITimeSpan time, TempoMap tempoMap, LengthedObjectPart matchBy)</code></li>
-</ul>
-<p><strong>New API</strong></p>
-<ul>
-<li><a class="xref" href="../api/Melanchall.DryWetMidi.Interaction.TimedObjectUtilities.html#Melanchall_DryWetMidi_Interaction_TimedObjectUtilities_AtTime_">TimedObjectUtilities.AtTime</a></li>
-</ul>
 <h3 id="obs19">OBS19</h3>
 <div class="WARNING">
 <h5>Warning</h5>
 <p>API removed from the library by 7.0.0 release.</p>
 </div>
-<p><code>Splitter.SplitByNotes</code> method is now obsolete since it has been replaced by <a class="xref" href="../api/Melanchall.DryWetMidi.Tools.Splitter.html#Melanchall_DryWetMidi_Tools_Splitter_SplitByObjects_">Splitter.SplitByObjects</a> one which can split a MIDI file by objects of difefrent types and with more flexibility.</p>
+<p><code>Splitter.SplitByNotes</code> method is now obsolere since it has been replaced by <a class="xref" href="../api/Melanchall.DryWetMidi.Tools.Splitter.html#Melanchall_DryWetMidi_Tools_Splitter_SplitByObjects_">Splitter.SplitByObjects</a> one which can split a MIDI file by objects of difefrent types and with more flexibility.</p>
 <p>Simple example of how to split a file by notes with the new tool:</p>
 <pre><code class="lang-csharp">var newFiles = midiFile.SplitByObjects(ObjectType.Note);
 </code></pre>

@@ -159,7 +159,8 @@
   <h6><strong>Assembly</strong>: Melanchall.DryWetMidi.dll</h6>
   <h5 id="Melanchall_DryWetMidi_Core_NoHeaderChunkException_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public sealed class NoHeaderChunkException : MidiException, ISerializable</code></pre>
+    <pre><code class="lang-csharp hljs">[Serializable]
+public sealed class NoHeaderChunkException : MidiException, ISerializable</code></pre>
   </div>
   <h5 id="Melanchall_DryWetMidi_Core_NoHeaderChunkException_remarks"><strong>Remarks</strong></h5>
   <div class="markdown level0 remarks"><p>Note that this exception will be thrown only if <a class="xref" href="Melanchall.DryWetMidi.Core.ReadingSettings.html#Melanchall_DryWetMidi_Core_ReadingSettings_NoHeaderChunkPolicy">NoHeaderChunkPolicy</a>
