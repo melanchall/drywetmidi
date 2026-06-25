@@ -64,7 +64,7 @@ Endpoint removed: OutputEndpoint
 
 ## Avalonia on Windows
 
-If you use `EndpointsWatcher` in an Avalonia app on Windows, initialize DryWetMIDI advanced API on an MTA thread before Avalonia UI startup. Otherwise the first call can happen on STA UI thread and Windows MIDI Services availability check can fail.
+If you use `EndpointsWatcher` in an Avalonia app on Windows, initialize DryWetMIDI advanced API on an MTA thread before Avalonia UI startup. Otherwise the first DryWetMIDI API call can happen on STA UI thread and Windows MIDI Services availability check can fail.
 
 The important part is to ensure there are no calls to [`LibraryConfiguration.GetConfigurationSummary`](xref:Melanchall.DryWetMidi.Configuration.LibraryConfiguration.GetConfigurationSummary), [`LibraryConfiguration.IsEndpointsWatcherApiAvailable`](xref:Melanchall.DryWetMidi.Configuration.LibraryConfiguration.IsEndpointsWatcherApiAvailable), endpoint enumeration methods, or [`EndpointsWatcher.Instance`](xref:Melanchall.DryWetMidi.Multimedia.EndpointsWatcher.Instance) before the bootstrap code finishes.
 
@@ -97,57 +97,87 @@ namespace MyApp
 
     internal static class MidiWatcherBootstrap
     {
+        private static readonly object LockObject = new();
         private static readonly ManualResetEventSlim Initialized = new(false);
         private static readonly ManualResetEventSlim ShutdownRequested = new(false);
 
         private static Exception _initializationException;
+        private static string _initializationSummary;
         private static EndpointsWatcher _watcher;
         private static Thread _thread;
 
         public static void Initialize()
         {
-            if (_thread != null)
-                return;
-
-            _thread = new Thread(() =>
+            lock (LockObject)
             {
-                try
+                if (_thread != null)
+                    return;
+
+                _thread = new Thread(() =>
                 {
-                    LibraryConfiguration.UseWindowsMidiServices = true;
+                    try
+                    {
+                        LibraryConfiguration.UseWindowsMidiServices = true;
 
-                    if (!LibraryConfiguration.IsEndpointsWatcherApiAvailable())
-                        throw new InvalidOperationException(LibraryConfiguration.GetConfigurationSummary());
+                        if (!LibraryConfiguration.IsEndpointsWatcherApiAvailable())
+                        {
+                            _initializationSummary = LibraryConfiguration.GetConfigurationSummary();
+                            throw new InvalidOperationException(_initializationSummary);
+                        }
 
-                    _watcher = EndpointsWatcher.Instance;
-                    _watcher.EndpointAdded += OnEndpointAdded;
-                    _watcher.EndpointRemoved += OnEndpointRemoved;
-                }
-                catch (Exception ex)
+                        _watcher = EndpointsWatcher.Instance;
+                        _watcher.EndpointAdded += OnEndpointAdded;
+                        _watcher.EndpointRemoved += OnEndpointRemoved;
+                    }
+                    catch (Exception ex)
+                    {
+                        _initializationException = ex;
+                    }
+                    finally
+                    {
+                        Initialized.Set();
+                    }
+
+                    ShutdownRequested.Wait();
+                })
                 {
-                    _initializationException = ex;
-                }
-                finally
-                {
-                    Initialized.Set();
-                }
+                    IsBackground = true,
+                    Name = "DryWetMIDI watcher bootstrap"
+                };
 
-                ShutdownRequested.Wait();
-            })
-            {
-                IsBackground = true,
-                Name = "DryWetMIDI watcher bootstrap"
-            };
-
-            _thread.SetApartmentState(ApartmentState.MTA);
-            _thread.Start();
+                _thread.SetApartmentState(ApartmentState.MTA);
+                _thread.Start();
+            }
 
             Initialized.Wait();
 
             if (_initializationException != null)
-                throw new InvalidOperationException("Failed to initialize DryWetMIDI watcher on MTA thread.", _initializationException);
+            {
+                if (!string.IsNullOrEmpty(_initializationSummary))
+                    throw new InvalidOperationException($"Failed to initialize DryWetMIDI watcher on MTA thread.{Environment.NewLine}{_initializationSummary}", _initializationException);
 
-            AppDomain.CurrentDomain.ProcessExit += (_, _) => ShutdownRequested.Set();
-            AppDomain.CurrentDomain.DomainUnload += (_, _) => ShutdownRequested.Set();
+                throw new InvalidOperationException("Failed to initialize DryWetMIDI watcher on MTA thread.", _initializationException);
+            }
+
+            AppDomain.CurrentDomain.ProcessExit += (_, _) => Shutdown();
+            AppDomain.CurrentDomain.DomainUnload += (_, _) => Shutdown();
+        }
+
+        public static void Shutdown()
+        {
+            lock (LockObject)
+            {
+                if (_thread == null)
+                    return;
+
+                ShutdownRequested.Set();
+                _thread.Join();
+
+                Initialized.Dispose();
+                ShutdownRequested.Dispose();
+
+                _thread = null;
+            }
         }
 
         private static void OnEndpointAdded(object sender, EndpointAddedRemovedEventArgs e)
@@ -173,7 +203,7 @@ Checklist to validate the startup sequence:
 
 * Call the bootstrap method before creating `AppBuilder` or resolving any UI services.
 * Keep `UseWindowsMidiServices` configuration inside the bootstrap path so it is applied before the first DryWetMIDI call.
-* If initialization fails, log `LibraryConfiguration.GetConfigurationSummary()` from the MTA bootstrap thread, not from the UI thread.
+* If initialization fails, capture or log `LibraryConfiguration.GetConfigurationSummary()` from the MTA bootstrap thread, not from the UI thread.
 * Marshal watcher event handling to Avalonia dispatcher before touching view models or controls.
 * Cold-start the app and verify watcher availability and endpoint add/remove notifications.
 
