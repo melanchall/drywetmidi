@@ -12,6 +12,22 @@ But UI related things like call of `StartCoroutine` can be executed on UI thread
 
 Related question on StackOverflow: [Catching and processing multiple keyboard inputs at once](https://stackoverflow.com/q/62750863)
 
+## Updating Avalonia UI from `EndpointsWatcher`
+
+Handlers of [`EndpointsWatcher`](xref:Melanchall.DryWetMidi.Multimedia.EndpointsWatcher) should not update Avalonia controls or view models directly because watcher callbacks can run outside the UI thread. Marshal UI work through `Dispatcher.UIThread`:
+
+```csharp
+EndpointsWatcher.Instance.EndpointAdded += (_, e) =>
+{
+    Dispatcher.UIThread.Post(() =>
+    {
+        // Update Avalonia UI here.
+    });
+};
+```
+
+If you use Windows MIDI Services in Avalonia, initialize DryWetMIDI advanced API on a dedicated MTA thread before UI startup and use `Dispatcher.UIThread` only for the final UI update step.
+
 ## `InputEndpoint` declared as a local variable
 
 If an instance of the [`InputEndpoint`](xref:Melanchall.DryWetMidi.Multimedia.InputEndpoint) is declared as a local variable and you’ve subscribed to its [`EventReceived`](xref:Melanchall.DryWetMidi.Multimedia.IInputEndpoint.EventReceived) event, the event handler won’t be called or you can get undefined behavior. For example, let’s look at this code:

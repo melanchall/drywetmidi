@@ -62,6 +62,121 @@ Endpoint removed: InputEndpoint
 Endpoint removed: OutputEndpoint
 ```
 
+## Avalonia on Windows
+
+If you use `EndpointsWatcher` in an Avalonia app on Windows, initialize DryWetMIDI advanced API on an MTA thread before Avalonia UI startup. Otherwise the first call can happen on STA UI thread and Windows MIDI Services availability check can fail.
+
+The important part is to ensure there are no calls to [`LibraryConfiguration.GetConfigurationSummary`](xref:Melanchall.DryWetMidi.Configuration.LibraryConfiguration.GetConfigurationSummary), [`LibraryConfiguration.IsEndpointsWatcherApiAvailable`](xref:Melanchall.DryWetMidi.Configuration.LibraryConfiguration.IsEndpointsWatcherApiAvailable), endpoint enumeration methods, or [`EndpointsWatcher.Instance`](xref:Melanchall.DryWetMidi.Multimedia.EndpointsWatcher.Instance) before the bootstrap code finishes.
+
+```csharp
+using System;
+using System.Threading;
+using Avalonia;
+using Avalonia.Threading;
+using Melanchall.DryWetMidi.Configuration;
+using Melanchall.DryWetMidi.Multimedia;
+
+namespace MyApp
+{
+    internal static class Program
+    {
+        [STAThread]
+        public static void Main(string[] args)
+        {
+            MidiWatcherBootstrap.Initialize();
+
+            BuildAvaloniaApp()
+                .StartWithClassicDesktopLifetime(args);
+        }
+
+        public static AppBuilder BuildAvaloniaApp()
+        {
+            return AppBuilder.Configure<App>();
+        }
+    }
+
+    internal static class MidiWatcherBootstrap
+    {
+        private static readonly ManualResetEventSlim Initialized = new(false);
+        private static readonly ManualResetEventSlim ShutdownRequested = new(false);
+
+        private static Exception _initializationException;
+        private static EndpointsWatcher _watcher;
+        private static Thread _thread;
+
+        public static void Initialize()
+        {
+            if (_thread != null)
+                return;
+
+            _thread = new Thread(() =>
+            {
+                try
+                {
+                    LibraryConfiguration.UseWindowsMidiServices = true;
+
+                    if (!LibraryConfiguration.IsEndpointsWatcherApiAvailable())
+                        throw new InvalidOperationException(LibraryConfiguration.GetConfigurationSummary());
+
+                    _watcher = EndpointsWatcher.Instance;
+                    _watcher.EndpointAdded += OnEndpointAdded;
+                    _watcher.EndpointRemoved += OnEndpointRemoved;
+                }
+                catch (Exception ex)
+                {
+                    _initializationException = ex;
+                }
+                finally
+                {
+                    Initialized.Set();
+                }
+
+                ShutdownRequested.Wait();
+            })
+            {
+                IsBackground = true,
+                Name = "DryWetMIDI watcher bootstrap"
+            };
+
+            _thread.SetApartmentState(ApartmentState.MTA);
+            _thread.Start();
+
+            Initialized.Wait();
+
+            if (_initializationException != null)
+                throw new InvalidOperationException("Failed to initialize DryWetMIDI watcher on MTA thread.", _initializationException);
+
+            AppDomain.CurrentDomain.ProcessExit += (_, _) => ShutdownRequested.Set();
+            AppDomain.CurrentDomain.DomainUnload += (_, _) => ShutdownRequested.Set();
+        }
+
+        private static void OnEndpointAdded(object sender, EndpointAddedRemovedEventArgs e)
+        {
+            Dispatcher.UIThread.Post(() =>
+            {
+                // Update Avalonia UI here.
+            });
+        }
+
+        private static void OnEndpointRemoved(object sender, EndpointAddedRemovedEventArgs e)
+        {
+            Dispatcher.UIThread.Post(() =>
+            {
+                // Update Avalonia UI here.
+            });
+        }
+    }
+}
+```
+
+Checklist to validate the startup sequence:
+
+* Call the bootstrap method before creating `AppBuilder` or resolving any UI services.
+* Keep `UseWindowsMidiServices` configuration inside the bootstrap path so it is applied before the first DryWetMIDI call.
+* If initialization fails, log `LibraryConfiguration.GetConfigurationSummary()` from the MTA bootstrap thread, not from the UI thread.
+* Marshal watcher event handling to Avalonia dispatcher before touching view models or controls.
+* Cold-start the app and verify watcher availability and endpoint add/remove notifications.
+
 When an endpoint is added you can immediately interact with it using an instance from the `EndpointAdded` event's arguments. But an instance from the `EndpointRemoved` event's arguments is non-interactable, because the endpoint is removed and doesn't exist in the system anymore. Any attempt to use its properties on that instance will throw an exception:
 
 ```csharp
