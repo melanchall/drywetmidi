@@ -70,8 +70,12 @@ The important part is to ensure there are no calls to [`LibraryConfiguration.Get
 
 ```csharp
 using System;
+using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading;
 using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Threading;
 using Melanchall.DryWetMidi.Configuration;
 using Melanchall.DryWetMidi.Multimedia;
@@ -84,7 +88,6 @@ namespace MyApp
         public static void Main(string[] args)
         {
             MidiWatcherBootstrap.Initialize();
-
             BuildAvaloniaApp()
                 .StartWithClassicDesktopLifetime(args);
         }
@@ -105,6 +108,7 @@ namespace MyApp
 
         private static Exception _initializationException;
         private static string _initializationSummary;
+        private static MainViewModel _mainViewModel;
         private static EndpointsWatcher _watcher;
         private static Thread _thread;
         private static bool _shutdownHandlersRegistered;
@@ -174,6 +178,14 @@ namespace MyApp
             }
         }
 
+        public static void AttachMainViewModel(MainViewModel viewModel)
+        {
+            lock (_lockObject)
+            {
+                _mainViewModel = viewModel;
+            }
+        }
+
         public static void Shutdown()
         {
             lock (_lockObject)
@@ -200,7 +212,13 @@ namespace MyApp
         {
             Dispatcher.UIThread.Post(() =>
             {
-                // Update Avalonia UI here.
+                MainViewModel viewModel;
+                lock (_lockObject)
+                {
+                    viewModel = _mainViewModel;
+                }
+
+                viewModel?.OnEndpointAdded(e.Endpoint);
             });
         }
 
@@ -208,9 +226,64 @@ namespace MyApp
         {
             Dispatcher.UIThread.Post(() =>
             {
-                // Update Avalonia UI here.
+                MainViewModel viewModel;
+                lock (_lockObject)
+                {
+                    viewModel = _mainViewModel;
+                }
+
+                viewModel?.OnEndpointRemoved(e.Endpoint);
             });
         }
+    }
+
+    public sealed class App : Application
+    {
+        public override void OnFrameworkInitializationCompleted()
+        {
+            if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+            {
+                var mainViewModel = new MainViewModel();
+                MidiWatcherBootstrap.AttachMainViewModel(mainViewModel);
+
+                desktop.MainWindow = new MainWindow
+                {
+                    DataContext = mainViewModel
+                };
+            }
+
+            base.OnFrameworkInitializationCompleted();
+        }
+    }
+
+    public sealed class MainViewModel
+    {
+        public ObservableCollection<EndpointViewModel> Endpoints { get; } = new();
+
+        public void OnEndpointAdded(MidiEndpoint endpoint)
+        {
+            Endpoints.Add(new EndpointViewModel(endpoint, endpoint.Name));
+        }
+
+        public void OnEndpointRemoved(MidiEndpoint endpoint)
+        {
+            var endpointViewModel = Endpoints.FirstOrDefault(e => e.Endpoint.Equals(endpoint));
+            if (endpointViewModel != null)
+                Endpoints.Remove(endpointViewModel);
+        }
+    }
+
+    public sealed class EndpointViewModel
+    {
+        public EndpointViewModel(MidiEndpoint endpoint, string displayName)
+        {
+            Endpoint = endpoint;
+            DisplayName = displayName;
+        }
+
+        public MidiEndpoint Endpoint { get; }
+
+        public string DisplayName { get; }
     }
 }
 ```
@@ -220,7 +293,9 @@ Checklist to validate the startup sequence:
 * Call the bootstrap method before creating `AppBuilder` or resolving any UI services.
 * Keep `UseWindowsMidiServices` configuration inside the bootstrap path so it is applied before the first DryWetMIDI call.
 * If initialization fails, capture or log `LibraryConfiguration.GetConfigurationSummary()` from the MTA bootstrap thread, not from the UI thread.
+* Attach the main view model to bootstrap/service layer once UI lifetime is created.
 * Marshal watcher event handling to Avalonia dispatcher before touching view models or controls.
+* For removed endpoints, remove existing UI items by endpoint identity (`Equals`) instead of reading removed endpoint properties.
 * Treat the bootstrap as a one-time process-start step and keep the watcher thread alive until process exit.
 * Cold-start the app and verify watcher availability and endpoint add/remove notifications.
 

@@ -14,14 +14,22 @@ Related question on StackOverflow: [Catching and processing multiple keyboard in
 
 ## Updating Avalonia UI from `EndpointsWatcher`
 
-Handlers of [`EndpointsWatcher`](xref:Melanchall.DryWetMidi.Multimedia.EndpointsWatcher) should not update Avalonia controls or view models directly because watcher callbacks can run outside the UI thread. Marshal UI work through `Dispatcher.UIThread`:
+Handlers of [`EndpointsWatcher`](xref:Melanchall.DryWetMidi.Multimedia.EndpointsWatcher) should not update Avalonia controls or view models directly because watcher callbacks can run outside the UI thread. Keep a reference to your main view model in a bootstrap/service layer and marshal UI work through `Dispatcher.UIThread`:
 
 ```csharp
 EndpointsWatcher.Instance.EndpointAdded += (_, e) =>
 {
     Dispatcher.UIThread.Post(() =>
     {
-        // Update Avalonia UI here.
+        _mainViewModel.OnEndpointAdded(e.Endpoint);
+    });
+};
+
+EndpointsWatcher.Instance.EndpointRemoved += (_, e) =>
+{
+    Dispatcher.UIThread.Post(() =>
+    {
+        _mainViewModel.OnEndpointRemoved(e.Endpoint); // remove by endpoint identity, not endpoint properties
     });
 };
 ```
