@@ -100,11 +100,13 @@ namespace MyApp
         private static readonly object LockObject = new();
         private static readonly ManualResetEventSlim Initialized = new(false);
         private static readonly ManualResetEventSlim ShutdownRequested = new(false);
+        private static readonly TimeSpan InitializationTimeout = TimeSpan.FromSeconds(10);
 
         private static Exception _initializationException;
         private static string _initializationSummary;
         private static EndpointsWatcher _watcher;
         private static Thread _thread;
+        private static bool _shutdownHandlersRegistered;
 
         public static void Initialize()
         {
@@ -149,7 +151,8 @@ namespace MyApp
                 _thread.Start();
             }
 
-            Initialized.Wait();
+            if (!Initialized.Wait(InitializationTimeout))
+                throw new TimeoutException("Timed out while initializing DryWetMIDI watcher on MTA thread.");
 
             if (_initializationException != null)
             {
@@ -159,8 +162,15 @@ namespace MyApp
                 throw new InvalidOperationException("Failed to initialize DryWetMIDI watcher on MTA thread.", _initializationException);
             }
 
-            AppDomain.CurrentDomain.ProcessExit += (_, _) => Shutdown();
-            AppDomain.CurrentDomain.DomainUnload += (_, _) => Shutdown();
+            lock (LockObject)
+            {
+                if (_shutdownHandlersRegistered)
+                    return;
+
+                AppDomain.CurrentDomain.ProcessExit += (_, _) => Shutdown();
+                AppDomain.CurrentDomain.DomainUnload += (_, _) => Shutdown();
+                _shutdownHandlersRegistered = true;
+            }
         }
 
         public static void Shutdown()
@@ -172,11 +182,6 @@ namespace MyApp
 
                 ShutdownRequested.Set();
                 _thread.Join();
-
-                Initialized.Dispose();
-                ShutdownRequested.Dispose();
-
-                _thread = null;
             }
         }
 
@@ -205,6 +210,7 @@ Checklist to validate the startup sequence:
 * Keep `UseWindowsMidiServices` configuration inside the bootstrap path so it is applied before the first DryWetMIDI call.
 * If initialization fails, capture or log `LibraryConfiguration.GetConfigurationSummary()` from the MTA bootstrap thread, not from the UI thread.
 * Marshal watcher event handling to Avalonia dispatcher before touching view models or controls.
+* Treat the bootstrap as a one-time process-start step and keep the watcher thread alive until process exit.
 * Cold-start the app and verify watcher availability and endpoint add/remove notifications.
 
 When an endpoint is added you can immediately interact with it using an instance from the `EndpointAdded` event's arguments. But an instance from the `EndpointRemoved` event's arguments is non-interactable, because the endpoint is removed and doesn't exist in the system anymore. Any attempt to use its properties on that instance will throw an exception:
