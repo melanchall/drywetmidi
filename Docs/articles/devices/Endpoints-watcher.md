@@ -97,10 +97,11 @@ namespace MyApp
 
     internal static class MidiWatcherBootstrap
     {
-        private static readonly object LockObject = new();
-        private static readonly ManualResetEventSlim Initialized = new(false);
-        private static readonly ManualResetEventSlim ShutdownRequested = new(false);
-        private static readonly TimeSpan InitializationTimeout = TimeSpan.FromSeconds(10);
+        private static readonly object _lockObject = new();
+        private static readonly ManualResetEventSlim _initialized = new(false);
+        private static readonly ManualResetEventSlim _shutdownRequested = new(false);
+        private static readonly TimeSpan _initializationTimeout = TimeSpan.FromSeconds(10);
+        private static readonly TimeSpan _shutdownTimeout = TimeSpan.FromSeconds(5);
 
         private static Exception _initializationException;
         private static string _initializationSummary;
@@ -110,7 +111,7 @@ namespace MyApp
 
         public static void Initialize()
         {
-            lock (LockObject)
+            lock (_lockObject)
             {
                 if (_thread != null)
                     return;
@@ -137,10 +138,10 @@ namespace MyApp
                     }
                     finally
                     {
-                        Initialized.Set();
+                        _initialized.Set();
                     }
 
-                    ShutdownRequested.Wait();
+                    _shutdownRequested.Wait();
                 })
                 {
                     IsBackground = true,
@@ -151,7 +152,7 @@ namespace MyApp
                 _thread.Start();
             }
 
-            if (!Initialized.Wait(InitializationTimeout))
+            if (!_initialized.Wait(_initializationTimeout))
                 throw new TimeoutException("Timed out while initializing DryWetMIDI watcher on MTA thread.");
 
             if (_initializationException != null)
@@ -162,7 +163,7 @@ namespace MyApp
                 throw new InvalidOperationException("Failed to initialize DryWetMIDI watcher on MTA thread.", _initializationException);
             }
 
-            lock (LockObject)
+            lock (_lockObject)
             {
                 if (_shutdownHandlersRegistered)
                     return;
@@ -175,13 +176,19 @@ namespace MyApp
 
         public static void Shutdown()
         {
-            lock (LockObject)
+            lock (_lockObject)
             {
                 if (_thread == null)
                     return;
 
-                ShutdownRequested.Set();
-                _thread.Join();
+                if (_watcher != null)
+                {
+                    _watcher.EndpointAdded -= OnEndpointAdded;
+                    _watcher.EndpointRemoved -= OnEndpointRemoved;
+                }
+
+                _shutdownRequested.Set();
+                _thread.Join(_shutdownTimeout);
             }
         }
 
