@@ -103,7 +103,7 @@ namespace MyApp
         private static readonly object _lockObject = new();
         private static readonly ManualResetEventSlim _initialized = new(false);
         private static readonly ManualResetEventSlim _shutdownRequested = new(false);
-        private static readonly TimeSpan _initializationTimeout = TimeSpan.FromSeconds(10); // allow extra time for WMS initialization
+        private static readonly TimeSpan _initializationTimeout = TimeSpan.FromSeconds(10); // allow extra time for Windows MIDI Services (WMS) initialization
         private static readonly TimeSpan _shutdownTimeout = TimeSpan.FromSeconds(5); // best-effort shutdown during process exit
 
         private static Exception _initializationException;
@@ -148,7 +148,7 @@ namespace MyApp
                     _shutdownRequested.Wait();
                 })
                 {
-                    IsBackground = true, // don't keep the process alive if the app is already shutting down
+                    IsBackground = true, // don't block process exit if the app is already shutting down
                     Name = "DryWetMIDI watcher bootstrap"
                 };
 
