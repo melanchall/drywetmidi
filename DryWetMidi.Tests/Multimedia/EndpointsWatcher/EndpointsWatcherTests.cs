@@ -95,6 +95,12 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     () => ((OutputEndpoint)lastRemovedEndpoint).SendEvent(new NoteOnEvent()),
                     "Can send event via removed output endpoint.");
 
+                // TODO: failed on macOS
+                //CollectionAssert.AreEquivalent(
+                //    addedEndpoints,
+                //    removedEndpoints,
+                //    "Removed endpoints are not equivalent to added endpoints.");
+
                 EndpointsWatcher.Instance.EndpointAdded -= addedHandler;
                 EndpointsWatcher.Instance.EndpointRemoved -= removedHandler;
             };
@@ -146,6 +152,13 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 ClassicAssert.AreEqual(2, addedEndpoints1.Count, $"[A] Invalid first count of added endpoints.");
                 ClassicAssert.IsTrue(added2, $"[A] Endpoints weren't added for [{timeout}] on second collection.");
                 ClassicAssert.AreEqual(2, addedEndpoints2.Count, $"[A] Invalid second count of added endpoints.");
+
+                ClassicAssert.IsTrue(
+                    addedEndpoints1.All(e => !string.IsNullOrWhiteSpace(e.Id)),
+                    "[A] Some added endpoints have invalid IDs on first collection.");
+                ClassicAssert.IsTrue(
+                    addedEndpoints2.All(e => !string.IsNullOrWhiteSpace(e.Id)),
+                    "[A] Some added endpoints have invalid IDs on second collection.");
             }
 
             EndpointsWatcher.Instance.EndpointAdded -= addedHandler1;
@@ -160,6 +173,13 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 ClassicAssert.AreEqual(0, addedEndpoints1.Count, $"[B] Invalid first count of added endpoints.");
                 ClassicAssert.IsTrue(added2, $"[B] Endpoints weren't added for [{timeout}] on second collection.");
                 ClassicAssert.AreEqual(2, addedEndpoints2.Count, $"[B] Invalid second count of added endpoints.");
+
+                ClassicAssert.IsTrue(
+                    addedEndpoints1.All(e => !string.IsNullOrWhiteSpace(e.Id)),
+                    "[B] Some added endpoints have invalid IDs on first collection.");
+                ClassicAssert.IsTrue(
+                    addedEndpoints2.All(e => !string.IsNullOrWhiteSpace(e.Id)),
+                    "[B] Some added endpoints have invalid IDs on second collection.");
             }
 
             EndpointsWatcher.Instance.EndpointAdded -= addedHandler2;
@@ -174,6 +194,13 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 ClassicAssert.AreEqual(0, addedEndpoints1.Count, $"[C] Invalid first count of added endpoints.");
                 ClassicAssert.IsFalse(added2, $"[C] Endpoints were added on second collection.");
                 ClassicAssert.AreEqual(0, addedEndpoints2.Count, $"[C] Invalid second count of added endpoints.");
+
+                ClassicAssert.IsTrue(
+                    addedEndpoints1.All(e => !string.IsNullOrWhiteSpace(e.Id)),
+                    "[C] Some added endpoints have invalid IDs on first collection.");
+                ClassicAssert.IsTrue(
+                    addedEndpoints2.All(e => !string.IsNullOrWhiteSpace(e.Id)),
+                    "[C] Some added endpoints have invalid IDs on second collection.");
             }
         }
 
@@ -208,6 +235,13 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             ClassicAssert.IsTrue(removed2, $"[A] Endpoints weren't removed for [{timeout}] on second collection.");
             ClassicAssert.AreEqual(2, removedEndpoints2.Count, $"[A] Invalid second count of removed endpoints.");
 
+            ClassicAssert.IsTrue(
+                removedEndpoints1.All(e => !string.IsNullOrWhiteSpace(e.Id)),
+                "[A] Some removed endpoints have invalid IDs on first collection.");
+            ClassicAssert.IsTrue(
+                removedEndpoints2.All(e => !string.IsNullOrWhiteSpace(e.Id)),
+                "[A] Some removed endpoints have invalid IDs on second collection.");
+
             EndpointsWatcher.Instance.EndpointRemoved -= removedHandler1;
 
             Thread.Sleep(5000);
@@ -226,6 +260,13 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             ClassicAssert.IsTrue(removed2, $"[B] Endpoints weren't removed for [{timeout}] on second collection.");
             ClassicAssert.AreEqual(2, removedEndpoints2.Count, $"[B] Invalid second count of removed endpoints.");
 
+            ClassicAssert.IsTrue(
+                removedEndpoints1.All(e => !string.IsNullOrWhiteSpace(e.Id)),
+                "[B] Some removed endpoints have invalid IDs on first collection.");
+            ClassicAssert.IsTrue(
+                removedEndpoints2.All(e => !string.IsNullOrWhiteSpace(e.Id)),
+                "[B] Some removed endpoints have invalid IDs on second collection.");
+
             EndpointsWatcher.Instance.EndpointRemoved -= removedHandler2;
 
             Thread.Sleep(5000);
@@ -243,6 +284,13 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             ClassicAssert.AreEqual(0, removedEndpoints1.Count, $"[C] Invalid first count of removed endpoints.");
             ClassicAssert.IsFalse(removed2, $"[C] Endpoints were removed on second collection.");
             ClassicAssert.AreEqual(0, removedEndpoints2.Count, $"[C] Invalid second count of removed endpoints.");
+
+            ClassicAssert.IsTrue(
+                removedEndpoints1.All(e => !string.IsNullOrWhiteSpace(e.Id)),
+                "[C] Some removed endpoints have invalid IDs on first collection.");
+            ClassicAssert.IsTrue(
+                removedEndpoints2.All(e => !string.IsNullOrWhiteSpace(e.Id)),
+                "[C] Some removed endpoints have invalid IDs on second collection.");
         }
 
         [Test]

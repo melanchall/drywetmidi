@@ -72,6 +72,8 @@ namespace Melanchall.DryWetMidi.Multimedia
         private readonly object _eventProcessingLock = new object();
         private volatile bool _disposing;
 
+        private string _id;
+
         #endregion
 
         #region Constructor
@@ -110,10 +112,13 @@ namespace Melanchall.DryWetMidi.Multimedia
         {
             get
             {
-                var result = InputEndpointApi.Api_GetEndpointId(Info.DangerousGetHandle(), out var id, out var errorCode);
+                if (!string.IsNullOrEmpty(_id))
+                    return _id;
+
+                var result = InputEndpointApi.Api_GetEndpointId(Info.DangerousGetHandle(), out _id, out var errorCode);
                 NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
 
-                return id;
+                return _id;
             }
         }
 

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Runtime.InteropServices;
 using Melanchall.DryWetMidi.Common;
@@ -45,6 +44,8 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         private readonly CommonApi.API_TYPE _apiType;
 
+        private string _id;
+
         #endregion
 
         #region Constructor
@@ -81,10 +82,13 @@ namespace Melanchall.DryWetMidi.Multimedia
         {
             get
             {
-                var result = OutputEndpointApi.Api_GetEndpointId(Info.DangerousGetHandle(), out var id, out var errorCode);
-                NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
+                if (!string.IsNullOrWhiteSpace(_id))
+                    return _id;
 
-                return id;
+                var result = OutputEndpointApi.Api_GetEndpointId(Info.DangerousGetHandle(), out _id, out var errorCode);
+                NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
+                
+                return _id;
             }
         }
 

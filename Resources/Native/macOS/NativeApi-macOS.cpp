@@ -334,6 +334,9 @@ struct EndpointInfoBase
     const char* deviceManufacturer = nullptr;
     const char* deviceModel = nullptr;
     const char* deviceDriverVersion = nullptr;
+
+    bool idCached = false;
+    int id = 0;
 };
 
 void FreeParentDeviceInfoStrings(EndpointInfoBase* info)
@@ -576,6 +579,12 @@ API_EXPORT DEVICE_GETDEVICEINFORESULT GetDeviceInformation(
 typedef void (*InputEndpointCallback)(void* info, SESSION_CALLBACKOPERATION operation);
 typedef void (*OutputEndpointCallback)(void* info, SESSION_CALLBACKOPERATION operation);
 
+struct EndpointDevicesInfo
+{
+    std::vector<InputEndpointInfo*> inputDevicesInfo;
+    std::vector<OutputEndpointInfo*> outputDevicesInfo;
+};
+
 struct SessionHandle
 {
     const char* name;
@@ -588,6 +597,8 @@ struct SessionHandle
     OSStatus clientCreationStatus;
     InputEndpointCallback inputDeviceCallback;
     OutputEndpointCallback outputDeviceCallback;
+
+    std::unordered_map<MIDIEndpointRef, int> ids;
 };
  
 void HandleSource(MIDIEndpointRef source, SessionHandle* sessionHandle, SESSION_CALLBACKOPERATION operation)
@@ -595,11 +606,37 @@ void HandleSource(MIDIEndpointRef source, SessionHandle* sessionHandle, SESSION_
     if (sessionHandle->sessionClosed.load() == 1)
         return;
 
+    int id = 0;
+
+    if (operation == SESSION_CALLBACKOPERATION_ENDPOINTREMOVED)
+    {
+        auto it = sessionHandle->ids.find(source);
+        if (it != sessionHandle->ids.end())
+        {
+            id = it->second;
+            sessionHandle->ids.erase(it);
+        }
+        else
+        {
+            // TODO
+        }
+    }
+    else
+    {
+        OSStatus status = MIDIObjectGetIntegerProperty(source, kMIDIPropertyUniqueID, &id);
+        if (status == noErr)
+            sessionHandle->ids[source] = id;
+    }
+
     if (sessionHandle->inputDeviceCallback == nullptr)
         return;
 
     InputEndpointInfo* inputDeviceInfo = new InputEndpointInfo();
     inputDeviceInfo->endpointRef = source;
+
+    inputDeviceInfo->id = id;
+    inputDeviceInfo->idCached = true;
+
     sessionHandle->inputDeviceCallback(inputDeviceInfo, operation);
 }
 
@@ -608,11 +645,37 @@ void HandleDestination(MIDIEndpointRef destination, SessionHandle* sessionHandle
     if (sessionHandle->sessionClosed.load() == 1)
         return;
 
+    int id = 0;
+
+    if (operation == SESSION_CALLBACKOPERATION_ENDPOINTREMOVED)
+    {
+        auto it = sessionHandle->ids.find(destination);
+        if (it != sessionHandle->ids.end())
+        {
+            id = it->second;
+            sessionHandle->ids.erase(it);
+        }
+        else
+        {
+            // TODO
+        }
+    }
+    else
+    {
+        OSStatus status = MIDIObjectGetIntegerProperty(destination, kMIDIPropertyUniqueID, &id);
+        if (status == noErr)
+            sessionHandle->ids[destination] = id;
+    }
+
     if (sessionHandle->outputDeviceCallback == nullptr)
         return;
 
     OutputEndpointInfo* outputDeviceInfo = new OutputEndpointInfo();
     outputDeviceInfo->endpointRef = destination;
+
+    outputDeviceInfo->id = id;
+    outputDeviceInfo->idCached = true;
+
     sessionHandle->outputDeviceCallback(outputDeviceInfo, operation);
 }
 
@@ -810,6 +873,26 @@ API_EXPORT SESSION_OPENRESULT OpenSession_Mac(const char* name, Configuration* c
         return SESSION_OPENRESULT_UNKNOWNERROR;
     }
 
+    ItemCount sourcesCount = MIDIGetNumberOfSources();
+    for (ItemCount i = 0; i < sourcesCount; i++)
+    {
+        MIDIEndpointRef source = MIDIGetSource(i);
+        int id = 0;
+        OSStatus status = MIDIObjectGetIntegerProperty(source, kMIDIPropertyUniqueID, &id);
+        if (status == noErr)
+            sessionHandle->ids[source] = id;
+    }
+
+    ItemCount destinationsCount = MIDIGetNumberOfDestinations();
+    for (ItemCount i = 0; i < destinationsCount; i++)
+    {
+        MIDIEndpointRef destination = MIDIGetDestination(i);
+        int id = 0;
+        OSStatus status = MIDIObjectGetIntegerProperty(destination, kMIDIPropertyUniqueID, &id);
+        if (status == noErr)
+            sessionHandle->ids[destination] = id;
+    }
+
     *handle = sessionHandle;
 
     return SESSION_OPENRESULT_OK;
@@ -937,6 +1020,12 @@ API_EXPORT IN_GETPROPERTYRESULT GetInputEndpointName(InputEndpointInfo* info, co
 API_EXPORT IN_GETPROPERTYRESULT GetInputEndpointId_Mac(InputEndpointInfo* info, int* value, int* errorCode)
 {
     *errorCode = 0;
+
+    if (info->idCached)
+    {
+        *value = info->id;
+        return IN_GETPROPERTYRESULT_OK;
+    }
 
     OSStatus status = MIDIObjectGetIntegerProperty(info->endpointRef, kMIDIPropertyUniqueID, value);
     if (status != noErr)
@@ -1161,6 +1250,12 @@ API_EXPORT OUT_GETPROPERTYRESULT GetOutputEndpointName(OutputEndpointInfo* info,
 API_EXPORT OUT_GETPROPERTYRESULT GetOutputEndpointId_Mac(OutputEndpointInfo* info, int* value, int* errorCode)
 {
     *errorCode = 0;
+
+    if (info->idCached)
+    {
+        *value = info->id;
+        return OUT_GETPROPERTYRESULT_OK;
+    }
 
     OSStatus status = MIDIObjectGetIntegerProperty(info->endpointRef, kMIDIPropertyUniqueID, value);
     if (status != noErr)

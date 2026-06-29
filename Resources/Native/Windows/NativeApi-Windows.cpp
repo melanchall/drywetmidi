@@ -1000,9 +1000,6 @@ API_EXPORT SESSION_OPENRESULT API_CALL OpenSession_Win(
 
             auto OnWatcherDeviceAdded = [sessionHandle](midi2::MidiEndpointDeviceWatcher const&, midi2::MidiEndpointDeviceInformationAddedEventArgs const& args)
             {
-                if (sessionHandle->initialEnumerationCompleted.load() == 0)
-                    return;
-
                 std::lock_guard<std::mutex> lock(sessionHandle->endpointDevicesLock);
 
                 std::vector<InputEndpointInfo*> inputDevicesInfo;
@@ -1148,6 +1145,9 @@ API_EXPORT SESSION_OPENRESULT API_CALL OpenSession_Win(
                     }
 
                     sessionHandle->endpointDevicesById[endpointKey] = endpointDevicesInfo;
+
+                    if (sessionHandle->initialEnumerationCompleted.load() == 0)
+                        return;
 
                     for (auto* inputDeviceInfo : inputDevicesInfo)
                     {
