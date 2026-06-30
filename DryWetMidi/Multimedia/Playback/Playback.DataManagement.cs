@@ -86,8 +86,8 @@ namespace Melanchall.DryWetMidi.Multimedia
                         var obj = changedObject.Object;
                         var oldTime = changedObject.OldTime;
 
-                        RemoveTimedObject(obj, oldTime);
-                        AddNewTimedObject(obj, false);
+                        if (RemoveTimedObject(obj, oldTime))
+                            AddNewTimedObject(obj, false);
                     }
                 }
 
@@ -124,7 +124,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             AddTimedObject(timedObject, TempoMap, false, true, useNoteEventsDirectly);
         }
 
-        private void RemoveTimedObject(ITimedObject timedObject, long oldTime)
+        private bool RemoveTimedObject(ITimedObject timedObject, long oldTime)
         {
             var playbackSource = (ObservablePlaybackSource)_playbackSource;
 
@@ -156,6 +156,9 @@ namespace Melanchall.DryWetMidi.Multimedia
                 .SelectMany(n => n.Value.EventsGroup ?? Enumerable.Empty<RedBlackTreeCoordinate<TimeSpan, PlaybackEvent>>())
                 .Distinct()
                 .ToArray();
+
+            if (playbackEventsNodes == null || playbackEventsNodes.Length == 0)
+                return false;
 
             if (noteEvent != null)
             {
@@ -213,6 +216,8 @@ namespace Melanchall.DryWetMidi.Multimedia
             TryRemoveTimeSignatureEvent(
                 timedEvent,
                 oldTime);
+
+            return true;
         }
 
         private void InitializePlaybackEvents(
@@ -335,8 +340,8 @@ namespace Melanchall.DryWetMidi.Multimedia
 
             var valuesChanges = TempoMap.TempoLine.ToArray();
 
-            Tempo oldTempo = null;
-            Tempo newTempo = TempoMap.TempoLine.GetValueAtTime(0);
+            var oldTempo = Tempo.Default;
+            var newTempo = TempoMap.TempoLine.GetValueAtTime(0);
             TimeSpan? nextTempoTime = null;
 
             foreach (var valueChange in valuesChanges)
