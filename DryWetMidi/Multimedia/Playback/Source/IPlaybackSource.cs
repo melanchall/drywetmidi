@@ -35,5 +35,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             TimeSpan? nextTempoTime,
             double scaleFactor,
             TimeSpan shift);
+
+        void Clear();
     }
 }

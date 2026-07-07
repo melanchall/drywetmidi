@@ -158,6 +158,13 @@ namespace Melanchall.DryWetMidi.Multimedia
             while ((node = _playbackEvents.GetNextCoordinate(node)) != null);
         }
 
+        public void Clear()
+        {
+            _playbackEvents.Clear();
+            InvalidatePosition();
+
+        }
+
         #endregion
     }
 }

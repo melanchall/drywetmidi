@@ -218,6 +218,19 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         #region Methods
 
+        private void ClearTrackedData()
+        {
+            foreach (var channel in FourBitNumber.Values)
+            {
+                _currentProgramChanges[channel] = null;
+                _programChangesTreesByChannel[channel].Clear();
+                _currentPitchValues[channel] = null;
+                _pitchValuesTreesByChannel[channel].Clear();
+                _currentControlsValuesChangesByChannel[channel]?.Clear();
+                _controlsValuesChangesTreesByChannel[channel].Clear();
+            }
+        }
+
         private void InitializeDataTracking()
         {
             _getParameterEventsAtTime = new Dictionary<TrackedParameterType, Func<long, IEnumerable<EventWithMetadata>>>

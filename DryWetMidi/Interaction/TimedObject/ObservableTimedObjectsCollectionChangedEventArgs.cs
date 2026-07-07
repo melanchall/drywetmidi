@@ -26,6 +26,8 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         public ICollection<ChangedTimedObject> ChangedObjects { get; set; }
 
+        public bool AllDataRemoved { get; set; }
+
         internal bool HasData
         {
             get
@@ -33,7 +35,8 @@ namespace Melanchall.DryWetMidi.Interaction
                 return
                     AddedObjects?.Any() == true ||
                     RemovedObjects?.Any() == true ||
-                    ChangedObjects?.Any() == true;
+                    ChangedObjects?.Any() == true ||
+                    AllDataRemoved;
             }
         }
 

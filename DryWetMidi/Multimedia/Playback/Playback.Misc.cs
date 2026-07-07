@@ -196,7 +196,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// when the current playback has been created from a <see cref="IObservableTimedObjectsCollection"/>
         /// (more info in the <see href="xref:a_playback_dynamic">Dynamic changes</see> article).
         /// </summary>
-        public TempoMap TempoMap { get; }
+        public TempoMap TempoMap { get; private set; }
 
         /// <summary>
         /// Gets or sets the output MIDI endpoint to play MIDI data through.

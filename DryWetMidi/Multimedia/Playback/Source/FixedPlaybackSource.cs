@@ -173,6 +173,11 @@ namespace Melanchall.DryWetMidi.Multimedia
             while (++node < _playbackEventsBuffer.Count);
         }
 
+        public void Clear()
+        {
+            throw new InvalidOperationException("Can't clear fixed playback source.");
+        }
+
         #endregion
     }
 }

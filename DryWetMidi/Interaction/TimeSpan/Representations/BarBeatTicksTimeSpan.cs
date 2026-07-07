@@ -436,9 +436,10 @@ namespace Melanchall.DryWetMidi.Interaction
         {
             ThrowIfArgument.IsNegative(nameof(multiplier), multiplier, "Multiplier is negative.");
 
-            return new BarBeatTicksTimeSpan(MathUtilities.RoundToLong(Bars * multiplier),
-                                       MathUtilities.RoundToLong(Beats * multiplier),
-                                       MathUtilities.RoundToLong(Ticks * multiplier));
+            return new BarBeatTicksTimeSpan(
+                MathUtilities.RoundToLong(Bars * multiplier),
+                MathUtilities.RoundToLong(Beats * multiplier),
+                MathUtilities.RoundToLong(Ticks * multiplier));
         }
 
         /// <summary>
@@ -451,9 +452,10 @@ namespace Melanchall.DryWetMidi.Interaction
         {
             ThrowIfArgument.IsNonpositive(nameof(divisor), divisor, "Divisor is zero or negative.");
 
-            return new BarBeatTicksTimeSpan(MathUtilities.RoundToLong(Bars / divisor),
-                                       MathUtilities.RoundToLong(Beats / divisor),
-                                       MathUtilities.RoundToLong(Ticks / divisor));
+            return new BarBeatTicksTimeSpan(
+                MathUtilities.RoundToLong(Bars / divisor),
+                MathUtilities.RoundToLong(Beats / divisor),
+                MathUtilities.RoundToLong(Ticks / divisor));
         }
 
         /// <summary>

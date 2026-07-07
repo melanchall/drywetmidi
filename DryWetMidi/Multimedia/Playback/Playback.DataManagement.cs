@@ -24,6 +24,8 @@ namespace Melanchall.DryWetMidi.Multimedia
         private readonly object _playbackLockObject = new object();
         private bool _beforeStart = true;
 
+        private TempoMap _initialTempoMap;
+
         #endregion
 
         #region Methods
@@ -46,6 +48,8 @@ namespace Melanchall.DryWetMidi.Multimedia
             if (!(timedObjects is ISortedCollection))
                 playbackEventsSource = timedObjects.OrderBy(t => t.Time);
 
+            _initialTempoMap = tempoMap.Clone();
+
             InitializePlaybackEvents(
                 playbackEventsSource.GetNotesAndTimedEventsLazy(noteDetectionSettings, true),
                 tempoMap,
@@ -63,31 +67,47 @@ namespace Melanchall.DryWetMidi.Multimedia
 
                 var isRunning = IsRunning;
 
-                if (e.AddedObjects != null)
+                if (e.AllDataRemoved)
                 {
-                    foreach (var obj in e.AddedObjects)
-                    {
-                        AddNewTimedObject(obj, false);
-                    }
+                    InterruptActiveNotes();
+                    ClearTrackedData();
+
+                    _playbackSource.Clear();
+                    _notesMetadata.Clear();
+                    _notesMetadataHashSet.Clear();
+                    _noteOnEvents.Clear();
+                    _noteOffEvents.Clear();
+
+                    TempoMap = _initialTempoMap.Clone();
                 }
-
-                if (e.RemovedObjects != null)
+                else
                 {
-                    foreach (var obj in e.RemovedObjects)
+                    if (e.AddedObjects != null)
                     {
-                        RemoveTimedObject(obj, obj.Time);
-                    }
-                }
-
-                if (e.ChangedObjects != null)
-                {
-                    foreach (var changedObject in e.ChangedObjects)
-                    {
-                        var obj = changedObject.Object;
-                        var oldTime = changedObject.OldTime;
-
-                        if (RemoveTimedObject(obj, oldTime))
+                        foreach (var obj in e.AddedObjects)
+                        {
                             AddNewTimedObject(obj, false);
+                        }
+                    }
+
+                    if (e.RemovedObjects != null)
+                    {
+                        foreach (var obj in e.RemovedObjects)
+                        {
+                            RemoveTimedObject(obj, obj.Time);
+                        }
+                    }
+
+                    if (e.ChangedObjects != null)
+                    {
+                        foreach (var changedObject in e.ChangedObjects)
+                        {
+                            var obj = changedObject.Object;
+                            var oldTime = changedObject.OldTime;
+
+                            if (RemoveTimedObject(obj, oldTime))
+                                AddNewTimedObject(obj, false);
+                        }
                     }
                 }
 

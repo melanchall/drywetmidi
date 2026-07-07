@@ -229,6 +229,9 @@ namespace Melanchall.DryWetMidi.Interaction
 
         private void HandleObjectsAdded(IEnumerable<ITimedObject> addedObjects)
         {
+            if (!addedObjects.Any())
+                return;
+
             if (_batchOperationInProgress)
             {
                 foreach (var obj in addedObjects)
@@ -258,6 +261,9 @@ namespace Melanchall.DryWetMidi.Interaction
 
         private void HandleObjectsRemoved(IEnumerable<ITimedObject> removedObjects)
         {
+            if (!removedObjects.Any())
+                return;
+
             if (_batchOperationInProgress)
             {
                 foreach (var obj in removedObjects)
@@ -268,7 +274,10 @@ namespace Melanchall.DryWetMidi.Interaction
                 return;
             }
 
-            var eventArgs = new ObservableTimedObjectsCollectionChangedEventArgs();
+            var eventArgs = new ObservableTimedObjectsCollectionChangedEventArgs
+            {
+                AllDataRemoved = !_objects.Any(),
+            };
 
             var eventArgsRemovedObjects = eventArgs.RemovedObjects;
             if (eventArgsRemovedObjects == null)
@@ -349,6 +358,9 @@ namespace Melanchall.DryWetMidi.Interaction
 
             if (!args.HasData)
                 return;
+
+            if (removedObjects.Any() && !_objects.Any())
+                args.AllDataRemoved = true;
 
             CollectionChanged?.Invoke(this, args);
         }

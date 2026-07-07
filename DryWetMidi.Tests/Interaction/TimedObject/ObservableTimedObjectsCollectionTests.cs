@@ -6,7 +6,6 @@ using NUnit.Framework;
 using NUnit.Framework.Legacy;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.Tracing;
 using System.Linq;
 
 namespace Melanchall.DryWetMidi.Tests.Interaction
@@ -200,6 +199,23 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
+        public void Remove_All()
+        {
+            var initialObjects = new[]
+            {
+                new TimedEvent(new TextEvent("B"), 20),
+                new TimedEvent(new NoteOnEvent()),
+                new TimedEvent(new NoteOffEvent(), 400),
+            };
+
+            Remove(
+                initialObjects,
+                initialObjects.ToArray(),
+                collection => collection.Remove(initialObjects),
+                args => ClassicAssert.IsTrue(args.AllDataRemoved, "All data removed flag is not set."));
+        }
+
+        [Test]
         public void Remove_FromPreFilledCollection_Multiple([Values(0, 1, 2, 3)] int count)
         {
             var initialObjects = new ITimedObject[]
@@ -387,6 +403,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 changedObject.Object,
                 "Invalid changed object.");
             ClassicAssert.AreEqual(23, changedObject.OldTime, "Invalid old time of changed object.");
+
+            ClassicAssert.IsFalse(eventArgs.AllDataRemoved, "All data removed flag is set.");
         }
 
         [Test]
@@ -421,6 +439,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 },
                 addedObjects,
                 "Invalid added objects.");
+
+            ClassicAssert.IsFalse(eventArgs.AllDataRemoved, "All data removed flag is set.");
         }
 
         [Test]
@@ -484,6 +504,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 },
                 addedObjects,
                 "Invalid added objects.");
+
+            ClassicAssert.IsFalse(eventArgs.AllDataRemoved, "All data removed flag is set.");
         }
 
         [Test]
@@ -543,6 +565,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 },
                 addedObjects,
                 "Invalid added objects.");
+
+            ClassicAssert.IsFalse(eventArgs.AllDataRemoved, "All data removed flag is set.");
         }
 
         [Test]
@@ -577,6 +601,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 changedObject.Object,
                 "Invalid changed object");
             ClassicAssert.AreEqual(15, changedObject.OldTime, "Invalid old time of changed object.");
+
+            ClassicAssert.IsFalse(eventArgs.AllDataRemoved, "All data removed flag is set.");
         }
 
         [Test]
@@ -618,10 +644,75 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 changedObject.Object,
                 "Invalid changed object");
             ClassicAssert.AreEqual(15, changedObject.OldTime, "Invalid old time of changed object.");
+
+            ClassicAssert.IsFalse(eventArgs.AllDataRemoved, "All data removed flag is set.");
         }
 
         [Test]
-        public void Clear()
+        public void ChangeCollection_AddAndClear([Values(1, 2, 3)] int iterationsCount)
+        {
+            var collection = new ObservableTimedObjectsCollection();
+
+            var eventsArgs = new List<ObservableTimedObjectsCollectionChangedEventArgs>();
+            collection.CollectionChanged += (_, e) => eventsArgs.Add(e);
+
+            var objectToAdd1 = new TimedEvent(new TextEvent("C"), 15);
+            var objectToAdd2 = new Note((SevenBitNumber)80, 200, 20);
+
+            collection.ChangeCollection(() =>
+            {
+                for (var i = 0; i < iterationsCount; i++)
+                {
+                    collection.Add(objectToAdd1, objectToAdd2);
+                    collection.Clear();
+                }
+            });
+
+            ClassicAssert.AreEqual(0, eventsArgs.Count, "Invalid events args count.");
+        }
+
+        [Test]
+        public void ChangeCollection_ClearAndAdd([Values(1, 2, 3)] int iterationsCount)
+        {
+            var collection = new ObservableTimedObjectsCollection();
+
+            var eventsArgs = new List<ObservableTimedObjectsCollectionChangedEventArgs>();
+            collection.CollectionChanged += (_, e) => eventsArgs.Add(e);
+
+            var objectToAdd1 = new TimedEvent(new TextEvent("C"), 15);
+            var objectToAdd2 = new Note((SevenBitNumber)80, 200, 20);
+
+            collection.ChangeCollection(() =>
+            {
+                for (var i = 0; i < iterationsCount; i++)
+                {
+                    collection.Add(objectToAdd1);
+                    collection.Clear();
+                    collection.Add(objectToAdd2);
+                }
+            });
+
+            ClassicAssert.AreEqual(1, eventsArgs.Count, "Invalid events args count.");
+
+            var eventArgs = eventsArgs.Single();
+
+            CheckCollectionIsNullOrEmpty(eventArgs.RemovedObjects, "There are removed objects.");
+            CheckCollectionIsNullOrEmpty(eventArgs.ChangedObjects, "There are changed objects.");
+
+            var addedObjects = eventArgs.AddedObjects;
+            CollectionAssert.AreEquivalent(
+                new ITimedObject[]
+                {
+                    objectToAdd2,
+                },
+                addedObjects,
+                "Invalid added objects.");
+
+            ClassicAssert.IsFalse(eventArgs.AllDataRemoved, "All data removed flag is set.");
+        }
+
+        [Test]
+        public void Clear_1()
         {
             var objects = new ITimedObject[]
             {
@@ -646,6 +737,21 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
             var removedObjects = eventArgs.RemovedObjects;
             CollectionAssert.AreEqual(objects, removedObjects, "Invalid removed objects.");
+
+            ClassicAssert.IsTrue(eventArgs.AllDataRemoved, "All data removed flag is not set.");
+        }
+
+        [Test]
+        public void Clear_2()
+        {
+            var collection = new ObservableTimedObjectsCollection();
+
+            var eventsArgs = new List<ObservableTimedObjectsCollectionChangedEventArgs>();
+            collection.CollectionChanged += (_, e) => eventsArgs.Add(e);
+
+            collection.Clear();
+
+            ClassicAssert.AreEqual(0, eventsArgs.Count, "Invalid events args count.");
         }
 
         #endregion
@@ -698,7 +804,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         private void Remove(
             IEnumerable<ITimedObject> initialObjects,
             IEnumerable<ITimedObject> oldObjects,
-            Action<ObservableTimedObjectsCollection> remove) => CheckObservableTimedObjectsCollection_FromPreFilled(
+            Action<ObservableTimedObjectsCollection> remove,
+            Action<ObservableTimedObjectsCollectionChangedEventArgs> check = null) => CheckObservableTimedObjectsCollection_FromPreFilled(
                 initialObjects,
                 remove,
                 args =>
@@ -717,6 +824,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     }
                     else
                         CheckCollectionIsNullOrEmpty(eventArgs?.RemovedObjects, "There are removed objects.");
+
+                    check?.Invoke(eventArgs);
                 },
                 collection => CollectionAssert.AreEqual(initialObjects.Except(oldObjects).OrderBy(o => o.Time), collection, "Invalid collection after change."));
 
