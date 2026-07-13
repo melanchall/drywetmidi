@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
 
 namespace Melanchall.DryWetMidi.Interaction
@@ -24,8 +25,8 @@ namespace Melanchall.DryWetMidi.Interaction
 
             var timeSignatureLine = tempoMap.TimeSignatureLine;
 
-            var bars = 0L;
-            var beats = 0L;
+            var bars = 0d;
+            var beats = 0d;
             var ticks = 0L;
 
             var timeSignatureChanges = timeSignatureLine.GetValueChanges(time, endTime);
@@ -122,11 +123,11 @@ namespace Melanchall.DryWetMidi.Interaction
 
             //
 
-            long bars = barBeatTicksTimeSpan.Bars;
-            long beats = barBeatTicksTimeSpan.Beats;
-            long ticks = barBeatTicksTimeSpan.Ticks;
+            var bars = barBeatTicksTimeSpan.Bars;
+            var beats = barBeatTicksTimeSpan.Beats;
+            var ticks = barBeatTicksTimeSpan.Ticks;
 
-            if ((double)bars + beats + ticks > long.MaxValue)
+            if (bars + beats + ticks > long.MaxValue)
                 throw new InvalidOperationException("Time span is too big.");
 
             var startTimeSignature = timeSignatureLine.GetValueAtTime(time);
@@ -164,7 +165,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
                 var currentBars = Math.Min(deltaTime / lastBarLength, bars);
                 bars -= currentBars;
-                lastTime += currentBars * lastBarLength;
+                lastTime += MathUtilities.RoundToLong(currentBars * lastBarLength);
 
                 if (bars == 0)
                     break;
@@ -176,40 +177,40 @@ namespace Melanchall.DryWetMidi.Interaction
             {
                 lastBarLength = BarBeatUtilities.GetBarLength(lastTimeSignature, ticksPerQuarterNote);
                 lastBeatLength = BarBeatUtilities.GetBeatLength(lastTimeSignature, ticksPerQuarterNote);
-                lastTime += bars * lastBarLength;
+                lastTime += MathUtilities.RoundToLong(bars * lastBarLength);
             }
 
             if (beats == beatsBefore && ticks == ticksBefore)
-                return lastTime - time;
+                return MathUtilities.RoundToLong(lastTime - time);
 
             // Balance beats
 
             if (beatsBefore > beats && lastBarLength > 0)
             {
-                lastTime += -lastBarLength + (startTimeSignature.Numerator - beatsBefore) * lastBeatLength;
+                lastTime += MathUtilities.RoundToLong(-lastBarLength + (startTimeSignature.Numerator - beatsBefore) * lastBeatLength);
                 beatsBefore = 0;
             }
 
             if (beatsBefore < beats)
             {
-                lastBeatLength = BarBeatUtilities.GetBeatLength(timeSignatureLine.GetValueAtTime(lastTime), ticksPerQuarterNote);
-                lastTime += (beats - beatsBefore) * lastBeatLength;
+                lastBeatLength = BarBeatUtilities.GetBeatLength(timeSignatureLine.GetValueAtTime(MathUtilities.RoundToLong(lastTime)), ticksPerQuarterNote);
+                lastTime += MathUtilities.RoundToLong((beats - beatsBefore) * lastBeatLength);
             }
 
             // Balance ticks
 
             if (ticksBefore > ticks && lastBeatLength > 0)
             {
-                lastTime += -lastBeatLength + startBeatLength - ticksBefore;
+                lastTime += MathUtilities.RoundToLong(-lastBeatLength + startBeatLength - ticksBefore);
                 ticksBefore = 0;
             }
 
             if (ticksBefore < ticks)
-                lastTime += ticks - ticksBefore;
+                lastTime += MathUtilities.RoundToLong(ticks - ticksBefore);
 
             //
 
-            return lastTime - time;
+            return MathUtilities.RoundToLong(lastTime - time);
         }
 
         #endregion
@@ -220,15 +221,17 @@ namespace Melanchall.DryWetMidi.Interaction
             long totalTicks,
             TimeSignature timeSignature,
             short ticksPerQuarterNote,
-            out long bars,
-            out long beats,
+            out double bars,
+            out double beats,
             out long ticks)
         {
             var barLength = BarBeatUtilities.GetBarLength(timeSignature, ticksPerQuarterNote);
-            bars = Math.DivRem(totalTicks, barLength, out ticks);
+            bars = totalTicks / barLength;
+            ticks = totalTicks % barLength;
 
             var beatLength = BarBeatUtilities.GetBeatLength(timeSignature, ticksPerQuarterNote);
-            beats = Math.DivRem(ticks, beatLength, out ticks);
+            beats = ticks / beatLength;
+            ticks = ticks % beatLength;
         }
 
         #endregion

@@ -187,20 +187,30 @@ Examples:
 
 Following strings can be parsed to `BarBeatTicksTimeSpan`:
 
-`Bars.Beats.Ticks`
+* `Bars.Beats.Ticks`
+* `BarsIntegerPart,BarsFractionalPart.Beats.Ticks`
+* `Bars.BeatsIntegerPart,BeatsFractionalPart.Ticks`
+* `BarsIntegerPart,BarsFractionalPart.BeatsIntegerPart,BeatsFractionalPart.Ticks`
 
 where
 
 * **Bars** is a number of bars.
+* **BarsIntegerPart** is an integer part of fractional bars number.
+* **BarsFractionalPart** is a fractional part of fractional bars number.
 * **Beats** is a number of beats.
+* **BeatsIntegerPart** is an integer part of fractional beats number.
+* **BeatsFractionalPart** is a fractional part of fractional beats number.
 * **Ticks** is a number of MIDI ticks.
 
 Examples:
 
-* `0.0.0` – zero time span  
-* `1.0.0` – 1 bar  
-* `0.10.5` – 10 beats and 5 ticks  
+* `0.0.0` – zero time span
+* `1.0.0` – 1 bar
+* `0.10.5` – 10 beats and 5 ticks
 * `100.20.0` – 100 bars and 20 beats
+* `1,5.0,3.0` – 1.5 bars and 0.3 beats
+* `1.2,7.0` – 1 bar and 2.7 beats
+* `5,5.0.0` – 5.5 bars
 
 ### Bars, beats and fraction
 

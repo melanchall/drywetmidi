@@ -165,8 +165,9 @@ namespace Melanchall.DryWetMidi.Interaction
             ThrowIfArgument.IsNull(nameof(timeSpan1), timeSpan1);
             ThrowIfArgument.IsNull(nameof(timeSpan2), timeSpan2);
 
-            return new BarBeatFractionTimeSpan(timeSpan1.Bars + timeSpan2.Bars,
-                                               timeSpan1.Beats + timeSpan2.Beats);
+            return new BarBeatFractionTimeSpan(
+                timeSpan1.Bars + timeSpan2.Bars,
+                timeSpan1.Beats + timeSpan2.Beats);
         }
 
         /// <summary>
@@ -196,8 +197,9 @@ namespace Melanchall.DryWetMidi.Interaction
             if (timeSpan1 < timeSpan2)
                 throw new ArgumentException("First time span is less than second one.", nameof(timeSpan1));
 
-            return new BarBeatFractionTimeSpan(timeSpan1.Bars - timeSpan2.Bars,
-                                               timeSpan1.Beats - timeSpan2.Beats);
+            return new BarBeatFractionTimeSpan(
+                timeSpan1.Bars - timeSpan2.Bars,
+                timeSpan1.Beats - timeSpan2.Beats);
         }
 
         /// <summary>

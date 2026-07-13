@@ -43,7 +43,12 @@ namespace Melanchall.DryWetMidi.Common
 
         public static string GetNonnegativeDoubleNumberGroup(string groupName)
         {
-            return $@"(?<{groupName}>\d+(.\d+)?)";
+            return $@"(?<{groupName}>\d+(\.\d+)?)";
+        }
+
+        public static string GetNonnegativeDoubleWithCommaNumberGroup(string groupName)
+        {
+            return $@"(?<{groupName}>\d+(,\d+)?)";
         }
 
         public static Match Match(string input, IEnumerable<string> patterns, bool ignoreCase = true)
@@ -73,6 +78,11 @@ namespace Melanchall.DryWetMidi.Common
             return ParseDouble(match, groupName, defaultValue, NonnegativeDoubleNumberStyle, out value);
         }
 
+        public static bool ParseNonnegativeDoubleWithComma(Match match, string groupName, double defaultValue, out double value)
+        {
+            return ParseDouble(match, groupName, defaultValue, NonnegativeDoubleNumberStyle, ",", out value);
+        }
+
         public static bool ParseNonnegativeLong(Match match, string groupName, long defaultValue, out long value)
         {
             value = defaultValue;
@@ -95,6 +105,22 @@ namespace Melanchall.DryWetMidi.Common
 
             var group = match.Groups[groupName];
             return !group.Success || double.TryParse(group.Value, numberStyle, CultureInfo.InvariantCulture, out value);
+        }
+
+        private static bool ParseDouble(
+            Match match,
+            string groupName,
+            double defaultValue,
+            NumberStyles numberStyle,
+            string decimalSeparator,
+            out double value)
+        {
+            value = defaultValue;
+
+            var numberFormat = new NumberFormatInfo { NumberDecimalSeparator = decimalSeparator };
+
+            var group = match.Groups[groupName];
+            return !group.Success || double.TryParse(group.Value, numberStyle, numberFormat, out value);
         }
 
         #endregion

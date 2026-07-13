@@ -290,6 +290,41 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             });
 
         [Test]
+        public void CheckSplitObjectsByPartsNumber_TrackChunk_BarBeatTicks()
+        {
+            var tempoMap = TempoMap.Create(new TicksPerQuarterNoteTimeDivision(480));
+            var partLength = new BarBeatTicksTimeSpan(0.6);
+            var noteNumber = (SevenBitNumber)70;
+
+            CheckSplitObjectsByPartsNumber_TrackChunk(
+                inputObjects: new ITimedObject[]
+                {
+                    new Note(noteNumber).SetLength(3 * MusicalTimeSpan.Whole, tempoMap),
+                },
+                objectType: ObjectType.Note,
+                partsNumber: 5,
+                lengthType: TimeSpanType.BarBeatTicks,
+                expectedObjects: new ITimedObject[]
+                {
+                    new Note(noteNumber)
+                        .SetLength(partLength, tempoMap),
+                    new Note(noteNumber)
+                        .SetTime(partLength, tempoMap)
+                        .SetLength(partLength, tempoMap),
+                    new Note(noteNumber)
+                        .SetTime(partLength.Multiply(2), tempoMap)
+                        .SetLength(partLength, tempoMap),
+                    new Note(noteNumber)
+                        .SetTime(partLength.Multiply(3), tempoMap)
+                        .SetLength(partLength, tempoMap),
+                    new Note(noteNumber)
+                        .SetTime(partLength.Multiply(4), tempoMap)
+                        .SetLength(partLength, tempoMap),
+                },
+                tempoMap: tempoMap);
+        }
+
+        [Test]
         public void CheckSplitObjectsByPartsNumber_TrackChunk_Settings_1() => CheckSplitObjectsByPartsNumber_TrackChunk(
             inputObjects: new ITimedObject[]
             {
@@ -515,10 +550,13 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             int partsNumber,
             TimeSpanType lengthType,
             ICollection<ITimedObject> expectedObjects,
-            ObjectDetectionSettings settings = null)
+            ObjectDetectionSettings settings = null,
+            TempoMap tempoMap = null)
         {
+            tempoMap = tempoMap ?? TempoMap.Default;
+
             var trackChunk = inputObjects.ToTrackChunk();
-            trackChunk.SplitObjectsByPartsNumber(objectType, partsNumber, lengthType, TempoMap.Default, settings);
+            trackChunk.SplitObjectsByPartsNumber(objectType, partsNumber, lengthType, tempoMap, settings);
             MidiAsserts.AreEqual(
                 expectedObjects.ToTrackChunk(),
                 trackChunk,
@@ -526,7 +564,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 "Invalid result track chunk.");
 
             var trackChunks = new[] { inputObjects.ToTrackChunk() };
-            trackChunks.SplitObjectsByPartsNumber(objectType, partsNumber, lengthType, TempoMap.Default, settings);
+            trackChunks.SplitObjectsByPartsNumber(objectType, partsNumber, lengthType, tempoMap, settings);
             MidiAsserts.AreEqual(
                 new[] { expectedObjects.ToTrackChunk() },
                 trackChunks,

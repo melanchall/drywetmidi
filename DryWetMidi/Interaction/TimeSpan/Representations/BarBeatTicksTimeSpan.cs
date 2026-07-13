@@ -10,6 +10,14 @@ namespace Melanchall.DryWetMidi.Interaction
     /// </summary>
     public sealed class BarBeatTicksTimeSpan : ITimeSpan, IComparable<BarBeatTicksTimeSpan>, IEquatable<BarBeatTicksTimeSpan>
     {
+        #region Constants
+
+        private const double Epsilon = 1e-10;
+
+        private static readonly System.Globalization.NumberFormatInfo NumberFormat = new() { NumberDecimalSeparator = "," };
+
+        #endregion
+
         #region Constructor
 
         /// <summary>
@@ -26,7 +34,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="bars">The number of bars.</param>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="bars"/> is negative.</exception>
-        public BarBeatTicksTimeSpan(long bars)
+        public BarBeatTicksTimeSpan(double bars)
             : this(bars, 0)
         {
         }
@@ -48,7 +56,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </item>
         /// </list>
         /// </exception>
-        public BarBeatTicksTimeSpan(long bars, long beats)
+        public BarBeatTicksTimeSpan(double bars, double beats)
             : this(bars, beats, 0)
         {
         }
@@ -74,7 +82,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </item>
         /// </list>
         /// </exception>
-        public BarBeatTicksTimeSpan(long bars, long beats, long ticks)
+        public BarBeatTicksTimeSpan(double bars, double beats, long ticks)
         {
             ThrowIfArgument.IsNegative(nameof(bars), bars, "Bars number is negative.");
             ThrowIfArgument.IsNegative(nameof(beats), beats, "Beats number is negative.");
@@ -92,12 +100,12 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <summary>
         /// Gets the bars component of the time represented by the current <see cref="BarBeatTicksTimeSpan"/>.
         /// </summary>
-        public long Bars { get; }
+        public double Bars { get; }
 
         /// <summary>
         /// Gets the beats component of the time represented by the current <see cref="BarBeatTicksTimeSpan"/>.
         /// </summary>
-        public long Beats { get; }
+        public double Beats { get; }
 
         /// <summary>
         /// Gets the ticks component of the time represented by the current <see cref="BarBeatTicksTimeSpan"/>.
@@ -190,9 +198,10 @@ namespace Melanchall.DryWetMidi.Interaction
             ThrowIfArgument.IsNull(nameof(timeSpan1), timeSpan1);
             ThrowIfArgument.IsNull(nameof(timeSpan2), timeSpan2);
 
-            return new BarBeatTicksTimeSpan(timeSpan1.Bars + timeSpan2.Bars,
-                                       timeSpan1.Beats + timeSpan2.Beats,
-                                       timeSpan1.Ticks + timeSpan2.Ticks);
+            return new BarBeatTicksTimeSpan(
+                timeSpan1.Bars + timeSpan2.Bars,
+                timeSpan1.Beats + timeSpan2.Beats,
+                timeSpan1.Ticks + timeSpan2.Ticks);
         }
 
         /// <summary>
@@ -222,9 +231,10 @@ namespace Melanchall.DryWetMidi.Interaction
             if (timeSpan1 < timeSpan2)
                 throw new ArgumentException("First time span is less than second one.", nameof(timeSpan1));
 
-            return new BarBeatTicksTimeSpan(timeSpan1.Bars - timeSpan2.Bars,
-                                       timeSpan1.Beats - timeSpan2.Beats,
-                                       timeSpan1.Ticks - timeSpan2.Ticks);
+            return new BarBeatTicksTimeSpan(
+                timeSpan1.Bars - timeSpan2.Bars,
+                timeSpan1.Beats - timeSpan2.Beats,
+                timeSpan1.Ticks - timeSpan2.Ticks);
         }
 
         /// <summary>
@@ -369,7 +379,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <returns>A string that represents the current object.</returns>
         public override string ToString()
         {
-            return $"{Bars}.{Beats}.{Ticks}";
+            return $"{Bars.ToString(NumberFormat)}.{Beats.ToString(NumberFormat)}.{Ticks}";
         }
 
         #endregion
@@ -437,8 +447,8 @@ namespace Melanchall.DryWetMidi.Interaction
             ThrowIfArgument.IsNegative(nameof(multiplier), multiplier, "Multiplier is negative.");
 
             return new BarBeatTicksTimeSpan(
-                MathUtilities.RoundToLong(Bars * multiplier),
-                MathUtilities.RoundToLong(Beats * multiplier),
+                Bars * multiplier,
+                Beats * multiplier,
                 MathUtilities.RoundToLong(Ticks * multiplier));
         }
 
@@ -453,8 +463,8 @@ namespace Melanchall.DryWetMidi.Interaction
             ThrowIfArgument.IsNonpositive(nameof(divisor), divisor, "Divisor is zero or negative.");
 
             return new BarBeatTicksTimeSpan(
-                MathUtilities.RoundToLong(Bars / divisor),
-                MathUtilities.RoundToLong(Beats / divisor),
+                Bars / divisor,
+                Beats / divisor,
                 MathUtilities.RoundToLong(Ticks / divisor));
         }
 
@@ -546,7 +556,7 @@ namespace Melanchall.DryWetMidi.Interaction
             var beatsDelta = Beats - other.Beats;
             var ticksDelta = Ticks - other.Ticks;
 
-            return Math.Sign(barsDelta != 0 ? barsDelta : (beatsDelta != 0 ? beatsDelta : ticksDelta));
+            return Math.Sign(Math.Abs(barsDelta) >= Epsilon ? barsDelta : (Math.Abs(beatsDelta) >= Epsilon ? beatsDelta : ticksDelta));
         }
 
         #endregion
@@ -566,8 +576,8 @@ namespace Melanchall.DryWetMidi.Interaction
             if (ReferenceEquals(null, other))
                 return false;
 
-            return Bars == other.Bars &&
-                   Beats == other.Beats &&
+            return Math.Abs(Bars - other.Bars) < Epsilon &&
+                   Math.Abs(Beats - other.Beats) < Epsilon &&
                    Ticks == other.Ticks;
         }
 

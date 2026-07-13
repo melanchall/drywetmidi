@@ -381,8 +381,9 @@ namespace Melanchall.DryWetMidi.Interaction
             ThrowIfArgument.IsNull(nameof(timeSpan), timeSpan);
             ThrowIfArgument.IsNegative(nameof(number), number, "Number is negative.");
 
-            return new MusicalTimeSpan(timeSpan.Numerator * number,
-                                       timeSpan.Denominator);
+            return new MusicalTimeSpan(
+                timeSpan.Numerator * number,
+                timeSpan.Denominator);
         }
 
         /// <summary>
