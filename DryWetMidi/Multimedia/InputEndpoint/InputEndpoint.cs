@@ -1,11 +1,12 @@
-﻿using System;
+﻿using Melanchall.DryWetMidi.Common;
+using Melanchall.DryWetMidi.Configuration;
+using Melanchall.DryWetMidi.Core;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
-using Melanchall.DryWetMidi.Common;
-using Melanchall.DryWetMidi.Core;
 
 namespace Melanchall.DryWetMidi.Multimedia
 {
@@ -314,7 +315,20 @@ namespace Melanchall.DryWetMidi.Multimedia
             NativeApiUtilities.EnsureOsIsSupported();
             EnsureSessionIsCreated();
 
-            return MidiEndpointsManager.Instance.GetAllInputEndpoints();
+            var result = InputEndpointApi.Api_GetEndpointsInfo(MidiConfiguration.GetConfigurationHandle(), MidiDevicesSession.GetSessionHandle(), out var endpointsInfo, out var endpointsCount, out var errorCode);
+            NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
+
+            var endpoints = new InputEndpoint[endpointsCount];
+
+            for (int i = 0; i < endpointsCount; i++)
+            {
+                var info = Marshal.ReadIntPtr(endpointsInfo, i * IntPtr.Size);
+                endpoints[i] = new InputEndpoint(info, MidiEndpoint.CreationContext.User);
+            }
+
+            InputEndpointApi.Api_FreeEndpointsInfo(endpointsInfo, endpointsCount);
+
+            return endpoints;
         }
 
         /// <summary>
@@ -341,7 +355,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             NativeApiUtilities.EnsureOsIsSupported();
             EnsureSessionIsCreated();
 
-            var endpoint = MidiEndpointsManager.Instance.GetInputEndpointByName(name);
+            var endpoint = GetAll().FirstOrDefault(d => d.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
             if (endpoint == null)
                 throw new ArgumentException($"There is no MIDI input endpoint '{name}'.", nameof(name));
 

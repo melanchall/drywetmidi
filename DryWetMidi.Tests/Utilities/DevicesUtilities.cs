@@ -29,6 +29,14 @@ namespace Melanchall.DryWetMidi.Tests.Utilities
             return "VIRT_" + new string(name);
         }
 
+        public static void WaitVirtualDeviceCreated(string name)
+        {
+            var inputEndpoint = GetInputEndpoint(name);
+            var outputEndpoint = GetOutputEndpoint(name);
+
+            ClassicAssert.IsTrue(inputEndpoint != null && outputEndpoint != null, $"Virtual device '{name}' was not created.");
+        }
+
         public static InputEndpoint GetInputEndpoint(string name)
         {
             var inputEndpoint = default(InputEndpoint);
@@ -36,8 +44,15 @@ namespace Melanchall.DryWetMidi.Tests.Utilities
             var success = WaitOperations.Wait(
                 () =>
                 {
-                    inputEndpoint = InputEndpoint.GetByName(name);
-                    return inputEndpoint != null;
+                    try
+                    {
+                        inputEndpoint = InputEndpoint.GetByName(name);
+                        return inputEndpoint != null;
+                    }
+                    catch (Exception)
+                    {
+                        return false;
+                    }
                 },
                 EndpointsSearchTimeout);
 
@@ -53,8 +68,15 @@ namespace Melanchall.DryWetMidi.Tests.Utilities
             var success = WaitOperations.Wait(
                 () =>
                 {
-                    outputEndpoint = OutputEndpoint.GetByName(name);
-                    return outputEndpoint != null;
+                    try
+                    {
+                        outputEndpoint = OutputEndpoint.GetByName(name);
+                        return outputEndpoint != null;
+                    }
+                    catch
+                    {
+                        return false;
+                    }
                 },
                 EndpointsSearchTimeout);
 

@@ -494,6 +494,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     setupInputEndpoint?.Invoke(inputEndpoint);
 
                     inputEndpoint.StartEventsListening();
+                    SendReceiveUtilities.WaitEventsReceivingStarted();
+
                     outputEndpoint.PrepareForEventsSending();
                     stopwatch.Start();
 

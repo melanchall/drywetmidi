@@ -21,6 +21,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
         #region Methods
 
+        public static void WaitEventsReceivingStarted()
+        {
+            WaitOperations.Wait(TimeSpan.FromSeconds(2));
+        }
+
         public static void CheckEventsReceiving(
             TimestampedEvent[] eventsToSend,
             IOutputEndpoint outputEndpoint,

@@ -151,6 +151,20 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// </summary>
         /// <param name="name">The name of a virtual device to create.</param>
         /// <returns>An instance of the <see cref="VirtualDevice"/> with name of <paramref name="name"/>.</returns>
+        /// <remarks>
+        /// <para>
+        /// Note that if you try to get <see cref="Multimedia.InputEndpoint"/> or <see cref="Multimedia.OutputEndpoint"/>
+        /// with <paramref name="name"/> (for example, via <see cref="InputEndpoint.GetByName(string)"/>)
+        /// immediately after a virtual device is created, it may not be available yet. So just poll
+        /// endpoints for a couple of seconds until they become available. At now, such behavior may be observed on
+        /// modern Windows 11 with Windows MIDI Services. But it's recommended to not think endpoints can be
+        /// queried immediately.
+        /// </para>
+        /// <para>
+        /// But <see cref="InputEndpoint"/> and <see cref="OutputEndpoint"/> properties can be used right after
+        /// a virtual device is created and they will be available immediately.
+        /// </para>
+        /// </remarks>
         /// <exception cref="ArgumentException"><paramref name="name"/> is <c>null</c> or contains white-spaces only.</exception>
         /// <exception cref="NativeApiException">An error occurred on device creation.</exception>
         public static VirtualDevice Create(string name)

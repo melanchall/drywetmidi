@@ -18,17 +18,6 @@ namespace Melanchall.DryWetMidi.Multimedia
             API_TYPE_MAC = 1
         }
 
-        public enum WMSSERVICECHECKRESULT
-        {
-            WMSSERVICECHECKRESULT_OK = 0,
-            WMSSERVICECHECKRESULT_ERROR_OPENSCMANAGER = 1,
-            WMSSERVICECHECKRESULT_ERROR_OPENSERVICE = 2,
-            WMSSERVICECHECKRESULT_ERROR_QUERYSERVICECONFIG_1 = 3,
-            WMSSERVICECHECKRESULT_ERROR_ALLOCSERVICECONFIG = 4,
-            WMSSERVICECHECKRESULT_ERROR_QUERYSERVICECONFIG_2 = 5,
-            WMSSERVICECHECKRESULT_ERROR_SERVICEDISABLED = 6,
-        }
-
         #endregion
 
         #region Extern functions
@@ -41,11 +30,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         [LibraryImport(NativeApi.LibraryName)]
         [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
         private static partial void GetNativeEnvironmentInfo_Win(
-            [MarshalAs(UnmanagedType.U1)] out bool comInitializationResult,
-            [MarshalAs(UnmanagedType.U1)] out bool registryCheckResult,
-            [MarshalAs(UnmanagedType.U1)] out bool comCheckResult,
-            out WMSSERVICECHECKRESULT serviceCheckResult,
-            [MarshalAs(UnmanagedType.U1)] out bool sdkCheckResult);
+            [MarshalAs(UnmanagedType.U1)] out bool wmsAvailable);
 
         [LibraryImport(NativeApi.LibraryName)]
         [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
@@ -56,11 +41,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
         private static extern void GetNativeEnvironmentInfo_Win(
-            [MarshalAs(UnmanagedType.U1)] out bool comInitializationResult,
-            [MarshalAs(UnmanagedType.U1)] out bool registryCheckResult,
-            [MarshalAs(UnmanagedType.U1)] out bool comCheckResult,
-            out WMSSERVICECHECKRESULT serviceCheckResult,
-            [MarshalAs(UnmanagedType.U1)] out bool sdkCheckResult);
+            [MarshalAs(UnmanagedType.U1)] out bool wmsAvailable);
 
         [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
         private static extern void FreeBuffer(IntPtr buffer);
@@ -76,18 +57,10 @@ namespace Melanchall.DryWetMidi.Multimedia
         }
 
         public static void Api_GetNativeEnvironmentInfo_Win(
-            out bool comInitializationResult,
-            out bool registryCheckResult,
-            out bool comCheckResult,
-            out WMSSERVICECHECKRESULT serviceCheckResult,
-            out bool sdkCheckResult)
+            out bool wmsAvailable)
         {
             GetNativeEnvironmentInfo_Win(
-                out comInitializationResult,
-                out registryCheckResult,
-                out comCheckResult,
-                out serviceCheckResult,
-                out sdkCheckResult);
+                out wmsAvailable);
         }
 
         public static void Api_FreeBuffer(IntPtr buffer)

@@ -25,16 +25,31 @@ namespace Melanchall.DryWetMidi.Multimedia
             VIRTUAL_OPENRESULT_FAILED = 3,
             VIRTUAL_OPENRESULT_FAILEDGETINPUTDEVICEINFO = 4,
             VIRTUAL_OPENRESULT_FAILEDGETOUTPUTDEVICEINFO = 5,
+
             [NativeApi.NativeErrorType(NativeApi.NativeErrorType.WmsError)]
             VIRTUAL_OPENRESULT_WMSERROR = 6,
             [NativeApi.NativeErrorType(NativeApi.NativeErrorType.WmsError)]
-            VIRTUAL_OPENRESULT_INVALIDNAME = 7,
+            VIRTUAL_OPENRESULT_CLIENTAPIEXCEPTION = 7,
             [NativeApi.NativeErrorType(NativeApi.NativeErrorType.WmsError)]
             VIRTUAL_OPENRESULT_INVALIDUNIQUEID = 8,
             [NativeApi.NativeErrorType(NativeApi.NativeErrorType.WmsError)]
-            VIRTUAL_OPENRESULT_NAMEINUSE = 9,
+            VIRTUAL_OPENRESULT_DUPLICATEENDPOINTNAME = 9,
             [NativeApi.NativeErrorType(NativeApi.NativeErrorType.WmsError)]
-            VIRTUAL_OPENRESULT_UNIQUEIDINUSE = 10,
+            VIRTUAL_OPENRESULT_DUPLICATEUNIQUEID = 10,
+            [NativeApi.NativeErrorType(NativeApi.NativeErrorType.WmsError)]
+            VIRTUAL_OPENRESULT_ENDPOINTCREATIONFAILED = 11,
+            [NativeApi.NativeErrorType(NativeApi.NativeErrorType.WmsError)]
+            VIRTUAL_OPENRESULT_ENDPOINTNOTFOUND = 12,
+            [NativeApi.NativeErrorType(NativeApi.NativeErrorType.WmsError)]
+            VIRTUAL_OPENRESULT_INVALIDARGUMENT = 13,
+            [NativeApi.NativeErrorType(NativeApi.NativeErrorType.WmsError)]
+            VIRTUAL_OPENRESULT_INVALIDJSON = 14,
+            [NativeApi.NativeErrorType(NativeApi.NativeErrorType.WmsError)]
+            VIRTUAL_OPENRESULT_INVALIDORMISSINGASSOCIATIONID = 15,
+            [NativeApi.NativeErrorType(NativeApi.NativeErrorType.WmsError)]
+            VIRTUAL_OPENRESULT_INVALIDORMISSINGENDPOINTNAME = 16,
+            [NativeApi.NativeErrorType(NativeApi.NativeErrorType.WmsError)]
+            VIRTUAL_OPENRESULT_UNRECOGNIZEDCOMMAND = 17,
 
             [NativeApi.NativeErrorType(NativeApi.NativeErrorType.NotPermitted)]
             VIRTUAL_OPENRESULT_CREATESOURCE_NOTPERMITTED = 101,

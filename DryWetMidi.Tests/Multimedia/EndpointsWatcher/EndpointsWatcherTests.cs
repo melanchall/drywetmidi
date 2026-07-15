@@ -225,7 +225,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
             using (var virtualDevice = VirtualDevice.Create(deviceName))
             {
-                Thread.Sleep(5000);
+                DevicesUtilities.WaitVirtualDeviceCreated(deviceName);
             }
 
             var removed1 = WaitOperations.Wait(() => removedEndpoints1.Count >= 2, timeout);
@@ -244,13 +244,12 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
             EndpointsWatcher.Instance.EndpointRemoved -= removedHandler1;
 
-            Thread.Sleep(5000);
             removedEndpoints1.Clear();
             removedEndpoints2.Clear();
 
             using (var virtualDevice = VirtualDevice.Create(deviceName))
             {
-                Thread.Sleep(5000);
+                DevicesUtilities.WaitVirtualDeviceCreated(deviceName);
             }
 
             removed1 = WaitOperations.Wait(() => removedEndpoints1.Count > 0, timeout);
@@ -269,13 +268,12 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
             EndpointsWatcher.Instance.EndpointRemoved -= removedHandler2;
 
-            Thread.Sleep(5000);
             removedEndpoints1.Clear();
             removedEndpoints2.Clear();
 
             using (var virtualDevice = VirtualDevice.Create(deviceName))
             {
-                Thread.Sleep(5000);
+                DevicesUtilities.WaitVirtualDeviceCreated(deviceName);
             }
 
             removed1 = WaitOperations.Wait(() => removedEndpoints1.Count > 0, timeout);

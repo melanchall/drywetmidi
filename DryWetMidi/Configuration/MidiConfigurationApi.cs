@@ -63,11 +63,6 @@ namespace Melanchall.DryWetMidi.Configuration
         [LibraryImport(NativeApi.LibraryName)]
         [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
         [return: MarshalAs(UnmanagedType.U1)]
-        private static partial bool IsDevicesCachingRequired(MidiConfigurationHandle configuration);
-
-        [LibraryImport(NativeApi.LibraryName)]
-        [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-        [return: MarshalAs(UnmanagedType.U1)]
         private static partial bool IsDevicesWatcherApiAvailable(MidiConfigurationHandle configuration);
 
         [LibraryImport(NativeApi.LibraryName)]
@@ -94,10 +89,6 @@ namespace Melanchall.DryWetMidi.Configuration
         [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool IsVirtualDeviceApiAvailable(MidiConfigurationHandle configuration);
-
-        [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
-        [return: MarshalAs(UnmanagedType.U1)]
-        private static extern bool IsDevicesCachingRequired(MidiConfigurationHandle configuration);
 
         [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
         [return: MarshalAs(UnmanagedType.U1)]
@@ -143,11 +134,6 @@ namespace Melanchall.DryWetMidi.Configuration
         public static bool Api_IsVirtualDeviceApiAvailable(MidiConfigurationHandle configuration)
         {
             return IsVirtualDeviceApiAvailable(configuration);
-        }
-
-        public static bool Api_IsDevicesCachingRequired(MidiConfigurationHandle configuration)
-        {
-            return IsDevicesCachingRequired(configuration);
         }
 
         public static bool Api_IsDevicesWatcherApiAvailable(MidiConfigurationHandle configuration)

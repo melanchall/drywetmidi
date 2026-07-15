@@ -171,13 +171,16 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 {
                     inputB.EventReceived += (_, e) => receivedEventsB.Add(new TimestampedEvent(e.Event, stopwatch.Elapsed));
                     inputB.StartEventsListening();
+                    SendReceiveUtilities.WaitEventsReceivingStarted();
 
                     inputC.EventReceived += (_, e) => receivedEventsC.Add(new TimestampedEvent(e.Event, stopwatch.Elapsed));
                     inputC.StartEventsListening();
+                    SendReceiveUtilities.WaitEventsReceivingStarted();
 
                     using (var inputA = InputEndpoint.GetByName(MidiEndpoints.A))
                     {
                         inputA.StartEventsListening();
+                        SendReceiveUtilities.WaitEventsReceivingStarted();
 
                         using (var outputB = TestDeviceManager.GetOutputEndpoint(MidiEndpoints.B))
                         using (var outputC = TestDeviceManager.GetOutputEndpoint(MidiEndpoints.C))

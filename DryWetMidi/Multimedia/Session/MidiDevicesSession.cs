@@ -53,7 +53,6 @@ namespace Melanchall.DryWetMidi.Multimedia
                         NativeApiUtilities.HandleEndpointNativeApiResult(openResult, errorCode);
 
                         _handle = new MidiDevicesSessionHandle(rawHandle);
-                        _handle.IsDevicesCachingRequired = MidiConfigurationApi.Api_IsDevicesCachingRequired(MidiConfiguration.GetConfigurationHandle());
 
 #if TEST
                         _handle.TestCheckpoints = TestCheckpoints;

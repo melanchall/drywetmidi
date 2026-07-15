@@ -15,8 +15,6 @@ namespace Melanchall.DryWetMidi.Multimedia
         {
         }
 
-        public bool IsDevicesCachingRequired { get; set; }
-
         protected override bool ReleaseHandle()
         {
 #if TEST

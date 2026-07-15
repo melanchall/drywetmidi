@@ -1,4 +1,5 @@
 ﻿using Melanchall.DryWetMidi.Common;
+using Melanchall.DryWetMidi.Configuration;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Multimedia;
 using Melanchall.DryWetMidi.Tests.Attributes;
@@ -301,6 +302,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 
                 outputEndpoint.PrepareForEventsSending();
                 inputEndpoint.StartEventsListening();
+                SendReceiveUtilities.WaitEventsReceivingStarted();
 
                 outputEndpoint.SendEvent(new NoteOnEvent());
                 var eventReceived = WaitOperations.Wait(() => receivedEventsCount == 1, SendReceiveUtilities.MaximumEventSendReceiveDelay);
@@ -355,6 +357,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
                 outputEndpoint.PrepareForEventsSending();
                 inputEndpoint.StartEventsListening();
+                SendReceiveUtilities.WaitEventsReceivingStarted();
 
                 outputEndpoint.SendEvent(new NoteOnEvent());
                 success = WaitOperations.Wait(() => receivedEventsCount > 0, timeout);
@@ -369,12 +372,15 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 ClassicAssert.AreEqual(1, receivedEventsCount, "Received events count is invalid after first stop.");
 
                 inputEndpoint.StartEventsListening();
+                SendReceiveUtilities.WaitEventsReceivingStarted();
+
                 outputEndpoint.SendEvent(new NoteOnEvent());
                 success = WaitOperations.Wait(() => receivedEventsCount > 1, timeout);
                 ClassicAssert.IsTrue(success, "Event was not received after second start.");
                 ClassicAssert.AreEqual(2, receivedEventsCount, "Received events count is invalid after second start.");
 
                 inputEndpoint.StopEventsListening();
+
                 outputEndpoint.SendEvent(new NoteOnEvent());
                 success = WaitOperations.Wait(() => receivedEventsCount > 2, timeout);
                 ClassicAssert.IsFalse(success, "Event received after second stop.");
@@ -479,14 +485,10 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 virtualDevices[i] = VirtualDevice.Create(previousNames[i]);
             }
 
-            Thread.Sleep(2000);
-
             var lastVirtualDeviceName = DevicesUtilities.GetVirtualDeviceName();
 
             using (var lastVirtualDevice = VirtualDevice.Create(lastVirtualDeviceName))
             {
-                Thread.Sleep(2000);
-
                 using (var inputEndpoint = DevicesUtilities.GetInputEndpoint(lastVirtualDeviceName))
                 {
                     for (var i = 0; i < previousCount; i++)
@@ -672,6 +674,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
                 outputEndpoint.PrepareForEventsSending();
                 inputEndpoint.StartEventsListening();
+                SendReceiveUtilities.WaitEventsReceivingStarted();
 
                 foreach (var packet in packets)
                 {

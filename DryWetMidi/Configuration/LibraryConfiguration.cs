@@ -114,7 +114,7 @@ namespace Melanchall.DryWetMidi.Configuration
                 return false;
 
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-                return UseWindowsMidiServices && AreWindowsMidiServicesAvailable(out _, out _, out _, out _, out _);
+                return UseWindowsMidiServices && AreWindowsMidiServicesAvailable();
 
             return true;
         }
@@ -142,59 +142,24 @@ namespace Melanchall.DryWetMidi.Configuration
                 AddWindowsNativeBackendInfo(resultLines);
         }
 
-        private static bool AreWindowsMidiServicesAvailable(
-            out bool comInitializationResult,
-            out bool registryCheckResult,
-            out bool comCheckResult,
-            out CommonApi.WMSSERVICECHECKRESULT serviceCheckResult,
-            out bool sdkCheckResult)
+        private static bool AreWindowsMidiServicesAvailable()
         {
             CommonApi.Api_GetNativeEnvironmentInfo_Win(
-                out comInitializationResult,
-                out registryCheckResult,
-                out comCheckResult,
-                out serviceCheckResult,
-                out sdkCheckResult);
+                out var wmsAvailable);
 
-            return
-                comInitializationResult &&
-                registryCheckResult &&
-                comCheckResult &&
-                serviceCheckResult == CommonApi.WMSSERVICECHECKRESULT.WMSSERVICECHECKRESULT_OK &&
-                sdkCheckResult;
+            return wmsAvailable;
         }
 
         private static void AddWindowsNativeBackendInfo(List<string> resultLines)
         {
-            var wmsAvailable = AreWindowsMidiServicesAvailable(
-                out var comInitializationResult,
-                out var registryCheckResult,
-                out var comCheckResult,
-                out var serviceCheckResult,
-                out var sdkCheckResult);
-
+            var wmsAvailable = AreWindowsMidiServicesAvailable();
             if (wmsAvailable)
             {
                 resultLines.Add("- Windows MIDI Services are available and fully functional");
                 return;
             }
 
-            resultLines.Add("- Windows MIDI Services are not available; components status:");
-
-            if (!comInitializationResult)
-            {
-                resultLines.Add($"-- COM failed to initialize");
-            }
-            else
-            {
-                resultLines.AddRange(new[]
-                {
-                    $"-- registry: {registryCheckResult}",
-                    $"-- COM: {comCheckResult}",
-                    $"-- service: {serviceCheckResult}",
-                    $"-- SDK: {sdkCheckResult}",
-                });
-            }
+            resultLines.Add("- Windows MIDI Services are not available");
         }
 #endif
 

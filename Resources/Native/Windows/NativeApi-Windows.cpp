@@ -35,15 +35,17 @@
 #include <winrt/Windows.Foundation.h>
 #include <winrt/Windows.Foundation.Collections.h>
 #include <winrt/Windows.Devices.Enumeration.h>
-#include <winrt/Microsoft.Windows.Devices.Midi2.h>
-namespace midi2 = winrt::Microsoft::Windows::Devices::Midi2;
-#include <winrt/Microsoft.Windows.Devices.Midi2.Endpoints.BasicLoopback.h>
-namespace basicLoopback = winrt::Microsoft::Windows::Devices::Midi2::Endpoints::BasicLoopback;
+#include <winrt/Windows.Devices.Midi2.h>
+namespace midi2 = winrt::Windows::Devices::Midi2;
+#include <winrt/Windows.Devices.Midi2.Enumeration.h>
+#include <winrt/Windows.Devices.Midi2.Enumeration.Legacy.h>
+#include <winrt/Windows.Devices.Midi2.Transports.BasicLoopback.h>
+namespace basicLoopback = winrt::Windows::Devices::Midi2::Transports::BasicLoopback;
 
-#include "winmidi/init/Microsoft.Windows.Devices.Midi2.Initialization.hpp"
-namespace init = Microsoft::Windows::Devices::Midi2::Initialization;
+//#include "winmidi/init/Windows.Devices.Midi2.Initialization.hpp"
+//namespace init = Windows::Devices::Midi2::Initialization;
 
-#include "winmidi/init/WindowsMidiServicesVersion.h"
+//#include "winmidi/init/WindowsMidiServicesVersion.h"
 
 #include "../Common/NativeApi-Constants.h"
 
@@ -106,127 +108,35 @@ const wchar_t* FormatError(const std::exception& e, const wchar_t* label)
     return ToWide(e.what(), label);
 }
 
-typedef int WMSSERVICECHECKRESULT;
-
-#define WMSSERVICECHECKRESULT_OK 0
-#define WMSSERVICECHECKRESULT_ERROR_OPENSCMANAGER 1
-#define WMSSERVICECHECKRESULT_ERROR_OPENSERVICE 2
-#define WMSSERVICECHECKRESULT_ERROR_QUERYSERVICECONFIG_1 3
-#define WMSSERVICECHECKRESULT_ERROR_ALLOCSERVICECONFIG 4
-#define WMSSERVICECHECKRESULT_ERROR_QUERYSERVICECONFIG_2 5
-#define WMSSERVICECHECKRESULT_ERROR_SERVICEDISABLED 6
-
 API_EXPORT API_TYPE API_CALL GetApiType()
 {
     return API_TYPE_WIN;
 }
 
-struct __declspec(uuid("2BA15E4E-5417-4A66-85B8-2B2260EFBC84")) MidiSrvTransportPlaceholder : ::IUnknown
-{};
-
-struct __declspec(uuid("c3263827-c3b0-bdbd-2500-ce63a3f3f2c3")) MidiClientInitializer : ::IUnknown
-{};
-
-char CheckWmsAvailability_Registry()
-{
-    std::wstring keyPath = L"SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Drivers32";
-
-    for (int i = 0; i < 10; i++)
-    {
-        std::wstring valueName = (i == 0) ? L"midi" : L"midi" + std::to_wstring(i);
-
-        auto val = wil::reg::try_get_value_string(HKEY_LOCAL_MACHINE, keyPath.c_str(), valueName.c_str());
-
-        if (val.has_value() && val.value() == L"wdmaud2.drv")
-        {
-            return true;
-        }
-    }
-
-    return false;
-}
-
-char CheckWmsAvailability_Com()
-{
-    wil::com_ptr_nothrow<IUnknown> servicePointer;
-
-    HRESULT hr = CoCreateInstance(
-        __uuidof(MidiSrvTransportPlaceholder),
-        nullptr,
-        CLSCTX_INPROC_SERVER,
-        IID_PPV_ARGS(&servicePointer)
-    );
-
-    return SUCCEEDED(hr);
-}
-
-WMSSERVICECHECKRESULT CheckWmsAvailability_Service()
-{
-    SC_HANDLE hSCManager = OpenSCManagerW(nullptr, nullptr, SC_MANAGER_CONNECT);
-    if (!hSCManager)
-        return WMSSERVICECHECKRESULT_ERROR_OPENSCMANAGER;
-
-    auto closeSCM = wil::scope_exit([&] { CloseServiceHandle(hSCManager); });
-
-    SC_HANDLE hService = OpenServiceW(hSCManager, L"midisrv", SERVICE_QUERY_STATUS | SERVICE_QUERY_CONFIG);
-    if (!hService)
-        return WMSSERVICECHECKRESULT_ERROR_OPENSERVICE;
-
-    auto closeSvc = wil::scope_exit([&] { CloseServiceHandle(hService); });
-
-    DWORD bytesNeeded = 0;
-    BOOL ok = QueryServiceConfigW(hService, nullptr, 0, &bytesNeeded);
-    if (!ok && (GetLastError() != ERROR_INSUFFICIENT_BUFFER || bytesNeeded == 0))
-        return WMSSERVICECHECKRESULT_ERROR_QUERYSERVICECONFIG_1;
-
-    LPQUERY_SERVICE_CONFIGW config = static_cast<LPQUERY_SERVICE_CONFIGW>(LocalAlloc(LPTR, bytesNeeded));
-    if (!config)
-        return WMSSERVICECHECKRESULT_ERROR_ALLOCSERVICECONFIG;
-
-    auto freeConfig = wil::scope_exit([&] { LocalFree(config); });
-
-    if (!QueryServiceConfigW(hService, config, bytesNeeded, &bytesNeeded))
-        return WMSSERVICECHECKRESULT_ERROR_QUERYSERVICECONFIG_2;
-
-    if (config->dwStartType == SERVICE_DISABLED)
-        return WMSSERVICECHECKRESULT_ERROR_SERVICEDISABLED;
-
-    return WMSSERVICECHECKRESULT_OK;
-}
-
-char CheckWmsAvailability_Sdk()
-{
-    wil::com_ptr_nothrow<IUnknown> initPointer;
-
-    HRESULT hr = CoCreateInstance(
-        __uuidof(MidiClientInitializer),
-        nullptr,
-        CLSCTX_INPROC_SERVER,
-        IID_PPV_ARGS(&initPointer)
-    );
-
-    return SUCCEEDED(hr);
-}
-
 API_EXPORT void API_CALL GetNativeEnvironmentInfo_Win(
-    char* comInitializationResult,
-    char* registryCheckResult,
-    char* comCheckResult,
-    WMSSERVICECHECKRESULT* serviceCheckResult,
-    char* sdkCheckResult)
+    bool* wmsAvailable)
 {
-    HRESULT hrInit = CoInitializeEx(nullptr, COINIT_MULTITHREADED);
+    winrt::init_apartment();
     
-    *comInitializationResult = SUCCEEDED(hrInit);
-    if (!*comInitializationResult)
-        return;
-    
-    *registryCheckResult = CheckWmsAvailability_Registry();
-    *comCheckResult = CheckWmsAvailability_Com();
-    *serviceCheckResult = CheckWmsAvailability_Service();
-    *sdkCheckResult = CheckWmsAvailability_Sdk();
+    try
+    {
+        *wmsAvailable = midi2::MidiApi::EnsureServiceAvailable();
+    }
+    catch (...)
+    {
+        *wmsAvailable = false;
+    }
+}
 
-    CoUninitialize();
+int GetPortNumber(const midi2::Enumeration::Legacy::MidiLegacyPortDeviceInformation info)
+{
+    if (info.Flow() == midi2::Enumeration::Midi1PortFlow::MidiMessageSource)
+        return info.Number() - 1;
+    else if (info.Flow() == midi2::Enumeration::Midi1PortFlow::MidiMessageDestination)
+        return info.Number();
+
+    // TODO
+    return -1;
 }
 
 /* ================================
@@ -241,8 +151,6 @@ struct Configuration
     bool useWms{ 0 };
     bool wmsAvailable{0};
     bool basicLoopbackAvailable{0};
-    std::shared_ptr<init::MidiDesktopAppSdkInitializer> wmsSdkInitializer{nullptr};
-    bool wmsSdkInitialized{0};
 };
 
 API_EXPORT CONFIGURATION_GETRESULT API_CALL GetConfiguration_Win(
@@ -262,51 +170,12 @@ API_EXPORT CONFIGURATION_GETRESULT API_CALL GetConfiguration_Win(
     {
         try
         {
-            char comInitializationResult;
-            char registryCheckResult;
-            char comCheckResult;
-            WMSSERVICECHECKRESULT serviceCheckResult;
-            char sdkCheckResult;
-
-            GetNativeEnvironmentInfo_Win(
-                &comInitializationResult,
-                &registryCheckResult,
-                &comCheckResult,
-                &serviceCheckResult,
-                &sdkCheckResult);
-
-            config->wmsAvailable = static_cast<char>(
-                comInitializationResult &&
-                registryCheckResult &&
-                comCheckResult &&
-                (serviceCheckResult == WMSSERVICECHECKRESULT_OK) &&
-                sdkCheckResult);
+            winrt::init_apartment();
+            config->wmsAvailable = midi2::MidiApi::EnsureServiceAvailable();
 
             if (config->wmsAvailable)
             {
-                winrt::init_apartment();
-
-                std::shared_ptr<init::MidiDesktopAppSdkInitializer> wmsSdkInitializer = std::make_shared<init::MidiDesktopAppSdkInitializer>();
-
-                if (wmsSdkInitializer == nullptr)
-                    return CONFIGURATION_GETRESULT_CANTCREATEWMSSDKINITIALIZER;
-
-                if (!wmsSdkInitializer->InitializeSdkRuntime())
-                    return CONFIGURATION_GETRESULT_CANTINITIALIZEWMSSDK;
-
-                if (!wmsSdkInitializer->CheckForMinimumRequiredSdkVersion(
-                    WINDOWS_MIDI_SERVICES_NUGET_BUILD_VERSION_MAJOR,
-                    WINDOWS_MIDI_SERVICES_NUGET_BUILD_VERSION_MINOR,
-                    WINDOWS_MIDI_SERVICES_NUGET_BUILD_VERSION_PATCH))
-                    return SESSION_OPENRESULT_OLDWMSSDK;
-
-                if (!wmsSdkInitializer->EnsureServiceAvailable())
-                    return CONFIGURATION_GETRESULT_WMSSERVICEUNAVAILABLE;
-
-                config->wmsSdkInitializer = wmsSdkInitializer;
-                config->basicLoopbackAvailable = basicLoopback::MidiBasicLoopbackEndpointManager::IsTransportAvailable();
-
-                config->wmsSdkInitialized = true;
+                config->basicLoopbackAvailable = basicLoopback::MidiBasicLoopbackManager::IsTransportAvailable();
             }
         }
         catch (const winrt::hresult_error& e)
@@ -336,12 +205,6 @@ API_EXPORT CONFIGURATION_CLEANUPRESULT API_CALL CleanupConfiguration(Configurati
     {
         if (configuration->wmsAvailable)
         {
-            if (configuration->wmsSdkInitializer != nullptr && configuration->wmsSdkInitialized)
-            {
-                configuration->wmsSdkInitializer->ShutdownSdkRuntime();
-                configuration->wmsSdkInitializer.reset();
-            }
-
             winrt::uninit_apartment();
         }
     }
@@ -357,17 +220,12 @@ API_EXPORT CONFIGURATION_CLEANUPRESULT API_CALL CleanupConfiguration(Configurati
 
 API_EXPORT bool API_CALL IsVirtualDeviceApiAvailable(Configuration* configuration)
 {
-    return configuration->useWms && configuration->wmsAvailable && configuration->wmsSdkInitialized && configuration->basicLoopbackAvailable;
-}
-
-API_EXPORT bool API_CALL IsDevicesCachingRequired(Configuration* configuration)
-{
-    return configuration->useWms && configuration->wmsAvailable && configuration->wmsSdkInitialized;
+    return configuration->useWms && configuration->wmsAvailable && configuration->basicLoopbackAvailable;
 }
 
 API_EXPORT bool API_CALL IsDevicesWatcherApiAvailable(Configuration* configuration)
 {
-    return configuration->useWms && configuration->wmsAvailable && configuration->wmsSdkInitialized;
+    return configuration->useWms && configuration->wmsAvailable;
 }
 
 API_EXPORT void API_CALL CheckNativeApiActivityCallback(Configuration* configuration)
@@ -611,7 +469,7 @@ struct OutputEndpointInfo : EndpointInfoBase
     int deviceIndex;
     LPMIDIOUTCAPSW caps;
 
-    char isMicrosoftGsWavetableSynth = 0;
+    bool isMicrosoftGsWavetableSynth{false};
 };
 
 API_EXPORT void API_CALL CloneOutputEndpointInfo(OutputEndpointInfo* source, OutputEndpointInfo** info)
@@ -702,22 +560,22 @@ API_EXPORT void API_CALL DeleteOutputEndpointInfo(OutputEndpointInfo* info)
     delete info;
 }
 
-int FindPortIndex(const std::wstring& endpointDeviceId, const std::wstring& portDeviceId, const midi2::Midi1PortFlow& flow)
+int FindPortIndex(const std::wstring& endpointDeviceId, const std::wstring& portDeviceId, const midi2::Enumeration::Midi1PortFlow& flow)
 {
     if (endpointDeviceId.empty() || portDeviceId.empty())
         return -1;
 
     const winrt::hstring endpointDeviceIdH{ endpointDeviceId };
 
-    auto endpointInformation = midi2::MidiEndpointDeviceInformation::CreateFromEndpointDeviceId(endpointDeviceIdH);
+    auto endpointInformation = midi2::Enumeration::MidiEndpointDeviceInformation::CreateFromEndpointDeviceId(endpointDeviceIdH);
     if (endpointInformation == nullptr)
         return -1;
 
-    auto ports = endpointInformation.FindAllAssociatedMidi1PortsForThisEndpoint(flow);
+    auto ports = midi2::Enumeration::Legacy::MidiLegacyPortDeviceInformation::FindAllForAssociatedEndpoint(endpointInformation.EndpointDeviceId(), flow);
     for (auto const& port : ports)
     {
         if (port.PortDeviceId().c_str() == portDeviceId)
-            return port.PortNumber();
+            return GetPortNumber(port);
     }
 
     return -1;
@@ -766,11 +624,12 @@ API_EXPORT DEVICE_GETDEVICEINFORESULT API_CALL GetDeviceInformation(
 
     if (!deviceInfo->endpointDeviceId.empty())
     {
-        winrt::Windows::Devices::Enumeration::DeviceInformation parentInformation = nullptr;
+        midi2::Enumeration::MidiParentDeviceInformation parentInformation = nullptr;
+        midi2::Enumeration::MidiEndpointDeviceInformation endpointInformation = nullptr;
 
         try
         {
-            auto endpointInformation = midi2::MidiEndpointDeviceInformation::CreateFromEndpointDeviceId(winrt::hstring{ deviceInfo->endpointDeviceId });
+            endpointInformation = midi2::Enumeration::MidiEndpointDeviceInformation::CreateFromEndpointDeviceId(winrt::hstring{ deviceInfo->endpointDeviceId });
             if (endpointInformation == nullptr)
                 return DEVICE_GETDEVICEINFORESULT_FAILEDGETENDPOINTINFO;
 
@@ -780,9 +639,11 @@ API_EXPORT DEVICE_GETDEVICEINFORESULT API_CALL GetDeviceInformation(
 
             deviceInfo->deviceId = parentInformation.Id().c_str();
             deviceInfo->deviceName = parentInformation.Name().c_str();
+            deviceInfo->deviceDriverInformation = parentInformation.DriverVersion().c_str();
 
             *id = deviceInfo->deviceId.c_str();
             *name = deviceInfo->deviceName.c_str();
+            *driverVersion = deviceInfo->deviceDriverInformation.c_str();
         }
         catch (const winrt::hresult_error& e)
         {
@@ -800,38 +661,40 @@ API_EXPORT DEVICE_GETDEVICEINFORESULT API_CALL GetDeviceInformation(
             return DEVICE_GETDEVICEINFORESULT_UNKNOWNWMSERROR;
         }
 
-        if (parentInformation != nullptr)
+        if (parentInformation != nullptr && endpointInformation != nullptr)
         {
             try
             {
-                auto properties = parentInformation.Properties();
-
                 auto manufacturerPropertyName = L"System.Devices.DeviceManufacturer";
+                auto modelPropertyName = L"System.Devices.ModelName";
+
+                auto parentDeviceInfo = winrt::Windows::Devices::Enumeration::DeviceInformation::CreateFromIdAsync(
+                    endpointInformation.ParentDeviceInstanceId(),
+                    {
+                        manufacturerPropertyName,
+                        modelPropertyName
+                    },
+                    winrt::Windows::Devices::Enumeration::DeviceInformationKind::Device).get();
+
+                auto properties = parentDeviceInfo.Properties();
+
                 if (properties.HasKey(manufacturerPropertyName))
                 {
                     auto unboxed = winrt::unbox_value_or<winrt::hstring>(properties.Lookup(manufacturerPropertyName), L"");
                     deviceInfo->deviceManufacturer = unboxed.c_str();
+                    *manufacturer = deviceInfo->deviceManufacturer.c_str();
                 }
                 else
                     configuration->activityCallback(L"Device manufacturer property is not set");
 
-                auto modelPropertyName = L"System.Devices.ModelName";
                 if (properties.HasKey(modelPropertyName))
                 {
                     auto unboxed = winrt::unbox_value_or<winrt::hstring>(properties.Lookup(modelPropertyName), L"");
                     deviceInfo->deviceModel = unboxed.c_str();
+                    *model = deviceInfo->deviceModel.c_str();
                 }
                 else
                     configuration->activityCallback(L"Device model property is not set");
-
-                auto driverVersionPropertyName = L"{A8B865DD-2E3D-4094-AD97-E593A70C75D6} 3";
-                if (properties.HasKey(driverVersionPropertyName))
-                {
-                    auto unboxed = winrt::unbox_value_or<winrt::hstring>(properties.Lookup(driverVersionPropertyName), L"");
-                    deviceInfo->deviceDriverInformation = unboxed.c_str();
-                }
-                else
-                    configuration->activityCallback(L"Device driver version property is not set");
             }
             catch (const winrt::hresult_error& e)
             {
@@ -845,10 +708,6 @@ API_EXPORT DEVICE_GETDEVICEINFORESULT API_CALL GetDeviceInformation(
             {
                 configuration->activityCallback(L"Failed to get additional parent device properties");
             }
-
-            *manufacturer = deviceInfo->deviceManufacturer.c_str();
-            *model = deviceInfo->deviceModel.c_str();
-            *driverVersion = deviceInfo->deviceDriverInformation.c_str();
         }
     }
     else if (!deviceInfo->devicePath.empty())
@@ -946,7 +805,7 @@ struct SessionHandle
     InputEndpointCallback inputEndpointCallback;
     OutputEndpointCallback outputEndpointCallback;
 
-    midi2::MidiEndpointDeviceWatcher watcher{nullptr};
+    midi2::Enumeration::MidiEndpointDeviceWatcher watcher{nullptr};
     winrt::event_token revokeOnWatcherDeviceRemoved;
     winrt::event_token revokeOnWatcherDeviceAdded;
     winrt::event_token revokeOnWatcherEnumerationCompleted;
@@ -994,11 +853,11 @@ API_EXPORT SESSION_OPENRESULT API_CALL OpenSession_Win(
 
     try
     {
-        if (configuration->useWms && configuration->wmsAvailable && configuration->wmsSdkInitialized)
+        if (configuration->useWms && configuration->wmsAvailable)
         {
-            sessionHandle->watcher = midi2::MidiEndpointDeviceWatcher::Create(midi2::MidiEndpointDeviceInformationFilters::AllStandardEndpoints);
+            sessionHandle->watcher = midi2::Enumeration::MidiEndpointDeviceWatcher::Create(midi2::Enumeration::MidiEndpointDeviceInformationFilters::AllStandardEndpoints);
 
-            auto OnWatcherDeviceAdded = [sessionHandle](midi2::MidiEndpointDeviceWatcher const&, midi2::MidiEndpointDeviceInformationAddedEventArgs const& args)
+            auto OnWatcherDeviceAdded = [sessionHandle](midi2::Enumeration::MidiEndpointDeviceWatcher const&, midi2::Enumeration::MidiEndpointDeviceInformationAddedEventArgs const& args)
             {
                 std::lock_guard<std::mutex> lock(sessionHandle->endpointDevicesLock);
 
@@ -1019,7 +878,7 @@ API_EXPORT SESSION_OPENRESULT API_CALL OpenSession_Win(
                     EnsureWinMmPortsAvailable();
 
                     auto endpointId = args.AddedDevice().EndpointDeviceId();
-                    auto endpointInformation = midi2::MidiEndpointDeviceInformation::CreateFromEndpointDeviceId(endpointId);
+                    auto endpointInformation = midi2::Enumeration::MidiEndpointDeviceInformation::CreateFromEndpointDeviceId(endpointId);
                     if (endpointInformation == nullptr)
                     {
                         // TODO
@@ -1035,13 +894,13 @@ API_EXPORT SESSION_OPENRESULT API_CALL OpenSession_Win(
                     {
                         switch (gtb.Direction())
                         {
-                            case midi2::MidiGroupTerminalBlockDirection::BlockInput:
+                            case midi2::Enumeration::MidiGroupTerminalBlockDirection::BlockInput:
                                 destinationsCount++;
                                 break;
-                            case midi2::MidiGroupTerminalBlockDirection::BlockOutput:
+                            case midi2::Enumeration::MidiGroupTerminalBlockDirection::BlockOutput:
                                 sourcesCount++;
                                 break;
-                            case midi2::MidiGroupTerminalBlockDirection::Bidirectional:
+                            case midi2::Enumeration::MidiGroupTerminalBlockDirection::Bidirectional:
                                 sourcesCount++;
                                 destinationsCount++;
                                 break;
@@ -1061,7 +920,7 @@ API_EXPORT SESSION_OPENRESULT API_CALL OpenSession_Win(
 
                         cleanupAllDeviceInfos();
 
-                        auto endpointInformation = midi2::MidiEndpointDeviceInformation::CreateFromEndpointDeviceId(endpointId);
+                        auto endpointInformation = midi2::Enumeration::MidiEndpointDeviceInformation::CreateFromEndpointDeviceId(endpointId);
                         if (endpointInformation == nullptr)
                         {
                             // TODO
@@ -1070,7 +929,7 @@ API_EXPORT SESSION_OPENRESULT API_CALL OpenSession_Win(
 
                         if (sourcesCount > 0)
                         {
-                            auto inputPorts = endpointInformation.FindAllAssociatedMidi1PortsForThisEndpoint(midi2::Midi1PortFlow::MidiMessageSource);
+                            auto inputPorts = midi2::Enumeration::Legacy::MidiLegacyPortDeviceInformation::FindAllForAssociatedEndpoint(endpointInformation.EndpointDeviceId(), midi2::Enumeration::Midi1PortFlow::MidiMessageSource);
                             ok = inputPorts.Size() >= sourcesCount;
                             if (!ok)
                                 continue;
@@ -1080,7 +939,7 @@ API_EXPORT SESSION_OPENRESULT API_CALL OpenSession_Win(
                                 InputEndpointInfo* inputDeviceInfo = nullptr;
                                 int errorCode;
 
-                                auto getInputEndpointInfoResult = GetInputEndpointInfo(port.PortNumber(), endpointId, port.PortDeviceId(), &inputDeviceInfo, &errorCode);
+                                auto getInputEndpointInfoResult = GetInputEndpointInfo(GetPortNumber(port), endpointId, port.PortDeviceId(), &inputDeviceInfo, &errorCode);
                                 if (getInputEndpointInfoResult != IN_GETINFORESULT_OK)
                                 {
                                     ok = false;
@@ -1090,7 +949,7 @@ API_EXPORT SESSION_OPENRESULT API_CALL OpenSession_Win(
                                 inputDevicesInfo.push_back(inputDeviceInfo);
 
                                 InputEndpointInfo* persistentInputEndpointInfo;
-                                getInputEndpointInfoResult = GetInputEndpointInfo(port.PortNumber(), endpointId, port.PortDeviceId(), &persistentInputEndpointInfo, &errorCode);
+                                getInputEndpointInfoResult = GetInputEndpointInfo(GetPortNumber(port), endpointId, port.PortDeviceId(), &persistentInputEndpointInfo, &errorCode);
                                 if (getInputEndpointInfoResult != IN_GETINFORESULT_OK)
                                 {
                                     ok = false;
@@ -1103,7 +962,7 @@ API_EXPORT SESSION_OPENRESULT API_CALL OpenSession_Win(
 
                         if (destinationsCount > 0)
                         {
-                            auto outputPorts = endpointInformation.FindAllAssociatedMidi1PortsForThisEndpoint(midi2::Midi1PortFlow::MidiMessageDestination);
+                            auto outputPorts = midi2::Enumeration::Legacy::MidiLegacyPortDeviceInformation::FindAllForAssociatedEndpoint(endpointInformation.EndpointDeviceId(), midi2::Enumeration::Midi1PortFlow::MidiMessageDestination);
                             ok = outputPorts.Size() >= destinationsCount;
                             if (!ok)
                                 continue;
@@ -1113,7 +972,7 @@ API_EXPORT SESSION_OPENRESULT API_CALL OpenSession_Win(
                                 OutputEndpointInfo* outputDeviceInfo = nullptr;
                                 int errorCode;
 
-                                auto getOutputEndpointInfoResult = GetOutputEndpointInfo(port.PortNumber(), endpointId, port.PortDeviceId(), &outputDeviceInfo, &errorCode);
+                                auto getOutputEndpointInfoResult = GetOutputEndpointInfo(GetPortNumber(port), endpointId, port.PortDeviceId(), &outputDeviceInfo, &errorCode);
                                 if (getOutputEndpointInfoResult != OUT_GETINFORESULT_OK)
                                 {
                                     ok = false;
@@ -1123,7 +982,7 @@ API_EXPORT SESSION_OPENRESULT API_CALL OpenSession_Win(
                                 outputDevicesInfo.push_back(outputDeviceInfo);
 
                                 OutputEndpointInfo* persistentOutputEndpointInfo;
-                                getOutputEndpointInfoResult = GetOutputEndpointInfo(port.PortNumber(), endpointId, port.PortDeviceId(), &persistentOutputEndpointInfo, &errorCode);
+                                getOutputEndpointInfoResult = GetOutputEndpointInfo(GetPortNumber(port), endpointId, port.PortDeviceId(), &persistentOutputEndpointInfo, &errorCode);
                                 if (getOutputEndpointInfoResult != OUT_GETINFORESULT_OK)
                                 {
                                     ok = false;
@@ -1173,7 +1032,7 @@ API_EXPORT SESSION_OPENRESULT API_CALL OpenSession_Win(
                 }
             };
 
-            auto OnWatcherDeviceRemoved = [sessionHandle](midi2::MidiEndpointDeviceWatcher const&, midi2::MidiEndpointDeviceInformationRemovedEventArgs const& args)
+            auto OnWatcherDeviceRemoved = [sessionHandle](midi2::Enumeration::MidiEndpointDeviceWatcher const&, midi2::Enumeration::MidiEndpointDeviceInformationRemovedEventArgs const& args)
             {
                 if (sessionHandle->initialEnumerationCompleted.load() == 0)
                     return;
@@ -1218,7 +1077,7 @@ API_EXPORT SESSION_OPENRESULT API_CALL OpenSession_Win(
                 }
             };
 
-            auto OnWatcherEnumerationCompleted = [sessionHandle](midi2::MidiEndpointDeviceWatcher const&, winrt::Windows::Foundation::IInspectable const&)
+            auto OnWatcherEnumerationCompleted = [sessionHandle](midi2::Enumeration::MidiEndpointDeviceWatcher const&, winrt::Windows::Foundation::IInspectable const&)
             {
                 sessionHandle->initialEnumerationCompleted.store(1);
             };
@@ -1321,9 +1180,15 @@ API_EXPORT IN_GETALLINFORESULT API_CALL GetInputEndpointsInfo(Configuration* con
 
     EnsureWinMmPortsAvailable();
 
-    if (configuration->useWms && configuration->wmsAvailable && configuration->wmsSdkInitialized)
+    if (configuration->useWms && configuration->wmsAvailable)
     {
+        while (sessionHandle->initialEnumerationCompleted.load() == 0)
+        {
+            std::this_thread::sleep_for(std::chrono::milliseconds(10));
+        }
+
         std::vector<InputEndpointInfo*> inputDevicesInfo;
+        std::lock_guard<std::mutex> lock(sessionHandle->endpointDevicesLock);
 
         auto cleanupInputDevices = [&inputDevicesInfo]()
         {
@@ -1335,26 +1200,15 @@ API_EXPORT IN_GETALLINFORESULT API_CALL GetInputEndpointsInfo(Configuration* con
 
         try
         {
-            auto endpoints = midi2::MidiEndpointDeviceInformation::FindAll(
-                midi2::MidiEndpointDeviceInformationSortOrder::Name,
-                midi2::MidiEndpointDeviceInformationFilters::AllStandardEndpoints);
-
-            for (auto const& endpoint : endpoints)
+            for (const auto& pair : sessionHandle->endpointDevicesById)
             {
-                auto ports = endpoint.FindAllAssociatedMidi1PortsForThisEndpoint(midi2::Midi1PortFlow::MidiMessageSource);
+                const EndpointDevicesInfo& endpointDevicesInfo = pair.second;
 
-                for (auto const& port : ports)
+                for (auto* inputDeviceInfo : endpointDevicesInfo.inputDevicesInfo)
                 {
-                    InputEndpointInfo* inputDeviceInfo;
-
-                    auto getInputEndpointInfoResult = GetInputEndpointInfo(port.PortNumber(), endpoint.EndpointDeviceId(), port.PortDeviceId(), &inputDeviceInfo, errorCode);
-                    if (getInputEndpointInfoResult != IN_GETINFORESULT_OK)
-                    {
-                        cleanupInputDevices();
-                        return ConvertToGetAllInInfoResult(getInputEndpointInfoResult);
-                    }
-
-                    inputDevicesInfo.push_back(inputDeviceInfo);
+                    InputEndpointInfo* infoCopy = nullptr;
+                    CloneInputEndpointInfo(inputDeviceInfo, &infoCopy);
+                    inputDevicesInfo.push_back(infoCopy);
                 }
             }
 
@@ -1603,7 +1457,7 @@ API_EXPORT IN_OPENRESULT API_CALL OpenInputEndpoint_Win(InputEndpointInfo* info,
     InitializeCriticalSection(&inputDeviceHandle->lock);
     inputDeviceHandle->isClosing = 0;
 
-    auto deviceIndex = FindPortIndex(inputDeviceInfo->endpointDeviceId, inputDeviceInfo->portDeviceId, midi2::Midi1PortFlow::MidiMessageSource);
+    auto deviceIndex = FindPortIndex(inputDeviceInfo->endpointDeviceId, inputDeviceInfo->portDeviceId, midi2::Enumeration::Midi1PortFlow::MidiMessageSource);
     if (deviceIndex < 0)
         deviceIndex = inputDeviceInfo->deviceIndex;
 
@@ -1824,9 +1678,15 @@ API_EXPORT OUT_GETALLINFORESULT API_CALL GetOutputEndpointsInfo(Configuration* c
 
     EnsureWinMmPortsAvailable();
 
-    if (configuration->useWms && configuration->wmsAvailable && configuration->wmsSdkInitialized)
+    if (configuration->useWms && configuration->wmsAvailable)
     {
+        while (sessionHandle->initialEnumerationCompleted.load() == 0)
+        {
+            std::this_thread::sleep_for(std::chrono::milliseconds(10));
+        }
+
         std::vector<OutputEndpointInfo*> outputDevicesInfo;
+        std::lock_guard<std::mutex> lock(sessionHandle->endpointDevicesLock);
 
         auto cleanupOutputDevices = [&outputDevicesInfo]()
         {
@@ -1852,7 +1712,7 @@ API_EXPORT OUT_GETALLINFORESULT API_CALL GetOutputEndpointsInfo(Configuration* c
             
             if (wcscmp(outputDeviceInfo->caps->szPname, L"Microsoft GS Wavetable Synth") == 0)
             {
-                outputDeviceInfo->isMicrosoftGsWavetableSynth = 1;
+                outputDeviceInfo->isMicrosoftGsWavetableSynth = true;
                 outputDevicesInfo.push_back(outputDeviceInfo);
                 break;
             }
@@ -1862,26 +1722,15 @@ API_EXPORT OUT_GETALLINFORESULT API_CALL GetOutputEndpointsInfo(Configuration* c
 
         try
         {
-            auto endpoints = midi2::MidiEndpointDeviceInformation::FindAll(
-                midi2::MidiEndpointDeviceInformationSortOrder::Name,
-                midi2::MidiEndpointDeviceInformationFilters::AllStandardEndpoints);
-
-            for (auto const& endpoint : endpoints)
+            for (const auto& pair : sessionHandle->endpointDevicesById)
             {
-                auto ports = endpoint.FindAllAssociatedMidi1PortsForThisEndpoint(midi2::Midi1PortFlow::MidiMessageDestination);
+                const EndpointDevicesInfo& endpointDevicesInfo = pair.second;
 
-                for (auto const& port : ports)
+                for (auto* outputDeviceInfo : endpointDevicesInfo.outputDevicesInfo)
                 {
-                    OutputEndpointInfo* outputDeviceInfo;
-
-                    auto getOutputEndpointInfoResult = GetOutputEndpointInfo(port.PortNumber(), endpoint.EndpointDeviceId(), port.PortDeviceId(), &outputDeviceInfo, errorCode);
-                    if (getOutputEndpointInfoResult != OUT_GETINFORESULT_OK)
-                    {
-                        cleanupOutputDevices();
-                        return ConvertToGetAllOutInfoResult(getOutputEndpointInfoResult);
-                    }
-
-                    outputDevicesInfo.push_back(outputDeviceInfo);
+                    OutputEndpointInfo* infoCopy = nullptr;
+                    CloneOutputEndpointInfo(outputDeviceInfo, &infoCopy);
+                    outputDevicesInfo.push_back(infoCopy);
                 }
             }
 
@@ -1946,7 +1795,7 @@ API_EXPORT OUT_GETALLINFORESULT API_CALL GetOutputEndpointsInfo(Configuration* c
         }
 
         if (wcscmp(outputDeviceInfo->caps->szPname, L"Microsoft GS Wavetable Synth") == 0)
-            outputDeviceInfo->isMicrosoftGsWavetableSynth = 1;
+            outputDeviceInfo->isMicrosoftGsWavetableSynth = true;
 
         result[i] = outputDeviceInfo;
     }
@@ -2001,7 +1850,7 @@ API_EXPORT OUT_OPENRESULT API_CALL OpenOutputEndpoint_Win(OutputEndpointInfo* in
     OutputEndpointHandle* outputDeviceHandle = new OutputEndpointHandle();
     outputDeviceHandle->info = info;
 
-    auto deviceIndex = FindPortIndex(info->endpointDeviceId, info->portDeviceId, midi2::Midi1PortFlow::MidiMessageDestination);
+    auto deviceIndex = FindPortIndex(info->endpointDeviceId, info->portDeviceId, midi2::Enumeration::Midi1PortFlow::MidiMessageDestination);
     if (deviceIndex < 0)
         deviceIndex = info->deviceIndex;
 
@@ -2192,9 +2041,9 @@ struct VirtualDeviceInfo
     std::wstring endpointDeviceId;
 };
 
-const midi2::MidiEndpointAssociatedPortDeviceInformation GetSinglePort(midi2::MidiEndpointDeviceInformation endpointInformation, midi2::Midi1PortFlow flow)
+const midi2::Enumeration::Legacy::MidiLegacyPortDeviceInformation GetSinglePort(midi2::Enumeration::MidiEndpointDeviceInformation endpointInformation, midi2::Enumeration::Midi1PortFlow flow)
 {
-    auto ports = endpointInformation.FindAllAssociatedMidi1PortsForThisEndpoint(flow);
+    auto ports = midi2::Enumeration::Legacy::MidiLegacyPortDeviceInformation::FindAllForAssociatedEndpoint(endpointInformation.EndpointDeviceId(), flow);
 
     // TODO: check there are at least 1 port and not more than 1 port, and return error if not
     return ports.GetAt(0);
@@ -2212,7 +2061,7 @@ API_EXPORT VIRTUAL_OPENRESULT API_CALL OpenVirtualDevice_Win(
     VirtualDeviceInfo* virtualDeviceInfo = new VirtualDeviceInfo();
     virtualDeviceInfo->name = name;
 
-    if (!configuration->useWms || !configuration->wmsSdkInitialized || !configuration->wmsAvailable)
+    if (!configuration->useWms || !configuration->wmsAvailable)
     {
         delete virtualDeviceInfo;
         return VIRTUAL_OPENRESULT_WMSUNAVAILABLE;
@@ -2241,16 +2090,15 @@ API_EXPORT VIRTUAL_OPENRESULT API_CALL OpenVirtualDevice_Win(
 
         virtualDeviceInfo->associationId = winrt::Windows::Foundation::GuidHelper::CreateNewGuid();
 
-        basicLoopback::MidiBasicLoopbackEndpointDefinition definition{};
-        definition.Name = winrt::to_hstring(name);
-        definition.UniqueId = uniqueId;
-        definition.IsMuted = false;
+        basicLoopback::MidiBasicLoopbackEndpointDefinition definition;
+        definition.Name(winrt::to_hstring(name));
+        definition.UniqueId(uniqueId);
 
-        basicLoopback::MidiBasicLoopbackEndpointCreationConfig config(
+        basicLoopback::MidiBasicLoopbackCreationConfig config(
             virtualDeviceInfo->associationId,
             definition);
 
-        auto result = basicLoopback::MidiBasicLoopbackEndpointManager::CreateTransientLoopbackEndpoint(config);
+        auto result = basicLoopback::MidiBasicLoopbackManager::CreateTransientLoopback(config);
 
         if (!result.Success())
         {
@@ -2260,30 +2108,44 @@ API_EXPORT VIRTUAL_OPENRESULT API_CALL OpenVirtualDevice_Win(
 
             switch (result.ErrorCode())
             {
-                case basicLoopback::MidiBasicLoopbackEndpointCreationResultErrorCode::InvalidOrMissingName:
-                    return VIRTUAL_OPENRESULT_INVALIDNAME;
-                case basicLoopback::MidiBasicLoopbackEndpointCreationResultErrorCode::InvalidOrMissingUniqueId:
+                case basicLoopback::MidiBasicLoopbackErrorCode::ClientApiException:
+                    return VIRTUAL_OPENRESULT_CLIENTAPIEXCEPTION;
+                case basicLoopback::MidiBasicLoopbackErrorCode::InvalidOrMissingUniqueId:
                     return VIRTUAL_OPENRESULT_INVALIDUNIQUEID;
-                case basicLoopback::MidiBasicLoopbackEndpointCreationResultErrorCode::NameInUse:
-                    return VIRTUAL_OPENRESULT_NAMEINUSE;
-                case basicLoopback::MidiBasicLoopbackEndpointCreationResultErrorCode::UniqueIdInUse:
-                    return VIRTUAL_OPENRESULT_UNIQUEIDINUSE;
+                case basicLoopback::MidiBasicLoopbackErrorCode::DuplicateEndpointName:
+                    return VIRTUAL_OPENRESULT_DUPLICATEENDPOINTNAME;
+                case basicLoopback::MidiBasicLoopbackErrorCode::DuplicateUniqueId:
+                    return VIRTUAL_OPENRESULT_DUPLICATEUNIQUEID;
+                case basicLoopback::MidiBasicLoopbackErrorCode::EndpointCreationFailed:
+                    return VIRTUAL_OPENRESULT_ENDPOINTCREATIONFAILED;
+                case basicLoopback::MidiBasicLoopbackErrorCode::EndpointNotFound:
+                    return VIRTUAL_OPENRESULT_ENDPOINTNOTFOUND;
+                case basicLoopback::MidiBasicLoopbackErrorCode::InvalidArgument:
+                    return VIRTUAL_OPENRESULT_INVALIDARGUMENT;
+                case basicLoopback::MidiBasicLoopbackErrorCode::InvalidJson:
+                    return VIRTUAL_OPENRESULT_INVALIDJSON;
+                case basicLoopback::MidiBasicLoopbackErrorCode::InvalidOrMissingAssociationId:
+                    return VIRTUAL_OPENRESULT_INVALIDORMISSINGASSOCIATIONID;
+                case basicLoopback::MidiBasicLoopbackErrorCode::InvalidOrMissingEndpointName:
+                    return VIRTUAL_OPENRESULT_INVALIDORMISSINGENDPOINTNAME;
+                case basicLoopback::MidiBasicLoopbackErrorCode::UnrecognizedCommand:
+                    return VIRTUAL_OPENRESULT_UNRECOGNIZEDCOMMAND;
             }
 
             return VIRTUAL_OPENRESULT_FAILED;
         }
 
-        virtualDeviceInfo->endpointDeviceId = result.EndpointDeviceId().c_str();
+        virtualDeviceInfo->endpointDeviceId = result.CreatedLoopbackEntry().EndpointDeviceId().c_str();
 
         EnsureWinMmPortsAvailable();
 
-        auto endpointId = result.EndpointDeviceId();
-        auto endpointInformation = midi2::MidiEndpointDeviceInformation::CreateFromEndpointDeviceId(endpointId);
+        auto endpointId = result.CreatedLoopbackEntry().EndpointDeviceId();
+        auto endpointInformation = midi2::Enumeration::MidiEndpointDeviceInformation::CreateFromEndpointDeviceId(endpointId);
 
-        auto inputPort = GetSinglePort(endpointInformation, midi2::Midi1PortFlow::MidiMessageSource);
+        auto inputPort = GetSinglePort(endpointInformation, midi2::Enumeration::Midi1PortFlow::MidiMessageSource);
 
         InputEndpointInfo* inputDeviceInfo = nullptr;
-        IN_GETINFORESULT inputResult = GetInputEndpointInfo(inputPort.PortNumber(), endpointId, inputPort.PortDeviceId(), &inputDeviceInfo, errorCode);
+        IN_GETINFORESULT inputResult = GetInputEndpointInfo(GetPortNumber(inputPort), endpointId, inputPort.PortDeviceId(), &inputDeviceInfo, errorCode);
         if (inputResult != IN_GETINFORESULT_OK)
         {
             delete virtualDeviceInfo;
@@ -2292,10 +2154,10 @@ API_EXPORT VIRTUAL_OPENRESULT API_CALL OpenVirtualDevice_Win(
 
         virtualDeviceInfo->inputDeviceInfo = inputDeviceInfo;
 
-        auto outputPort = GetSinglePort(endpointInformation, midi2::Midi1PortFlow::MidiMessageDestination);
+        auto outputPort = GetSinglePort(endpointInformation, midi2::Enumeration::Midi1PortFlow::MidiMessageDestination);
 
         OutputEndpointInfo* outputDeviceInfo = nullptr;
-        OUT_GETINFORESULT outputResult = GetOutputEndpointInfo(outputPort.PortNumber(), endpointId, outputPort.PortDeviceId(), &outputDeviceInfo, errorCode);
+        OUT_GETINFORESULT outputResult = GetOutputEndpointInfo(GetPortNumber(outputPort), endpointId, outputPort.PortDeviceId(), &outputDeviceInfo, errorCode);
         if (outputResult != OUT_GETINFORESULT_OK)
         {
             DeleteInputEndpointInfo(virtualDeviceInfo->inputDeviceInfo);
@@ -2334,8 +2196,8 @@ API_EXPORT VIRTUAL_CLOSERESULT API_CALL CloseVirtualDevice(VirtualDeviceInfo* in
 
     try
     {
-        auto removed = basicLoopback::MidiBasicLoopbackEndpointManager::RemoveTransientLoopbackEndpoint(
-            basicLoopback::MidiBasicLoopbackEndpointRemovalConfig{ info->associationId });
+        auto removed = basicLoopback::MidiBasicLoopbackManager::RemoveTransientLoopback(
+            basicLoopback::MidiBasicLoopbackRemovalConfig{ info->associationId });
 
         if (!removed)
         {
@@ -2369,7 +2231,7 @@ API_EXPORT VIRTUAL_MUTERESULT API_CALL MuteVirtualDevice(
 {
     try
     {
-        auto muted = basicLoopback::MidiBasicLoopbackEndpointManager::MuteLoopback(info->associationId);
+        auto muted = basicLoopback::MidiBasicLoopbackManager::MuteLoopback(info->associationId);
         if (!muted)
             return VIRTUAL_MUTERESULT_FAILED;
     }
@@ -2398,7 +2260,7 @@ API_EXPORT VIRTUAL_UNMUTERESULT API_CALL UnmuteVirtualDevice(
 {
     try
     {
-        auto unmuted = basicLoopback::MidiBasicLoopbackEndpointManager::UnmuteLoopback(info->associationId);
+        auto unmuted = basicLoopback::MidiBasicLoopbackManager::UnmuteLoopback(info->associationId);
         if (!unmuted)
             return VIRTUAL_UNMUTERESULT_FAILED;
     }
