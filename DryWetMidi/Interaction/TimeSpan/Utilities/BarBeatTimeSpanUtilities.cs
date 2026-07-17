@@ -7,8 +7,17 @@ namespace Melanchall.DryWetMidi.Interaction
     /// <summary>
     /// Utilities for working with bars and beats.
     /// </summary>
-    public static class BarBeatUtilities
+    public static class BarBeatTimeSpanUtilities
     {
+        #region Constants
+
+        internal const double Epsilon = 1e-7;
+        internal const int FractionDigits = 7;
+
+        internal static readonly System.Globalization.NumberFormatInfo NumberFormat = new() { NumberDecimalSeparator = "," };
+
+        #endregion
+
         #region Methods
 
         /// <summary>

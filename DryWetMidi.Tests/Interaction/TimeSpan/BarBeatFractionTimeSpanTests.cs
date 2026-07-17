@@ -18,29 +18,59 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         private const long ShortTime = 1000;
         private const long LargeTime = 100000;
 
-        private static readonly Tuple<BarBeatFractionTimeSpan, BarBeatFractionTimeSpan>[] TimeSpansForComparison_Less = new[]
+        private static object[] TimeSpansForComparison_Less = new[]
         {
-            Tuple.Create(new BarBeatFractionTimeSpan(), new BarBeatFractionTimeSpan(0, 0.01)),
-            Tuple.Create(new BarBeatFractionTimeSpan(), new BarBeatFractionTimeSpan(0, 1.00)),
-            Tuple.Create(new BarBeatFractionTimeSpan(), new BarBeatFractionTimeSpan(1, 0.00)),
-            Tuple.Create(new BarBeatFractionTimeSpan(), new BarBeatFractionTimeSpan(0, 0.01)),
-            Tuple.Create(new BarBeatFractionTimeSpan(2, 0.00), new BarBeatFractionTimeSpan(10, 0.01)),
-            Tuple.Create(new BarBeatFractionTimeSpan(0, 10.00), new BarBeatFractionTimeSpan(0, 10.01)),
-            Tuple.Create(new BarBeatFractionTimeSpan(10, 10.00), new BarBeatFractionTimeSpan(10, 10.01)),
-            Tuple.Create(new BarBeatFractionTimeSpan(10000, 899.00), new BarBeatFractionTimeSpan(10000, 10000.00)),
-            Tuple.Create(new BarBeatFractionTimeSpan(0, 100.00), new BarBeatFractionTimeSpan(0, 110.01)),
-            Tuple.Create(new BarBeatFractionTimeSpan(199, 0.10), new BarBeatFractionTimeSpan(200, 0.80)),
-            Tuple.Create(new BarBeatFractionTimeSpan(), new BarBeatFractionTimeSpan(10, 110.91))
+            new object[] { new BarBeatFractionTimeSpan(), new BarBeatFractionTimeSpan(0, 0.01) },
+            new object[] { new BarBeatFractionTimeSpan(), new BarBeatFractionTimeSpan(0, 1.00) },
+            new object[] { new BarBeatFractionTimeSpan(), new BarBeatFractionTimeSpan(1, 0.00) },
+            new object[] { new BarBeatFractionTimeSpan(), new BarBeatFractionTimeSpan(0, 0.01) },
+            new object[] { new BarBeatFractionTimeSpan(2, 0.00), new BarBeatFractionTimeSpan(10, 0.01) },
+            new object[] { new BarBeatFractionTimeSpan(0, 10.00), new BarBeatFractionTimeSpan(0, 10.01) },
+            new object[] { new BarBeatFractionTimeSpan(10, 10.00), new BarBeatFractionTimeSpan(10, 10.01) },
+            new object[] { new BarBeatFractionTimeSpan(10000, 899.00), new BarBeatFractionTimeSpan(10000, 10000.00) },
+            new object[] { new BarBeatFractionTimeSpan(0, 100.00), new BarBeatFractionTimeSpan(0, 110.01) },
+            new object[] { new BarBeatFractionTimeSpan(199, 0.10), new BarBeatFractionTimeSpan(200, 0.80) },
+            new object[] { new BarBeatFractionTimeSpan(), new BarBeatFractionTimeSpan(10, 110.91) }
         };
 
-        private static readonly Tuple<BarBeatFractionTimeSpan, BarBeatFractionTimeSpan>[] TimeSpansForComparison_Equal = new[]
+        private static object[] TimeSpansForComparison_Equal = new[]
         {
-            Tuple.Create(new BarBeatFractionTimeSpan(), new BarBeatFractionTimeSpan()),
-            Tuple.Create(new BarBeatFractionTimeSpan(), new BarBeatFractionTimeSpan(0, 0.00)),
-            Tuple.Create(new BarBeatFractionTimeSpan(10, 0.00), new BarBeatFractionTimeSpan(10, 0.00)),
-            Tuple.Create(new BarBeatFractionTimeSpan(100, 100.10), new BarBeatFractionTimeSpan(100, 100.10)),
-            Tuple.Create(new BarBeatFractionTimeSpan(0, 345.00), new BarBeatFractionTimeSpan(0, 345.0)),
-            Tuple.Create(new BarBeatFractionTimeSpan(0, 0.345), new BarBeatFractionTimeSpan(0, 0.345))
+            new object[] { new BarBeatFractionTimeSpan(), new BarBeatFractionTimeSpan() },
+            new object[] { new BarBeatFractionTimeSpan(), new BarBeatFractionTimeSpan(0, 0.00) },
+            new object[] { new BarBeatFractionTimeSpan(10, 0.00), new BarBeatFractionTimeSpan(10, 0.00) },
+            new object[] { new BarBeatFractionTimeSpan(100, 100.10), new BarBeatFractionTimeSpan(100, 100.10) },
+            new object[] { new BarBeatFractionTimeSpan(0, 345.00), new BarBeatFractionTimeSpan(0, 345.0) },
+            new object[] { new BarBeatFractionTimeSpan(0, 0.345), new BarBeatFractionTimeSpan(0, 0.345) }
+        };
+
+        private static object[] TimeSpansForComparison_LessOrEqual =
+            TimeSpansForComparison_Less.Concat(TimeSpansForComparison_Equal).ToArray();
+
+        private static object[] StringsToTimeSpans = new[]
+        {
+            new object[] { "0_0", new BarBeatFractionTimeSpan() },
+            new object[] { "0,0_0.0", new BarBeatFractionTimeSpan() },
+            new object[] { "0_0.0", new BarBeatFractionTimeSpan() },
+            new object[] { "10_0", new BarBeatFractionTimeSpan(10, 0.00) },
+            new object[] { "10,8_0", new BarBeatFractionTimeSpan(10.8, 0.00) },
+            new object[] { "100_100.10", new BarBeatFractionTimeSpan(100, 100.10) },
+            new object[] { "100_100,10", new BarBeatFractionTimeSpan(100, 100.10) },
+            new object[] { "0_345.00", new BarBeatFractionTimeSpan(0, 345.00) },
+            new object[] { "0_345,00", new BarBeatFractionTimeSpan(0, 345.00) },
+            new object[] { "10_45.00", new BarBeatFractionTimeSpan(10, 45.00) },
+            new object[] { "10_45,00", new BarBeatFractionTimeSpan(10, 45.00) },
+            new object[] { "2_45", new BarBeatFractionTimeSpan(2, 45) }
+        };
+
+        private static object[] TimeSpansToStrings = new[]
+        {
+            new object[] { new BarBeatFractionTimeSpan(), "0_0" },
+            new object[] { new BarBeatFractionTimeSpan(10, 0.00), "10_0" },
+            new object[] { new BarBeatFractionTimeSpan(10.8, 0.00), "10,8_0" },
+            new object[] { new BarBeatFractionTimeSpan(100, 100.10), "100_100,1" },
+            new object[] { new BarBeatFractionTimeSpan(0, 345.00), "0_345" },
+            new object[] { new BarBeatFractionTimeSpan(10, 45.00), "10_45" },
+            new object[] { new BarBeatFractionTimeSpan(2, 45), "2_45" }
         };
 
         #endregion
@@ -508,32 +538,16 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
         #region Parse
 
-        [Test]
-        [Description("Parse zero bar-beat time span.")]
-        public void Parse_1()
+        [TestCaseSource(nameof(StringsToTimeSpans))]
+        public void Parse(string s, BarBeatFractionTimeSpan expectedTimeSpan)
         {
-            TimeSpanTestUtilities.Parse("0_0", new BarBeatFractionTimeSpan());
+            TimeSpanTestUtilities.Parse(s, expectedTimeSpan);
         }
 
-        [Test]
-        [Description("Parse one-bar time span.")]
-        public void Parse_2()
+        [TestCaseSource(nameof(TimeSpansToStrings))]
+        public void ToString(BarBeatFractionTimeSpan timeSpan, string expectedString)
         {
-            TimeSpanTestUtilities.Parse("1_0.02", new BarBeatFractionTimeSpan(1, 0.02));
-        }
-
-        [Test]
-        [Description("Parse arbitrary bar-beat time span.")]
-        public void Parse_3()
-        {
-            TimeSpanTestUtilities.Parse("0_10.05", new BarBeatFractionTimeSpan(0, 10.05));
-        }
-
-        [Test]
-        [Description("Parse arbitrary bar-beat time span.")]
-        public void Parse_4()
-        {
-            TimeSpanTestUtilities.Parse("100_20.5656", new BarBeatFractionTimeSpan(100, 20.5656));
+            ClassicAssert.AreEqual(expectedString, timeSpan.ToString(), "Invalid string representation.");
         }
 
         #endregion
@@ -946,76 +960,60 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
         #region Compare
 
-        [Test]
-        [Description("Compare two time spans where first one is less than second one.")]
-        public void Compare_Less()
+        [TestCaseSource(nameof(TimeSpansForComparison_Less))]
+        public void Compare_Less(BarBeatFractionTimeSpan timeSpan1, BarBeatFractionTimeSpan timeSpan2)
         {
-            foreach (var timeSpansPair in TimeSpansForComparison_Less)
-            {
-                var timeSpan1 = timeSpansPair.Item1;
-                var timeSpan2 = timeSpansPair.Item2;
-
-                ClassicAssert.IsTrue(timeSpan1 < timeSpan2,
-                              $"{timeSpan1} isn't less than {timeSpan2} using <.");
-                ClassicAssert.IsTrue(timeSpan1.CompareTo(timeSpan2) < 0,
-                              $"{timeSpan1} isn't less than {timeSpan2} using typed CompareTo.");
-                ClassicAssert.IsTrue(timeSpan1.CompareTo((object)timeSpan2) < 0,
-                              $"{timeSpan1} isn't less than {timeSpan2} using CompareTo(object).");
-            }
+            ClassicAssert.IsTrue(
+                timeSpan1 < timeSpan2,
+                $"{timeSpan1} isn't less than {timeSpan2} using <.");
+            ClassicAssert.IsTrue(
+                timeSpan1.CompareTo(timeSpan2) < 0,
+                $"{timeSpan1} isn't less than {timeSpan2} using typed CompareTo.");
+            ClassicAssert.IsTrue(
+                timeSpan1.CompareTo((object)timeSpan2) < 0,
+                $"{timeSpan1} isn't less than {timeSpan2} using CompareTo(object).");
         }
 
-        [Test]
-        [Description("Compare two time spans where first one is greater than second one.")]
-        public void Compare_Greater()
+        [TestCaseSource(nameof(TimeSpansForComparison_Less))]
+        public void Compare_Greater(BarBeatFractionTimeSpan timeSpan2, BarBeatFractionTimeSpan timeSpan1)
         {
-            foreach (var timeSpansPair in TimeSpansForComparison_Less)
-            {
-                var timeSpan1 = timeSpansPair.Item2;
-                var timeSpan2 = timeSpansPair.Item1;
-
-                ClassicAssert.IsTrue(timeSpan1 > timeSpan2,
-                              $"{timeSpan1} isn't greater than {timeSpan2} using >.");
-                ClassicAssert.IsTrue(timeSpan1.CompareTo(timeSpan2) > 0,
-                              $"{timeSpan1} isn't greater than {timeSpan2} using typed CompareTo.");
-                ClassicAssert.IsTrue(timeSpan1.CompareTo((object)timeSpan2) > 0,
-                              $"{timeSpan1} isn't greater than {timeSpan2} using CompareTo(object).");
-            }
+            ClassicAssert.IsTrue(
+                timeSpan1 > timeSpan2,
+                $"{timeSpan1} isn't greater than {timeSpan2} using >.");
+            ClassicAssert.IsTrue(
+                timeSpan1.CompareTo(timeSpan2) > 0,
+                $"{timeSpan1} isn't greater than {timeSpan2} using typed CompareTo.");
+            ClassicAssert.IsTrue(
+                timeSpan1.CompareTo((object)timeSpan2) > 0,
+                $"{timeSpan1} isn't greater than {timeSpan2} using CompareTo(object).");
         }
 
-        [Test]
-        [Description("Compare two time spans where first one is less than or equal to second one.")]
-        public void Compare_LessOrEqual()
+        [TestCaseSource(nameof(TimeSpansForComparison_LessOrEqual))]
+        public void Compare_LessOrEqual(BarBeatFractionTimeSpan timeSpan1, BarBeatFractionTimeSpan timeSpan2)
         {
-            foreach (var timeSpansPair in TimeSpansForComparison_Less.Concat(TimeSpansForComparison_Equal))
-            {
-                var timeSpan1 = timeSpansPair.Item1;
-                var timeSpan2 = timeSpansPair.Item2;
-
-                ClassicAssert.IsTrue(timeSpan1 <= timeSpan2,
-                              $"{timeSpan1} isn't less than or equal to {timeSpan2} using <=.");
-                ClassicAssert.IsTrue(timeSpan1.CompareTo(timeSpan2) <= 0,
-                              $"{timeSpan1} isn't less than or equal to {timeSpan2} using typed CompareTo.");
-                ClassicAssert.IsTrue(timeSpan1.CompareTo((object)timeSpan2) <= 0,
-                              $"{timeSpan1} isn't less than or equal to {timeSpan2} using CompareTo(object).");
-            }
+            ClassicAssert.IsTrue(
+                timeSpan1 <= timeSpan2,
+                $"{timeSpan1} isn't less than or equal to {timeSpan2} using <=.");
+            ClassicAssert.IsTrue(
+                timeSpan1.CompareTo(timeSpan2) <= 0,
+                $"{timeSpan1} isn't less than or equal to {timeSpan2} using typed CompareTo.");
+            ClassicAssert.IsTrue(
+                timeSpan1.CompareTo((object)timeSpan2) <= 0,
+                $"{timeSpan1} isn't less than or equal to {timeSpan2} using CompareTo(object).");
         }
 
-        [Test]
-        [Description("Compare two time spans where first one is greater than or equal to second one.")]
-        public void Compare_GreaterOrEqual()
+        [TestCaseSource(nameof(TimeSpansForComparison_LessOrEqual))]
+        public void Compare_GreaterOrEqual(BarBeatFractionTimeSpan timeSpan2, BarBeatFractionTimeSpan timeSpan1)
         {
-            foreach (var timeSpansPair in TimeSpansForComparison_Less.Concat(TimeSpansForComparison_Equal))
-            {
-                var timeSpan1 = timeSpansPair.Item2;
-                var timeSpan2 = timeSpansPair.Item1;
-
-                ClassicAssert.IsTrue(timeSpan1 >= timeSpan2,
-                              $"{timeSpan1} isn't greater than or equal to {timeSpan2} using >=.");
-                ClassicAssert.IsTrue(timeSpan1.CompareTo(timeSpan2) >= 0,
-                              $"{timeSpan1} isn't greater than or equal to {timeSpan2} using typed CompareTo.");
-                ClassicAssert.IsTrue(timeSpan1.CompareTo((object)timeSpan2) >= 0,
-                              $"{timeSpan1} isn't greater than or equal to {timeSpan2} using CompareTo(object).");
-            }
+            ClassicAssert.IsTrue(
+                timeSpan1 >= timeSpan2,
+                $"{timeSpan1} isn't greater than or equal to {timeSpan2} using >=.");
+            ClassicAssert.IsTrue(
+                timeSpan1.CompareTo(timeSpan2) >= 0,
+                $"{timeSpan1} isn't greater than or equal to {timeSpan2} using typed CompareTo.");
+            ClassicAssert.IsTrue(
+                timeSpan1.CompareTo((object)timeSpan2) >= 0,
+                $"{timeSpan1} isn't greater than or equal to {timeSpan2} using CompareTo(object).");
         }
 
         [Test]
@@ -1038,76 +1036,60 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             }
         }
 
-        [Test]
-        [Description("Compare two time spans for equality: true expected.")]
-        public void Compare_Equal_True()
+        [TestCaseSource(nameof(TimeSpansForComparison_Equal))]
+        public void Compare_Equal_True(BarBeatFractionTimeSpan timeSpan1, BarBeatFractionTimeSpan timeSpan2)
         {
-            foreach (var timeSpansPair in TimeSpansForComparison_Equal)
-            {
-                var timeSpan1 = timeSpansPair.Item2;
-                var timeSpan2 = timeSpansPair.Item1;
-
-                ClassicAssert.IsTrue(timeSpan1 == timeSpan2,
-                              $"{timeSpan1} isn't equal to {timeSpan2} using ==.");
-                ClassicAssert.IsTrue(timeSpan1.Equals(timeSpan2),
-                              $"{timeSpan1} isn't equal to {timeSpan2} using typed Equals.");
-                ClassicAssert.IsTrue(timeSpan1.Equals((object)timeSpan2),
-                              $"{timeSpan1} isn't equal to {timeSpan2} using Equals(object).");
-            }
+            ClassicAssert.IsTrue(
+                timeSpan1 == timeSpan2,
+                $"{timeSpan1} isn't equal to {timeSpan2} using ==.");
+            ClassicAssert.IsTrue(
+                timeSpan1.Equals(timeSpan2),
+                $"{timeSpan1} isn't equal to {timeSpan2} using typed Equals.");
+            ClassicAssert.IsTrue(
+                timeSpan1.Equals((object)timeSpan2),
+                $"{timeSpan1} isn't equal to {timeSpan2} using Equals(object).");
         }
 
-        [Test]
-        [Description("Compare two time spans for equality: false expected.")]
-        public void Compare_Equal_False()
+        [TestCaseSource(nameof(TimeSpansForComparison_Less))]
+        public void Compare_Equal_False(BarBeatFractionTimeSpan timeSpan1, BarBeatFractionTimeSpan timeSpan2)
         {
-            foreach (var timeSpansPair in TimeSpansForComparison_Less)
-            {
-                var timeSpan1 = timeSpansPair.Item2;
-                var timeSpan2 = timeSpansPair.Item1;
-
-                ClassicAssert.IsFalse(timeSpan1 == timeSpan2,
-                               $"{timeSpan1} equal to {timeSpan2} using ==.");
-                ClassicAssert.IsFalse(timeSpan1.Equals(timeSpan2),
-                               $"{timeSpan1} equal to {timeSpan2} using typed Equals.");
-                ClassicAssert.IsFalse(timeSpan1.Equals((object)timeSpan2),
-                               $"{timeSpan1} equal to {timeSpan2} using Equals(object).");
-            }
+            ClassicAssert.IsFalse(
+                timeSpan1 == timeSpan2,
+                $"{timeSpan1} equal to {timeSpan2} using ==.");
+            ClassicAssert.IsFalse(
+                timeSpan1.Equals(timeSpan2),
+                $"{timeSpan1} equal to {timeSpan2} using typed Equals.");
+            ClassicAssert.IsFalse(
+                timeSpan1.Equals((object)timeSpan2),
+                $"{timeSpan1} equal to {timeSpan2} using Equals(object).");
         }
 
-        [Test]
-        [Description("Compare two time spans for inequality: true expected.")]
-        public void Compare_DoesNotEqual_True()
+        [TestCaseSource(nameof(TimeSpansForComparison_Less))]
+        public void Compare_DoesNotEqual_True(BarBeatFractionTimeSpan timeSpan1, BarBeatFractionTimeSpan timeSpan2)
         {
-            foreach (var timeSpansPair in TimeSpansForComparison_Less)
-            {
-                var timeSpan1 = timeSpansPair.Item2;
-                var timeSpan2 = timeSpansPair.Item1;
-
-                ClassicAssert.IsTrue(timeSpan1 != timeSpan2,
-                              $"{timeSpan1} equal to {timeSpan2} using !=.");
-                ClassicAssert.IsTrue(!timeSpan1.Equals(timeSpan2),
-                              $"{timeSpan1} equal to {timeSpan2} using typed Equals.");
-                ClassicAssert.IsTrue(!timeSpan1.Equals((object)timeSpan2),
-                              $"{timeSpan1} equal to {timeSpan2} using Equals(object).");
-            }
+            ClassicAssert.IsTrue(
+                timeSpan1 != timeSpan2,
+                $"{timeSpan1} equal to {timeSpan2} using !=.");
+            ClassicAssert.IsTrue(
+                !timeSpan1.Equals(timeSpan2),
+                $"{timeSpan1} equal to {timeSpan2} using typed Equals.");
+            ClassicAssert.IsTrue(
+                !timeSpan1.Equals((object)timeSpan2),
+                $"{timeSpan1} equal to {timeSpan2} using Equals(object).");
         }
 
-        [Test]
-        [Description("Compare two time spans for inequality: false expected.")]
-        public void Compare_DoesNotEqual_False()
+        [TestCaseSource(nameof(TimeSpansForComparison_Equal))]
+        public void Compare_DoesNotEqual_False(BarBeatFractionTimeSpan timeSpan1, BarBeatFractionTimeSpan timeSpan2)
         {
-            foreach (var timeSpansPair in TimeSpansForComparison_Equal)
-            {
-                var timeSpan1 = timeSpansPair.Item2;
-                var timeSpan2 = timeSpansPair.Item1;
-
-                ClassicAssert.IsFalse(timeSpan1 != timeSpan2,
-                               $"{timeSpan1} isn't equal to {timeSpan2} using !=.");
-                ClassicAssert.IsFalse(!timeSpan1.Equals(timeSpan2),
-                               $"{timeSpan1} isn't equal to {timeSpan2} using typed Equals.");
-                ClassicAssert.IsFalse(!timeSpan1.Equals((object)timeSpan2),
-                               $"{timeSpan1} isn't equal to {timeSpan2} using Equals(object).");
-            }
+            ClassicAssert.IsFalse(
+                timeSpan1 != timeSpan2,
+                $"{timeSpan1} isn't equal to {timeSpan2} using !=.");
+            ClassicAssert.IsFalse(
+                !timeSpan1.Equals(timeSpan2),
+                $"{timeSpan1} isn't equal to {timeSpan2} using typed Equals.");
+            ClassicAssert.IsFalse(
+                !timeSpan1.Equals((object)timeSpan2),
+                $"{timeSpan1} isn't equal to {timeSpan2} using Equals(object).");
         }
 
         #endregion

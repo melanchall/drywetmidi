@@ -10,8 +10,8 @@ namespace Melanchall.DryWetMidi.Interaction
         private const string BarsGroupName = "bars";
         private const string BeatsGroupName = "beats";
 
-        private static readonly string BarsGroup = ParsingUtilities.GetNonnegativeIntegerNumberGroup(BarsGroupName);
-        private static readonly string BeatsGroup = ParsingUtilities.GetNonnegativeDoubleNumberGroup(BeatsGroupName);
+        private static readonly string BarsGroup = ParsingUtilities.GetNonnegativeDoubleNumberGroup(BarsGroupName, ',');
+        private static readonly string BeatsGroup = ParsingUtilities.GetNonnegativeDoubleNumberGroup(BeatsGroupName, '.', ',');
 
         private static readonly string Divider = Regex.Escape("_");
 
@@ -38,10 +38,10 @@ namespace Melanchall.DryWetMidi.Interaction
             if (match == null)
                 return ParsingResult.NotMatched;
 
-            if (!ParsingUtilities.ParseNonnegativeLong(match, BarsGroupName, 0, out var bars))
+            if (!ParsingUtilities.ParseNonnegativeDouble(match, BarsGroupName, 0, new[] { ',' }, out var bars))
                 return ParsingResult.Error(BarsIsOutOfRange);
 
-            if (!ParsingUtilities.ParseNonnegativeDouble(match, BeatsGroupName, 0, out var beats))
+            if (!ParsingUtilities.ParseNonnegativeDouble(match, BeatsGroupName, 0, new[] { '.', ',' }, out var beats))
                 return ParsingResult.Error(BeatsIsOutOfRange);
 
             timeSpan = new BarBeatFractionTimeSpan(bars, beats);

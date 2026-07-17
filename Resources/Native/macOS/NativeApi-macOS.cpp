@@ -104,9 +104,9 @@ API_EXPORT void CheckNativeApiActivityCallback(Configuration* configuration)
 struct TickGeneratorSessionHandle
 {
     pthread_t thread;
-    std::atomic<char> active;
-    std::atomic<char> sessionClosed;
-    std::atomic<char> threadExited;
+    std::atomic<bool> active;
+    std::atomic<bool> sessionClosed;
+    std::atomic<bool> threadExited;
     CFRunLoopRef runLoopRef;
     TGSESSION_OPENRESULT threadStartResult;
     int threadStartError;
@@ -178,7 +178,7 @@ void* TickGeneratorSessionThreadRoutine(void* data)
     //
 
     sessionHandle->runLoopRef = (CFRunLoopRef)CFRetain(runLoopRef);
-    sessionHandle->active.store(1);
+    sessionHandle->active.store(true);
 
     CFRunLoopRun();
 
@@ -188,7 +188,7 @@ void* TickGeneratorSessionThreadRoutine(void* data)
         sessionHandle->runLoopRef = nullptr;
     }
 
-    sessionHandle->threadExited.store(1);
+    sessionHandle->threadExited.store(true);
 
     return nullptr;
 }
@@ -200,9 +200,9 @@ API_EXPORT TGSESSION_OPENRESULT OpenTickGeneratorSession(void** handle, int* err
     TickGeneratorSessionHandle* sessionHandle = new TickGeneratorSessionHandle();
 
     sessionHandle->threadStartResult = TGSESSION_OPENRESULT_OK;
-    sessionHandle->active.store(0);
-    sessionHandle->sessionClosed.store(0);
-    sessionHandle->threadExited.store(0);
+    sessionHandle->active.store(false);
+    sessionHandle->sessionClosed.store(false);
+    sessionHandle->threadExited.store(false);
 
     int pthreadCreateResult;
     if ((pthreadCreateResult = pthread_create(&sessionHandle->thread, nullptr, TickGeneratorSessionThreadRoutine, sessionHandle)) != 0)
@@ -212,7 +212,7 @@ API_EXPORT TGSESSION_OPENRESULT OpenTickGeneratorSession(void** handle, int* err
         return TGSESSION_OPENRESULT_THREADSTARTERROR;
     }
     
-    while (sessionHandle->active.load() == 0)
+    while (sessionHandle->active.load() == false)
     {
         if (sessionHandle->threadStartResult != TGSESSION_OPENRESULT_OK)
         {
@@ -237,7 +237,7 @@ API_EXPORT TGSESSION_CLOSERESULT CloseTickGeneratorSession(void* handle, int* er
 
     TickGeneratorSessionHandle* sessionHandle = static_cast<TickGeneratorSessionHandle*>(handle);
 
-    if (sessionHandle->sessionClosed.exchange(1) == 1)
+    if (sessionHandle->sessionClosed.exchange(true) == true)
         return SESSION_CLOSERESULT_OK;
 
     if (sessionHandle->runLoopRef == nullptr)
@@ -259,14 +259,14 @@ API_EXPORT TGSESSION_CLOSERESULT CloseTickGeneratorSession(void* handle, int* er
     const int pollIntervalMs = 10;
     int waitedMs = 0;
 
-    while (sessionHandle->threadExited.load() == 0 && waitedMs < maxWaitMs)
+    while (sessionHandle->threadExited.load() == false && waitedMs < maxWaitMs)
     {
         struct timespec ts = { 0, pollIntervalMs * 1000000 };
         nanosleep(&ts, nullptr);
         waitedMs += pollIntervalMs;
     }
 
-    TGSESSION_CLOSERESULT result = sessionHandle->threadExited.load() == 1
+    TGSESSION_CLOSERESULT result = sessionHandle->threadExited.load() == true
         ? TGSESSION_CLOSERESULT_OK
         : TGSESSION_CLOSERESULT_THREADEXITTIMEOUT;
 
@@ -581,8 +581,8 @@ typedef void (*OutputEndpointCallback)(void* info, SESSION_CALLBACKOPERATION ope
 
 struct EndpointDevicesInfo
 {
-    std::vector<InputEndpointInfo*> inputDevicesInfo;
-    std::vector<OutputEndpointInfo*> outputDevicesInfo;
+    std::vector<InputEndpointInfo*> inputEndpointsInfo;
+    std::vector<OutputEndpointInfo*> outputEndpointsInfo;
 };
 
 struct SessionHandle
@@ -591,19 +591,19 @@ struct SessionHandle
     MIDIClientRef clientRef;
     CFRunLoopRef runLoopRef;
     pthread_t thread;
-    std::atomic<char> clientCreated;
-    std::atomic<char> sessionClosed;
-    std::atomic<char> threadExited;
+    std::atomic<bool> clientCreated;
+    std::atomic<bool> sessionClosed;
+    std::atomic<bool> threadExited;
     OSStatus clientCreationStatus;
-    InputEndpointCallback inputDeviceCallback;
-    OutputEndpointCallback outputDeviceCallback;
+    InputEndpointCallback inputEndpointCallback;
+    OutputEndpointCallback outputEndpointCallback;
 
     std::unordered_map<MIDIEndpointRef, int> ids;
 };
  
 void HandleSource(MIDIEndpointRef source, SessionHandle* sessionHandle, SESSION_CALLBACKOPERATION operation)
 {
-    if (sessionHandle->sessionClosed.load() == 1)
+    if (sessionHandle->sessionClosed.load() == true)
         return;
 
     int id = 0;
@@ -628,21 +628,21 @@ void HandleSource(MIDIEndpointRef source, SessionHandle* sessionHandle, SESSION_
             sessionHandle->ids[source] = id;
     }
 
-    if (sessionHandle->inputDeviceCallback == nullptr)
+    if (sessionHandle->inputEndpointCallback == nullptr)
         return;
 
-    InputEndpointInfo* inputDeviceInfo = new InputEndpointInfo();
-    inputDeviceInfo->endpointRef = source;
+    InputEndpointInfo* inputEndpointInfo = new InputEndpointInfo();
+    inputEndpointInfo->endpointRef = source;
 
-    inputDeviceInfo->id = id;
-    inputDeviceInfo->idCached = true;
+    inputEndpointInfo->id = id;
+    inputEndpointInfo->idCached = true;
 
-    sessionHandle->inputDeviceCallback(inputDeviceInfo, operation);
+    sessionHandle->inputEndpointCallback(inputEndpointInfo, operation);
 }
 
 void HandleDestination(MIDIEndpointRef destination, SessionHandle* sessionHandle, SESSION_CALLBACKOPERATION operation)
 {
-    if (sessionHandle->sessionClosed.load() == 1)
+    if (sessionHandle->sessionClosed.load() == true)
         return;
 
     int id = 0;
@@ -667,21 +667,21 @@ void HandleDestination(MIDIEndpointRef destination, SessionHandle* sessionHandle
             sessionHandle->ids[destination] = id;
     }
 
-    if (sessionHandle->outputDeviceCallback == nullptr)
+    if (sessionHandle->outputEndpointCallback == nullptr)
         return;
 
-    OutputEndpointInfo* outputDeviceInfo = new OutputEndpointInfo();
-    outputDeviceInfo->endpointRef = destination;
+    OutputEndpointInfo* outputEndpointInfo = new OutputEndpointInfo();
+    outputEndpointInfo->endpointRef = destination;
 
-    outputDeviceInfo->id = id;
-    outputDeviceInfo->idCached = true;
+    outputEndpointInfo->id = id;
+    outputEndpointInfo->idCached = true;
 
-    sessionHandle->outputDeviceCallback(outputDeviceInfo, operation);
+    sessionHandle->outputEndpointCallback(outputEndpointInfo, operation);
 }
 
 void HandleEntitySources(MIDIEntityRef entity, SessionHandle* sessionHandle, SESSION_CALLBACKOPERATION operation)
 {
-    if (sessionHandle->sessionClosed.load() == 1)
+    if (sessionHandle->sessionClosed.load() == true)
         return;
 
     ItemCount _sourcesCount = MIDIEntityGetNumberOfSources(entity);
@@ -695,7 +695,7 @@ void HandleEntitySources(MIDIEntityRef entity, SessionHandle* sessionHandle, SES
 
 void HandleEntityDestinations(MIDIEntityRef entity, SessionHandle* sessionHandle, SESSION_CALLBACKOPERATION operation)
 {
-    if (sessionHandle->sessionClosed.load() == 1)
+    if (sessionHandle->sessionClosed.load() == true)
         return;
 
     ItemCount _destinationsCount = MIDIEntityGetNumberOfDestinations(entity);
@@ -709,7 +709,7 @@ void HandleEntityDestinations(MIDIEntityRef entity, SessionHandle* sessionHandle
 
 void HandleEntity(MIDIEntityRef entity, SessionHandle* sessionHandle, SESSION_CALLBACKOPERATION operation)
 {
-    if (sessionHandle->sessionClosed.load() == 1)
+    if (sessionHandle->sessionClosed.load() == true)
         return;
 
     HandleEntitySources(entity, sessionHandle, operation);
@@ -718,7 +718,7 @@ void HandleEntity(MIDIEntityRef entity, SessionHandle* sessionHandle, SESSION_CA
 
 void HandleDevice(MIDIDeviceRef device, SessionHandle* sessionHandle, SESSION_CALLBACKOPERATION operation)
 {
-    if (sessionHandle->sessionClosed.load() == 1)
+    if (sessionHandle->sessionClosed.load() == true)
         return;
 
     ItemCount entitiesCount = MIDIDeviceGetNumberOfEntities(device);
@@ -732,7 +732,7 @@ void HandleDevice(MIDIDeviceRef device, SessionHandle* sessionHandle, SESSION_CA
 
 void HandleNotification(const MIDINotification* message, SessionHandle* sessionHandle)
 {
-    if (sessionHandle->sessionClosed.load() == 1)
+    if (sessionHandle->sessionClosed.load() == true)
         return;
 
     switch (message->messageID)
@@ -778,7 +778,7 @@ void HandleNotification(const MIDINotification* message, SessionHandle* sessionH
 void NotifyProc(const MIDINotification* message, void* refCon)
 {
     SessionHandle* sessionHandle = static_cast<SessionHandle*>(refCon);
-    if (sessionHandle->sessionClosed.load() == 1)
+    if (sessionHandle->sessionClosed.load() == true)
         return;
 
     HandleNotification(message, sessionHandle);
@@ -795,14 +795,14 @@ void* ThreadProc(void* data)
         CFRelease(sessionHandle->runLoopRef);
         sessionHandle->runLoopRef = nullptr;
         sessionHandle->clientCreationStatus = kMIDIUnknownError;
-        sessionHandle->clientCreated.store(1);
+        sessionHandle->clientCreated.store(true);
         return nullptr;
     }
 
     sessionHandle->clientCreationStatus = MIDIClientCreate(nameRef, NotifyProc, data, &sessionHandle->clientRef);
     CFRelease(nameRef);
     
-    sessionHandle->clientCreated.store(1);
+    sessionHandle->clientCreated.store(true);
     
     CFRunLoopRun();
 
@@ -812,23 +812,23 @@ void* ThreadProc(void* data)
         sessionHandle->runLoopRef = nullptr;
     }
 
-    sessionHandle->threadExited.store(1);
+    sessionHandle->threadExited.store(true);
 
     return nullptr;
 }
 
-API_EXPORT SESSION_OPENRESULT OpenSession_Mac(const char* name, Configuration* configuration, InputEndpointCallback inputDeviceCallback, OutputEndpointCallback outputDeviceCallback, SessionHandle** handle, int* errorCode)
+API_EXPORT SESSION_OPENRESULT OpenSession_Mac(const char* name, Configuration* configuration, InputEndpointCallback inputEndpointCallback, OutputEndpointCallback outputEndpointCallback, SessionHandle** handle, int* errorCode)
 {
     *errorCode = 0;
 
     SessionHandle* sessionHandle = new SessionHandle();
     
     sessionHandle->name = name;
-    sessionHandle->inputDeviceCallback = inputDeviceCallback;
-    sessionHandle->outputDeviceCallback = outputDeviceCallback;
-    sessionHandle->clientCreated.store(0);
-    sessionHandle->sessionClosed.store(0);
-    sessionHandle->threadExited.store(0);
+    sessionHandle->inputEndpointCallback = inputEndpointCallback;
+    sessionHandle->outputEndpointCallback = outputEndpointCallback;
+    sessionHandle->clientCreated.store(false);
+    sessionHandle->sessionClosed.store(false);
+    sessionHandle->threadExited.store(false);
     
     int pthreadCreateResult;
     if ((pthreadCreateResult = pthread_create(&sessionHandle->thread, nullptr, ThreadProc, sessionHandle)) != 0)
@@ -841,7 +841,7 @@ API_EXPORT SESSION_OPENRESULT OpenSession_Mac(const char* name, Configuration* c
     auto startTime = std::chrono::steady_clock::now();
     const auto timeoutMs = 5000;
 
-    while (sessionHandle->clientCreated.load() == 0)
+    while (sessionHandle->clientCreated.load() == false)
     {
         std::this_thread::sleep_for(std::chrono::milliseconds(1));
 
@@ -900,11 +900,11 @@ API_EXPORT SESSION_OPENRESULT OpenSession_Mac(const char* name, Configuration* c
 
 API_EXPORT SESSION_CLOSERESULT CloseSession(SessionHandle* sessionHandle)
 {
-    if (sessionHandle->sessionClosed.exchange(1) == 1 || sessionHandle->runLoopRef == nullptr)
+    if (sessionHandle->sessionClosed.exchange(true) == true || sessionHandle->runLoopRef == nullptr)
         return SESSION_CLOSERESULT_OK;
     
-    sessionHandle->inputDeviceCallback = nullptr;
-    sessionHandle->outputDeviceCallback = nullptr;
+    sessionHandle->inputEndpointCallback = nullptr;
+    sessionHandle->outputEndpointCallback = nullptr;
 
     if (sessionHandle->runLoopRef != nullptr)
         CFRunLoopStop(sessionHandle->runLoopRef);
@@ -913,14 +913,14 @@ API_EXPORT SESSION_CLOSERESULT CloseSession(SessionHandle* sessionHandle)
     const int pollIntervalMs = 10;
     int waitedMs = 0;
 
-    while (sessionHandle->threadExited.load() == 0 && waitedMs < maxWaitMs)
+    while (sessionHandle->threadExited.load() == false && waitedMs < maxWaitMs)
     {
         struct timespec ts = { 0, pollIntervalMs * 1000000 };
         nanosleep(&ts, nullptr);
         waitedMs += pollIntervalMs;
     }
 
-    SESSION_CLOSERESULT result = sessionHandle->threadExited.load() == 1
+    SESSION_CLOSERESULT result = sessionHandle->threadExited.load() == true
         ? SESSION_CLOSERESULT_OK
         : SESSION_CLOSERESULT_THREADEXITTIMEOUT;
 
@@ -942,18 +942,18 @@ IN_GETINFORESULT GetInputEndpointInfo(int deviceIndex, InputEndpointInfo** info,
 {
     *errorCode = 0;
 
-    InputEndpointInfo* inputDeviceInfo = new InputEndpointInfo();
+    InputEndpointInfo* inputEndpointInfo = new InputEndpointInfo();
 
     MIDIEndpointRef endpointRef = MIDIGetSource(deviceIndex);
     if (endpointRef == 0)
     {
-        delete inputDeviceInfo;
+        delete inputEndpointInfo;
         return IN_GETINFORESULT_UNKNOWNERROR;
     }
 
-    inputDeviceInfo->endpointRef = endpointRef;
+    inputEndpointInfo->endpointRef = endpointRef;
 
-    *info = inputDeviceInfo;
+    *info = inputEndpointInfo;
 
     return IN_GETINFORESULT_OK;
 }
@@ -967,9 +967,9 @@ API_EXPORT IN_GETALLINFORESULT GetInputEndpointsInfo(Configuration* configuratio
 
     for (int i = 0; i < *devicesCount; i++)
     {
-        InputEndpointInfo* inputDeviceInfo;
+        InputEndpointInfo* inputEndpointInfo;
 
-        auto getInputEndpointInfoResult = GetInputEndpointInfo(i, &inputDeviceInfo, errorCode);
+        auto getInputEndpointInfoResult = GetInputEndpointInfo(i, &inputEndpointInfo, errorCode);
         if (getInputEndpointInfoResult != IN_GETINFORESULT_OK)
         {
             for (int j = 0; j < i; j++)
@@ -982,7 +982,7 @@ API_EXPORT IN_GETALLINFORESULT GetInputEndpointsInfo(Configuration* configuratio
             return IN_GETALLINFORESULT_UNKNOWNERRORONGETINFO;
         }
 
-        result[i] = inputDeviceInfo;
+        result[i] = inputEndpointInfo;
     }
 
     *devicesInfo = result;
@@ -1043,16 +1043,16 @@ API_EXPORT IN_OPENRESULT OpenInputEndpoint_Mac(InputEndpointInfo* info, void* se
 
     SessionHandle* pSessionHandle = static_cast<SessionHandle*>(sessionHandle);
 
-    InputEndpointHandle* inputDeviceHandle = new InputEndpointHandle();
-    inputDeviceHandle->info = info;
+    InputEndpointHandle* inputEndpointHandle = new InputEndpointHandle();
+    inputEndpointHandle->info = info;
 
-    *handle = inputDeviceHandle;
+    *handle = inputEndpointHandle;
 
     CFStringRef portNameRef = CFSTR("IN");
-    OSStatus status = MIDIInputPortCreate(pSessionHandle->clientRef, portNameRef, callback, nullptr, &inputDeviceHandle->portRef);
+    OSStatus status = MIDIInputPortCreate(pSessionHandle->clientRef, portNameRef, callback, nullptr, &inputEndpointHandle->portRef);
     if (status != noErr)
     {
-        delete inputDeviceHandle;
+        delete inputEndpointHandle;
 
         *errorCode = status;
 
@@ -1073,10 +1073,10 @@ API_EXPORT IN_CLOSERESULT CloseInputEndpoint(void* handle, int* errorCode)
 {
     *errorCode = 0;
 
-    InputEndpointHandle* inputDeviceHandle = static_cast<InputEndpointHandle*>(handle);
-    MIDIPortDispose(inputDeviceHandle->portRef);
+    InputEndpointHandle* inputEndpointHandle = static_cast<InputEndpointHandle*>(handle);
+    MIDIPortDispose(inputEndpointHandle->portRef);
 
-    delete inputDeviceHandle;
+    delete inputEndpointHandle;
 
     return IN_CLOSERESULT_OK;
 }
@@ -1085,9 +1085,9 @@ API_EXPORT IN_CONNECTRESULT ConnectToInputEndpoint(void* handle, int* errorCode)
 {
     *errorCode = 0;
 
-    InputEndpointHandle* inputDeviceHandle = static_cast<InputEndpointHandle*>(handle);
+    InputEndpointHandle* inputEndpointHandle = static_cast<InputEndpointHandle*>(handle);
 
-    OSStatus status = MIDIPortConnectSource(inputDeviceHandle->portRef, inputDeviceHandle->info->endpointRef, nullptr);
+    OSStatus status = MIDIPortConnectSource(inputEndpointHandle->portRef, inputEndpointHandle->info->endpointRef, nullptr);
     if (status != noErr)
     {
         *errorCode = status;
@@ -1111,9 +1111,9 @@ API_EXPORT IN_DISCONNECTRESULT DisconnectFromInputEndpoint(void* handle, int* er
 {
     *errorCode = 0;
 
-    InputEndpointHandle* inputDeviceHandle = static_cast<InputEndpointHandle*>(handle);
+    InputEndpointHandle* inputEndpointHandle = static_cast<InputEndpointHandle*>(handle);
 
-    OSStatus status = MIDIPortDisconnectSource(inputDeviceHandle->portRef, inputDeviceHandle->info->endpointRef);
+    OSStatus status = MIDIPortDisconnectSource(inputEndpointHandle->portRef, inputEndpointHandle->info->endpointRef);
     if (status != noErr)
     {
         *errorCode = status;
@@ -1172,18 +1172,18 @@ OUT_GETINFORESULT GetOutputEndpointInfo(int deviceIndex, OutputEndpointInfo** in
 {
     *errorCode = 0;
 
-    OutputEndpointInfo* outputDeviceInfo = new OutputEndpointInfo();
+    OutputEndpointInfo* outputEndpointInfo = new OutputEndpointInfo();
 
     MIDIEndpointRef endpointRef = MIDIGetDestination(deviceIndex);
     if (endpointRef == 0)
     {
-        delete outputDeviceInfo;
+        delete outputEndpointInfo;
         return OUT_GETINFORESULT_UNKNOWNERROR;
     }
 
-    outputDeviceInfo->endpointRef = endpointRef;
+    outputEndpointInfo->endpointRef = endpointRef;
 
-    *info = outputDeviceInfo;
+    *info = outputEndpointInfo;
 
     return OUT_GETINFORESULT_OK;
 }
@@ -1197,9 +1197,9 @@ API_EXPORT OUT_GETALLINFORESULT GetOutputEndpointsInfo(Configuration* configurat
 
     for (int i = 0; i < *devicesCount; i++)
     {
-        OutputEndpointInfo* outputDeviceInfo;
+        OutputEndpointInfo* outputEndpointInfo;
 
-        auto getOutputEndpointInfoResult = GetOutputEndpointInfo(i, &outputDeviceInfo, errorCode);
+        auto getOutputEndpointInfoResult = GetOutputEndpointInfo(i, &outputEndpointInfo, errorCode);
         if (getOutputEndpointInfoResult != OUT_GETINFORESULT_OK)
         {
             for (int j = 0; j < i; j++)
@@ -1212,7 +1212,7 @@ API_EXPORT OUT_GETALLINFORESULT GetOutputEndpointsInfo(Configuration* configurat
             return OUT_GETALLINFORESULT_UNKNOWNERRORONGETINFO;
         }
 
-        result[i] = outputDeviceInfo;
+        result[i] = outputEndpointInfo;
     }
 
     *devicesInfo = result;
@@ -1273,16 +1273,16 @@ API_EXPORT OUT_OPENRESULT OpenOutputEndpoint_Mac(OutputEndpointInfo* info, void*
 
     SessionHandle* pSessionHandle = static_cast<SessionHandle*>(sessionHandle);
 
-    OutputEndpointHandle* outputDeviceHandle = new OutputEndpointHandle();
-    outputDeviceHandle->info = info;
+    OutputEndpointHandle* outputEndpointHandle = new OutputEndpointHandle();
+    outputEndpointHandle->info = info;
 
-    *handle = outputDeviceHandle;
+    *handle = outputEndpointHandle;
 
     CFStringRef portNameRef = CFSTR("OUT");
-    OSStatus result = MIDIOutputPortCreate(pSessionHandle->clientRef, portNameRef, &outputDeviceHandle->portRef);
+    OSStatus result = MIDIOutputPortCreate(pSessionHandle->clientRef, portNameRef, &outputEndpointHandle->portRef);
     if (result != noErr)
     {
-        delete outputDeviceHandle;
+        delete outputEndpointHandle;
 
         *errorCode = result;
 
@@ -1303,11 +1303,11 @@ API_EXPORT OUT_CLOSERESULT CloseOutputEndpoint(void* handle, int* errorCode)
 {
     *errorCode = 0;
 
-    OutputEndpointHandle* outputDeviceHandle = static_cast<OutputEndpointHandle*>(handle);
-    MIDIPortDispose(outputDeviceHandle->portRef);
+    OutputEndpointHandle* outputEndpointHandle = static_cast<OutputEndpointHandle*>(handle);
+    MIDIPortDispose(outputEndpointHandle->portRef);
 
-    // delete outputDeviceHandle->info;
-    delete outputDeviceHandle;
+    // delete outputEndpointHandle->info;
+    delete outputEndpointHandle;
 
     return OUT_CLOSERESULT_OK;
 }
@@ -1316,7 +1316,7 @@ API_EXPORT OUT_SENDSHORTRESULT SendShortEventToOutputEndpoint(void* handle, int 
 {
     *errorCode = 0;
 
-    OutputEndpointHandle* outputDeviceHandle = static_cast<OutputEndpointHandle*>(handle);
+    OutputEndpointHandle* outputEndpointHandle = static_cast<OutputEndpointHandle*>(handle);
 
     Byte data[3];
     Byte statusByte = static_cast<Byte>(message & 0xFF);
@@ -1341,7 +1341,7 @@ API_EXPORT OUT_SENDSHORTRESULT SendShortEventToOutputEndpoint(void* handle, int 
     MIDIPacket* packet = MIDIPacketListInit(packetList);
     MIDIPacketListAdd(packetList, static_cast<ByteCount>(bufferVec.size()), packet, 0, dataSize, &data[0]);
 
-    OSStatus result = MIDISend(outputDeviceHandle->portRef, outputDeviceHandle->info->endpointRef, packetList);
+    OSStatus result = MIDISend(outputEndpointHandle->portRef, outputEndpointHandle->info->endpointRef, packetList);
     if (result != noErr)
     {
         *errorCode = result;
@@ -1368,14 +1368,14 @@ API_EXPORT OUT_SENDSYSEXRESULT SendSysExEventToOutputEndpoint_Mac(void* handle, 
 {
     *errorCode = 0;
 
-    OutputEndpointHandle* outputDeviceHandle = static_cast<OutputEndpointHandle*>(handle);
+    OutputEndpointHandle* outputEndpointHandle = static_cast<OutputEndpointHandle*>(handle);
 
     std::vector<Byte> bufferVec(static_cast<size_t>(dataSize) + sizeof(MIDIPacketList));
     MIDIPacketList* packetList = reinterpret_cast<MIDIPacketList*>(bufferVec.data());
     MIDIPacket* packet = MIDIPacketListInit(packetList);
     MIDIPacketListAdd(packetList, static_cast<ByteCount>(bufferVec.size()), packet, 0, dataSize, &data[0]);
 
-    OSStatus result = MIDISend(outputDeviceHandle->portRef, outputDeviceHandle->info->endpointRef, packetList);
+    OSStatus result = MIDISend(outputEndpointHandle->portRef, outputEndpointHandle->info->endpointRef, packetList);
     if (result != noErr)
     {
         *errorCode = result;
@@ -1404,8 +1404,8 @@ API_EXPORT OUT_SENDSYSEXRESULT SendSysExEventToOutputEndpoint_Mac(void* handle, 
 
 struct VirtualDeviceInfo
 {
-    InputEndpointInfo* inputDeviceInfo = nullptr;
-    OutputEndpointInfo* outputDeviceInfo = nullptr;
+    InputEndpointInfo* inputEndpointInfo = nullptr;
+    OutputEndpointInfo* outputEndpointInfo = nullptr;
     const char* name;
     bool isMuted = false;
 };
@@ -1450,15 +1450,15 @@ API_EXPORT VIRTUAL_OPENRESULT OpenVirtualDevice_Mac(
         return VIRTUAL_OPENRESULT_CREATESOURCE_UNKNOWNERROR;
     }
     
-    InputEndpointInfo* inputDeviceInfo = new InputEndpointInfo();
-    inputDeviceInfo->endpointRef = sourceRef;
-    virtualDeviceInfo->inputDeviceInfo = inputDeviceInfo;
+    InputEndpointInfo* inputEndpointInfo = new InputEndpointInfo();
+    inputEndpointInfo->endpointRef = sourceRef;
+    virtualDeviceInfo->inputEndpointInfo = inputEndpointInfo;
     
     CFStringRef nameRef2 = CFStringCreateWithCString(nullptr, name, kCFStringEncodingUTF8);
     if (!nameRef2)
     {
         MIDIEndpointDispose(sourceRef);
-        delete inputDeviceInfo;
+        delete inputEndpointInfo;
         delete virtualDeviceInfo;
 
         return VIRTUAL_OPENRESULT_CREATEDESTINATION_FAILEDPROCESSNAME;
@@ -1471,7 +1471,7 @@ API_EXPORT VIRTUAL_OPENRESULT OpenVirtualDevice_Mac(
     if (status != noErr)
     {
         MIDIEndpointDispose(sourceRef);
-        delete inputDeviceInfo;
+        delete inputEndpointInfo;
         delete virtualDeviceInfo;
 
         *errorCode = status;
@@ -1486,9 +1486,9 @@ API_EXPORT VIRTUAL_OPENRESULT OpenVirtualDevice_Mac(
         return VIRTUAL_OPENRESULT_CREATEDESTINATION_UNKNOWNERROR;
     }
     
-    OutputEndpointInfo* outputDeviceInfo = new OutputEndpointInfo();
-    outputDeviceInfo->endpointRef = destinationRef;
-    virtualDeviceInfo->outputDeviceInfo = outputDeviceInfo;
+    OutputEndpointInfo* outputEndpointInfo = new OutputEndpointInfo();
+    outputEndpointInfo->endpointRef = destinationRef;
+    virtualDeviceInfo->outputEndpointInfo = outputEndpointInfo;
     
     *info = virtualDeviceInfo;
     
@@ -1499,7 +1499,7 @@ API_EXPORT VIRTUAL_CLOSERESULT CloseVirtualDevice(VirtualDeviceInfo* info, int* 
 {
     *errorCode = 0;
 
-    OSStatus status = MIDIEndpointDispose(info->inputDeviceInfo->endpointRef);
+    OSStatus status = MIDIEndpointDispose(info->inputEndpointInfo->endpointRef);
     if (status != noErr)
     {
         *errorCode = status;
@@ -1515,7 +1515,7 @@ API_EXPORT VIRTUAL_CLOSERESULT CloseVirtualDevice(VirtualDeviceInfo* info, int* 
         return VIRTUAL_CLOSERESULT_DISPOSESOURCE_UNKNOWNERROR;
     }
     
-    status = MIDIEndpointDispose(info->outputDeviceInfo->endpointRef);
+    status = MIDIEndpointDispose(info->outputEndpointInfo->endpointRef);
     if (status != noErr)
     {
         *errorCode = status;
@@ -1544,7 +1544,7 @@ API_EXPORT VIRTUAL_SENDBACKRESULT SendDataBackFromVirtualDevice(const MIDIPacket
     if (virtualDeviceInfo->isMuted)
         return VIRTUAL_SENDBACKRESULT_OK;
     
-    OSStatus status = MIDIReceived(virtualDeviceInfo->inputDeviceInfo->endpointRef, pktlist);
+    OSStatus status = MIDIReceived(virtualDeviceInfo->inputEndpointInfo->endpointRef, pktlist);
     if (status != noErr)
     {
         *errorCode = status;
@@ -1567,12 +1567,12 @@ API_EXPORT VIRTUAL_SENDBACKRESULT SendDataBackFromVirtualDevice(const MIDIPacket
 
 API_EXPORT InputEndpointInfo* GetInputEndpointInfoFromVirtualDevice(VirtualDeviceInfo* info)
 {
-    return info->inputDeviceInfo;
+    return info->inputEndpointInfo;
 }
 
 API_EXPORT OutputEndpointInfo* GetOutputEndpointInfoFromVirtualDevice(VirtualDeviceInfo* info)
 {
-    return info->outputDeviceInfo;
+    return info->outputEndpointInfo;
 }
 
 API_EXPORT VIRTUAL_MUTERESULT MuteVirtualDevice(

@@ -11,13 +11,6 @@ namespace Melanchall.DryWetMidi.Interaction
     /// </summary>
     public sealed class BarBeatFractionTimeSpan : ITimeSpan, IComparable<BarBeatFractionTimeSpan>, IEquatable<BarBeatFractionTimeSpan>
     {
-        #region Constants
-
-        private const double FractionEpsilon = 0.00001;
-        private const int FractionDigits = 5;
-
-        #endregion
-
         #region Constructor
 
         /// <summary>
@@ -34,7 +27,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="bars">The number of bars.</param>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="bars"/> is negative.</exception>
-        public BarBeatFractionTimeSpan(long bars)
+        public BarBeatFractionTimeSpan(double bars)
             : this(bars, 0)
         {
         }
@@ -56,7 +49,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </item>
         /// </list>
         /// </exception>
-        public BarBeatFractionTimeSpan(long bars, double beats)
+        public BarBeatFractionTimeSpan(double bars, double beats)
         {
             ThrowIfArgument.IsNegative(nameof(bars), bars, "Bars number is negative.");
             ThrowIfArgument.IsNegative(nameof(beats), beats, "Beats number is negative.");
@@ -72,7 +65,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <summary>
         /// Gets the bars component of the time represented by the current <see cref="BarBeatFractionTimeSpan"/>.
         /// </summary>
-        public long Bars { get; }
+        public double Bars { get; }
 
         /// <summary>
         /// Gets the beats component of the time represented by the current <see cref="BarBeatFractionTimeSpan"/>.
@@ -343,7 +336,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <returns>A string that represents the current object.</returns>
         public override string ToString()
         {
-            return $"{Bars}_{Beats.ToString(CultureInfo.InvariantCulture)}";
+            return $"{Bars.ToString(BarBeatTimeSpanUtilities.NumberFormat)}_{Beats.ToString(BarBeatTimeSpanUtilities.NumberFormat)}";
         }
 
         #endregion
@@ -411,8 +404,8 @@ namespace Melanchall.DryWetMidi.Interaction
             ThrowIfArgument.IsNegative(nameof(multiplier), multiplier, "Multiplier is negative.");
 
             return new BarBeatFractionTimeSpan(
-                MathUtilities.RoundToLong(Bars * multiplier),
-                Math.Round(Beats * multiplier, FractionDigits));
+                Math.Round(Bars * multiplier, BarBeatTimeSpanUtilities.FractionDigits),
+                Math.Round(Beats * multiplier, BarBeatTimeSpanUtilities.FractionDigits));
         }
 
         /// <summary>
@@ -426,8 +419,8 @@ namespace Melanchall.DryWetMidi.Interaction
             ThrowIfArgument.IsNonpositive(nameof(divisor), divisor, "Divisor is zero or negative.");
 
             return new BarBeatFractionTimeSpan(
-                MathUtilities.RoundToLong(Bars / divisor),
-                Math.Round(Beats / divisor, FractionDigits));
+                Math.Round(Bars / divisor, BarBeatTimeSpanUtilities.FractionDigits),
+                Math.Round(Beats / divisor, BarBeatTimeSpanUtilities.FractionDigits));
         }
 
         /// <summary>
@@ -517,7 +510,7 @@ namespace Melanchall.DryWetMidi.Interaction
             var barsDelta = Bars - other.Bars;
             var beatsDelta = Beats - other.Beats;
 
-            return Math.Sign(barsDelta != 0 ? barsDelta : beatsDelta);
+            return Math.Sign(Math.Abs(barsDelta) >= BarBeatTimeSpanUtilities.Epsilon ? barsDelta : beatsDelta);
         }
 
         #endregion
@@ -538,7 +531,7 @@ namespace Melanchall.DryWetMidi.Interaction
                 return false;
 
             return Bars == other.Bars &&
-                   Math.Abs(Beats - other.Beats) < FractionEpsilon;
+                   Math.Abs(Beats - other.Beats) < BarBeatTimeSpanUtilities.Epsilon;
         }
 
         #endregion

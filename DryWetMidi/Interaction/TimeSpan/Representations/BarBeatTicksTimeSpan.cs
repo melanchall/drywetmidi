@@ -10,14 +10,6 @@ namespace Melanchall.DryWetMidi.Interaction
     /// </summary>
     public sealed class BarBeatTicksTimeSpan : ITimeSpan, IComparable<BarBeatTicksTimeSpan>, IEquatable<BarBeatTicksTimeSpan>
     {
-        #region Constants
-
-        private const double Epsilon = 1e-10;
-
-        private static readonly System.Globalization.NumberFormatInfo NumberFormat = new() { NumberDecimalSeparator = "," };
-
-        #endregion
-
         #region Constructor
 
         /// <summary>
@@ -379,7 +371,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <returns>A string that represents the current object.</returns>
         public override string ToString()
         {
-            return $"{Bars.ToString(NumberFormat)}.{Beats.ToString(NumberFormat)}.{Ticks}";
+            return $"{Bars.ToString(BarBeatTimeSpanUtilities.NumberFormat)}.{Beats.ToString(BarBeatTimeSpanUtilities.NumberFormat)}.{Ticks}";
         }
 
         #endregion
@@ -447,8 +439,8 @@ namespace Melanchall.DryWetMidi.Interaction
             ThrowIfArgument.IsNegative(nameof(multiplier), multiplier, "Multiplier is negative.");
 
             return new BarBeatTicksTimeSpan(
-                Bars * multiplier,
-                Beats * multiplier,
+                Math.Round(Bars * multiplier, BarBeatTimeSpanUtilities.FractionDigits),
+                Math.Round(Beats * multiplier, BarBeatTimeSpanUtilities.FractionDigits),
                 MathUtilities.RoundToLong(Ticks * multiplier));
         }
 
@@ -463,8 +455,8 @@ namespace Melanchall.DryWetMidi.Interaction
             ThrowIfArgument.IsNonpositive(nameof(divisor), divisor, "Divisor is zero or negative.");
 
             return new BarBeatTicksTimeSpan(
-                Bars / divisor,
-                Beats / divisor,
+                Math.Round(Bars / divisor, BarBeatTimeSpanUtilities.FractionDigits),
+                Math.Round(Beats / divisor, BarBeatTimeSpanUtilities.FractionDigits),
                 MathUtilities.RoundToLong(Ticks / divisor));
         }
 
@@ -556,7 +548,7 @@ namespace Melanchall.DryWetMidi.Interaction
             var beatsDelta = Beats - other.Beats;
             var ticksDelta = Ticks - other.Ticks;
 
-            return Math.Sign(Math.Abs(barsDelta) >= Epsilon ? barsDelta : (Math.Abs(beatsDelta) >= Epsilon ? beatsDelta : ticksDelta));
+            return Math.Sign(Math.Abs(barsDelta) >= BarBeatTimeSpanUtilities.Epsilon ? barsDelta : (Math.Abs(beatsDelta) >= BarBeatTimeSpanUtilities.Epsilon ? beatsDelta : ticksDelta));
         }
 
         #endregion
@@ -576,8 +568,8 @@ namespace Melanchall.DryWetMidi.Interaction
             if (ReferenceEquals(null, other))
                 return false;
 
-            return Math.Abs(Bars - other.Bars) < Epsilon &&
-                   Math.Abs(Beats - other.Beats) < Epsilon &&
+            return Math.Abs(Bars - other.Bars) < BarBeatTimeSpanUtilities.Epsilon &&
+                   Math.Abs(Beats - other.Beats) < BarBeatTimeSpanUtilities.Epsilon &&
                    Ticks == other.Ticks;
         }
 

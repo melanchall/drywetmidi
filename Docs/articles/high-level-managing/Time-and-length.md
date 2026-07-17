@@ -4,17 +4,47 @@ uid: a_time_length
 
 # Time and length
 
-All times and lengths in a MIDI file are presented as some long values in units defined by the time division of a MIDI file. In practice it is much more convenient to operate by "human understandable" representations like seconds or bars/beats. In fact there is no difference between time and length since time within a MIDI file is just a length that always starts at zero, so the _time span_ term will be used to describe both time and length. DryWetMIDI provides the following classes to represent time span:
+All time and length values in a MIDI file are presented as `long` numbers in units defined by the [time division](xref:Melanchall.DryWetMidi.Core.TimeDivision) of a MIDI file. However, in practice, it is much more convenient to work with "human understandable" representations like seconds or bars/beats. In fact, there is no difference between time and length since time within a MIDI file is just a length that starts at zero, so the _time span_ term will be used to describe both time and length. DryWetMIDI provides the following classes to represent time spans:
 
-* [MetricTimeSpan](#metric) for time span in terms of microseconds;
-* [BarBeatTicksTimeSpan](#bars-beats-and-ticks) for time span in terms of number of bars, beats and ticks;
-* [BarBeatFractionTimeSpan](#bars-beats-and-fraction) for time span in terms of number of bars and fractional beats (for example, `0.5` beats);
-* [MusicalTimeSpan](#musical) for time span in terms of a fraction of the whole note length;
-* [MidiTimeSpan](#midi) exists for unification purposes and simply holds a `long` value in units defined by the time division of a file.
+* [`MetricTimeSpan`](#metric) for a time span in terms of microseconds;
+* [`BarBeatTicksTimeSpan`](#bars-beats-and-ticks) for a time span in terms of number of bars, beats and ticks;
+* [`BarBeatFractionTimeSpan`](#bars-beats-and-fraction) for a time span in terms of number of bars and fractional beats (for example, `0.5` beats);
+* [`MusicalTimeSpan`](#musical) for a time span in terms of a fraction of the whole note length;
+* [`MidiTimeSpan`](#midi) exists for unification purposes and simply holds a `long` value in units defined by the time division of a file.
 
-All time span classes implement the [ITimeSpan](xref:Melanchall.DryWetMidi.Interaction.ITimeSpan) interface.
+To quickly dive into the subject, just take a look at how you can get the time and length of a [note](xref:Melanchall.DryWetMidi.Interaction.Note) in different representations:
 
-To convert time span between different representations you should use [TimeConverter](xref:Melanchall.DryWetMidi.Interaction.TimeConverter) or [LengthConverter](xref:Melanchall.DryWetMidi.Interaction.LengthConverter) classes (these conversions require the [tempo map](xref:Melanchall.DryWetMidi.Interaction.TempoMap) of a MIDI file). (You can use `LengthConverter` for time conversions too but with the `TimeConverter` you don't need to specify the time where time span starts since it is always zero.)
+```csharp
+var tempoMap = midiFile.GetTempoMap();
+var metricTime = note.TimeAs<MetricTimeSpan>(tempoMap);
+var metricLength = note.LengthAs<MetricTimeSpan>(tempoMap);
+```
+
+Or you can find all notes of a MIDI file that start at [10 bars and 4 beats](#bars-beats-and-ticks):
+
+```csharp
+var tempoMap = midiFile.GetTempoMap();
+var notes = midiFile
+    .GetNotes()
+    .AtTime(new BarBeatTicksTimeSpan(10, 4), tempoMap);
+```
+
+Or you can get all notes of a MIDI file that end exactly at [30 seconds](#metric) from the start of the file:
+
+```csharp
+var tempoMap = midiFile.GetTempoMap();
+var notesAt30sec = midiFile
+    .GetNotes()
+    .EndAtTime(new MetricTimeSpan(0, 0, 30), tempoMap);
+```
+
+`TimeAs` (and `EndTimeAs`) and `LengthAs` methods have non-generic versions where the desired type of result should be passed as an argument of type [`TimeSpanType`](xref:Melanchall.DryWetMidi.Interaction.TimeSpanType).
+
+These and other useful methods are located in the [`TimedObjectUtilities`](xref:Melanchall.DryWetMidi.Interaction.TimedObjectUtilities) and [`LengthedObjectUtilities`](xref:Melanchall.DryWetMidi.Interaction.LengthedObjectUtilities) classes.
+
+All time span classes implement the [`ITimeSpan`](xref:Melanchall.DryWetMidi.Interaction.ITimeSpan) interface.
+
+To convert a time span between different representations you should use [`TimeConverter`](xref:Melanchall.DryWetMidi.Interaction.TimeConverter) or [`LengthConverter`](xref:Melanchall.DryWetMidi.Interaction.LengthConverter) classes (these conversions require the [tempo map](xref:Melanchall.DryWetMidi.Interaction.TempoMap) of a MIDI file). (You can use `LengthConverter` for time conversions too but with the `TimeConverter` you don't need to specify the time where the time span starts since it is always zero.)
 
 Examples of time conversions:
 
@@ -27,23 +57,33 @@ long ticks = 123;
 
 // Convert ticks to metric time
 
-MetricTimeSpan metricTime = TimeConverter.ConvertTo<MetricTimeSpan>(ticks, tempoMap);
+MetricTimeSpan metricTime = TimeConverter.ConvertTo<MetricTimeSpan>(
+    ticks,
+    tempoMap);
 
 // Convert ticks to musical time
 
-MusicalTimeSpan musicalTimeFromTicks = TimeConverter.ConvertTo<MusicalTimeSpan>(ticks, tempoMap);
+MusicalTimeSpan musicalTimeFromTicks = TimeConverter.ConvertTo<MusicalTimeSpan>(
+    ticks,
+    tempoMap);
 
 // Convert metric time to musical time
 
-MusicalTimeSpan musicalTimeFromMetric = TimeConverter.ConvertTo<MusicalTimeSpan>(metricTime, tempoMap);
+MusicalTimeSpan musicalTimeFromMetric = TimeConverter.ConvertTo<MusicalTimeSpan>(
+    metricTime,
+    tempoMap);
 
 // Convert metric time to bar/beat time
 
-BarBeatTicksTimeSpan barBeatTicksTimeFromMetric = TimeConverter.ConvertTo<BarBeatTicksTimeSpan>(metricTime, tempoMap);
+BarBeatTicksTimeSpan barBeatTicksTimeFromMetric = TimeConverter.ConvertTo<BarBeatTicksTimeSpan>(
+    metricTime,
+    tempoMap);
 
 // Convert musical time back to ticks
 
-long ticksFromMusical = TimeConverter.ConvertFrom(musicalTimeFromTicks, tempoMap);
+long ticksFromMusical = TimeConverter.ConvertFrom(
+    musicalTimeFromTicks,
+    tempoMap);
 ```
 
 Examples of length conversions:
@@ -53,50 +93,27 @@ var tempoMap = midiFile.GetTempoMap();
 
 // Convert ticks to metric length
 
-MetricTimeSpan metricLength = LengthConverter.ConvertTo<MetricTimeSpan>(ticks, time, tempoMap);
+MetricTimeSpan metricLength = LengthConverter.ConvertTo<MetricTimeSpan>(
+    ticks,
+    time,
+    tempoMap);
 
 // Convert metric length to musical length using metric time
 
-MusicalTimeSpan musicalLengthFromMetric = LengthConverter.ConvertTo<MusicalTimeSpan>(metricLength,
-                                                                                     metricTime,
-                                                                                     tempoMap);
+MusicalTimeSpan musicalLengthFromMetric = LengthConverter.ConvertTo<MusicalTimeSpan>(
+    metricLength,
+    metricTime,
+    tempoMap);
 
 // Convert musical length back to ticks
 
-long ticksFromMetricLength = LengthConverter.ConvertFrom(metricLength, time, tempoMap);
+long ticksFromMetricLength = LengthConverter.ConvertFrom(
+    metricLength,
+    time,
+    tempoMap);
 ```
 
-You could notice that `LengthConverter`'s methods have the `time` parameter. In general, a MIDI file has changes of the tempo and time signature. Thus the same `long` (X) value can represent different numbers of seconds, for example, depending on the time of an object with length of this X value. The methods above can take time either as `long` or as `ITimeSpan`.
-
-There are some useful methods in the [TimedObjectUtilities](xref:Melanchall.DryWetMidi.Interaction.TimedObjectUtilities) class. This class contains extension methods for types that implement the [ITimedObject](xref:Melanchall.DryWetMidi.Interaction.ITimedObject) interface – [TimedEvent](xref:Melanchall.DryWetMidi.Interaction.TimedEvent), [Note](xref:Melanchall.DryWetMidi.Interaction.Note) and [Chord](xref:Melanchall.DryWetMidi.Interaction.Chord). For example, you can get time of a timed event in hours, minutes, seconds with [TimeAs](xref:Melanchall.DryWetMidi.Interaction.TimedObjectUtilities.TimeAs``1(Melanchall.DryWetMidi.Interaction.ITimedObject,Melanchall.DryWetMidi.Interaction.TempoMap)) method:
-
-```csharp
-var metricTime = timedEvent.TimeAs<MetricTimeSpan>(tempoMap);
-```
-
-Or you can find all notes of a MIDI file that start at time of 10 bars and 4 beats:
-
-```csharp
-TempoMap tempoMap = midiFile.GetTempoMap();
-IEnumerable<Note> notes = midiFile
-    .GetNotes().AtTime(new BarBeatTicksTimeSpan(10, 4), tempoMap);
-```
-
-Also there is the [LengthedObjectUtilities](xref:Melanchall.DryWetMidi.Interaction.LengthedObjectUtilities) class. This class contains extension methods for types that implement the [ILengthedObject](xref:Melanchall.DryWetMidi.Interaction.ILengthedObject) interface – [Note](xref:Melanchall.DryWetMidi.Interaction.Note) and [Chord](xref:Melanchall.DryWetMidi.Interaction.Chord). For example, you can get length of a note as a fraction of the whole note with [LengthAs](xref:Melanchall.DryWetMidi.Interaction.LengthedObjectUtilities.LengthAs``1(Melanchall.DryWetMidi.Interaction.ILengthedObject,Melanchall.DryWetMidi.Interaction.TempoMap)) method:
-
-```csharp
-var musicalLength = note.LengthAs<MusicalTimeSpan>(tempoMap);
-```
-
-Or you can get all notes of a MIDI file that end exactly at 30 seconds from the start of the file:
-
-```csharp
-var tempoMap = midiFile.GetTempoMap();
-var notesAt30sec = midiFile
-    .GetNotes().EndAtTime(new MetricTimeSpan(0, 0, 30), tempoMap);
-```
-
-`TimeAs` (end `EndTimeAs`) and `LengthAs` methods have non-generic versions where the desired type of result should be passed as an argument of the [TimeSpanType](xref:Melanchall.DryWetMidi.Interaction.TimeSpanType) type.
+You might notice that `LengthConverter`'s methods have the `time` parameter. In general, a MIDI file contains changes in tempo and time signature. Thus the same `long` (X) value can represent different numbers of seconds, for example, depending on the time of an object with length of X. The methods above can take time either as `long` or as `ITimeSpan`.
 
 `ITimeSpan` interface has several methods to perform arithmetic operations on time spans. For example, to add metric length to metric time you can write:
 
@@ -116,16 +133,16 @@ var timeSpan2 = new MusicalTimeSpan(3, 8);
 ITimeSpan result = timeSpan1.Subtract(timeSpan2, TimeSpanMode.TimeTime);
 ```
 
-If operands of the same type, result time span will be of this type too. But if you sum or subtract time spans of different types, the type of a result time span will be [MathTimeSpan](xref:Melanchall.DryWetMidi.Interaction.MathTimeSpan) which holds operands along with operation (addition or subtraction) and mode.
+If the operands are of the same type, the resulting time span will be of this type too. But if you sum or subtract time spans of different types, the type of the resulting time span will be [`MathTimeSpan`](xref:Melanchall.DryWetMidi.Interaction.MathTimeSpan) which holds the operands along with the operation (addition or subtraction) and the mode.
 
 To stretch or shrink a time span use `Multiply` or `Divide` methods:
 
 ```csharp
-ITimeSpan stretchedTimeSpan = new MetricTimeSpan(0, 0, 10).Multiply(2.5);
-ITimeSpan shrinkedTimeSpan = new BarBeatTicksTimeSpan(0, 2).Divide(2);
+var stretchedTimeSpan = new MetricTimeSpan(0, 0, 10).Multiply(2.5);
+var shrunkTimeSpan = new BarBeatTicksTimeSpan(0, 2).Divide(2);
 ```
 
-There are some useful methods in the [TimeSpanUtilities](xref:Melanchall.DryWetMidi.Interaction.TimeSpanUtilities) class. These methods include `Parse` and `TryParse` ones that allow parsing a string to appropriate time span. Please read the article corresponding to the desired time span type to learn formats of strings that can be parsed to this type (use links at the start of this article).
+There are some useful methods in the [`TimeSpanUtilities`](xref:Melanchall.DryWetMidi.Interaction.TimeSpanUtilities) class. These methods include `Parse` and `TryParse` ones (and many others) that allow parsing a string into the appropriate time span. Please read the article corresponding to the desired time span type to learn the formats of strings that can be parsed to this type (use links at the start of this article or read further).
 
 ## Representations
 
@@ -133,9 +150,9 @@ DryWetMIDI provides several representations of time spans.
 
 ### Metric
 
-[MetricTimeSpan](xref:Melanchall.DryWetMidi.Interaction.MetricTimeSpan) represents time span as a number of microseconds.
+[`MetricTimeSpan`](xref:Melanchall.DryWetMidi.Interaction.MetricTimeSpan) represents a time span as a number of microseconds.
 
-Following strings can be parsed to `MetricTimeSpan`:
+The following strings can be parsed to `MetricTimeSpan`:
 
 * `Hours : Minutes : Seconds : Milliseconds`  
 * `HoursGroup : Minutes : Seconds`  
@@ -158,10 +175,10 @@ Following strings can be parsed to `MetricTimeSpan`:
 
 where
 
-* **Hours** is a number of hours.
-* **Minutes** is a number of minutes.
-* **Seconds** is a number of seconds.
-* **Milliseconds** is a number of milliseconds.
+* **Hours** is the number of hours.
+* **Minutes** is the number of minutes.
+* **Seconds** is the number of seconds.
+* **Milliseconds** is the number of milliseconds.
 
 Examples:
 
@@ -183,24 +200,26 @@ Examples:
 
 ### Bars, beats and ticks
 
-[BarBeatTicksTimeSpan](xref:Melanchall.DryWetMidi.Interaction.BarBeatTicksTimeSpan) represents a time span as a number of bars, beats and MIDI ticks.
+[`BarBeatTicksTimeSpan`](xref:Melanchall.DryWetMidi.Interaction.BarBeatTicksTimeSpan) represents a time span as a number of bars, beats and MIDI ticks.
 
-Following strings can be parsed to `BarBeatTicksTimeSpan`:
+The following strings can be parsed to `BarBeatTicksTimeSpan`:
 
 * `Bars.Beats.Ticks`
 * `BarsIntegerPart,BarsFractionalPart.Beats.Ticks`
 * `Bars.BeatsIntegerPart,BeatsFractionalPart.Ticks`
 * `BarsIntegerPart,BarsFractionalPart.BeatsIntegerPart,BeatsFractionalPart.Ticks`
 
+So both bars and beats numbers can be integer or fractional.
+
 where
 
-* **Bars** is a number of bars.
-* **BarsIntegerPart** is an integer part of fractional bars number.
-* **BarsFractionalPart** is a fractional part of fractional bars number.
-* **Beats** is a number of beats.
-* **BeatsIntegerPart** is an integer part of fractional beats number.
-* **BeatsFractionalPart** is a fractional part of fractional beats number.
-* **Ticks** is a number of MIDI ticks.
+* **Bars** is the number of bars.
+* **BarsIntegerPart** is the integer part of a fractional bars number.
+* **BarsFractionalPart** is the fractional part of a fractional bars number.
+* **Beats** is the number of beats.
+* **BeatsIntegerPart** is the integer part of a fractional beats number.
+* **BeatsFractionalPart** is the fractional part of a fractional beats number.
+* **Ticks** is the number of MIDI ticks.
 
 Examples:
 
@@ -214,30 +233,40 @@ Examples:
 
 ### Bars, beats and fraction
 
-[BarBeatFractionTimeSpan](xref:Melanchall.DryWetMidi.Interaction.BarBeatFractionTimeSpan) represents a time span as a number of bars and fractional beats (for example, `0.5` beats).
+[`BarBeatFractionTimeSpan`](xref:Melanchall.DryWetMidi.Interaction.BarBeatFractionTimeSpan) represents a time span as a number of bars and fractional beats (for example, `0.5` beats).
 
-Following strings can be parsed to `BarBeatFractionTimeSpan`:
+The following strings can be parsed to `BarBeatFractionTimeSpan`:
 
-`Bars_BeatsIntegerPart.BeatsFractionalPart`
+* `Bars_Beats`
+* `BarsIntegerPart,BarsFractionalPart_Beats`
+* `Bars_BeatsIntegerPart,BeatsFractionalPart`
+* `BarsIntegerPart,BarsFractionalPart_BeatsIntegerPart,BeatsFractionalPart`
 
 where
 
-* **Bars** is a number of bars.
-* **BeatsIntegerPart** is an integer part of fractional beats number.
-* **BeatsFractionalPart** is a fractional part of fractional beats number.
+* **Bars** is the number of bars.
+* **BarsIntegerPart** is the integer part of a fractional bars number.
+* **BarsFractionalPart** is the fractional part of a fractional bars number.
+* **Beats** is the number of beats.
+* **BeatsIntegerPart** is the integer part of a fractional beats number.
+* **BeatsFractionalPart** is the fractional part of a fractional beats number.
+
+So both bars and beats numbers can be integer or fractional.
 
 Examples:
 
-* `0_0.0` – zero time span  
-* `1_0.0` – 1 bar  
-* `0_10.5` – 10.5 beats  
-* `100_20.2` – 100 bars and 20.2 beats
+* `0_0` – zero time span  
+* `1_0,0` – 1 bar  
+* `0_10,5` – 10.5 beats  
+* `100_20,2` – 100 bars and 20.2 beats
+* `0,5_20` – 0.5 bars and 20 beats
+* `2,45_1,5` – 2.45 bars and 1.5 beats
 
 ### Musical
 
-[MusicalTimeSpan](xref:Melanchall.DryWetMidi.Interaction.MusicalTimeSpan) represents a time span as a fraction of the whole note, for example, 1/4 (quarter note length).
+[`MusicalTimeSpan`](xref:Melanchall.DryWetMidi.Interaction.MusicalTimeSpan) represents a time span as a fraction of the whole note, for example, `1/4` (quarter note length).
 
-Following strings can be parsed to `MusicalTimeSpan`:
+The following strings can be parsed to `MusicalTimeSpan`:
 
 `Fraction Tuplet Dots`
 
@@ -265,9 +294,9 @@ Examples:
 
 ### MIDI
 
-[MidiTimeSpan](xref:Melanchall.DryWetMidi.Interaction.MidiTimeSpan) exists for unification purposes and simply holds a `long` value in units defined by the time division of a MIDI file.
+[`MidiTimeSpan`](xref:Melanchall.DryWetMidi.Interaction.MidiTimeSpan) exists for unification purposes and simply holds a `long` value in units defined by the time division of a MIDI file.
 
-Following strings can be parsed to `MidiTimeSpan`:
+The following strings can be parsed to `MidiTimeSpan`:
 
 * `Value`
 

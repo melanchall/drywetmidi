@@ -116,10 +116,11 @@ API_EXPORT API_TYPE API_CALL GetApiType()
 API_EXPORT void API_CALL GetNativeEnvironmentInfo_Win(
     bool* wmsAvailable)
 {
-    winrt::init_apartment();
-    
+    *wmsAvailable = false;
+
     try
     {
+        winrt::init_apartment();
         *wmsAvailable = midi2::MidiApi::EnsureServiceAvailable();
     }
     catch (...)
@@ -170,11 +171,11 @@ API_EXPORT CONFIGURATION_GETRESULT API_CALL GetConfiguration_Win(
     {
         try
         {
-            winrt::init_apartment();
-            config->wmsAvailable = midi2::MidiApi::EnsureServiceAvailable();
+            GetNativeEnvironmentInfo_Win(&config->wmsAvailable);
 
             if (config->wmsAvailable)
             {
+                winrt::init_apartment();
                 config->basicLoopbackAvailable = basicLoopback::MidiBasicLoopbackManager::IsTransportAvailable();
             }
         }
@@ -405,16 +406,16 @@ IN_GETINFORESULT GetInputEndpointInfo(int deviceIndex, InputEndpointInfo** info,
 {
     *errorCode = 0;
 
-    InputEndpointInfo* inputDeviceInfo = new InputEndpointInfo();
+    InputEndpointInfo* inputEndpointInfo = new InputEndpointInfo();
 
-    inputDeviceInfo->deviceIndex = deviceIndex;
-    inputDeviceInfo->caps = new MIDIINCAPSW();
+    inputEndpointInfo->deviceIndex = deviceIndex;
+    inputEndpointInfo->caps = new MIDIINCAPSW();
 
-    MMRESULT result = midiInGetDevCapsW(deviceIndex, inputDeviceInfo->caps, sizeof(MIDIINCAPSW));
+    MMRESULT result = midiInGetDevCapsW(deviceIndex, inputEndpointInfo->caps, sizeof(MIDIINCAPSW));
     if (result != MMSYSERR_NOERROR)
     {
-        delete inputDeviceInfo->caps;
-        delete inputDeviceInfo;
+        delete inputEndpointInfo->caps;
+        delete inputEndpointInfo;
 
         *errorCode = result;
 
@@ -436,10 +437,10 @@ IN_GETINFORESULT GetInputEndpointInfo(int deviceIndex, InputEndpointInfo** info,
         std::vector<wchar_t> buffer(size / sizeof(wchar_t));
         result = midiInMessage((HMIDIIN)(uintptr_t)deviceIndex, DRV_QUERYDEVICEINTERFACE, (DWORD_PTR)buffer.data(), size);
         if (result == MMSYSERR_NOERROR)
-            inputDeviceInfo->devicePath = std::wstring(buffer.data());
+            inputEndpointInfo->devicePath = std::wstring(buffer.data());
     }
 
-    *info = inputDeviceInfo;
+    *info = inputEndpointInfo;
 
     return IN_GETINFORESULT_OK;
 }
@@ -501,16 +502,16 @@ OUT_GETINFORESULT GetOutputEndpointInfo(int deviceIndex, OutputEndpointInfo** in
 {
     *errorCode = 0;
 
-    OutputEndpointInfo* outputDeviceInfo = new OutputEndpointInfo();
+    OutputEndpointInfo* outputEndpointInfo = new OutputEndpointInfo();
 
-    outputDeviceInfo->deviceIndex = deviceIndex;
-    outputDeviceInfo->caps = new MIDIOUTCAPSW();
+    outputEndpointInfo->deviceIndex = deviceIndex;
+    outputEndpointInfo->caps = new MIDIOUTCAPSW();
 
-    MMRESULT result = midiOutGetDevCapsW(deviceIndex, outputDeviceInfo->caps, sizeof(MIDIOUTCAPSW));
+    MMRESULT result = midiOutGetDevCapsW(deviceIndex, outputEndpointInfo->caps, sizeof(MIDIOUTCAPSW));
     if (result != MMSYSERR_NOERROR)
     {
-        delete outputDeviceInfo->caps;
-        delete outputDeviceInfo;
+        delete outputEndpointInfo->caps;
+        delete outputEndpointInfo;
 
         *errorCode = result;
 
@@ -532,10 +533,10 @@ OUT_GETINFORESULT GetOutputEndpointInfo(int deviceIndex, OutputEndpointInfo** in
         std::vector<wchar_t> buffer(size / sizeof(wchar_t));
         result = midiOutMessage((HMIDIOUT)(uintptr_t)deviceIndex, DRV_QUERYDEVICEINTERFACE, (DWORD_PTR)buffer.data(), size);
         if (result == MMSYSERR_NOERROR)
-            outputDeviceInfo->devicePath = std::wstring(buffer.data());
+            outputEndpointInfo->devicePath = std::wstring(buffer.data());
     }
 
-    *info = outputDeviceInfo;
+    *info = outputEndpointInfo;
 
     return OUT_GETINFORESULT_OK;
 }
@@ -792,8 +793,8 @@ typedef void (*OutputEndpointCallback)(void* info, SESSION_CALLBACKOPERATION ope
 
 struct EndpointDevicesInfo
 {
-    std::vector<InputEndpointInfo*> inputDevicesInfo;
-    std::vector<OutputEndpointInfo*> outputDevicesInfo;
+    std::vector<InputEndpointInfo*> inputEndpointsInfo;
+    std::vector<OutputEndpointInfo*> outputEndpointsInfo;
 };
 
 struct SessionHandle
@@ -817,9 +818,9 @@ struct SessionHandle
 
 void DeleteInputEndpointInfos(std::vector<InputEndpointInfo*>& deviceInfos)
 {
-    for (auto* inputDeviceInfo : deviceInfos)
+    for (auto* inputEndpointInfo : deviceInfos)
     {
-        DeleteInputEndpointInfo(inputDeviceInfo);
+        DeleteInputEndpointInfo(inputEndpointInfo);
     }
 
     deviceInfos.clear();
@@ -827,9 +828,9 @@ void DeleteInputEndpointInfos(std::vector<InputEndpointInfo*>& deviceInfos)
 
 void DeleteOutputEndpointInfos(std::vector<OutputEndpointInfo*>& deviceInfos)
 {
-    for (auto* outputDeviceInfo : deviceInfos)
+    for (auto* outputEndpointInfo : deviceInfos)
     {
-        DeleteOutputEndpointInfo(outputDeviceInfo);
+        DeleteOutputEndpointInfo(outputEndpointInfo);
     }
 
     deviceInfos.clear();
@@ -861,16 +862,16 @@ API_EXPORT SESSION_OPENRESULT API_CALL OpenSession_Win(
             {
                 std::lock_guard<std::mutex> lock(sessionHandle->endpointDevicesLock);
 
-                std::vector<InputEndpointInfo*> inputDevicesInfo;
-                std::vector<OutputEndpointInfo*> outputDevicesInfo;
+                std::vector<InputEndpointInfo*> inputEndpointsInfo;
+                std::vector<OutputEndpointInfo*> outputEndpointsInfo;
                 EndpointDevicesInfo endpointDevicesInfo;
 
                 auto cleanupAllDeviceInfos = [&]()
                 {
-                    DeleteInputEndpointInfos(inputDevicesInfo);
-                    DeleteInputEndpointInfos(endpointDevicesInfo.inputDevicesInfo);
-                    DeleteOutputEndpointInfos(outputDevicesInfo);
-                    DeleteOutputEndpointInfos(endpointDevicesInfo.outputDevicesInfo);
+                    DeleteInputEndpointInfos(inputEndpointsInfo);
+                    DeleteInputEndpointInfos(endpointDevicesInfo.inputEndpointsInfo);
+                    DeleteOutputEndpointInfos(outputEndpointsInfo);
+                    DeleteOutputEndpointInfos(endpointDevicesInfo.outputEndpointsInfo);
                 };
 
                 try
@@ -936,17 +937,17 @@ API_EXPORT SESSION_OPENRESULT API_CALL OpenSession_Win(
 
                             for (auto const& port : inputPorts)
                             {
-                                InputEndpointInfo* inputDeviceInfo = nullptr;
+                                InputEndpointInfo* inputEndpointInfo = nullptr;
                                 int errorCode;
 
-                                auto getInputEndpointInfoResult = GetInputEndpointInfo(GetPortNumber(port), endpointId, port.PortDeviceId(), &inputDeviceInfo, &errorCode);
+                                auto getInputEndpointInfoResult = GetInputEndpointInfo(GetPortNumber(port), endpointId, port.PortDeviceId(), &inputEndpointInfo, &errorCode);
                                 if (getInputEndpointInfoResult != IN_GETINFORESULT_OK)
                                 {
                                     ok = false;
                                     break;
                                 }
 
-                                inputDevicesInfo.push_back(inputDeviceInfo);
+                                inputEndpointsInfo.push_back(inputEndpointInfo);
 
                                 InputEndpointInfo* persistentInputEndpointInfo;
                                 getInputEndpointInfoResult = GetInputEndpointInfo(GetPortNumber(port), endpointId, port.PortDeviceId(), &persistentInputEndpointInfo, &errorCode);
@@ -956,7 +957,7 @@ API_EXPORT SESSION_OPENRESULT API_CALL OpenSession_Win(
                                     break;
                                 }
                                 
-                                endpointDevicesInfo.inputDevicesInfo.push_back(persistentInputEndpointInfo);
+                                endpointDevicesInfo.inputEndpointsInfo.push_back(persistentInputEndpointInfo);
                             }
                         }
 
@@ -969,17 +970,17 @@ API_EXPORT SESSION_OPENRESULT API_CALL OpenSession_Win(
 
                             for (auto const& port : outputPorts)
                             {
-                                OutputEndpointInfo* outputDeviceInfo = nullptr;
+                                OutputEndpointInfo* outputEndpointInfo = nullptr;
                                 int errorCode;
 
-                                auto getOutputEndpointInfoResult = GetOutputEndpointInfo(GetPortNumber(port), endpointId, port.PortDeviceId(), &outputDeviceInfo, &errorCode);
+                                auto getOutputEndpointInfoResult = GetOutputEndpointInfo(GetPortNumber(port), endpointId, port.PortDeviceId(), &outputEndpointInfo, &errorCode);
                                 if (getOutputEndpointInfoResult != OUT_GETINFORESULT_OK)
                                 {
                                     ok = false;
                                     break;
                                 }
 
-                                outputDevicesInfo.push_back(outputDeviceInfo);
+                                outputEndpointsInfo.push_back(outputEndpointInfo);
 
                                 OutputEndpointInfo* persistentOutputEndpointInfo;
                                 getOutputEndpointInfoResult = GetOutputEndpointInfo(GetPortNumber(port), endpointId, port.PortDeviceId(), &persistentOutputEndpointInfo, &errorCode);
@@ -989,7 +990,7 @@ API_EXPORT SESSION_OPENRESULT API_CALL OpenSession_Win(
                                     break;
                                 }
                                 
-                                endpointDevicesInfo.outputDevicesInfo.push_back(persistentOutputEndpointInfo);
+                                endpointDevicesInfo.outputEndpointsInfo.push_back(persistentOutputEndpointInfo);
                             }
                         }
 
@@ -1008,14 +1009,14 @@ API_EXPORT SESSION_OPENRESULT API_CALL OpenSession_Win(
                     if (sessionHandle->initialEnumerationCompleted.load() == 0)
                         return;
 
-                    for (auto* inputDeviceInfo : inputDevicesInfo)
+                    for (auto* inputEndpointInfo : inputEndpointsInfo)
                     {
-                        sessionHandle->inputEndpointCallback(inputDeviceInfo, SESSION_CALLBACKOPERATION_ENDPOINTADDED);
+                        sessionHandle->inputEndpointCallback(inputEndpointInfo, SESSION_CALLBACKOPERATION_ENDPOINTADDED);
                     }
 
-                    for (auto* outputDeviceInfo : outputDevicesInfo)
+                    for (auto* outputEndpointInfo : outputEndpointsInfo)
                     {
-                        sessionHandle->outputEndpointCallback(outputDeviceInfo, SESSION_CALLBACKOPERATION_ENDPOINTADDED);
+                        sessionHandle->outputEndpointCallback(outputEndpointInfo, SESSION_CALLBACKOPERATION_ENDPOINTADDED);
                     }
                 }
                 catch (const winrt::hresult_error& e)
@@ -1053,14 +1054,14 @@ API_EXPORT SESSION_OPENRESULT API_CALL OpenSession_Win(
                     endpointDevicesInfo = it->second;
                     sessionHandle->endpointDevicesById.erase(it);
 
-                    for (auto* inputDeviceInfo : endpointDevicesInfo.inputDevicesInfo)
+                    for (auto* inputEndpointInfo : endpointDevicesInfo.inputEndpointsInfo)
                     {
-                        sessionHandle->inputEndpointCallback(inputDeviceInfo, SESSION_CALLBACKOPERATION_ENDPOINTREMOVED);
+                        sessionHandle->inputEndpointCallback(inputEndpointInfo, SESSION_CALLBACKOPERATION_ENDPOINTREMOVED);
                     }
 
-                    for (auto* outputDeviceInfo : endpointDevicesInfo.outputDevicesInfo)
+                    for (auto* outputEndpointInfo : endpointDevicesInfo.outputEndpointsInfo)
                     {
-                        sessionHandle->outputEndpointCallback(outputDeviceInfo, SESSION_CALLBACKOPERATION_ENDPOINTREMOVED);
+                        sessionHandle->outputEndpointCallback(outputEndpointInfo, SESSION_CALLBACKOPERATION_ENDPOINTREMOVED);
                     }
                 }
                 catch (const winrt::hresult_error& e)
@@ -1136,8 +1137,8 @@ API_EXPORT SESSION_CLOSERESULT API_CALL CloseSession(SessionHandle* sessionHandl
 
         for (auto& pair : sessionHandle->endpointDevicesById)
         {
-            DeleteInputEndpointInfos(pair.second.inputDevicesInfo);
-            DeleteOutputEndpointInfos(pair.second.outputDevicesInfo);
+            DeleteInputEndpointInfos(pair.second.inputEndpointsInfo);
+            DeleteOutputEndpointInfos(pair.second.outputEndpointsInfo);
         }
 
         sessionHandle->endpointDevicesById.clear();
@@ -1187,12 +1188,12 @@ API_EXPORT IN_GETALLINFORESULT API_CALL GetInputEndpointsInfo(Configuration* con
             std::this_thread::sleep_for(std::chrono::milliseconds(10));
         }
 
-        std::vector<InputEndpointInfo*> inputDevicesInfo;
+        std::vector<InputEndpointInfo*> inputEndpointsInfo;
         std::lock_guard<std::mutex> lock(sessionHandle->endpointDevicesLock);
 
-        auto cleanupInputDevices = [&inputDevicesInfo]()
+        auto cleanupInputDevices = [&inputEndpointsInfo]()
         {
-            for (auto& info : inputDevicesInfo)
+            for (auto& info : inputEndpointsInfo)
             {
                 DeleteInputEndpointInfo(info);
             }
@@ -1204,20 +1205,20 @@ API_EXPORT IN_GETALLINFORESULT API_CALL GetInputEndpointsInfo(Configuration* con
             {
                 const EndpointDevicesInfo& endpointDevicesInfo = pair.second;
 
-                for (auto* inputDeviceInfo : endpointDevicesInfo.inputDevicesInfo)
+                for (auto* inputEndpointInfo : endpointDevicesInfo.inputEndpointsInfo)
                 {
                     InputEndpointInfo* infoCopy = nullptr;
-                    CloneInputEndpointInfo(inputDeviceInfo, &infoCopy);
-                    inputDevicesInfo.push_back(infoCopy);
+                    CloneInputEndpointInfo(inputEndpointInfo, &infoCopy);
+                    inputEndpointsInfo.push_back(infoCopy);
                 }
             }
 
-            auto count = inputDevicesInfo.size();
+            auto count = inputEndpointsInfo.size();
             auto result = new InputEndpointInfo*[count];
 
             for (auto i = 0; i < count; i++)
             {
-                result[i] = inputDevicesInfo[i];
+                result[i] = inputEndpointsInfo[i];
             }
 
             *devicesInfo = result;
@@ -1256,9 +1257,9 @@ API_EXPORT IN_GETALLINFORESULT API_CALL GetInputEndpointsInfo(Configuration* con
 
     for (int i = 0; i < *devicesCount; i++)
     {
-        InputEndpointInfo* inputDeviceInfo;
+        InputEndpointInfo* inputEndpointInfo;
 
-        auto getInputEndpointInfoResult = GetInputEndpointInfo(i, &inputDeviceInfo, errorCode);
+        auto getInputEndpointInfoResult = GetInputEndpointInfo(i, &inputEndpointInfo, errorCode);
         if (getInputEndpointInfoResult != IN_GETINFORESULT_OK)
         {
             for (int j = 0; j < i; j++)
@@ -1271,7 +1272,7 @@ API_EXPORT IN_GETALLINFORESULT API_CALL GetInputEndpointsInfo(Configuration* con
             return ConvertToGetAllInInfoResult(getInputEndpointInfoResult);
         }
 
-        result[i] = inputDeviceInfo;
+        result[i] = inputEndpointInfo;
     }
 
     *devicesInfo = result;
@@ -1317,24 +1318,24 @@ API_EXPORT IN_RENEWSYSEXBUFFERRESULT API_CALL RenewInputEndpointSysExBuffer(void
 {
     *errorCode = 0;
 
-    InputEndpointHandle* inputDeviceHandle = static_cast<InputEndpointHandle*>(handle);
+    InputEndpointHandle* inputEndpointHandle = static_cast<InputEndpointHandle*>(handle);
     LPMIDIHDR header = static_cast<LPMIDIHDR>(headerPointer);
 
     if (header == nullptr)
         return IN_RENEWSYSEXBUFFERRESULT_INVALIDHEADER;
 
-    EnterCriticalSection(&inputDeviceHandle->lock);
+    EnterCriticalSection(&inputEndpointHandle->lock);
 
-    if (inputDeviceHandle->isClosing)
+    if (inputEndpointHandle->isClosing)
     {
-        LeaveCriticalSection(&inputDeviceHandle->lock);
+        LeaveCriticalSection(&inputEndpointHandle->lock);
         return IN_RENEWSYSEXBUFFERRESULT_CLOSING;
     }
 
     bool found = false;
-    for (int i = 0; i < inputDeviceHandle->sysExBufferCount; i++)
+    for (int i = 0; i < inputEndpointHandle->sysExBufferCount; i++)
     {
-        if (inputDeviceHandle->sysExHeaders[i] == header)
+        if (inputEndpointHandle->sysExHeaders[i] == header)
         {
             found = true;
             break;
@@ -1343,13 +1344,13 @@ API_EXPORT IN_RENEWSYSEXBUFFERRESULT API_CALL RenewInputEndpointSysExBuffer(void
 
     if (!found)
     {
-        LeaveCriticalSection(&inputDeviceHandle->lock);
+        LeaveCriticalSection(&inputEndpointHandle->lock);
         return IN_RENEWSYSEXBUFFERRESULT_INVALIDHEADER;
     }
 
     if ((header->dwFlags & MHDR_DONE) == 0)
     {
-        LeaveCriticalSection(&inputDeviceHandle->lock);
+        LeaveCriticalSection(&inputEndpointHandle->lock);
         return IN_RENEWSYSEXBUFFERRESULT_BUFFERNOTDONE;
     }
 
@@ -1362,17 +1363,17 @@ API_EXPORT IN_RENEWSYSEXBUFFERRESULT API_CALL RenewInputEndpointSysExBuffer(void
 
     for (int retry = 0; retry < maxRetries; retry++)
     {
-        if (inputDeviceHandle->isClosing)
+        if (inputEndpointHandle->isClosing)
         {
-            LeaveCriticalSection(&inputDeviceHandle->lock);
+            LeaveCriticalSection(&inputEndpointHandle->lock);
             return IN_RENEWSYSEXBUFFERRESULT_CLOSING;
         }
 
-        result = midiInAddBuffer(inputDeviceHandle->handle, header, sizeof(MIDIHDR));
+        result = midiInAddBuffer(inputEndpointHandle->handle, header, sizeof(MIDIHDR));
 
         if (result == MMSYSERR_NOERROR)
         {
-            LeaveCriticalSection(&inputDeviceHandle->lock);
+            LeaveCriticalSection(&inputEndpointHandle->lock);
             return IN_RENEWSYSEXBUFFERRESULT_OK;
         }
 
@@ -1382,7 +1383,7 @@ API_EXPORT IN_RENEWSYSEXBUFFERRESULT API_CALL RenewInputEndpointSysExBuffer(void
         Sleep(retryDelayMs);
     }
 
-    LeaveCriticalSection(&inputDeviceHandle->lock);
+    LeaveCriticalSection(&inputEndpointHandle->lock);
 
     *errorCode = result;
 
@@ -1442,31 +1443,31 @@ API_EXPORT IN_OPENRESULT API_CALL OpenInputEndpoint_Win(InputEndpointInfo* info,
 
     EnsureWinMmPortsAvailable();
 
-    InputEndpointInfo* inputDeviceInfo = info;
-    InputEndpointHandle* inputDeviceHandle = new InputEndpointHandle();
-    inputDeviceHandle->info = inputDeviceInfo;
-    inputDeviceHandle->sysExBufferSize = sysExBufferSize;
-    inputDeviceHandle->sysExBufferCount = sysExBufferCount;
+    InputEndpointInfo* inputEndpointInfo = info;
+    InputEndpointHandle* inputEndpointHandle = new InputEndpointHandle();
+    inputEndpointHandle->info = inputEndpointInfo;
+    inputEndpointHandle->sysExBufferSize = sysExBufferSize;
+    inputEndpointHandle->sysExBufferCount = sysExBufferCount;
 
-    inputDeviceHandle->sysExHeaders = new LPMIDIHDR[sysExBufferCount];
+    inputEndpointHandle->sysExHeaders = new LPMIDIHDR[sysExBufferCount];
     for (int i = 0; i < sysExBufferCount; i++)
     {
-        inputDeviceHandle->sysExHeaders[i] = nullptr;
+        inputEndpointHandle->sysExHeaders[i] = nullptr;
     }
 
-    InitializeCriticalSection(&inputDeviceHandle->lock);
-    inputDeviceHandle->isClosing = 0;
+    InitializeCriticalSection(&inputEndpointHandle->lock);
+    inputEndpointHandle->isClosing = 0;
 
-    auto deviceIndex = FindPortIndex(inputDeviceInfo->endpointDeviceId, inputDeviceInfo->portDeviceId, midi2::Enumeration::Midi1PortFlow::MidiMessageSource);
+    auto deviceIndex = FindPortIndex(inputEndpointInfo->endpointDeviceId, inputEndpointInfo->portDeviceId, midi2::Enumeration::Midi1PortFlow::MidiMessageSource);
     if (deviceIndex < 0)
-        deviceIndex = inputDeviceInfo->deviceIndex;
+        deviceIndex = inputEndpointInfo->deviceIndex;
 
-    MMRESULT result = midiInOpen(&inputDeviceHandle->handle, deviceIndex, callback, 0, CALLBACK_FUNCTION);
+    MMRESULT result = midiInOpen(&inputEndpointHandle->handle, deviceIndex, callback, 0, CALLBACK_FUNCTION);
     if (result != MMSYSERR_NOERROR)
     {
-        delete[] inputDeviceHandle->sysExHeaders;
-        DeleteCriticalSection(&inputDeviceHandle->lock);
-        delete inputDeviceHandle;
+        delete[] inputEndpointHandle->sysExHeaders;
+        DeleteCriticalSection(&inputEndpointHandle->lock);
+        delete inputEndpointHandle;
 
         *errorCode = result;
 
@@ -1487,7 +1488,7 @@ API_EXPORT IN_OPENRESULT API_CALL OpenInputEndpoint_Win(InputEndpointInfo* info,
     for (int i = 0; i < sysExBufferCount; i++)
     {
         int prepareErrorCode;
-        IN_PREPARESYSEXBUFFERRESULT prepareResult = PrepareSysExBuffer(inputDeviceHandle->handle, sysExBufferSize, &inputDeviceHandle->sysExHeaders[i], &prepareErrorCode);
+        IN_PREPARESYSEXBUFFERRESULT prepareResult = PrepareSysExBuffer(inputEndpointHandle->handle, sysExBufferSize, &inputEndpointHandle->sysExHeaders[i], &prepareErrorCode);
 
         if (prepareResult != IN_PREPARESYSEXBUFFERRESULT_OK)
         {
@@ -1499,7 +1500,7 @@ API_EXPORT IN_OPENRESULT API_CALL OpenInputEndpoint_Win(InputEndpointInfo* info,
                 std::to_wstring(prepareErrorCode) +
                 L")";
             sessionHandle->configuration->activityCallback(errorMessage.c_str());
-            inputDeviceHandle->sysExHeaders[i] = nullptr;
+            inputEndpointHandle->sysExHeaders[i] = nullptr;
             continue;
         }
 
@@ -1508,14 +1509,14 @@ API_EXPORT IN_OPENRESULT API_CALL OpenInputEndpoint_Win(InputEndpointInfo* info,
 
     if (preparedBuffersCount == 0)
     {
-        midiInClose(inputDeviceHandle->handle);
-        delete[] inputDeviceHandle->sysExHeaders;
-        DeleteCriticalSection(&inputDeviceHandle->lock);
-        delete inputDeviceHandle;
+        midiInClose(inputEndpointHandle->handle);
+        delete[] inputEndpointHandle->sysExHeaders;
+        DeleteCriticalSection(&inputEndpointHandle->lock);
+        delete inputEndpointHandle;
         return IN_OPENRESULT_FAILEDPREPARESYSEXBUFFERS;
     }
 
-    *handle = inputDeviceHandle;
+    *handle = inputEndpointHandle;
 
     return IN_OPENRESULT_OK;
 }
@@ -1524,41 +1525,41 @@ API_EXPORT IN_CLOSERESULT API_CALL CloseInputEndpoint(void* handle, int* errorCo
 {
     *errorCode = 0;
 
-    InputEndpointHandle* inputDeviceHandle = static_cast<InputEndpointHandle*>(handle);
+    InputEndpointHandle* inputEndpointHandle = static_cast<InputEndpointHandle*>(handle);
 
-    EnterCriticalSection(&inputDeviceHandle->lock);
-    inputDeviceHandle->isClosing = 1;
+    EnterCriticalSection(&inputEndpointHandle->lock);
+    inputEndpointHandle->isClosing = 1;
 
-    auto cleanupSysExHeaders = [&inputDeviceHandle]()
+    auto cleanupSysExHeaders = [&inputEndpointHandle]()
     {
-        for (int i = 0; i < inputDeviceHandle->sysExBufferCount; i++)
+        for (int i = 0; i < inputEndpointHandle->sysExBufferCount; i++)
         {
-            if (inputDeviceHandle->sysExHeaders[i] == nullptr)
+            if (inputEndpointHandle->sysExHeaders[i] == nullptr)
                 continue;
 
-            LPMIDIHDR header = inputDeviceHandle->sysExHeaders[i];
-            midiInUnprepareHeader(inputDeviceHandle->handle, header, sizeof(MIDIHDR));
+            LPMIDIHDR header = inputEndpointHandle->sysExHeaders[i];
+            midiInUnprepareHeader(inputEndpointHandle->handle, header, sizeof(MIDIHDR));
 
             delete[] header->lpData;
             delete header;
 
-            inputDeviceHandle->sysExHeaders[i] = nullptr;
+            inputEndpointHandle->sysExHeaders[i] = nullptr;
         }
 
-        delete[] inputDeviceHandle->sysExHeaders;
+        delete[] inputEndpointHandle->sysExHeaders;
     };
 
-    MMRESULT result = midiInReset(inputDeviceHandle->handle);
+    MMRESULT result = midiInReset(inputEndpointHandle->handle);
     if (result != MMSYSERR_NOERROR)
     {
-        LeaveCriticalSection(&inputDeviceHandle->lock);
-        DeleteCriticalSection(&inputDeviceHandle->lock);
+        LeaveCriticalSection(&inputEndpointHandle->lock);
+        DeleteCriticalSection(&inputEndpointHandle->lock);
 
         *errorCode = result;
 
         cleanupSysExHeaders();
-        midiInClose(inputDeviceHandle->handle);
-        delete inputDeviceHandle;
+        midiInClose(inputEndpointHandle->handle);
+        delete inputEndpointHandle;
 
         switch (result)
         {
@@ -1570,15 +1571,15 @@ API_EXPORT IN_CLOSERESULT API_CALL CloseInputEndpoint(void* handle, int* errorCo
 
     cleanupSysExHeaders();
 
-    result = midiInClose(inputDeviceHandle->handle);
+    result = midiInClose(inputEndpointHandle->handle);
     if (result != MMSYSERR_NOERROR)
     {
-        LeaveCriticalSection(&inputDeviceHandle->lock);
-        DeleteCriticalSection(&inputDeviceHandle->lock);
+        LeaveCriticalSection(&inputEndpointHandle->lock);
+        DeleteCriticalSection(&inputEndpointHandle->lock);
 
         *errorCode = result;
 
-        delete inputDeviceHandle;
+        delete inputEndpointHandle;
 
         switch (result)
         {
@@ -1590,10 +1591,10 @@ API_EXPORT IN_CLOSERESULT API_CALL CloseInputEndpoint(void* handle, int* errorCo
         return IN_CLOSERESULT_CLOSE_UNKNOWNERROR;
     }
 
-    LeaveCriticalSection(&inputDeviceHandle->lock);
-    DeleteCriticalSection(&inputDeviceHandle->lock);
+    LeaveCriticalSection(&inputEndpointHandle->lock);
+    DeleteCriticalSection(&inputEndpointHandle->lock);
 
-    delete inputDeviceHandle;
+    delete inputEndpointHandle;
 
     return IN_CLOSERESULT_OK;
 }
@@ -1602,9 +1603,9 @@ API_EXPORT IN_CONNECTRESULT API_CALL ConnectToInputEndpoint(void* handle, int* e
 {
     *errorCode = 0;
 
-    InputEndpointHandle* inputDeviceHandle = static_cast<InputEndpointHandle*>(handle);
+    InputEndpointHandle* inputEndpointHandle = static_cast<InputEndpointHandle*>(handle);
 
-    MMRESULT result = midiInStart(inputDeviceHandle->handle);
+    MMRESULT result = midiInStart(inputEndpointHandle->handle);
     if (result != MMSYSERR_NOERROR)
     {
         *errorCode = result;
@@ -1624,9 +1625,9 @@ API_EXPORT IN_DISCONNECTRESULT API_CALL DisconnectFromInputEndpoint(void* handle
 {
     *errorCode = 0;
 
-    InputEndpointHandle* inputDeviceHandle = static_cast<InputEndpointHandle*>(handle);
+    InputEndpointHandle* inputEndpointHandle = static_cast<InputEndpointHandle*>(handle);
 
-    MMRESULT result = midiInStop(inputDeviceHandle->handle);
+    MMRESULT result = midiInStop(inputEndpointHandle->handle);
     if (result != MMSYSERR_NOERROR)
     {
         *errorCode = result;
@@ -1685,12 +1686,12 @@ API_EXPORT OUT_GETALLINFORESULT API_CALL GetOutputEndpointsInfo(Configuration* c
             std::this_thread::sleep_for(std::chrono::milliseconds(10));
         }
 
-        std::vector<OutputEndpointInfo*> outputDevicesInfo;
+        std::vector<OutputEndpointInfo*> outputEndpointsInfo;
         std::lock_guard<std::mutex> lock(sessionHandle->endpointDevicesLock);
 
-        auto cleanupOutputDevices = [&outputDevicesInfo]()
+        auto cleanupOutputDevices = [&outputEndpointsInfo]()
         {
-            for (auto& info : outputDevicesInfo)
+            for (auto& info : outputEndpointsInfo)
             {
                 DeleteOutputEndpointInfo(info);
             }
@@ -1701,23 +1702,23 @@ API_EXPORT OUT_GETALLINFORESULT API_CALL GetOutputEndpointsInfo(Configuration* c
 
         for (int i = 0; i < initialCount; i++)
         {
-            OutputEndpointInfo* outputDeviceInfo;
+            OutputEndpointInfo* outputEndpointInfo;
 
-            auto getOutputEndpointInfoResult = GetOutputEndpointInfo(i, &outputDeviceInfo, errorCode);
+            auto getOutputEndpointInfoResult = GetOutputEndpointInfo(i, &outputEndpointInfo, errorCode);
             if (getOutputEndpointInfoResult != OUT_GETINFORESULT_OK)
             {
                 cleanupOutputDevices();
                 return ConvertToGetAllOutInfoResult(getOutputEndpointInfoResult);
             }
             
-            if (wcscmp(outputDeviceInfo->caps->szPname, L"Microsoft GS Wavetable Synth") == 0)
+            if (wcscmp(outputEndpointInfo->caps->szPname, L"Microsoft GS Wavetable Synth") == 0)
             {
-                outputDeviceInfo->isMicrosoftGsWavetableSynth = true;
-                outputDevicesInfo.push_back(outputDeviceInfo);
+                outputEndpointInfo->isMicrosoftGsWavetableSynth = true;
+                outputEndpointsInfo.push_back(outputEndpointInfo);
                 break;
             }
 
-            DeleteOutputEndpointInfo(outputDeviceInfo);
+            DeleteOutputEndpointInfo(outputEndpointInfo);
         }
 
         try
@@ -1726,20 +1727,20 @@ API_EXPORT OUT_GETALLINFORESULT API_CALL GetOutputEndpointsInfo(Configuration* c
             {
                 const EndpointDevicesInfo& endpointDevicesInfo = pair.second;
 
-                for (auto* outputDeviceInfo : endpointDevicesInfo.outputDevicesInfo)
+                for (auto* outputEndpointInfo : endpointDevicesInfo.outputEndpointsInfo)
                 {
                     OutputEndpointInfo* infoCopy = nullptr;
-                    CloneOutputEndpointInfo(outputDeviceInfo, &infoCopy);
-                    outputDevicesInfo.push_back(infoCopy);
+                    CloneOutputEndpointInfo(outputEndpointInfo, &infoCopy);
+                    outputEndpointsInfo.push_back(infoCopy);
                 }
             }
 
-            auto count = outputDevicesInfo.size();
+            auto count = outputEndpointsInfo.size();
             OutputEndpointInfo** result = new OutputEndpointInfo * [count];
 
             for (size_t i = 0; i < count; i++)
             {
-                result[i] = outputDevicesInfo[i];
+                result[i] = outputEndpointsInfo[i];
             }
 
             *devicesInfo = result;
@@ -1778,10 +1779,10 @@ API_EXPORT OUT_GETALLINFORESULT API_CALL GetOutputEndpointsInfo(Configuration* c
 
     for (int i = 0; i < *devicesCount; i++)
     {
-        OutputEndpointInfo* outputDeviceInfo;
+        OutputEndpointInfo* outputEndpointInfo;
         int errorCode;
 
-        auto getOutputEndpointInfoResult = GetOutputEndpointInfo(i, &outputDeviceInfo, &errorCode);
+        auto getOutputEndpointInfoResult = GetOutputEndpointInfo(i, &outputEndpointInfo, &errorCode);
         if (getOutputEndpointInfoResult != OUT_GETINFORESULT_OK)
         {
             for (int j = 0; j < i; j++)
@@ -1794,10 +1795,10 @@ API_EXPORT OUT_GETALLINFORESULT API_CALL GetOutputEndpointsInfo(Configuration* c
             return ConvertToGetAllOutInfoResult(getOutputEndpointInfoResult);
         }
 
-        if (wcscmp(outputDeviceInfo->caps->szPname, L"Microsoft GS Wavetable Synth") == 0)
-            outputDeviceInfo->isMicrosoftGsWavetableSynth = true;
+        if (wcscmp(outputEndpointInfo->caps->szPname, L"Microsoft GS Wavetable Synth") == 0)
+            outputEndpointInfo->isMicrosoftGsWavetableSynth = true;
 
-        result[i] = outputDeviceInfo;
+        result[i] = outputEndpointInfo;
     }
 
     *devicesInfo = result;
@@ -1847,8 +1848,8 @@ API_EXPORT OUT_OPENRESULT API_CALL OpenOutputEndpoint_Win(OutputEndpointInfo* in
 
     EnsureWinMmPortsAvailable();
 
-    OutputEndpointHandle* outputDeviceHandle = new OutputEndpointHandle();
-    outputDeviceHandle->info = info;
+    OutputEndpointHandle* outputEndpointHandle = new OutputEndpointHandle();
+    outputEndpointHandle->info = info;
 
     auto deviceIndex = FindPortIndex(info->endpointDeviceId, info->portDeviceId, midi2::Enumeration::Midi1PortFlow::MidiMessageDestination);
     if (deviceIndex < 0)
@@ -1858,7 +1859,7 @@ API_EXPORT OUT_OPENRESULT API_CALL OpenOutputEndpoint_Win(OutputEndpointInfo* in
     MMRESULT result = midiOutOpen(&outHandle, deviceIndex, callback, 0, CALLBACK_FUNCTION);
     if (result != MMSYSERR_NOERROR)
     {
-        delete outputDeviceHandle;
+        delete outputEndpointHandle;
 
         *errorCode = result;
 
@@ -1874,9 +1875,9 @@ API_EXPORT OUT_OPENRESULT API_CALL OpenOutputEndpoint_Win(OutputEndpointInfo* in
         return OUT_OPENRESULT_UNKNOWNERROR;
     }
 
-    outputDeviceHandle->handle = outHandle;
+    outputEndpointHandle->handle = outHandle;
 
-    *handle = outputDeviceHandle;
+    *handle = outputEndpointHandle;
 
     return OUT_OPENRESULT_OK;
 }
@@ -1885,15 +1886,15 @@ API_EXPORT OUT_CLOSERESULT API_CALL CloseOutputEndpoint(void* handle, int* error
 {
     *errorCode = 0;
 
-    OutputEndpointHandle* outputDeviceHandle = static_cast<OutputEndpointHandle*>(handle);
+    OutputEndpointHandle* outputEndpointHandle = static_cast<OutputEndpointHandle*>(handle);
 
-    MMRESULT result = midiOutReset(outputDeviceHandle->handle);
+    MMRESULT result = midiOutReset(outputEndpointHandle->handle);
     if (result != MMSYSERR_NOERROR)
     {
         *errorCode = result;
 
-        midiOutClose(outputDeviceHandle->handle);
-        delete outputDeviceHandle;
+        midiOutClose(outputEndpointHandle->handle);
+        delete outputEndpointHandle;
 
         switch (result)
         {
@@ -1903,12 +1904,12 @@ API_EXPORT OUT_CLOSERESULT API_CALL CloseOutputEndpoint(void* handle, int* error
         return OUT_CLOSERESULT_RESET_UNKNOWNERROR;
     }
 
-    result = midiOutClose(outputDeviceHandle->handle);
+    result = midiOutClose(outputEndpointHandle->handle);
     if (result != MMSYSERR_NOERROR)
     {
         *errorCode = result;
 
-        delete outputDeviceHandle;
+        delete outputEndpointHandle;
 
         switch (result)
         {
@@ -1920,7 +1921,7 @@ API_EXPORT OUT_CLOSERESULT API_CALL CloseOutputEndpoint(void* handle, int* error
         return OUT_CLOSERESULT_CLOSE_UNKNOWNERROR;
     }
 
-    delete outputDeviceHandle;
+    delete outputEndpointHandle;
 
     return OUT_CLOSERESULT_OK;
 }
@@ -1929,9 +1930,9 @@ API_EXPORT OUT_SENDSHORTRESULT API_CALL SendShortEventToOutputEndpoint(void* han
 {
     *errorCode = 0;
 
-    OutputEndpointHandle* outputDeviceHandle = static_cast<OutputEndpointHandle*>(handle);
+    OutputEndpointHandle* outputEndpointHandle = static_cast<OutputEndpointHandle*>(handle);
 
-    MMRESULT result = midiOutShortMsg(outputDeviceHandle->handle, (DWORD)message);
+    MMRESULT result = midiOutShortMsg(outputEndpointHandle->handle, (DWORD)message);
     if (result != MMSYSERR_NOERROR)
     {
         *errorCode = result;
@@ -1953,7 +1954,7 @@ API_EXPORT OUT_SENDSYSEXRESULT API_CALL SendSysExEventToOutputEndpoint_Win(void*
 {
     *errorCode = 0;
 
-    OutputEndpointHandle* outputDeviceHandle = static_cast<OutputEndpointHandle*>(handle);
+    OutputEndpointHandle* outputEndpointHandle = static_cast<OutputEndpointHandle*>(handle);
 
     LPMIDIHDR header = new MIDIHDR();
     header->lpData = data;
@@ -1961,7 +1962,7 @@ API_EXPORT OUT_SENDSYSEXRESULT API_CALL SendSysExEventToOutputEndpoint_Win(void*
     header->dwBytesRecorded = size;
     header->dwFlags = 0;
 
-    MMRESULT result = midiOutPrepareHeader(outputDeviceHandle->handle, header, sizeof(MIDIHDR));
+    MMRESULT result = midiOutPrepareHeader(outputEndpointHandle->handle, header, sizeof(MIDIHDR));
     if (result != MMSYSERR_NOERROR)
     {
         delete header;
@@ -1978,10 +1979,10 @@ API_EXPORT OUT_SENDSYSEXRESULT API_CALL SendSysExEventToOutputEndpoint_Win(void*
         return OUT_SENDSYSEXRESULT_PREPAREBUFFER_UNKNOWNERROR;
     }
 
-    result = midiOutLongMsg(outputDeviceHandle->handle, header, sizeof(MIDIHDR));
+    result = midiOutLongMsg(outputEndpointHandle->handle, header, sizeof(MIDIHDR));
     if (result != MMSYSERR_NOERROR)
     {
-        midiOutUnprepareHeader(outputDeviceHandle->handle, header, sizeof(MIDIHDR));
+        midiOutUnprepareHeader(outputEndpointHandle->handle, header, sizeof(MIDIHDR));
         delete header;
 
         *errorCode = result;
@@ -2004,9 +2005,9 @@ API_EXPORT OUT_GETSYSEXDATARESULT API_CALL GetOutputEndpointSysExBufferData(void
 {
     *errorCode = 0;
 
-    OutputEndpointHandle* outputDeviceHandle = static_cast<OutputEndpointHandle*>(handle);
+    OutputEndpointHandle* outputEndpointHandle = static_cast<OutputEndpointHandle*>(handle);
 
-    MMRESULT result = midiOutUnprepareHeader(outputDeviceHandle->handle, header, sizeof(MIDIHDR));
+    MMRESULT result = midiOutUnprepareHeader(outputEndpointHandle->handle, header, sizeof(MIDIHDR));
     if (result != MMSYSERR_NOERROR)
     {
         *errorCode = result;
@@ -2034,8 +2035,8 @@ API_EXPORT OUT_GETSYSEXDATARESULT API_CALL GetOutputEndpointSysExBufferData(void
 
 struct VirtualDeviceInfo
 {
-    InputEndpointInfo* inputDeviceInfo = nullptr;
-    OutputEndpointInfo* outputDeviceInfo = nullptr;
+    InputEndpointInfo* inputEndpointInfo = nullptr;
+    OutputEndpointInfo* outputEndpointInfo = nullptr;
     const wchar_t* name;
     winrt::guid associationId;
     std::wstring endpointDeviceId;
@@ -2075,11 +2076,11 @@ API_EXPORT VIRTUAL_OPENRESULT API_CALL OpenVirtualDevice_Win(
 
     auto cleanupVirtualDevice = [&virtualDeviceInfo]()
     {
-        if (virtualDeviceInfo->inputDeviceInfo != nullptr)
-            DeleteInputEndpointInfo(virtualDeviceInfo->inputDeviceInfo);
+        if (virtualDeviceInfo->inputEndpointInfo != nullptr)
+            DeleteInputEndpointInfo(virtualDeviceInfo->inputEndpointInfo);
 
-        if (virtualDeviceInfo->outputDeviceInfo != nullptr)
-            DeleteOutputEndpointInfo(virtualDeviceInfo->outputDeviceInfo);
+        if (virtualDeviceInfo->outputEndpointInfo != nullptr)
+            DeleteOutputEndpointInfo(virtualDeviceInfo->outputEndpointInfo);
 
         delete virtualDeviceInfo;
     };
@@ -2144,28 +2145,28 @@ API_EXPORT VIRTUAL_OPENRESULT API_CALL OpenVirtualDevice_Win(
 
         auto inputPort = GetSinglePort(endpointInformation, midi2::Enumeration::Midi1PortFlow::MidiMessageSource);
 
-        InputEndpointInfo* inputDeviceInfo = nullptr;
-        IN_GETINFORESULT inputResult = GetInputEndpointInfo(GetPortNumber(inputPort), endpointId, inputPort.PortDeviceId(), &inputDeviceInfo, errorCode);
+        InputEndpointInfo* inputEndpointInfo = nullptr;
+        IN_GETINFORESULT inputResult = GetInputEndpointInfo(GetPortNumber(inputPort), endpointId, inputPort.PortDeviceId(), &inputEndpointInfo, errorCode);
         if (inputResult != IN_GETINFORESULT_OK)
         {
             delete virtualDeviceInfo;
             return VIRTUAL_OPENRESULT_FAILEDGETINPUTDEVICEINFO;
         }
 
-        virtualDeviceInfo->inputDeviceInfo = inputDeviceInfo;
+        virtualDeviceInfo->inputEndpointInfo = inputEndpointInfo;
 
         auto outputPort = GetSinglePort(endpointInformation, midi2::Enumeration::Midi1PortFlow::MidiMessageDestination);
 
-        OutputEndpointInfo* outputDeviceInfo = nullptr;
-        OUT_GETINFORESULT outputResult = GetOutputEndpointInfo(GetPortNumber(outputPort), endpointId, outputPort.PortDeviceId(), &outputDeviceInfo, errorCode);
+        OutputEndpointInfo* outputEndpointInfo = nullptr;
+        OUT_GETINFORESULT outputResult = GetOutputEndpointInfo(GetPortNumber(outputPort), endpointId, outputPort.PortDeviceId(), &outputEndpointInfo, errorCode);
         if (outputResult != OUT_GETINFORESULT_OK)
         {
-            DeleteInputEndpointInfo(virtualDeviceInfo->inputDeviceInfo);
+            DeleteInputEndpointInfo(virtualDeviceInfo->inputEndpointInfo);
             delete virtualDeviceInfo;
             return VIRTUAL_OPENRESULT_FAILEDGETOUTPUTDEVICEINFO;
         }
 
-        virtualDeviceInfo->outputDeviceInfo = outputDeviceInfo;
+        virtualDeviceInfo->outputEndpointInfo = outputEndpointInfo;
     }
     catch (const winrt::hresult_error& e)
     {
@@ -2217,12 +2218,12 @@ API_EXPORT VIRTUAL_CLOSERESULT API_CALL CloseVirtualDevice(VirtualDeviceInfo* in
 
 API_EXPORT InputEndpointInfo* API_CALL GetInputEndpointInfoFromVirtualDevice(VirtualDeviceInfo* info)
 {
-    return info->inputDeviceInfo;
+    return info->inputEndpointInfo;
 }
 
 API_EXPORT OutputEndpointInfo* API_CALL GetOutputEndpointInfoFromVirtualDevice(VirtualDeviceInfo* info)
 {
-    return info->outputDeviceInfo;
+    return info->outputEndpointInfo;
 }
 
 API_EXPORT VIRTUAL_MUTERESULT API_CALL MuteVirtualDevice(

@@ -11,8 +11,8 @@ namespace Melanchall.DryWetMidi.Interaction
         private const string BeatsGroupName = "beats";
         private const string TicksGroupName = "ticks";
 
-        private static readonly string BarsGroup = ParsingUtilities.GetNonnegativeDoubleWithCommaNumberGroup(BarsGroupName);
-        private static readonly string BeatsGroup = ParsingUtilities.GetNonnegativeDoubleWithCommaNumberGroup(BeatsGroupName);
+        private static readonly string BarsGroup = ParsingUtilities.GetNonnegativeDoubleNumberGroup(BarsGroupName, ',');
+        private static readonly string BeatsGroup = ParsingUtilities.GetNonnegativeDoubleNumberGroup(BeatsGroupName, ',');
         private static readonly string TicksGroup = ParsingUtilities.GetNonnegativeIntegerNumberGroup(TicksGroupName);
 
         private static readonly string Divider = Regex.Escape(".");
@@ -41,10 +41,10 @@ namespace Melanchall.DryWetMidi.Interaction
             if (match == null)
                 return ParsingResult.NotMatched;
 
-            if (!ParsingUtilities.ParseNonnegativeDoubleWithComma(match, BarsGroupName, 0, out var bars))
+            if (!ParsingUtilities.ParseNonnegativeDouble(match, BarsGroupName, 0, new[] { ',' }, out var bars))
                 return ParsingResult.Error(BarsIsOutOfRange);
 
-            if (!ParsingUtilities.ParseNonnegativeDoubleWithComma(match, BeatsGroupName, 0, out var beats))
+            if (!ParsingUtilities.ParseNonnegativeDouble(match, BeatsGroupName, 0, new[] { ',' }, out var beats))
                 return ParsingResult.Error(BeatsIsOutOfRange);
 
             if (!ParsingUtilities.ParseNonnegativeLong(match, TicksGroupName, 0, out var ticks))

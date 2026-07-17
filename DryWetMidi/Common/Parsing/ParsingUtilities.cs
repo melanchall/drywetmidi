@@ -41,14 +41,9 @@ namespace Melanchall.DryWetMidi.Common
             return $@"(?<{groupName}>[\+\-]?\d+)";
         }
 
-        public static string GetNonnegativeDoubleNumberGroup(string groupName)
+        public static string GetNonnegativeDoubleNumberGroup(string groupName, params char[] decimalSeparators)
         {
-            return $@"(?<{groupName}>\d+(\.\d+)?)";
-        }
-
-        public static string GetNonnegativeDoubleWithCommaNumberGroup(string groupName)
-        {
-            return $@"(?<{groupName}>\d+(,\d+)?)";
+            return $@"(?<{groupName}>\d+({(decimalSeparators?.Any() == true ? $"[{string.Join(string.Empty, decimalSeparators.Select(s => Regex.Escape(s.ToString())))}]" : @"\.")}\d+)?)";
         }
 
         public static Match Match(string input, IEnumerable<string> patterns, bool ignoreCase = true)
@@ -73,14 +68,15 @@ namespace Melanchall.DryWetMidi.Common
             return ParseInt(match, groupName, defaultValue, IntegerNumberStyle, out value);
         }
 
-        public static bool ParseNonnegativeDouble(Match match, string groupName, double defaultValue, out double value)
+        public static bool ParseNonnegativeDouble(Match match, string groupName, double defaultValue, char[] decimalSeparators, out double value)
         {
-            return ParseDouble(match, groupName, defaultValue, NonnegativeDoubleNumberStyle, out value);
-        }
-
-        public static bool ParseNonnegativeDoubleWithComma(Match match, string groupName, double defaultValue, out double value)
-        {
-            return ParseDouble(match, groupName, defaultValue, NonnegativeDoubleNumberStyle, ",", out value);
+            return ParseDouble(
+                match,
+                groupName,
+                defaultValue,
+                NonnegativeDoubleNumberStyle,
+                decimalSeparators,
+                out value);
         }
 
         public static bool ParseNonnegativeLong(Match match, string groupName, long defaultValue, out long value)
@@ -99,28 +95,28 @@ namespace Melanchall.DryWetMidi.Common
             return !group.Success || int.TryParse(group.Value, numberStyle, null, out value);
         }
 
-        private static bool ParseDouble(Match match, string groupName, double defaultValue, NumberStyles numberStyle, out double value)
-        {
-            value = defaultValue;
-
-            var group = match.Groups[groupName];
-            return !group.Success || double.TryParse(group.Value, numberStyle, CultureInfo.InvariantCulture, out value);
-        }
-
         private static bool ParseDouble(
             Match match,
             string groupName,
             double defaultValue,
             NumberStyles numberStyle,
-            string decimalSeparator,
+            char[] decimalSeparators,
             out double value)
         {
             value = defaultValue;
 
-            var numberFormat = new NumberFormatInfo { NumberDecimalSeparator = decimalSeparator };
-
             var group = match.Groups[groupName];
-            return !group.Success || double.TryParse(group.Value, numberStyle, numberFormat, out value);
+            if (!group.Success)
+                return true;
+
+            foreach (var c in decimalSeparators)
+            {
+                var numberFormat = new NumberFormatInfo { NumberDecimalSeparator = c.ToString() };
+                if (double.TryParse(group.Value, numberStyle, numberFormat, out value))
+                    return true;
+            }
+
+            return false;
         }
 
         #endregion

@@ -325,6 +325,41 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         }
 
         [Test]
+        public void CheckSplitObjectsByPartsNumber_TrackChunk_BarBeatFraction()
+        {
+            var tempoMap = TempoMap.Create(new TicksPerQuarterNoteTimeDivision(480));
+            var partLength = new BarBeatFractionTimeSpan(0.6);
+            var noteNumber = (SevenBitNumber)70;
+
+            CheckSplitObjectsByPartsNumber_TrackChunk(
+                inputObjects: new ITimedObject[]
+                {
+                    new Note(noteNumber).SetLength(3 * MusicalTimeSpan.Whole, tempoMap),
+                },
+                objectType: ObjectType.Note,
+                partsNumber: 5,
+                lengthType: TimeSpanType.BarBeatFraction,
+                expectedObjects: new ITimedObject[]
+                {
+                    new Note(noteNumber)
+                        .SetLength(partLength, tempoMap),
+                    new Note(noteNumber)
+                        .SetTime(partLength, tempoMap)
+                        .SetLength(partLength, tempoMap),
+                    new Note(noteNumber)
+                        .SetTime(partLength.Multiply(2), tempoMap)
+                        .SetLength(partLength, tempoMap),
+                    new Note(noteNumber)
+                        .SetTime(partLength.Multiply(3), tempoMap)
+                        .SetLength(partLength, tempoMap),
+                    new Note(noteNumber)
+                        .SetTime(partLength.Multiply(4), tempoMap)
+                        .SetLength(partLength, tempoMap),
+                },
+                tempoMap: tempoMap);
+        }
+
+        [Test]
         public void CheckSplitObjectsByPartsNumber_TrackChunk_Settings_1() => CheckSplitObjectsByPartsNumber_TrackChunk(
             inputObjects: new ITimedObject[]
             {

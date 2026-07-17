@@ -13,11 +13,11 @@ jobs:
     vmImage: 'windows-latest'
   steps:
   - task: PowerShell@2
-    displayName: 'Download Microsoft.Windows.Devices.Midi2.nupkg'
+    displayName: 'Download Windows.Devices.Midi2.nupkg'
     inputs:
       targetType: 'inline'
       script: |
-        $packageUrl = "https://github.com/microsoft/MIDI/releases/download/rc-4/Microsoft.Windows.Devices.Midi2.1.0.17-rc.4.25.nupkg"
+        $packageUrl = "https://github.com/microsoft/MIDI/releases/download/inbox-dev-preview-1/Windows.Devices.Midi2.0.99.30-devpreview.1.nupkg"
         $downloadFolder = "$(Pipeline.Workspace)\Midi2"
         
         New-Item -Path $downloadFolder -ItemType Directory -Force | Out-Null
@@ -36,6 +36,27 @@ jobs:
     inputs:
       command: 'custom'
       arguments: 'restore "Resources/Native/Windows/Melanchall.DryWetMidi.Native.Windows/Melanchall.DryWetMidi.Native.Windows/Melanchall.DryWetMidi.Native.Windows.vcxproj" -Source "$(Pipeline.Workspace)\Midi2" -Source "https://api.nuget.org/v3/index.json" -SolutionDirectory "$(Build.SourcesDirectory)/Resources/Native/Windows/Melanchall.DryWetMidi.Native.Windows"'
+  
+  - task: PowerShell@2
+    displayName: 'Fix Windows.Devices.Midi2 ARM64EC folder link'
+    inputs:
+      targetType: 'inline'
+      script: |
+        $packageRuntimesDir = "$(Build.SourcesDirectory)\Resources\Native\Windows\Melanchall.DryWetMidi.Native.Windows\packages\Windows.Devices.Midi2.0.99.30-devpreview.1\runtimes"
+        $srcFolder = "$packageRuntimesDir\win-arm64"
+        $dstFolder = "$packageRuntimesDir\win-ARM64EC"
+        
+        Write-Host "Checking paths..."
+        if (Test-Path $srcFolder) {
+            if (-not (Test-Path $dstFolder)) {
+                New-Item -ItemType Junction -Path $dstFolder -Value $srcFolder
+                Write-Host "Successfully linked $srcFolder to $dstFolder"
+            } else {
+                Write-Host "Destination folder already exists."
+            }
+        } else {
+            Write-Error "Source folder $srcFolder not found! Make sure NuGet restore step has completed successfully."
+        }
   
   - task: VSBuild@1
     displayName: 'Build dll'
