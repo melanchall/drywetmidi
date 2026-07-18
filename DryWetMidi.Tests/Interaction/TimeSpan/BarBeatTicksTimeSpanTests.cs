@@ -413,13 +413,12 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             2 * MusicalTimeSpan.Whole + 5 * MusicalTimeSpan.Eighth + 12 * MusicalTimeSpan.Sixteenth,
             TimeSpanTestUtilities.ComplexTempoMap);
 
-        // TODO
         // 5/8            5/16      3/8     13/8
         //  |--+--+--+--+--|-+-+-+-+-|--+--+--|--+--+--+--+--+--+--+--+--+--+--+--+--|
         //  0              1         2        3                                      4
         //        |===============================================================|
         //        '  '  '  ^         ^        ^  '  '  '  '  '  '  '  '  '  '  '  '
-        //[Test]
+        [Test]
         public void Convert_Complex_5() => TimeSpanTestUtilities.TestConversion(
             new BarBeatTicksTimeSpan(3, 10),
             18 * MusicalTimeSpan.Eighth + 5 * MusicalTimeSpan.Sixteenth,

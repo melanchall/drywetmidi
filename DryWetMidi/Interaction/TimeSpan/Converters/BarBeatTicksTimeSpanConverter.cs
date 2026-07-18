@@ -173,6 +173,27 @@ namespace Melanchall.DryWetMidi.Interaction
                 lastTimeSignature = timeSignatureChange.Value;
             }
 
+            if (firstTimeSignatureChange != null &&
+                bars > 0 &&
+                (beats > beatsBefore || (beats == beatsBefore && ticks >= ticksBefore)) &&
+                (beats > 0 || ticks > 0))
+            {
+                bars--;
+
+                if (ticksBefore > 0)
+                {
+                    beats += startTimeSignature.Numerator - beatsBefore - 1;
+                    ticks += startBeatLength - ticksBefore;
+                }
+                else
+                {
+                    beats += startTimeSignature.Numerator - beatsBefore;
+                }
+
+                beatsBefore = 0;
+                ticksBefore = 0;
+            }
+
             if (bars > 0)
             {
                 lastBarLength = BarBeatTimeSpanUtilities.GetBarLength(lastTimeSignature, ticksPerQuarterNote);
