@@ -151,15 +151,6 @@ namespace Melanchall.DryWetMidi.Core
             {
                 var sysExEvent2 = (SysExEvent)midiEvent2;
 
-                var completed1 = sysExEvent1.Completed;
-                var completed2 = sysExEvent2.Completed;
-
-                if (completed1 != completed2)
-                {
-                    message = $"'Completed' state of system exclusive events are different ({completed1} vs {completed2}).";
-                    return false;
-                }
-
                 var data1 = sysExEvent1.Data ?? Array.Empty<byte>();
                 var offset1 = sysExEvent1.StartsWithStatusByte ? 1 : 0;
 

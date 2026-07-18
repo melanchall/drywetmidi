@@ -60,9 +60,8 @@ namespace Melanchall.DryWetMidi.Tests.Core
             new object[] { new NormalSysExEvent(new byte[] { 0xF0, 0xAB, 0x65, 0xF7 }), new NormalSysExEvent(new byte[] { 0xAB, 0x65, 0xF7 }) },
 
             new object[] { new EscapeSysExEvent(), new EscapeSysExEvent() },
-            // TODO: differs by Completed property
-            // new object[] { new EscapeSysExEvent(), new EscapeSysExEvent(new byte[] { 0xF7 }) },
-            // new object[] { new EscapeSysExEvent(new byte[] { 0xF7 }), new EscapeSysExEvent() },
+            new object[] { new EscapeSysExEvent(), new EscapeSysExEvent(new byte[] { 0xF7 }) },
+            new object[] { new EscapeSysExEvent(new byte[] { 0xF7 }), new EscapeSysExEvent() },
             new object[] { new EscapeSysExEvent(new byte[] { 0xF7, 0xAB, 0x65, 0xF7 }), new EscapeSysExEvent(new byte[] { 0xF7, 0xAB, 0x65, 0xF7 }) },
             new object[] { new EscapeSysExEvent(new byte[] { 0xAB, 0x65, 0xF7 }), new EscapeSysExEvent(new byte[] { 0xF7, 0xAB, 0x65, 0xF7 }) },
             new object[] { new EscapeSysExEvent(new byte[] { 0xF7, 0xAB, 0x65, 0xF7 }), new EscapeSysExEvent(new byte[] { 0xAB, 0x65, 0xF7 }) },
