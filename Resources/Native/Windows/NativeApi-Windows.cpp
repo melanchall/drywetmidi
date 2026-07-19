@@ -131,13 +131,7 @@ API_EXPORT void API_CALL GetNativeEnvironmentInfo_Win(
 
 int GetPortNumber(const midi2::Enumeration::Legacy::MidiLegacyPortDeviceInformation info)
 {
-    if (info.Flow() == midi2::Enumeration::Midi1PortFlow::MidiMessageSource)
-        return info.Number() - 1;
-    else if (info.Flow() == midi2::Enumeration::Midi1PortFlow::MidiMessageDestination)
-        return info.Number();
-
-    // TODO
-    return -1;
+    return info.Number();
 }
 
 /* ================================

@@ -24,7 +24,7 @@ jobs:
       - name: Download Microsoft.Windows.Devices.Midi2.nupkg
         shell: pwsh
         run: |
-          $packageUrl = "https://github.com/microsoft/MIDI/releases/download/inbox-dev-preview-1/Windows.Devices.Midi2.0.99.30-devpreview.1.nupkg"
+          $packageUrl = "https://github.com/microsoft/MIDI/releases/download/${{ vars.WMS_PREVIEW_PACKAGE_NAME }}"
           $downloadFolder = "${{ runner.temp }}\Midi2"
           
           New-Item -Path $downloadFolder -ItemType Directory -Force | Out-Null
@@ -41,25 +41,6 @@ jobs:
       - name: Restore NuGet packages
         run: |
           nuget restore "Resources/Native/Windows/Melanchall.DryWetMidi.Native.Windows/Melanchall.DryWetMidi.Native.Windows/Melanchall.DryWetMidi.Native.Windows.vcxproj" -Source "${{ runner.temp }}\Midi2" -Source "https://api.nuget.org/v3/index.json" -SolutionDirectory "${{ github.workspace }}/Resources/Native/Windows/Melanchall.DryWetMidi.Native.Windows"
-
-      - name: Download Microsoft.Windows.Devices.Midi2.nupkg
-        shell: pwsh
-        run: |
-          $packageRuntimesDir = "${{ github.workspace }}\Resources\Native\Windows\Melanchall.DryWetMidi.Native.Windows\packages\Windows.Devices.Midi2.0.99.30-devpreview.1\runtimes"
-          $srcFolder = "$packageRuntimesDir\win-arm64"
-          $dstFolder = "$packageRuntimesDir\win-ARM64EC"
-        
-          Write-Host "Checking paths..."
-          if (Test-Path $srcFolder) {
-            if (-not (Test-Path $dstFolder)) {
-                New-Item -ItemType Junction -Path $dstFolder -Value $srcFolder
-                Write-Host "Successfully linked $srcFolder to $dstFolder"
-            } else {
-                Write-Host "Destination folder already exists."
-            }
-          } else {
-            Write-Error "Source folder $srcFolder not found! Make sure NuGet restore step has completed successfully."
-          }
 
       - name: Build dll
         run: |
