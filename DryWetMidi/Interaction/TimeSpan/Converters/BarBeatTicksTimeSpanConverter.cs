@@ -1,7 +1,8 @@
-﻿using System;
-using System.Linq;
-using Melanchall.DryWetMidi.Common;
+﻿using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Melanchall.DryWetMidi.Interaction
 {
@@ -173,27 +174,6 @@ namespace Melanchall.DryWetMidi.Interaction
                 lastTimeSignature = timeSignatureChange.Value;
             }
 
-            if (firstTimeSignatureChange != null &&
-                bars > 0 &&
-                (beats > beatsBefore || (beats == beatsBefore && ticks >= ticksBefore)) &&
-                (beats > 0 || ticks > 0))
-            {
-                bars--;
-
-                if (ticksBefore > 0)
-                {
-                    beats += startTimeSignature.Numerator - beatsBefore - 1;
-                    ticks += startBeatLength - ticksBefore;
-                }
-                else
-                {
-                    beats += startTimeSignature.Numerator - beatsBefore;
-                }
-
-                beatsBefore = 0;
-                ticksBefore = 0;
-            }
-
             if (bars > 0)
             {
                 lastBarLength = BarBeatTimeSpanUtilities.GetBarLength(lastTimeSignature, ticksPerQuarterNote);
@@ -202,7 +182,7 @@ namespace Melanchall.DryWetMidi.Interaction
             }
 
             if (beats == beatsBefore && ticks == ticksBefore)
-                return MathUtilities.RoundToLong(lastTime - time);
+                return CorrectResult(barBeatTicksTimeSpan, time, tempoMap, timeSignatureChanges, MathUtilities.RoundToLong(lastTime - time));
 
             // Balance beats
 
@@ -231,7 +211,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
             //
 
-            return MathUtilities.RoundToLong(lastTime - time);
+            return CorrectResult(barBeatTicksTimeSpan, time, tempoMap, timeSignatureChanges, MathUtilities.RoundToLong(lastTime - time));
         }
 
         #endregion
@@ -253,6 +233,56 @@ namespace Melanchall.DryWetMidi.Interaction
             var beatLength = BarBeatTimeSpanUtilities.GetBeatLength(timeSignature, ticksPerQuarterNote);
             beats = ticks / beatLength;
             ticks = ticks % beatLength;
+        }
+
+        private long CorrectResult(
+            BarBeatTicksTimeSpan expectedTimeSpan,
+            long time,
+            TempoMap tempoMap,
+            IReadOnlyCollection<ValueChange<TimeSignature>> timeSignatureChanges,
+            long result)
+        {
+            if (timeSignatureChanges.Count == 0 ||
+                expectedTimeSpan.Bars <= 0 ||
+                (expectedTimeSpan.Beats <= 0 && expectedTimeSpan.Ticks <= 0))
+            {
+                return result;
+            }
+
+            if (ConvertTo(result, time, tempoMap).Equals(expectedTimeSpan))
+                return result;
+
+            var timeSignatureLine = tempoMap.TimeSignatureLine;
+            var ticksPerQuarterNoteTimeDivision = tempoMap.TimeDivision as TicksPerQuarterNoteTimeDivision;
+            var ticksPerQuarterNote = ticksPerQuarterNoteTimeDivision.TicksPerQuarterNote;
+            var maxBarLength = 0;
+
+            foreach (var timeSignatureChange in timeSignatureChanges)
+            {
+                maxBarLength = Math.Max(maxBarLength, BarBeatTimeSpanUtilities.GetBarLength(timeSignatureChange.Value, ticksPerQuarterNote));
+            }
+            
+            maxBarLength = Math.Max(maxBarLength, BarBeatTimeSpanUtilities.GetBarLength(timeSignatureLine.GetValueAtTime(time), ticksPerQuarterNote));
+            maxBarLength = Math.Max(maxBarLength, BarBeatTimeSpanUtilities.GetBarLength(timeSignatureLine.GetValueAtTime(Math.Max(time, time + result - 1)), ticksPerQuarterNote));
+            
+            var lower = 0L;
+            var upper = result + Math.Max(0, maxBarLength);
+
+            while (lower <= upper)
+            {
+                var middle = lower + (upper - lower) / 2;
+                var actualTimeSpan = (BarBeatTicksTimeSpan)ConvertTo(middle, time, tempoMap);
+                
+                var comparison = actualTimeSpan.CompareTo(expectedTimeSpan);
+                if (comparison == 0)
+                    return middle;
+                else if (comparison < 0)
+                    lower = middle + 1;
+                else
+                    upper = middle - 1;
+            }
+
+            return result;
         }
 
         #endregion
