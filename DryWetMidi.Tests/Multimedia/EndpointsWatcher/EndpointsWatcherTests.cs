@@ -22,6 +22,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void CheckEndpointAddedRemoved()
         {
+            WaitPreviousNotifications();
+
             Action<TestCheckpoints> check = checkpoints =>
             {
                 var addedEndpoints = new List<MidiEndpoint>();
@@ -95,11 +97,10 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     () => ((OutputEndpoint)lastRemovedEndpoint).SendEvent(new NoteOnEvent()),
                     "Can send event via removed output endpoint.");
 
-                // TODO: failed on macOS
-                //CollectionAssert.AreEquivalent(
-                //    addedEndpoints,
-                //    removedEndpoints,
-                //    "Removed endpoints are not equivalent to added endpoints.");
+                CollectionAssert.AreEquivalent(
+                    addedEndpoints,
+                    removedEndpoints,
+                    "Removed endpoints are not equivalent to added endpoints.");
 
                 EndpointsWatcher.Instance.EndpointAdded -= addedHandler;
                 EndpointsWatcher.Instance.EndpointRemoved -= removedHandler;
@@ -132,6 +133,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void CheckEndpointAdded()
         {
+            WaitPreviousNotifications();
+
             var addedEndpoints1 = new List<MidiEndpoint>();
             var addedEndpoints2 = new List<MidiEndpoint>();
 
@@ -207,6 +210,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void CheckEndpointRemoved()
         {
+            WaitPreviousNotifications();
+
             var removedEndpoints1 = new List<MidiEndpoint>();
             var removedEndpoints2 = new List<MidiEndpoint>();
 
@@ -223,9 +228,13 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             removedEndpoints1.Clear();
             removedEndpoints2.Clear();
 
+            var addedCount = 0;
+            EndpointsWatcher.Instance.EndpointAdded += (_, e) => addedCount++;
+
             using (var virtualDevice = VirtualDevice.Create(deviceName))
             {
                 DevicesUtilities.WaitVirtualDeviceCreated(deviceName);
+                WaitOperations.Wait(() => addedCount == 2, timeout);
             }
 
             var removed1 = WaitOperations.Wait(() => removedEndpoints1.Count >= 2, timeout);
@@ -250,6 +259,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             using (var virtualDevice = VirtualDevice.Create(deviceName))
             {
                 DevicesUtilities.WaitVirtualDeviceCreated(deviceName);
+                WaitOperations.Wait(() => addedCount == 4, timeout);
             }
 
             removed1 = WaitOperations.Wait(() => removedEndpoints1.Count > 0, timeout);
@@ -274,6 +284,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             using (var virtualDevice = VirtualDevice.Create(deviceName))
             {
                 DevicesUtilities.WaitVirtualDeviceCreated(deviceName);
+                WaitOperations.Wait(() => addedCount == 6, timeout);
             }
 
             removed1 = WaitOperations.Wait(() => removedEndpoints1.Count > 0, timeout);
@@ -294,6 +305,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void CheckEndpointsEqualityFromNotifications_StandaloneEndpoints()
         {
+            WaitPreviousNotifications();
+
             var addedEndpoints = new List<MidiEndpoint>();
             var removedEndpoints = new List<MidiEndpoint>();
 
@@ -324,6 +337,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void CheckEndpointsEqualityFromNotifications_VirtualEndpoints()
         {
+            WaitPreviousNotifications();
+
             var addedEndpoints = new List<MidiEndpoint>();
             var removedEndpoints = new List<MidiEndpoint>();
 
@@ -345,6 +360,15 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 ClassicAssert.IsTrue(addedEndpoints.Contains(virtualDevice.InputEndpoint), "Added endpoints don't contain input endpoint.");
                 ClassicAssert.IsTrue(addedEndpoints.Contains(virtualDevice.OutputEndpoint), "Added endpoints don't contain output endpoint.");
             }
+        }
+
+        #endregion
+
+        #region Private methods
+
+        private void WaitPreviousNotifications()
+        {
+            WaitOperations.Wait(TimeSpan.FromSeconds(5));
         }
 
         #endregion

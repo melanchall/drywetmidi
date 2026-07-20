@@ -10,6 +10,8 @@
 #include <cstring>
 #include <chrono>
 #include <thread>
+#include <unordered_map>
+#include <mutex>
 
 #include "../Common/NativeApi-Constants.h"
 
@@ -588,6 +590,7 @@ struct EndpointDevicesInfo
 struct SessionHandle
 {
     const char* name;
+    Configuration* configuration;
     MIDIClientRef clientRef;
     CFRunLoopRef runLoopRef;
     pthread_t thread;
@@ -598,6 +601,7 @@ struct SessionHandle
     InputEndpointCallback inputEndpointCallback;
     OutputEndpointCallback outputEndpointCallback;
 
+    std::mutex idsLock;
     std::unordered_map<MIDIEndpointRef, int> ids;
 };
  
@@ -605,6 +609,8 @@ void HandleSource(MIDIEndpointRef source, SessionHandle* sessionHandle, SESSION_
 {
     if (sessionHandle->sessionClosed.load() == true)
         return;
+
+    std::lock_guard<std::mutex> lock(sessionHandle->idsLock);
 
     int id = 0;
 
@@ -618,14 +624,24 @@ void HandleSource(MIDIEndpointRef source, SessionHandle* sessionHandle, SESSION_
         }
         else
         {
-            // TODO
+            sessionHandle->configuration->activityCallback("Failed to retrieve cached unique ID for removed source");
+            return;
         }
     }
     else
     {
         OSStatus status = MIDIObjectGetIntegerProperty(source, kMIDIPropertyUniqueID, &id);
         if (status == noErr)
+        {
             sessionHandle->ids[source] = id;
+        }
+        else
+        {
+            char buffer[256];
+            snprintf(buffer, sizeof(buffer), "Failed to get unique ID for added source (%d)", status);
+            sessionHandle->configuration->activityCallback(buffer);
+            return;
+        }
     }
 
     if (sessionHandle->inputEndpointCallback == nullptr)
@@ -645,6 +661,8 @@ void HandleDestination(MIDIEndpointRef destination, SessionHandle* sessionHandle
     if (sessionHandle->sessionClosed.load() == true)
         return;
 
+    std::lock_guard<std::mutex> lock(sessionHandle->idsLock);
+
     int id = 0;
 
     if (operation == SESSION_CALLBACKOPERATION_ENDPOINTREMOVED)
@@ -657,14 +675,24 @@ void HandleDestination(MIDIEndpointRef destination, SessionHandle* sessionHandle
         }
         else
         {
-            // TODO
+            sessionHandle->configuration->activityCallback("Failed to retrieve cached unique ID for removed destination");
+            return;
         }
     }
     else
     {
         OSStatus status = MIDIObjectGetIntegerProperty(destination, kMIDIPropertyUniqueID, &id);
         if (status == noErr)
+        {
             sessionHandle->ids[destination] = id;
+        }
+        else
+        {
+            char buffer[256];
+            snprintf(buffer, sizeof(buffer), "Failed to get unique ID for added destination (%d)", status);
+            sessionHandle->configuration->activityCallback(buffer);
+            return;
+        }
     }
 
     if (sessionHandle->outputEndpointCallback == nullptr)
@@ -824,6 +852,7 @@ API_EXPORT SESSION_OPENRESULT OpenSession_Mac(const char* name, Configuration* c
     SessionHandle* sessionHandle = new SessionHandle();
     
     sessionHandle->name = name;
+    sessionHandle->configuration = configuration;
     sessionHandle->inputEndpointCallback = inputEndpointCallback;
     sessionHandle->outputEndpointCallback = outputEndpointCallback;
     sessionHandle->clientCreated.store(false);
@@ -880,7 +909,10 @@ API_EXPORT SESSION_OPENRESULT OpenSession_Mac(const char* name, Configuration* c
         int id = 0;
         OSStatus status = MIDIObjectGetIntegerProperty(source, kMIDIPropertyUniqueID, &id);
         if (status == noErr)
+        {
+            std::lock_guard<std::mutex> lock(sessionHandle->idsLock);
             sessionHandle->ids[source] = id;
+        }
     }
 
     ItemCount destinationsCount = MIDIGetNumberOfDestinations();
@@ -890,7 +922,10 @@ API_EXPORT SESSION_OPENRESULT OpenSession_Mac(const char* name, Configuration* c
         int id = 0;
         OSStatus status = MIDIObjectGetIntegerProperty(destination, kMIDIPropertyUniqueID, &id);
         if (status == noErr)
+        {
+            std::lock_guard<std::mutex> lock(sessionHandle->idsLock);
             sessionHandle->ids[destination] = id;
+        }
     }
 
     *handle = sessionHandle;
