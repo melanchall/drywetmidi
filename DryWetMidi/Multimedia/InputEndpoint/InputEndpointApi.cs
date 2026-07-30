@@ -36,6 +36,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         public enum IN_OPENRESULT
         {
             IN_OPENRESULT_OK = 0,
+
             [NativeApi.NativeErrorType(NativeApi.NativeErrorType.InUse)]
             IN_OPENRESULT_ALLOCATED = 1,
             IN_OPENRESULT_BADDEVICEID = 2,
@@ -44,6 +45,13 @@ namespace Melanchall.DryWetMidi.Multimedia
             [NativeApi.NativeErrorType(NativeApi.NativeErrorType.NoMemory)]
             IN_OPENRESULT_NOMEMORY = 5,
             IN_OPENRESULT_FAILEDPREPARESYSEXBUFFERS = 6,
+            [NativeApi.NativeErrorType(NativeApi.NativeErrorType.WmsError)]
+            IN_OPENRESULT_GETCONNECTION_OPENFAILED = 7,
+            [NativeApi.NativeErrorType(NativeApi.NativeErrorType.WmsError)]
+            IN_OPENRESULT_GETCONNECTION_UNKNOWNERROR = 8,
+            [NativeApi.NativeErrorType(NativeApi.NativeErrorType.WmsError)]
+            IN_OPENRESULT_UNKNOWNWMSERROR = 9,
+
             IN_OPENRESULT_INVALIDCLIENT = 101,
             IN_OPENRESULT_INVALIDPORT = 102,
             IN_OPENRESULT_WRONGTHREAD = 103,
@@ -65,7 +73,9 @@ namespace Melanchall.DryWetMidi.Multimedia
             IN_CLOSERESULT_UNPREPAREBUFFER_STILLPLAYING = 5,
             IN_CLOSERESULT_UNPREPAREBUFFER_INVALIDSTRUCTURE = 6,
             IN_CLOSERESULT_UNPREPAREBUFFER_INVALIDHANDLE = 7,
-            IN_CLOSERESULT_UNPREPAREBUFFER_UNKNOWNERROR = 1000
+            IN_CLOSERESULT_UNPREPAREBUFFER_UNKNOWNERROR = 1000,
+            [NativeApi.NativeErrorType(NativeApi.NativeErrorType.WmsError)]
+            IN_CLOSERESULT_UNKNOWNWMSERROR = 8,
         }
 
         public enum IN_RENEWSYSEXBUFFERRESULT
@@ -139,6 +149,9 @@ namespace Melanchall.DryWetMidi.Multimedia
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         public delegate void Callback_Mac(IntPtr pktlist, IntPtr readProcRefCon, IntPtr srcConnRefCon);
 
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public delegate void BytesReceivedCallback(IntPtr bytes, int size);
+
         #endregion
 
         #region Extern functions
@@ -174,7 +187,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         [LibraryImport(NativeApi.LibraryName)]
         [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-        private static partial IN_OPENRESULT OpenInputEndpoint_Win(IntPtr info, MidiDevicesSessionHandle sessionHandle, Callback_Win callback, int sysExBufferSize, int sysExBufferCount, out IntPtr handle, out int errorCode);
+        private static partial IN_OPENRESULT OpenInputEndpoint_Win(IntPtr info, MidiDevicesSessionHandle sessionHandle, Callback_Win callback, BytesReceivedCallback bytesReceivedCallback, int sysExBufferSize, int sysExBufferCount, out IntPtr handle, out int errorCode);
 
         [LibraryImport(NativeApi.LibraryName)]
         [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
@@ -230,7 +243,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         private static extern IN_GETPROPERTYRESULT GetInputEndpointId_Mac(IntPtr info, out int value, out int errorCode);
 
         [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
-        private static extern IN_OPENRESULT OpenInputEndpoint_Win(IntPtr info, MidiDevicesSessionHandle sessionHandle, Callback_Win callback, int sysExBufferSize, int sysExBufferCount, out IntPtr handle, out int errorCode);
+        private static extern IN_OPENRESULT OpenInputEndpoint_Win(IntPtr info, MidiDevicesSessionHandle sessionHandle, Callback_Win callback, BytesReceivedCallback bytesReceivedCallback, int sysExBufferSize, int sysExBufferCount, out IntPtr handle, out int errorCode);
 
         [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
         private static extern IN_OPENRESULT OpenInputEndpoint_Mac(IntPtr info, MidiDevicesSessionHandle sessionHandle, Callback_Mac callback, out IntPtr handle, out int errorCode);
@@ -281,9 +294,9 @@ namespace Melanchall.DryWetMidi.Multimedia
             FreeInputEndpointsInfo(array, size);
         }
 
-        public static IN_OPENRESULT Api_OpenEndpoint_Win(IntPtr info, MidiDevicesSessionHandle sessionHandle, Callback_Win callback, int sysExBufferSize, int sysExBufferCount, out IntPtr handle, out int errorCode)
+        public static IN_OPENRESULT Api_OpenEndpoint_Win(IntPtr info, MidiDevicesSessionHandle sessionHandle, Callback_Win callback, BytesReceivedCallback bytesReceivedCallback, int sysExBufferSize, int sysExBufferCount, out IntPtr handle, out int errorCode)
         {
-            return OpenInputEndpoint_Win(info, sessionHandle, callback, sysExBufferSize, sysExBufferCount, out handle, out errorCode);
+            return OpenInputEndpoint_Win(info, sessionHandle, callback, bytesReceivedCallback, sysExBufferSize, sysExBufferCount, out handle, out errorCode);
         }
 
         public static IN_OPENRESULT Api_OpenEndpoint_Mac(IntPtr info, MidiDevicesSessionHandle sessionHandle, Callback_Mac callback, out IntPtr handle, out int errorCode)

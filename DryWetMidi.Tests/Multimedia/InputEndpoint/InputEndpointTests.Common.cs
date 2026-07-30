@@ -183,6 +183,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             using (var outputEndpoint = OutputEndpoint.GetByName(MidiEndpoints.A))
             using (var inputEndpoint = InputEndpoint.GetByName(MidiEndpoints.A))
             {
+                var receivedEvents = new List<MidiEvent>();
+
+                inputEndpoint.EventReceived += (_, e) => receivedEvents.Add(e.Event);
                 inputEndpoint.MidiTimeCodeReceived += (_, e) => midiTimeCodeReceived = new MidiTimeCode(e.Format, e.Hours, e.Minutes, e.Seconds, e.Frames);
 
                 outputEndpoint.PrepareForEventsSending();
@@ -192,7 +195,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
                 var timeout = eventsToSend.Last().Time + SendReceiveUtilities.MaximumEventSendReceiveDelay;
                 var isMidiTimeCodeReceived = WaitOperations.Wait(() => midiTimeCodeReceived != null, timeout);
-                ClassicAssert.IsTrue(isMidiTimeCodeReceived, $"MIDI time code received for timeout {timeout}.");
+                ClassicAssert.IsTrue(isMidiTimeCodeReceived, $"MIDI time code is not received for {timeout}. Received events:{Environment.NewLine}{string.Join(Environment.NewLine, receivedEvents)}");
 
                 inputEndpoint.StopEventsListening();
             }
@@ -343,48 +346,52 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void StartStopEventsListening()
         {
-            var receivedEventsCount = 0;
             var timeout = SendReceiveUtilities.MaximumEventSendReceiveDelay + SendReceiveUtilities.MaximumEventSendReceiveDelay;
 
             using (var outputEndpoint = OutputEndpoint.GetByName(MidiEndpoints.A))
             using (var inputEndpoint = InputEndpoint.GetByName(MidiEndpoints.A))
             {
-                inputEndpoint.EventReceived += (_, __) => receivedEventsCount++;
+                var receivedEvents = new List<MidiEvent>();
+                inputEndpoint.EventReceived += (_, e) => receivedEvents.Add(e.Event);
 
                 outputEndpoint.SendEvent(new NoteOnEvent());
-                var success = WaitOperations.Wait(() => receivedEventsCount > 0, timeout);
+                var success = WaitOperations.Wait(() => receivedEvents.Count > 0, timeout);
                 ClassicAssert.IsFalse(success, "Event received on just created endpoint.");
 
                 outputEndpoint.PrepareForEventsSending();
                 inputEndpoint.StartEventsListening();
                 SendReceiveUtilities.WaitEventsReceivingStarted();
 
-                outputEndpoint.SendEvent(new NoteOnEvent());
-                success = WaitOperations.Wait(() => receivedEventsCount > 0, timeout);
+                var midiEvent1 = new NoteOnEvent((SevenBitNumber)70, (SevenBitNumber)50);
+                outputEndpoint.SendEvent(midiEvent1);
+                success = WaitOperations.Wait(() => MidiEvent.Equals(receivedEvents.LastOrDefault(), midiEvent1), timeout);
                 ClassicAssert.IsTrue(success, "Event was not received after first start.");
-                ClassicAssert.AreEqual(1, receivedEventsCount, "Received events count is invalid after first start.");
+                ClassicAssert.AreEqual(1, receivedEvents.Count, "Received events count is invalid after first start.");
 
                 inputEndpoint.StopEventsListening();
 
-                outputEndpoint.SendEvent(new NoteOnEvent());
-                success = WaitOperations.Wait(() => receivedEventsCount > 1, timeout);
+                var midiEvent2 = new NoteOnEvent((SevenBitNumber)80, (SevenBitNumber)60);
+                outputEndpoint.SendEvent(midiEvent2);
+                success = WaitOperations.Wait(() => MidiEvent.Equals(receivedEvents.LastOrDefault(), midiEvent2), timeout);
                 ClassicAssert.IsFalse(success, "Event received after first stop.");
-                ClassicAssert.AreEqual(1, receivedEventsCount, "Received events count is invalid after first stop.");
+                ClassicAssert.AreEqual(1, receivedEvents.Count, "Received events count is invalid after first stop.");
 
                 inputEndpoint.StartEventsListening();
                 SendReceiveUtilities.WaitEventsReceivingStarted();
 
-                outputEndpoint.SendEvent(new NoteOnEvent());
-                success = WaitOperations.Wait(() => receivedEventsCount > 1, timeout);
+                var midiEvent3 = new NoteOnEvent((SevenBitNumber)90, (SevenBitNumber)70);
+                outputEndpoint.SendEvent(midiEvent3);
+                success = WaitOperations.Wait(() => MidiEvent.Equals(receivedEvents.LastOrDefault(), midiEvent3), timeout);
                 ClassicAssert.IsTrue(success, "Event was not received after second start.");
-                ClassicAssert.AreEqual(2, receivedEventsCount, "Received events count is invalid after second start.");
+                ClassicAssert.AreEqual(2, receivedEvents.Count, "Received events count is invalid after second start.");
 
                 inputEndpoint.StopEventsListening();
 
-                outputEndpoint.SendEvent(new NoteOnEvent());
-                success = WaitOperations.Wait(() => receivedEventsCount > 2, timeout);
+                var midiEvent4 = new NoteOnEvent((SevenBitNumber)100, (SevenBitNumber)80);
+                outputEndpoint.SendEvent(midiEvent4);
+                success = WaitOperations.Wait(() => MidiEvent.Equals(receivedEvents.LastOrDefault(), midiEvent4), timeout);
                 ClassicAssert.IsFalse(success, "Event received after second stop.");
-                ClassicAssert.AreEqual(2, receivedEventsCount, "Received events count is invalid after second stop.");
+                ClassicAssert.AreEqual(2, receivedEvents.Count, "Received events count is invalid after second stop.");
             }
         }
 
@@ -662,7 +669,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var receivedEvents = new List<MidiEvent>(expectedEvents.Count);
             var checkpoints = new TestCheckpoints();
 
-            using (var outputEndpoint = OutputEndpoint.GetByName(deviceName))
+            using (var outputEndpoint = OutputEndpoint.GetByName(deviceName, true))
             using (var inputEndpoint = DevicesUtilities.GetInputEndpoint(deviceName))
             {
 #if TEST

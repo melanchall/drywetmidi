@@ -67,6 +67,11 @@ namespace Melanchall.DryWetMidi.Configuration
 
         [LibraryImport(NativeApi.LibraryName)]
         [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static partial bool IsWmsInitialized(MidiConfigurationHandle configuration);
+
+        [LibraryImport(NativeApi.LibraryName)]
+        [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
         private static partial void CheckNativeApiActivityCallback(MidiConfigurationHandle configuration);
 
         [LibraryImport(NativeApi.LibraryName)]
@@ -93,6 +98,10 @@ namespace Melanchall.DryWetMidi.Configuration
         [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
         [return: MarshalAs(UnmanagedType.U1)]
         private static extern bool IsDevicesWatcherApiAvailable(MidiConfigurationHandle configuration);
+
+        [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
+        [return: MarshalAs(UnmanagedType.U1)]
+        private static extern bool IsWmsInitialized(MidiConfigurationHandle configuration);
 
         [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
         private static extern void CheckNativeApiActivityCallback(MidiConfigurationHandle configuration);
@@ -139,6 +148,11 @@ namespace Melanchall.DryWetMidi.Configuration
         public static bool Api_IsDevicesWatcherApiAvailable(MidiConfigurationHandle configuration)
         {
             return IsDevicesWatcherApiAvailable(configuration);
+        }
+
+        public static bool Api_IsWmsInitialized(MidiConfigurationHandle configuration)
+        {
+            return IsWmsInitialized(configuration);
         }
 
         public static void Api_CheckNativeApiActivityCallback(MidiConfigurationHandle configuration)

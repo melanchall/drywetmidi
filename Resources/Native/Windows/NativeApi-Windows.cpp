@@ -26,6 +26,7 @@
 #include <unordered_map>
 #include <mutex>
 #include <atomic>
+#include <iostream>
 
 #include <string>
 #include <wil/com.h>
@@ -41,18 +42,20 @@ namespace midi2 = winrt::Windows::Devices::Midi2;
 #include <winrt/Windows.Devices.Midi2.Enumeration.Legacy.h>
 #include <winrt/Windows.Devices.Midi2.Transports.BasicLoopback.h>
 namespace basicLoopback = winrt::Windows::Devices::Midi2::Transports::BasicLoopback;
+#include <winrt/Windows.Devices.Midi2.Utilities.Messages.h>
+namespace messages = winrt::Windows::Devices::Midi2::Utilities::Messages;
 
-//#include "winmidi/init/Windows.Devices.Midi2.Initialization.hpp"
-//namespace init = Windows::Devices::Midi2::Initialization;
+#include <winrt/Windows.Devices.Midi2.ClientPlugins.h>
+using namespace winrt::Windows::Devices::Midi2::ClientPlugins;
 
-//#include "winmidi/init/WindowsMidiServicesVersion.h"
+#include <winrt/Windows.Storage.Streams.h>
+#include <winrt/Windows.Devices.Midi2.Utilities.SysExTransfer.h>
+namespace sysex = winrt::Windows::Devices::Midi2::Utilities::SysExTransfer;
 
 #include "../Common/NativeApi-Constants.h"
 
 #define API_EXPORT extern "C" __declspec(dllexport)
 #define API_CALL __cdecl
-
-// TODO: check all char: maybe use bool?
 
 /* ================================
    Common
@@ -143,9 +146,10 @@ typedef void (*NativeApiActivityCallback)(const wchar_t* record);
 struct Configuration
 {
     NativeApiActivityCallback activityCallback;
-    bool useWms{ 0 };
-    bool wmsAvailable{0};
-    bool basicLoopbackAvailable{0};
+    bool useWms{ false };
+    bool wmsAvailable{ false };
+    bool wmsInitialized{ false };
+    bool basicLoopbackAvailable{ 0 };
 };
 
 API_EXPORT CONFIGURATION_GETRESULT API_CALL GetConfiguration_Win(
@@ -170,6 +174,8 @@ API_EXPORT CONFIGURATION_GETRESULT API_CALL GetConfiguration_Win(
             if (config->wmsAvailable)
             {
                 winrt::init_apartment();
+                config->wmsInitialized = true;
+
                 config->basicLoopbackAvailable = basicLoopback::MidiBasicLoopbackManager::IsTransportAvailable();
             }
         }
@@ -198,7 +204,7 @@ API_EXPORT CONFIGURATION_CLEANUPRESULT API_CALL CleanupConfiguration(Configurati
 {
     try
     {
-        if (configuration->wmsAvailable)
+        if (configuration->wmsInitialized)
         {
             winrt::uninit_apartment();
         }
@@ -215,12 +221,17 @@ API_EXPORT CONFIGURATION_CLEANUPRESULT API_CALL CleanupConfiguration(Configurati
 
 API_EXPORT bool API_CALL IsVirtualDeviceApiAvailable(Configuration* configuration)
 {
-    return configuration->useWms && configuration->wmsAvailable && configuration->basicLoopbackAvailable;
+    return configuration->wmsInitialized && configuration->basicLoopbackAvailable;
 }
 
 API_EXPORT bool API_CALL IsDevicesWatcherApiAvailable(Configuration* configuration)
 {
-    return configuration->useWms && configuration->wmsAvailable;
+    return configuration->wmsInitialized;
+}
+
+API_EXPORT bool API_CALL IsWmsInitialized(Configuration* configuration)
+{
+    return configuration->wmsInitialized;
 }
 
 API_EXPORT void API_CALL CheckNativeApiActivityCallback(Configuration* configuration)
@@ -355,8 +366,9 @@ struct EndpointInfoBase
     std::wstring endpointId;
 
     std::wstring endpointDeviceId;
+    midi2::Enumeration::MidiGroupTerminalBlock gtb{nullptr};
+    midi2::MidiGroup group{nullptr};
 
-    std::wstring portDeviceId;
     std::wstring devicePath;
 
     std::wstring deviceId;
@@ -377,10 +389,12 @@ API_EXPORT void API_CALL CloneInputEndpointInfo(InputEndpointInfo* source, Input
     InputEndpointInfo* result = new InputEndpointInfo();
 
     result->deviceIndex = source->deviceIndex;
-    result->caps = new MIDIINCAPSW(*source->caps);
-    result->portDeviceId = source->portDeviceId;
+    if (source->caps)
+        result->caps = new MIDIINCAPSW(*source->caps);
     result->devicePath = source->devicePath;
     result->endpointDeviceId = source->endpointDeviceId;
+    result->gtb = source->gtb;
+    result->group = source->group;
     result->deviceId = source->deviceId;
     result->deviceName = source->deviceName;
     result->deviceManufacturer = source->deviceManufacturer;
@@ -439,18 +453,17 @@ IN_GETINFORESULT GetInputEndpointInfo(int deviceIndex, InputEndpointInfo** info,
     return IN_GETINFORESULT_OK;
 }
 
-IN_GETINFORESULT GetInputEndpointInfo(const int deviceIndex, const winrt::hstring& endpointDeviceId, const winrt::hstring& portDeviceId, InputEndpointInfo** info, int* errorCode)
+IN_GETINFORESULT GetInputEndpointInfo(const winrt::hstring& endpointDeviceId, const midi2::Enumeration::MidiGroupTerminalBlock& gtb, const midi2::MidiGroup& group, InputEndpointInfo** info, int* errorCode)
 {
     *errorCode = 0;
 
-    auto result = GetInputEndpointInfo(deviceIndex, info, errorCode);
-    if (result == IN_GETINFORESULT_OK && info != nullptr)
-    {
-        (*info)->endpointDeviceId = endpointDeviceId.c_str();
-        (*info)->portDeviceId = portDeviceId.c_str();
-    }
+    InputEndpointInfo* inputEndpointInfo = new InputEndpointInfo();
+    inputEndpointInfo->endpointDeviceId = endpointDeviceId;
+    inputEndpointInfo->gtb = gtb;
+    inputEndpointInfo->group = group;
+    *info = inputEndpointInfo;
 
-    return result;
+    return IN_GETINFORESULT_OK;
 }
 
 API_EXPORT void API_CALL DeleteInputEndpointInfo(InputEndpointInfo* info)
@@ -464,7 +477,7 @@ struct OutputEndpointInfo : EndpointInfoBase
     int deviceIndex;
     LPMIDIOUTCAPSW caps;
 
-    bool isMicrosoftGsWavetableSynth{false};
+    bool isMicrosoftGsWavetableSynth{ false };
 };
 
 API_EXPORT void API_CALL CloneOutputEndpointInfo(OutputEndpointInfo* source, OutputEndpointInfo** info)
@@ -472,11 +485,13 @@ API_EXPORT void API_CALL CloneOutputEndpointInfo(OutputEndpointInfo* source, Out
     OutputEndpointInfo* result = new OutputEndpointInfo();
 
     result->deviceIndex = source->deviceIndex;
-    result->caps = new MIDIOUTCAPSW(*source->caps);
-    result->portDeviceId = source->portDeviceId;
+    if (source->caps)
+        result->caps = new MIDIOUTCAPSW(*source->caps);
     result->devicePath = source->devicePath;
     result->isMicrosoftGsWavetableSynth = source->isMicrosoftGsWavetableSynth;
     result->endpointDeviceId = source->endpointDeviceId;
+    result->gtb = source->gtb;
+    result->group = source->group;
     result->deviceId = source->deviceId;
     result->deviceName = source->deviceName;
     result->deviceManufacturer = source->deviceManufacturer;
@@ -535,45 +550,23 @@ OUT_GETINFORESULT GetOutputEndpointInfo(int deviceIndex, OutputEndpointInfo** in
     return OUT_GETINFORESULT_OK;
 }
 
-OUT_GETINFORESULT GetOutputEndpointInfo(const int deviceIndex, const winrt::hstring& endpointDeviceId, const winrt::hstring& portDeviceId, OutputEndpointInfo** info, int* errorCode)
+OUT_GETINFORESULT GetOutputEndpointInfo(const winrt::hstring& endpointDeviceId, const midi2::Enumeration::MidiGroupTerminalBlock& gtb, const midi2::MidiGroup& group, OutputEndpointInfo** info, int* errorCode)
 {
     *errorCode = 0;
 
-    auto result = GetOutputEndpointInfo(deviceIndex, info, errorCode);
-    if (result == OUT_GETINFORESULT_OK && info != nullptr)
-    {
-        (*info)->endpointDeviceId = endpointDeviceId.c_str();
-        (*info)->portDeviceId = portDeviceId.c_str();
-    }
+    OutputEndpointInfo* outputEndpointInfo = new OutputEndpointInfo();
+    outputEndpointInfo->endpointDeviceId = endpointDeviceId;
+    outputEndpointInfo->gtb = gtb;
+    outputEndpointInfo->group = group;
+    *info = outputEndpointInfo;
 
-    return result;
+    return OUT_GETINFORESULT_OK;
 }
 
 API_EXPORT void API_CALL DeleteOutputEndpointInfo(OutputEndpointInfo* info)
 {
     delete info->caps;
     delete info;
-}
-
-int FindPortIndex(const std::wstring& endpointDeviceId, const std::wstring& portDeviceId, const midi2::Enumeration::Midi1PortFlow& flow)
-{
-    if (endpointDeviceId.empty() || portDeviceId.empty())
-        return -1;
-
-    const winrt::hstring endpointDeviceIdH{ endpointDeviceId };
-
-    auto endpointInformation = midi2::Enumeration::MidiEndpointDeviceInformation::CreateFromEndpointDeviceId(endpointDeviceIdH);
-    if (endpointInformation == nullptr)
-        return -1;
-
-    auto ports = midi2::Enumeration::Legacy::MidiLegacyPortDeviceInformation::FindAllForAssociatedEndpoint(endpointInformation.EndpointDeviceId(), flow);
-    for (auto const& port : ports)
-    {
-        if (port.PortDeviceId().c_str() == portDeviceId)
-            return GetPortNumber(port);
-    }
-
-    return -1;
 }
 
 std::wstring ReadStringProp(HDEVINFO hDev, SP_DEVINFO_DATA& devData, const DEVPROPKEY& key)
@@ -590,7 +583,7 @@ std::wstring ReadStringProp(HDEVINFO hDev, SP_DEVINFO_DATA& devData, const DEVPR
 
     if (propType != DEVPROP_TYPE_STRING)
         return {};
-    
+
     return std::wstring(reinterpret_cast<const wchar_t*>(buf.data()));
 }
 
@@ -768,7 +761,7 @@ API_EXPORT DEVICE_GETDEVICEINFORESULT API_CALL GetDeviceInformation(
 
         deviceInfo->deviceModel = ReadStringProp(hParent, parentData, DEVPKEY_Device_BusReportedDeviceDesc);
         *model = deviceInfo->deviceModel.c_str();
-        
+
         deviceInfo->deviceDriverInformation = ReadStringProp(hParent, parentData, DEVPKEY_Device_DriverVersion);
         *driverVersion = deviceInfo->deviceDriverInformation.c_str();
 
@@ -787,27 +780,37 @@ typedef void (*OutputEndpointCallback)(void* info, SESSION_CALLBACKOPERATION ope
 
 struct EndpointDevicesInfo
 {
-    std::vector<InputEndpointInfo*> inputEndpointsInfo;
-    std::vector<OutputEndpointInfo*> outputEndpointsInfo;
+    std::vector<InputEndpointInfo*> inputEndpointsInfo{};
+    std::vector<OutputEndpointInfo*> outputEndpointsInfo{};
 };
 
 struct SessionHandle
 {
-    const wchar_t* name;
+    const wchar_t* name{};
 
     Configuration* configuration;
 
     InputEndpointCallback inputEndpointCallback;
     OutputEndpointCallback outputEndpointCallback;
 
-    midi2::Enumeration::MidiEndpointDeviceWatcher watcher{nullptr};
+    midi2::Enumeration::MidiEndpointDeviceWatcher watcher{ nullptr };
     winrt::event_token revokeOnWatcherDeviceRemoved;
     winrt::event_token revokeOnWatcherDeviceAdded;
     winrt::event_token revokeOnWatcherEnumerationCompleted;
-    std::atomic<char> initialEnumerationCompleted{0};
+    std::atomic<char> initialEnumerationCompleted{ 0 };
 
+    midi2::MidiSession session{ nullptr };
     std::mutex endpointDevicesLock;
     std::unordered_map<std::wstring, EndpointDevicesInfo> endpointDevicesById;
+    winrt::Windows::Foundation::Collections::IMap<winrt::hstring, midi2::MidiEndpointConnection> endpointConnectionsById =
+        winrt::single_threaded_map<winrt::hstring, midi2::MidiEndpointConnection>();
+    std::unordered_map<winrt::guid, int> endpointConnectionsUsersCounts;
+};
+
+struct EndpointHandleBase
+{
+    SessionHandle* sessionHandle{ nullptr };
+    midi2::MidiEndpointConnection connection{ nullptr };
 };
 
 void DeleteInputEndpointInfos(std::vector<InputEndpointInfo*>& deviceInfos)
@@ -848,8 +851,10 @@ API_EXPORT SESSION_OPENRESULT API_CALL OpenSession_Win(
 
     try
     {
-        if (configuration->useWms && configuration->wmsAvailable)
+        if (configuration->wmsInitialized)
         {
+            sessionHandle->session = midi2::MidiSession::Create(name);
+
             sessionHandle->watcher = midi2::Enumeration::MidiEndpointDeviceWatcher::Create(midi2::Enumeration::MidiEndpointDeviceInformationFilters::AllStandardEndpoints);
 
             auto OnWatcherDeviceAdded = [sessionHandle](midi2::Enumeration::MidiEndpointDeviceWatcher const&, midi2::Enumeration::MidiEndpointDeviceInformationAddedEventArgs const& args)
@@ -859,14 +864,6 @@ API_EXPORT SESSION_OPENRESULT API_CALL OpenSession_Win(
                 std::vector<InputEndpointInfo*> inputEndpointsInfo;
                 std::vector<OutputEndpointInfo*> outputEndpointsInfo;
                 EndpointDevicesInfo endpointDevicesInfo;
-
-                auto cleanupAllDeviceInfos = [&]()
-                {
-                    DeleteInputEndpointInfos(inputEndpointsInfo);
-                    DeleteInputEndpointInfos(endpointDevicesInfo.inputEndpointsInfo);
-                    DeleteOutputEndpointInfos(outputEndpointsInfo);
-                    DeleteOutputEndpointInfos(endpointDevicesInfo.outputEndpointsInfo);
-                };
 
                 try
                 {
@@ -879,126 +876,72 @@ API_EXPORT SESSION_OPENRESULT API_CALL OpenSession_Win(
                         // TODO
                         return;
                     }
-                    
-                    auto groupTerminalBlocks = endpointInformation.GetGroupTerminalBlocks();
 
-                    auto sourcesCount = 0;
-                    auto destinationsCount = 0;
+                    auto addOutputEndpoint = [&](const midi2::Enumeration::MidiGroupTerminalBlock& gtb)
+                    {
+                        OutputEndpointInfo* outputEndpointInfo = nullptr;
+                        int errorCode;
+
+                        auto getOutputEndpointInfoResult = GetOutputEndpointInfo(endpointId, gtb, gtb.FirstGroup(), &outputEndpointInfo, &errorCode);
+                        if (getOutputEndpointInfoResult != IN_GETINFORESULT_OK)
+                            return false;
+
+                        outputEndpointsInfo.push_back(outputEndpointInfo);
+
+                        OutputEndpointInfo* persistentOutputEndpointInfo;
+                        getOutputEndpointInfoResult = GetOutputEndpointInfo(endpointId, gtb, gtb.FirstGroup(), &persistentOutputEndpointInfo, &errorCode);
+                        if (getOutputEndpointInfoResult != IN_GETINFORESULT_OK)
+                            return false;
+
+                        endpointDevicesInfo.outputEndpointsInfo.push_back(persistentOutputEndpointInfo);
+                        return true;
+                    };
+
+                    auto addInputEndpoint = [&](const midi2::Enumeration::MidiGroupTerminalBlock& gtb)
+                    {
+                        InputEndpointInfo* inputEndpointInfo = nullptr;
+                        int errorCode;
+
+                        auto getInputEndpointInfoResult = GetInputEndpointInfo(endpointId, gtb, gtb.FirstGroup(), &inputEndpointInfo, &errorCode);
+                        if (getInputEndpointInfoResult != IN_GETINFORESULT_OK)
+                            return false;
+
+                        inputEndpointsInfo.push_back(inputEndpointInfo);
+
+                        InputEndpointInfo* persistentInputEndpointInfo;
+                        getInputEndpointInfoResult = GetInputEndpointInfo(endpointId, gtb, gtb.FirstGroup(), &persistentInputEndpointInfo, &errorCode);
+                        if (getInputEndpointInfoResult != IN_GETINFORESULT_OK)
+                            return false;
+
+                        endpointDevicesInfo.inputEndpointsInfo.push_back(persistentInputEndpointInfo);
+                        return true;
+                    };
+
+                    auto groupTerminalBlocks = endpointInformation.GetGroupTerminalBlocks();
 
                     for (auto const& gtb : groupTerminalBlocks)
                     {
-                        switch (gtb.Direction())
+                        auto const group = gtb.FirstGroup();
+                        auto direction = gtb.Direction();
+
+                        if (direction == midi2::Enumeration::MidiGroupTerminalBlockDirection::BlockInput)
                         {
-                            case midi2::Enumeration::MidiGroupTerminalBlockDirection::BlockInput:
-                                destinationsCount++;
-                                break;
-                            case midi2::Enumeration::MidiGroupTerminalBlockDirection::BlockOutput:
-                                sourcesCount++;
-                                break;
-                            case midi2::Enumeration::MidiGroupTerminalBlockDirection::Bidirectional:
-                                sourcesCount++;
-                                destinationsCount++;
-                                break;
+                            addOutputEndpoint(gtb);
+                        }
+                        else if (direction == midi2::Enumeration::MidiGroupTerminalBlockDirection::BlockOutput)
+                        {
+                            addInputEndpoint(gtb);
+                        }
+                        else if (direction == midi2::Enumeration::MidiGroupTerminalBlockDirection::Bidirectional)
+                        {
+                            addOutputEndpoint(gtb);
+                            addInputEndpoint(gtb);
                         }
                     }
 
                     std::wstring endpointKey = endpointId.c_str();
 
-                    auto ok = false;
-                    int attempts = 0;
-
-                    while (!ok && attempts++ < 20)
-                    {
-                        EnsureWinMmPortsAvailable();
-
-                        ok = true;
-
-                        cleanupAllDeviceInfos();
-
-                        auto endpointInformation = midi2::Enumeration::MidiEndpointDeviceInformation::CreateFromEndpointDeviceId(endpointId);
-                        if (endpointInformation == nullptr)
-                        {
-                            // TODO
-                            return;
-                        }
-
-                        if (sourcesCount > 0)
-                        {
-                            auto inputPorts = midi2::Enumeration::Legacy::MidiLegacyPortDeviceInformation::FindAllForAssociatedEndpoint(endpointInformation.EndpointDeviceId(), midi2::Enumeration::Midi1PortFlow::MidiMessageSource);
-                            ok = inputPorts.Size() >= sourcesCount;
-                            if (!ok)
-                                continue;
-
-                            for (auto const& port : inputPorts)
-                            {
-                                InputEndpointInfo* inputEndpointInfo = nullptr;
-                                int errorCode;
-
-                                auto getInputEndpointInfoResult = GetInputEndpointInfo(GetPortNumber(port), endpointId, port.PortDeviceId(), &inputEndpointInfo, &errorCode);
-                                if (getInputEndpointInfoResult != IN_GETINFORESULT_OK)
-                                {
-                                    ok = false;
-                                    break;
-                                }
-
-                                inputEndpointsInfo.push_back(inputEndpointInfo);
-
-                                InputEndpointInfo* persistentInputEndpointInfo;
-                                getInputEndpointInfoResult = GetInputEndpointInfo(GetPortNumber(port), endpointId, port.PortDeviceId(), &persistentInputEndpointInfo, &errorCode);
-                                if (getInputEndpointInfoResult != IN_GETINFORESULT_OK)
-                                {
-                                    ok = false;
-                                    break;
-                                }
-                                
-                                endpointDevicesInfo.inputEndpointsInfo.push_back(persistentInputEndpointInfo);
-                            }
-                        }
-
-                        if (destinationsCount > 0)
-                        {
-                            auto outputPorts = midi2::Enumeration::Legacy::MidiLegacyPortDeviceInformation::FindAllForAssociatedEndpoint(endpointInformation.EndpointDeviceId(), midi2::Enumeration::Midi1PortFlow::MidiMessageDestination);
-                            ok = outputPorts.Size() >= destinationsCount;
-                            if (!ok)
-                                continue;
-
-                            for (auto const& port : outputPorts)
-                            {
-                                OutputEndpointInfo* outputEndpointInfo = nullptr;
-                                int errorCode;
-
-                                auto getOutputEndpointInfoResult = GetOutputEndpointInfo(GetPortNumber(port), endpointId, port.PortDeviceId(), &outputEndpointInfo, &errorCode);
-                                if (getOutputEndpointInfoResult != OUT_GETINFORESULT_OK)
-                                {
-                                    ok = false;
-                                    break;
-                                }
-
-                                outputEndpointsInfo.push_back(outputEndpointInfo);
-
-                                OutputEndpointInfo* persistentOutputEndpointInfo;
-                                getOutputEndpointInfoResult = GetOutputEndpointInfo(GetPortNumber(port), endpointId, port.PortDeviceId(), &persistentOutputEndpointInfo, &errorCode);
-                                if (getOutputEndpointInfoResult != OUT_GETINFORESULT_OK)
-                                {
-                                    ok = false;
-                                    break;
-                                }
-                                
-                                endpointDevicesInfo.outputEndpointsInfo.push_back(persistentOutputEndpointInfo);
-                            }
-                        }
-
-                        if (!ok)
-                            Sleep(500);
-                    }
-
-                    if (!ok)
-                    {
-                        cleanupAllDeviceInfos();
-                        return;
-                    }
-
-                    sessionHandle->endpointDevicesById[endpointKey] = endpointDevicesInfo;
+                    sessionHandle->endpointDevicesById[endpointKey] = std::move(endpointDevicesInfo);
 
                     if (sessionHandle->initialEnumerationCompleted.load() == 0)
                         return;
@@ -1111,19 +1054,25 @@ API_EXPORT SESSION_CLOSERESULT API_CALL CloseSession(SessionHandle* sessionHandl
 {
     if (sessionHandle->watcher != nullptr)
     {
-        if (sessionHandle->watcher.Status() != winrt::Windows::Devices::Enumeration::DeviceWatcherStatus::Stopped)
-            sessionHandle->watcher.Stop();
+        try
+        {
+            if (sessionHandle->watcher.Status() != winrt::Windows::Devices::Enumeration::DeviceWatcherStatus::Stopped)
+                sessionHandle->watcher.Stop();
 
-        if (sessionHandle->revokeOnWatcherEnumerationCompleted)
-            sessionHandle->watcher.EnumerationCompleted(sessionHandle->revokeOnWatcherEnumerationCompleted);
+            if (sessionHandle->revokeOnWatcherEnumerationCompleted)
+                sessionHandle->watcher.EnumerationCompleted(sessionHandle->revokeOnWatcherEnumerationCompleted);
 
-        if (sessionHandle->revokeOnWatcherDeviceRemoved)
-            sessionHandle->watcher.Removed(sessionHandle->revokeOnWatcherDeviceRemoved);
+            if (sessionHandle->revokeOnWatcherDeviceRemoved)
+                sessionHandle->watcher.Removed(sessionHandle->revokeOnWatcherDeviceRemoved);
 
-        if (sessionHandle->revokeOnWatcherDeviceAdded)
-            sessionHandle->watcher.Added(sessionHandle->revokeOnWatcherDeviceAdded);
+            if (sessionHandle->revokeOnWatcherDeviceAdded)
+                sessionHandle->watcher.Added(sessionHandle->revokeOnWatcherDeviceAdded);
 
-        sessionHandle->watcher = nullptr;
+            sessionHandle->watcher = nullptr;
+        }
+        catch (...)
+        {
+        }
     }
 
     {
@@ -1138,15 +1087,71 @@ API_EXPORT SESSION_CLOSERESULT API_CALL CloseSession(SessionHandle* sessionHandl
         sessionHandle->endpointDevicesById.clear();
     }
 
+    if (sessionHandle->session != nullptr)
+    {
+        std::lock_guard<std::mutex> lock(sessionHandle->endpointDevicesLock);
+
+        try
+        {
+            for (auto const& pair : sessionHandle->endpointConnectionsById)
+            {
+                sessionHandle->session.DisconnectEndpointConnection(pair.Value().ConnectionId());
+            }
+
+            sessionHandle->endpointConnectionsById.Clear();
+            sessionHandle->session.Close();
+        }
+        catch (...)
+        {
+        }
+    }
+
     delete sessionHandle;
     return SESSION_CLOSERESULT_OK;
+}
+
+typedef int GETCONNECTIONRESULT;
+
+#define GETCONNECTIONRESULT_OK 0
+#define GETCONNECTIONRESULT_OPENFAILED 1
+#define GETCONNECTIONRESULT_UNKNOWNERROR 2
+
+GETCONNECTIONRESULT GetConnection(SessionHandle* sessionHandle, EndpointInfoBase* info, midi2::MidiEndpointConnection* connection)
+{
+    try
+    {
+        if (!sessionHandle->endpointConnectionsById.HasKey(info->endpointDeviceId))
+        {
+            *connection = sessionHandle->session.CreateEndpointConnection(info->endpointDeviceId);
+
+            sessionHandle->endpointConnectionsById.Insert(info->endpointDeviceId, *connection);
+
+            if (!connection->Open())
+                return GETCONNECTIONRESULT_OPENFAILED;
+        }
+
+        *connection = sessionHandle->endpointConnectionsById.Lookup(info->endpointDeviceId);
+        return GETCONNECTIONRESULT_OK;
+    }
+    catch (const winrt::hresult_error& e)
+    {
+        return GETCONNECTIONRESULT_UNKNOWNERROR;
+    }
+    catch (const std::exception& e)
+    {
+        return GETCONNECTIONRESULT_UNKNOWNERROR;
+    }
+    catch (...)
+    {
+        return GETCONNECTIONRESULT_UNKNOWNERROR;
+    }
 }
 
 /* ================================
    Input device
 ================================ */
 
-typedef struct
+struct InputEndpointHandle : EndpointHandleBase
 {
     InputEndpointInfo* info;
     HMIDIIN handle;
@@ -1155,7 +1160,11 @@ typedef struct
     int sysExBufferSize;
     CRITICAL_SECTION lock;
     LONG isClosing;
-} InputEndpointHandle;
+    MidiGroupEndpointListener groupListener{nullptr};
+    winrt::event_token revokeOnGroupListener;
+};
+
+typedef void (*BytesReceivedCallback)(const uint8_t* bytes, int size);
 
 IN_GETALLINFORESULT ConvertToGetAllInInfoResult(IN_GETINFORESULT getInfoResult)
 {
@@ -1175,7 +1184,7 @@ API_EXPORT IN_GETALLINFORESULT API_CALL GetInputEndpointsInfo(Configuration* con
 
     EnsureWinMmPortsAvailable();
 
-    if (configuration->useWms && configuration->wmsAvailable)
+    if (configuration->wmsInitialized)
     {
         while (sessionHandle->initialEnumerationCompleted.load() == 0)
         {
@@ -1208,7 +1217,7 @@ API_EXPORT IN_GETALLINFORESULT API_CALL GetInputEndpointsInfo(Configuration* con
             }
 
             auto count = inputEndpointsInfo.size();
-            auto result = new InputEndpointInfo*[count];
+            auto result = new InputEndpointInfo * [count];
 
             for (auto i = 0; i < count; i++)
             {
@@ -1247,7 +1256,7 @@ API_EXPORT IN_GETALLINFORESULT API_CALL GetInputEndpointsInfo(Configuration* con
 
     GetInputEndpointsCount(devicesCount);
 
-    InputEndpointInfo** result = new InputEndpointInfo*[*devicesCount];
+    InputEndpointInfo** result = new InputEndpointInfo * [*devicesCount];
 
     for (int i = 0; i < *devicesCount; i++)
     {
@@ -1279,10 +1288,15 @@ API_EXPORT void API_CALL FreeInputEndpointsInfo(InputEndpointInfo** devicesInfo,
     delete[] devicesInfo;
 }
 
-// TODO: WMS API
 API_EXPORT IN_GETPROPERTYRESULT API_CALL GetInputEndpointName(InputEndpointInfo* info, const wchar_t** value, int* errorCode)
 {
     *errorCode = 0;
+
+    if (!info->endpointDeviceId.empty() && info->gtb != nullptr)
+    {
+        *value = info->gtb.Name().c_str();
+        return IN_GETPROPERTYRESULT_OK;
+    }
 
     *value = info->caps->szPname;
     return IN_GETPROPERTYRESULT_OK;
@@ -1296,8 +1310,8 @@ API_EXPORT IN_GETPROPERTYRESULT API_CALL GetInputEndpointId_Win(InputEndpointInf
     if (info == nullptr)
         return IN_GETPROPERTYRESULT_OK;
 
-    if (!info->endpointDeviceId.empty() && !info->portDeviceId.empty())
-        info->endpointId = info->endpointDeviceId + L"_" + info->portDeviceId;
+    if (!info->endpointDeviceId.empty() && info->gtb != nullptr && info->group != nullptr)
+        info->endpointId = info->endpointDeviceId + L"_" + std::to_wstring(info->gtb.Number()) + L"_" + std::to_wstring(info->group.Index());
     else if (!info->devicePath.empty())
         info->endpointId = info->devicePath + L"_" + info->caps->szPname;
     else
@@ -1431,7 +1445,7 @@ IN_PREPARESYSEXBUFFERRESULT PrepareSysExBuffer(HMIDIIN deviceHandle, int bufferS
     return IN_PREPARESYSEXBUFFERRESULT_OK;
 }
 
-API_EXPORT IN_OPENRESULT API_CALL OpenInputEndpoint_Win(InputEndpointInfo* info, SessionHandle* sessionHandle, DWORD_PTR callback, int sysExBufferSize, int sysExBufferCount, void** handle, int* errorCode)
+API_EXPORT IN_OPENRESULT API_CALL OpenInputEndpoint_Win(InputEndpointInfo* info, SessionHandle* sessionHandle, DWORD_PTR callback, BytesReceivedCallback bytesReceivedCallback, int sysExBufferSize, int sysExBufferCount, InputEndpointHandle** handle, int* errorCode)
 {
     *errorCode = 0;
 
@@ -1440,6 +1454,74 @@ API_EXPORT IN_OPENRESULT API_CALL OpenInputEndpoint_Win(InputEndpointInfo* info,
     InputEndpointInfo* inputEndpointInfo = info;
     InputEndpointHandle* inputEndpointHandle = new InputEndpointHandle();
     inputEndpointHandle->info = inputEndpointInfo;
+    inputEndpointHandle->sessionHandle = sessionHandle;
+
+    if (!info->endpointDeviceId.empty() && info->gtb != nullptr && info->group != nullptr)
+    {
+        std::lock_guard<std::mutex> lock(sessionHandle->endpointDevicesLock);
+
+        try
+        {
+            inputEndpointHandle->groupListener = MidiGroupEndpointListener();
+            inputEndpointHandle->groupListener.IncludedGroups().Append(midi2::MidiGroup(static_cast<uint8_t>(info->group.Index())));
+            inputEndpointHandle->groupListener.PreventCallingFurtherListeners(false);
+            inputEndpointHandle->groupListener.PreventFiringMainMessageReceivedEvent(true);
+            inputEndpointHandle->groupListener.PluginName(L"Group listener " + std::to_wstring(info->group.Index()));
+            inputEndpointHandle->groupListener.IsEnabled(false);
+
+            auto MessageReceivedHandler = [bytesReceivedCallback](midi2::IMidiMessageReceivedEventSource const& sender, midi2::MidiMessageReceivedEventArgs const& args)
+            {
+                auto ump = args.GetMessagePacket();
+                auto words = messages::MidiMessageConverter::ConvertSingleGroupCompleteMessageUmpWordsToMidi1Bytes(ump.GetAllWords());
+
+                int byteCount = static_cast<int>(words.Size());
+                uint8_t* bytes = new uint8_t[byteCount];
+                std::vector<uint8_t> temp(byteCount);
+                words.GetMany(0, temp);
+                std::memcpy(bytes, temp.data(), byteCount);
+
+                bytesReceivedCallback(bytes, byteCount);
+
+                delete[] bytes;
+            };
+
+            inputEndpointHandle->revokeOnGroupListener = inputEndpointHandle->groupListener.MessageReceived(MessageReceivedHandler);
+
+            midi2::MidiEndpointConnection connection{nullptr};
+            auto getConnectionResult = GetConnection(sessionHandle, info, &connection);
+            if (getConnectionResult != GETCONNECTIONRESULT_OK)
+            {
+                delete inputEndpointHandle;
+
+                switch (getConnectionResult)
+                {
+                    case GETCONNECTIONRESULT_OPENFAILED: return IN_OPENRESULT_GETCONNECTION_OPENFAILED;
+                    default: return IN_OPENRESULT_GETCONNECTION_UNKNOWNERROR;
+                }
+            }
+
+            connection.AddMessageProcessingPlugin(inputEndpointHandle->groupListener);
+
+            sessionHandle->endpointConnectionsUsersCounts[connection.ConnectionId()]++;
+            inputEndpointHandle->connection = connection;
+
+            *handle = inputEndpointHandle;
+            return IN_OPENRESULT_OK;
+        }
+        catch (const winrt::hresult_error& e)
+        {
+            return IN_OPENRESULT_UNKNOWNWMSERROR;
+        }
+        catch (const std::exception& e)
+        {
+            return IN_OPENRESULT_UNKNOWNWMSERROR;
+        }
+        catch (...)
+        {
+            return IN_OPENRESULT_UNKNOWNWMSERROR;
+        }
+    }
+
     inputEndpointHandle->sysExBufferSize = sysExBufferSize;
     inputEndpointHandle->sysExBufferCount = sysExBufferCount;
 
@@ -1452,9 +1534,7 @@ API_EXPORT IN_OPENRESULT API_CALL OpenInputEndpoint_Win(InputEndpointInfo* info,
     InitializeCriticalSection(&inputEndpointHandle->lock);
     inputEndpointHandle->isClosing = 0;
 
-    auto deviceIndex = FindPortIndex(inputEndpointInfo->endpointDeviceId, inputEndpointInfo->portDeviceId, midi2::Enumeration::Midi1PortFlow::MidiMessageSource);
-    if (deviceIndex < 0)
-        deviceIndex = inputEndpointInfo->deviceIndex;
+    auto deviceIndex = inputEndpointInfo->deviceIndex;
 
     MMRESULT result = midiInOpen(&inputEndpointHandle->handle, deviceIndex, callback, 0, CALLBACK_FUNCTION);
     if (result != MMSYSERR_NOERROR)
@@ -1520,6 +1600,33 @@ API_EXPORT IN_CLOSERESULT API_CALL CloseInputEndpoint(void* handle, int* errorCo
     *errorCode = 0;
 
     InputEndpointHandle* inputEndpointHandle = static_cast<InputEndpointHandle*>(handle);
+
+    if (inputEndpointHandle->groupListener != nullptr)
+    {
+        std::lock_guard<std::mutex> lock(inputEndpointHandle->sessionHandle->endpointDevicesLock);
+
+        try
+        {
+            if (inputEndpointHandle->groupListener != nullptr)
+                inputEndpointHandle->groupListener.MessageReceived(inputEndpointHandle->revokeOnGroupListener);
+
+            auto connectionId = inputEndpointHandle->connection.ConnectionId();
+            auto sessionHandle = inputEndpointHandle->sessionHandle;
+
+            sessionHandle->endpointConnectionsUsersCounts[connectionId]--;
+            if (sessionHandle->endpointConnectionsUsersCounts[connectionId] == 0)
+            {
+                sessionHandle->session.DisconnectEndpointConnection(connectionId);
+                sessionHandle->endpointConnectionsById.Remove(inputEndpointHandle->info->endpointDeviceId);
+            }
+        }
+        catch (...)
+        {
+            return IN_CLOSERESULT_UNKNOWNWMSERROR;
+        }
+
+        return IN_CLOSERESULT_OK;
+    }
 
     EnterCriticalSection(&inputEndpointHandle->lock);
     inputEndpointHandle->isClosing = 1;
@@ -1599,6 +1706,12 @@ API_EXPORT IN_CONNECTRESULT API_CALL ConnectToInputEndpoint(void* handle, int* e
 
     InputEndpointHandle* inputEndpointHandle = static_cast<InputEndpointHandle*>(handle);
 
+    if (inputEndpointHandle->groupListener != nullptr)
+    {
+        inputEndpointHandle->groupListener.IsEnabled(true);
+        return IN_CONNECTRESULT_OK;
+    }
+
     MMRESULT result = midiInStart(inputEndpointHandle->handle);
     if (result != MMSYSERR_NOERROR)
     {
@@ -1620,6 +1733,12 @@ API_EXPORT IN_DISCONNECTRESULT API_CALL DisconnectFromInputEndpoint(void* handle
     *errorCode = 0;
 
     InputEndpointHandle* inputEndpointHandle = static_cast<InputEndpointHandle*>(handle);
+
+    if (inputEndpointHandle->groupListener != nullptr)
+    {
+        inputEndpointHandle->groupListener.IsEnabled(false);
+        return IN_DISCONNECTRESULT_OK;
+    }
 
     MMRESULT result = midiInStop(inputEndpointHandle->handle);
     if (result != MMSYSERR_NOERROR)
@@ -1649,11 +1768,11 @@ API_EXPORT IN_GETSYSEXDATARESULT API_CALL GetInputEndpointSysExBufferData(LPMIDI
    Output device
 ================================ */
 
-typedef struct
+struct OutputEndpointHandle : EndpointHandleBase
 {
     OutputEndpointInfo* info;
     HMIDIOUT handle;
-} OutputEndpointHandle;
+};
 
 OUT_GETALLINFORESULT ConvertToGetAllOutInfoResult(OUT_GETINFORESULT getInfoResult)
 {
@@ -1667,13 +1786,19 @@ OUT_GETALLINFORESULT ConvertToGetAllOutInfoResult(OUT_GETINFORESULT getInfoResul
     }
 }
 
-API_EXPORT OUT_GETALLINFORESULT API_CALL GetOutputEndpointsInfo(Configuration* configuration, SessionHandle* sessionHandle, OutputEndpointInfo*** devicesInfo, int* devicesCount, int* errorCode)
+API_EXPORT OUT_GETALLINFORESULT API_CALL GetOutputEndpointsInfo_Win(
+    Configuration* configuration,
+    SessionHandle* sessionHandle,
+    bool forceWinMM,
+    OutputEndpointInfo*** devicesInfo,
+    int* devicesCount,
+    int* errorCode)
 {
     *errorCode = 0;
 
     EnsureWinMmPortsAvailable();
 
-    if (configuration->useWms && configuration->wmsAvailable)
+    if (!forceWinMM && configuration->wmsInitialized)
     {
         while (sessionHandle->initialEnumerationCompleted.load() == 0)
         {
@@ -1704,7 +1829,7 @@ API_EXPORT OUT_GETALLINFORESULT API_CALL GetOutputEndpointsInfo(Configuration* c
                 cleanupOutputDevices();
                 return ConvertToGetAllOutInfoResult(getOutputEndpointInfoResult);
             }
-            
+
             if (wcscmp(outputEndpointInfo->caps->szPname, L"Microsoft GS Wavetable Synth") == 0)
             {
                 outputEndpointInfo->isMicrosoftGsWavetableSynth = true;
@@ -1809,7 +1934,12 @@ API_EXPORT OUT_GETPROPERTYRESULT API_CALL GetOutputEndpointName(OutputEndpointIn
 {
     *errorCode = 0;
 
-    // TODO: WMS
+    if (!info->endpointDeviceId.empty() && info->gtb != nullptr)
+    {
+        *value = info->gtb.Name().c_str();
+        return IN_GETPROPERTYRESULT_OK;
+    }
+
     *value = info->caps->szPname;
     return OUT_GETPROPERTYRESULT_OK;
 }
@@ -1822,8 +1952,8 @@ API_EXPORT OUT_GETPROPERTYRESULT API_CALL GetOutputEndpointId_Win(OutputEndpoint
     if (info == nullptr)
         return OUT_GETPROPERTYRESULT_OK;
 
-    if (!info->endpointDeviceId.empty() && !info->portDeviceId.empty())
-        info->endpointId = info->endpointDeviceId + L"_" + info->portDeviceId;
+    if (!info->endpointDeviceId.empty() && info->gtb != nullptr && info->group != nullptr)
+        info->endpointId = info->endpointDeviceId + L"_" + std::to_wstring(info->gtb.Number()) + L"_" + std::to_wstring(info->group.Index());
     else if (!info->devicePath.empty())
         info->endpointId = info->devicePath + L"_" + info->caps->szPname;
     else if (info->isMicrosoftGsWavetableSynth)
@@ -1836,7 +1966,7 @@ API_EXPORT OUT_GETPROPERTYRESULT API_CALL GetOutputEndpointId_Win(OutputEndpoint
     return OUT_GETPROPERTYRESULT_OK;
 }
 
-API_EXPORT OUT_OPENRESULT API_CALL OpenOutputEndpoint_Win(OutputEndpointInfo* info, void* sessionHandle, DWORD_PTR callback, void** handle, int* errorCode)
+API_EXPORT OUT_OPENRESULT API_CALL OpenOutputEndpoint_Win(OutputEndpointInfo* info, SessionHandle* sessionHandle, DWORD_PTR callback, OutputEndpointHandle** handle, int* errorCode)
 {
     *errorCode = 0;
 
@@ -1844,10 +1974,48 @@ API_EXPORT OUT_OPENRESULT API_CALL OpenOutputEndpoint_Win(OutputEndpointInfo* in
 
     OutputEndpointHandle* outputEndpointHandle = new OutputEndpointHandle();
     outputEndpointHandle->info = info;
+    outputEndpointHandle->sessionHandle = sessionHandle;
 
-    auto deviceIndex = FindPortIndex(info->endpointDeviceId, info->portDeviceId, midi2::Enumeration::Midi1PortFlow::MidiMessageDestination);
-    if (deviceIndex < 0)
-        deviceIndex = info->deviceIndex;
+    if (!info->endpointDeviceId.empty() && info->gtb != nullptr && info->group != nullptr)
+    {
+        std::lock_guard<std::mutex> lock(sessionHandle->endpointDevicesLock);
+
+        try
+        {
+            midi2::MidiEndpointConnection connection{ nullptr };
+            auto getConnectionResult = GetConnection(sessionHandle, info, &connection);
+            if (getConnectionResult != GETCONNECTIONRESULT_OK)
+            {
+                delete outputEndpointHandle;
+
+                switch (getConnectionResult)
+                {
+                    case GETCONNECTIONRESULT_OPENFAILED: return OUT_OPENRESULT_GETCONNECTION_OPENFAILED;
+                    default: return OUT_OPENRESULT_GETCONNECTION_UNKNOWNERROR;
+                }
+            }
+
+            sessionHandle->endpointConnectionsUsersCounts[connection.ConnectionId()]++;
+            outputEndpointHandle->connection = connection;
+
+            *handle = outputEndpointHandle;
+            return OUT_OPENRESULT_OK;
+        }
+        catch (const winrt::hresult_error& e)
+        {
+            return OUT_OPENRESULT_UNKNOWNWMSERROR;
+        }
+        catch (const std::exception& e)
+        {
+            return OUT_OPENRESULT_UNKNOWNWMSERROR;
+        }
+        catch (...)
+        {
+            return OUT_OPENRESULT_UNKNOWNWMSERROR;
+        }
+    }
+
+    auto deviceIndex = info->deviceIndex;
 
     HMIDIOUT outHandle;
     MMRESULT result = midiOutOpen(&outHandle, deviceIndex, callback, 0, CALLBACK_FUNCTION);
@@ -1881,6 +2049,30 @@ API_EXPORT OUT_CLOSERESULT API_CALL CloseOutputEndpoint(void* handle, int* error
     *errorCode = 0;
 
     OutputEndpointHandle* outputEndpointHandle = static_cast<OutputEndpointHandle*>(handle);
+
+    if (outputEndpointHandle->connection != nullptr)
+    {
+        std::lock_guard<std::mutex> lock(outputEndpointHandle->sessionHandle->endpointDevicesLock);
+
+        try
+        {
+            auto connectionId = outputEndpointHandle->connection.ConnectionId();
+            auto sessionHandle = outputEndpointHandle->sessionHandle;
+
+            sessionHandle->endpointConnectionsUsersCounts[connectionId]--;
+            if (sessionHandle->endpointConnectionsUsersCounts[connectionId] == 0)
+            {
+                sessionHandle->session.DisconnectEndpointConnection(connectionId);
+                sessionHandle->endpointConnectionsById.Remove(outputEndpointHandle->info->endpointDeviceId);
+            }
+        }
+        catch (...)
+        {
+            return OUT_CLOSERESULT_UNKNOWNWMSERROR;
+        }
+
+        return OUT_CLOSERESULT_OK;
+    }
 
     MMRESULT result = midiOutReset(outputEndpointHandle->handle);
     if (result != MMSYSERR_NOERROR)
@@ -1920,11 +2112,49 @@ API_EXPORT OUT_CLOSERESULT API_CALL CloseOutputEndpoint(void* handle, int* error
     return OUT_CLOSERESULT_OK;
 }
 
-API_EXPORT OUT_SENDSHORTRESULT API_CALL SendShortEventToOutputEndpoint(void* handle, int message, int* errorCode)
+API_EXPORT OUT_SENDSHORTRESULT API_CALL SendShortEventToOutputEndpoint(void* handle, SessionHandle* sessionHandle, int message, int* errorCode)
 {
     *errorCode = 0;
 
     OutputEndpointHandle* outputEndpointHandle = static_cast<OutputEndpointHandle*>(handle);
+
+    if (outputEndpointHandle->info->group != nullptr)
+    {
+        std::lock_guard<std::mutex> lock(sessionHandle->endpointDevicesLock);
+
+        try
+        {
+            auto connection = sessionHandle->endpointConnectionsById.Lookup(outputEndpointHandle->info->endpointDeviceId);
+
+            auto ump = messages::MidiMessageConverter::ConvertMidi1Message(
+                midi2::MidiClock::TimestampConstantSendImmediately(),
+                outputEndpointHandle->info->group,
+                message & 0xFF,
+                (message >> 8) & 0xFF,
+                (message >> 16) & 0xFF);
+
+            auto result = connection.SendSingleMessagePacket(ump);
+            if (result != midi2::MidiSendMessageResults::Succeeded)
+            {
+                *errorCode = static_cast<int>(result);
+                return OUT_SENDSHORTRESULT_SENDERROR;
+            }
+
+            return OUT_SENDSHORTRESULT_OK;
+        }
+        catch (const winrt::hresult_error& e)
+        {
+            return OUT_SENDSHORTRESULT_UNKNOWNWMSERROR;
+        }
+        catch (const std::exception& e)
+        {
+            return OUT_SENDSHORTRESULT_UNKNOWNWMSERROR;
+        }
+        catch (...)
+        {
+            return OUT_SENDSHORTRESULT_UNKNOWNWMSERROR;
+        }
+    }
 
     MMRESULT result = midiOutShortMsg(outputEndpointHandle->handle, (DWORD)message);
     if (result != MMSYSERR_NOERROR)
@@ -1944,11 +2174,61 @@ API_EXPORT OUT_SENDSHORTRESULT API_CALL SendShortEventToOutputEndpoint(void* han
     return OUT_SENDSHORTRESULT_OK;
 }
 
-API_EXPORT OUT_SENDSYSEXRESULT API_CALL SendSysExEventToOutputEndpoint_Win(void* handle, LPSTR data, int size, int* errorCode)
+API_EXPORT OUT_SENDSYSEXRESULT API_CALL SendSysExEventToOutputEndpoint_Win(void* handle, SessionHandle* sessionHandle, LPSTR data, int size, int* errorCode)
 {
     *errorCode = 0;
 
     OutputEndpointHandle* outputEndpointHandle = static_cast<OutputEndpointHandle*>(handle);
+
+    if (outputEndpointHandle->info->group != nullptr)
+    {
+        std::lock_guard<std::mutex> lock(sessionHandle->endpointDevicesLock);
+
+        try
+        {
+            auto connection = sessionHandle->endpointConnectionsById.Lookup(outputEndpointHandle->info->endpointDeviceId);
+
+            std::vector<uint8_t> bytes(
+                reinterpret_cast<uint8_t*>(data),
+                reinterpret_cast<uint8_t*>(data) + size);
+
+            winrt::Windows::Storage::Streams::InMemoryRandomAccessStream memoryStream;
+            winrt::Windows::Storage::Streams::DataWriter writer(memoryStream);
+            writer.WriteBytes(bytes);
+            writer.StoreAsync().get();
+            winrt::Windows::Storage::Streams::IInputStream inputStream = memoryStream.GetInputStreamAt(0);
+
+            messages::MidiBytestreamToUmpMessageConverterState converterState;
+
+            auto result = sysex::MidiSystemExclusiveSender::SendBinarySysEx7ByteDataAsync(
+                connection,
+                outputEndpointHandle->info->group,
+                inputStream,
+                0,
+                0,
+                converterState).get();
+
+            if (!result)
+            {
+                *errorCode = static_cast<int>(result);
+                return OUT_SENDSYSEXRESULT_SENDERROR;
+            }
+
+            return OUT_SENDSYSEXRESULT_OK;
+        }
+        catch (const winrt::hresult_error& e)
+        {
+            return OUT_SENDSYSEXRESULT_UNKNOWNWMSERROR;
+        }
+        catch (const std::exception& e)
+        {
+            return OUT_SENDSYSEXRESULT_UNKNOWNWMSERROR;
+        }
+        catch (...)
+        {
+            return OUT_SENDSYSEXRESULT_UNKNOWNWMSERROR;
+        }
+    }
 
     LPMIDIHDR header = new MIDIHDR();
     header->lpData = data;
@@ -2036,14 +2316,6 @@ struct VirtualDeviceInfo
     std::wstring endpointDeviceId;
 };
 
-const midi2::Enumeration::Legacy::MidiLegacyPortDeviceInformation GetSinglePort(midi2::Enumeration::MidiEndpointDeviceInformation endpointInformation, midi2::Enumeration::Midi1PortFlow flow)
-{
-    auto ports = midi2::Enumeration::Legacy::MidiLegacyPortDeviceInformation::FindAllForAssociatedEndpoint(endpointInformation.EndpointDeviceId(), flow);
-
-    // TODO: check there are at least 1 port and not more than 1 port, and return error if not
-    return ports.GetAt(0);
-}
-
 API_EXPORT VIRTUAL_OPENRESULT API_CALL OpenVirtualDevice_Win(
     const wchar_t* name,
     Configuration* configuration,
@@ -2056,7 +2328,7 @@ API_EXPORT VIRTUAL_OPENRESULT API_CALL OpenVirtualDevice_Win(
     VirtualDeviceInfo* virtualDeviceInfo = new VirtualDeviceInfo();
     virtualDeviceInfo->name = name;
 
-    if (!configuration->useWms || !configuration->wmsAvailable)
+    if (!configuration->wmsInitialized)
     {
         delete virtualDeviceInfo;
         return VIRTUAL_OPENRESULT_WMSUNAVAILABLE;
@@ -2136,31 +2408,58 @@ API_EXPORT VIRTUAL_OPENRESULT API_CALL OpenVirtualDevice_Win(
 
         auto endpointId = result.CreatedLoopbackEntry().EndpointDeviceId();
         auto endpointInformation = midi2::Enumeration::MidiEndpointDeviceInformation::CreateFromEndpointDeviceId(endpointId);
+        auto groupTerminalBlocks = endpointInformation.GetGroupTerminalBlocks();
 
-        auto inputPort = GetSinglePort(endpointInformation, midi2::Enumeration::Midi1PortFlow::MidiMessageSource);
-
-        InputEndpointInfo* inputEndpointInfo = nullptr;
-        IN_GETINFORESULT inputResult = GetInputEndpointInfo(GetPortNumber(inputPort), endpointId, inputPort.PortDeviceId(), &inputEndpointInfo, errorCode);
-        if (inputResult != IN_GETINFORESULT_OK)
+        for (auto const& gtb : groupTerminalBlocks)
         {
-            delete virtualDeviceInfo;
-            return VIRTUAL_OPENRESULT_FAILEDGETINPUTDEVICEINFO;
+            auto const group = gtb.FirstGroup();
+            auto direction = gtb.Direction();
+
+            if (direction == midi2::Enumeration::MidiGroupTerminalBlockDirection::BlockInput)
+            {
+                OutputEndpointInfo* outputEndpointInfo = nullptr;
+                int errorCode;
+
+                auto getOutputEndpointInfoResult = GetOutputEndpointInfo(endpointId, gtb, group, &outputEndpointInfo, &errorCode);
+                if (getOutputEndpointInfoResult == OUT_GETINFORESULT_OK)
+                    virtualDeviceInfo->outputEndpointInfo = outputEndpointInfo;
+            }
+            else if (direction == midi2::Enumeration::MidiGroupTerminalBlockDirection::BlockOutput)
+            {
+                InputEndpointInfo* inputEndpointInfo = nullptr;
+                int errorCode;
+
+                auto getInputEndpointInfoResult = GetInputEndpointInfo(endpointId, gtb, group, &inputEndpointInfo, &errorCode);
+                if (getInputEndpointInfoResult == IN_GETINFORESULT_OK)
+                    virtualDeviceInfo->inputEndpointInfo = inputEndpointInfo;
+            }
+            else if (direction == midi2::Enumeration::MidiGroupTerminalBlockDirection::Bidirectional)
+            {
+                int errorCode;
+
+                OutputEndpointInfo* outputEndpointInfo = nullptr;
+
+                auto getOutputEndpointInfoResult = GetOutputEndpointInfo(endpointId, gtb, group, &outputEndpointInfo, &errorCode);
+                if (getOutputEndpointInfoResult == OUT_GETINFORESULT_OK)
+                    virtualDeviceInfo->outputEndpointInfo = outputEndpointInfo;
+
+                InputEndpointInfo* inputEndpointInfo = nullptr;
+
+                auto getInputEndpointInfoResult = GetInputEndpointInfo(endpointId, gtb, group, &inputEndpointInfo, &errorCode);
+                if (getInputEndpointInfoResult == IN_GETINFORESULT_OK)
+                    virtualDeviceInfo->inputEndpointInfo = inputEndpointInfo;
+            }
         }
 
-        virtualDeviceInfo->inputEndpointInfo = inputEndpointInfo;
-
-        auto outputPort = GetSinglePort(endpointInformation, midi2::Enumeration::Midi1PortFlow::MidiMessageDestination);
-
-        OutputEndpointInfo* outputEndpointInfo = nullptr;
-        OUT_GETINFORESULT outputResult = GetOutputEndpointInfo(GetPortNumber(outputPort), endpointId, outputPort.PortDeviceId(), &outputEndpointInfo, errorCode);
-        if (outputResult != OUT_GETINFORESULT_OK)
+        if (virtualDeviceInfo->inputEndpointInfo == nullptr)
         {
-            DeleteInputEndpointInfo(virtualDeviceInfo->inputEndpointInfo);
-            delete virtualDeviceInfo;
-            return VIRTUAL_OPENRESULT_FAILEDGETOUTPUTDEVICEINFO;
+            // TODO: error
         }
 
-        virtualDeviceInfo->outputEndpointInfo = outputEndpointInfo;
+        if (virtualDeviceInfo->outputEndpointInfo == nullptr)
+        {
+            // TODO: error
+        }
     }
     catch (const winrt::hresult_error& e)
     {
@@ -2191,11 +2490,12 @@ API_EXPORT VIRTUAL_CLOSERESULT API_CALL CloseVirtualDevice(VirtualDeviceInfo* in
 
     try
     {
-        auto removed = basicLoopback::MidiBasicLoopbackManager::RemoveTransientLoopback(
+        auto result = basicLoopback::MidiBasicLoopbackManager::RemoveTransientLoopback(
             basicLoopback::MidiBasicLoopbackRemovalConfig{ info->associationId });
 
-        if (!removed)
+        if (!result.Success())
         {
+            *errorCode = static_cast<int>(result.ErrorCode());
             delete info;
             return VIRTUAL_CLOSERESULT_FAILED;
         }

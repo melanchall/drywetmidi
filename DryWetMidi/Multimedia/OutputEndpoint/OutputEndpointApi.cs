@@ -2,7 +2,6 @@
 using Melanchall.DryWetMidi.Configuration;
 using System;
 using System.Runtime.InteropServices;
-using static Melanchall.DryWetMidi.Multimedia.InputEndpointApi;
 
 #if NET7_0_OR_GREATER
 using System.Runtime.CompilerServices;
@@ -44,6 +43,14 @@ namespace Melanchall.DryWetMidi.Multimedia
             OUT_OPENRESULT_INVALIDSTRUCTURE = 4,
             [NativeApi.NativeErrorType(NativeApi.NativeErrorType.NoMemory)]
             OUT_OPENRESULT_NOMEMORY = 5,
+
+            [NativeApi.NativeErrorType(NativeApi.NativeErrorType.WmsError)]
+            OUT_OPENRESULT_GETCONNECTION_OPENFAILED = 6,
+            [NativeApi.NativeErrorType(NativeApi.NativeErrorType.WmsError)]
+            OUT_OPENRESULT_GETCONNECTION_UNKNOWNERROR = 7,
+            [NativeApi.NativeErrorType(NativeApi.NativeErrorType.WmsError)]
+            OUT_OPENRESULT_UNKNOWNWMSERROR = 8,
+
             OUT_OPENRESULT_INVALIDCLIENT = 101,
             OUT_OPENRESULT_INVALIDPORT = 102,
             OUT_OPENRESULT_WRONGTHREAD = 103,
@@ -61,7 +68,9 @@ namespace Melanchall.DryWetMidi.Multimedia
             OUT_CLOSERESULT_CLOSE_INVALIDHANDLE = 3,
             [NativeApi.NativeErrorType(NativeApi.NativeErrorType.NoMemory)]
             OUT_CLOSERESULT_CLOSE_NOMEMORY = 4,
-            OUT_CLOSERESULT_CLOSE_UNKNOWNERROR = 2000
+            OUT_CLOSERESULT_CLOSE_UNKNOWNERROR = 2000,
+            [NativeApi.NativeErrorType(NativeApi.NativeErrorType.WmsError)]
+            OUT_CLOSERESULT_UNKNOWNWMSERROR = 5,
         }
 
         public enum OUT_SENDSHORTRESULT
@@ -71,6 +80,11 @@ namespace Melanchall.DryWetMidi.Multimedia
             [NativeApi.NativeErrorType(NativeApi.NativeErrorType.Busy)]
             OUT_SENDSHORTRESULT_NOTREADY = 2,
             OUT_SENDSHORTRESULT_INVALIDHANDLE = 3,
+            [NativeApi.NativeErrorType(NativeApi.NativeErrorType.WmsError)]
+            OUT_SENDSHORTRESULT_SENDERROR = 4,
+            [NativeApi.NativeErrorType(NativeApi.NativeErrorType.WmsError)]
+            OUT_SENDSHORTRESULT_UNKNOWNWMSERROR = 5,
+
             OUT_SENDSHORTRESULT_INVALIDCLIENT = 101,
             OUT_SENDSHORTRESULT_INVALIDPORT = 102,
             OUT_SENDSHORTRESULT_WRONGENDPOINT = 103,
@@ -96,6 +110,8 @@ namespace Melanchall.DryWetMidi.Multimedia
             OUT_SENDSYSEXRESULT_UNPREPARED = 5,
             OUT_SENDSYSEXRESULT_INVALIDHANDLE = 6,
             OUT_SENDSYSEXRESULT_INVALIDSTRUCTURE = 7,
+            OUT_SENDSYSEXRESULT_SENDERROR = 8,
+            OUT_SENDSYSEXRESULT_UNKNOWNWMSERROR = 9,
             OUT_SENDSYSEXRESULT_INVALIDCLIENT = 101,
             OUT_SENDSYSEXRESULT_INVALIDPORT = 102,
             OUT_SENDSYSEXRESULT_WRONGENDPOINT = 103,
@@ -148,7 +164,11 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         [LibraryImport(NativeApi.LibraryName)]
         [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-        private static partial OUT_GETALLINFORESULT GetOutputEndpointsInfo(MidiConfigurationHandle configuration, MidiDevicesSessionHandle sessionHandle, out IntPtr devicesInfo, out int devicesCount, out int errorCode);
+        private static partial OUT_GETALLINFORESULT GetOutputEndpointsInfo_Win(MidiConfigurationHandle configuration, MidiDevicesSessionHandle sessionHandle, [MarshalAs(UnmanagedType.U1)] bool forceWinMM, out IntPtr devicesInfo, out int devicesCount, out int errorCode);
+
+        [LibraryImport(NativeApi.LibraryName)]
+        [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
+        private static partial OUT_GETALLINFORESULT GetOutputEndpointsInfo_Mac(MidiConfigurationHandle configuration, MidiDevicesSessionHandle sessionHandle, out IntPtr devicesInfo, out int devicesCount, out int errorCode);
 
         [LibraryImport(NativeApi.LibraryName)]
         [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
@@ -180,7 +200,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         [LibraryImport(NativeApi.LibraryName)]
         [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-        private static partial OUT_SENDSHORTRESULT SendShortEventToOutputEndpoint(IntPtr handle, int message, out int errorCode);
+        private static partial OUT_SENDSHORTRESULT SendShortEventToOutputEndpoint(IntPtr handle, MidiDevicesSessionHandle sessionHandle, int message, out int errorCode);
 
         [LibraryImport(NativeApi.LibraryName)]
         [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
@@ -188,7 +208,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         [LibraryImport(NativeApi.LibraryName)]
         [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-        private static partial OUT_SENDSYSEXRESULT SendSysExEventToOutputEndpoint_Win(IntPtr handle, IntPtr data, int size, out int errorCode);
+        private static partial OUT_SENDSYSEXRESULT SendSysExEventToOutputEndpoint_Win(IntPtr handle, MidiDevicesSessionHandle sessionHandle, IntPtr data, int size, out int errorCode);
 
         [LibraryImport(NativeApi.LibraryName)]
         [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
@@ -205,7 +225,10 @@ namespace Melanchall.DryWetMidi.Multimedia
         private static extern OUT_GETCOUNTRESULT GetOutputEndpointsCount(out int count);
 
         [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
-        private static extern OUT_GETALLINFORESULT GetOutputEndpointsInfo(MidiConfigurationHandle configuration, MidiDevicesSessionHandle sessionHandle, out IntPtr devicesInfo, out int devicesCount, out int errorCode);
+        private static extern OUT_GETALLINFORESULT GetOutputEndpointsInfo_Win(MidiConfigurationHandle configuration, MidiDevicesSessionHandle sessionHandle, [MarshalAs(UnmanagedType.U1)] bool forceWinMM, out IntPtr devicesInfo, out int devicesCount, out int errorCode);
+
+        [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
+        private static extern OUT_GETALLINFORESULT GetOutputEndpointsInfo_Mac(MidiConfigurationHandle configuration, MidiDevicesSessionHandle sessionHandle, out IntPtr devicesInfo, out int devicesCount, out int errorCode);
 
         [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
         private static extern void FreeOutputEndpointsInfo(IntPtr array, int size);
@@ -229,13 +252,13 @@ namespace Melanchall.DryWetMidi.Multimedia
         private static extern OUT_CLOSERESULT CloseOutputEndpoint(IntPtr handle, out int errorCode);
 
         [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
-        private static extern OUT_SENDSHORTRESULT SendShortEventToOutputEndpoint(IntPtr handle, int message, out int errorCode);
+        private static extern OUT_SENDSHORTRESULT SendShortEventToOutputEndpoint(IntPtr handle, MidiDevicesSessionHandle sessionHandle, int message, out int errorCode);
 
         [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
         private static extern OUT_SENDSYSEXRESULT SendSysExEventToOutputEndpoint_Mac(IntPtr handle, byte[] data, ushort dataSize, out int errorCode);
 
         [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
-        private static extern OUT_SENDSYSEXRESULT SendSysExEventToOutputEndpoint_Win(IntPtr handle, IntPtr data, int size, out int errorCode);
+        private static extern OUT_SENDSYSEXRESULT SendSysExEventToOutputEndpoint_Win(IntPtr handle, MidiDevicesSessionHandle sessionHandle, IntPtr data, int size, out int errorCode);
 
         [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
         private static extern OUT_GETSYSEXDATARESULT GetOutputEndpointSysExBufferData(IntPtr handle, IntPtr header, out IntPtr data, out int size, out int errorCode);
@@ -258,9 +281,18 @@ namespace Melanchall.DryWetMidi.Multimedia
             return GetOutputEndpointsCount(out count);
         }
 
-        public static OUT_GETALLINFORESULT Api_GetEndpointsInfo(MidiConfigurationHandle configuration, MidiDevicesSessionHandle sessionHandle, out IntPtr devicesInfo, out int devicesCount, out int errorCode)
+        public static OUT_GETALLINFORESULT Api_GetEndpointsInfo(MidiConfigurationHandle configuration, MidiDevicesSessionHandle sessionHandle, bool forceWinMM, out IntPtr devicesInfo, out int devicesCount, out int errorCode)
         {
-            return GetOutputEndpointsInfo(configuration, sessionHandle, out devicesInfo, out devicesCount, out errorCode);
+            switch (CommonApi.Api_GetApiType())
+            {
+                case CommonApi.API_TYPE.API_TYPE_WIN:
+                    return GetOutputEndpointsInfo_Win(configuration, sessionHandle, forceWinMM, out devicesInfo, out devicesCount, out errorCode);
+                case CommonApi.API_TYPE.API_TYPE_MAC:
+                    return GetOutputEndpointsInfo_Mac(configuration, sessionHandle, out devicesInfo, out devicesCount, out errorCode);
+            }
+
+            // TODO
+            throw new NotImplementedException();
         }
 
         public static void Api_FreeEndpointsInfo(IntPtr array, int size)
@@ -283,9 +315,9 @@ namespace Melanchall.DryWetMidi.Multimedia
             return CloseOutputEndpoint(handle, out errorCode);
         }
 
-        public static OUT_SENDSHORTRESULT Api_SendShortEvent(IntPtr handle, int message, out int errorCode)
+        public static OUT_SENDSHORTRESULT Api_SendShortEvent(IntPtr handle, MidiDevicesSessionHandle sessionHandle, int message, out int errorCode)
         {
-            return SendShortEventToOutputEndpoint(handle, message, out errorCode);
+            return SendShortEventToOutputEndpoint(handle, sessionHandle, message, out errorCode);
         }
 
         public static OUT_SENDSYSEXRESULT Api_SendSysExEvent_Mac(IntPtr handle, byte[] data, ushort dataSize, out int errorCode)
@@ -293,9 +325,9 @@ namespace Melanchall.DryWetMidi.Multimedia
             return SendSysExEventToOutputEndpoint_Mac(handle, data, dataSize, out errorCode);
         }
 
-        public static OUT_SENDSYSEXRESULT Api_SendSysExEvent_Win(IntPtr handle, IntPtr data, int size, out int errorCode)
+        public static OUT_SENDSYSEXRESULT Api_SendSysExEvent_Win(IntPtr handle, MidiDevicesSessionHandle sessionHandle, IntPtr data, int size, out int errorCode)
         {
-            return SendSysExEventToOutputEndpoint_Win(handle, data, size, out errorCode);
+            return SendSysExEventToOutputEndpoint_Win(handle, sessionHandle, data, size, out errorCode);
         }
 
         public static OUT_GETSYSEXDATARESULT Api_GetSysExBufferData(IntPtr handle, IntPtr header, out IntPtr data, out int size, out int errorCode)

@@ -136,7 +136,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                             var areEventsReceived = WaitOperations.Wait(
                                 () => receivedEventsB.Count == eventsToSend.Count && receivedEventsC.Count == eventsToSend.Count,
                                 timeout);
-                            ClassicAssert.IsTrue(areEventsReceived, $"Events are not received for timeout {timeout}.");
+                            ClassicAssert.IsTrue(areEventsReceived, $"Events are not received for timeout {timeout}. Received events B:{Environment.NewLine}{string.Join(Environment.NewLine, receivedEventsB)}{Environment.NewLine}Received events C:{Environment.NewLine}{string.Join(Environment.NewLine, receivedEventsC)}");
 
                             midiEndpointsConnector.Disconnect();
                             ClassicAssert.IsFalse(midiEndpointsConnector.AreEndpointsConnected, "Endpoints aren't disconnected.");

@@ -1223,7 +1223,7 @@ OUT_GETINFORESULT GetOutputEndpointInfo(int deviceIndex, OutputEndpointInfo** in
     return OUT_GETINFORESULT_OK;
 }
 
-API_EXPORT OUT_GETALLINFORESULT GetOutputEndpointsInfo(Configuration* configuration, SessionHandle* sessionHandle, OutputEndpointInfo*** devicesInfo, int* devicesCount, int* errorCode)
+API_EXPORT OUT_GETALLINFORESULT GetOutputEndpointsInfo_Mac(Configuration* configuration, SessionHandle* sessionHandle, OutputEndpointInfo*** devicesInfo, int* devicesCount, int* errorCode)
 {
     *errorCode = 0;
     *devicesCount = static_cast<int>(MIDIGetNumberOfDestinations());
@@ -1347,7 +1347,7 @@ API_EXPORT OUT_CLOSERESULT CloseOutputEndpoint(void* handle, int* errorCode)
     return OUT_CLOSERESULT_OK;
 }
 
-API_EXPORT OUT_SENDSHORTRESULT SendShortEventToOutputEndpoint(void* handle, int message, int* errorCode)
+API_EXPORT OUT_SENDSHORTRESULT SendShortEventToOutputEndpoint(void* handle, SessionHandle* sessionHandle, int message, int* errorCode)
 {
     *errorCode = 0;
 

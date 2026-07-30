@@ -54,7 +54,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         internal OutputEndpoint(IntPtr info, CreationContext context)
             : base(context)
         {
-            Info = new OutputEndpointInfo(info);
+            Handle_ = new OutputEndpointHandle(info);
             _apiType = CommonApi.Api_GetApiType();
         }
 
@@ -72,7 +72,7 @@ namespace Melanchall.DryWetMidi.Multimedia
                 EnsureSessionIsCreated();
                 EnsureEndpointIsNotRemoved();
 
-                var result = OutputEndpointApi.Api_GetEndpointName(Info.DangerousGetHandle(), out var name, out var errorCode);
+                var result = OutputEndpointApi.Api_GetEndpointName(Handle_.DangerousGetHandle(), out var name, out var errorCode);
                 NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
 
                 return name;
@@ -86,7 +86,7 @@ namespace Melanchall.DryWetMidi.Multimedia
                 if (!string.IsNullOrWhiteSpace(_id))
                     return _id;
 
-                var result = OutputEndpointApi.Api_GetEndpointId(Info.DangerousGetHandle(), out _id, out var errorCode);
+                var result = OutputEndpointApi.Api_GetEndpointId(Handle_.DangerousGetHandle(), out _id, out var errorCode);
                 NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
                 
                 return _id;
@@ -124,7 +124,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             if (midiEvent is ChannelEvent || midiEvent is SystemCommonEvent || midiEvent is SystemRealTimeEvent)
             {
                 var message = PackShortEvent(midiEvent);
-                var result = OutputEndpointApi.Api_SendShortEvent(Handle.DangerousGetHandle(), message, out var errorCode);
+                var result = OutputEndpointApi.Api_SendShortEvent(Handle_.OpenedEndpointHandle, MidiDevicesSession.GetSessionHandle(), message, out var errorCode);
                 NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
             }
             else
@@ -201,20 +201,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             NativeApiUtilities.EnsureOsIsSupported();
             EnsureSessionIsCreated();
 
-            var result = OutputEndpointApi.Api_GetEndpointsInfo(MidiConfiguration.GetConfigurationHandle(), MidiDevicesSession.GetSessionHandle(), out var endpointsInfo, out var endpointsCount, out var error);
-            NativeApiUtilities.HandleEndpointNativeApiResult(result, error);
-
-            var endpoints = new OutputEndpoint[endpointsCount];
-
-            for (int i = 0; i < endpointsCount; i++)
-            {
-                var info = Marshal.ReadIntPtr(endpointsInfo, i * IntPtr.Size);
-                endpoints[i] = new OutputEndpoint(info, MidiEndpoint.CreationContext.User);
-            }
-
-            OutputEndpointApi.Api_FreeEndpointsInfo(endpointsInfo, endpointsCount);
-
-            return endpoints;
+            return GetAll(false);
         }
 
         /// <summary>
@@ -241,7 +228,17 @@ namespace Melanchall.DryWetMidi.Multimedia
             NativeApiUtilities.EnsureOsIsSupported();
             EnsureSessionIsCreated();
 
-            var endpoint = GetAll().FirstOrDefault(d => d.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+            return GetByName(name, false);
+        }
+
+        internal static OutputEndpoint GetByName(string name, bool forceWinMM)
+        {
+            ThrowIfArgument.IsNullOrWhiteSpaceString(nameof(name), name, "Endpoint name");
+
+            NativeApiUtilities.EnsureOsIsSupported();
+            EnsureSessionIsCreated();
+
+            var endpoint = GetAll(forceWinMM).FirstOrDefault(d => d.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
             if (endpoint == null)
                 throw new ArgumentException($"There is no MIDI output endpoint '{name}'.", nameof(name));
 
@@ -259,16 +256,39 @@ namespace Melanchall.DryWetMidi.Multimedia
             var bufferPointer = Marshal.AllocHGlobal(bufferLength);
             Marshal.Copy(data, 0, bufferPointer, data.Length);
 
-            var result = OutputEndpointApi.Api_SendSysExEvent_Win(Handle.DangerousGetHandle(), bufferPointer, bufferLength, out var errorCode);
+            var configurationHandle = MidiConfiguration.GetConfigurationHandle();
+
+            var result = OutputEndpointApi.Api_SendSysExEvent_Win(Handle_.OpenedEndpointHandle, MidiDevicesSession.GetSessionHandle(), bufferPointer, bufferLength, out var errorCode);
             if (result != OutputEndpointApi.OUT_SENDSYSEXRESULT.OUT_SENDSYSEXRESULT_OK)
                 Marshal.FreeHGlobal(bufferPointer);
             
             NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
         }
 
+        private static ICollection<OutputEndpoint> GetAll(bool forceWinMM)
+        {
+            NativeApiUtilities.EnsureOsIsSupported();
+            EnsureSessionIsCreated();
+
+            var result = OutputEndpointApi.Api_GetEndpointsInfo(MidiConfiguration.GetConfigurationHandle(), MidiDevicesSession.GetSessionHandle(), forceWinMM, out var endpointsInfo, out var endpointsCount, out var error);
+            NativeApiUtilities.HandleEndpointNativeApiResult(result, error);
+
+            var endpoints = new OutputEndpoint[endpointsCount];
+
+            for (int i = 0; i < endpointsCount; i++)
+            {
+                var info = Marshal.ReadIntPtr(endpointsInfo, i * IntPtr.Size);
+                endpoints[i] = new OutputEndpoint(info, MidiEndpoint.CreationContext.User);
+            }
+
+            OutputEndpointApi.Api_FreeEndpointsInfo(endpointsInfo, endpointsCount);
+
+            return endpoints;
+        }
+
         private void EnsureHandleIsCreated()
         {
-            if (Handle != null)
+            if (Handle_.OpenedEndpointHandle != IntPtr.Zero)
                 return;
 
             var sessionHandle = MidiDevicesSession.GetSessionHandle();
@@ -281,13 +301,13 @@ namespace Melanchall.DryWetMidi.Multimedia
                 case CommonApi.API_TYPE.API_TYPE_WIN:
                     {
                         _callback = OnMessage;
-                        var result = OutputEndpointApi.Api_OpenEndpoint_Win(Info.DangerousGetHandle(), sessionHandle, _callback, out rawHandle, out errorCode);
+                        var result = OutputEndpointApi.Api_OpenEndpoint_Win(Handle_.DangerousGetHandle(), sessionHandle, _callback, out rawHandle, out errorCode);
                         NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
                     }
                     break;
                 case CommonApi.API_TYPE.API_TYPE_MAC:
                     {
-                        var result = OutputEndpointApi.Api_OpenEndpoint_Mac(Info.DangerousGetHandle(), sessionHandle, out rawHandle, out errorCode);
+                        var result = OutputEndpointApi.Api_OpenEndpoint_Mac(Handle_.DangerousGetHandle(), sessionHandle, out rawHandle, out errorCode);
                         NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
                     }
                     break;
@@ -295,10 +315,10 @@ namespace Melanchall.DryWetMidi.Multimedia
                     throw new NotSupportedException($"{_apiType} API is not supported.");
             }
 
-            Handle = new OutputEndpointHandle(rawHandle);
+            Handle_.OpenedEndpointHandle = rawHandle;
 
 #if TEST
-            Handle.TestCheckpoints = TestCheckpoints;
+            Handle_.TestCheckpoints = TestCheckpoints;
 #endif
         }
 
@@ -342,8 +362,11 @@ namespace Melanchall.DryWetMidi.Multimedia
                 hasStartByte ? bufferPointer : IntPtr.Add(bufferPointer, 1),
                 data.Length);
 
-            var result = OutputEndpointApi.Api_SendSysExEvent_Win(Handle.DangerousGetHandle(), bufferPointer, bufferLength, out var errorCode);
-            if (result != OutputEndpointApi.OUT_SENDSYSEXRESULT.OUT_SENDSYSEXRESULT_OK)
+            var configurationHandle = MidiConfiguration.GetConfigurationHandle();
+
+            var result = OutputEndpointApi.Api_SendSysExEvent_Win(Handle_.OpenedEndpointHandle, MidiDevicesSession.GetSessionHandle(), bufferPointer, bufferLength, out var errorCode);
+            if (result != OutputEndpointApi.OUT_SENDSYSEXRESULT.OUT_SENDSYSEXRESULT_OK ||
+                MidiConfigurationApi.Api_IsWmsInitialized(configurationHandle))
                 Marshal.FreeHGlobal(bufferPointer);
             
             NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
@@ -367,7 +390,7 @@ namespace Melanchall.DryWetMidi.Multimedia
                 hasStartByte ? 0 : 1,
                 data.Length);
 
-            var result = OutputEndpointApi.Api_SendSysExEvent_Mac(Handle.DangerousGetHandle(), buffer, (ushort)buffer.Length, out var errorCode);
+            var result = OutputEndpointApi.Api_SendSysExEvent_Mac(Handle_.OpenedEndpointHandle, buffer, (ushort)buffer.Length, out var errorCode);
             NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
         }
 
@@ -402,7 +425,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
             try
             {
-                var result = OutputEndpointApi.Api_GetSysExBufferData(Handle.DangerousGetHandle(), sysExHeaderPointer, out dataPointer, out var size, out var errorCode);
+                var result = OutputEndpointApi.Api_GetSysExBufferData(Handle_.OpenedEndpointHandle, sysExHeaderPointer, out dataPointer, out var size, out var errorCode);
                 NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
             }
             catch (Exception ex)
@@ -520,11 +543,8 @@ namespace Melanchall.DryWetMidi.Multimedia
                 _midiEventToBytesConverter.Dispose();
                 _bytesToMidiEventConverter.Dispose();
 
-                Handle?.Dispose();
-                Handle = null;
-
-                Info?.Dispose();
-                Info = null;
+                Handle_?.Dispose();
+                Handle_ = null;
             }
 
             _disposed = true;

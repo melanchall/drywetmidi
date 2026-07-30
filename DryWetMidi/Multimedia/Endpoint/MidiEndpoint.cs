@@ -108,9 +108,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         internal CreationContext Context { get; }
 
-        internal NativeHandle Handle { get; set; }
-
-        internal NativeHandle Info { get; set; }
+        internal EndpointHandle Handle_ { get; set; }
 
 #if TEST
         internal TestCheckpoints TestCheckpoints
@@ -120,11 +118,8 @@ namespace Melanchall.DryWetMidi.Multimedia
             {
                 _testCheckpoints = value;
 
-                if (Handle != null)
-                    Handle.TestCheckpoints = value;
-
-                if (Info != null)
-                    Info.TestCheckpoints = value;
+                if (Handle_ != null)
+                    Handle_.TestCheckpoints = value;
             }
         }
 #endif
@@ -137,7 +132,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         {
             NativeApiUtilities.EnsureOsIsSupported();
 
-            var result = DeviceApi.Api_GetDeviceInformation((Info ?? Handle).DangerousGetHandle(), MidiConfiguration.GetConfigurationHandle(), out var id, out var name, out var manufacturer, out var model, out var deviceDriver, out var errorCode);
+            var result = DeviceApi.Api_GetDeviceInformation(Handle_.DangerousGetHandle(), MidiConfiguration.GetConfigurationHandle(), out var id, out var name, out var manufacturer, out var model, out var deviceDriver, out var errorCode);
             NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
 
             return DeviceInformation.Get(id, name, manufacturer, model, deviceDriver);

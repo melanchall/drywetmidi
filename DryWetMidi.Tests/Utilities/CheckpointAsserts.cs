@@ -36,6 +36,7 @@ namespace Melanchall.DryWetMidi.Tests.Utilities
             ClassicAssert.IsTrue(
                 success,
                 $"Some checkpoints are not reached: {string.Join(", ", checkpointsNames.Except(GetReachedCheckpoints()))}" +
+                Environment.NewLine +
                 GetErrorsString(checkpoints));
         }
 
