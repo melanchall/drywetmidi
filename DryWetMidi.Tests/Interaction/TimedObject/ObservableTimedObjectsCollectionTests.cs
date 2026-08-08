@@ -199,6 +199,48 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
+        public void Remove_ByPredicate_FromEmptyCollection_Single()
+        {
+            var oldObject = new TimedEvent(new TextEvent("B"), 20);
+
+            Remove(
+                Array.Empty<ITimedObject>(),
+                new[] { oldObject },
+                collection => collection.Remove(obj => true));
+        }
+
+        [Test]
+        public void Remove_ByPredicate_FromPreFilledCollection_Single_1()
+        {
+            var initialObjects = new[]
+            {
+                new TimedEvent(new TextEvent("B"), 20),
+            };
+
+            Remove(
+                initialObjects,
+                initialObjects,
+                collection => collection.Remove(obj => obj is TimedEvent));
+        }
+
+        [Test]
+        public void Remove_ByPredicate_FromPreFilledCollection_Single_2()
+        {
+            var initialObjects = new[]
+            {
+                new TimedEvent(new TextEvent("B"), 20),
+                new TimedEvent(new NoteOnEvent()),
+                new TimedEvent(new NoteOffEvent(), 400),
+            };
+            var oldObject = initialObjects[DryWetMidi.Common.Random.Instance.Next(initialObjects.Length)];
+
+            Remove(
+                initialObjects,
+                new[] { oldObject },
+                collection => collection.Remove(obj => obj == oldObject));
+        }
+
+        [Test]
         public void Remove_All()
         {
             var initialObjects = new[]
@@ -247,6 +289,40 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 initialObjects,
                 oldObjects,
                 collection => collection.ChangeCollection(() => collection.Remove(oldObjects)));
+        }
+
+        [Test]
+        public void Remove_ByPredicate_FromPreFilledCollection_Multiple([Values(0, 1, 2, 3)] int count)
+        {
+            var initialObjects = new ITimedObject[]
+            {
+                new TimedEvent(new TextEvent("B"), 20),
+                new Note((SevenBitNumber)90, 100, 10),
+                new TimedEvent(new TextEvent("A"), 5),
+            };
+            var oldObjects = initialObjects.Take(count).ToArray();
+
+            Remove(
+                initialObjects,
+                oldObjects,
+                collection => collection.Remove(obj => oldObjects.Contains(obj)));
+        }
+
+        [Test]
+        public void Remove_ByPredicate_FromPreFilledCollection_Batch([Values(0, 1, 2, 3)] int count)
+        {
+            var initialObjects = new ITimedObject[]
+            {
+                new TimedEvent(new TextEvent("B"), 20),
+                new Note((SevenBitNumber)90, 100, 10),
+                new TimedEvent(new TextEvent("A"), 5),
+            };
+            var oldObjects = initialObjects.Take(count).ToArray();
+
+            Remove(
+                initialObjects,
+                oldObjects,
+                collection => collection.ChangeCollection(() => collection.Remove(obj => oldObjects.Contains(obj))));
         }
 
         [Test]

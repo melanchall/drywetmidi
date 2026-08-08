@@ -205,6 +205,26 @@ namespace Melanchall.DryWetMidi.Interaction
             return Remove((IEnumerable<ITimedObject>)objects);
         }
 
+        public bool Remove(Predicate<ITimedObject> match)
+        {
+            ThrowIfArgument.IsNull(nameof(match), match);
+
+            var objectsToRemove = new List<ITimedObject>();
+
+            // TODO: eliminate double pass
+
+            foreach (var obj in _objects)
+            {
+                if (match(obj))
+                    objectsToRemove.Add(obj);
+            }
+
+            _objects.RemoveAll(match);
+            HandleObjectsRemoved(objectsToRemove);
+
+            return objectsToRemove.Any();
+        }
+
         /// <summary>
         /// Removes all objects from the current collection.
         /// </summary>
