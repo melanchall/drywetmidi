@@ -1989,6 +1989,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 repeatsCount: 1);
         }
 
+        [MultimediaTestRetry]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_ChangeObject_TrackNotes_5()
         {

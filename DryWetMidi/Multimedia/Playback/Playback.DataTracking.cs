@@ -17,8 +17,9 @@ namespace Melanchall.DryWetMidi.Multimedia
             Program = 1 << 0,
             PitchValue = 1 << 1,
             ControlValue = 1 << 2,
+            ChannelAftertouch = 1 << 3,
 
-            All = Program | PitchValue | ControlValue
+            All = Program | PitchValue | ControlValue | ChannelAftertouch
         }
 
         #endregion
@@ -38,15 +39,15 @@ namespace Melanchall.DryWetMidi.Multimedia
             public object Metadata { get; }
         }
 
-        private abstract class DataChange<TData> : IMetadata
+        private sealed class DataChange<TData> : IMetadata
         {
-            protected DataChange(TData data, object metadata)
+            public DataChange(TData data, object metadata)
             {
                 Data = data;
                 Metadata = metadata;
             }
 
-            protected DataChange(TData data, object metadata, bool isDefault)
+            public DataChange(TData data, object metadata, bool isDefault)
                 : this(data, metadata)
             {
                 IsDefault = isDefault;
@@ -72,77 +73,226 @@ namespace Melanchall.DryWetMidi.Multimedia
             }
         }
 
-        private sealed class ProgramChange : DataChange<SevenBitNumber>
+        private sealed class DataChangesManager<TData, TEvent>
+            where TData : struct
+            where TEvent : ChannelEvent, new()
         {
-            public ProgramChange(SevenBitNumber programNumber, object metadata)
-                : base(programNumber, metadata)
+            private readonly Action<TEvent, TData> _setEventData;
+            private readonly Func<TEvent, TData> _getEventData;
+
+            public DataChangesManager(
+                TData defaultValue,
+                Action<TEvent, TData> setEventData,
+                Func<TEvent, TData> getEventData)
             {
+                DefaultChange = new DataChange<TData>(defaultValue, null, true);
+
+                _setEventData = setEventData;
+                _getEventData = getEventData;
             }
 
-            public ProgramChange(SevenBitNumber programNumber, object metadata, bool isDefault)
-                : base(programNumber, metadata, isDefault)
+            public bool IsEnabled { get; set; } = true;
+
+            public DataChange<TData>[] CurrentChangesByChannel { get; } = new DataChange<TData>[FourBitNumber.MaxValue + 1];
+
+            public RedBlackTree<long, DataChange<TData>>[] ChangesTreesByChannel { get; } = FourBitNumber.Values
+                .Select(n => new RedBlackTree<long, DataChange<TData>>())
+                .ToArray();
+
+            public DataChange<TData> DefaultChange { get; }
+
+            public void Clear()
             {
+                foreach (var channel in FourBitNumber.Values)
+                {
+                    CurrentChangesByChannel[channel] = null;
+                    ChangesTreesByChannel[channel].Clear();
+                }
+            }
+
+            public IEnumerable<EventWithMetadata> GetEventsAtTime(long time)
+            {
+                if (!IsEnabled)
+                    yield break;
+
+                foreach (var channel in FourBitNumber.Values)
+                {
+                    var tree = ChangesTreesByChannel[channel];
+                    var node = tree.GetLastCoordinateBelowThreshold(time + 1);
+                    if (node?.Key == time)
+                        continue;
+
+                    var changeAtTime = node?.Value ?? DefaultChange;
+
+                    var currentChange = CurrentChangesByChannel[channel];
+                    if (!changeAtTime.Data.Equals(currentChange?.Data) && (currentChange != null || !changeAtTime.IsDefault))
+                    {
+                        var midiEvent = new TEvent();
+                        _setEventData(midiEvent, changeAtTime.Data);
+                        midiEvent.Channel = channel;
+                        yield return new EventWithMetadata(
+                            midiEvent,
+                            changeAtTime.Metadata);
+                    }
+                }
+            }
+
+            public void InitializeData(
+                TEvent midiEvent,
+                long time,
+                object metadata)
+            {
+                if (midiEvent == null)
+                    return;
+
+                var tree = ChangesTreesByChannel[midiEvent.Channel];
+                tree.Add(time, new DataChange<TData>(_getEventData(midiEvent), metadata));
+            }
+
+            public void UpdateCurrentData(TEvent midiEvent, object metadata)
+            {
+                if (midiEvent == null)
+                    return;
+
+                CurrentChangesByChannel[midiEvent.Channel] = new DataChange<TData>(_getEventData(midiEvent), metadata);
+            }
+
+            public void RemoveData(TEvent midiEvent, long time)
+            {
+                if (midiEvent == null)
+                    return;
+
+                var tree = ChangesTreesByChannel[midiEvent.Channel];
+                var nodes = tree.GetCoordinatesByKey(time);
+
+                var programChange = new DataChange<TData>(_getEventData(midiEvent), null);
+
+                foreach (var node in nodes)
+                {
+                    if (node.Value.Equals(programChange))
+                        tree.Remove(node);
+                }
             }
         }
 
-        private sealed class PitchValueChange : DataChange<ushort>
+        private sealed class DataChangesManager<TKey, TData, TEvent>
+            where TData : struct
+            where TEvent : ChannelEvent, new()
         {
-            public PitchValueChange(ushort pitchValue, object metadata)
-                : base(pitchValue, metadata)
+            private readonly Action<TEvent, TData> _setEventData;
+            private readonly Func<TEvent, TData> _getEventData;
+            private readonly Action<TEvent, TKey> _setEventKey;
+            private readonly Func<TEvent, TKey> _getEventKey;
+
+            public DataChangesManager(
+                TData defaultValue,
+                Action<TEvent, TData> setEventData,
+                Func<TEvent, TData> getEventData,
+                Action<TEvent, TKey> setEventKey,
+                Func<TEvent, TKey> getEventKey)
             {
+                DefaultChange = new DataChange<TData>(defaultValue, null, true);
+
+                _setEventData = setEventData;
+                _getEventData = getEventData;
+                _setEventKey = setEventKey;
+                _getEventKey = getEventKey;
             }
 
-            public PitchValueChange(ushort pitchValue, object metadata, bool isDefault)
-                : base(pitchValue, metadata, isDefault)
+            public bool IsEnabled { get; set; } = true;
+
+            public Dictionary<TKey, DataChangesManager<TData, TEvent>> ChangesManagersByKeys { get; } = new Dictionary<TKey, DataChangesManager<TData, TEvent>>();
+
+            public DataChange<TData> DefaultChange { get; }
+
+            public void Clear()
             {
+                ChangesManagersByKeys.Clear();
+            }
+
+            public IEnumerable<EventWithMetadata> GetEventsAtTime(long time)
+            {
+                if (!IsEnabled)
+                    yield break;
+
+                foreach (var keyAndchangesManager in ChangesManagersByKeys)
+                {
+                    foreach (var e in keyAndchangesManager.Value.GetEventsAtTime(time))
+                    {
+                        _setEventKey((TEvent)e.Event, keyAndchangesManager.Key);
+                        yield return e;
+                    }
+                }
+            }
+
+            public void InitializeData(
+                TEvent midiEvent,
+                long time,
+                object metadata)
+            {
+                if (midiEvent == null)
+                    return;
+
+                var key = _getEventKey(midiEvent);
+                if (!ChangesManagersByKeys.TryGetValue(key, out var changesManager))
+                    ChangesManagersByKeys.Add(key, changesManager = new DataChangesManager<TData, TEvent>(DefaultChange.Data, _setEventData, _getEventData));
+
+                changesManager.InitializeData(midiEvent, time, metadata);
+            }
+
+            public void UpdateCurrentData(TEvent midiEvent, object metadata)
+            {
+                if (midiEvent == null)
+                    return;
+
+                var key = _getEventKey(midiEvent);
+                if (!ChangesManagersByKeys.TryGetValue(key, out var changesManager))
+                    ChangesManagersByKeys.Add(key, changesManager = new DataChangesManager<TData, TEvent>(DefaultChange.Data, _setEventData, _getEventData));
+
+                changesManager.UpdateCurrentData(midiEvent, metadata);
+            }
+
+            public void RemoveData(TEvent midiEvent, long time)
+            {
+                if (midiEvent == null)
+                    return;
+
+                var key = _getEventKey(midiEvent);
+                if (!ChangesManagersByKeys.TryGetValue(key, out var changesManager))
+                    return;
+
+                changesManager.RemoveData(midiEvent, time);
             }
         }
-
-        private sealed class ControlValueChange : DataChange<SevenBitNumber>
-        {
-            public ControlValueChange(SevenBitNumber controlValue, object metadata)
-                : base(controlValue, metadata)
-            {
-            }
-
-            public ControlValueChange(SevenBitNumber controlValue, object metadata, bool isDefault)
-                : base(controlValue, metadata, isDefault)
-            {
-            }
-        }
-
-        #endregion
-
-        #region Constants
-
-        private static readonly ProgramChange DefaultProgramChange = new ProgramChange(SevenBitNumber.MinValue, null, true);
-        private static readonly PitchValueChange DefaultPitchValueChange = new PitchValueChange(PitchBendEvent.DefaultPitchValue, null, true);
-        private static readonly ControlValueChange DefaultControlValueChange = new ControlValueChange(SevenBitNumber.MinValue, null, true);
 
         #endregion
 
         #region Fields
 
-        private readonly ProgramChange[] _currentProgramChanges = new ProgramChange[FourBitNumber.MaxValue + 1];
-        private readonly RedBlackTree<long, ProgramChange>[] _programChangesTreesByChannel = FourBitNumber.Values
-            .Select(n => new RedBlackTree<long, ProgramChange>())
-            .ToArray();
+        private readonly DataChangesManager<SevenBitNumber, ProgramChangeEvent> _programChangesManager = new DataChangesManager<SevenBitNumber, ProgramChangeEvent>(
+            SevenBitNumber.MinValue,
+            (e, d) => e.ProgramNumber = d,
+            e => e.ProgramNumber);
+        
+        private readonly DataChangesManager<ushort, PitchBendEvent> _pitchBendChangesManager = new DataChangesManager<ushort, PitchBendEvent>(
+            PitchBendEvent.DefaultPitchValue,
+            (e, d) => e.PitchValue = d,
+            e => e.PitchValue);
+        
+        private readonly DataChangesManager<SevenBitNumber, ChannelAftertouchEvent> _channelAftertouchChangesManager = new DataChangesManager<SevenBitNumber, ChannelAftertouchEvent>(
+            SevenBitNumber.MinValue,
+            (e, d) => e.AftertouchValue = d,
+            e => e.AftertouchValue);
 
-        private readonly PitchValueChange[] _currentPitchValues = new PitchValueChange[FourBitNumber.MaxValue + 1];
-        private readonly RedBlackTree<long, PitchValueChange>[] _pitchValuesTreesByChannel = FourBitNumber.Values
-            .Select(n => new RedBlackTree<long, PitchValueChange>())
-            .ToArray();
+        private readonly DataChangesManager<SevenBitNumber, SevenBitNumber, ControlChangeEvent> _controlsChangesManager = new DataChangesManager<SevenBitNumber, SevenBitNumber, ControlChangeEvent>(
+            SevenBitNumber.MinValue,
+            (e, d) => e.ControlValue = d,
+            e => e.ControlValue,
+            (e, d) => e.ControlNumber = d,
+            e => e.ControlNumber);
 
-        private readonly Dictionary<SevenBitNumber, ControlValueChange>[] _currentControlsValuesChangesByChannel = new Dictionary<SevenBitNumber, ControlValueChange>[FourBitNumber.MaxValue + 1];
-        private readonly Dictionary<SevenBitNumber, RedBlackTree<long, ControlValueChange>>[] _controlsValuesChangesTreesByChannel = FourBitNumber.Values
-            .Select(n => new Dictionary<SevenBitNumber, RedBlackTree<long, ControlValueChange>>())
-            .ToArray();
 
         private Dictionary<TrackedParameterType, Func<long, IEnumerable<EventWithMetadata>>> _getParameterEventsAtTime;
-
-        private bool _trackProgram = true;
-        private bool _trackPitchValue = true;
-        private bool _trackControlValue = true;
 
         #endregion
 
@@ -157,13 +307,13 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// </summary>
         public bool TrackProgram
         {
-            get { return _trackProgram; }
+            get { return _programChangesManager.IsEnabled; }
             set
             {
-                if (_trackProgram == value)
+                if (_programChangesManager.IsEnabled == value)
                     return;
 
-                _trackProgram = value;
+                _programChangesManager.IsEnabled = value;
 
                 if (value)
                     SendTrackedData(TrackedParameterType.Program);
@@ -179,13 +329,13 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// </summary>
         public bool TrackPitchValue
         {
-            get { return _trackPitchValue; }
+            get { return _pitchBendChangesManager.IsEnabled; }
             set
             {
-                if (_trackPitchValue == value)
+                if (_pitchBendChangesManager.IsEnabled == value)
                     return;
 
-                _trackPitchValue = value;
+                _pitchBendChangesManager.IsEnabled = value;
 
                 if (value)
                     SendTrackedData(TrackedParameterType.PitchValue);
@@ -201,16 +351,31 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// </summary>
         public bool TrackControlValue
         {
-            get { return _trackControlValue; }
+            get { return _controlsChangesManager.IsEnabled; }
             set
             {
-                if (_trackControlValue == value)
+                if (_controlsChangesManager.IsEnabled == value)
                     return;
 
-                _trackControlValue = value;
+                _controlsChangesManager.IsEnabled = value;
 
                 if (value)
                     SendTrackedData(TrackedParameterType.ControlValue);
+            }
+        }
+
+        public bool TrackChannelAftertouch
+        {
+            get { return _channelAftertouchChangesManager.IsEnabled; }
+            set
+            {
+                if (_channelAftertouchChangesManager.IsEnabled == value)
+                    return;
+
+                _channelAftertouchChangesManager.IsEnabled = value;
+
+                if (value)
+                    SendTrackedData(TrackedParameterType.ChannelAftertouch);
             }
         }
 
@@ -220,46 +385,45 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         private void ClearTrackedData()
         {
-            foreach (var channel in FourBitNumber.Values)
-            {
-                _currentProgramChanges[channel] = null;
-                _programChangesTreesByChannel[channel].Clear();
-                _currentPitchValues[channel] = null;
-                _pitchValuesTreesByChannel[channel].Clear();
-                _currentControlsValuesChangesByChannel[channel]?.Clear();
-                _controlsValuesChangesTreesByChannel[channel].Clear();
-            }
+            _programChangesManager.Clear();
+            _pitchBendChangesManager.Clear();
+            _channelAftertouchChangesManager.Clear();
+            _controlsChangesManager.Clear();
         }
 
         private void InitializeDataTracking()
         {
             _getParameterEventsAtTime = new Dictionary<TrackedParameterType, Func<long, IEnumerable<EventWithMetadata>>>
             {
-                [TrackedParameterType.Program] = GetProgramChangeEventsAtTime,
-                [TrackedParameterType.PitchValue] = GetPitchBendEventsAtTime,
-                [TrackedParameterType.ControlValue] = GetControlChangeEventsAtTime
+                [TrackedParameterType.Program] = _programChangesManager.GetEventsAtTime,
+                [TrackedParameterType.PitchValue] = _pitchBendChangesManager.GetEventsAtTime,
+                [TrackedParameterType.ControlValue] = _controlsChangesManager.GetEventsAtTime,
+                [TrackedParameterType.ChannelAftertouch] = _channelAftertouchChangesManager.GetEventsAtTime,
             };
         }
 
         private void InitializeTrackedData(MidiEvent midiEvent, long time, object metadata)
         {
-            InitializeProgramChangeData(midiEvent as ProgramChangeEvent, time, metadata);
-            InitializePitchBendData(midiEvent as PitchBendEvent, time, metadata);
-            InitializeControlData(midiEvent as ControlChangeEvent, time, metadata);
+            _programChangesManager.InitializeData(midiEvent as ProgramChangeEvent, time, metadata);
+            _pitchBendChangesManager.InitializeData(midiEvent as PitchBendEvent, time, metadata);
+            _controlsChangesManager.InitializeData(midiEvent as ControlChangeEvent, time, metadata);
+            _channelAftertouchChangesManager.InitializeData(midiEvent as ChannelAftertouchEvent, time, metadata);
         }
 
         private void UpdateCurrentTrackedData(MidiEvent midiEvent, object metadata)
         {
-            UpdateCurrentProgramChangeData(midiEvent as ProgramChangeEvent, metadata);
-            UpdateCurrentPitchBendData(midiEvent as PitchBendEvent, metadata);
-            UpdateCurrentControlData(midiEvent as ControlChangeEvent, metadata);
+            _programChangesManager.UpdateCurrentData(midiEvent as ProgramChangeEvent, metadata);
+            _pitchBendChangesManager.UpdateCurrentData(midiEvent as PitchBendEvent, metadata);
+            _controlsChangesManager.UpdateCurrentData(midiEvent as ControlChangeEvent, metadata);
+            _channelAftertouchChangesManager.UpdateCurrentData(midiEvent as ChannelAftertouchEvent, metadata);
         }
 
         private void RemoveTrackedData(MidiEvent midiEvent, long time)
         {
-            RemoveProgramChangeData(midiEvent as ProgramChangeEvent, time);
-            RemovePitchBendData(midiEvent as PitchBendEvent, time);
-            RemoveControlData(midiEvent as ControlChangeEvent, time);
+            _programChangesManager.RemoveData(midiEvent as ProgramChangeEvent, time);
+            _pitchBendChangesManager.RemoveData(midiEvent as PitchBendEvent, time);
+            _controlsChangesManager.RemoveData(midiEvent as ControlChangeEvent, time);
+            _channelAftertouchChangesManager.RemoveData(midiEvent as ChannelAftertouchEvent, time);
         }
 
         private void SendTrackedData(TrackedParameterType trackedParameterType = TrackedParameterType.All)
@@ -282,197 +446,6 @@ namespace Melanchall.DryWetMidi.Multimedia
                     {
                         yield return e;
                     }
-                }
-            }
-        }
-
-        private void UpdateCurrentProgramChangeData(ProgramChangeEvent programChangeEvent, object metadata)
-        {
-            if (programChangeEvent == null)
-                return;
-
-            _currentProgramChanges[programChangeEvent.Channel] = new ProgramChange(programChangeEvent.ProgramNumber, metadata);
-        }
-
-        private void InitializeProgramChangeData(ProgramChangeEvent programChangeEvent, long time, object metadata)
-        {
-            if (programChangeEvent == null)
-                return;
-
-            var tree = _programChangesTreesByChannel[programChangeEvent.Channel];
-            tree.Add(time, new ProgramChange(programChangeEvent.ProgramNumber, metadata));
-        }
-
-        private void RemoveProgramChangeData(ProgramChangeEvent programChangeEvent, long time)
-        {
-            if (programChangeEvent == null)
-                return;
-
-            var tree = _programChangesTreesByChannel[programChangeEvent.Channel];
-            var nodes = tree.GetCoordinatesByKey(time);
-
-            var programChange = new ProgramChange(programChangeEvent.ProgramNumber, null);
-
-            foreach (var node in nodes)
-            {
-                if (node.Value.Equals(programChange))
-                    tree.Remove(node);
-            }
-        }
-
-        private IEnumerable<EventWithMetadata> GetProgramChangeEventsAtTime(long time)
-        {
-            if (!TrackProgram)
-                yield break;
-
-            foreach (var channel in FourBitNumber.Values)
-            {
-                var tree = _programChangesTreesByChannel[channel];
-                var node = tree.GetLastCoordinateBelowThreshold(time + 1);
-                if (node?.Key == time)
-                    continue;
-
-                var programChangeAtTime = node?.Value ?? DefaultProgramChange;
-
-                var currentProgramChange = _currentProgramChanges[channel];
-                if (programChangeAtTime.Data != currentProgramChange?.Data && (currentProgramChange != null || !programChangeAtTime.IsDefault))
-                    yield return new EventWithMetadata(
-                        new ProgramChangeEvent(programChangeAtTime.Data) { Channel = channel },
-                        programChangeAtTime.Metadata);
-            }
-        }
-
-        private void UpdateCurrentPitchBendData(PitchBendEvent pitchBendEvent, object metadata)
-        {
-            if (pitchBendEvent == null)
-                return;
-
-            _currentPitchValues[pitchBendEvent.Channel] = new PitchValueChange(pitchBendEvent.PitchValue, metadata);
-        }
-
-        private void InitializePitchBendData(PitchBendEvent pitchBendEvent, long time, object metadata)
-        {
-            if (pitchBendEvent == null)
-                return;
-
-            var tree = _pitchValuesTreesByChannel[pitchBendEvent.Channel];
-            tree.Add(time, new PitchValueChange(pitchBendEvent.PitchValue, metadata));
-        }
-
-        private void RemovePitchBendData(PitchBendEvent pitchBendEvent, long time)
-        {
-            if (pitchBendEvent == null)
-                return;
-
-            var tree = _pitchValuesTreesByChannel[pitchBendEvent.Channel];
-            var nodes = tree.GetCoordinatesByKey(time);
-
-            var pitchBend = new PitchValueChange(pitchBendEvent.PitchValue, null);
-
-            foreach (var node in nodes)
-            {
-                if (node.Value.Equals(pitchBend))
-                    tree.Remove(node);
-            }
-        }
-
-        private IEnumerable<EventWithMetadata> GetPitchBendEventsAtTime(long time)
-        {
-            if (!TrackPitchValue)
-                yield break;
-
-            foreach (var channel in FourBitNumber.Values)
-            {
-                var tree = _pitchValuesTreesByChannel[channel];
-                var node = tree.GetLastCoordinateBelowThreshold(time + 1);
-                if (node?.Key == time)
-                    continue;
-
-                var pitchValueChangeAtTime = node?.Value ?? DefaultPitchValueChange;
-
-                var currentPitchValueChange = _currentPitchValues[channel];
-                if (pitchValueChangeAtTime.Data != currentPitchValueChange?.Data && (currentPitchValueChange != null || !pitchValueChangeAtTime.IsDefault))
-                    yield return new EventWithMetadata(
-                        new PitchBendEvent(pitchValueChangeAtTime.Data) { Channel = channel },
-                        pitchValueChangeAtTime.Metadata);
-            }
-        }
-
-        private void UpdateCurrentControlData(ControlChangeEvent controlChangeEvent, object metadata)
-        {
-            if (controlChangeEvent == null)
-                return;
-
-            var controlsCurrentValues = _currentControlsValuesChangesByChannel[controlChangeEvent.Channel];
-            if (controlsCurrentValues == null)
-                controlsCurrentValues = _currentControlsValuesChangesByChannel[controlChangeEvent.Channel] = new Dictionary<SevenBitNumber, ControlValueChange>();
-
-            controlsCurrentValues[controlChangeEvent.ControlNumber] = new ControlValueChange(controlChangeEvent.ControlValue, metadata);
-        }
-
-        private void InitializeControlData(ControlChangeEvent controlChangeEvent, long time, object metadata)
-        {
-            if (controlChangeEvent == null)
-                return;
-
-            var trees = _controlsValuesChangesTreesByChannel[controlChangeEvent.Channel];
-
-            if (!trees.TryGetValue(controlChangeEvent.ControlNumber, out var tree))
-                trees.Add(controlChangeEvent.ControlNumber, tree = new RedBlackTree<long, ControlValueChange>());
-
-            tree.Add(time, new ControlValueChange(controlChangeEvent.ControlValue, metadata));
-        }
-
-        private void RemoveControlData(ControlChangeEvent controlChangeEvent, long time)
-        {
-            if (controlChangeEvent == null)
-                return;
-
-            var trees = _controlsValuesChangesTreesByChannel[controlChangeEvent.Channel];
-
-            if (!trees.TryGetValue(controlChangeEvent.ControlNumber, out var tree))
-                trees.Add(controlChangeEvent.ControlNumber, tree = new RedBlackTree<long, ControlValueChange>());
-
-            var nodes = tree.GetCoordinatesByKey(time);
-
-            var controlValueChange = new ControlValueChange(controlChangeEvent.ControlValue, null);
-
-            foreach (var node in nodes)
-            {
-                if (node.Value.Equals(controlValueChange))
-                    tree.Remove(node);
-            }
-        }
-
-        private IEnumerable<EventWithMetadata> GetControlChangeEventsAtTime(long time)
-        {
-            if (!TrackControlValue)
-                yield break;
-
-            foreach (var channel in FourBitNumber.Values)
-            {
-                var controlsValuesChangesTreesByControlNumber = _controlsValuesChangesTreesByChannel[channel];
-                var currentControlsValuesChangesByControlNumber = _currentControlsValuesChangesByChannel[channel];
-
-                foreach (var controlNumber in SevenBitNumber.Values)
-                {
-                    if (!controlsValuesChangesTreesByControlNumber.TryGetValue(controlNumber, out var tree))
-                        continue;
-
-                    var node = tree.GetLastCoordinateBelowThreshold(time + 1);
-                    if (node?.Key == time)
-                        continue;
-
-                    var controlValueChangeAtTime = node?.Value ?? DefaultControlValueChange;
-
-                    ControlValueChange currentControlValueChange = null;
-                    if (currentControlsValuesChangesByControlNumber != null)
-                        currentControlsValuesChangesByControlNumber.TryGetValue(controlNumber, out currentControlValueChange);
-
-                    if (controlValueChangeAtTime.Data != currentControlValueChange?.Data && (currentControlValueChange != null || !controlValueChangeAtTime.IsDefault))
-                        yield return new EventWithMetadata(
-                            new ControlChangeEvent(controlNumber, controlValueChangeAtTime.Data) { Channel = channel },
-                            controlValueChangeAtTime.Metadata);
                 }
             }
         }
