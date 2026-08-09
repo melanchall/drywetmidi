@@ -59,7 +59,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             tempoMap: TempoMap.Create(new TicksPerQuarterNoteTimeDivision(480), Tempo.FromBeatsPerMinute(240)),
             check: playback => { });
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Clear_WithPlaying_1()
         {
@@ -92,7 +92,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Clear_WithPlaying_2()
         {
@@ -127,7 +127,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Clear_WithPlaying_3()
         {
@@ -161,7 +161,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Clear_WithPlaying_4()
         {
@@ -195,7 +195,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Clear_WithPlaying_5()
         {

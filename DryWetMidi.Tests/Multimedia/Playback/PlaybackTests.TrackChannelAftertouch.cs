@@ -12,7 +12,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
     {
         #region Test methods
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void TrackChannelAftertouch_NoChannelAftertouchChanges_MoveToTime(
             [Values(0, 100)] int moveFromMs,
@@ -39,7 +39,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void TrackChannelAftertouch_ChannelAftertouchChangeAtZero_MoveToTime()
         {
@@ -68,7 +68,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void TrackChannelAftertouch_ChannelAftertouchChangeAtZero_MoveToStart()
         {
@@ -98,7 +98,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void TrackChannelAftertouch_FromBeforeChannelAftertouch_ToBeforeChannelAftertouch()
         {
@@ -129,7 +129,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void TrackChannelAftertouch_FromBeforeChannelAftertouch_ToAfterProgramChange()
         {
@@ -160,7 +160,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void TrackChannelAftertouch_FromAfterChannelAftertouch_ToAfterChannelAftertouch()
         {
@@ -191,7 +191,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void TrackChannelAftertouch_FromAfterChannelAftertouch_ToBeforeChannelAftertouch()
         {
@@ -224,7 +224,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void TrackChannelAftertouch_FromBeforeChannelAftertouch_ToChannelAftertouch()
         {
@@ -255,7 +255,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void TrackChannelAftertouch_FromAfterChannelAftertouch_ToChannelAftertouch()
         {
@@ -287,7 +287,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void TrackChannelAftertouch_EnableInMiddle_FromBeforeChannelAftertouch_ToAfterChannelAftertouch()
         {
@@ -329,7 +329,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void TrackChannelAftertouch_EnableInMiddle_FromAfterChannelAftertouch_ToBeforeChannelAftertouch()
         {
@@ -365,7 +365,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 setupPlayback: playback => playback.TrackChannelAftertouch = false);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void DontTrackChannelAftertouch_NoChannelAftertouchChanges_MoveToTime(
             [Values(0, 100)] int moveFromMs,
@@ -393,7 +393,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 setupPlayback: playback => playback.TrackChannelAftertouch = false);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void DontTrackChannelAftertouch_ChannelAftertouchAtZero_MoveToTime()
         {
@@ -423,7 +423,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 setupPlayback: playback => playback.TrackChannelAftertouch = false);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void DontTrackChannelAftertouch_ChannelAftertouchAtZero_MoveToStart()
         {
@@ -454,7 +454,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 setupPlayback: playback => playback.TrackChannelAftertouch = false);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void DontTrackChannelAftertouch_FromBeforeChannelAftertouch_ToBeforeChannelAftertouch()
         {
@@ -486,7 +486,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 setupPlayback: playback => playback.TrackChannelAftertouch = false);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void DontTrackChannelAftertouch_FromBeforeChannelAftertouch_ToAfterChannelAftertouch()
         {
@@ -517,7 +517,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 setupPlayback: playback => playback.TrackChannelAftertouch = false);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void DontTrackChannelAftertouch_FromAfterChannelAftertouch_ToAfterChannelAftertouch()
         {
@@ -549,7 +549,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 setupPlayback: playback => playback.TrackChannelAftertouch = false);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void DontTrackChannelAftertouch_FromAfterChannelAftertouch_ToBeforeChannelAftertouch()
         {
@@ -582,7 +582,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 setupPlayback: playback => playback.TrackChannelAftertouch = false);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void DontTrackChannelAftertouch_FromBeforeChannelAftertouch_ToChannelAftertouch()
         {
@@ -614,7 +614,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 setupPlayback: playback => playback.TrackChannelAftertouch = false);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void DontTrackChannelAftertouch_FromAfterChannelAftertouch_ToChannelAftertouch()
         {
@@ -647,7 +647,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 setupPlayback: playback => playback.TrackChannelAftertouch = false);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void TrackChannelAftertouch_DisableInMiddle_FromBeforeChannelAftertouch_ToAfterChannelAftertouch()
         {
@@ -685,7 +685,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 setupPlayback: playback => playback.TrackPitchValue = false);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void TrackChannelAftertouch_DisableInMiddle_FromAfterChannelAftertouch_ToBeforeChannelAftertouch()
         {

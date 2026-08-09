@@ -25,7 +25,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
         #region Test methods
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void SaveRecordingToFile()
         {

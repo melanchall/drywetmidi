@@ -42,7 +42,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             }
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [TestCaseSource(nameof(ParametersForDurationCheck))]
         public void GetDuration(TimeSpan start, TimeSpan delayFromStart)
         {
@@ -81,7 +81,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             }
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckRecording()
         {

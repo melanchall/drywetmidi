@@ -17,28 +17,28 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
     {
         #region Test methods
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckSingleTimedObjectPlayback_TimedEvent_MetaEvent([Values(0, 100)] long time) => CheckSingleTimedObjectPlayback(
             new TimedEvent(new TextEvent("A"), time));
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckSingleTimedObjectPlayback_TimedEvent_ChannelEvent([Values(0, 100)] long time) => CheckSingleTimedObjectPlayback(
             new TimedEvent(new ProgramChangeEvent(), time));
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckSingleTimedObjectPlayback_Note([Values(0, 100)] long time, [Values(0, 100)] long length) => CheckSingleTimedObjectPlayback(
             new Note((SevenBitNumber)70, length, time));
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckSingleTimedObjectPlayback_Chord_SingleNote([Values(0, 100)] long time, [Values(0, 100)] long length) => CheckSingleTimedObjectPlayback(
             new Chord(
                 new Note((SevenBitNumber)70, length, time)));
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckSingleTimedObjectPlayback_Chord_MultipleNotes(
             [Values(0, 100)] long time,

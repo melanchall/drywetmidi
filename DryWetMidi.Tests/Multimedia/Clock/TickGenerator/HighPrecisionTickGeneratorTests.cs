@@ -47,7 +47,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
         #region Test methods
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckInterval([Values(1, 10, 100)] int intervalInMs)
         {
@@ -60,7 +60,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             StopTickGeneratorAndCheckIntervals(runInfo);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckParallelIntervals()
         {

@@ -8,7 +8,7 @@ using System.Threading;
 namespace Melanchall.DryWetMidi.Tests.Attributes
 {
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = false)]
-    internal sealed class MultimediaTestRetryAttribute : PropertyAttribute, IRepeatTest
+    internal sealed class TimingCriticalAttribute : PropertyAttribute, IRepeatTest
     {
         private static readonly int RepeatsCount = 5;
         private static readonly TimeSpan Delay = TimeSpan.FromSeconds(10);

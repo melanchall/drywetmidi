@@ -27,7 +27,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
         #region Test methods
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void EventCallback_ThrowException()
         {
@@ -67,7 +67,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void EventCallback_ReturnNull()
         {
@@ -86,7 +86,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 expectedReceivedEvents: new TimestampedEvent[] { });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void EventCallback_WithNotes_ReturnNull()
         {
@@ -110,7 +110,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void EventCallback_ReturnNull_ReturnOriginal()
         {
@@ -132,7 +132,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void EventCallback_ReturnOriginal_ReturnNull()
         {
@@ -154,7 +154,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void EventCallback_ReturnOriginal_ReturnNew()
         {

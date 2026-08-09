@@ -87,7 +87,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             ClassicAssert.IsNotEmpty(deviceInformation.Manufacturer, "Device manufacturer is empty.");
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [MultiClientEndpointsAccessSupportRequired]
         [Test]
         public void CheckInputEndpointMultiClientAccess()
@@ -156,7 +156,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 "Input endpoints count is invalid.");
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckMidiTimeCodeEventReceiving()
         {
@@ -426,7 +426,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             }
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void SysExBufferSize_Invalid([Values(0, 16, 31)] int bufferSize)
         {
@@ -438,7 +438,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             }
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void SysExBufferSize_AfterStartEventListening()
         {
@@ -451,7 +451,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             }
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void SysExBuffersCount_Invalid([Values(0, 1)] int buffersCount)
         {
@@ -463,7 +463,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             }
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void SysExBuffersCount_AfterStartEventListening()
         {

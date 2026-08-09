@@ -16,21 +16,21 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
     {
         #region Test methods
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackCurrentTimeAfterSpeedChange(
             [Values(0.5, 1, 10)] double speed,
             [Values(10, 100)] int waitAfterSpeedChangeMs) =>
             CheckPlaybackCurrentTimeAfterSpeedChanges(speed, waitAfterSpeedChangeMs, false);
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackCurrentTimeAfterMultipleSpeedChanges(
             [Values(0.5, 1, 10)] double speed,
             [Values(10, 100)] int waitAfterSpeedChangeMs) =>
             CheckPlaybackCurrentTimeAfterSpeedChanges(speed, waitAfterSpeedChangeMs, true);
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackSpeedRandomChanges()
         {

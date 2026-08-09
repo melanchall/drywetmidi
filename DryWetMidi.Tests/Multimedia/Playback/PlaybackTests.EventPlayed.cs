@@ -18,7 +18,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
     {
         #region Test methods
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void EventPlayed()
         {
@@ -43,7 +43,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void EventPlayed_AllEventsTypes()
         {
@@ -86,7 +86,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 checkFromFile: false);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void EventPlayed_InterruptNotesOnStop()
         {
@@ -119,7 +119,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void EventPlayed_InterruptNotesOnStop_SendNoteOffEventsForNonActiveNotes()
         {
@@ -154,7 +154,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [TestCase(1.0)]
         [TestCase(2.0)]
         [TestCase(0.5)]
@@ -212,7 +212,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [TestCase(1.0)]
         [TestCase(2.0)]
         [TestCase(0.5)]
@@ -273,7 +273,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [TestCase(1.0)]
         [TestCase(2.0)]
         [TestCase(0.5)]
@@ -333,7 +333,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void EventPlayed_MoveForward_BeyondDuration()
         {
@@ -372,7 +372,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void EventPlayed_MoveForward_BeyondPlaybackEnd()
         {
@@ -414,7 +414,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [TestCase(1.0)]
         [TestCase(2.0)]
         [TestCase(0.5)]
@@ -476,7 +476,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void EventPlayed_MoveBack_BeyondZero()
         {
@@ -533,7 +533,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void EventPlayed_MoveBack_BeyondZero_SendNoteOnEventsForActiveNotes()
         {
@@ -592,7 +592,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void EventPlayed_MoveBack_BeyondPlaybackStart()
         {
@@ -626,7 +626,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void EventPlayed_MoveBack_BeyondPlaybackStart_SendNoteOnEventsForActiveNotes()
         {
@@ -662,7 +662,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void EventPlayed_MoveToTime()
         {
@@ -721,7 +721,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void EventPlayed_MoveToTime_BeyondDuration()
         {
@@ -758,7 +758,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void EventPlayed_MoveToTime_BeyondPlaybackEnd()
         {

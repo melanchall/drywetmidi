@@ -39,7 +39,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         #region Test methods
 
         [Test]
-        [MultimediaTestRetry]
+        [TimingCritical]
         public void PlaybackNotStarted()
         {
             var waitingTime = TimeSpan.FromMilliseconds(500);
@@ -75,7 +75,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         [Test]
-        [MultimediaTestRetry]
+        [TimingCritical]
         public void PlaybackFinished()
         {
             var waitingTime = TimeSpan.FromMilliseconds(500);
@@ -121,7 +121,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         [Test]
-        [MultimediaTestRetry]
+        [TimingCritical]
         public void WatchMultiplePlaybacks()
         {
             var tempoMap = TempoMap.Default;
@@ -197,7 +197,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         [Test]
-        [MultimediaTestRetry]
+        [TimingCritical]
         public void WatchMultiplePlaybacks_RemoveOne()
         {
             var tempoMap = TempoMap.Default;
@@ -277,6 +277,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         [Test]
+        [TimingCritical]
         public void DisposePlaybackCurrentTimeWatcher()
         {
             var events = new MidiEvent[]

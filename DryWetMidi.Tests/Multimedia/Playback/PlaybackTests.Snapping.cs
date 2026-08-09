@@ -14,7 +14,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
     {
         #region Test methods
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void Snapping_AddSnapPoint_WithoutData()
         {
@@ -60,7 +60,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void Snapping_AddSnapPoint_WithData()
         {
@@ -107,7 +107,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void Snapping_RemoveSnapPoint_WithoutData()
         {
@@ -161,7 +161,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void Snapping_RemoveSnapPoint_WithData()
         {
@@ -215,7 +215,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void Snapping_RemoveSnapPointsByData()
         {
@@ -263,7 +263,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void Snapping_RemoveAllSnapPoints()
         {
@@ -311,7 +311,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void Snapping_MoveToSnapPoint_1()
         {
@@ -374,7 +374,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void Snapping_MoveToSnapPoint_2()
         {
@@ -417,7 +417,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void Snapping_MoveToFirstSnapPoint_1()
         {
@@ -471,7 +471,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void Snapping_MoveToFirstSnapPoint_2()
         {
@@ -525,7 +525,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void Snapping_MoveToFirstSnapPoint_3()
         {
@@ -588,7 +588,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void Snapping_MoveToFirstSnapPoint_4()
         {
@@ -651,7 +651,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void Snapping_MoveToPreviousSnapPoint_1()
         {
@@ -720,7 +720,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void Snapping_MoveToPreviousSnapPoint_ByGroup_CheckReturnValue()
         {
@@ -775,7 +775,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void Snapping_MoveToPreviousSnapPoint_ByGroup_CheckReturnValue_SendNoteOffEventsForNonActiveNotes()
         {
@@ -832,7 +832,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void Snapping_MoveToPreviousSnapPoint_Global()
         {
@@ -902,7 +902,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void Snapping_MoveToPreviousSnapPoint_Global_CheckReturnValue()
         {
@@ -966,7 +966,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void Snapping_MoveToPreviousSnapPoint_Global_CheckReturnValue_SendNoteOffEventsForNonActiveNotes()
         {
@@ -1034,7 +1034,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void Snapping_MoveToPreviousSnapPoint_ByData()
         {
@@ -1097,7 +1097,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void Snapping_MoveToPreviousSnapPoint_ByData_CheckReturnValue()
         {
@@ -1149,7 +1149,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void Snapping_MoveToPreviousSnapPoint_ByData_CheckReturnValue_SendNoteOffEventsForNonActiveNotes()
         {
@@ -1204,7 +1204,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void Snapping_MoveToNextSnapPoint_ByGroup()
         {
@@ -1271,7 +1271,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void Snapping_MoveToNextSnapPoint_ByGroup_CheckReturnValue()
         {
@@ -1327,7 +1327,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void Snapping_MoveToNextSnapPoint_Global()
         {
@@ -1396,7 +1396,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void Snapping_MoveToNextSnapPoint_Global_CheckReturnValue()
         {
@@ -1451,7 +1451,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void Snapping_MoveToNextSnapPoint_ByData()
         {
@@ -1513,7 +1513,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void Snapping_MoveToNextSnapPoint_ByData_CheckReturnValue()
         {
@@ -1558,7 +1558,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void Snapping_MoveToNextSnapPoint_ByData_CheckReturnValue_AtZero()
         {
@@ -1591,7 +1591,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void Snapping_SnapToEvents()
         {
@@ -1664,7 +1664,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void Snapping_MoveToSnapPoint_BeyondDuration()
         {
@@ -1706,7 +1706,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void Snapping_MoveToSnapPoint_BeyondPlaybackEnd()
         {
@@ -1754,7 +1754,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void Snapping_MoveToSnapPoint_BeyondPlaybackStart()
         {

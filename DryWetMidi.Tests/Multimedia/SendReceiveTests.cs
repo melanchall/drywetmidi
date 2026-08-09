@@ -21,7 +21,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
         #region Test methods
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckEventsReceiving()
         {
@@ -48,7 +48,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             }
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckEventsReceiving_AllEventTypes_ExceptSysEx()
         {

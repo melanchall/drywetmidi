@@ -51,7 +51,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             ClassicAssert.IsNotEmpty(deviceInformation.Manufacturer, "Device manufacturer is empty.");
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [MultiClientEndpointsAccessSupportRequired]
         [Test]
         public void CheckOutputEndpointMultiClientAccess()
@@ -127,14 +127,14 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         public void SendEvent_EscapeSysEx() => Assert.Throws<ArgumentException>(
             () => SendEvents(new[] { new EscapeSysExEvent(new byte[] { 0x5F, 0x40, 0xF7 }) }));
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void SendEvent_SysEx_1()
         {
             SendEvents(new[] { new NormalSysExEvent(new byte[] { 0x5F, 0x40, 0xF7 }) });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void SendEvent_SysEx_2()
         {
@@ -142,7 +142,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         // TODO: fix very large sys ex sending
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void SendEvent_SysEx_Large([Values(100, 1000, 10000/*, 100000*/)] int size)
         {
@@ -155,7 +155,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         // TODO: failed
-        [MultimediaTestRetry]
+        [TimingCritical]
         // [Test]
         public void SendEvent_SysEx_NotTerminated()
         {
@@ -169,7 +169,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void SendEvent_SysEx_Multiple([Values(2, 5, 10)] int eventsCount, [Values(1, 10, 100, 1000)] int dataSize)
         {
@@ -183,7 +183,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 .ToArray());
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [TestCase(MidiEventType.ActiveSensing)]
         [TestCase(MidiEventType.Continue)]
         [TestCase(MidiEventType.Reset)]
@@ -211,7 +211,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             SendEvents(new[] { midiEvent });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [TestCaseSource(nameof(GetNonDefaultShortEvents))]
         public void SendEvent_Short_NonDefault(MidiEvent midiEvent)
         {

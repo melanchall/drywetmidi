@@ -51,7 +51,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
         #region Test methods
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckNotesPlayback_ProgramNumber()
         {
@@ -61,7 +61,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 channel => new[] { new ProgramChangeEvent(programNumber) { Channel = channel } });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckNotesPlayback_GeneralMidiProgram()
         {
@@ -71,7 +71,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 channel => new[] { generalMidiProgram.GetProgramEvent(channel) });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckNotesPlayback_GeneralMidi2Program()
         {

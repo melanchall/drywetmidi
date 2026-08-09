@@ -37,7 +37,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             }
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void SendEvent_SysEx_SysExBufferSettings(
             [Values(32, 64, 128, 256, 1024, 4096)] int bufferSize,

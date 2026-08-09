@@ -17,7 +17,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
     {
         #region Test methods
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_AddEventWithinNote_AfterCurrentTime_1()
         {
@@ -45,7 +45,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_AddEventWithinNote_AfterCurrentTime_2()
         {
@@ -75,7 +75,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_AddEventWithinNote_AfterCurrentTime_3()
         {
@@ -110,7 +110,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_AddEventWithinNote_BeforeCurrentTime()
         {
@@ -137,7 +137,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_AddNotesInAdvance()
         {
@@ -191,7 +191,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_AddProgramChangeWithinNote_AfterCurrentTime_1()
         {
@@ -219,7 +219,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_AddProgramChangeWithinNote_AfterCurrentTime_2()
         {
@@ -249,7 +249,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_AddProgramChangeWithinNote_AfterCurrentTime_3()
         {
@@ -279,7 +279,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_AddProgramChangeWithinNote_AfterCurrentTime_4()
         {
@@ -314,7 +314,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_AddProgramChangeWithinNote_BeforeCurrentTime_1()
         {
@@ -342,7 +342,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_AddProgramChangeWithinNote_BeforeCurrentTime_2()
         {
@@ -371,7 +371,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_AddProgramChangeWithinNote_BeforeCurrentTime_3()
         {
@@ -401,7 +401,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_AddProgramChangeWithinNote_MoveToTime_1()
         {
@@ -430,7 +430,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_AddProgramChangeWithinNote_MoveToTime_2()
         {
@@ -468,7 +468,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_AddPitchBendWithinNote_AfterCurrentTime_1()
         {
@@ -497,7 +497,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 setupPlayback: playback => playback.TrackPitchValue = true);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_AddPitchBendWithinNote_AfterCurrentTime_2()
         {
@@ -528,7 +528,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 setupPlayback: playback => playback.TrackPitchValue = true);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_AddPitchBendWithinNote_AfterCurrentTime_3()
         {
@@ -559,7 +559,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 setupPlayback: playback => playback.TrackPitchValue = true);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_AddPitchBendWithinNote_AfterCurrentTime_4()
         {
@@ -595,7 +595,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 setupPlayback: playback => playback.TrackPitchValue = true);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_AddPitchBendWithinNote_BeforeCurrentTime_1()
         {
@@ -624,7 +624,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 setupPlayback: playback => playback.TrackPitchValue = true);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_AddPitchBendWithinNote_BeforeCurrentTime_2()
         {
@@ -654,7 +654,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 setupPlayback: playback => playback.TrackPitchValue = true);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_AddPitchBendWithinNote_BeforeCurrentTime_3()
         {
@@ -685,7 +685,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 setupPlayback: playback => playback.TrackPitchValue = true);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_AddPitchBendWithinNote_MoveToTime_1()
         {
@@ -715,7 +715,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 setupPlayback: playback => playback.TrackPitchValue = true);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_AddPitchBendWithinNote_MoveToTime_2()
         {
@@ -754,7 +754,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 setupPlayback: playback => playback.TrackPitchValue = true);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_AddControlChangeWithinNote_AfterCurrentTime_1()
         {
@@ -783,7 +783,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 setupPlayback: playback => playback.TrackControlValue = true);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_AddControlChangeWithinNote_AfterCurrentTime_2()
         {
@@ -814,7 +814,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 setupPlayback: playback => playback.TrackControlValue = true);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_AddControlChangeWithinNote_AfterCurrentTime_3()
         {
@@ -845,7 +845,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 setupPlayback: playback => playback.TrackControlValue = true);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_AddControlChangeWithinNote_AfterCurrentTime_4()
         {
@@ -881,7 +881,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 setupPlayback: playback => playback.TrackControlValue = true);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_AddControlChangeWithinNote_AfterCurrentTime_5()
         {
@@ -914,7 +914,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 setupPlayback: playback => playback.TrackControlValue = true);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_AddControlChangeWithinNote_BeforeCurrentTime_1()
         {
@@ -943,7 +943,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 setupPlayback: playback => playback.TrackControlValue = true);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_AddControlChangeWithinNote_BeforeCurrentTime_2()
         {
@@ -973,7 +973,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 setupPlayback: playback => playback.TrackControlValue = true);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_AddControlChangeWithinNote_BeforeCurrentTime_3()
         {
@@ -1004,7 +1004,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 setupPlayback: playback => playback.TrackControlValue = true);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_AddControlChangeWithinNote_MoveToTime_1()
         {
@@ -1034,7 +1034,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 setupPlayback: playback => playback.TrackControlValue = true);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_AddControlChangeWithinNote_MoveToTime_2()
         {
@@ -1073,7 +1073,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 setupPlayback: playback => playback.TrackControlValue = true);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_AddNote_1([Values(1.0, 0.5, 0.1)] double scaleFactor)
         {
@@ -1105,7 +1105,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 setupPlayback: playback => playback.TrackNotes = true);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_AddNote_2([Values(1.0, 0.5, 0.1)] double scaleFactor)
         {
@@ -1142,7 +1142,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 setupPlayback: playback => playback.TrackNotes = true);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_AddNote_3([Values(1.0, 0.5, 0.1)] double scaleFactor)
         {
@@ -1188,7 +1188,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 setupPlayback: playback => playback.TrackNotes = true);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_AddNote_4([Values(1.0, 0.5, 0.1)] double scaleFactor)
         {
@@ -1225,7 +1225,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 setupPlayback: playback => playback.TrackNotes = true);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_AddNote_5()
         {
@@ -1259,7 +1259,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 setupPlayback: playback => playback.TrackNotes = true);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_AddNote_6()
         {
@@ -1294,7 +1294,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 setupPlayback: playback => playback.TrackNotes = true);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_AddEventWithinNote_AfterCurrentTime_1()
         {
@@ -1326,7 +1326,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 repeatsCount: 1);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_AddEventWithinNote_AfterCurrentTime_2()
         {
@@ -1361,7 +1361,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 repeatsCount: 1);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_AddEventWithinNote_AfterCurrentTime_3()
         {
@@ -1401,7 +1401,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 repeatsCount: 1);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_AddEventWithinNote_BeforeOrEqualToCurrentTime()
         {
@@ -1432,7 +1432,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 repeatsCount: 1);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_AddNotesInAdvance()
         {
@@ -1495,7 +1495,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 repeatsCount: 1);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_AddProgramChangeWithinNote_AfterCurrentTime_1()
         {
@@ -1527,7 +1527,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 repeatsCount: 1);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_AddProgramChangeWithinNote_AfterCurrentTime_2()
         {
@@ -1562,7 +1562,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 repeatsCount: 1);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_AddProgramChangeWithinNote_AfterCurrentTime_3()
         {
@@ -1597,7 +1597,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 repeatsCount: 1);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_AddProgramChangeWithinNote_AfterCurrentTime_4()
         {
@@ -1637,7 +1637,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 repeatsCount: 1);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_AddProgramChangeWithinNote_BeforeCurrentTime_1()
         {
@@ -1668,7 +1668,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 repeatsCount: 1);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_AddProgramChangeWithinNote_BeforeCurrentTime_2()
         {
@@ -1702,7 +1702,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 repeatsCount: 1);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_AddProgramChangeWithinNote_BeforeCurrentTime_3()
         {
@@ -1737,7 +1737,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 repeatsCount: 1);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_AddProgramChangeWithinNote_MoveToTime_1()
         {
@@ -1770,7 +1770,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 repeatsCount: 1);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_AddProgramChangeWithinNote_MoveToTime_2()
         {
@@ -1813,7 +1813,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 repeatsCount: 1);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_AddPitchBendWithinNote_AfterCurrentTime_1()
         {
@@ -1846,7 +1846,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 repeatsCount: 1);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_AddPitchBendWithinNote_AfterCurrentTime_2()
         {
@@ -1882,7 +1882,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 repeatsCount: 1);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_AddPitchBendWithinNote_AfterCurrentTime_3()
         {
@@ -1918,7 +1918,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 repeatsCount: 1);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_AddPitchBendWithinNote_AfterCurrentTime_4()
         {
@@ -1959,7 +1959,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 repeatsCount: 1);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_AddPitchBendWithinNote_BeforeCurrentTime_1()
         {
@@ -1992,7 +1992,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 repeatsCount: 1);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_AddPitchBendWithinNote_BeforeCurrentTime_2()
         {
@@ -2027,7 +2027,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 repeatsCount: 1);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_AddPitchBendWithinNote_BeforeCurrentTime_3()
         {
@@ -2063,7 +2063,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 repeatsCount: 1);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_AddPitchBendWithinNote_MoveToTime_1()
         {
@@ -2097,7 +2097,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 repeatsCount: 1);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_AddPitchBendWithinNote_MoveToTime_2()
         {
@@ -2142,7 +2142,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 repeatsCount: 1);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_AddControlChangeWithinNote_AfterCurrentTime_1()
         {
@@ -2175,7 +2175,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 repeatsCount: 1);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_AddControlChangeWithinNote_AfterCurrentTime_2()
         {
@@ -2211,7 +2211,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 repeatsCount: 1);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_AddControlChangeWithinNote_AfterCurrentTime_3()
         {
@@ -2247,7 +2247,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 repeatsCount: 1);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_AddControlChangeWithinNote_AfterCurrentTime_4()
         {
@@ -2288,7 +2288,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 repeatsCount: 1);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_AddControlChangeWithinNote_AfterCurrentTime_5()
         {
@@ -2327,7 +2327,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 repeatsCount: 1);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_AddControlChangeWithinNote_BeforeCurrentTime_1()
         {
@@ -2360,7 +2360,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 repeatsCount: 1);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_AddControlChangeWithinNote_BeforeCurrentTime_2()
         {
@@ -2395,7 +2395,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 repeatsCount: 1);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_AddControlChangeWithinNote_BeforeCurrentTime_3()
         {
@@ -2431,7 +2431,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 repeatsCount: 1);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_AddControlChangeWithinNote_MoveToTime_1()
         {
@@ -2465,7 +2465,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 repeatsCount: 1);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_AddControlChangeWithinNote_MoveToTime_2()
         {
@@ -2510,7 +2510,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 repeatsCount: 1);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_AddNote_1([Values(1.0, 0.5, 0.1)] double scaleFactor)
         {
@@ -2548,7 +2548,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 repeatsCount: 1);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_AddNote_2([Values(1.0, 0.5, 0.1)] double scaleFactor)
         {
@@ -2593,7 +2593,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 repeatsCount: 1);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_AddNote_3([Values(1.0, 0.5, 0.1)] double scaleFactor)
         {
@@ -2646,7 +2646,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 repeatsCount: 1);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_AddNote_4([Values(1.0, 0.5, 0.1)] double scaleFactor)
         {
@@ -2690,7 +2690,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 repeatsCount: 1);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_AddNote_5()
         {
@@ -2729,7 +2729,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 repeatsCount: 1);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Loop_AddNote_6()
         {
@@ -2769,7 +2769,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 repeatsCount: 1);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_AddNoteOnEvent()
         {
@@ -2797,7 +2797,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 setupPlayback: playback => playback.TrackNotes = true);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_AddNoteOffEvent()
         {
@@ -2825,7 +2825,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 setupPlayback: playback => playback.TrackNotes = true);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_AddNoteEvents_1()
         {
@@ -2876,7 +2876,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             ClassicAssert.AreEqual(1, notesFinished.Count, "Invalid notes finished count.");
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_AddNoteEvents_2()
         {
@@ -2927,7 +2927,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             ClassicAssert.AreEqual(1, notesFinished.Count, "Invalid notes finished count.");
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_AddNoteEvents_3()
         {
@@ -2973,7 +2973,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             ClassicAssert.AreEqual(1, notesFinished.Count, "Invalid notes finished count.");
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_AddNoteEvents_4()
         {
@@ -3019,7 +3019,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             ClassicAssert.AreEqual(1, notesFinished.Count, "Invalid notes finished count.");
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_AddNoteEvents_5()
         {
@@ -3102,7 +3102,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 "Invalid started/finished notes.");
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_AddNoteEvents_6()
         {
@@ -3135,7 +3135,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 setupPlayback: playback => playback.TrackNotes = true);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_AddNoteEvents_7()
         {
@@ -3168,7 +3168,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 setupPlayback: playback => playback.TrackNotes = true);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_AddNoteEvents_8()
         {
@@ -3201,7 +3201,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 setupPlayback: playback => playback.TrackNotes = true);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_AddNoteEvents_9()
         {
@@ -3234,7 +3234,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 setupPlayback: playback => playback.TrackNotes = true);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_AddNoteEvents_10()
         {
@@ -3289,7 +3289,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 setupPlayback: playback => playback.TrackNotes = true);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_AddNoteEvents_11()
         {
@@ -3333,7 +3333,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 setupPlayback: playback => playback.TrackNotes = true);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Add_SetTempo_1()
         {
@@ -3380,7 +3380,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             ClassicAssert.AreEqual(TimeSpan.FromMilliseconds(400), snapPoint.Time, "Invalid snap point time.");
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Add_SetTempo_2()
         {
@@ -3427,7 +3427,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             ClassicAssert.AreEqual(TimeSpan.FromMilliseconds(600), snapPoint.Time, "Invalid snap point time.");
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Add_SetTempo_3()
         {
@@ -3474,7 +3474,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             ClassicAssert.AreEqual(TimeSpan.FromMilliseconds(550), snapPoint.Time, "Invalid snap point time.");
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Add_SetTempo_4()
         {
@@ -3521,7 +3521,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             ClassicAssert.AreEqual(TimeSpan.FromMilliseconds(500), snapPoint.Time, "Invalid snap point time.");
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Add_SetTempo_5()
         {
@@ -3568,7 +3568,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             ClassicAssert.AreEqual(TimeSpan.FromMilliseconds(800), snapPoint.Time, "Invalid snap point time.");
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Add_SetTempo_6()
         {
@@ -3615,7 +3615,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             ClassicAssert.AreEqual(TimeSpan.FromMilliseconds(450), snapPoint.Time, "Invalid snap point time.");
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Add_SetTempo_7()
         {
@@ -3674,7 +3674,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             ClassicAssert.AreEqual(TimeSpan.FromMilliseconds(725), snapPoint2.Time, "Invalid second snap point time.");
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Add_SetTempo_8()
         {
@@ -3738,7 +3738,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             ClassicAssert.AreEqual(TimeSpan.FromMilliseconds(675), snapPoint.Time, "Invalid snap point time.");
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Add_SetTempo_9()
         {
@@ -3805,7 +3805,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             ClassicAssert.AreEqual(TimeSpan.FromMilliseconds(625), snapPoint2.Time, "Invalid second snap point time.");
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Add_SetTempo_10()
         {
@@ -3851,7 +3851,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     "Invalid tempo map."));
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Add_SetTempo_11()
         {
@@ -3897,7 +3897,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     "Invalid tempo map."));
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Add_SetTempo_12()
         {
@@ -3943,7 +3943,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     "Invalid tempo map."));
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Add_SetTempo_13()
         {
@@ -3982,7 +3982,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     "Invalid tempo map."));
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Add_SetTempo_14()
         {
@@ -4022,7 +4022,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     "Invalid tempo map."));
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Add_SetTempo_15()
         {
@@ -4069,7 +4069,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     "Invalid tempo map."));
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Add_SetTempo_16()
         {
@@ -4106,7 +4106,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     "Invalid tempo map."));
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Add_SetTempo_17()
         {
@@ -4145,7 +4145,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     "Invalid tempo map."));
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Add_SetTempo_PlaybackEnd()
         {
@@ -4192,7 +4192,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Add_SetTempo_PlaybackStart()
         {
@@ -4237,7 +4237,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Add_TimeSignature_1()
         {
@@ -4278,7 +4278,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     "Invalid tempo map."));
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Add_TimeSignature_2()
         {
@@ -4319,7 +4319,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     "Invalid tempo map."));
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Add_TimeSignature_3()
         {
@@ -4359,7 +4359,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     "Invalid tempo map."));
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Add_TimeSignature_4()
         {
@@ -4399,7 +4399,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     "Invalid tempo map."));
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Add_TimeSignature_5()
         {
@@ -4439,7 +4439,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     "Invalid tempo map."));
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Add_TimeSignature_6()
         {
@@ -4479,7 +4479,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     "Invalid tempo map."));
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Add_TimeSignature_7()
         {
@@ -4529,7 +4529,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     "Invalid tempo map."));
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Add_TimeSignature_8()
         {
@@ -4585,7 +4585,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     "Invalid tempo map."));
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Add_TimeSignature_9()
         {
@@ -4640,7 +4640,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 tempoMap: tempoMap);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Add_TimeSignature_10()
         {
@@ -4685,7 +4685,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     "Invalid tempo map."));
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Add_TimeSignature_11()
         {
@@ -4730,7 +4730,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     "Invalid tempo map."));
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Add_TimeSignature_12()
         {
@@ -4775,7 +4775,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     "Invalid tempo map."));
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Add_TimeSignature_13()
         {
@@ -4814,7 +4814,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     "Invalid tempo map."));
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Add_TimeSignature_14()
         {
@@ -4854,7 +4854,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     "Invalid tempo map."));
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Add_TimeSignature_15()
         {
@@ -4901,7 +4901,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     "Invalid tempo map."));
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Add_TimeSignature_16()
         {
@@ -4937,7 +4937,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     "Invalid tempo map."));
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Add_TimeSignature_17()
         {

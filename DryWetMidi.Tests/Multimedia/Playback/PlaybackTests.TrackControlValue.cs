@@ -12,7 +12,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
     {
         #region Test methods
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void TrackControlValue_NoControlChanges_MoveToTime(
             [Values(0, 100)] int moveFromMs,
@@ -41,7 +41,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void TrackControlValue_ControlChangeAtZero_MoveToTime()
         {
@@ -73,7 +73,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void TrackControlValue_ControlChangeAtZero_MoveToStart()
         {
@@ -113,7 +113,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void TrackControlValue_ControlChangesAtZero_MoveToStart()
         {
@@ -153,7 +153,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void TrackControlValue_FromBeforeControlChange_ToBeforeControlChange()
         {
@@ -186,7 +186,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void TrackControlValue_FromBeforeControlChange_ToAfterControlChange()
         {
@@ -219,7 +219,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void TrackControlValue_Default_FromBeforeControlChange_ToAfterControlChange()
         {
@@ -252,7 +252,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void TrackControlValue_FromAfterControlChange_ToAfterControlChange()
         {
@@ -285,7 +285,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void TrackControlValue_FromAfterControlChange_ToBeforeControlChange()
         {
@@ -320,7 +320,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void TrackControlValue_Default_FromBeforeControlChange_ToControlChange()
         {
@@ -353,7 +353,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void TrackControlValue_FromAfterControlChange_ToControlChange()
         {
@@ -387,7 +387,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void TrackControlValue_EnableInMiddle_FromBeforeControlChange_ToAfterControlChange()
         {
@@ -432,7 +432,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void TrackControlValue_EnableInMiddle_FromAfterControlChange_ToBeforeControlChange()
         {
@@ -471,7 +471,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 setupPlayback: playback => playback.TrackControlValue = false);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void DontTrackControlValue_NoControlChanges_MoveToTime(
             [Values(0, 100)] int moveFromMs,
@@ -501,7 +501,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 setupPlayback: playback => playback.TrackControlValue = false);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void DontTrackControlValue_ControlChangeAtZero_MoveToTime()
         {
@@ -534,7 +534,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 setupPlayback: playback => playback.TrackControlValue = false);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void DontTrackControlValue_ControlChangeAtZero_MoveToStart()
         {
@@ -575,7 +575,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 setupPlayback: playback => playback.TrackControlValue = false);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void DontTrackControlValue_ControlChangesAtZero_MoveToStart()
         {
@@ -616,7 +616,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 setupPlayback: playback => playback.TrackControlValue = false);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void DontTrackControlValue_FromBeforeControlChange_ToBeforeControlChange()
         {
@@ -650,7 +650,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 setupPlayback: playback => playback.TrackControlValue = false);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void DontTrackControlValue_FromBeforeControlChange_ToAfterControlChange()
         {
@@ -683,7 +683,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 setupPlayback: playback => playback.TrackControlValue = false);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void DontTrackControlValue_Default_FromBeforeControlChange_ToAfterControlChange()
         {
@@ -716,7 +716,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 setupPlayback: playback => playback.TrackControlValue = false);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void DontTrackControlValue_FromAfterControlChange_ToAfterControlChange()
         {
@@ -750,7 +750,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 setupPlayback: playback => playback.TrackControlValue = false);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void DontTrackControlValue_FromAfterControlChange_ToBeforeControlChange()
         {
@@ -785,7 +785,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 setupPlayback: playback => playback.TrackControlValue = false);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void DontTrackControlValue_Default_FromBeforeControlChange_ToControlChange()
         {
@@ -819,7 +819,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 setupPlayback: playback => playback.TrackControlValue = false);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void DontTrackControlValue_FromAfterControlChange_ToControlChange()
         {
@@ -854,7 +854,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 setupPlayback: playback => playback.TrackControlValue = false);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void TrackControlValue_DisableInMiddle_FromBeforeControlChange_ToAfterControlChange()
         {
@@ -895,7 +895,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 setupPlayback: playback => playback.TrackProgram = false);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void TrackControlValue_DisableInMiddle_FromAfterControlChange_ToBeforeControlChange()
         {

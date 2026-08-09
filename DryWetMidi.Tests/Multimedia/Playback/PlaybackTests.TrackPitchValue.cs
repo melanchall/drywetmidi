@@ -12,7 +12,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
     {
         #region Test methods
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void TrackPitchValue_NoPitchBend_MoveToTime(
             [Values(0, 100)] int moveFromMs,
@@ -41,7 +41,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void TrackPitchValue_PitchBendAtZero_MoveToTime()
         {
@@ -72,7 +72,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void TrackPitchValue_PitchBendAtZero_MoveToStart()
         {
@@ -104,7 +104,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void TrackPitchValue_FromBeforePitchBend_ToBeforePitchBend()
         {
@@ -136,7 +136,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void TrackPitchValue_FromBeforePitchBend_ToAfterPitchBend()
         {
@@ -168,7 +168,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void TrackPitchValue_FromAfterPitchBend_ToAfterPitchBend()
         {
@@ -200,7 +200,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void TrackPitchValue_FromAfterPitchBend_ToBeforePitchBend()
         {
@@ -234,7 +234,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void TrackPitchValue_FromBeforePitchBend_ToPitchBend()
         {
@@ -266,7 +266,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void TrackPitchValue_FromAfterPitchBend_ToPitchBend()
         {
@@ -299,7 +299,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void TrackPitchValue_EnableInMiddle_FromBeforePitchBend_ToAfterPitchBend()
         {
@@ -343,7 +343,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void TrackPitchValue_EnableInMiddle_FromAfterPitchBend_ToBeforePitchBend()
         {
@@ -381,7 +381,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 setupPlayback: playback => playback.TrackPitchValue = false);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void DontTrackPitchValue_NoPitchBend_MoveToTime(
             [Values(0, 100)] int moveFromMs,
@@ -411,7 +411,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 setupPlayback: playback => playback.TrackPitchValue = false);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void DontTrackPitchValue_PitchBendAtZero_MoveToTime()
         {
@@ -443,7 +443,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 setupPlayback: playback => playback.TrackPitchValue = false);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void DontTrackPitchValue_PitchBendAtZero_MoveToStart()
         {
@@ -476,7 +476,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 setupPlayback: playback => playback.TrackPitchValue = false);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void DontTrackPitchValue_FromBeforePitchBend_ToBeforePitchBend()
         {
@@ -509,7 +509,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 setupPlayback: playback => playback.TrackPitchValue = false);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void DontTrackPitchValue_FromBeforePitchBend_ToAfterPitchBend()
         {
@@ -541,7 +541,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 setupPlayback: playback => playback.TrackPitchValue = false);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void DontTrackPitchValue_FromAfterPitchBend_ToAfterPitchBend()
         {
@@ -574,7 +574,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 setupPlayback: playback => playback.TrackPitchValue = false);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void DontTrackPitchValue_FromAfterPitchBend_ToBeforePitchBend()
         {
@@ -608,7 +608,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 setupPlayback: playback => playback.TrackPitchValue = false);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void DontTrackPitchValue_FromBeforePitchBend_ToPitchBend()
         {
@@ -641,7 +641,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 setupPlayback: playback => playback.TrackPitchValue = false);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void DontTrackPitchValue_FromAfterPitchBend_ToPitchBend()
         {
@@ -675,7 +675,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 setupPlayback: playback => playback.TrackPitchValue = false);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void TrackPitchValue_DisableInMiddle_FromBeforePitchBend_ToAfterPitchBend()
         {
@@ -718,7 +718,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void TrackPitchValue_DisableInMiddle_FromAfterPitchBend_ToBeforePitchBend()
         {

@@ -68,28 +68,28 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
         #region Test methods
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlayback_HighPrecisionTickGenerator()
         {
             CheckPlayback_TickGenerator(() => new HighPrecisionTickGenerator(), TimeSpan.FromMilliseconds(30));
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlayback_RegularPrecisionTickGenerator()
         {
             CheckPlayback_TickGenerator(() => new RegularPrecisionTickGenerator(), TimeSpan.FromMilliseconds(50));
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlayback_CustomTickGenerator()
         {
             CheckPlayback_TickGenerator(() => new ThreadTickGenerator(), TimeSpan.FromMilliseconds(10));
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlayback_ManualTicking()
         {

@@ -12,7 +12,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
     {
         #region Test methods
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void TrackProgram_NoProgramChanges_MoveToTime(
             [Values(0, 100)] int moveFromMs,
@@ -39,7 +39,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void TrackProgram_ProgramChangeAtZero_MoveToTime()
         {
@@ -68,7 +68,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void TrackProgram_ProgramChangeAtZero_MoveToStart()
         {
@@ -98,7 +98,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void TrackProgram_FromBeforeProgramChange_ToBeforeProgramChange()
         {
@@ -129,7 +129,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void TrackProgram_FromBeforeProgramChange_ToAfterProgramChange()
         {
@@ -160,7 +160,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void TrackProgram_FromAfterProgramChange_ToAfterProgramChange()
         {
@@ -191,7 +191,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void TrackProgram_FromAfterProgramChange_ToBeforeProgramChange()
         {
@@ -224,7 +224,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void TrackProgram_FromBeforeProgramChange_ToProgramChange()
         {
@@ -255,7 +255,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void TrackProgram_FromAfterProgramChange_ToProgramChange()
         {
@@ -287,7 +287,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void TrackProgram_EnableInMiddle_FromBeforeProgramChange_ToAfterProgramChange()
         {
@@ -329,7 +329,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void TrackProgram_EnableInMiddle_FromAfterProgramChange_ToBeforeProgramChange()
         {
@@ -365,7 +365,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 setupPlayback: playback => playback.TrackProgram = false);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void DontTrackProgram_NoProgramChanges_MoveToTime(
             [Values(0, 100)] int moveFromMs,
@@ -393,7 +393,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 setupPlayback: playback => playback.TrackProgram = false);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void DontTrackProgram_ProgramChangeAtZero_MoveToTime()
         {
@@ -423,7 +423,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 setupPlayback: playback => playback.TrackProgram = false);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void DontTrackProgram_ProgramChangeAtZero_MoveToStart()
         {
@@ -454,7 +454,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 setupPlayback: playback => playback.TrackProgram = false);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void DontTrackProgram_FromBeforeProgramChange_ToBeforeProgramChange()
         {
@@ -486,7 +486,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 setupPlayback: playback => playback.TrackProgram = false);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void DontTrackProgram_FromBeforeProgramChange_ToAfterProgramChange()
         {
@@ -517,7 +517,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 setupPlayback: playback => playback.TrackProgram = false);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void DontTrackProgram_FromAfterProgramChange_ToAfterProgramChange()
         {
@@ -549,7 +549,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 setupPlayback: playback => playback.TrackProgram = false);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void DontTrackProgram_FromAfterProgramChange_ToBeforeProgramChange()
         {
@@ -582,7 +582,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 setupPlayback: playback => playback.TrackProgram = false);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void DontTrackProgram_FromBeforeProgramChange_ToProgramChange()
         {
@@ -614,7 +614,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 setupPlayback: playback => playback.TrackProgram = false);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void DontTrackProgram_FromAfterProgramChange_ToProgramChange()
         {
@@ -647,7 +647,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 setupPlayback: playback => playback.TrackProgram = false);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void TrackProgram_DisableInMiddle_FromBeforeProgramChange_ToAfterProgramChange()
         {
@@ -685,7 +685,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 setupPlayback: playback => playback.TrackPitchValue = false);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void TrackProgram_DisableInMiddle_FromAfterProgramChange_ToBeforeProgramChange()
         {

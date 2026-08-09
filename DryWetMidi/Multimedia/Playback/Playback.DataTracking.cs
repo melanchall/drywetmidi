@@ -18,8 +18,9 @@ namespace Melanchall.DryWetMidi.Multimedia
             PitchValue = 1 << 1,
             ControlValue = 1 << 2,
             ChannelAftertouch = 1 << 3,
+            NoteAftertouch = 1 << 4,
 
-            All = Program | PitchValue | ControlValue | ChannelAftertouch
+            All = Program | PitchValue | ControlValue | ChannelAftertouch | NoteAftertouch
         }
 
         #endregion
@@ -291,6 +292,13 @@ namespace Melanchall.DryWetMidi.Multimedia
             (e, d) => e.ControlNumber = d,
             e => e.ControlNumber);
 
+        private readonly DataChangesManager<SevenBitNumber, SevenBitNumber, NoteAftertouchEvent> _noteAftertouchChangesManager = new DataChangesManager<SevenBitNumber, SevenBitNumber, NoteAftertouchEvent>(
+            SevenBitNumber.MinValue,
+            (e, d) => e.AftertouchValue = d,
+            e => e.AftertouchValue,
+            (e, d) => e.NoteNumber = d,
+            e => e.NoteNumber);
+
 
         private Dictionary<TrackedParameterType, Func<long, IEnumerable<EventWithMetadata>>> _getParameterEventsAtTime;
 
@@ -379,6 +387,21 @@ namespace Melanchall.DryWetMidi.Multimedia
             }
         }
 
+        public bool TrackNoteAftertouch
+        {
+            get { return _noteAftertouchChangesManager.IsEnabled; }
+            set
+            {
+                if (_noteAftertouchChangesManager.IsEnabled == value)
+                    return;
+
+                _noteAftertouchChangesManager.IsEnabled = value;
+
+                if (value)
+                    SendTrackedData(TrackedParameterType.NoteAftertouch);
+            }
+        }
+
         #endregion
 
         #region Methods
@@ -389,6 +412,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             _pitchBendChangesManager.Clear();
             _channelAftertouchChangesManager.Clear();
             _controlsChangesManager.Clear();
+            _noteAftertouchChangesManager.Clear();
         }
 
         private void InitializeDataTracking()
@@ -399,6 +423,7 @@ namespace Melanchall.DryWetMidi.Multimedia
                 [TrackedParameterType.PitchValue] = _pitchBendChangesManager.GetEventsAtTime,
                 [TrackedParameterType.ControlValue] = _controlsChangesManager.GetEventsAtTime,
                 [TrackedParameterType.ChannelAftertouch] = _channelAftertouchChangesManager.GetEventsAtTime,
+                [TrackedParameterType.NoteAftertouch] = _noteAftertouchChangesManager.GetEventsAtTime,
             };
         }
 
@@ -408,6 +433,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             _pitchBendChangesManager.InitializeData(midiEvent as PitchBendEvent, time, metadata);
             _controlsChangesManager.InitializeData(midiEvent as ControlChangeEvent, time, metadata);
             _channelAftertouchChangesManager.InitializeData(midiEvent as ChannelAftertouchEvent, time, metadata);
+            _noteAftertouchChangesManager.InitializeData(midiEvent as NoteAftertouchEvent, time, metadata);
         }
 
         private void UpdateCurrentTrackedData(MidiEvent midiEvent, object metadata)
@@ -416,6 +442,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             _pitchBendChangesManager.UpdateCurrentData(midiEvent as PitchBendEvent, metadata);
             _controlsChangesManager.UpdateCurrentData(midiEvent as ControlChangeEvent, metadata);
             _channelAftertouchChangesManager.UpdateCurrentData(midiEvent as ChannelAftertouchEvent, metadata);
+            _noteAftertouchChangesManager.UpdateCurrentData(midiEvent as NoteAftertouchEvent, metadata);
         }
 
         private void RemoveTrackedData(MidiEvent midiEvent, long time)
@@ -424,6 +451,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             _pitchBendChangesManager.RemoveData(midiEvent as PitchBendEvent, time);
             _controlsChangesManager.RemoveData(midiEvent as ControlChangeEvent, time);
             _channelAftertouchChangesManager.RemoveData(midiEvent as ChannelAftertouchEvent, time);
+            _noteAftertouchChangesManager.RemoveData(midiEvent as NoteAftertouchEvent, time);
         }
 
         private void SendTrackedData(TrackedParameterType trackedParameterType = TrackedParameterType.All)

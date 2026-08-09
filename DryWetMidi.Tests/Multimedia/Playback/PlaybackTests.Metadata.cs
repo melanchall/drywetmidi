@@ -38,7 +38,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
         #region Test methods
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackMetadata_EventPlayed() => CheckPlaybackMetadata(
             midiFile: new MidiFile(
@@ -61,7 +61,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 (new NoteOffEvent(), 0),
             });
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackMetadata_EventPlayed_SendNoteOnEventsForActiveNotes() => CheckPlaybackMetadata(
             midiFile: new MidiFile(
@@ -87,7 +87,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             },
             setupPlayback: playback => playback.SendNoteOnEventsForActiveNotes = true);
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackMetadata_EventPlayed_SendNoteOffEventsForNonActiveNotes() => CheckPlaybackMetadata(
             midiFile: new MidiFile(
@@ -113,7 +113,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             },
             setupPlayback: playback => playback.SendNoteOffEventsForNonActiveNotes = true);
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackMetadata_EventPlayed_SendNoteOffEventsForNonActiveNotes_SendNoteOnEventsForActiveNotes() => CheckPlaybackMetadata(
             midiFile: new MidiFile(
@@ -145,7 +145,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 playback.SendNoteOnEventsForActiveNotes = true;
             });
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackMetadata_TrackControlValue_NoControlChanges_MoveToTime([Values(0, 100)] int moveFromMs) => CheckPlaybackMetadata(
             midiFile: new MidiFile(
@@ -161,7 +161,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 (new TextEvent(), 1)
             });
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackMetadata_TrackControlValue_NoControlChanges_MoveToStart() => CheckPlaybackMetadata(
             midiFile: new MidiFile(
@@ -179,7 +179,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 (new ProgramChangeEvent(), 1)
             });
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackMetadata_TrackControlValue_ControlChangeAtZero_MoveToTime()
         {
@@ -202,7 +202,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackMetadata_TrackControlValue_ControlChangeAtZero_MoveToStart()
         {
@@ -245,7 +245,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackMetadata_TrackControlValue_ControlChangesAtZero_MoveToStart()
         {
@@ -284,7 +284,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackMetadata_TrackControlValue_FromBeforeControlChange_ToBeforeControlChange()
         {
@@ -321,7 +321,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackMetadata_TrackControlValue_FromBeforeControlChange_ToAfterControlChange()
         {
@@ -358,7 +358,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackMetadata_TrackControlValue_Default_FromBeforeControlChange_ToAfterControlChange()
         {
@@ -395,7 +395,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackMetadata_TrackControlValue_FromAfterControlChange_ToAfterControlChange()
         {
@@ -432,7 +432,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackMetadata_TrackControlValue_FromAfterControlChange_ToBeforeControlChange()
         {
@@ -471,7 +471,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [TestCase(0)]
         [TestCase(100)]
         public void CheckPlaybackMetadata_TrackPitchValue_NoPitchBend_MoveToTime(int moveFromMs)
@@ -500,7 +500,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackMetadata_TrackPitchValue_NoPitchBend_MoveToStart()
         {
@@ -528,7 +528,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackMetadata_TrackPitchValue_PitchBendAtZero_MoveToTime()
         {
@@ -559,7 +559,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackMetadata_TrackPitchValue_PitchBendAtZero_MoveToStart()
         {
@@ -591,7 +591,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackMetadata_TrackPitchValue_FromBeforePitchBend_ToBeforePitchBend()
         {
@@ -627,7 +627,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackMetadata_TrackPitchValue_FromBeforePitchBend_ToAfterPitchBend()
         {
@@ -663,7 +663,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackMetadata_TrackPitchValue_FromAfterPitchBend_ToAfterPitchBend()
         {
@@ -699,7 +699,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackMetadata_TrackPitchValue_FromAfterPitchBend_ToBeforePitchBend()
         {
@@ -737,7 +737,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [TestCase(0)]
         [TestCase(100)]
         public void CheckPlaybackMetadata_TrackProgram_NoProgramChanges_MoveToTime(int moveFromMs)
@@ -766,7 +766,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackMetadata_TrackProgram_NoProgramChanges_MoveToStart()
         {
@@ -794,7 +794,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackMetadata_TrackProgram_ProgramChangeAtZero_MoveToTime()
         {
@@ -825,7 +825,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackMetadata_TrackProgram_ProgramChangeAtZero_MoveToStart()
         {
@@ -857,7 +857,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackMetadata_TrackProgram_FromBeforeProgramChange_ToBeforeProgramChange()
         {
@@ -893,7 +893,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackMetadata_TrackProgram_FromBeforeProgramChange_ToAfterProgramChange()
         {
@@ -929,7 +929,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackMetadata_TrackProgram_FromAfterProgramChange_ToAfterProgramChange()
         {
@@ -965,7 +965,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackMetadata_TrackProgram_FromAfterProgramChange_ToBeforeProgramChange()
         {
@@ -1003,7 +1003,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackMetadata_TrackNotes_MoveForwardToNote()
         {
@@ -1041,7 +1041,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 setupPlayback: playback => playback.TrackNotes = true);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackMetadata_TrackNotes_MoveBackToNote()
         {
@@ -1087,7 +1087,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 setupPlayback: playback => playback.TrackNotes = true);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackMetadata_TrackNotes_MoveForwardFromNote()
         {
@@ -1131,7 +1131,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 setupPlayback: playback => playback.TrackNotes = true);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackMetadata_TrackNotes_MoveBackFromNote()
         {
@@ -1171,7 +1171,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 setupPlayback: playback => playback.TrackNotes = true);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackMetadata_TrackNotes_MoveForwardToSameNote()
         {
@@ -1209,7 +1209,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 setupPlayback: playback => playback.TrackNotes = true);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackMetadata_TrackNotes_MoveBackToSameNote()
         {
@@ -1247,7 +1247,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 setupPlayback: playback => playback.TrackNotes = true);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackMetadata_TrackNotes_MoveForwardFromNoteToNote()
         {
@@ -1301,7 +1301,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 setupPlayback: playback => playback.TrackNotes = true);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackMetadata_TrackNotes_MoveBackFromNoteToNote()
         {
@@ -1359,7 +1359,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 setupPlayback: playback => playback.TrackNotes = true);
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackMetadata_TrackNotes_StopStart_InterruptNotesOnStop()
         {
@@ -1402,7 +1402,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackMetadata_TrackNotes_StopStart_DontInterruptNotesOnStop()
         {
@@ -1443,7 +1443,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackMetadata_NoteCallback_ReturnNull_ReturnSkipNote()
         {
@@ -1477,7 +1477,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackMetadata_NoteCallback_ReturnNull_ReturnOriginal()
         {
@@ -1515,7 +1515,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackMetadata_NoteCallback_ReturnOriginal_ReturnNull()
         {
@@ -1553,7 +1553,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackMetadata_NoteCallback_Transpose()
         {
@@ -1593,7 +1593,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackMetadata_NoteCallback_InterruptNotesOnStop()
         {
@@ -1632,7 +1632,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackMetadata_NoteCallback_InterruptNotesOnStop_SendNoteOffEventsForNonActiveNotes()
         {
@@ -1673,7 +1673,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackMetadata_NoteCallback_MoveToStart()
         {
@@ -1737,7 +1737,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackMetadata_NoteCallback_MoveToStart_SendNoteOnEventsForActiveNotes()
         {
@@ -1804,7 +1804,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackMetadata_NoteCallback_MoveForward()
         {
@@ -1870,7 +1870,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackMetadata_NoteCallback_MoveForward_BeyondDuration()
         {
@@ -1915,7 +1915,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackMetadata_NoteCallback_MoveForward_BeyondPlaybackEnd()
         {
@@ -1970,7 +1970,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackMetadata_NoteCallback_MoveBack()
         {
@@ -2036,7 +2036,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackMetadata_NoteCallback_MoveBack_BeyondZero()
         {
@@ -2099,7 +2099,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackMetadata_NoteCallback_MoveBack_BeyondZero_SendNoteOnEventsForActiveNotes()
         {
@@ -2164,7 +2164,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackMetadata_NoteCallback_MoveBack_BeyondPlaybackStart()
         {
@@ -2209,7 +2209,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackMetadata_NoteCallback_MoveBack_BeyondPlaybackStart_SendNoteOnEventsForActiveNotes()
         {
@@ -2256,7 +2256,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackMetadata_NoteCallback_MoveToTime()
         {
@@ -2318,7 +2318,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackMetadata_NoteCallback_MoveToTime_BeyondDuration()
         {
@@ -2361,7 +2361,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 });
         }
 
-        [MultimediaTestRetry]
+        [TimingCritical]
         [Test]
         public void CheckPlaybackMetadata_NoteCallback_MoveToTime_BeyondPlaybackEnd()
         {

@@ -16,7 +16,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         #region Test methods
 
         [Test]
-        [MultimediaTestRetry]
+        [TimingCritical]
         public void ChangeGlobalTimeType_SinglePlayback()
         {
             var changeAfter = TimeSpan.FromMilliseconds(200);
@@ -59,7 +59,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         [Test]
-        [MultimediaTestRetry]
+        [TimingCritical]
         public void ChangeGlobalTimeType_MultiplePlaybacks_AllOnCommonTimeType()
         {
             var changeAfter = TimeSpan.FromMilliseconds(200);
@@ -111,7 +111,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         [Test]
-        [MultimediaTestRetry]
+        [TimingCritical]
         public void ChangeGlobalTimeType_MultiplePlaybacks_OneOnCommonTimeType()
         {
             var changeAfter = TimeSpan.FromMilliseconds(200);
@@ -163,7 +163,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         [Test]
-        [MultimediaTestRetry]
+        [TimingCritical]
         public void ChangeLocalTimeType_SinglePlayback()
         {
             var changeAfter = TimeSpan.FromMilliseconds(200);
@@ -205,7 +205,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         [Test]
-        [MultimediaTestRetry]
+        [TimingCritical]
         public void ChangeLocalTimeType_MultiplePlaybacks_AllOnCommonTimeType()
         {
             var changeAfter = TimeSpan.FromMilliseconds(200);
@@ -256,7 +256,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         [Test]
-        [MultimediaTestRetry]
+        [TimingCritical]
         public void ChangeLocalTimeType_MultiplePlaybacks_OneOnCommonTimeType()
         {
             var changeAfter = TimeSpan.FromMilliseconds(200);

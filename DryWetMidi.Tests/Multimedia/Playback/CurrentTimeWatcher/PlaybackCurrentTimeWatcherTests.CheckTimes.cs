@@ -12,7 +12,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         #region Test methods
 
         [Test]
-        [MultimediaTestRetry]
+        [TimingCritical]
         public void WatchCurrentTime_Metric()
         {
             CheckWatchCurrentTime(
@@ -23,7 +23,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         [Test]
-        [MultimediaTestRetry]
+        [TimingCritical]
         public void WatchCurrentTime_BarBeat()
         {
             CheckWatchCurrentTime(
@@ -40,7 +40,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         [Test]
-        [MultimediaTestRetry]
+        [TimingCritical]
         public void WatchCurrentTime_BarBeatFraction()
         {
             CheckWatchCurrentTime(
@@ -62,7 +62,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         [Test]
-        [MultimediaTestRetry]
+        [TimingCritical]
         public void WatchCurrentTime_Musical()
         {
             CheckWatchCurrentTime(
@@ -73,7 +73,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         [Test]
-        [MultimediaTestRetry]
+        [TimingCritical]
         public void WatchCurrentTime_Midi()
         {
             CheckWatchCurrentTime(
@@ -84,7 +84,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         [Test]
-        [MultimediaTestRetry]
+        [TimingCritical]
         public void WatchCurrentTimeWithCommonTimeType_Metric()
         {
             CheckWatchCurrentTimeWithCommonTimeType(
@@ -95,7 +95,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         [Test]
-        [MultimediaTestRetry]
+        [TimingCritical]
         public void WatchCurrentTimeWithCommonTimeType_BarBeat()
         {
             CheckWatchCurrentTimeWithCommonTimeType(
@@ -112,7 +112,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         [Test]
-        [MultimediaTestRetry]
+        [TimingCritical]
         public void WatchCurrentTimeWithCommonTimeType_BarBeatFraction()
         {
             CheckWatchCurrentTimeWithCommonTimeType(
@@ -134,7 +134,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         [Test]
-        [MultimediaTestRetry]
+        [TimingCritical]
         public void WatchCurrentTimeWithCommonTimeType_Musical()
         {
             CheckWatchCurrentTimeWithCommonTimeType(
@@ -145,7 +145,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         [Test]
-        [MultimediaTestRetry]
+        [TimingCritical]
         public void WatchCurrentTimeWithCommonTimeType_Midi()
         {
             CheckWatchCurrentTimeWithCommonTimeType(

@@ -1,4 +1,5 @@
 ﻿using Melanchall.DryWetMidi.Multimedia;
+using Melanchall.DryWetMidi.Tests.Attributes;
 using NUnit.Framework;
 using NUnit.Framework.Legacy;
 using System;
@@ -12,6 +13,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
     {
         #region Test methods
 
+        [TimingCritical]
         [Test]
         public void WatchOnlyRunningPlaybacks_SinglePlayback_NotRunning()
         {
@@ -32,6 +34,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             ClassicAssert.IsFalse(eventFired, "Event is fired.");
         }
 
+        [TimingCritical]
         [Test]
         public void WatchOnlyRunningPlaybacks_SinglePlayback_ChangedFromRunningToNotRunning()
         {
@@ -59,6 +62,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             ClassicAssert.AreEqual(objectsCount, objects.Count, "Event is fired after playback stopped.");
         }
 
+        [TimingCritical]
         [Test]
         public void WatchOnlyRunningPlaybacks_MultiplePlaybacks_NotRunning()
         {
@@ -80,6 +84,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             ClassicAssert.IsFalse(eventFired, "Event is fired.");
         }
 
+        [TimingCritical]
         [Test]
         public void WatchOnlyRunningPlaybacks_MultiplePlaybacks_OneRunning()
         {
