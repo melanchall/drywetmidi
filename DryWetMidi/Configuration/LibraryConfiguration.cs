@@ -135,10 +135,10 @@ namespace Melanchall.DryWetMidi.Configuration
 
             resultLines.Add("Native backend info:");
 
-            var apiType = CommonApi.Api_GetApiType();
-            resultLines.Add($"- API type: {apiType}");
+            var osType = CommonApi.Api_GetOsType();
+            resultLines.Add($"- OS type: {osType}");
 
-            if (apiType == CommonApi.API_TYPE.API_TYPE_WIN)
+            if (osType == CommonApi.OS_TYPE.OS_TYPE_WIN)
                 AddWindowsNativeBackendInfo(resultLines);
         }
 

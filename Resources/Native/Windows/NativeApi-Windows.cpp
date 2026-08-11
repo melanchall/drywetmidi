@@ -111,9 +111,9 @@ const wchar_t* FormatError(const std::exception& e, const wchar_t* label)
     return ToWide(e.what(), label);
 }
 
-API_EXPORT API_TYPE API_CALL GetApiType()
+API_EXPORT OS_TYPE API_CALL GetOsType()
 {
-    return API_TYPE_WIN;
+    return OS_TYPE_WIN;
 }
 
 API_EXPORT void API_CALL GetNativeEnvironmentInfo_Win(
@@ -123,7 +123,6 @@ API_EXPORT void API_CALL GetNativeEnvironmentInfo_Win(
 
     try
     {
-        winrt::init_apartment();
         *wmsAvailable = midi2::MidiApi::EnsureServiceAvailable();
     }
     catch (...)
@@ -172,11 +171,15 @@ API_EXPORT CONFIGURATION_GETRESULT API_CALL GetConfiguration_Win(
             GetNativeEnvironmentInfo_Win(&config->wmsAvailable);
 
             if (config->wmsAvailable)
-            {
-                winrt::init_apartment();
                 config->wmsInitialized = true;
 
+            try
+            {
                 config->basicLoopbackAvailable = basicLoopback::MidiBasicLoopbackManager::IsTransportAvailable();
+            }
+            catch (...)
+            {
+                config->basicLoopbackAvailable = false;
             }
         }
         catch (const winrt::hresult_error& e)
@@ -202,18 +205,6 @@ API_EXPORT CONFIGURATION_GETRESULT API_CALL GetConfiguration_Win(
 
 API_EXPORT CONFIGURATION_CLEANUPRESULT API_CALL CleanupConfiguration(Configuration* configuration)
 {
-    try
-    {
-        if (configuration->wmsInitialized)
-        {
-            winrt::uninit_apartment();
-        }
-    }
-    catch (...)
-    {
-        return CONFIGURATION_CLEANUPRESULT_WMSUNKNOWNERROR;
-    }
-
     delete configuration;
 
     return CONFIGURATION_CLEANUPRESULT_OK;
@@ -1158,7 +1149,6 @@ struct InputEndpointHandle : EndpointHandleBase
     LPMIDIHDR* sysExHeaders;
     int sysExBufferCount;
     int sysExBufferSize;
-    CRITICAL_SECTION lock;
     LONG isClosing;
     MidiGroupEndpointListener groupListener{nullptr};
     winrt::event_token revokeOnGroupListener;
@@ -1322,23 +1312,19 @@ API_EXPORT IN_GETPROPERTYRESULT API_CALL GetInputEndpointId_Win(InputEndpointInf
     return IN_GETPROPERTYRESULT_OK;
 }
 
-API_EXPORT IN_RENEWSYSEXBUFFERRESULT API_CALL RenewInputEndpointSysExBuffer(void* handle, void* headerPointer, int* errorCode)
+API_EXPORT IN_RENEWSYSEXBUFFERRESULT API_CALL RenewInputEndpointSysExBuffer(InputEndpointHandle* inputEndpointHandle, void* headerPointer, int* errorCode)
 {
     *errorCode = 0;
 
-    InputEndpointHandle* inputEndpointHandle = static_cast<InputEndpointHandle*>(handle);
     LPMIDIHDR header = static_cast<LPMIDIHDR>(headerPointer);
 
     if (header == nullptr)
         return IN_RENEWSYSEXBUFFERRESULT_INVALIDHEADER;
 
-    EnterCriticalSection(&inputEndpointHandle->lock);
+    std::lock_guard<std::mutex> lock(inputEndpointHandle->sessionHandle->endpointDevicesLock);
 
     if (inputEndpointHandle->isClosing)
-    {
-        LeaveCriticalSection(&inputEndpointHandle->lock);
         return IN_RENEWSYSEXBUFFERRESULT_CLOSING;
-    }
 
     bool found = false;
     for (int i = 0; i < inputEndpointHandle->sysExBufferCount; i++)
@@ -1351,16 +1337,10 @@ API_EXPORT IN_RENEWSYSEXBUFFERRESULT API_CALL RenewInputEndpointSysExBuffer(void
     }
 
     if (!found)
-    {
-        LeaveCriticalSection(&inputEndpointHandle->lock);
         return IN_RENEWSYSEXBUFFERRESULT_INVALIDHEADER;
-    }
 
     if ((header->dwFlags & MHDR_DONE) == 0)
-    {
-        LeaveCriticalSection(&inputEndpointHandle->lock);
         return IN_RENEWSYSEXBUFFERRESULT_BUFFERNOTDONE;
-    }
 
     header->dwFlags &= MHDR_PREPARED;
     header->dwBytesRecorded = 0;
@@ -1372,26 +1352,18 @@ API_EXPORT IN_RENEWSYSEXBUFFERRESULT API_CALL RenewInputEndpointSysExBuffer(void
     for (int retry = 0; retry < maxRetries; retry++)
     {
         if (inputEndpointHandle->isClosing)
-        {
-            LeaveCriticalSection(&inputEndpointHandle->lock);
             return IN_RENEWSYSEXBUFFERRESULT_CLOSING;
-        }
 
         result = midiInAddBuffer(inputEndpointHandle->handle, header, sizeof(MIDIHDR));
 
         if (result == MMSYSERR_NOERROR)
-        {
-            LeaveCriticalSection(&inputEndpointHandle->lock);
             return IN_RENEWSYSEXBUFFERRESULT_OK;
-        }
 
         if (result != MIDIERR_STILLPLAYING)
             break;
 
         Sleep(retryDelayMs);
     }
-
-    LeaveCriticalSection(&inputEndpointHandle->lock);
 
     *errorCode = result;
 
@@ -1531,7 +1503,8 @@ API_EXPORT IN_OPENRESULT API_CALL OpenInputEndpoint_Win(InputEndpointInfo* info,
         inputEndpointHandle->sysExHeaders[i] = nullptr;
     }
 
-    InitializeCriticalSection(&inputEndpointHandle->lock);
+    std::lock_guard<std::mutex> lock(sessionHandle->endpointDevicesLock);
+
     inputEndpointHandle->isClosing = 0;
 
     auto deviceIndex = inputEndpointInfo->deviceIndex;
@@ -1540,7 +1513,6 @@ API_EXPORT IN_OPENRESULT API_CALL OpenInputEndpoint_Win(InputEndpointInfo* info,
     if (result != MMSYSERR_NOERROR)
     {
         delete[] inputEndpointHandle->sysExHeaders;
-        DeleteCriticalSection(&inputEndpointHandle->lock);
         delete inputEndpointHandle;
 
         *errorCode = result;
@@ -1585,7 +1557,6 @@ API_EXPORT IN_OPENRESULT API_CALL OpenInputEndpoint_Win(InputEndpointInfo* info,
     {
         midiInClose(inputEndpointHandle->handle);
         delete[] inputEndpointHandle->sysExHeaders;
-        DeleteCriticalSection(&inputEndpointHandle->lock);
         delete inputEndpointHandle;
         return IN_OPENRESULT_FAILEDPREPARESYSEXBUFFERS;
     }
@@ -1600,6 +1571,7 @@ API_EXPORT IN_CLOSERESULT API_CALL CloseInputEndpoint(void* handle, int* errorCo
     *errorCode = 0;
 
     InputEndpointHandle* inputEndpointHandle = static_cast<InputEndpointHandle*>(handle);
+    auto sessionHandle = inputEndpointHandle->sessionHandle;
 
     if (inputEndpointHandle->groupListener != nullptr)
     {
@@ -1611,7 +1583,6 @@ API_EXPORT IN_CLOSERESULT API_CALL CloseInputEndpoint(void* handle, int* errorCo
                 inputEndpointHandle->groupListener.MessageReceived(inputEndpointHandle->revokeOnGroupListener);
 
             auto connectionId = inputEndpointHandle->connection.ConnectionId();
-            auto sessionHandle = inputEndpointHandle->sessionHandle;
 
             sessionHandle->endpointConnectionsUsersCounts[connectionId]--;
             if (sessionHandle->endpointConnectionsUsersCounts[connectionId] == 0)
@@ -1628,7 +1599,8 @@ API_EXPORT IN_CLOSERESULT API_CALL CloseInputEndpoint(void* handle, int* errorCo
         return IN_CLOSERESULT_OK;
     }
 
-    EnterCriticalSection(&inputEndpointHandle->lock);
+    std::lock_guard<std::mutex> lock(sessionHandle->endpointDevicesLock);
+
     inputEndpointHandle->isClosing = 1;
 
     auto cleanupSysExHeaders = [&inputEndpointHandle]()
@@ -1653,9 +1625,6 @@ API_EXPORT IN_CLOSERESULT API_CALL CloseInputEndpoint(void* handle, int* errorCo
     MMRESULT result = midiInReset(inputEndpointHandle->handle);
     if (result != MMSYSERR_NOERROR)
     {
-        LeaveCriticalSection(&inputEndpointHandle->lock);
-        DeleteCriticalSection(&inputEndpointHandle->lock);
-
         *errorCode = result;
 
         cleanupSysExHeaders();
@@ -1675,9 +1644,6 @@ API_EXPORT IN_CLOSERESULT API_CALL CloseInputEndpoint(void* handle, int* errorCo
     result = midiInClose(inputEndpointHandle->handle);
     if (result != MMSYSERR_NOERROR)
     {
-        LeaveCriticalSection(&inputEndpointHandle->lock);
-        DeleteCriticalSection(&inputEndpointHandle->lock);
-
         *errorCode = result;
 
         delete inputEndpointHandle;
@@ -1691,9 +1657,6 @@ API_EXPORT IN_CLOSERESULT API_CALL CloseInputEndpoint(void* handle, int* errorCo
 
         return IN_CLOSERESULT_CLOSE_UNKNOWNERROR;
     }
-
-    LeaveCriticalSection(&inputEndpointHandle->lock);
-    DeleteCriticalSection(&inputEndpointHandle->lock);
 
     delete inputEndpointHandle;
 

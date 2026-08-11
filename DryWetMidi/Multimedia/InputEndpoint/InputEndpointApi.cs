@@ -355,15 +355,15 @@ namespace Melanchall.DryWetMidi.Multimedia
 
             IN_GETPROPERTYRESULT result = default;
 
-            var apiType = CommonApi.Api_GetApiType();
+            var osType = CommonApi.Api_GetOsType();
 
-            if (apiType == CommonApi.API_TYPE.API_TYPE_WIN)
+            if (osType == CommonApi.OS_TYPE.OS_TYPE_WIN)
             {
                 result = GetInputEndpointId_Win(info, out var idPointer, out errorCode);
                 if (result == IN_GETPROPERTYRESULT.IN_GETPROPERTYRESULT_OK)
                     id = NativeApi.GetStringFromPointer(idPointer);
             }
-            else if (apiType == CommonApi.API_TYPE.API_TYPE_MAC)
+            else if (osType == CommonApi.OS_TYPE.OS_TYPE_MAC)
             {
                 result = GetInputEndpointId_Mac(info, out var idValue, out errorCode);
                 if (result == IN_GETPROPERTYRESULT.IN_GETPROPERTYRESULT_OK)

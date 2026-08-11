@@ -23,9 +23,9 @@
    Common
 ================================ */
 
-API_EXPORT API_TYPE GetApiType()
+API_EXPORT OS_TYPE GetOsType()
 {
-    return API_TYPE_MAC;
+    return OS_TYPE_MAC;
 }
 
 API_EXPORT void FreeBuffer(const char* buffer)

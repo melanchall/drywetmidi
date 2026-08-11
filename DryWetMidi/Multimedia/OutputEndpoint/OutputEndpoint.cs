@@ -43,7 +43,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         private OutputEndpointApi.Callback_Win _callback;
 
-        private readonly CommonApi.API_TYPE _apiType;
+        private readonly CommonApi.OS_TYPE _osType;
 
         private string _id;
 
@@ -55,7 +55,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             : base(context)
         {
             Handle_ = new OutputEndpointHandle(info);
-            _apiType = CommonApi.Api_GetApiType();
+            _osType = CommonApi.Api_GetOsType();
         }
 
         #endregion
@@ -296,23 +296,23 @@ namespace Melanchall.DryWetMidi.Multimedia
 
             int errorCode;
 
-            switch (_apiType)
+            switch (_osType)
             {
-                case CommonApi.API_TYPE.API_TYPE_WIN:
+                case CommonApi.OS_TYPE.OS_TYPE_WIN:
                     {
                         _callback = OnMessage;
                         var result = OutputEndpointApi.Api_OpenEndpoint_Win(Handle_.DangerousGetHandle(), sessionHandle, _callback, out rawHandle, out errorCode);
                         NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
                     }
                     break;
-                case CommonApi.API_TYPE.API_TYPE_MAC:
+                case CommonApi.OS_TYPE.OS_TYPE_MAC:
                     {
                         var result = OutputEndpointApi.Api_OpenEndpoint_Mac(Handle_.DangerousGetHandle(), sessionHandle, out rawHandle, out errorCode);
                         NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
                     }
                     break;
                 default:
-                    throw new NotSupportedException($"{_apiType} API is not supported.");
+                    throw new NotSupportedException($"{_osType} API is not supported.");
             }
 
             Handle_.OpenedEndpointHandle = rawHandle;
@@ -328,16 +328,16 @@ namespace Melanchall.DryWetMidi.Multimedia
             if (data == null || !data.Any())
                 return;
 
-            switch (_apiType)
+            switch (_osType)
             {
-                case CommonApi.API_TYPE.API_TYPE_WIN:
+                case CommonApi.OS_TYPE.OS_TYPE_WIN:
                     SendSysExEventData_Win(data);
                     break;
-                case CommonApi.API_TYPE.API_TYPE_MAC:
+                case CommonApi.OS_TYPE.OS_TYPE_MAC:
                     SendSysExEventData_Mac(data);
                     break;
                 default:
-                    throw new NotSupportedException($"{_apiType} API is not supported.");
+                    throw new NotSupportedException($"{_osType} API is not supported.");
             }
         }
 

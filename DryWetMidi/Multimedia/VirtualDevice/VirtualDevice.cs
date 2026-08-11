@@ -45,13 +45,13 @@ namespace Melanchall.DryWetMidi.Multimedia
         {
             _name = name;
 
-            var apiType = CommonApi.Api_GetApiType();
-            switch (apiType)
+            var osType = CommonApi.Api_GetOsType();
+            switch (osType)
             {
-                case CommonApi.API_TYPE.API_TYPE_MAC:
+                case CommonApi.OS_TYPE.OS_TYPE_MAC:
                     InitializeDevice_Mac();
                     break;
-                case CommonApi.API_TYPE.API_TYPE_WIN:
+                case CommonApi.OS_TYPE.OS_TYPE_WIN:
                     InitializeDevice_Win();
                     break;
             }

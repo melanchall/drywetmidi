@@ -123,16 +123,16 @@ namespace Melanchall.DryWetMidi.Configuration
             out IntPtr configuration,
             out int errorCode)
         {
-            var apiType = CommonApi.Api_GetApiType();
-            switch (apiType)
+            var osType = CommonApi.Api_GetOsType();
+            switch (osType)
             {
-                case CommonApi.API_TYPE.API_TYPE_WIN:
+                case CommonApi.OS_TYPE.OS_TYPE_WIN:
                     return GetConfiguration_Win(useWms, activityCallback, out configuration, out errorCode);
-                case CommonApi.API_TYPE.API_TYPE_MAC:
+                case CommonApi.OS_TYPE.OS_TYPE_MAC:
                     return GetConfiguration_Mac(activityCallback, out configuration, out errorCode);
             }
 
-            throw new NotImplementedException($"API type {apiType} not supported.");
+            throw new NotImplementedException($"OS type {osType} not supported.");
         }
 
         public static CONFIGURATION_CLEANUPRESULT Api_CleanupConfiguration(IntPtr configuration)

@@ -87,11 +87,11 @@ namespace Melanchall.DryWetMidi.Common
 
             var result = string.Empty;
 
-            switch (CommonApi.Api_GetApiType())
+            switch (CommonApi.Api_GetOsType())
             {
-                case CommonApi.API_TYPE.API_TYPE_WIN:
+                case CommonApi.OS_TYPE.OS_TYPE_WIN:
                     return Marshal.PtrToStringUni(stringPointer) ?? string.Empty;
-                case CommonApi.API_TYPE.API_TYPE_MAC:
+                case CommonApi.OS_TYPE.OS_TYPE_MAC:
                     return Marshal.PtrToStringAnsi(stringPointer) ?? string.Empty;
             }
 
@@ -100,7 +100,7 @@ namespace Melanchall.DryWetMidi.Common
 
         public static void FreeStringPointer(IntPtr stringPointer)
         {
-            if (stringPointer == IntPtr.Zero || CommonApi.Api_GetApiType() != CommonApi.API_TYPE.API_TYPE_MAC)
+            if (stringPointer == IntPtr.Zero || CommonApi.Api_GetOsType() != CommonApi.OS_TYPE.OS_TYPE_MAC)
                 return;
 
             CommonApi.Api_FreeBuffer(stringPointer);

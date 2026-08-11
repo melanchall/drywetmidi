@@ -73,19 +73,19 @@ namespace Melanchall.DryWetMidi.Multimedia
 
             var intervalInMilliseconds = (int)interval.TotalMilliseconds;
 
-            var apiType = CommonApi.Api_GetApiType();
+            var osType = CommonApi.Api_GetOsType();
             var sessionHandle = TickGeneratorSession.GetSessionHandle();
 
             TickGeneratorApi.TG_STARTRESULT result;
             int errorCode;
 
-            switch (apiType)
+            switch (osType)
             {
-                case CommonApi.API_TYPE.API_TYPE_WIN:
+                case CommonApi.OS_TYPE.OS_TYPE_WIN:
                     result = StartHighPrecisionTickGenerator_Win(intervalInMilliseconds, out _tickGeneratorInfo, out errorCode);
                     TickGeneratorUtilities.HandleTickGeneratorNativeApiResult(result, errorCode);
                     break;
-                case CommonApi.API_TYPE.API_TYPE_MAC:
+                case CommonApi.OS_TYPE.OS_TYPE_MAC:
                     result = StartHighPrecisionTickGenerator_Mac(intervalInMilliseconds, out _tickGeneratorInfo, out errorCode);
                     TickGeneratorUtilities.HandleTickGeneratorNativeApiResult(result, errorCode);
                     break;

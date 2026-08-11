@@ -2,10 +2,10 @@
    Common
 ================================ */
 
-typedef int API_TYPE;
+typedef int OS_TYPE;
 
-#define API_TYPE_WIN 0
-#define API_TYPE_MAC 1
+#define OS_TYPE_WIN 0
+#define OS_TYPE_MAC 1
 
 /* ================================
    Configuration

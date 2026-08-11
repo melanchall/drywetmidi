@@ -12,10 +12,10 @@ namespace Melanchall.DryWetMidi.Multimedia
     {
         #region Nested enums
 
-        public enum API_TYPE
+        public enum OS_TYPE
         {
-            API_TYPE_WIN = 0,
-            API_TYPE_MAC = 1
+            OS_TYPE_WIN = 0,
+            OS_TYPE_MAC = 1
         }
 
         #endregion
@@ -25,7 +25,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 #if NET7_0_OR_GREATER
         [LibraryImport(NativeApi.LibraryName)]
         [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-        private static partial API_TYPE GetApiType();
+        private static partial OS_TYPE GetOsType();
 
         [LibraryImport(NativeApi.LibraryName)]
         [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
@@ -37,7 +37,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         private static partial void FreeBuffer(IntPtr buffer);
 #else
         [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
-        private static extern API_TYPE GetApiType();
+        private static extern OS_TYPE GetOsType();
 
         [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
         private static extern void GetNativeEnvironmentInfo_Win(
@@ -51,9 +51,9 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         #region Methods
 
-        public static API_TYPE Api_GetApiType()
+        public static OS_TYPE Api_GetOsType()
         {
-            return GetApiType();
+            return GetOsType();
         }
 
         public static void Api_GetNativeEnvironmentInfo_Win(

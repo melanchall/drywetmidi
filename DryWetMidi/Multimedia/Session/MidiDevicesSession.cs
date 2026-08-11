@@ -49,7 +49,7 @@ namespace Melanchall.DryWetMidi.Multimedia
                         _inputEndpointCallback = InputEndpointCallback;
                         _outputEndpointCallback = OutputEndpointCallback;
 
-                        var openResult = MidiDevicesSessionApi.Api_OpenSession(Guid.NewGuid().ToString(), MidiConfiguration.GetConfigurationHandle(), _inputEndpointCallback, _outputEndpointCallback, out var rawHandle, out var errorCode);
+                        var openResult = MidiDevicesSessionApi.Api_OpenSession($"DryWetMIDI_{Guid.NewGuid()}", MidiConfiguration.GetConfigurationHandle(), _inputEndpointCallback, _outputEndpointCallback, out var rawHandle, out var errorCode);
                         NativeApiUtilities.HandleEndpointNativeApiResult(openResult, errorCode);
 
                         _handle = new MidiDevicesSessionHandle(rawHandle);
@@ -67,7 +67,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             return _handle;
         }
 
-        private static void OnDomainUnloadOrExit(object sender, EventArgs e)
+        internal static void ResetSessionHandle()
         {
             if (_handle != null && !_handle.IsInvalid)
             {
@@ -80,6 +80,11 @@ namespace Melanchall.DryWetMidi.Multimedia
                     }
                 }
             }
+        }
+
+        private static void OnDomainUnloadOrExit(object sender, EventArgs e)
+        {
+            ResetSessionHandle();
         }
 
         private static void InputEndpointCallback(IntPtr info, MidiDevicesSessionApi.SESSION_CALLBACKOPERATION operation)

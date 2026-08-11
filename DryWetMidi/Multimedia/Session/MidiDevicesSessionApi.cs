@@ -110,9 +110,9 @@ namespace Melanchall.DryWetMidi.Multimedia
             out IntPtr handle,
             out int errorCode)
         {
-            switch (CommonApi.Api_GetApiType())
+            switch (CommonApi.Api_GetOsType())
             {
-                case CommonApi.API_TYPE.API_TYPE_WIN:
+                case CommonApi.OS_TYPE.OS_TYPE_WIN:
                     return OpenSession_Win(
                         name,
                         configuration,
@@ -120,7 +120,7 @@ namespace Melanchall.DryWetMidi.Multimedia
                         outputEndpointCallback,
                         out handle,
                         out errorCode);
-                case CommonApi.API_TYPE.API_TYPE_MAC:
+                case CommonApi.OS_TYPE.OS_TYPE_MAC:
                     return OpenSession_Mac(
                         name,
                         configuration,

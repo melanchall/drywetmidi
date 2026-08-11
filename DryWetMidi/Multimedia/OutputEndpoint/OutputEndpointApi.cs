@@ -283,11 +283,11 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         public static OUT_GETALLINFORESULT Api_GetEndpointsInfo(MidiConfigurationHandle configuration, MidiDevicesSessionHandle sessionHandle, bool forceWinMM, out IntPtr devicesInfo, out int devicesCount, out int errorCode)
         {
-            switch (CommonApi.Api_GetApiType())
+            switch (CommonApi.Api_GetOsType())
             {
-                case CommonApi.API_TYPE.API_TYPE_WIN:
+                case CommonApi.OS_TYPE.OS_TYPE_WIN:
                     return GetOutputEndpointsInfo_Win(configuration, sessionHandle, forceWinMM, out devicesInfo, out devicesCount, out errorCode);
-                case CommonApi.API_TYPE.API_TYPE_MAC:
+                case CommonApi.OS_TYPE.OS_TYPE_MAC:
                     return GetOutputEndpointsInfo_Mac(configuration, sessionHandle, out devicesInfo, out devicesCount, out errorCode);
             }
 
@@ -356,15 +356,15 @@ namespace Melanchall.DryWetMidi.Multimedia
 
             OUT_GETPROPERTYRESULT result = default;
 
-            var apiType = CommonApi.Api_GetApiType();
+            var osType = CommonApi.Api_GetOsType();
 
-            if (apiType == CommonApi.API_TYPE.API_TYPE_WIN)
+            if (osType == CommonApi.OS_TYPE.OS_TYPE_WIN)
             {
                 result = GetOutputEndpointId_Win(info, out var idPointer, out errorCode);
                 if (result == OUT_GETPROPERTYRESULT.OUT_GETPROPERTYRESULT_OK)
                     id = NativeApi.GetStringFromPointer(idPointer);
             }
-            else if (apiType == CommonApi.API_TYPE.API_TYPE_MAC)
+            else if (osType == CommonApi.OS_TYPE.OS_TYPE_MAC)
             {
                 result = GetOutputEndpointId_Mac(info, out var idValue, out errorCode);
                 if (result == OUT_GETPROPERTYRESULT.OUT_GETPROPERTYRESULT_OK)
