@@ -48,10 +48,10 @@ namespace Melanchall.DryWetMidi.Multimedia
             var osType = CommonApi.Api_GetOsType();
             switch (osType)
             {
-                case CommonApi.OS_TYPE.OS_TYPE_MAC:
+                case CommonApi.OsType.MacOS:
                     InitializeDevice_Mac();
                     break;
-                case CommonApi.OS_TYPE.OS_TYPE_WIN:
+                case CommonApi.OsType.Windows:
                     InitializeDevice_Win();
                     break;
             }

@@ -27,6 +27,12 @@ typedef int CONFIGURATION_CLEANUPRESULT;
 
 #define CONFIGURATION_CLEANUPRESULT_WMSUNKNOWNERROR 1
 
+typedef int CONFIGURATION_API_TYPE;
+
+#define CONFIGURATION_API_TYPE_COREMIDI 0
+#define CONFIGURATION_API_TYPE_WINMM 1
+#define CONFIGURATION_API_TYPE_WMS 2
+
 /* ================================
    High-precision tick generator
 ================================ */

@@ -75,6 +75,12 @@ namespace Melanchall.DryWetMidi.Configuration
 
             return MidiConfigurationApi.Api_IsVirtualDeviceApiAvailable(MidiConfiguration.GetConfigurationHandle());
         }
+
+        public static ApiType GetApiType()
+        {
+            NativeApiUtilities.EnsureOsIsSupported();
+            return MidiConfigurationApi.Api_GetApiType(MidiConfiguration.GetConfigurationHandle());
+        }
 #endif
 
         public static string GetConfigurationSummary()
@@ -138,7 +144,13 @@ namespace Melanchall.DryWetMidi.Configuration
             var osType = CommonApi.Api_GetOsType();
             resultLines.Add($"- OS type: {osType}");
 
-            if (osType == CommonApi.OS_TYPE.OS_TYPE_WIN)
+            if (NativeApiUtilities.IsOsSupported())
+            {
+                var apiType = MidiConfigurationApi.Api_GetApiType(MidiConfiguration.GetConfigurationHandle());
+                resultLines.Add($"- API type: {apiType}");
+            }
+
+            if (osType == CommonApi.OsType.Windows)
                 AddWindowsNativeBackendInfo(resultLines);
         }
 

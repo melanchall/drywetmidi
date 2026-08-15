@@ -43,7 +43,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         private OutputEndpointApi.Callback_Win _callback;
 
-        private readonly CommonApi.OS_TYPE _osType;
+        private readonly CommonApi.OsType _osType;
 
         private string _id;
 
@@ -298,14 +298,14 @@ namespace Melanchall.DryWetMidi.Multimedia
 
             switch (_osType)
             {
-                case CommonApi.OS_TYPE.OS_TYPE_WIN:
+                case CommonApi.OsType.Windows:
                     {
                         _callback = OnMessage;
                         var result = OutputEndpointApi.Api_OpenEndpoint_Win(Handle_.DangerousGetHandle(), sessionHandle, _callback, out rawHandle, out errorCode);
                         NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
                     }
                     break;
-                case CommonApi.OS_TYPE.OS_TYPE_MAC:
+                case CommonApi.OsType.MacOS:
                     {
                         var result = OutputEndpointApi.Api_OpenEndpoint_Mac(Handle_.DangerousGetHandle(), sessionHandle, out rawHandle, out errorCode);
                         NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
@@ -330,10 +330,10 @@ namespace Melanchall.DryWetMidi.Multimedia
 
             switch (_osType)
             {
-                case CommonApi.OS_TYPE.OS_TYPE_WIN:
+                case CommonApi.OsType.Windows:
                     SendSysExEventData_Win(data);
                     break;
-                case CommonApi.OS_TYPE.OS_TYPE_MAC:
+                case CommonApi.OsType.MacOS:
                     SendSysExEventData_Mac(data);
                     break;
                 default:

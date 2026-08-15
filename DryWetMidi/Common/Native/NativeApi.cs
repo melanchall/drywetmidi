@@ -89,9 +89,9 @@ namespace Melanchall.DryWetMidi.Common
 
             switch (CommonApi.Api_GetOsType())
             {
-                case CommonApi.OS_TYPE.OS_TYPE_WIN:
+                case CommonApi.OsType.Windows:
                     return Marshal.PtrToStringUni(stringPointer) ?? string.Empty;
-                case CommonApi.OS_TYPE.OS_TYPE_MAC:
+                case CommonApi.OsType.MacOS:
                     return Marshal.PtrToStringAnsi(stringPointer) ?? string.Empty;
             }
 
@@ -100,7 +100,7 @@ namespace Melanchall.DryWetMidi.Common
 
         public static void FreeStringPointer(IntPtr stringPointer)
         {
-            if (stringPointer == IntPtr.Zero || CommonApi.Api_GetOsType() != CommonApi.OS_TYPE.OS_TYPE_MAC)
+            if (stringPointer == IntPtr.Zero || CommonApi.Api_GetOsType() != CommonApi.OsType.MacOS)
                 return;
 
             CommonApi.Api_FreeBuffer(stringPointer);

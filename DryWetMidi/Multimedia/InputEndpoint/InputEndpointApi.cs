@@ -357,13 +357,13 @@ namespace Melanchall.DryWetMidi.Multimedia
 
             var osType = CommonApi.Api_GetOsType();
 
-            if (osType == CommonApi.OS_TYPE.OS_TYPE_WIN)
+            if (osType == CommonApi.OsType.Windows)
             {
                 result = GetInputEndpointId_Win(info, out var idPointer, out errorCode);
                 if (result == IN_GETPROPERTYRESULT.IN_GETPROPERTYRESULT_OK)
                     id = NativeApi.GetStringFromPointer(idPointer);
             }
-            else if (osType == CommonApi.OS_TYPE.OS_TYPE_MAC)
+            else if (osType == CommonApi.OsType.MacOS)
             {
                 result = GetInputEndpointId_Mac(info, out var idValue, out errorCode);
                 if (result == IN_GETPROPERTYRESULT.IN_GETPROPERTYRESULT_OK)

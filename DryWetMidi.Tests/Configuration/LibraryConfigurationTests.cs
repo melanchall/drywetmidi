@@ -3,6 +3,7 @@ using Melanchall.DryWetMidi.Tests.Attributes;
 using NUnit.Framework;
 using NUnit.Framework.Legacy;
 using System;
+using System.Runtime.InteropServices;
 
 namespace Melanchall.DryWetMidi.Tests.Configuration
 {
@@ -65,6 +66,42 @@ namespace Melanchall.DryWetMidi.Tests.Configuration
         public void IsVirtualDeviceApiAvailable()
         {
             ClassicAssert.IsTrue(LibraryConfiguration.IsVirtualDeviceApiAvailable(), "Invalid virtual device API availability.");
+        }
+
+        [NativeApiRequired]
+        [Test]
+        public void GetApiType()
+        {
+            var apiType = LibraryConfiguration.GetApiType();
+
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                ClassicAssert.IsTrue(apiType == ApiType.WinMM || apiType == ApiType.WindowsMidiServices, "Invalid API type.");
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+                ClassicAssert.AreEqual(ApiType.CoreMidi, apiType, "Invalid API type.");
+        }
+
+        [NativeApiRequired]
+        [AdvancedApiRequired]
+        [WinOnly]
+        [Test]
+        public void GetApiType_WmsAvailable([Values] bool useWms)
+        {
+            MidiConfiguration.ResetHandle();
+
+            try
+            {
+                LibraryConfiguration.UseWindowsMidiServices = useWms;
+
+                ClassicAssert.AreEqual(
+                    useWms ? ApiType.WindowsMidiServices : ApiType.WinMM,
+                    LibraryConfiguration.GetApiType(),
+                    "Invalid API type.");
+            }
+            finally
+            {
+                MidiConfiguration.ResetHandle();
+                LibraryConfiguration.UseWindowsMidiServices = true;
+            }
         }
 
         [NativeApiRequired]

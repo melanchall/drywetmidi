@@ -81,11 +81,11 @@ namespace Melanchall.DryWetMidi.Multimedia
 
             switch (osType)
             {
-                case CommonApi.OS_TYPE.OS_TYPE_WIN:
+                case CommonApi.OsType.Windows:
                     result = StartHighPrecisionTickGenerator_Win(intervalInMilliseconds, out _tickGeneratorInfo, out errorCode);
                     TickGeneratorUtilities.HandleTickGeneratorNativeApiResult(result, errorCode);
                     break;
-                case CommonApi.OS_TYPE.OS_TYPE_MAC:
+                case CommonApi.OsType.MacOS:
                     result = StartHighPrecisionTickGenerator_Mac(intervalInMilliseconds, out _tickGeneratorInfo, out errorCode);
                     TickGeneratorUtilities.HandleTickGeneratorNativeApiResult(result, errorCode);
                     break;

@@ -57,6 +57,10 @@ namespace Melanchall.DryWetMidi.Configuration
 
         [LibraryImport(NativeApi.LibraryName)]
         [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
+        private static partial ApiType GetApiType(MidiConfigurationHandle configuration);
+
+        [LibraryImport(NativeApi.LibraryName)]
+        [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
         [return: MarshalAs(UnmanagedType.U1)]
         private static partial bool IsVirtualDeviceApiAvailable(MidiConfigurationHandle configuration);
 
@@ -90,6 +94,9 @@ namespace Melanchall.DryWetMidi.Configuration
 
         [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
         private static extern CONFIGURATION_CLEANUPRESULT CleanupConfiguration(IntPtr configuration);
+
+        [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
+        private static extern ApiType GetApiType(MidiConfigurationHandle configuration);
 
         [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
         [return: MarshalAs(UnmanagedType.U1)]
@@ -126,9 +133,9 @@ namespace Melanchall.DryWetMidi.Configuration
             var osType = CommonApi.Api_GetOsType();
             switch (osType)
             {
-                case CommonApi.OS_TYPE.OS_TYPE_WIN:
+                case CommonApi.OsType.Windows:
                     return GetConfiguration_Win(useWms, activityCallback, out configuration, out errorCode);
-                case CommonApi.OS_TYPE.OS_TYPE_MAC:
+                case CommonApi.OsType.MacOS:
                     return GetConfiguration_Mac(activityCallback, out configuration, out errorCode);
             }
 
@@ -138,6 +145,11 @@ namespace Melanchall.DryWetMidi.Configuration
         public static CONFIGURATION_CLEANUPRESULT Api_CleanupConfiguration(IntPtr configuration)
         {
             return CleanupConfiguration(configuration);
+        }
+
+        public static ApiType Api_GetApiType(MidiConfigurationHandle configuration)
+        {
+            return GetApiType(configuration);
         }
 
         public static bool Api_IsVirtualDeviceApiAvailable(MidiConfigurationHandle configuration)

@@ -210,6 +210,14 @@ API_EXPORT CONFIGURATION_CLEANUPRESULT API_CALL CleanupConfiguration(Configurati
     return CONFIGURATION_CLEANUPRESULT_OK;
 }
 
+API_EXPORT CONFIGURATION_API_TYPE API_CALL GetApiType(Configuration* configuration)
+{
+    if (configuration->wmsInitialized)
+        return CONFIGURATION_API_TYPE_WMS;
+
+    return CONFIGURATION_API_TYPE_WINMM;
+}
+
 API_EXPORT bool API_CALL IsVirtualDeviceApiAvailable(Configuration* configuration)
 {
     return configuration->wmsInitialized && configuration->basicLoopbackAvailable;

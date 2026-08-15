@@ -79,6 +79,11 @@ API_EXPORT CONFIGURATION_CLEANUPRESULT CleanupConfiguration(Configuration* confi
     return CONFIGURATION_CLEANUPRESULT_OK;
 }
 
+API_EXPORT CONFIGURATION_API_TYPE GetApiType(Configuration* configuration)
+{
+    return CONFIGURATION_API_TYPE_COREMIDI;
+}
+
 API_EXPORT bool IsVirtualDeviceApiAvailable(Configuration* configuration)
 {
     return true;

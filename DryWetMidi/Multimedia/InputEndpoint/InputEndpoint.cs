@@ -68,7 +68,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         private readonly Dictionary<MidiTimeCodeComponent, FourBitNumber> _midiTimeCodeComponents = new Dictionary<MidiTimeCodeComponent, FourBitNumber>();
         private readonly List<byte[]> _sysExParts = new List<byte[]>();
 
-        private readonly CommonApi.OS_TYPE _osType;
+        private readonly CommonApi.OsType _osType;
 
         private readonly object _handleLock = new object();
         private readonly object _eventProcessingLock = new object();
@@ -393,7 +393,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
                 switch (_osType)
                 {
-                    case CommonApi.OS_TYPE.OS_TYPE_WIN:
+                    case CommonApi.OsType.Windows:
                         {
                             _callbackWin = OnMessage_Win;
                             _bytesReceivedCallback = OnBytesReceived;
@@ -401,7 +401,7 @@ namespace Melanchall.DryWetMidi.Multimedia
                             NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
                         }
                         break;
-                    case CommonApi.OS_TYPE.OS_TYPE_MAC:
+                    case CommonApi.OsType.MacOS:
                         {
                             _callbackMac = OnMessage_Mac;
                             var result = InputEndpointApi.Api_OpenEndpoint_Mac(Handle_.DangerousGetHandle(), sessionHandle, _callbackMac, out rawHandle, out errorCode);
