@@ -101,7 +101,6 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
         [TestCase("Csus2", new[] { NoteName.C, NoteName.D, NoteName.G })]
         [TestCase("C9", new[] { NoteName.C, NoteName.E, NoteName.G, NoteName.ASharp, NoteName.D })]
         [TestCase("C9sus4", new[] { NoteName.C, NoteName.F, NoteName.G, NoteName.ASharp, NoteName.D })]
-        [TestCase("C9sus2", new[] { NoteName.C, NoteName.D, NoteName.G, NoteName.ASharp })]
         [TestCase("F/G", new[] { NoteName.G, NoteName.F, NoteName.A, NoteName.C })]
         [TestCase("C11", new[] { NoteName.C, NoteName.E, NoteName.G, NoteName.ASharp, NoteName.D, NoteName.F })]
         [TestCase("Cm11", new[] { NoteName.C, NoteName.DSharp, NoteName.G, NoteName.ASharp, NoteName.D, NoteName.F })]
@@ -143,7 +142,6 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
         [TestCase(new[] { NoteName.C, NoteName.D, NoteName.G }, "Csus2")]
         [TestCase(new[] { NoteName.C, NoteName.E, NoteName.G, NoteName.ASharp, NoteName.D }, "C9")]
         [TestCase(new[] { NoteName.C, NoteName.F, NoteName.G, NoteName.ASharp, NoteName.D }, "C9sus4")]
-        [TestCase(new[] { NoteName.C, NoteName.D, NoteName.G, NoteName.ASharp, NoteName.D }, "C9sus2")]
         [TestCase(new[] { NoteName.G, NoteName.F, NoteName.A, NoteName.C }, "F/G")]
         [TestCase(new[] { NoteName.C, NoteName.E, NoteName.G, NoteName.F }, "Cadd11")]
         [TestCase(new[] { NoteName.C, NoteName.E, NoteName.GSharp, NoteName.ASharp }, "C7#5")]
@@ -189,6 +187,25 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
             }
 
             CollectionAssert.IsEmpty(namesWithOctaves, "There are names with octaves.");
+        }
+
+        [Test]
+        public void CheckChordNamesTableDoesntContainDuplicatedIntervalsSets()
+        {
+            var intervalsStrings = new HashSet<string>();
+            var duplicatedIntervalsStrings = new HashSet<string>();
+
+            foreach (var nameDefinition in ChordsNamesTable.NamesDefinitions)
+            {
+                foreach (var intervals in nameDefinition.Intervals)
+                {
+                    var intervalsString = string.Join(" ", intervals);
+                    if (!intervalsStrings.Add(intervalsString))
+                        duplicatedIntervalsStrings.Add(intervalsString);
+                }
+            }
+
+            CollectionAssert.IsEmpty(duplicatedIntervalsStrings, "There are duplicated intervals sets.");
         }
 
         #endregion
