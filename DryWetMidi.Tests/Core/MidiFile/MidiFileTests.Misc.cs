@@ -8,6 +8,7 @@ using NUnit.Framework.Legacy;
 
 namespace Melanchall.DryWetMidi.Tests.Core
 {
+    [Parallelizable(ParallelScope.Children)]
     [TestFixture]
     public sealed partial class MidiFileTests
     {

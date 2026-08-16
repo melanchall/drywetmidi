@@ -1,14 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Melanchall.DryWetMidi.Common;
-using Melanchall.DryWetMidi.Multimedia;
+﻿using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
+using Melanchall.DryWetMidi.Multimedia;
 using NUnit.Framework;
-using System.Diagnostics;
 using NUnit.Framework.Legacy;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
+using System.Linq;
+using System.Threading;
 
 namespace Melanchall.DryWetMidi.Tests.Multimedia
 {
@@ -47,10 +48,17 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         #region Constants
 
         private static readonly TempoMap TempoMap = new TempoMap(new TicksPerQuarterNoteTimeDivision(500));
+        private static readonly SemaphoreSlim Semaphore = new SemaphoreSlim(2, 2);
 
         #endregion
 
         #region Setup
+
+        [SetUp]
+        public void SetUp() => Semaphore.Wait();
+
+        [TearDown]
+        public void TearDown() => Semaphore.Release();
 
         [OneTimeSetUp]
         public static void GlobalSetup()

@@ -7,6 +7,7 @@ using NUnit.Framework.Legacy;
 
 namespace Melanchall.DryWetMidi.Tests.Common
 {
+    [Parallelizable(ParallelScope.Children)]
     [TestFixture]
     public sealed class RedBlackTreeTests
     {

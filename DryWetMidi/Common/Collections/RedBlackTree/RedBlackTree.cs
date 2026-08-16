@@ -11,7 +11,9 @@ namespace Melanchall.DryWetMidi.Common
     {
         #region Fields
 
-        protected RedBlackTreeNode<TKey, TValue> _root = RedBlackTreeNode<TKey, TValue>.Void;
+        protected readonly RedBlackTreeNode<TKey, TValue> _void =
+            new RedBlackTreeNode<TKey, TValue>(default(TKey), null) { IsVoidNode = true };
+        protected RedBlackTreeNode<TKey, TValue> _root;
 
         #endregion
 
@@ -19,10 +21,13 @@ namespace Melanchall.DryWetMidi.Common
 
         public RedBlackTree()
         {
+            _root = _void;
         }
 
         public RedBlackTree(IEnumerable<TValue> values, Func<TValue, TKey> keySelector)
         {
+            _root = _void;
+
             foreach (var v in values)
             {
                 Add(keySelector(v), v);
@@ -41,11 +46,9 @@ namespace Melanchall.DryWetMidi.Common
 
         public RedBlackTree<TKey, TValue> Clone()
         {
-            var result = new RedBlackTree<TKey, TValue>
-            {
-                _root = _root.Clone(),
-                Count = Count
-            };
+            var result = new RedBlackTree<TKey, TValue>();
+            result._root = _root.Clone(_void, result._void);
+            result.Count = Count;
 
             result._root.Tree = result;
             return result;
@@ -53,7 +56,7 @@ namespace Melanchall.DryWetMidi.Common
 
         public void Clear()
         {
-            _root = RedBlackTreeNode<TKey, TValue>.Void;
+            _root = _void;
         }
 
         public RedBlackTreeCoordinate<TKey, TValue> GetCoordinate(TKey key, TValue value)
@@ -188,7 +191,7 @@ namespace Melanchall.DryWetMidi.Common
         public RedBlackTreeCoordinate<TKey, TValue> Add(TKey key, TValue value)
         {
             var currentNode = _root;
-            var lastNode = RedBlackTreeNode<TKey, TValue>.Void;
+            var lastNode = _void;
 
             while (!IsVoid(currentNode))
             {
@@ -218,8 +221,8 @@ namespace Melanchall.DryWetMidi.Common
             else
                 lastNode.Right = newNode;
 
-            newNode.Left = RedBlackTreeNode<TKey, TValue>.Void;
-            newNode.Right = RedBlackTreeNode<TKey, TValue>.Void;
+            newNode.Left = _void;
+            newNode.Right = _void;
             newNode.IsRed = true;
 
             OnValueAdded(result, value);
@@ -393,7 +396,7 @@ namespace Melanchall.DryWetMidi.Common
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected bool IsVoid(RedBlackTreeNode<TKey, TValue> node)
         {
-            return node == null || node == RedBlackTreeNode<TKey, TValue>.Void;
+            return node == null || node == _void || node.IsVoidNode;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

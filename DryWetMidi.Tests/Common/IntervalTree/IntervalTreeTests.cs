@@ -7,6 +7,7 @@ using System.Linq;
 
 namespace Melanchall.DryWetMidi.Tests.Common
 {
+    [Parallelizable(ParallelScope.Children)]
     [TestFixture]
     public sealed class IntervalTreeTests
     {
@@ -665,7 +666,7 @@ namespace Melanchall.DryWetMidi.Tests.Common
             var result = subTreeRoot.Values.Select(v => v.End).Max();
 
             var left = subTreeRoot.Left;
-            if (left != null && left != RedBlackTreeNode<TKey, TValue>.Void)
+            if (left != null && !left.IsVoidNode)
             {
                 var leftMax = GetSubTreeMax(left);
                 if (leftMax.CompareTo(result) > 0)
@@ -673,7 +674,7 @@ namespace Melanchall.DryWetMidi.Tests.Common
             }
 
             var right = subTreeRoot.Right;
-            if (right != null && right != RedBlackTreeNode<TKey, TValue>.Void)
+            if (right != null && !right.IsVoidNode)
             {
                 var rightMax = GetSubTreeMax(right);
                 if (rightMax.CompareTo(result) > 0)

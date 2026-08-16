@@ -6,12 +6,6 @@ namespace Melanchall.DryWetMidi.Common
     internal sealed class RedBlackTreeNode<TKey, TValue>
         where TKey : IComparable<TKey>
     {
-        #region Constants
-
-        public static readonly RedBlackTreeNode<TKey, TValue> Void = new RedBlackTreeNode<TKey, TValue>(default(TKey), null);
-
-        #endregion
-
         #region Constructor
 
         public RedBlackTreeNode(TKey key, RedBlackTreeNode<TKey, TValue> parent)
@@ -23,6 +17,8 @@ namespace Melanchall.DryWetMidi.Common
         #endregion
 
         #region Properties
+
+        public bool IsVoidNode { get; internal set; }
 
         public TKey Key { get; set; }
 
@@ -46,10 +42,10 @@ namespace Melanchall.DryWetMidi.Common
 
         #region Methods
 
-        public RedBlackTreeNode<TKey, TValue> Clone()
+        public RedBlackTreeNode<TKey, TValue> Clone(RedBlackTreeNode<TKey, TValue> oldVoid, RedBlackTreeNode<TKey, TValue> newVoid)
         {
-            if (this == Void)
-                return Void;
+            if (this == oldVoid)
+                return newVoid;
 
             var node = new RedBlackTreeNode<TKey, TValue>(Key, Parent)
             {
@@ -59,11 +55,11 @@ namespace Melanchall.DryWetMidi.Common
                 Values = Values
             };
 
-            var leftClone = Left?.Clone();
+            var leftClone = Left?.Clone(oldVoid, newVoid);
             leftClone.Parent = node;
             node.Left = leftClone;
 
-            var rightClone = Right?.Clone();
+            var rightClone = Right?.Clone(oldVoid, newVoid);
             rightClone.Parent = node;
             node.Right = rightClone;
 
@@ -76,7 +72,7 @@ namespace Melanchall.DryWetMidi.Common
 
         public override string ToString()
         {
-            return this != Void ? $"{Key}: {string.Join(", ", Values)}" : "<Void>";
+            return !IsVoidNode ? $"{Key}: {string.Join(", ", Values)}" : "<Void>";
         }
 
         #endregion
