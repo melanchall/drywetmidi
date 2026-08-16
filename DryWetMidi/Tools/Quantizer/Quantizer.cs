@@ -12,6 +12,12 @@ namespace Melanchall.DryWetMidi.Tools
     /// </summary>
     public class Quantizer
     {
+        #region Constants
+
+        private const int RandomizeMaxAttempts = 3;
+
+        #endregion
+
         #region Methods
 
         /// <summary>
@@ -288,7 +294,14 @@ namespace Melanchall.DryWetMidi.Tools
             var maxTime = timeBounds.Item2;
 
             var difference = (int)Math.Abs(maxTime - minTime);
-            return minTime + Common.Random.Instance.Next(difference) + 1;
+
+            var result = time;
+            for (var i = 0; i < RandomizeMaxAttempts && result == time; i++)
+            {
+                result = minTime + Common.Random.Instance.Next(difference) + 1;
+            }
+
+            return result;
         }
 
         private static long[] GetGridTimes(
