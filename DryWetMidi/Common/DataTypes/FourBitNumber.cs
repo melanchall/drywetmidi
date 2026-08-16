@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Linq;
 
+#if NET7_0_OR_GREATER
+using System.Text.Json.Serialization;
+#endif
+
 namespace Melanchall.DryWetMidi.Common
 {
     /// <summary>
@@ -22,6 +26,9 @@ namespace Melanchall.DryWetMidi.Common
     /// noteOnEvent.Channel = (FourBitNumber)10;
     /// </code>
     /// </example>
+#if NET7_0_OR_GREATER
+    [JsonConverter(typeof(FourBitNumberJsonConverter))]
+#endif
     public struct FourBitNumber : IComparable<FourBitNumber>, IConvertible, IEquatable<FourBitNumber>
     {
         #region Constants

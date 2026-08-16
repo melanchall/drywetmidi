@@ -3,12 +3,36 @@ using Melanchall.DryWetMidi.Common;
 using NUnit.Framework;
 using NUnit.Framework.Legacy;
 
+#if NET7_0_OR_GREATER
+using System.Text.Json;
+#endif
+
 namespace Melanchall.DryWetMidi.Tests.Common
 {
     [TestFixture]
     public sealed class SevenBitNumberTests
     {
         #region Test methods
+
+#if NET7_0_OR_GREATER
+        [Test]
+        public void SerializeSevenBitNumberToJson()
+        {
+            ClassicAssert.AreEqual("42", JsonSerializer.Serialize((SevenBitNumber)42));
+        }
+
+        [Test]
+        public void DeserializeSevenBitNumberFromJson()
+        {
+            ClassicAssert.AreEqual((SevenBitNumber)42, JsonSerializer.Deserialize<SevenBitNumber>("42"));
+        }
+
+        [Test]
+        public void DeserializeSevenBitNumberFromJson_OutOfRange()
+        {
+            ClassicAssert.Throws<JsonException>(() => JsonSerializer.Deserialize<SevenBitNumber>("128"));
+        }
+#endif
 
         [Test]
         public void Parse_InvalidFormat()

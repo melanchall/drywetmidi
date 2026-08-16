@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Linq;
 
+#if NET7_0_OR_GREATER
+using System.Text.Json.Serialization;
+#endif
+
 namespace Melanchall.DryWetMidi.Common
 {
     /// <summary>
@@ -34,6 +38,9 @@ namespace Melanchall.DryWetMidi.Common
     /// <c>(SevenBitNumber)70</c> passed to the <c>velocity</c> one.
     /// </para>
     /// </example>
+#if NET7_0_OR_GREATER
+    [JsonConverter(typeof(SevenBitNumberJsonConverter))]
+#endif
     public struct SevenBitNumber : IComparable<SevenBitNumber>, IConvertible, IEquatable<SevenBitNumber>
     {
         #region Constants

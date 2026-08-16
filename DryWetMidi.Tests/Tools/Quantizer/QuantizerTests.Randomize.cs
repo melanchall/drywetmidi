@@ -2,6 +2,7 @@
 using Melanchall.DryWetMidi.Tools;
 using NUnit.Framework;
 using NUnit.Framework.Legacy;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -267,7 +268,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             ClassicAssert.LessOrEqual(
                 unchangedTimesCount / (double)timesForChangeCount,
                 unchangedMaxPercent,
-                "Too high percent of unchanged times.");
+                $"Too high percent of unchanged times.{Environment.NewLine}{string.Join(Environment.NewLine, originalTimedEvents.Zip(actualTimedEvents, (x, y) => $"{x.Time} -> {y.Time}"))}");
         }
 
         #endregion
