@@ -13,79 +13,64 @@ namespace Melanchall.DryWetMidi.Interaction
     {
         #region Nested classes
 
-        private abstract class NoteOnsHolderBase<TDescriptor> where TDescriptor : IObjectDescriptor
+        private abstract class NoteOnsHolder
         {
             private const int DefaultCapacity = 2;
 
-            private readonly NoteStartDetectionPolicy _noteStartDetectionPolicy;
+            public abstract int Count { get; }
 
-            private readonly Stack<LinkedListNode<TDescriptor>> _nodesStack;
-            private readonly Queue<LinkedListNode<TDescriptor>> _nodesQueue;
+            public abstract void Add(LinkedListNode<IObjectDescriptor> noteOnNode);
 
-            protected NoteOnsHolderBase(NoteStartDetectionPolicy noteStartDetectionPolicy)
+            public abstract LinkedListNode<IObjectDescriptor> GetNext();
+
+            public static NoteOnsHolder Create(NoteStartDetectionPolicy policy, LinkedListNode<IObjectDescriptor> firstNode, LinkedListNode<IObjectDescriptor> secondNode)
             {
-                switch (noteStartDetectionPolicy)
-                {
-                    case NoteStartDetectionPolicy.LastNoteOn:
-                        _nodesStack = new Stack<LinkedListNode<TDescriptor>>(DefaultCapacity);
-                        break;
-                    case NoteStartDetectionPolicy.FirstNoteOn:
-                        _nodesQueue = new Queue<LinkedListNode<TDescriptor>>(DefaultCapacity);
-                        break;
-                }
+                NoteOnsHolder holder = policy == NoteStartDetectionPolicy.LastNoteOn
+                    ? (NoteOnsHolder)new NoteOnsHolderStack(DefaultCapacity)
+                    : new NoteOnsHolderQueue(DefaultCapacity);
 
-                _noteStartDetectionPolicy = noteStartDetectionPolicy;
-            }
-
-            public int Count
-            {
-                get
-                {
-                    switch (_noteStartDetectionPolicy)
-                    {
-                        case NoteStartDetectionPolicy.LastNoteOn:
-                            return _nodesStack.Count;
-                        case NoteStartDetectionPolicy.FirstNoteOn:
-                            return _nodesQueue.Count;
-                    }
-
-                    return -1;
-                }
-            }
-
-            public void Add(LinkedListNode<TDescriptor> noteOnNode)
-            {
-                switch (_noteStartDetectionPolicy)
-                {
-                    case NoteStartDetectionPolicy.LastNoteOn:
-                        _nodesStack.Push(noteOnNode);
-                        break;
-                    case NoteStartDetectionPolicy.FirstNoteOn:
-                        _nodesQueue.Enqueue(noteOnNode);
-                        break;
-                }
-            }
-
-            public LinkedListNode<TDescriptor> GetNext()
-            {
-                switch (_noteStartDetectionPolicy)
-                {
-                    case NoteStartDetectionPolicy.LastNoteOn:
-                        return _nodesStack.Pop();
-                    case NoteStartDetectionPolicy.FirstNoteOn:
-                        return _nodesQueue.Dequeue();
-                }
-
-                return null;
+                holder.Add(firstNode);
+                holder.Add(secondNode);
+                return holder;
             }
         }
 
-        private sealed class NoteOnsHolder : NoteOnsHolderBase<IObjectDescriptor>
+        private sealed class NoteOnsHolderStack : NoteOnsHolder
         {
-            public NoteOnsHolder(NoteStartDetectionPolicy noteStartDetectionPolicy)
-                : base(noteStartDetectionPolicy)
+            private readonly Stack<LinkedListNode<IObjectDescriptor>> _nodes;
+
+            public NoteOnsHolderStack(int capacity)
             {
+                _nodes = new Stack<LinkedListNode<IObjectDescriptor>>(capacity);
             }
+
+            public override int Count => _nodes.Count;
+
+            public override void Add(LinkedListNode<IObjectDescriptor> noteOnNode) => _nodes.Push(noteOnNode);
+
+            public override LinkedListNode<IObjectDescriptor> GetNext() => _nodes.Pop();
+        }
+
+        private sealed class NoteOnsHolderQueue : NoteOnsHolder
+        {
+            private readonly Queue<LinkedListNode<IObjectDescriptor>> _nodes;
+
+            public NoteOnsHolderQueue(int capacity)
+            {
+                _nodes = new Queue<LinkedListNode<IObjectDescriptor>>(capacity);
+            }
+
+            public override int Count => _nodes.Count;
+
+            public override void Add(LinkedListNode<IObjectDescriptor> noteOnNode) => _nodes.Enqueue(noteOnNode);
+
+            public override LinkedListNode<IObjectDescriptor> GetNext() => _nodes.Dequeue();
+        }
+
+        private struct NoteOnEntry
+        {
+            public LinkedListNode<IObjectDescriptor> SingleNode;
+            public NoteOnsHolder Holder;
         }
 
         private interface IObjectDescriptor
@@ -1037,7 +1022,7 @@ namespace Melanchall.DryWetMidi.Interaction
             var constructor = settings?.Constructor;
 
             var objectsDescriptors = new LinkedList<IObjectDescriptor>();
-            var notesDescriptorsNodes = new Dictionary<int, NoteOnsHolder>();
+            var notesDescriptorsNodes = new Dictionary<int, NoteOnEntry>();
 
             foreach (var timedObject in timedObjects)
             {
@@ -1060,22 +1045,66 @@ namespace Melanchall.DryWetMidi.Interaction
                             var noteId = ((NoteOnEvent)timedEvent.Event).GetNoteId();
                             var node = objectsDescriptors.AddLast(new NoteDescriptor(timedEvent));
 
-                            if (!notesDescriptorsNodes.TryGetValue(noteId, out var noteOnsHolder))
-                                notesDescriptorsNodes.Add(noteId, noteOnsHolder = new NoteOnsHolder(settings.NoteStartDetectionPolicy));
-
-                            noteOnsHolder.Add(node);
+                            if (!notesDescriptorsNodes.TryGetValue(noteId, out var entry))
+                            {
+                                notesDescriptorsNodes[noteId] = new NoteOnEntry { SingleNode = node };
+                            }
+                            else if (entry.Holder == null)
+                            {
+                                notesDescriptorsNodes[noteId] = new NoteOnEntry
+                                {
+                                    Holder = NoteOnsHolder.Create(settings.NoteStartDetectionPolicy, entry.SingleNode, node)
+                                };
+                            }
+                            else
+                            {
+                                entry.Holder.Add(node);
+                            }
                         }
                         break;
                     case MidiEventType.NoteOff:
                         {
                             var noteId = ((NoteOffEvent)timedEvent.Event).GetNoteId();
 
-                            LinkedListNode<IObjectDescriptor> node;
-
-                            if (!notesDescriptorsNodes.TryGetValue(noteId, out var noteOnsHolder) || noteOnsHolder.Count == 0 || (node = noteOnsHolder.GetNext()).List == null)
+                            if (!notesDescriptorsNodes.TryGetValue(noteId, out var entry))
                             {
                                 objectsDescriptors.AddLast(new TimedEventDescriptor(timedEvent));
                                 break;
+                            }
+
+                            LinkedListNode<IObjectDescriptor> node;
+
+                            if (entry.Holder == null)
+                            {
+                                node = entry.SingleNode;
+                                if (node.List == null)
+                                {
+                                    objectsDescriptors.AddLast(new TimedEventDescriptor(timedEvent));
+                                    break;
+                                }
+                                notesDescriptorsNodes.Remove(noteId);
+                            }
+                            else
+                            {
+                                var holder = entry.Holder;
+                                if (holder.Count == 0)
+                                {
+                                    notesDescriptorsNodes.Remove(noteId);
+                                    objectsDescriptors.AddLast(new TimedEventDescriptor(timedEvent));
+                                    break;
+                                }
+
+                                node = holder.GetNext();
+                                if (node.List == null)
+                                {
+                                    if (holder.Count == 0)
+                                        notesDescriptorsNodes.Remove(noteId);
+                                    objectsDescriptors.AddLast(new TimedEventDescriptor(timedEvent));
+                                    break;
+                                }
+
+                                if (holder.Count == 0)
+                                    notesDescriptorsNodes.Remove(noteId);
                             }
 
                             ((NoteDescriptor)node.Value).NoteOffTimedEvent = timedEvent;
