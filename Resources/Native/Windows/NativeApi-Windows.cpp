@@ -868,73 +868,86 @@ API_EXPORT SESSION_OPENRESULT API_CALL OpenSession_Win(
                 {
                     EnsureWinMmPortsAvailable();
 
-                    auto endpointId = args.AddedDevice().EndpointDeviceId();
-                    auto endpointInformation = midi2::Enumeration::MidiEndpointDeviceInformation::CreateFromEndpointDeviceId(endpointId);
-                    if (endpointInformation == nullptr)
+                    auto endpointInformation = args.AddedDevice();
+                    auto endpointId = endpointInformation.EndpointDeviceId();
+
+                    auto addOutputEndpoints = [&](const midi2::Enumeration::MidiGroupTerminalBlock& gtb)
                     {
-                        // TODO
-                        return;
-                    }
+                        for (auto i = 0; i < gtb.GroupCount(); i++)
+                        {
+                            auto group = midi2::MidiGroup(gtb.FirstGroup().Index() + i);
 
-                    auto addOutputEndpoint = [&](const midi2::Enumeration::MidiGroupTerminalBlock& gtb)
-                    {
-                        OutputEndpointInfo* outputEndpointInfo = nullptr;
-                        int errorCode;
+                            OutputEndpointInfo* outputEndpointInfo = nullptr;
+                            int errorCode;
 
-                        auto getOutputEndpointInfoResult = GetOutputEndpointInfo(endpointId, gtb, gtb.FirstGroup(), &outputEndpointInfo, &errorCode);
-                        if (getOutputEndpointInfoResult != IN_GETINFORESULT_OK)
-                            return false;
+                            auto getOutputEndpointInfoResult = GetOutputEndpointInfo(endpointId, gtb, group, &outputEndpointInfo, &errorCode);
+                            if (getOutputEndpointInfoResult != OUT_GETINFORESULT_OK)
+                            {
+                                // TODO
+                                return;
+                            }
 
-                        outputEndpointsInfo.push_back(outputEndpointInfo);
+                            outputEndpointsInfo.push_back(outputEndpointInfo);
 
-                        OutputEndpointInfo* persistentOutputEndpointInfo;
-                        getOutputEndpointInfoResult = GetOutputEndpointInfo(endpointId, gtb, gtb.FirstGroup(), &persistentOutputEndpointInfo, &errorCode);
-                        if (getOutputEndpointInfoResult != IN_GETINFORESULT_OK)
-                            return false;
+                            OutputEndpointInfo* persistentOutputEndpointInfo;
+                            getOutputEndpointInfoResult = GetOutputEndpointInfo(endpointId, gtb, group, &persistentOutputEndpointInfo, &errorCode);
+                            if (getOutputEndpointInfoResult != OUT_GETINFORESULT_OK)
+                            {
+                                // TODO
+                                return;
+                            }
 
-                        endpointDevicesInfo.outputEndpointsInfo.push_back(persistentOutputEndpointInfo);
-                        return true;
+                            endpointDevicesInfo.outputEndpointsInfo.push_back(persistentOutputEndpointInfo);
+                        }
                     };
 
-                    auto addInputEndpoint = [&](const midi2::Enumeration::MidiGroupTerminalBlock& gtb)
+                    auto addInputEndpoints = [&](const midi2::Enumeration::MidiGroupTerminalBlock& gtb)
                     {
-                        InputEndpointInfo* inputEndpointInfo = nullptr;
-                        int errorCode;
+                        for (auto i = 0; i < gtb.GroupCount(); i++)
+                        {
+                            auto group = midi2::MidiGroup(gtb.FirstGroup().Index() + i);
 
-                        auto getInputEndpointInfoResult = GetInputEndpointInfo(endpointId, gtb, gtb.FirstGroup(), &inputEndpointInfo, &errorCode);
-                        if (getInputEndpointInfoResult != IN_GETINFORESULT_OK)
-                            return false;
+                            InputEndpointInfo* inputEndpointInfo = nullptr;
+                            int errorCode;
 
-                        inputEndpointsInfo.push_back(inputEndpointInfo);
+                            auto getInputEndpointInfoResult = GetInputEndpointInfo(endpointId, gtb, group, &inputEndpointInfo, &errorCode);
+                            if (getInputEndpointInfoResult != IN_GETINFORESULT_OK)
+                            {
+                                // TODO
+                                return;
+                            }
 
-                        InputEndpointInfo* persistentInputEndpointInfo;
-                        getInputEndpointInfoResult = GetInputEndpointInfo(endpointId, gtb, gtb.FirstGroup(), &persistentInputEndpointInfo, &errorCode);
-                        if (getInputEndpointInfoResult != IN_GETINFORESULT_OK)
-                            return false;
+                            inputEndpointsInfo.push_back(inputEndpointInfo);
 
-                        endpointDevicesInfo.inputEndpointsInfo.push_back(persistentInputEndpointInfo);
-                        return true;
+                            InputEndpointInfo* persistentInputEndpointInfo;
+                            getInputEndpointInfoResult = GetInputEndpointInfo(endpointId, gtb, group, &persistentInputEndpointInfo, &errorCode);
+                            if (getInputEndpointInfoResult != IN_GETINFORESULT_OK)
+                            {
+                                // TODO
+                                return;
+                            }
+
+                            endpointDevicesInfo.inputEndpointsInfo.push_back(persistentInputEndpointInfo);
+                        }
                     };
 
                     auto groupTerminalBlocks = endpointInformation.GetGroupTerminalBlocks();
 
                     for (auto const& gtb : groupTerminalBlocks)
                     {
-                        auto const group = gtb.FirstGroup();
                         auto direction = gtb.Direction();
-
                         if (direction == midi2::Enumeration::MidiGroupTerminalBlockDirection::BlockInput)
                         {
-                            addOutputEndpoint(gtb);
+                            addOutputEndpoints(gtb);
                         }
                         else if (direction == midi2::Enumeration::MidiGroupTerminalBlockDirection::BlockOutput)
                         {
-                            addInputEndpoint(gtb);
+                            addInputEndpoints(gtb);
                         }
                         else if (direction == midi2::Enumeration::MidiGroupTerminalBlockDirection::Bidirectional)
                         {
-                            addOutputEndpoint(gtb);
-                            addInputEndpoint(gtb);
+                            addOutputEndpoints(gtb);
+                            addInputEndpoints(gtb);
                         }
                     }
 
