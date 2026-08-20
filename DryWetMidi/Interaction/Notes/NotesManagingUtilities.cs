@@ -13,64 +13,64 @@ namespace Melanchall.DryWetMidi.Interaction
     {
         #region Nested classes
 
-        private abstract class NoteOnsHolder
+        private abstract class NoteOnIndexesHolder
         {
             private const int DefaultCapacity = 2;
 
             public abstract int Count { get; }
 
-            public abstract void Add(LinkedListNode<IObjectDescriptor> noteOnNode);
+            public abstract void Add(int noteOnIndex);
 
-            public abstract LinkedListNode<IObjectDescriptor> GetNext();
+            public abstract int GetNext();
 
-            public static NoteOnsHolder Create(NoteStartDetectionPolicy policy, LinkedListNode<IObjectDescriptor> firstNode, LinkedListNode<IObjectDescriptor> secondNode)
+            public static NoteOnIndexesHolder Create(NoteStartDetectionPolicy policy, int firstIndex, int secondIndex)
             {
-                NoteOnsHolder holder = policy == NoteStartDetectionPolicy.LastNoteOn
-                    ? (NoteOnsHolder)new NoteOnsHolderStack(DefaultCapacity)
-                    : new NoteOnsHolderQueue(DefaultCapacity);
+                NoteOnIndexesHolder holder = policy == NoteStartDetectionPolicy.LastNoteOn
+                    ? (NoteOnIndexesHolder)new NoteOnIndexesHolderStack(DefaultCapacity)
+                    : new NoteOnIndexesHolderQueue(DefaultCapacity);
 
-                holder.Add(firstNode);
-                holder.Add(secondNode);
+                holder.Add(firstIndex);
+                holder.Add(secondIndex);
                 return holder;
             }
         }
 
-        private sealed class NoteOnsHolderStack : NoteOnsHolder
+        private sealed class NoteOnIndexesHolderStack : NoteOnIndexesHolder
         {
-            private readonly Stack<LinkedListNode<IObjectDescriptor>> _nodes;
+            private readonly Stack<int> _indexes;
 
-            public NoteOnsHolderStack(int capacity)
+            public NoteOnIndexesHolderStack(int capacity)
             {
-                _nodes = new Stack<LinkedListNode<IObjectDescriptor>>(capacity);
+                _indexes = new Stack<int>(capacity);
             }
 
-            public override int Count => _nodes.Count;
+            public override int Count => _indexes.Count;
 
-            public override void Add(LinkedListNode<IObjectDescriptor> noteOnNode) => _nodes.Push(noteOnNode);
+            public override void Add(int noteOnIndex) => _indexes.Push(noteOnIndex);
 
-            public override LinkedListNode<IObjectDescriptor> GetNext() => _nodes.Pop();
+            public override int GetNext() => _indexes.Pop();
         }
 
-        private sealed class NoteOnsHolderQueue : NoteOnsHolder
+        private sealed class NoteOnIndexesHolderQueue : NoteOnIndexesHolder
         {
-            private readonly Queue<LinkedListNode<IObjectDescriptor>> _nodes;
+            private readonly Queue<int> _indexes;
 
-            public NoteOnsHolderQueue(int capacity)
+            public NoteOnIndexesHolderQueue(int capacity)
             {
-                _nodes = new Queue<LinkedListNode<IObjectDescriptor>>(capacity);
+                _indexes = new Queue<int>(capacity);
             }
 
-            public override int Count => _nodes.Count;
+            public override int Count => _indexes.Count;
 
-            public override void Add(LinkedListNode<IObjectDescriptor> noteOnNode) => _nodes.Enqueue(noteOnNode);
+            public override void Add(int noteOnIndex) => _indexes.Enqueue(noteOnIndex);
 
-            public override LinkedListNode<IObjectDescriptor> GetNext() => _nodes.Dequeue();
+            public override int GetNext() => _indexes.Dequeue();
         }
 
         private struct NoteOnEntry
         {
-            public LinkedListNode<IObjectDescriptor> SingleNode;
-            public NoteOnsHolder Holder;
+            public int SingleIndex;
+            public NoteOnIndexesHolder Holder;
         }
 
         private readonly struct NoteOnRecord
@@ -145,73 +145,70 @@ namespace Melanchall.DryWetMidi.Interaction
             public NoteOnTimedEventsHolder Holder;
         }
 
-        private interface IObjectDescriptor
+        private enum PendingObjectDescriptorType : byte
         {
-            bool IsCompleted { get; }
-
-            ITimedObject GetObject(Func<NoteData, Note> constructor);
+            Note = 0,
+            TimedEvent,
+            CompleteObject
         }
 
-        private class NoteDescriptor : IObjectDescriptor
+        private struct PendingObjectDescriptor
         {
-            private readonly TimedEvent _noteOnTimedEvent;
-
-            public NoteDescriptor(TimedEvent noteOnTimedEvent)
-            {
-                _noteOnTimedEvent = noteOnTimedEvent;
-            }
-
+            public PendingObjectDescriptorType Type;
+            public TimedEvent TimedEvent;
             public TimedEvent NoteOffTimedEvent { get; set; }
+            public ITimedObject TimedObject;
 
-            public bool IsCompleted => NoteOffTimedEvent != null;
-
-            public ITimedObject GetObject(Func<NoteData, Note> constructor)
-            {
-                if (!IsCompleted)
-                    return _noteOnTimedEvent;
-
-                var note = constructor != null
-                    ? constructor(new NoteData(_noteOnTimedEvent, NoteOffTimedEvent))
-                    : null;
-
-                if (note == null)
-                    note = new Note(_noteOnTimedEvent, NoteOffTimedEvent, false);
-
-                return note;
-            }
-        }
-
-        private class CompleteObjectDescriptor : IObjectDescriptor
-        {
-            private readonly ITimedObject _timedObject;
-
-            public CompleteObjectDescriptor(ITimedObject timedObject)
-            {
-                _timedObject = timedObject;
-            }
-
-            public bool IsCompleted { get; } = true;
+            public bool IsCompleted => Type != PendingObjectDescriptorType.Note || NoteOffTimedEvent != null;
 
             public ITimedObject GetObject(Func<NoteData, Note> constructor)
             {
-                return _timedObject;
+                switch (Type)
+                {
+                    case PendingObjectDescriptorType.Note:
+                        if (NoteOffTimedEvent == null)
+                            return TimedEvent;
+
+                        var note = constructor != null
+                            ? constructor(new NoteData(TimedEvent, NoteOffTimedEvent))
+                            : null;
+
+                        if (note == null)
+                            note = new Note(TimedEvent, NoteOffTimedEvent, false);
+
+                        return note;
+                    case PendingObjectDescriptorType.CompleteObject:
+                        return TimedObject;
+                    default:
+                        return TimedEvent;
+                }
             }
-        }
 
-        private class TimedEventDescriptor : IObjectDescriptor
-        {
-            private readonly TimedEvent _timedEvent;
-
-            public TimedEventDescriptor(TimedEvent timedEvent)
+            public static PendingObjectDescriptor CreateNote(TimedEvent timedEvent)
             {
-                _timedEvent = timedEvent;
+                return new PendingObjectDescriptor
+                {
+                    Type = PendingObjectDescriptorType.Note,
+                    TimedEvent = timedEvent
+                };
             }
 
-            public bool IsCompleted { get; } = true;
-
-            public ITimedObject GetObject(Func<NoteData, Note> constructor)
+            public static PendingObjectDescriptor CreateTimedEvent(TimedEvent timedEvent)
             {
-                return _timedEvent;
+                return new PendingObjectDescriptor
+                {
+                    Type = PendingObjectDescriptorType.TimedEvent,
+                    TimedEvent = timedEvent
+                };
+            }
+
+            public static PendingObjectDescriptor CreateCompleteObject(ITimedObject timedObject)
+            {
+                return new PendingObjectDescriptor
+                {
+                    Type = PendingObjectDescriptorType.CompleteObject,
+                    TimedObject = timedObject
+                };
             }
         }
 
@@ -1187,19 +1184,45 @@ namespace Melanchall.DryWetMidi.Interaction
             bool completeObjectsAllowed)
         {
             settings = settings ?? new NoteDetectionSettings();
-            var constructor = settings?.Constructor;
+            var constructor = settings.Constructor;
 
-            var objectsDescriptors = new LinkedList<IObjectDescriptor>();
+            var objectsDescriptors = new List<PendingObjectDescriptor>();
             var notesDescriptorsNodes = new Dictionary<int, NoteOnEntry>();
+            var firstDescriptorIndex = 0;
+            var headDescriptorIndex = 0;
+            var nextDescriptorIndex = 0;
+
+            void CompactObjectsDescriptors()
+            {
+                var removeCount = headDescriptorIndex - firstDescriptorIndex;
+                if (removeCount == 0)
+                    return;
+
+                if (removeCount == objectsDescriptors.Count)
+                {
+                    objectsDescriptors.Clear();
+                    firstDescriptorIndex = headDescriptorIndex;
+                    return;
+                }
+
+                if (removeCount < 128 && removeCount * 2 < objectsDescriptors.Count)
+                    return;
+
+                objectsDescriptors.RemoveRange(0, removeCount);
+                firstDescriptorIndex = headDescriptorIndex;
+            }
 
             foreach (var timedObject in timedObjects)
             {
                 if (completeObjectsAllowed && !(timedObject is TimedEvent))
                 {
-                    if (objectsDescriptors.Count == 0)
+                    if (headDescriptorIndex == nextDescriptorIndex)
                         yield return timedObject;
                     else
-                        objectsDescriptors.AddLast(new CompleteObjectDescriptor(timedObject));
+                    {
+                        objectsDescriptors.Add(PendingObjectDescriptor.CreateCompleteObject(timedObject));
+                        nextDescriptorIndex++;
+                    }
 
                     continue;
                 }
@@ -1211,22 +1234,24 @@ namespace Melanchall.DryWetMidi.Interaction
                     case MidiEventType.NoteOn:
                         {
                             var noteId = ((NoteOnEvent)timedEvent.Event).GetNoteId();
-                            var node = objectsDescriptors.AddLast(new NoteDescriptor(timedEvent));
+                            var noteDescriptorIndex = nextDescriptorIndex;
+                            objectsDescriptors.Add(PendingObjectDescriptor.CreateNote(timedEvent));
+                            nextDescriptorIndex++;
 
                             if (!notesDescriptorsNodes.TryGetValue(noteId, out var entry))
                             {
-                                notesDescriptorsNodes[noteId] = new NoteOnEntry { SingleNode = node };
+                                notesDescriptorsNodes[noteId] = new NoteOnEntry { SingleIndex = noteDescriptorIndex };
                             }
                             else if (entry.Holder == null)
                             {
                                 notesDescriptorsNodes[noteId] = new NoteOnEntry
                                 {
-                                    Holder = NoteOnsHolder.Create(settings.NoteStartDetectionPolicy, entry.SingleNode, node)
+                                    Holder = NoteOnIndexesHolder.Create(settings.NoteStartDetectionPolicy, entry.SingleIndex, noteDescriptorIndex)
                                 };
                             }
                             else
                             {
-                                entry.Holder.Add(node);
+                                entry.Holder.Add(noteDescriptorIndex);
                             }
                         }
                         break;
@@ -1236,18 +1261,31 @@ namespace Melanchall.DryWetMidi.Interaction
 
                             if (!notesDescriptorsNodes.TryGetValue(noteId, out var entry))
                             {
-                                objectsDescriptors.AddLast(new TimedEventDescriptor(timedEvent));
+                                if (headDescriptorIndex == nextDescriptorIndex)
+                                    yield return timedEvent;
+                                else
+                                {
+                                    objectsDescriptors.Add(PendingObjectDescriptor.CreateTimedEvent(timedEvent));
+                                    nextDescriptorIndex++;
+                                }
                                 break;
                             }
 
-                            LinkedListNode<IObjectDescriptor> node;
+                            int noteDescriptorIndex;
 
                             if (entry.Holder == null)
                             {
-                                node = entry.SingleNode;
-                                if (node.List == null)
+                                noteDescriptorIndex = entry.SingleIndex;
+                                if (noteDescriptorIndex < headDescriptorIndex)
                                 {
-                                    objectsDescriptors.AddLast(new TimedEventDescriptor(timedEvent));
+                                    notesDescriptorsNodes.Remove(noteId);
+                                    if (headDescriptorIndex == nextDescriptorIndex)
+                                        yield return timedEvent;
+                                    else
+                                    {
+                                        objectsDescriptors.Add(PendingObjectDescriptor.CreateTimedEvent(timedEvent));
+                                        nextDescriptorIndex++;
+                                    }
                                     break;
                                 }
                                 notesDescriptorsNodes.Remove(noteId);
@@ -1255,59 +1293,71 @@ namespace Melanchall.DryWetMidi.Interaction
                             else
                             {
                                 var holder = entry.Holder;
-                                if (holder.Count == 0)
-                                {
-                                    notesDescriptorsNodes.Remove(noteId);
-                                    objectsDescriptors.AddLast(new TimedEventDescriptor(timedEvent));
-                                    break;
-                                }
+                                noteDescriptorIndex = -1;
 
-                                node = holder.GetNext();
-                                if (node.List == null)
+                                while (holder.Count > 0)
                                 {
-                                    if (holder.Count == 0)
-                                        notesDescriptorsNodes.Remove(noteId);
-                                    objectsDescriptors.AddLast(new TimedEventDescriptor(timedEvent));
-                                    break;
+                                    var candidateDescriptorIndex = holder.GetNext();
+                                    if (candidateDescriptorIndex >= headDescriptorIndex)
+                                    {
+                                        noteDescriptorIndex = candidateDescriptorIndex;
+                                        break;
+                                    }
                                 }
 
                                 if (holder.Count == 0)
                                     notesDescriptorsNodes.Remove(noteId);
+
+                                if (noteDescriptorIndex < 0)
+                                {
+                                    if (headDescriptorIndex == nextDescriptorIndex)
+                                        yield return timedEvent;
+                                    else
+                                    {
+                                        objectsDescriptors.Add(PendingObjectDescriptor.CreateTimedEvent(timedEvent));
+                                        nextDescriptorIndex++;
+                                    }
+                                    break;
+                                }
                             }
 
-                            ((NoteDescriptor)node.Value).NoteOffTimedEvent = timedEvent;
+                            var descriptorIndex = noteDescriptorIndex - firstDescriptorIndex;
+                            var noteDescriptor = objectsDescriptors[descriptorIndex];
+                            noteDescriptor.NoteOffTimedEvent = timedEvent;
+                            objectsDescriptors[descriptorIndex] = noteDescriptor;
 
-                            var previousNode = node.Previous;
-                            if (previousNode != null)
+                            if (noteDescriptorIndex != headDescriptorIndex)
                                 break;
 
-                            for (var n = node; n != null;)
+                            for (; headDescriptorIndex < nextDescriptorIndex; headDescriptorIndex++)
                             {
-                                if (!n.Value.IsCompleted)
+                                var completedDescriptor = objectsDescriptors[headDescriptorIndex - firstDescriptorIndex];
+                                if (!completedDescriptor.IsCompleted)
                                     break;
 
-                                yield return n.Value.GetObject(constructor);
-
-                                var next = n.Next;
-                                objectsDescriptors.Remove(n);
-                                n = next;
+                                yield return completedDescriptor.GetObject(constructor);
                             }
+
+                            CompactObjectsDescriptors();
                         }
                         break;
                     default:
                         {
-                            if (objectsDescriptors.Count == 0)
+                            if (headDescriptorIndex == nextDescriptorIndex)
                                 yield return timedEvent;
                             else
-                                objectsDescriptors.AddLast(new TimedEventDescriptor(timedEvent));
+                            {
+                                objectsDescriptors.Add(PendingObjectDescriptor.CreateTimedEvent(timedEvent));
+                                nextDescriptorIndex++;
+                            }
                         }
                         break;
                 }
             }
 
-            foreach (var objectDescriptor in objectsDescriptors)
+            for (; headDescriptorIndex < nextDescriptorIndex; headDescriptorIndex++)
             {
-                yield return objectDescriptor.GetObject(constructor);
+                yield return objectsDescriptors[headDescriptorIndex - firstDescriptorIndex].GetObject(constructor);
             }
         }
 
