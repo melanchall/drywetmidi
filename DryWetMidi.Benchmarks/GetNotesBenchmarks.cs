@@ -1,20 +1,19 @@
 using BenchmarkDotNet.Attributes;
-using BenchmarkDotNet.Jobs;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
 
 namespace Melanchall.DryWetMidi.Benchmarks;
 
-[MediumRunJob]
 [MemoryDiagnoser]
 public class GetNotesBenchmarks
 {
-    private const int EventsCount = 10_000;
-
     private MidiEvent[] _noOverlapEvents = null!;
     private MidiEvent[] _withOverlapEvents = null!;
     private MidiEvent[] _mixedEvents = null!;
+
+    [Params(1000, 10000, 100000)]
+    public int EventsCount { get; set; }
 
     [GlobalSetup]
     public void Setup()

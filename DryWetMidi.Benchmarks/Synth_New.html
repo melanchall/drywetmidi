@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+<meta charset='utf-8' />
+<title>Melanchall.DryWetMidi.Benchmarks.GetNotesBenchmarks-20260820-113556</title>
+
+<style type="text/css">
+	table { border-collapse: collapse; display: block; width: 100%; overflow: auto; }
+	td, th { padding: 6px 13px; border: 1px solid #ddd; text-align: right; }
+	tr { background-color: #fff; border-top: 1px solid #ccc; }
+	tr:nth-child(even) { background: #f8f8f8; }
+</style>
+</head>
+<body>
+<pre><code>
+BenchmarkDotNet v0.14.0, Windows 11 (10.0.26200.9168)
+13th Gen Intel Core i7-13620H, 1 CPU, 16 logical and 10 physical cores
+.NET SDK 10.0.400
+  [Host]     : .NET 10.0.11 (10.0.1126.37416), X64 RyuJIT AVX2
+  DefaultJob : .NET 10.0.11 (10.0.1126.37416), X64 RyuJIT AVX2
+</code></pre>
+<pre><code></code></pre>
+
+<table>
+<thead><tr><th>Method              </th><th>EventsCount</th><th>Mean  </th><th>Error </th><th>StdDev</th><th>Gen0</th><th>Gen1</th><th>Gen2</th><th>Allocated</th>
+</tr>
+</thead><tbody><tr><td>&#39;GetNotes – no overlaps&#39;</td><td>1000</td><td>66.79 &mu;s</td><td>0.673 &mu;s</td><td>0.596 &mu;s</td><td>26.8555</td><td>11.2305</td><td>-</td><td>329.41 KB</td>
+</tr><tr><td>&#39;GetNotes – with overlaps&#39;</td><td>1000</td><td>78.24 &mu;s</td><td>1.008 &mu;s</td><td>0.893 &mu;s</td><td>30.8838</td><td>15.3809</td><td>-</td><td>378.86 KB</td>
+</tr><tr><td>&#39;GetNotes – mixed&#39;</td><td>1000</td><td>73.19 &mu;s</td><td>0.322 &mu;s</td><td>0.301 &mu;s</td><td>29.6631</td><td>14.7705</td><td>-</td><td>363.86 KB</td>
+</tr><tr><td>&#39;GetNotes – no overlaps&#39;</td><td>10000</td><td>2,956.43 &mu;s</td><td>56.780 &mu;s</td><td>60.754 &mu;s</td><td>312.5000</td><td>296.8750</td><td>109.3750</td><td>3382.04 KB</td>
+</tr><tr><td>&#39;GetNotes – with overlaps&#39;</td><td>10000</td><td>3,236.64 &mu;s</td><td>40.696 &mu;s</td><td>33.983 &mu;s</td><td>332.0313</td><td>328.1250</td><td>117.1875</td><td>3608.49 KB</td>
+</tr><tr><td>&#39;GetNotes – mixed&#39;</td><td>10000</td><td>3,715.88 &mu;s</td><td>53.677 &mu;s</td><td>50.210 &mu;s</td><td>343.7500</td><td>335.9375</td><td>101.5625</td><td>3509.51 KB</td>
+</tr><tr><td>&#39;GetNotes – no overlaps&#39;</td><td>100000</td><td>52,351.35 &mu;s</td><td>1,002.074 &mu;s</td><td>1,192.898 &mu;s</td><td>3363.6364</td><td>3272.7273</td><td>818.1818</td><td>33299.39 KB</td>
+</tr><tr><td>&#39;GetNotes – with overlaps&#39;</td><td>100000</td><td>60,035.50 &mu;s</td><td>1,196.330 &mu;s</td><td>1,597.066 &mu;s</td><td>3666.6667</td><td>3555.5556</td><td>888.8889</td><td>36417.88 KB</td>
+</tr><tr><td>&#39;GetNotes – mixed&#39;</td><td>100000</td><td>51,959.37 &mu;s</td><td>1,029.385 &mu;s</td><td>1,632.713 &mu;s</td><td>3300.0000</td><td>3200.0000</td><td>700.0000</td><td>34879.09 KB</td>
+</tr></tbody></table>
+</body>
+</html>
