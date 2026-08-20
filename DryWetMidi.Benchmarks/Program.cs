@@ -1,4 +1,3 @@
 using BenchmarkDotNet.Running;
-using Melanchall.DryWetMidi.Benchmarks;
 
-BenchmarkRunner.Run<GetNotesBenchmarks>();
+BenchmarkSwitcher.FromAssembly(typeof(Program).Assembly).Run(args);
