@@ -253,6 +253,58 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 });
         }
 
+        [Test]
+        public void GetObjects_TimedEventsAndNotes_OverlappingNotes_FirstNoteOn()
+        {
+            GetObjects(
+                inputObjects: new ITimedObject[]
+                {
+                    new TimedEvent(new NoteOnEvent((SevenBitNumber)60, (SevenBitNumber)10), 0),
+                    new TimedEvent(new NoteOnEvent((SevenBitNumber)60, (SevenBitNumber)20), 10),
+                    new TimedEvent(new NoteOffEvent((SevenBitNumber)60, (SevenBitNumber)30), 20),
+                    new TimedEvent(new NoteOffEvent((SevenBitNumber)60, (SevenBitNumber)40), 30),
+                },
+                outputObjects: new ITimedObject[]
+                {
+                    new Note((SevenBitNumber)60, 20, 0) { Velocity = (SevenBitNumber)10, OffVelocity = (SevenBitNumber)30 },
+                    new Note((SevenBitNumber)60, 20, 10) { Velocity = (SevenBitNumber)20, OffVelocity = (SevenBitNumber)40 },
+                },
+                objectType: ObjectType.TimedEvent | ObjectType.Note,
+                settings: new ObjectDetectionSettings
+                {
+                    NoteDetectionSettings = new NoteDetectionSettings
+                    {
+                        NoteStartDetectionPolicy = NoteStartDetectionPolicy.FirstNoteOn
+                    }
+                });
+        }
+
+        [Test]
+        public void GetObjects_TimedEventsAndNotes_OverlappingNotes_LastNoteOn()
+        {
+            GetObjects(
+                inputObjects: new ITimedObject[]
+                {
+                    new TimedEvent(new NoteOnEvent((SevenBitNumber)60, (SevenBitNumber)10), 0),
+                    new TimedEvent(new NoteOnEvent((SevenBitNumber)60, (SevenBitNumber)20), 10),
+                    new TimedEvent(new NoteOffEvent((SevenBitNumber)60, (SevenBitNumber)30), 20),
+                    new TimedEvent(new NoteOffEvent((SevenBitNumber)60, (SevenBitNumber)40), 30),
+                },
+                outputObjects: new ITimedObject[]
+                {
+                    new Note((SevenBitNumber)60, 30, 0) { Velocity = (SevenBitNumber)10, OffVelocity = (SevenBitNumber)40 },
+                    new Note((SevenBitNumber)60, 10, 10) { Velocity = (SevenBitNumber)20, OffVelocity = (SevenBitNumber)30 },
+                },
+                objectType: ObjectType.TimedEvent | ObjectType.Note,
+                settings: new ObjectDetectionSettings
+                {
+                    NoteDetectionSettings = new NoteDetectionSettings
+                    {
+                        NoteStartDetectionPolicy = NoteStartDetectionPolicy.LastNoteOn
+                    }
+                });
+        }
+
         #endregion
 
         #region Private methods
