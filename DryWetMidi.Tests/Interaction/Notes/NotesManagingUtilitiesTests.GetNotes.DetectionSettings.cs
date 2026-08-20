@@ -177,6 +177,66 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             });
 
         [Test]
+        public void GetNotes_DetectionSettings_EventsCollection_FirstNoteOn_ThreeOverlapping([Values] ContainerType containerType) => GetNotes_DetectionSettings_EventsCollection(
+            containerType,
+            new NoteDetectionSettings { NoteStartDetectionPolicy = NoteStartDetectionPolicy.FirstNoteOn },
+            midiEvents: new MidiEvent[]
+            {
+                new NoteOnEvent(),
+                new NoteOnEvent { DeltaTime = 10 },
+                new NoteOnEvent { DeltaTime = 10 },
+                new NoteOffEvent { DeltaTime = 10 },
+                new NoteOffEvent { DeltaTime = 10 },
+                new NoteOffEvent { DeltaTime = 10 },
+            },
+            new[]
+            {
+                new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue, Time = 0, Length = 30 },
+                new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue, Time = 10, Length = 30 },
+                new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue, Time = 20, Length = 30 },
+            });
+
+        [Test]
+        public void GetNotes_DetectionSettings_EventsCollection_LastNoteOn_ThreeOverlapping([Values] ContainerType containerType) => GetNotes_DetectionSettings_EventsCollection(
+            containerType,
+            new NoteDetectionSettings { NoteStartDetectionPolicy = NoteStartDetectionPolicy.LastNoteOn },
+            midiEvents: new MidiEvent[]
+            {
+                new NoteOnEvent(),
+                new NoteOnEvent { DeltaTime = 10 },
+                new NoteOnEvent { DeltaTime = 10 },
+                new NoteOffEvent { DeltaTime = 10 },
+                new NoteOffEvent { DeltaTime = 10 },
+                new NoteOffEvent { DeltaTime = 10 },
+            },
+            new[]
+            {
+                new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue, Time = 0, Length = 50 },
+                new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue, Time = 10, Length = 30 },
+                new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue, Time = 20, Length = 10 },
+            });
+
+        [Test]
+        public void GetNotes_DetectionSettings_EventsCollection_LastNoteOn_EqualTimeOrdering([Values] ContainerType containerType) => GetNotes_DetectionSettings_EventsCollection(
+            containerType,
+            new NoteDetectionSettings { NoteStartDetectionPolicy = NoteStartDetectionPolicy.LastNoteOn },
+            midiEvents: new MidiEvent[]
+            {
+                new NoteOnEvent((SevenBitNumber)60, (SevenBitNumber)10),
+                new NoteOnEvent((SevenBitNumber)60, (SevenBitNumber)20),
+                new NoteOnEvent((SevenBitNumber)60, (SevenBitNumber)30) { DeltaTime = 10 },
+                new NoteOffEvent((SevenBitNumber)60, (SevenBitNumber)40) { DeltaTime = 10 },
+                new NoteOffEvent((SevenBitNumber)60, (SevenBitNumber)50) { DeltaTime = 10 },
+                new NoteOffEvent((SevenBitNumber)60, (SevenBitNumber)60) { DeltaTime = 10 },
+            },
+            new[]
+            {
+                new Note((SevenBitNumber)60) { Velocity = (SevenBitNumber)10, OffVelocity = (SevenBitNumber)60, Time = 0, Length = 40 },
+                new Note((SevenBitNumber)60) { Velocity = (SevenBitNumber)20, OffVelocity = (SevenBitNumber)50, Time = 0, Length = 30 },
+                new Note((SevenBitNumber)60) { Velocity = (SevenBitNumber)30, OffVelocity = (SevenBitNumber)40, Time = 10, Length = 10 },
+            });
+
+        [Test]
         public void GetNotes_DetectionSettings_TrackChunks_FirstNoteOn_1([Values] bool wrapToFile) => GetNotes_DetectionSettings_TrackChunks(
             wrapToFile,
             new NoteDetectionSettings { NoteStartDetectionPolicy = NoteStartDetectionPolicy.FirstNoteOn },
@@ -565,6 +625,30 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue, Time = 100, Length = 130 },
                 new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue, Time = 110, Length = 70 },
                 new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue, Time = 110, Length = 70 },
+            });
+
+        [Test]
+        public void GetNotes_DetectionSettings_TrackChunks_LastNoteOn_EqualTimeOrdering([Values] bool wrapToFile) => GetNotes_DetectionSettings_TrackChunks(
+            wrapToFile,
+            new NoteDetectionSettings { NoteStartDetectionPolicy = NoteStartDetectionPolicy.LastNoteOn },
+            midiEvents: new[]
+            {
+                new MidiEvent[]
+                {
+                    new NoteOnEvent((SevenBitNumber)60, (SevenBitNumber)10),
+                    new NoteOnEvent((SevenBitNumber)60, (SevenBitNumber)20),
+                    new NoteOnEvent((SevenBitNumber)60, (SevenBitNumber)30),
+                    new NoteOffEvent((SevenBitNumber)60, (SevenBitNumber)40),
+                    new NoteOffEvent((SevenBitNumber)60, (SevenBitNumber)50),
+                    new NoteOffEvent((SevenBitNumber)60, (SevenBitNumber)60),
+                },
+                new MidiEvent[] { new TextEvent() },
+            },
+            new[]
+            {
+                new Note((SevenBitNumber)60) { Velocity = (SevenBitNumber)10, OffVelocity = (SevenBitNumber)60 },
+                new Note((SevenBitNumber)60) { Velocity = (SevenBitNumber)20, OffVelocity = (SevenBitNumber)50 },
+                new Note((SevenBitNumber)60) { Velocity = (SevenBitNumber)30, OffVelocity = (SevenBitNumber)40 },
             });
 
         [Test]

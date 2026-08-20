@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+<meta charset='utf-8' />
+<title>Melanchall.DryWetMidi.Benchmarks.GetFileNotesBenchmarks-20260820-192229</title>
+
+<style type="text/css">
+	table { border-collapse: collapse; display: block; width: 100%; overflow: auto; }
+	td, th { padding: 6px 13px; border: 1px solid #ddd; text-align: right; }
+	tr { background-color: #fff; border-top: 1px solid #ccc; }
+	tr:nth-child(even) { background: #f8f8f8; }
+</style>
+</head>
+<body>
+<pre><code>
+BenchmarkDotNet v0.14.0, Windows 11 (10.0.26200.9168)
+13th Gen Intel Core i7-13620H, 1 CPU, 16 logical and 10 physical cores
+.NET SDK 10.0.400
+  [Host]     : .NET 10.0.11 (10.0.1126.37416), X64 RyuJIT AVX2
+  DefaultJob : .NET 10.0.11 (10.0.1126.37416), X64 RyuJIT AVX2
+</code></pre>
+<pre><code></code></pre>
+
+<table>
+<thead><tr><th>Method</th><th>FilePath       </th><th>Mean      </th><th>Error   </th><th>StdDev    </th><th>Gen0</th><th>Gen1</th><th>Gen2</th><th>Allocated</th>
+</tr>
+</thead><tbody><tr><td>GetNotes</td><td>D:\\Dr(...)s.mid [97]</td><td>877,688.14 ns</td><td>5,494.489 ns</td><td>5,139.549 ns</td><td>186.5234</td><td>149.4141</td><td>-</td><td>2346929 B</td>
+</tr><tr><td>GetNotes</td><td>D:\\D(...).mid [100]</td><td>319,169.60 ns</td><td>1,032.878 ns</td><td>966.155 ns</td><td>81.5430</td><td>60.0586</td><td>-</td><td>1023712 B</td>
+</tr><tr><td>GetNotes</td><td>D:\\D(...).mid [106]</td><td>422,296.98 ns</td><td>1,983.401 ns</td><td>1,758.234 ns</td><td>101.5625</td><td>81.0547</td><td>-</td><td>1278068 B</td>
+</tr><tr><td>GetNotes</td><td>D:\\D(...).mid [103]</td><td>216,429.96 ns</td><td>1,075.423 ns</td><td>1,005.951 ns</td><td>56.8848</td><td>31.2500</td><td>-</td><td>714784 B</td>
+</tr><tr><td>GetNotes</td><td>D:\\D(...).mid [100]</td><td>364,684.84 ns</td><td>982.050 ns</td><td>820.056 ns</td><td>89.3555</td><td>68.8477</td><td>-</td><td>1124840 B</td>
+</tr><tr><td>GetNotes</td><td>D:\\D(...).mid [101]</td><td>324,707.11 ns</td><td>1,990.273 ns</td><td>1,861.703 ns</td><td>76.1719</td><td>56.6406</td><td>-</td><td>958976 B</td>
+</tr><tr><td>GetNotes</td><td>D:\\D(...).mid [102]</td><td>279,444.71 ns</td><td>1,528.723 ns</td><td>1,429.968 ns</td><td>74.2188</td><td>39.0625</td><td>-</td><td>931472 B</td>
+</tr><tr><td>GetNotes</td><td>D:\\D(...).mid [101]</td><td>66,317.75 ns</td><td>828.424 ns</td><td>774.909 ns</td><td>22.9492</td><td>10.2539</td><td>-</td><td>288736 B</td>
+</tr><tr><td>GetNotes</td><td>D:\\D(...).mid [101]</td><td>88,753.30 ns</td><td>321.528 ns</td><td>300.758 ns</td><td>29.5410</td><td>13.7939</td><td>-</td><td>371120 B</td>
+</tr><tr><td>GetNotes</td><td>D:\\D(...).mid [103]</td><td>75,615.01 ns</td><td>796.946 ns</td><td>745.464 ns</td><td>23.1934</td><td>9.0332</td><td>-</td><td>291288 B</td>
+</tr><tr><td>GetNotes</td><td>D:\\D(...).mid [102]</td><td>117,140.85 ns</td><td>806.776 ns</td><td>715.186 ns</td><td>38.0859</td><td>18.9209</td><td>-</td><td>477992 B</td>
+</tr><tr><td>GetNotes</td><td>D:\\Dr(...)2.mid [99]</td><td>115,421.17 ns</td><td>840.461 ns</td><td>786.167 ns</td><td>36.8652</td><td>20.5078</td><td>-</td><td>463592 B</td>
+</tr><tr><td>GetNotes</td><td>D:\\D(...).mid [104]</td><td>138,680.83 ns</td><td>1,117.292 ns</td><td>1,045.116 ns</td><td>43.7012</td><td>26.6113</td><td>-</td><td>549160 B</td>
+</tr><tr><td>GetNotes</td><td>D:\\D(...).mid [103]</td><td>33,200.16 ns</td><td>249.676 ns</td><td>233.547 ns</td><td>13.2446</td><td>4.3945</td><td>-</td><td>166528 B</td>
+</tr><tr><td>GetNotes</td><td>D:\\D(...).mid [101]</td><td>24,026.66 ns</td><td>366.960 ns</td><td>325.301 ns</td><td>9.8267</td><td>1.7395</td><td>-</td><td>123296 B</td>
+</tr><tr><td>GetNotes</td><td>D:\\D(...).mid [101]</td><td>40,181.88 ns</td><td>231.530 ns</td><td>216.573 ns</td><td>15.6860</td><td>3.9063</td><td>-</td><td>196808 B</td>
+</tr><tr><td>GetNotes</td><td>D:\\D(...).mid [100]</td><td>59,328.96 ns</td><td>82.557 ns</td><td>64.455 ns</td><td>20.8740</td><td>8.3008</td><td>-</td><td>262448 B</td>
+</tr><tr><td>GetNotes</td><td>D:\\D(...).mid [102]</td><td>37,585.35 ns</td><td>186.361 ns</td><td>165.204 ns</td><td>14.4653</td><td>4.3945</td><td>-</td><td>182192 B</td>
+</tr><tr><td>GetNotes</td><td>D:\\D(...).mid [113]</td><td>34,542.49 ns</td><td>347.127 ns</td><td>324.703 ns</td><td>12.5122</td><td>2.2583</td><td>-</td><td>157448 B</td>
+</tr><tr><td>GetNotes</td><td>D:\\D(...).mid [109]</td><td>41,820,620.51 ns</td><td>819,157.654 ns</td><td>1,558,532.694 ns</td><td>2538.4615</td><td>2461.5385</td><td>769.2308</td><td>22998839 B</td>
+</tr><tr><td>GetNotes</td><td>D:\\D(...).mid [123]</td><td>29,453,950.08 ns</td><td>585,266.351 ns</td><td>1,009,555.779 ns</td><td>2156.2500</td><td>1468.7500</td><td>437.5000</td><td>22048728 B</td>
+</tr><tr><td>GetNotes</td><td>D:\\D(...).mid [100]</td><td>38,742,708.55 ns</td><td>768,708.972 ns</td><td>822,509.988 ns</td><td>2538.4615</td><td>2461.5385</td><td>769.2308</td><td>22897707 B</td>
+</tr><tr><td>GetNotes</td><td>D:\\Dr(...)m.mid [99]</td><td>289,391.08 ns</td><td>2,200.701 ns</td><td>2,058.537 ns</td><td>76.6602</td><td>76.1719</td><td>-</td><td>966112 B</td>
+</tr><tr><td>GetNotes</td><td>D:\\D(...).mid [101]</td><td>288,710.84 ns</td><td>1,789.499 ns</td><td>1,673.899 ns</td><td>74.7070</td><td>45.8984</td><td>-</td><td>937673 B</td>
+</tr><tr><td>GetNotes</td><td>D:\\D(...).mid [115]</td><td>217,548.28 ns</td><td>1,414.205 ns</td><td>1,322.849 ns</td><td>61.7676</td><td>35.4004</td><td>-</td><td>777160 B</td>
+</tr><tr><td>GetNotes</td><td>D:\\D(...).mid [101]</td><td>140,748.92 ns</td><td>1,174.959 ns</td><td>1,041.571 ns</td><td>42.7246</td><td>14.1602</td><td>-</td><td>536624 B</td>
+</tr><tr><td>GetNotes</td><td>D:\\D(...).mid [105]</td><td>316,103.25 ns</td><td>2,911.485 ns</td><td>2,723.405 ns</td><td>74.7070</td><td>49.8047</td><td>-</td><td>941897 B</td>
+</tr><tr><td>GetNotes</td><td>D:\\D(...).mid [103]</td><td>222,437.34 ns</td><td>1,321.053 ns</td><td>1,235.714 ns</td><td>53.7109</td><td>26.6113</td><td>-</td><td>675200 B</td>
+</tr><tr><td>GetNotes</td><td>D:\\D(...).mid [100]</td><td>198,065.82 ns</td><td>788.835 ns</td><td>699.282 ns</td><td>58.1055</td><td>37.3535</td><td>-</td><td>730184 B</td>
+</tr><tr><td>GetNotes</td><td>D:\\D(...).mid [108]</td><td>191,268.38 ns</td><td>1,586.064 ns</td><td>1,483.606 ns</td><td>54.4434</td><td>30.5176</td><td>-</td><td>684648 B</td>
+</tr><tr><td>GetNotes</td><td>D:\\Dr(...)l.mid [99]</td><td>251,842.13 ns</td><td>1,885.363 ns</td><td>1,763.570 ns</td><td>57.6172</td><td>35.6445</td><td>-</td><td>726969 B</td>
+</tr><tr><td>GetNotes</td><td>D:\\D(...).mid [114]</td><td>189,527.04 ns</td><td>2,049.813 ns</td><td>1,917.396 ns</td><td>54.1992</td><td>27.5879</td><td>-</td><td>681344 B</td>
+</tr><tr><td>GetNotes</td><td>D:\\D(...).mid [108]</td><td>915.36 ns</td><td>3.592 ns</td><td>3.184 ns</td><td>0.3405</td><td>0.0019</td><td>-</td><td>4280 B</td>
+</tr><tr><td>GetNotes</td><td>D:\\Dr(...)e.mid [98]</td><td>1,153.07 ns</td><td>3.302 ns</td><td>3.089 ns</td><td>0.4482</td><td>0.0019</td><td>-</td><td>5624 B</td>
+</tr><tr><td>GetNotes</td><td>D:\\D(...).mid [121]</td><td>471.25 ns</td><td>1.539 ns</td><td>1.440 ns</td><td>0.1426</td><td>-</td><td>-</td><td>1792 B</td>
+</tr><tr><td>GetNotes</td><td>D:\\D(...).mid [136]</td><td>483.69 ns</td><td>1.570 ns</td><td>1.392 ns</td><td>0.1421</td><td>-</td><td>-</td><td>1784 B</td>
+</tr><tr><td>GetNotes</td><td>D:\\Dr(...)2.mid [98]</td><td>1,188.72 ns</td><td>6.052 ns</td><td>5.365 ns</td><td>0.4482</td><td>0.0038</td><td>-</td><td>5632 B</td>
+</tr><tr><td>GetNotes</td><td>D:\\D(...).mid [132]</td><td>479.67 ns</td><td>2.146 ns</td><td>2.008 ns</td><td>0.1421</td><td>-</td><td>-</td><td>1784 B</td>
+</tr><tr><td>GetNotes</td><td>D:\\D(...).mid [141]</td><td>831.98 ns</td><td>3.482 ns</td><td>3.257 ns</td><td>0.2937</td><td>0.0019</td><td>-</td><td>3696 B</td>
+</tr><tr><td>GetNotes</td><td>D:\\D(...).mid [119]</td><td>32.84 ns</td><td>0.188 ns</td><td>0.167 ns</td><td>0.0166</td><td>-</td><td>-</td><td>208 B</td>
+</tr><tr><td>GetNotes</td><td>D:\\D(...).mid [128]</td><td>623,275.79 ns</td><td>11,745.687 ns</td><td>10,986.923 ns</td><td>190.4297</td><td>144.5313</td><td>-</td><td>2394104 B</td>
+</tr><tr><td>GetNotes</td><td>D:\\D(...).mid [134]</td><td>11,295,065.62 ns</td><td>163,882.337 ns</td><td>153,295.639 ns</td><td>1703.1250</td><td>703.1250</td><td>234.3750</td><td>18720617 B</td>
+</tr><tr><td>GetNotes</td><td>D:\\D(...).mid [112]</td><td>3,188,150.81 ns</td><td>30,901.481 ns</td><td>28,905.264 ns</td><td>1019.5313</td><td>644.5313</td><td>-</td><td>12809098 B</td>
+</tr><tr><td>GetNotes</td><td>D:\\D(...).mid [102]</td><td>376,909.70 ns</td><td>2,075.825 ns</td><td>1,840.165 ns</td><td>119.1406</td><td>72.2656</td><td>-</td><td>1495952 B</td>
+</tr><tr><td>GetNotes</td><td>D:\\D(...).mid [101]</td><td>541,979.99 ns</td><td>5,651.550 ns</td><td>5,286.463 ns</td><td>130.8594</td><td>98.6328</td><td>-</td><td>1654128 B</td>
+</tr><tr><td>GetNotes</td><td>D:\\Dr(...)m.mid [99]</td><td>497,929.92 ns</td><td>2,166.077 ns</td><td>1,920.171 ns</td><td>121.0938</td><td>92.7734</td><td>-</td><td>1525648 B</td>
+</tr><tr><td>GetNotes</td><td>D:\\D(...).mid [114]</td><td>517,746.67 ns</td><td>3,012.368 ns</td><td>2,817.771 ns</td><td>127.9297</td><td>98.6328</td><td>-</td><td>1613088 B</td>
+</tr><tr><td>GetNotes</td><td>D:\\D(...).mid [103]</td><td>507,927.10 ns</td><td>3,366.919 ns</td><td>3,149.419 ns</td><td>127.9297</td><td>103.5156</td><td>-</td><td>1606104 B</td>
+</tr><tr><td>GetNotes</td><td>D:\\D(...).mid [106]</td><td>476,011.86 ns</td><td>2,880.167 ns</td><td>2,694.110 ns</td><td>127.4414</td><td>106.9336</td><td>-</td><td>1600600 B</td>
+</tr><tr><td>GetNotes</td><td>D:\\Dr(...)o.mid [99]</td><td>507,649.90 ns</td><td>7,026.061 ns</td><td>6,572.182 ns</td><td>128.9063</td><td>95.7031</td><td>-</td><td>1627816 B</td>
+</tr><tr><td>GetNotes</td><td>D:\\D(...).mid [113]</td><td>488,484.11 ns</td><td>2,985.193 ns</td><td>2,792.351 ns</td><td>126.4648</td><td>113.2813</td><td>-</td><td>1588424 B</td>
+</tr><tr><td>GetNotes</td><td>D:\\D(...).mid [109]</td><td>521,498.67 ns</td><td>3,633.298 ns</td><td>3,398.589 ns</td><td>119.1406</td><td>78.1250</td><td>-</td><td>1506440 B</td>
+</tr><tr><td>GetNotes</td><td>D:\\D(...).mid [107]</td><td>498,653.89 ns</td><td>3,454.371 ns</td><td>3,231.221 ns</td><td>121.0938</td><td>93.7500</td><td>-</td><td>1526904 B</td>
+</tr><tr><td>GetNotes</td><td>D:\\D(...).mid [108]</td><td>1,455.00 ns</td><td>9.325 ns</td><td>8.723 ns</td><td>0.6390</td><td>0.0134</td><td>-</td><td>8032 B</td>
+</tr><tr><td>GetNotes</td><td>D:\\D(...).mid [103]</td><td>873.98 ns</td><td>3.218 ns</td><td>3.010 ns</td><td>0.3786</td><td>0.0038</td><td>-</td><td>4752 B</td>
+</tr><tr><td>GetNotes</td><td>D:\\D(...).mid [100]</td><td>923.05 ns</td><td>4.063 ns</td><td>3.602 ns</td><td>0.3977</td><td>0.0048</td><td>-</td><td>5000 B</td>
+</tr><tr><td>GetNotes</td><td>D:\\D(...).mid [103]</td><td>862.29 ns</td><td>3.724 ns</td><td>3.484 ns</td><td>0.3729</td><td>0.0038</td><td>-</td><td>4680 B</td>
+</tr><tr><td>GetNotes</td><td>D:\\D(...).mid [109]</td><td>616.10 ns</td><td>12.112 ns</td><td>10.737 ns</td><td>0.2604</td><td>0.0019</td><td>-</td><td>3272 B</td>
+</tr><tr><td>GetNotes</td><td>D:\\Dr(...)r.mid [98]</td><td>214.49 ns</td><td>0.947 ns</td><td>0.840 ns</td><td>0.1051</td><td>-</td><td>-</td><td>1320 B</td>
+</tr><tr><td>GetNotes</td><td>D:\\Dr(...)2.mid [99]</td><td>218.42 ns</td><td>0.818 ns</td><td>0.765 ns</td><td>0.1051</td><td>-</td><td>-</td><td>1320 B</td>
+</tr><tr><td>GetNotes</td><td>D:\\D(...).mid [100]</td><td>211.98 ns</td><td>0.818 ns</td><td>0.765 ns</td><td>0.1051</td><td>-</td><td>-</td><td>1320 B</td>
+</tr><tr><td>GetNotes</td><td>D:\\D(...).mid [101]</td><td>216.00 ns</td><td>0.833 ns</td><td>0.780 ns</td><td>0.1051</td><td>-</td><td>-</td><td>1320 B</td>
+</tr><tr><td>GetNotes</td><td>D:\\D(...).mid [101]</td><td>214.86 ns</td><td>1.019 ns</td><td>0.953 ns</td><td>0.1051</td><td>-</td><td>-</td><td>1320 B</td>
+</tr></tbody></table>
+</body>
+</html>

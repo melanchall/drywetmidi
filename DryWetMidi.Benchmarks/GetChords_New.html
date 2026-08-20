@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+<meta charset='utf-8' />
+<title>Melanchall.DryWetMidi.Benchmarks.GetChordsBenchmarks-20260820-142134</title>
+
+<style type="text/css">
+	table { border-collapse: collapse; display: block; width: 100%; overflow: auto; }
+	td, th { padding: 6px 13px; border: 1px solid #ddd; text-align: right; }
+	tr { background-color: #fff; border-top: 1px solid #ccc; }
+	tr:nth-child(even) { background: #f8f8f8; }
+</style>
+</head>
+<body>
+<pre><code>
+BenchmarkDotNet v0.14.0, Windows 11 (10.0.26200.9168)
+13th Gen Intel Core i7-13620H, 1 CPU, 16 logical and 10 physical cores
+.NET SDK 10.0.400
+  [Host]     : .NET 10.0.11 (10.0.1126.37416), X64 RyuJIT AVX2
+  DefaultJob : .NET 10.0.11 (10.0.1126.37416), X64 RyuJIT AVX2
+</code></pre>
+<pre><code></code></pre>
+
+<table>
+<thead><tr><th>Method               </th><th>EventsCount</th><th>Mean  </th><th>Error </th><th>StdDev</th><th>Gen0</th><th>Gen1</th><th>Gen2</th><th>Allocated</th>
+</tr>
+</thead><tbody><tr><td>&#39;GetChords – no overlaps&#39;</td><td>1000</td><td>86.58 &mu;s</td><td>1.290 &mu;s</td><td>1.207 &mu;s</td><td>29.5410</td><td>16.9678</td><td>-</td><td>362.58 KB</td>
+</tr><tr><td>&#39;GetChords – with overlaps&#39;</td><td>1000</td><td>94.85 &mu;s</td><td>1.070 &mu;s</td><td>1.001 &mu;s</td><td>37.9639</td><td>22.7051</td><td>-</td><td>465.97 KB</td>
+</tr><tr><td>&#39;GetChords – mixed&#39;</td><td>1000</td><td>89.21 &mu;s</td><td>0.542 &mu;s</td><td>0.507 &mu;s</td><td>34.6680</td><td>23.0713</td><td>-</td><td>424.95 KB</td>
+</tr><tr><td>&#39;GetChords – no overlaps&#39;</td><td>10000</td><td>4,220.98 &mu;s</td><td>53.930 &mu;s</td><td>42.105 &mu;s</td><td>390.6250</td><td>382.8125</td><td>117.1875</td><td>3653.81 KB</td>
+</tr><tr><td>&#39;GetChords – with overlaps&#39;</td><td>10000</td><td>5,560.21 &mu;s</td><td>110.635 &mu;s</td><td>202.301 &mu;s</td><td>609.3750</td><td>609.3750</td><td>320.3125</td><td>4811.22 KB</td>
+</tr><tr><td>&#39;GetChords – mixed&#39;</td><td>10000</td><td>3,841.86 &mu;s</td><td>71.116 &mu;s</td><td>92.471 &mu;s</td><td>421.8750</td><td>414.0625</td><td>179.6875</td><td>4247.08 KB</td>
+</tr><tr><td>&#39;GetChords – no overlaps&#39;</td><td>100000</td><td>56,569.12 &mu;s</td><td>1,007.975 &mu;s</td><td>1,310.653 &mu;s</td><td>3500.0000</td><td>3400.0000</td><td>900.0000</td><td>37154.18 KB</td>
+</tr><tr><td>&#39;GetChords – with overlaps&#39;</td><td>100000</td><td>76,291.86 &mu;s</td><td>1,503.986 &mu;s</td><td>2,553.882 &mu;s</td><td>3571.4286</td><td>3428.5714</td><td>857.1429</td><td>46930.73 KB</td>
+</tr><tr><td>&#39;GetChords – mixed&#39;</td><td>100000</td><td>60,292.20 &mu;s</td><td>1,122.188 &mu;s</td><td>1,874.924 &mu;s</td><td>3555.5556</td><td>3444.4444</td><td>888.8889</td><td>42063.66 KB</td>
+</tr></tbody></table>
+</body>
+</html>

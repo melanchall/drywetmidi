@@ -39,6 +39,7 @@
       <Build Solution="ReleaseNativeless|*" Project="false" />
     </Project>
   </Folder>
+  <Project Path="DryWetMidi.Benchmarks/Melanchall.DryWetMidi.Benchmarks.csproj" />
   <Project Path="DryWetMidi.Tests/Melanchall.DryWetMidi.Tests.csproj" />
   <Project Path="DryWetMidi/Melanchall.DryWetMidi.csproj" />
 </Solution>

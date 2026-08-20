@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+<meta charset='utf-8' />
+<title>Melanchall.DryWetMidi.Benchmarks.GetObjectsBenchmarks-20260820-142844</title>
+
+<style type="text/css">
+	table { border-collapse: collapse; display: block; width: 100%; overflow: auto; }
+	td, th { padding: 6px 13px; border: 1px solid #ddd; text-align: right; }
+	tr { background-color: #fff; border-top: 1px solid #ccc; }
+	tr:nth-child(even) { background: #f8f8f8; }
+</style>
+</head>
+<body>
+<pre><code>
+BenchmarkDotNet v0.14.0, Windows 11 (10.0.26200.9168)
+13th Gen Intel Core i7-13620H, 1 CPU, 16 logical and 10 physical cores
+.NET SDK 10.0.400
+  [Host]     : .NET 10.0.11 (10.0.1126.37416), X64 RyuJIT AVX2
+  DefaultJob : .NET 10.0.11 (10.0.1126.37416), X64 RyuJIT AVX2
+</code></pre>
+<pre><code></code></pre>
+
+<table>
+<thead><tr><th>Method                                  </th><th>EventsCount</th><th>Mean  </th><th>Error </th><th>StdDev</th><th>Gen0</th><th>Gen1</th><th>Gen2</th><th>Allocated</th>
+</tr>
+</thead><tbody><tr><td>&#39;GetObjects(Note) – no overlaps&#39;</td><td>1000</td><td>59.74 &mu;s</td><td>0.429 &mu;s</td><td>0.401 &mu;s</td><td>20.5078</td><td>10.1929</td><td>-</td><td>251.56 KB</td>
+</tr><tr><td>&#39;GetObjects(Note) – with overlaps&#39;</td><td>1000</td><td>75.38 &mu;s</td><td>0.750 &mu;s</td><td>0.665 &mu;s</td><td>28.9307</td><td>15.1367</td><td>-</td><td>354.95 KB</td>
+</tr><tr><td>&#39;GetObjects(Note) – mixed&#39;</td><td>1000</td><td>68.09 &mu;s</td><td>0.588 &mu;s</td><td>0.550 &mu;s</td><td>25.6348</td><td>12.6953</td><td>-</td><td>313.93 KB</td>
+</tr><tr><td>&#39;GetObjects(TimedEvent) – no overlaps&#39;</td><td>1000</td><td>34.61 &mu;s</td><td>0.222 &mu;s</td><td>0.208 &mu;s</td><td>14.0991</td><td>4.9438</td><td>-</td><td>173.29 KB</td>
+</tr><tr><td>&#39;GetObjects(TimedEvent) – with overlaps&#39;</td><td>1000</td><td>34.44 &mu;s</td><td>0.334 &mu;s</td><td>0.312 &mu;s</td><td>14.0991</td><td>4.9438</td><td>-</td><td>173.29 KB</td>
+</tr><tr><td>&#39;GetObjects(TimedEvent) – mixed&#39;</td><td>1000</td><td>35.42 &mu;s</td><td>0.288 &mu;s</td><td>0.269 &mu;s</td><td>14.0991</td><td>4.9438</td><td>-</td><td>173.29 KB</td>
+</tr><tr><td>&#39;GetObjects(Note|TimedEvent) – no overlaps&#39;</td><td>1000</td><td>58.91 &mu;s</td><td>0.559 &mu;s</td><td>0.523 &mu;s</td><td>20.5078</td><td>10.1929</td><td>-</td><td>251.56 KB</td>
+</tr><tr><td>&#39;GetObjects(Note|TimedEvent) – with overlaps&#39;</td><td>1000</td><td>71.37 &mu;s</td><td>1.001 &mu;s</td><td>0.936 &mu;s</td><td>28.9307</td><td>15.1367</td><td>-</td><td>354.95 KB</td>
+</tr><tr><td>&#39;GetObjects(Note|TimedEvent) – mixed&#39;</td><td>1000</td><td>69.90 &mu;s</td><td>0.582 &mu;s</td><td>0.544 &mu;s</td><td>25.6348</td><td>12.6953</td><td>-</td><td>313.93 KB</td>
+</tr><tr><td>&#39;GetObjects(Chord) – no overlaps&#39;</td><td>1000</td><td>79.71 &mu;s</td><td>0.636 &mu;s</td><td>0.595 &mu;s</td><td>29.5410</td><td>16.3574</td><td>-</td><td>362.71 KB</td>
+</tr><tr><td>&#39;GetObjects(Chord) – with overlaps&#39;</td><td>1000</td><td>99.80 &mu;s</td><td>1.342 &mu;s</td><td>1.189 &mu;s</td><td>37.9639</td><td>22.0947</td><td>-</td><td>466.1 KB</td>
+</tr><tr><td>&#39;GetObjects(Chord) – mixed&#39;</td><td>1000</td><td>88.29 &mu;s</td><td>0.721 &mu;s</td><td>0.674 &mu;s</td><td>34.6680</td><td>21.9727</td><td>-</td><td>425.08 KB</td>
+</tr><tr><td>&#39;GetObjects(Chord|TimedEvent) – no overlaps&#39;</td><td>1000</td><td>80.07 &mu;s</td><td>0.837 &mu;s</td><td>0.783 &mu;s</td><td>29.5410</td><td>16.3574</td><td>-</td><td>362.71 KB</td>
+</tr><tr><td>&#39;GetObjects(Chord|TimedEvent) – with overlaps&#39;</td><td>1000</td><td>94.53 &mu;s</td><td>1.379 &mu;s</td><td>1.222 &mu;s</td><td>37.9639</td><td>22.0947</td><td>-</td><td>466.1 KB</td>
+</tr><tr><td>&#39;GetObjects(Chord|TimedEvent) – mixed&#39;</td><td>1000</td><td>89.04 &mu;s</td><td>0.701 &mu;s</td><td>0.655 &mu;s</td><td>34.6680</td><td>21.9727</td><td>-</td><td>425.08 KB</td>
+</tr><tr><td>&#39;GetObjects(Note) – no overlaps&#39;</td><td>10000</td><td>2,373.59 &mu;s</td><td>45.688 &mu;s</td><td>52.615 &mu;s</td><td>234.3750</td><td>230.4688</td><td>82.0313</td><td>2601.06 KB</td>
+</tr><tr><td>&#39;GetObjects(Note) – with overlaps&#39;</td><td>10000</td><td>1,430.34 &mu;s</td><td>19.867 &mu;s</td><td>15.511 &mu;s</td><td>332.0313</td><td>332.0313</td><td>332.0313</td><td>3757.63 KB</td>
+</tr><tr><td>&#39;GetObjects(Note) – mixed&#39;</td><td>10000</td><td>1,787.84 &mu;s</td><td>11.118 &mu;s</td><td>9.284 &mu;s</td><td>332.0313</td><td>330.0781</td><td>166.0156</td><td>3194.55 KB</td>
+</tr><tr><td>&#39;GetObjects(TimedEvent) – no overlaps&#39;</td><td>10000</td><td>612.88 &mu;s</td><td>11.549 &mu;s</td><td>10.803 &mu;s</td><td>125.0000</td><td>125.0000</td><td>124.0234</td><td>1919.05 KB</td>
+</tr><tr><td>&#39;GetObjects(TimedEvent) – with overlaps&#39;</td><td>10000</td><td>626.83 &mu;s</td><td>12.168 &mu;s</td><td>14.485 &mu;s</td><td>125.0000</td><td>125.0000</td><td>124.0234</td><td>1919.05 KB</td>
+</tr><tr><td>&#39;GetObjects(TimedEvent) – mixed&#39;</td><td>10000</td><td>648.25 &mu;s</td><td>12.954 &mu;s</td><td>21.283 &mu;s</td><td>125.0000</td><td>125.0000</td><td>124.0234</td><td>1919.05 KB</td>
+</tr><tr><td>&#39;GetObjects(Note|TimedEvent) – no overlaps&#39;</td><td>10000</td><td>2,392.77 &mu;s</td><td>40.783 &mu;s</td><td>38.148 &mu;s</td><td>234.3750</td><td>230.4688</td><td>82.0313</td><td>2601.06 KB</td>
+</tr><tr><td>&#39;GetObjects(Note|TimedEvent) – with overlaps&#39;</td><td>10000</td><td>1,437.57 &mu;s</td><td>17.668 &mu;s</td><td>15.662 &mu;s</td><td>332.0313</td><td>332.0313</td><td>332.0313</td><td>3757.62 KB</td>
+</tr><tr><td>&#39;GetObjects(Note|TimedEvent) – mixed&#39;</td><td>10000</td><td>1,800.69 &mu;s</td><td>35.578 &mu;s</td><td>33.280 &mu;s</td><td>332.0313</td><td>330.0781</td><td>166.0156</td><td>3194.55 KB</td>
+</tr><tr><td>&#39;GetObjects(Chord) – no overlaps&#39;</td><td>10000</td><td>4,384.94 &mu;s</td><td>87.093 &mu;s</td><td>152.536 &mu;s</td><td>390.6250</td><td>382.8125</td><td>117.1875</td><td>3653.84 KB</td>
+</tr><tr><td>&#39;GetObjects(Chord) – with overlaps&#39;</td><td>10000</td><td>5,500.09 &mu;s</td><td>104.415 &mu;s</td><td>124.299 &mu;s</td><td>593.7500</td><td>593.7500</td><td>320.3125</td><td>4811.01 KB</td>
+</tr><tr><td>&#39;GetObjects(Chord) – mixed&#39;</td><td>10000</td><td>3,932.46 &mu;s</td><td>77.913 &mu;s</td><td>109.223 &mu;s</td><td>429.6875</td><td>425.7813</td><td>179.6875</td><td>4247.23 KB</td>
+</tr><tr><td>&#39;GetObjects(Chord|TimedEvent) – no overlaps&#39;</td><td>10000</td><td>4,281.34 &mu;s</td><td>59.453 &mu;s</td><td>55.612 &mu;s</td><td>390.6250</td><td>382.8125</td><td>117.1875</td><td>3653.84 KB</td>
+</tr><tr><td>&#39;GetObjects(Chord|TimedEvent) – with overlaps&#39;</td><td>10000</td><td>5,604.19 &mu;s</td><td>111.625 &mu;s</td><td>204.112 &mu;s</td><td>617.1875</td><td>617.1875</td><td>328.1250</td><td>4811.08 KB</td>
+</tr><tr><td>&#39;GetObjects(Chord|TimedEvent) – mixed&#39;</td><td>10000</td><td>3,873.15 &mu;s</td><td>63.426 &mu;s</td><td>56.226 &mu;s</td><td>421.8750</td><td>417.9688</td><td>179.6875</td><td>4247.25 KB</td>
+</tr><tr><td>&#39;GetObjects(Note) – no overlaps&#39;</td><td>100000</td><td>38,027.41 &mu;s</td><td>748.815 &mu;s</td><td>1,563.056 &mu;s</td><td>2500.0000</td><td>2428.5714</td><td>642.8571</td><td>25487.09 KB</td>
+</tr><tr><td>&#39;GetObjects(Note) – with overlaps&#39;</td><td>100000</td><td>61,722.87 &mu;s</td><td>1,222.166 &mu;s</td><td>1,358.434 &mu;s</td><td>2777.7778</td><td>2666.6667</td><td>777.7778</td><td>35264.76 KB</td>
+</tr><tr><td>&#39;GetObjects(Note) – mixed&#39;</td><td>100000</td><td>48,379.04 &mu;s</td><td>961.464 &mu;s</td><td>2,266.285 &mu;s</td><td>2818.1818</td><td>2727.2727</td><td>818.1818</td><td>30396.66 KB</td>
+</tr><tr><td>&#39;GetObjects(TimedEvent) – no overlaps&#39;</td><td>100000</td><td>23,604.94 &mu;s</td><td>467.665 &mu;s</td><td>1,155.952 &mu;s</td><td>1593.7500</td><td>1562.5000</td><td>437.5000</td><td>18159.58 KB</td>
+</tr><tr><td>&#39;GetObjects(TimedEvent) – with overlaps&#39;</td><td>100000</td><td>23,566.27 &mu;s</td><td>456.144 &mu;s</td><td>1,038.871 &mu;s</td><td>1593.7500</td><td>1562.5000</td><td>437.5000</td><td>18159.57 KB</td>
+</tr><tr><td>&#39;GetObjects(TimedEvent) – mixed&#39;</td><td>100000</td><td>23,251.79 &mu;s</td><td>461.978 &mu;s</td><td>1,184.226 &mu;s</td><td>1593.7500</td><td>1562.5000</td><td>437.5000</td><td>18159.57 KB</td>
+</tr><tr><td>&#39;GetObjects(Note|TimedEvent) – no overlaps&#39;</td><td>100000</td><td>38,355.46 &mu;s</td><td>757.705 &mu;s</td><td>1,495.637 &mu;s</td><td>2500.0000</td><td>2428.5714</td><td>642.8571</td><td>25487.1 KB</td>
+</tr><tr><td>&#39;GetObjects(Note|TimedEvent) – with overlaps&#39;</td><td>100000</td><td>62,033.32 &mu;s</td><td>1,226.412 &mu;s</td><td>2,082.542 &mu;s</td><td>2750.0000</td><td>2625.0000</td><td>750.0000</td><td>35264.04 KB</td>
+</tr><tr><td>&#39;GetObjects(Note|TimedEvent) – mixed&#39;</td><td>100000</td><td>48,051.66 &mu;s</td><td>946.579 &mu;s</td><td>1,868.455 &mu;s</td><td>2833.3333</td><td>2750.0000</td><td>833.3333</td><td>30396.63 KB</td>
+</tr><tr><td>&#39;GetObjects(Chord) – no overlaps&#39;</td><td>100000</td><td>54,231.56 &mu;s</td><td>1,070.905 &mu;s</td><td>1,635.385 &mu;s</td><td>3444.4444</td><td>3333.3333</td><td>888.8889</td><td>37154.31 KB</td>
+</tr><tr><td>&#39;GetObjects(Chord) – with overlaps&#39;</td><td>100000</td><td>79,514.92 &mu;s</td><td>1,567.149 &mu;s</td><td>3,201.270 &mu;s</td><td>3571.4286</td><td>3428.5714</td><td>857.1429</td><td>46930.94 KB</td>
+</tr><tr><td>&#39;GetObjects(Chord) – mixed&#39;</td><td>100000</td><td>60,636.19 &mu;s</td><td>1,194.600 &mu;s</td><td>1,824.281 &mu;s</td><td>3500.0000</td><td>3375.0000</td><td>875.0000</td><td>42063.83 KB</td>
+</tr><tr><td>&#39;GetObjects(Chord|TimedEvent) – no overlaps&#39;</td><td>100000</td><td>56,310.31 &mu;s</td><td>1,106.661 &mu;s</td><td>1,722.937 &mu;s</td><td>3500.0000</td><td>3400.0000</td><td>900.0000</td><td>37154.31 KB</td>
+</tr><tr><td>&#39;GetObjects(Chord|TimedEvent) – with overlaps&#39;</td><td>100000</td><td>76,245.96 &mu;s</td><td>1,485.627 &mu;s</td><td>2,522.708 &mu;s</td><td>3571.4286</td><td>3428.5714</td><td>857.1429</td><td>46930.86 KB</td>
+</tr><tr><td>&#39;GetObjects(Chord|TimedEvent) – mixed&#39;</td><td>100000</td><td>61,484.41 &mu;s</td><td>1,210.288 &mu;s</td><td>1,774.025 &mu;s</td><td>3555.5556</td><td>3444.4444</td><td>888.8889</td><td>42063.83 KB</td>
+</tr></tbody></table>
+</body>
+</html>
