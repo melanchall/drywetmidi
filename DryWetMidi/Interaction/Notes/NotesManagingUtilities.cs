@@ -352,9 +352,8 @@ namespace Melanchall.DryWetMidi.Interaction
                 case 1: return eventsCollections[0].GetNotes(settings, timedEventDetectionSettings);
             }
 
-            var noteDetectionSettings = settings ?? new NoteDetectionSettings();
             var notes = eventsCollections
-                .Select((c, i) => GetNotesOnly(c.GetTimedEventsLazy(timedEventDetectionSettings, i), noteDetectionSettings))
+                .Select((c, i) => GetNotesAndTimedEventsLazy(c.GetTimedEventsLazy(timedEventDetectionSettings, i), settings).OfType<Note>())
                 .MergeSortedObjectsCollections();
 
             return new SortedImmutableCollection<Note>(notes.ToArray());
