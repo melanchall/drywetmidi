@@ -143,13 +143,13 @@ namespace Melanchall.DryWetMidi.Common
             IsLessThan(parameterName, value, double.Epsilon, message);
         }
 
-        internal static void IsNullOrWhiteSpaceString(string parameterName, string value, string stringDescription)
+        internal static void IsNullOrWhiteSpaceString(string parameterName, string? value, string stringDescription)
         {
             if (string.IsNullOrWhiteSpace(value))
                 throw new ArgumentException($"{stringDescription} is null or contains white-spaces only.", parameterName);
         }
 
-        internal static void IsNullOrEmptyString(string parameterName, string value, string stringDescription)
+        internal static void IsNullOrEmptyString(string parameterName, string? value, string stringDescription)
         {
             if (string.IsNullOrEmpty(value))
                 throw new ArgumentException($"{stringDescription} is null or empty.", parameterName);
@@ -178,7 +178,7 @@ namespace Melanchall.DryWetMidi.Common
 
         internal static void StartsWithInvalidValue<T>(string parameterName, IEnumerable<T> collection, T invalidValue, string message)
         {
-            if (collection != null && collection.Any() && collection.First().Equals(invalidValue))
+            if (collection != null && collection.Any() && collection.FirstOrDefault()?.Equals(invalidValue) == true)
                 throw new ArgumentException(message, parameterName);
         }
 

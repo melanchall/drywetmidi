@@ -35,7 +35,7 @@ namespace Melanchall.DryWetMidi.Core
         {
             public static readonly Instruction Read = new Instruction(InstructionType.Read, null);
 
-            private Instruction(InstructionType instructionType, MidiToken midiToken)
+            private Instruction(InstructionType instructionType, MidiToken? midiToken)
             {
                 InstructionType = instructionType;
                 Token = midiToken;
@@ -43,9 +43,9 @@ namespace Melanchall.DryWetMidi.Core
 
             public InstructionType InstructionType { get; }
 
-            public MidiToken Token { get; }
+            public MidiToken? Token { get; }
 
-            public static Instruction ReturnToken(MidiToken midiToken)
+            public static Instruction ReturnToken(MidiToken? midiToken)
             {
                 return new Instruction(InstructionType.ReturnToken, midiToken);
             }
@@ -73,7 +73,7 @@ namespace Melanchall.DryWetMidi.Core
 
         private State _state = State.Initial;
         private long? _smfEndPosition = null;
-        private string _chunkId = null;
+        private string? _chunkId = null;
         private uint _chunkSize;
 
         private long _endReaderPosition;
@@ -85,15 +85,13 @@ namespace Melanchall.DryWetMidi.Core
 
         #region Constructor
 
-        internal MidiTokensReader(Stream stream, ReadingSettings settings, bool disposeStream)
+        internal MidiTokensReader(Stream stream, ReadingSettings? settings, bool disposeStream)
         {
             _stream = stream;
             if (!_stream.CanRead)
                 throw new ArgumentException("Stream doesn't support reading.", nameof(stream));
 
-            _settings = settings;
-            if (_settings == null)
-                _settings = new ReadingSettings();
+            _settings = settings ?? new ReadingSettings();
 
             if (_settings.ReaderSettings == null)
                 _settings.ReaderSettings = new ReaderSettings();
@@ -148,9 +146,9 @@ namespace Melanchall.DryWetMidi.Core
         /// is <c>null</c> in case of <see cref="ReaderSettings.BufferingPolicy"/> set to
         /// <see cref="BufferingPolicy.UseCustomBuffer"/>.</exception>
         /// <exception cref="VlqNumberOverflowException">A variable-length quantity (VLQ) number in the file is too large.</exception>
-        public MidiToken ReadToken()
+        public MidiToken? ReadToken()
         {
-            Instruction instruction = null;
+            Instruction? instruction = null;
 
             var startPosition = _reader.Position;
 
@@ -172,6 +170,9 @@ namespace Melanchall.DryWetMidi.Core
                         case State.ChunkContent:
                             instruction = ProcessChunkContentState();
                             break;
+                        default:
+                            // TODO: proper exception
+                            throw new InvalidOperationException($"Unexpected state: {_state}");
                     }
                 }
                 catch (NotEnoughBytesException ex)
@@ -185,9 +186,9 @@ namespace Melanchall.DryWetMidi.Core
                     return null;
                 }
             }
-            while (instruction.InstructionType == InstructionType.Read);
+            while (instruction?.InstructionType == InstructionType.Read);
 
-            var token = instruction.Token;
+            var token = instruction?.Token;
             if (token != null)
             {
                 token.Position = startPosition;

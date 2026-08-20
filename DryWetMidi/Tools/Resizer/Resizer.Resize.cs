@@ -91,13 +91,13 @@ namespace Melanchall.DryWetMidi.Tools
         /// </item>
         /// </list>
         /// </exception>
-        public static void Resize(this IEnumerable<TrackChunk> trackChunks, ITimeSpan length, TempoMap tempoMap)
+        public static void Resize(this IEnumerable<TrackChunk?> trackChunks, ITimeSpan length, TempoMap tempoMap)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
             ThrowIfArgument.IsNull(nameof(length), length);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
-            if (!trackChunks.Any(c => c.Events.Any()))
+            if (!trackChunks.OfType<TrackChunk>().Any(c => c.Events.Any()))
                 return;
 
             var duration = trackChunks.GetDuration<MidiTimeSpan>(tempoMap);
@@ -117,12 +117,12 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="ratio">Ratio to resize <paramref name="trackChunks"/> by.</param>
         /// <exception cref="ArgumentNullException"><paramref name="trackChunks"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="ratio"/> is negative.</exception>
-        public static void Resize(this IEnumerable<TrackChunk> trackChunks, double ratio)
+        public static void Resize(this IEnumerable<TrackChunk?> trackChunks, double ratio)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
             ThrowIfArgument.IsNegative(nameof(ratio), ratio, "Ratio is negative.");
 
-            foreach (var trackChunk in trackChunks)
+            foreach (var trackChunk in trackChunks.OfType<TrackChunk>())
             {
                 trackChunk.Resize(ratio);
             }

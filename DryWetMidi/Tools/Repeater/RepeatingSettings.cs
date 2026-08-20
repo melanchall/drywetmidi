@@ -39,7 +39,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// Gets or sets fixed shift that will be used in case of <see cref="ShiftPolicy"/> set
         /// to <see cref="ShiftPolicy.ShiftByFixedValue"/>.
         /// </summary>
-        public ITimeSpan Shift { get; set; }
+        public ITimeSpan? Shift { get; set; }
 
         /// <summary>
         /// Gets or sets a way of rounding final shift value. The default value is
@@ -61,7 +61,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// Gets or sets a step that should be used to round final shift in case of
         /// <see cref="ShiftRoundingPolicy"/> set to a value other than <see cref="TimeSpanRoundingPolicy.NoRounding"/>.
         /// </summary>
-        public ITimeSpan ShiftRoundingStep { get; set; }
+        public ITimeSpan? ShiftRoundingStep { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether original tempo map should be preserved or not.

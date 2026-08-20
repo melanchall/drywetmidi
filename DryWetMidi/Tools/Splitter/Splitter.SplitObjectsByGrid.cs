@@ -47,8 +47,8 @@ namespace Melanchall.DryWetMidi.Tools
             ObjectType objectType,
             IGrid grid,
             TempoMap tempoMap,
-            ObjectDetectionSettings objectDetectionSettings = null,
-            Predicate<ITimedObject> filter = null)
+            ObjectDetectionSettings? objectDetectionSettings = null,
+            Predicate<ITimedObject>? filter = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
             ThrowIfArgument.IsNull(nameof(grid), grid);
@@ -93,18 +93,18 @@ namespace Melanchall.DryWetMidi.Tools
         /// </list>
         /// </exception>
         public static void SplitObjectsByGrid(
-            this IEnumerable<TrackChunk> trackChunks,
+            this IEnumerable<TrackChunk?> trackChunks,
             ObjectType objectType,
             IGrid grid,
             TempoMap tempoMap,
-            ObjectDetectionSettings objectDetectionSettings = null,
-            Predicate<ITimedObject> filter = null)
+            ObjectDetectionSettings? objectDetectionSettings = null,
+            Predicate<ITimedObject>? filter = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
             ThrowIfArgument.IsNull(nameof(grid), grid);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
-            foreach (var trackChunk in trackChunks)
+            foreach (var trackChunk in trackChunks.OfType<TrackChunk>())
             {
                 trackChunk.SplitObjectsByGrid(objectType, grid, tempoMap, objectDetectionSettings, filter);
             }
@@ -141,8 +141,8 @@ namespace Melanchall.DryWetMidi.Tools
             this MidiFile midiFile,
             ObjectType objectType,
             IGrid grid,
-            ObjectDetectionSettings objectDetectionSettings = null,
-            Predicate<ITimedObject> filter = null)
+            ObjectDetectionSettings? objectDetectionSettings = null,
+            Predicate<ITimedObject>? filter = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
             ThrowIfArgument.IsNull(nameof(grid), grid);
@@ -182,17 +182,17 @@ namespace Melanchall.DryWetMidi.Tools
         /// </item>
         /// </list>
         /// </exception>
-        public static IEnumerable<ITimedObject> SplitObjectsByGrid(
-            this IEnumerable<ITimedObject> objects,
+        public static IEnumerable<ITimedObject?> SplitObjectsByGrid(
+            this IEnumerable<ITimedObject?> objects,
             IGrid grid,
             TempoMap tempoMap,
-            Predicate<ITimedObject> filter = null)
+            Predicate<ITimedObject>? filter = null)
         {
             ThrowIfArgument.IsNull(nameof(objects), objects);
             ThrowIfArgument.IsNull(nameof(grid), grid);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
-            var lastObjectEndTime = objects.Where(o => o != null)
+            var lastObjectEndTime = objects.OfType<ITimedObject>()
                                            .Select(o => o.Time + ((o as ILengthedObject)?.Length ?? 0))
                                            .DefaultIfEmpty()
                                            .Max();
@@ -229,9 +229,12 @@ namespace Melanchall.DryWetMidi.Tools
                     yield return parts.LeftPart;
 
                     tail = parts.RightPart;
+                    if (tail == null)
+                        break;
                 }
 
-                yield return tail;
+                if (tail != null)
+                    yield return tail;
             }
         }
 

@@ -25,6 +25,8 @@ namespace Melanchall.DryWetMidi.MusicTheory
         public Scale(IEnumerable<Interval> intervals, NoteName rootNote)
         {
             ThrowIfArgument.IsNull(nameof(intervals), intervals);
+            // TODO: doc exception
+            ThrowIfArgument.ContainsNull(nameof(intervals), intervals);
             ThrowIfArgument.IsInvalidEnumValue(nameof(rootNote), rootNote);
 
             Intervals = intervals;
@@ -60,7 +62,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// <see cref="string.Empty"/>, or is not of the correct format. This parameter is passed uninitialized;
         /// any value originally supplied in result will be overwritten.</param>
         /// <returns><c>true</c> if <paramref name="input"/> was converted successfully; otherwise, <c>false</c>.</returns>
-        public static bool TryParse(string input, out Scale scale)
+        public static bool TryParse(string? input, out Scale? scale)
         {
             return ParsingUtilities.TryParse(input, ScaleParser.TryParse, out scale);
         }
@@ -72,7 +74,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// <returns>A <see cref="Scale"/> equivalent to the musical scale contained in <paramref name="input"/>.</returns>
         /// <exception cref="ArgumentException"><paramref name="input"/> is <c>null</c> or contains white-spaces only.</exception>
         /// <exception cref="FormatException"><paramref name="input"/> has invalid format.</exception>
-        public static Scale Parse(string input)
+        public static Scale Parse(string? input)
         {
             return ParsingUtilities.Parse<Scale>(input, ScaleParser.TryParse);
         }
@@ -87,7 +89,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// <param name="scale1">The first <see cref="Scale"/> to compare.</param>
         /// <param name="scale2">The second <see cref="Scale"/> to compare.</param>
         /// <returns><c>true</c> if the scales are equal, <c>false</c> otherwise.</returns>
-        public static bool operator ==(Scale scale1, Scale scale2)
+        public static bool operator ==(Scale? scale1, Scale? scale2)
         {
             if (ReferenceEquals(scale1, scale2))
                 return true;
@@ -105,7 +107,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// <param name="scale1">The first <see cref="Scale"/> to compare.</param>
         /// <param name="scale2">The second <see cref="Scale"/> to compare.</param>
         /// <returns><c>false</c> if the scales are equal, <c>true</c> otherwise.</returns>
-        public static bool operator !=(Scale scale1, Scale scale2)
+        public static bool operator !=(Scale? scale1, Scale? scale2)
         {
             return !(scale1 == scale2);
         }
@@ -128,7 +130,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// </summary>
         /// <param name="obj">The object to compare with the current object.</param>
         /// <returns><c>true</c> if the specified object is equal to the current object; otherwise, <c>false</c>.</returns>
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             return this == (obj as Scale);
         }

@@ -87,7 +87,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <see cref="string.Empty"/>, or is not of the correct format. This parameter is passed uninitialized;
         /// any value originally supplied in result will be overwritten.</param>
         /// <returns><c>true</c> if <paramref name="input"/> was converted successfully; otherwise, <c>false</c>.</returns>
-        public static bool TryParse(string input, out BarBeatFractionTimeSpan timeSpan)
+        public static bool TryParse(string? input, out BarBeatFractionTimeSpan? timeSpan)
         {
             return ParsingUtilities.TryParse(input, BarBeatFractionTimeSpanParser.TryParse, out timeSpan);
         }
@@ -101,7 +101,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <paramref name="input"/>.</returns>
         /// <exception cref="ArgumentException"><paramref name="input"/> is <c>null</c> or contains white-spaces only.</exception>
         /// <exception cref="FormatException"><paramref name="input"/> has invalid format.</exception>
-        public static BarBeatFractionTimeSpan Parse(string input)
+        public static BarBeatFractionTimeSpan Parse(string? input)
         {
             return ParsingUtilities.Parse<BarBeatFractionTimeSpan>(input, BarBeatFractionTimeSpanParser.TryParse);
         }
@@ -116,7 +116,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="timeSpan1">The first <see cref="BarBeatFractionTimeSpan"/> to compare.</param>
         /// <param name="timeSpan2">The second <see cref="BarBeatFractionTimeSpan"/> to compare.</param>
         /// <returns><c>true</c> if time spans are equal, <c>false</c> otherwise.</returns>
-        public static bool operator ==(BarBeatFractionTimeSpan timeSpan1, BarBeatFractionTimeSpan timeSpan2)
+        public static bool operator ==(BarBeatFractionTimeSpan? timeSpan1, BarBeatFractionTimeSpan? timeSpan2)
         {
             if (ReferenceEquals(timeSpan1, null))
                 return ReferenceEquals(timeSpan2, null);
@@ -130,7 +130,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="timeSpan1">The first <see cref="BarBeatFractionTimeSpan"/> to compare.</param>
         /// <param name="timeSpan2">The second <see cref="BarBeatFractionTimeSpan"/> to compare.</param>
         /// <returns><c>false</c> if time spans are equal, <c>true</c> otherwise.</returns>
-        public static bool operator !=(BarBeatFractionTimeSpan timeSpan1, BarBeatFractionTimeSpan timeSpan2)
+        public static bool operator !=(BarBeatFractionTimeSpan? timeSpan1, BarBeatFractionTimeSpan? timeSpan2)
         {
             return !(timeSpan1 == timeSpan2);
         }
@@ -310,7 +310,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="obj">The object to compare with the current object.</param>
         /// <returns><c>true</c> if the specified object is equal to the current object; otherwise, <c>false</c>.</returns>
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             return Equals(obj as BarBeatFractionTimeSpan);
         }
@@ -459,7 +459,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </item>
         /// </list>
         /// </returns>
-        public int CompareTo(object other)
+        public int CompareTo(object? other)
         {
             if (ReferenceEquals(other, null))
                 return 1;
@@ -502,7 +502,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </item>
         /// </list>
         /// </returns>
-        public int CompareTo(BarBeatFractionTimeSpan other)
+        public int CompareTo(BarBeatFractionTimeSpan? other)
         {
             if (ReferenceEquals(other, null))
                 return 1;
@@ -522,7 +522,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="other">An object to compare with this object.</param>
         /// <returns><c>true</c> if the current object is equal to the other parameter; otherwise, <c>false</c>.</returns>
-        public bool Equals(BarBeatFractionTimeSpan other)
+        public bool Equals(BarBeatFractionTimeSpan? other)
         {
             if (ReferenceEquals(this, other))
                 return true;

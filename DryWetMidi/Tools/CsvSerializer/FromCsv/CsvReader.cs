@@ -41,7 +41,7 @@ namespace Melanchall.DryWetMidi.Tools
 
         #region Methods
 
-        public CsvRecord ReadRecord()
+        public CsvRecord? ReadRecord()
         {
             var line = GetFirstLine();
             var lineNumber = _currentLineNumber - 1;
@@ -71,9 +71,9 @@ namespace Melanchall.DryWetMidi.Tools
             Dispose(true);
         }
 
-        private string GetFirstLine()
+        private string? GetFirstLine()
         {
-            string result;
+            string? result;
 
             do
             {
@@ -84,7 +84,7 @@ namespace Melanchall.DryWetMidi.Tools
             return result;
         }
 
-        private string GetNextLine()
+        private string? GetNextLine()
         {
             _currentLineNumber++;
 

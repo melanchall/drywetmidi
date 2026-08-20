@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Interaction;
@@ -23,7 +24,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <summary>
         /// Occurs when current times of playbacks are changed.
         /// </summary>
-        public event EventHandler<PlaybackCurrentTimeChangedEventArgs> CurrentTimeChanged;
+        public event EventHandler<PlaybackCurrentTimeChangedEventArgs>? CurrentTimeChanged;
 
         #endregion
 
@@ -50,7 +51,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// Initializes a new instance of the <see cref="PlaybackCurrentTimeWatcher"/>.
         /// </summary>
         /// <param name="settings">Settings for playbacks watching.</param>
-        public PlaybackCurrentTimeWatcher(PlaybackCurrentTimeWatcherSettings settings = null)
+        public PlaybackCurrentTimeWatcher(PlaybackCurrentTimeWatcherSettings? settings = null)
         {
             _settings = settings ?? new PlaybackCurrentTimeWatcherSettings();
             CreateClock(PollingInterval);
@@ -251,7 +252,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             RecreateClock();
         }
 
-        private void OnTick(object sender, EventArgs e)
+        private void OnTick(object? sender, EventArgs e)
         {
             if (_disposing || _disposed || !IsWatching)
                 return;
@@ -298,6 +299,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             _clock.Dispose();
         }
 
+        [MemberNotNull(nameof(_clock))]
         private void CreateClock(TimeSpan pollingInterval)
         {
             _clock = new MidiClock(true, (_settings.ClockSettings ?? new MidiClockSettings()).CreateTickGeneratorCallback(), pollingInterval);

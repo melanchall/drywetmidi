@@ -11,14 +11,16 @@ namespace Melanchall.DryWetMidi.Core
     {
         #region Extern methods
 
+        // TODO: Win only, check!!!
         [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
-        private static extern SafeFileHandle CreateFile(string lpFileName,
-                                                        uint dwDesiredAccess,
-                                                        uint dwShareMode,
-                                                        IntPtr lpSecurityAttributes,
-                                                        uint dwCreationDisposition,
-                                                        uint dwFlagsAndAttributes,
-                                                        IntPtr hTemplateFile);
+        private static extern SafeFileHandle CreateFile(
+            string lpFileName,
+            uint dwDesiredAccess,
+            uint dwShareMode,
+            IntPtr lpSecurityAttributes,
+            uint dwCreationDisposition,
+            uint dwFlagsAndAttributes,
+            IntPtr hTemplateFile);
 
         #endregion
 

@@ -2,6 +2,7 @@
 
 namespace Melanchall.DryWetMidi.Interaction
 {
+    // TODO: add nearest!
     /// <summary>
     /// Specifies how a time span should be rounded.
     /// </summary>

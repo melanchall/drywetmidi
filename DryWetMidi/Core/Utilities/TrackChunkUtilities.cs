@@ -25,6 +25,7 @@ namespace Melanchall.DryWetMidi.Core
             return midiFile.Chunks.OfType<TrackChunk>();
         }
 
+        // TODO: check
         /// <summary>
         /// Merges multiple track chunks into one that corresponds to <see cref="MidiFileFormat.SingleTrack"/>.
         /// </summary>

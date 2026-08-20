@@ -84,7 +84,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// </exception>
         public static MidiFile MergeSequentially(
             this IEnumerable<MidiFile> midiFiles,
-            SequentialMergingSettings settings = null)
+            SequentialMergingSettings? settings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFiles), midiFiles);
             ThrowIfArgument.ContainsNull(nameof(midiFiles), midiFiles);
@@ -93,7 +93,7 @@ namespace Melanchall.DryWetMidi.Tools
             settings = settings ?? new SequentialMergingSettings();
 
             var result = PrepareResultFile(midiFiles);
-            var timeDivision = (TicksPerQuarterNoteTimeDivision)result.TimeDivision;
+            var timeDivision = (TicksPerQuarterNoteTimeDivision)result.TimeDivision!;
             var resultTrackChunksCreationPolicy = settings.ResultTrackChunksCreationPolicy;
 
             var offset = 0L;
@@ -106,7 +106,7 @@ namespace Melanchall.DryWetMidi.Tools
 
                 var chunks = GetChunksForProcessing(midiFile, eventsContext);
                 InsertMarkers(midiFile, chunks, fileDuration, settings);
-                var deltaTimeFactor = GetDeltaTimeFactor(timeDivision, midiFile.TimeDivision);
+                var deltaTimeFactor = GetDeltaTimeFactor(timeDivision, midiFile.TimeDivision!);
 
                 var newChunks = new List<MidiChunk>();
 
@@ -182,7 +182,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// </exception>
         public static MidiFile MergeSimultaneously(
             this IEnumerable<MidiFile> midiFiles,
-            SimultaneousMergingSettings settings = null)
+            SimultaneousMergingSettings? settings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFiles), midiFiles);
             ThrowIfArgument.ContainsNull(nameof(midiFiles), midiFiles);
@@ -198,7 +198,7 @@ namespace Melanchall.DryWetMidi.Tools
             foreach (var midiFile in midiFiles)
             {
                 var chunks = midiFile.Chunks.Select(c => c.Clone()).ToArray();
-                var deltaTimeFactor = GetDeltaTimeFactor(timeDivision, midiFile.TimeDivision);
+                var deltaTimeFactor = GetDeltaTimeFactor(timeDivision!, midiFile.TimeDivision!);
 
                 var newTrackChunks = new List<TrackChunk>();
 
@@ -217,7 +217,7 @@ namespace Melanchall.DryWetMidi.Tools
                     }
                 }
 
-                var newTempoMap = newTrackChunks.GetTempoMap(timeDivision);
+                var newTempoMap = newTrackChunks.GetTempoMap(timeDivision!);
                 newTempoMaps.Add(newTempoMap);
             }
 
@@ -302,7 +302,7 @@ namespace Melanchall.DryWetMidi.Tools
         private static long GetFileDuration(
             MidiFile midiFile,
             TempoMap tempoMap,
-            ITimeSpan fileDurationRoundingStep)
+            ITimeSpan? fileDurationRoundingStep)
         {
             var fileDuration = midiFile.GetDuration<MidiTimeSpan>().TimeSpan;
             if (fileDurationRoundingStep != null)
@@ -331,7 +331,7 @@ namespace Melanchall.DryWetMidi.Tools
             var chunksCount = midiFile.Chunks.Count;
             var result = new ChunkDescriptor[chunksCount];
 
-            TrackChunk firstTrackChunk = null;
+            TrackChunk? firstTrackChunk = null;
 
             var eventsAtStart = new Dictionary<object, MidiEvent>();
             var trackedEvents = new Dictionary<object, Tuple<MidiEvent, long>>();
@@ -434,7 +434,7 @@ namespace Melanchall.DryWetMidi.Tools
         private static void UpdateOffset(
             ref long offset,
             long fileDuration,
-            ITimeSpan delayBetweenFiles,
+            ITimeSpan? delayBetweenFiles,
             int deltaTimeFactor,
             TempoMap tempoMap)
         {

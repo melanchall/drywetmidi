@@ -38,7 +38,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <summary>
         /// Occurs when a MIDI event is received.
         /// </summary>
-        public event EventHandler<MidiEventReceivedEventArgs> EventReceived;
+        public event EventHandler<MidiEventReceivedEventArgs>? EventReceived;
 
         /// <summary>
         /// Occurs when MIDI time code received, i.e. all MIDI events to complete MIDI time code are received.
@@ -46,19 +46,17 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <remarks>
         /// This event will be raised only if <see cref="RaiseMidiTimeCodeReceived"/> is set to <c>true</c>.
         /// </remarks>
-        public event EventHandler<MidiTimeCodeReceivedEventArgs> MidiTimeCodeReceived;
+        public event EventHandler<MidiTimeCodeReceivedEventArgs>? MidiTimeCodeReceived;
 
         #endregion
 
         #region Fields
 
-        private static InputEndpointProperty[] _supportedProperties;
-
         private readonly BytesToMidiEventConverter _bytesToMidiEventConverter = new BytesToMidiEventConverter(ChannelParametersBufferSize) { BytesFormat = BytesFormat.Device };
 
-        private InputEndpointApi.Callback_Win _callbackWin;
-        private InputEndpointApi.BytesReceivedCallback _bytesReceivedCallback;
-        private InputEndpointApi.Callback_Mac _callbackMac;
+        private InputEndpointApi.Callback_Win? _callbackWin;
+        private InputEndpointApi.BytesReceivedCallback? _bytesReceivedCallback;
+        private InputEndpointApi.Callback_Mac? _callbackMac;
 
         private int _sysExBufferSize = DefaultSysExBufferSize;
         private int _sysExBuffersCount = DefaultSysExBufferCount;
@@ -72,18 +70,16 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         private readonly object _handleLock = new object();
         private readonly object _eventProcessingLock = new object();
-        private volatile bool _disposing;
 
-        private string _id;
+        private string? _id;
 
         #endregion
 
         #region Constructor
 
         internal InputEndpoint(IntPtr info, CreationContext context)
-            : base(context)
+            : base(context, new InputEndpointHandle(info))
         {
-            Handle_ = new InputEndpointHandle(info);
             _osType = CommonApi.Api_GetOsType();
             _bytesToMidiEventConverter.SilentNoteOnPolicy = SilentNoteOnPolicy.NoteOn;
         }
@@ -103,7 +99,7 @@ namespace Melanchall.DryWetMidi.Multimedia
                 EnsureEndpointIsNotRemoved();
 
                 // TODO: cache the name and provide method to invalidate cache
-                var result = InputEndpointApi.Api_GetEndpointName(Handle_.DangerousGetHandle(), out var name, out var errorCode);
+                var result = InputEndpointApi.Api_GetEndpointName(Handle.DangerousGetHandle(), out var name, out var errorCode);
                 NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
 
                 return name;
@@ -117,7 +113,7 @@ namespace Melanchall.DryWetMidi.Multimedia
                 if (!string.IsNullOrEmpty(_id))
                     return _id;
 
-                var result = InputEndpointApi.Api_GetEndpointId(Handle_.DangerousGetHandle(), out _id, out var errorCode);
+                var result = InputEndpointApi.Api_GetEndpointId(Handle.DangerousGetHandle(), out _id, out var errorCode);
                 NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
 
                 return _id;
@@ -211,7 +207,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
                 lock (_handleLock)
                 {
-                    if (Handle_.OpenedEndpointHandle != IntPtr.Zero)
+                    if (Handle.OpenedEndpointHandle != IntPtr.Zero)
                         throw new InvalidOperationException("System-exclusive event buffer size cannot be changed since event listening has started.");
 
                     _sysExBufferSize = value;
@@ -232,7 +228,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
                 lock (_handleLock)
                 {
-                    if (Handle_.OpenedEndpointHandle != IntPtr.Zero)
+                    if (Handle.OpenedEndpointHandle != IntPtr.Zero)
                         throw new InvalidOperationException("System-exclusive event buffers count cannot be changed since event listening has started.");
 
                     _sysExBuffersCount = value;
@@ -264,7 +260,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             EnsureSessionIsCreated();
             EnsureHandleIsCreated();
 
-            var result = InputEndpointApi.Api_Connect(Handle_.OpenedEndpointHandle, out var errorCode);
+            var result = InputEndpointApi.Api_Connect(Handle.OpenedEndpointHandle, out var errorCode);
             NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
 
             IsListeningForEvents = true;
@@ -279,7 +275,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <see cref="EndpointsWatcher.EndpointRemoved"/> event and thus considered as removed so you cannot interact with it.</exception>
         public void StopEventsListening()
         {
-            if (!IsListeningForEvents || Handle_.OpenedEndpointHandle == IntPtr.Zero)
+            if (!IsListeningForEvents || Handle.OpenedEndpointHandle == IntPtr.Zero)
                 return;
 
             EnsureEndpointIsNotDisposed();
@@ -383,7 +379,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         {
             lock (_handleLock)
             {
-                if (Handle_.OpenedEndpointHandle != IntPtr.Zero)
+                if (Handle.OpenedEndpointHandle != IntPtr.Zero)
                     return;
 
                 var sessionHandle = MidiDevicesSession.GetSessionHandle();
@@ -397,14 +393,14 @@ namespace Melanchall.DryWetMidi.Multimedia
                         {
                             _callbackWin = OnMessage_Win;
                             _bytesReceivedCallback = OnBytesReceived;
-                            var result = InputEndpointApi.Api_OpenEndpoint_Win(Handle_.DangerousGetHandle(), sessionHandle, _callbackWin, _bytesReceivedCallback, SysExBufferSize, SysExBuffersCount, out rawHandle, out errorCode);
+                            var result = InputEndpointApi.Api_OpenEndpoint_Win(Handle.DangerousGetHandle(), sessionHandle, _callbackWin, _bytesReceivedCallback, SysExBufferSize, SysExBuffersCount, out rawHandle, out errorCode);
                             NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
                         }
                         break;
                     case CommonApi.OsType.MacOS:
                         {
                             _callbackMac = OnMessage_Mac;
-                            var result = InputEndpointApi.Api_OpenEndpoint_Mac(Handle_.DangerousGetHandle(), sessionHandle, _callbackMac, out rawHandle, out errorCode);
+                            var result = InputEndpointApi.Api_OpenEndpoint_Mac(Handle.DangerousGetHandle(), sessionHandle, _callbackMac, out rawHandle, out errorCode);
                             NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
                         }
                         break;
@@ -412,10 +408,10 @@ namespace Melanchall.DryWetMidi.Multimedia
                         throw new NotSupportedException($"{_osType} API is not supported.");
                 }
 
-                Handle_.OpenedEndpointHandle = rawHandle;
+                Handle.OpenedEndpointHandle = rawHandle;
 
 #if TEST
-                Handle_.TestCheckpoints = TestCheckpoints;
+                Handle.TestCheckpoints = TestCheckpoints;
 #endif
             }
         }
@@ -504,7 +500,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         private void OnPacket_Mac(IntPtr pktlist, int packetIndex, out int packetsCount)
         {
             packetsCount = 0;
-            byte[] data = null;
+            byte[]? data = null;
 
             try
             {
@@ -601,10 +597,18 @@ namespace Melanchall.DryWetMidi.Multimedia
 
                     var eventReader = EventReaderFactory.GetReader(statusByte, smfOnly: false);
                     var midiEvent = eventReader.Read(midiReader, _bytesToMidiEventConverter.ReadingSettings, statusByte);
-                    
+                    if (midiEvent == null)
+                        continue;
+
                     if (statusByte == EventStatusBytes.Global.NormalSysEx)
                     {
-                        var sysExEvent = (SysExEvent)midiEvent;
+                        var sysExEvent = midiEvent as SysExEvent;
+                        if (sysExEvent?.Data == null || sysExEvent.Data.Length == 0)
+                        {
+                            // TODO: log
+                            return;
+                        }
+
                         if (sysExEvent.Completed || !WaitForCompleteSysExEvent)
                             OnEventReceived(midiEvent);
                         else
@@ -653,8 +657,9 @@ namespace Melanchall.DryWetMidi.Multimedia
                 _channelParametersBuffer[0] = (byte)((message >> 8) & 0xFF);
                 _channelParametersBuffer[1] = (byte)((message >> 16) & 0xFF);
 
+                // TODO: Convert mustn't return null
                 var midiEvent = _bytesToMidiEventConverter.Convert(statusByte, _channelParametersBuffer);
-                OnEventReceived(midiEvent);
+                OnEventReceived(midiEvent!);
             }
             catch (Exception ex)
             {
@@ -666,7 +671,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         private void OnSysExMessage(IntPtr sysExHeaderPointer)
         {
-            byte[] data = null;
+            byte[]? data = null;
 
             try
             {
@@ -688,15 +693,15 @@ namespace Melanchall.DryWetMidi.Multimedia
                 else if (_sysExParts.Any())
                     HandleSysExSubsequentPart(data);
 
-                if (_disposing || Handle_.OpenedEndpointHandle == IntPtr.Zero)
+                if (_disposing || Handle.OpenedEndpointHandle == IntPtr.Zero)
                     return;
 
-                lock (Handle_.Lock)
+                lock (Handle.Lock)
                 {
-                    if (_disposing || Handle_.OpenedEndpointHandle == IntPtr.Zero)
+                    if (_disposing || Handle.OpenedEndpointHandle == IntPtr.Zero)
                         return;
 
-                    var result = InputEndpointApi.Api_RenewInputEndpointSysExBuffer(Handle_.OpenedEndpointHandle, sysExHeaderPointer, out var errorCode);
+                    var result = InputEndpointApi.Api_RenewInputEndpointSysExBuffer(Handle.OpenedEndpointHandle, sysExHeaderPointer, out var errorCode);
                     if (result == InputEndpointApi.IN_RENEWSYSEXBUFFERRESULT.IN_RENEWSYSEXBUFFERRESULT_CLOSING)
                         return;
 
@@ -744,10 +749,10 @@ namespace Melanchall.DryWetMidi.Multimedia
 
             IsListeningForEvents = false;
 
-            if (Handle_.OpenedEndpointHandle == IntPtr.Zero)
+            if (Handle.OpenedEndpointHandle == IntPtr.Zero)
                 return InputEndpointApi.IN_DISCONNECTRESULT.IN_DISCONNECTRESULT_OK;
 
-            return InputEndpointApi.Api_Disconnect(Handle_.OpenedEndpointHandle, out errorCode);
+            return InputEndpointApi.Api_Disconnect(Handle.OpenedEndpointHandle, out errorCode);
         }
 
         #endregion
@@ -764,7 +769,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <param name="inputEndpoint1">The first <see cref="InputEndpoint"/> to compare.</param>
         /// <param name="inputEndpoint2">The second <see cref="InputEndpoint"/> to compare.</param>
         /// <returns><c>true</c> if the endpoints are equal, <c>false</c> otherwise.</returns>
-        public static bool operator ==(InputEndpoint inputEndpoint1, InputEndpoint inputEndpoint2)
+        public static bool operator ==(InputEndpoint? inputEndpoint1, InputEndpoint? inputEndpoint2)
         {
             if (ReferenceEquals(inputEndpoint1, inputEndpoint2))
                 return true;
@@ -785,7 +790,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <param name="inputEndpoint1">The first <see cref="InputEndpoint"/> to compare.</param>
         /// <param name="inputEndpoint2">The second <see cref="InputEndpoint"/> to compare.</param>
         /// <returns><c>false</c> if the endpoints are equal, <c>true</c> otherwise.</returns>
-        public static bool operator !=(InputEndpoint inputEndpoint1, InputEndpoint inputEndpoint2)
+        public static bool operator !=(InputEndpoint? inputEndpoint1, InputEndpoint? inputEndpoint2)
         {
             return !(inputEndpoint1 == inputEndpoint2);
         }
@@ -803,7 +808,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// </remarks>
         /// <param name="obj">The object to compare with the current object.</param>
         /// <returns><c>true</c> if the specified object is equal to the current object; otherwise, <c>false</c>.</returns>
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             var inputEndpoint = obj as InputEndpoint;
             if (inputEndpoint == null)
@@ -831,21 +836,11 @@ namespace Melanchall.DryWetMidi.Multimedia
             return $"Input endpoint{(string.IsNullOrWhiteSpace(baseDescription) ? string.Empty : $" ({baseDescription})")}";
         }
 
-        internal override void Dispose(bool disposing)
+        protected override void OnDisposing()
         {
-            if (_disposed)
-                return;
+            base.OnDisposing();
 
-            _disposing = true;
-
-            if (disposing)
-            {
-                _bytesToMidiEventConverter.Dispose();
-                Handle_?.Dispose();
-                Handle_ = null;
-            }
-
-            _disposed = true;
+            _bytesToMidiEventConverter.Dispose();
         }
 
         #endregion

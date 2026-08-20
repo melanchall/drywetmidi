@@ -23,7 +23,7 @@
         /// specified text of lyrics.
         /// </summary>
         /// <param name="text">Text of the lyrics.</param>
-        public LyricEvent(string text)
+        public LyricEvent(string? text)
             : base(MidiEventType.Lyric, text)
         {
         }

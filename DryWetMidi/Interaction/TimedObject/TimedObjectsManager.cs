@@ -1,6 +1,7 @@
 ﻿using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace Melanchall.DryWetMidi.Interaction
@@ -42,8 +43,8 @@ namespace Melanchall.DryWetMidi.Interaction
         public TimedObjectsManager(
             EventsCollection eventsCollection,
             ObjectType objectType,
-            ObjectDetectionSettings objectDetectionSettings = null,
-            TimedObjectsComparer comparer = null)
+            ObjectDetectionSettings? objectDetectionSettings = null,
+            TimedObjectsComparer? comparer = null)
             : base(eventsCollection, objectType, objectDetectionSettings, comparer)
         {
         }
@@ -104,8 +105,8 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <exception cref="ArgumentNullException"><paramref name="eventsCollection"/> is <c>null</c>.</exception>
         public TimedObjectsManager(
             EventsCollection eventsCollection,
-            ObjectDetectionSettings objectDetectionSettings = null,
-            TimedObjectsComparer comparer = null)
+            ObjectDetectionSettings? objectDetectionSettings = null,
+            TimedObjectsComparer? comparer = null)
         {
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
 
@@ -119,8 +120,8 @@ namespace Melanchall.DryWetMidi.Interaction
         internal TimedObjectsManager(
             EventsCollection eventsCollection,
             ObjectType objectType,
-            ObjectDetectionSettings objectDetectionSettings = null,
-            TimedObjectsComparer comparer = null)
+            ObjectDetectionSettings? objectDetectionSettings = null,
+            TimedObjectsComparer? comparer = null)
         {
             Initialize(
                 eventsCollection,
@@ -186,11 +187,12 @@ namespace Melanchall.DryWetMidi.Interaction
             throw new InvalidOperationException($"Objects of '{timedObject.GetType()}' type are not supported.");
         }
 
+        [MemberNotNull(nameof(_eventsCollection), nameof(_comparer), nameof(_backgroundObjects), nameof(Objects))]
         private void Initialize(
             EventsCollection eventsCollection,
             ObjectType objectType,
-            ObjectDetectionSettings objectDetectionSettings,
-            TimedObjectsComparer comparer)
+            ObjectDetectionSettings? objectDetectionSettings,
+            TimedObjectsComparer? comparer)
         {
             _eventsCollection = eventsCollection;
             _comparer = comparer ?? new TimedObjectsComparer();

@@ -21,7 +21,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
 
         #region Methods
 
-        internal static ParsingResult TryParse(string input, out Octave octave)
+        internal static ParsingResult TryParse(string? input, out Octave? octave)
         {
             octave = null;
 

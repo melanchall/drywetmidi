@@ -40,7 +40,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <exception cref="InvalidOperationException"><see cref="SanitizingSettings.NoteMaxLengthForOrphanedNoteOnEvent"/>
         /// is <c>null</c> while <see cref="SanitizingSettings.OrphanedNoteOnEventsPolicy"/> is set to
         /// <see cref="OrphanedNoteOnEventsPolicy.CompleteNote"/>.</exception>
-        public static void Sanitize(this MidiFile midiFile, SanitizingSettings settings = null)
+        public static void Sanitize(this MidiFile midiFile, SanitizingSettings? settings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
 
@@ -333,7 +333,7 @@ namespace Melanchall.DryWetMidi.Tools
             {
                 foreach (var trackChunk in midiFile.GetTrackChunks())
                 {
-                    string sequenceTrackName = null;
+                    string? sequenceTrackName = null;
 
                     trackChunk.RemoveTimedEvents(e =>
                     {
@@ -395,6 +395,7 @@ namespace Melanchall.DryWetMidi.Tools
                             return true;
 
                         if (removeShortNotes &&
+                            timeSpanType != null &&
                             LengthConverter.ConvertTo((MidiTimeSpan)note.Length, timeSpanType, note.Time, tempoMap).CompareTo(noteMinLength) < 0)
                             return true;
 

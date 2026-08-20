@@ -1,18 +1,19 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Runtime.CompilerServices;
 
 namespace Melanchall.DryWetMidi.Common
 {
     internal class RedBlackTree<TKey, TValue> : IEnumerable<TValue>
-        where TKey : IComparable<TKey>
+        where TKey : notnull, IComparable<TKey>
+        where TValue : notnull
     {
         #region Fields
 
-        protected readonly RedBlackTreeNode<TKey, TValue> _void =
-            new RedBlackTreeNode<TKey, TValue>(default(TKey), null) { IsVoidNode = true };
+        protected readonly RedBlackTreeNode<TKey, TValue> _void = RedBlackTreeNode<TKey, TValue>.CreateVoidNode();
         protected RedBlackTreeNode<TKey, TValue> _root;
 
         #endregion
@@ -59,7 +60,7 @@ namespace Melanchall.DryWetMidi.Common
             _root = _void;
         }
 
-        public RedBlackTreeCoordinate<TKey, TValue> GetCoordinate(TKey key, TValue value)
+        public RedBlackTreeCoordinate<TKey, TValue>? GetCoordinate(TKey key, TValue value)
         {
             return GetCoordinatesByKey(key).FirstOrDefault(c => c.Value.Equals(value));
         }
@@ -76,7 +77,7 @@ namespace Melanchall.DryWetMidi.Common
             }
         }
 
-        public RedBlackTreeNode<TKey, TValue> GetNodeByKey(TKey key)
+        public RedBlackTreeNode<TKey, TValue>? GetNodeByKey(TKey key)
         {
             var node = _root;
 
@@ -96,37 +97,37 @@ namespace Melanchall.DryWetMidi.Common
             return GetCoordinatesByKey(key).Select(n => n.Value);
         }
 
-        public RedBlackTreeCoordinate<TKey, TValue> GetMinimumCoordinate()
+        public RedBlackTreeCoordinate<TKey, TValue>? GetMinimumCoordinate()
         {
             return GetMinimumCoordinate(_root);
         }
 
-        public RedBlackTreeCoordinate<TKey, TValue> GetMinimumCoordinate(RedBlackTreeNode<TKey, TValue> node)
+        public RedBlackTreeCoordinate<TKey, TValue>? GetMinimumCoordinate(RedBlackTreeNode<TKey, TValue> node)
         {
             while (!IsVoid(node?.Left))
                 node = node.Left;
 
-            return !IsVoid(node)
+            return !IsVoid(node) && node.Values.First != null
                 ? new RedBlackTreeCoordinate<TKey, TValue>(node, node.Values.First)
                 : null;
         }
 
-        public RedBlackTreeCoordinate<TKey, TValue> GetMaximumCoordinate()
+        public RedBlackTreeCoordinate<TKey, TValue>? GetMaximumCoordinate()
         {
             return GetMaximumCoordinate(_root);
         }
 
-        public RedBlackTreeCoordinate<TKey, TValue> GetMaximumCoordinate(RedBlackTreeNode<TKey, TValue> node)
+        public RedBlackTreeCoordinate<TKey, TValue>? GetMaximumCoordinate(RedBlackTreeNode<TKey, TValue> node)
         {
             while (!IsVoid(node?.Right))
                 node = node.Right;
 
-            return !IsVoid(node)
+            return !IsVoid(node) && node.Values.Last != null
                 ? new RedBlackTreeCoordinate<TKey, TValue>(node, node.Values.Last)
                 : null;
         }
 
-        public RedBlackTreeCoordinate<TKey, TValue> GetNextCoordinate(RedBlackTreeCoordinate<TKey, TValue> coordinate)
+        public RedBlackTreeCoordinate<TKey, TValue>? GetNextCoordinate(RedBlackTreeCoordinate<TKey, TValue> coordinate)
         {
             if (coordinate == null || IsVoid(coordinate.TreeNode))
                 return null;
@@ -145,19 +146,19 @@ namespace Melanchall.DryWetMidi.Common
 
             while (!IsVoid(nextNode))
             {
-                if (node == nextNode.Left)
+                if (node == nextNode.Left && nextNode.Values.First != null)
                     return new RedBlackTreeCoordinate<TKey, TValue>(nextNode, nextNode.Values.First);
 
                 node = nextNode;
                 nextNode = node.Parent;
             }
 
-            return IsVoid(nextNode)
+            return IsVoid(nextNode) || nextNode.Values.First == null
                 ? null
                 : new RedBlackTreeCoordinate<TKey, TValue>(nextNode, nextNode.Values.First);
         }
 
-        public RedBlackTreeCoordinate<TKey, TValue> GetPreviousCoordinate(RedBlackTreeCoordinate<TKey, TValue> coordinate)
+        public RedBlackTreeCoordinate<TKey, TValue>? GetPreviousCoordinate(RedBlackTreeCoordinate<TKey, TValue> coordinate)
         {
             if (coordinate == null || IsVoid(coordinate.TreeNode))
                 return null;
@@ -176,14 +177,14 @@ namespace Melanchall.DryWetMidi.Common
 
             while (!IsVoid(previousNode))
             {
-                if (node == previousNode.Right)
+                if (node == previousNode.Right && previousNode.Values.Last != null)
                     return new RedBlackTreeCoordinate<TKey, TValue>(previousNode, previousNode.Values.Last);
 
                 node = previousNode;
                 previousNode = node.Parent;
             }
 
-            return IsVoid(previousNode)
+            return IsVoid(previousNode) || previousNode.Values.Last == null
                 ? null
                 : new RedBlackTreeCoordinate<TKey, TValue>(previousNode, previousNode.Values.Last);
         }
@@ -211,7 +212,7 @@ namespace Melanchall.DryWetMidi.Common
                 }
             }
 
-            var newNode = new RedBlackTreeNode<TKey, TValue>(key, lastNode) { Tree = this };
+            var newNode = new RedBlackTreeNode<TKey, TValue>(key, lastNode, _void) { Tree = this };
             var result = new RedBlackTreeCoordinate<TKey, TValue>(newNode, newNode.Values.AddLast(value));
 
             if (IsVoid(lastNode))
@@ -232,7 +233,7 @@ namespace Melanchall.DryWetMidi.Common
             return result;
         }
 
-        public bool Remove(RedBlackTreeCoordinate<TKey, TValue> coordinate)
+        public bool Remove(RedBlackTreeCoordinate<TKey, TValue>? coordinate)
         {
             if (coordinate == null || coordinate.NodeElement.List == null)
                 return false;
@@ -251,19 +252,19 @@ namespace Melanchall.DryWetMidi.Common
             return Remove(node);
         }
 
-        public bool Remove(RedBlackTreeNode<TKey, TValue> node)
+        public bool Remove(RedBlackTreeNode<TKey, TValue>? node)
         {
             if (IsVoid(node) || node.Tree != this)
                 return false;
 
-            RedBlackTreeNode<TKey, TValue> child = null;
+            RedBlackTreeNode<TKey, TValue>? child = null;
             var nextNode = node;
             var isNextNodeRed = nextNode.IsRed;
             
             if (IsVoid(node.Left))
             {
                 child = node.Right;
-                Transplant(node, node.Right);
+                Transplant(node, node.Right!);
             }
             else if (IsVoid(node.Right))
             {
@@ -272,7 +273,10 @@ namespace Melanchall.DryWetMidi.Common
             }
             else
             {
-                nextNode = GetMinimumCoordinate(node.Right).TreeNode;
+                nextNode = GetMinimumCoordinate(node.Right)?.TreeNode;
+                if (nextNode == null)
+                    return false;
+
                 isNextNodeRed = nextNode.IsRed;
                 child = nextNode.Right;
                 
@@ -302,23 +306,23 @@ namespace Melanchall.DryWetMidi.Common
             return true;
         }
 
-        public RedBlackTreeCoordinate<TKey, TValue> GetLastCoordinateBelowThreshold(TKey threshold)
+        public RedBlackTreeCoordinate<TKey, TValue>? GetLastCoordinateBelowThreshold(TKey threshold)
         {
             var node = _root;
 
             while (!IsVoid(node))
             {
                 var compareResult = threshold.CompareTo(node.Key);
-                if (compareResult == 0)
+                if (compareResult == 0 && node.Values.First != null)
                     return GetPreviousCoordinate(new RedBlackTreeCoordinate<TKey, TValue>(node, node.Values.First));
 
                 var nextNode = compareResult > 0 ? node.Right : node.Left;
 
                 if (IsVoid(nextNode))
                 {
-                    if (compareResult > 0)
+                    if (compareResult > 0 && node.Values.Last != null)
                         return new RedBlackTreeCoordinate<TKey, TValue>(node, node.Values.Last);
-                    else if (compareResult < 0)
+                    else if (compareResult < 0 && node.Values.First != null)
                         return GetPreviousCoordinate(new RedBlackTreeCoordinate<TKey, TValue>(node, node.Values.First));
                 }
 
@@ -328,23 +332,23 @@ namespace Melanchall.DryWetMidi.Common
             return null;
         }
 
-        public RedBlackTreeCoordinate<TKey, TValue> GetFirstCoordinateAboveThreshold(TKey threshold)
+        public RedBlackTreeCoordinate<TKey, TValue>? GetFirstCoordinateAboveThreshold(TKey threshold)
         {
             var node = _root;
 
             while (!IsVoid(node))
             {
                 var compareResult = threshold.CompareTo(node.Key);
-                if (compareResult == 0)
+                if (compareResult == 0 && node.Values.Last != null)
                     return GetNextCoordinate(new RedBlackTreeCoordinate<TKey, TValue>(node, node.Values.Last));
 
                 var nextNode = compareResult > 0 ? node.Right : node.Left;
 
                 if (IsVoid(nextNode))
                 {
-                    if (compareResult > 0)
+                    if (compareResult > 0 && node.Values.Last != null)
                         return GetNextCoordinate(new RedBlackTreeCoordinate<TKey, TValue>(node, node.Values.Last));
-                    else if (compareResult < 0)
+                    else if (compareResult < 0 && node.Values.First != null)
                         return new RedBlackTreeCoordinate<TKey, TValue>(node, node.Values.First);
                 }
 
@@ -367,7 +371,7 @@ namespace Melanchall.DryWetMidi.Common
             while ((coordinate = GetNextCoordinate(coordinate)) != null);
         }
 
-        internal RedBlackTreeNode<TKey, TValue> GetRoot()
+        internal RedBlackTreeNode<TKey, TValue>? GetRoot()
         {
             return NodeOrNull(_root);
         }
@@ -394,13 +398,13 @@ namespace Melanchall.DryWetMidi.Common
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        protected bool IsVoid(RedBlackTreeNode<TKey, TValue> node)
+        protected bool IsVoid([NotNullWhen(false)] RedBlackTreeNode<TKey, TValue>? node)
         {
             return node == null || node == _void || node.IsVoidNode;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private RedBlackTreeNode<TKey, TValue> NodeOrNull(RedBlackTreeNode<TKey, TValue> node)
+        private RedBlackTreeNode<TKey, TValue>? NodeOrNull(RedBlackTreeNode<TKey, TValue>? node)
         {
             return IsVoid(node) ? null : node;
         }
@@ -426,6 +430,8 @@ namespace Melanchall.DryWetMidi.Common
             while (node != _root && !node.IsRed)
             {
                 var parent = node.Parent;
+                if (parent == null)
+                    break;
 
                 if (node == parent.Left)
                 {
@@ -506,11 +512,13 @@ namespace Melanchall.DryWetMidi.Common
 
         private void InsertFixup(RedBlackTreeNode<TKey, TValue> node)
         {
-            RedBlackTreeNode<TKey, TValue> parent;
+            RedBlackTreeNode<TKey, TValue>? parent;
 
-            while ((parent = node.Parent).IsRed)
+            while ((parent = node.Parent)?.IsRed == true)
             {
                 var grandParent = parent.Parent;
+                if (grandParent == null)
+                    break;
 
                 if (parent == grandParent.Left)
                 {
@@ -529,12 +537,17 @@ namespace Melanchall.DryWetMidi.Common
                             node = parent;
                             LeftRotate(node);
                             parent = node.Parent;
-                            grandParent = parent.Parent;
+                            grandParent = parent?.Parent;
                         }
 
-                        parent.IsRed = false;
-                        grandParent.IsRed = true;
-                        RightRotate(grandParent);
+                        if (parent != null)
+                            parent.IsRed = false;
+
+                        if (grandParent != null)
+                        {
+                            grandParent.IsRed = true;
+                            RightRotate(grandParent);
+                        }
                     }
                 }
                 else
@@ -554,12 +567,17 @@ namespace Melanchall.DryWetMidi.Common
                             node = parent;
                             RightRotate(node);
                             parent = node.Parent;
-                            grandParent = parent.Parent;
+                            grandParent = parent?.Parent;
                         }
 
-                        parent.IsRed = false;
-                        grandParent.IsRed = true;
-                        LeftRotate(grandParent);
+                        if (parent != null)
+                            parent.IsRed = false;
+                        
+                        if (grandParent != null)
+                        {
+                            grandParent.IsRed = true;
+                            LeftRotate(grandParent);
+                        }
                     }
                 }
             }

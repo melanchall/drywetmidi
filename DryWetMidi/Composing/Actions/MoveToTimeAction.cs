@@ -11,7 +11,7 @@ namespace Melanchall.DryWetMidi.Composing
         {
         }
 
-        public MoveToTimeAction(ITimeSpan time)
+        public MoveToTimeAction(ITimeSpan? time)
         {
             Time = time;
         }
@@ -20,7 +20,7 @@ namespace Melanchall.DryWetMidi.Composing
 
         #region Properties
 
-        public ITimeSpan Time { get; }
+        public ITimeSpan? Time { get; }
 
         #endregion
 

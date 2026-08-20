@@ -18,7 +18,7 @@ namespace Melanchall.DryWetMidi.Composing
         {
         }
 
-        public MoveToAnchorAction(object anchor, AnchorPosition position)
+        public MoveToAnchorAction(object? anchor, AnchorPosition position)
             : this(anchor, position, -1)
         {
         }
@@ -28,7 +28,7 @@ namespace Melanchall.DryWetMidi.Composing
         {
         }
 
-        public MoveToAnchorAction(object anchor, AnchorPosition position, int index)
+        public MoveToAnchorAction(object? anchor, AnchorPosition position, int index)
         {
             Anchor = anchor;
             AnchorPosition = position;
@@ -40,7 +40,7 @@ namespace Melanchall.DryWetMidi.Composing
 
         #region Properties
 
-        public object Anchor { get; }
+        public object? Anchor { get; }
 
         public AnchorPosition AnchorPosition { get; }
 

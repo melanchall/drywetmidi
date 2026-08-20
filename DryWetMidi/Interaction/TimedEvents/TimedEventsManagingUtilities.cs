@@ -25,7 +25,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <returns>An instance of the <see cref="TimedObjectsManager{TimedEvent}"/> that can be used to manage
         /// events represented by the <paramref name="eventsCollection"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="eventsCollection"/> is <c>null</c>.</exception>
-        public static TimedObjectsManager<TimedEvent> ManageTimedEvents(this EventsCollection eventsCollection, TimedEventDetectionSettings settings = null, TimedObjectsComparer comparer = null)
+        public static TimedObjectsManager<TimedEvent> ManageTimedEvents(this EventsCollection eventsCollection, TimedEventDetectionSettings? settings = null, TimedObjectsComparer? comparer = null)
         {
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
 
@@ -51,7 +51,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <returns>An instance of the <see cref="TimedObjectsManager{TimedEvent}"/> that can be used to manage
         /// events represented by the <paramref name="trackChunk"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is <c>null</c>.</exception>
-        public static TimedObjectsManager<TimedEvent> ManageTimedEvents(this TrackChunk trackChunk, TimedEventDetectionSettings settings = null, TimedObjectsComparer comparer = null)
+        public static TimedObjectsManager<TimedEvent> ManageTimedEvents(this TrackChunk trackChunk, TimedEventDetectionSettings? settings = null, TimedObjectsComparer? comparer = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
 
@@ -71,7 +71,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <seealso cref="RemoveTimedEvents(EventsCollection)"/>
         /// <seealso cref="RemoveTimedEvents(EventsCollection, Predicate{TimedEvent}, TimedEventDetectionSettings)"/>
         /// <seealso cref="GetObjectsUtilities"/>
-        public static ICollection<TimedEvent> GetTimedEvents(this EventsCollection eventsCollection, TimedEventDetectionSettings settings = null)
+        public static ICollection<TimedEvent> GetTimedEvents(this EventsCollection eventsCollection, TimedEventDetectionSettings? settings = null)
         {
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
 
@@ -98,7 +98,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <seealso cref="RemoveTimedEvents(TrackChunk)"/>
         /// <seealso cref="RemoveTimedEvents(TrackChunk, Predicate{TimedEvent}, TimedEventDetectionSettings)"/>
         /// <seealso cref="GetObjectsUtilities"/>
-        public static ICollection<TimedEvent> GetTimedEvents(this TrackChunk trackChunk, TimedEventDetectionSettings settings = null)
+        public static ICollection<TimedEvent> GetTimedEvents(this TrackChunk trackChunk, TimedEventDetectionSettings? settings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
 
@@ -118,7 +118,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <seealso cref="RemoveTimedEvents(IEnumerable{TrackChunk})"/>
         /// <seealso cref="RemoveTimedEvents(IEnumerable{TrackChunk}, Predicate{TimedEvent}, TimedEventDetectionSettings)"/>
         /// <seealso cref="GetObjectsUtilities"/>
-        public static ICollection<TimedEvent> GetTimedEvents(this IEnumerable<TrackChunk> trackChunks, TimedEventDetectionSettings settings = null)
+        public static ICollection<TimedEvent> GetTimedEvents(this IEnumerable<TrackChunk> trackChunks, TimedEventDetectionSettings? settings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
 
@@ -146,7 +146,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <seealso cref="RemoveTimedEvents(MidiFile)"/>
         /// <seealso cref="RemoveTimedEvents(MidiFile, Predicate{TimedEvent}, TimedEventDetectionSettings)"/>
         /// <seealso cref="GetObjectsUtilities"/>
-        public static ICollection<TimedEvent> GetTimedEvents(this MidiFile file, TimedEventDetectionSettings settings = null)
+        public static ICollection<TimedEvent> GetTimedEvents(this MidiFile file, TimedEventDetectionSettings? settings = null)
         {
             ThrowIfArgument.IsNull(nameof(file), file);
 
@@ -181,7 +181,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </list>
         /// </exception>
         /// <seealso cref="TimedObjectUtilities.ProcessObjects(EventsCollection, ObjectType, Action{ITimedObject}, ObjectDetectionSettings, ObjectProcessingHint)"/>
-        public static int ProcessTimedEvents(this EventsCollection eventsCollection, Action<TimedEvent> action, TimedEventDetectionSettings settings = null, TimedEventProcessingHint hint = TimedEventProcessingHint.Default)
+        public static int ProcessTimedEvents(this EventsCollection eventsCollection, Action<TimedEvent> action, TimedEventDetectionSettings? settings = null, TimedEventProcessingHint hint = TimedEventProcessingHint.Default)
         {
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
             ThrowIfArgument.IsNull(nameof(action), action);
@@ -221,7 +221,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </list>
         /// </exception>
         /// <seealso cref="TimedObjectUtilities.ProcessObjects(EventsCollection, ObjectType, Action{ITimedObject}, Predicate{ITimedObject}, ObjectDetectionSettings, ObjectProcessingHint)"/>
-        public static int ProcessTimedEvents(this EventsCollection eventsCollection, Action<TimedEvent> action, Predicate<TimedEvent> match, TimedEventDetectionSettings settings = null, TimedEventProcessingHint hint = TimedEventProcessingHint.Default)
+        public static int ProcessTimedEvents(this EventsCollection eventsCollection, Action<TimedEvent> action, Predicate<TimedEvent> match, TimedEventDetectionSettings? settings = null, TimedEventProcessingHint hint = TimedEventProcessingHint.Default)
         {
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
             ThrowIfArgument.IsNull(nameof(action), action);
@@ -258,7 +258,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </list>
         /// </exception>
         /// <seealso cref="TimedObjectUtilities.ProcessObjects(TrackChunk, ObjectType, Action{ITimedObject}, ObjectDetectionSettings, ObjectProcessingHint)"/>
-        public static int ProcessTimedEvents(this TrackChunk trackChunk, Action<TimedEvent> action, TimedEventDetectionSettings settings = null, TimedEventProcessingHint hint = TimedEventProcessingHint.Default)
+        public static int ProcessTimedEvents(this TrackChunk trackChunk, Action<TimedEvent> action, TimedEventDetectionSettings? settings = null, TimedEventProcessingHint hint = TimedEventProcessingHint.Default)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
             ThrowIfArgument.IsNull(nameof(action), action);
@@ -298,7 +298,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </list>
         /// </exception>
         /// <seealso cref="TimedObjectUtilities.ProcessObjects(TrackChunk, ObjectType, Action{ITimedObject}, Predicate{ITimedObject}, ObjectDetectionSettings, ObjectProcessingHint)"/>
-        public static int ProcessTimedEvents(this TrackChunk trackChunk, Action<TimedEvent> action, Predicate<TimedEvent> match, TimedEventDetectionSettings settings = null, TimedEventProcessingHint hint = TimedEventProcessingHint.Default)
+        public static int ProcessTimedEvents(this TrackChunk trackChunk, Action<TimedEvent> action, Predicate<TimedEvent> match, TimedEventDetectionSettings? settings = null, TimedEventProcessingHint hint = TimedEventProcessingHint.Default)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
             ThrowIfArgument.IsNull(nameof(action), action);
@@ -336,7 +336,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </list>
         /// </exception>
         /// <seealso cref="TimedObjectUtilities.ProcessObjects(IEnumerable{TrackChunk}, ObjectType, Action{ITimedObject}, ObjectDetectionSettings, ObjectProcessingHint)"/>
-        public static int ProcessTimedEvents(this IEnumerable<TrackChunk> trackChunks, Action<TimedEvent> action, TimedEventDetectionSettings settings = null, TimedEventProcessingHint hint = TimedEventProcessingHint.Default)
+        public static int ProcessTimedEvents(this IEnumerable<TrackChunk> trackChunks, Action<TimedEvent> action, TimedEventDetectionSettings? settings = null, TimedEventProcessingHint hint = TimedEventProcessingHint.Default)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
             ThrowIfArgument.IsNull(nameof(action), action);
@@ -377,7 +377,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </list>
         /// </exception>
         /// <seealso cref="TimedObjectUtilities.ProcessObjects(IEnumerable{TrackChunk}, ObjectType, Action{ITimedObject}, Predicate{ITimedObject}, ObjectDetectionSettings, ObjectProcessingHint)"/>
-        public static int ProcessTimedEvents(this IEnumerable<TrackChunk> trackChunks, Action<TimedEvent> action, Predicate<TimedEvent> match, TimedEventDetectionSettings settings = null, TimedEventProcessingHint hint = TimedEventProcessingHint.Default)
+        public static int ProcessTimedEvents(this IEnumerable<TrackChunk> trackChunks, Action<TimedEvent> action, Predicate<TimedEvent> match, TimedEventDetectionSettings? settings = null, TimedEventProcessingHint hint = TimedEventProcessingHint.Default)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
             ThrowIfArgument.IsNull(nameof(action), action);
@@ -417,7 +417,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </list>
         /// </exception>
         /// <seealso cref="TimedObjectUtilities.ProcessObjects(MidiFile, ObjectType, Action{ITimedObject}, ObjectDetectionSettings, ObjectProcessingHint)"/>
-        public static int ProcessTimedEvents(this MidiFile file, Action<TimedEvent> action, TimedEventDetectionSettings settings = null, TimedEventProcessingHint hint = TimedEventProcessingHint.Default)
+        public static int ProcessTimedEvents(this MidiFile file, Action<TimedEvent> action, TimedEventDetectionSettings? settings = null, TimedEventProcessingHint hint = TimedEventProcessingHint.Default)
         {
             ThrowIfArgument.IsNull(nameof(file), file);
             ThrowIfArgument.IsNull(nameof(action), action);
@@ -457,7 +457,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </list>
         /// </exception>
         /// <seealso cref="TimedObjectUtilities.ProcessObjects(MidiFile, ObjectType, Action{ITimedObject}, Predicate{ITimedObject}, ObjectDetectionSettings, ObjectProcessingHint)"/>
-        public static int ProcessTimedEvents(this MidiFile file, Action<TimedEvent> action, Predicate<TimedEvent> match, TimedEventDetectionSettings settings = null, TimedEventProcessingHint hint = TimedEventProcessingHint.Default)
+        public static int ProcessTimedEvents(this MidiFile file, Action<TimedEvent> action, Predicate<TimedEvent> match, TimedEventDetectionSettings? settings = null, TimedEventProcessingHint hint = TimedEventProcessingHint.Default)
         {
             ThrowIfArgument.IsNull(nameof(file), file);
             ThrowIfArgument.IsNull(nameof(action), action);
@@ -503,7 +503,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </list>
         /// </exception>
         /// <seealso cref="TimedObjectUtilities.RemoveObjects(EventsCollection, ObjectType, Predicate{ITimedObject}, ObjectDetectionSettings)"/>
-        public static int RemoveTimedEvents(this EventsCollection eventsCollection, Predicate<TimedEvent> match, TimedEventDetectionSettings settings = null)
+        public static int RemoveTimedEvents(this EventsCollection eventsCollection, Predicate<TimedEvent> match, TimedEventDetectionSettings? settings = null)
         {
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
             ThrowIfArgument.IsNull(nameof(match), match);
@@ -515,14 +515,13 @@ namespace Melanchall.DryWetMidi.Interaction
             var latestTime = 0L;
 
             var constructor = settings?.Constructor;
-            var useCustomConstructor = constructor != null;
 
             for (var i = 0; i < eventsCount; i++)
             {
                 var midiEvent = eventsCollection.GetByIndexInternal(i);
                 time += midiEvent.DeltaTime;
 
-                var timedEvent = useCustomConstructor
+                var timedEvent = constructor != null
                     ? constructor(new TimedEventData(midiEvent, time, 0, i))
                     : null;
 
@@ -582,7 +581,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </list>
         /// </exception>
         /// <seealso cref="TimedObjectUtilities.RemoveObjects(TrackChunk, ObjectType, Predicate{ITimedObject}, ObjectDetectionSettings)"/>
-        public static int RemoveTimedEvents(this TrackChunk trackChunk, Predicate<TimedEvent> match, TimedEventDetectionSettings settings = null)
+        public static int RemoveTimedEvents(this TrackChunk trackChunk, Predicate<TimedEvent> match, TimedEventDetectionSettings? settings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
             ThrowIfArgument.IsNull(nameof(match), match);
@@ -632,7 +631,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </list>
         /// </exception>
         /// <seealso cref="TimedObjectUtilities.RemoveObjects(IEnumerable{TrackChunk}, ObjectType, Predicate{ITimedObject}, ObjectDetectionSettings)"/>
-        public static int RemoveTimedEvents(this IEnumerable<TrackChunk> trackChunks, Predicate<TimedEvent> match, TimedEventDetectionSettings settings = null)
+        public static int RemoveTimedEvents(this IEnumerable<TrackChunk> trackChunks, Predicate<TimedEvent> match, TimedEventDetectionSettings? settings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
             ThrowIfArgument.IsNull(nameof(match), match);
@@ -657,7 +656,6 @@ namespace Melanchall.DryWetMidi.Interaction
             var removedEventsCounts = new int[eventsCollectionsCount];
 
             var constructor = settings?.Constructor;
-            var useCustomConstructor = constructor != null;
 
             for (var i = 0; i < eventsCount; i++)
             {
@@ -680,7 +678,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
                 var midiEvent = eventsCollections[eventsCollectionIndex][eventsCollectionIndices[eventsCollectionIndex]];
 
-                var timedEvent = useCustomConstructor
+                var timedEvent = constructor != null
                     ? constructor(new TimedEventData(midiEvent, minTime, eventsCollectionIndex, eventsCollectionIndices[eventsCollectionIndex]))
                     : null;
 
@@ -745,7 +743,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </list>
         /// </exception>
         /// <seealso cref="TimedObjectUtilities.RemoveObjects(MidiFile, ObjectType, Predicate{ITimedObject}, ObjectDetectionSettings)"/>
-        public static int RemoveTimedEvents(this MidiFile file, Predicate<TimedEvent> match, TimedEventDetectionSettings settings = null)
+        public static int RemoveTimedEvents(this MidiFile file, Predicate<TimedEvent> match, TimedEventDetectionSettings? settings = null)
         {
             ThrowIfArgument.IsNull(nameof(file), file);
             ThrowIfArgument.IsNull(nameof(match), match);
@@ -757,7 +755,7 @@ namespace Melanchall.DryWetMidi.Interaction
             this IEnumerable<EventsCollection> eventsCollectionsIn,
             Action<TimedEvent> action,
             Predicate<TimedEvent> match,
-            TimedEventDetectionSettings settings,
+            TimedEventDetectionSettings? settings,
             TimedEventProcessingHint hint)
         {
             var processedCount = 0;
@@ -800,7 +798,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
         internal static IEnumerable<TimedEvent> GetTimedEventsLazy(
             this IEnumerable<TrackChunk> trackChunks,
-            TimedEventDetectionSettings settings,
+            TimedEventDetectionSettings? settings,
             bool cloneEvent = true)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
@@ -811,7 +809,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
         internal static IEnumerable<TimedEvent> GetTimedEventsLazy(
             this EventsCollection[] eventsCollections,
-            TimedEventDetectionSettings settings,
+            TimedEventDetectionSettings? settings,
             bool cloneEvent = true)
         {
             return new SortedLazyCollection<TimedEvent>(GetSortedTimedEventsLazy(
@@ -821,8 +819,8 @@ namespace Melanchall.DryWetMidi.Interaction
         }
 
         internal static IEnumerable<TimedEvent> GetTimedEventsLazy(
-            this IEnumerable<MidiEvent> events,
-            TimedEventDetectionSettings settings,
+            this IEnumerable<MidiEvent?> events,
+            TimedEventDetectionSettings? settings,
             int eventsCollectionIndex,
             bool cloneEvent = true)
         {
@@ -835,8 +833,11 @@ namespace Melanchall.DryWetMidi.Interaction
 
         internal static void SortAndUpdateEvents(
             this EventsCollection eventsCollection,
-            IEnumerable<TimedEvent> timedEvents)
+            IEnumerable<TimedEvent>? timedEvents)
         {
+            if (timedEvents == null)
+                return;
+
             var time = 0L;
 
             eventsCollection.Clear();
@@ -856,7 +857,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
         private static IEnumerable<TimedEvent> GetSortedTimedEventsLazy(
             this EventsCollection[] eventsCollections,
-            TimedEventDetectionSettings settings,
+            TimedEventDetectionSettings? settings,
             bool cloneEvent = true)
         {
             return eventsCollections
@@ -865,13 +866,12 @@ namespace Melanchall.DryWetMidi.Interaction
         }
 
         private static IEnumerable<TimedEvent> GetSortedTimedEventsLazy(
-            this IEnumerable<MidiEvent> events,
-            TimedEventDetectionSettings settings,
+            this IEnumerable<MidiEvent?> events,
+            TimedEventDetectionSettings? settings,
             int eventsCollectionIndex,
             bool cloneEvent = true)
         {
             var constructor = settings?.Constructor;
-            var useCustomConstructor = constructor != null;
 
             var time = 0L;
             var index = 0;
@@ -883,9 +883,9 @@ namespace Melanchall.DryWetMidi.Interaction
 
                 time += midiEvent.DeltaTime;
 
-                TimedEvent timedEvent = null;
+                TimedEvent? timedEvent = null;
 
-                if (useCustomConstructor)
+                if (constructor != null)
                 {
                     timedEvent = constructor(new TimedEventData(
                         cloneEvent ? midiEvent.Clone() : midiEvent,

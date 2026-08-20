@@ -29,7 +29,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <param name="eventType">The type of event.</param>
         /// <param name="text">Text contained in the event.</param>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="eventType"/> specified an invalid value.</exception>
-        protected BaseTextEvent(MidiEventType eventType, string text)
+        protected BaseTextEvent(MidiEventType eventType, string? text)
             : this(eventType)
         {
             Text = text;
@@ -42,7 +42,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <summary>
         /// Gets or sets text contained in the event.
         /// </summary>
-        public string Text { get; set; }
+        public string? Text { get; set; }
 
         #endregion
 
@@ -118,7 +118,7 @@ namespace Melanchall.DryWetMidi.Core
                 return 0;
 
             var encoding = settings.TextEncoding ?? SmfConstants.DefaultTextEncoding;
-            return encoding.GetByteCount(Text);
+            return encoding.GetByteCount(text);
         }
 
         #endregion

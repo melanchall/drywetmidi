@@ -58,10 +58,7 @@ namespace Melanchall.DryWetMidi.Core
         /// </exception>
         protected MidiChunk(string id)
         {
-            ThrowIfArgument.IsNull(nameof(id), id);
-
-            if (string.IsNullOrEmpty(id))
-                throw new ArgumentException("ID is empty string.", nameof(id));
+            ThrowIfArgument.IsNullOrWhiteSpaceString(nameof(id), id, "Chunk ID");
 
             if (id.Length != IdLength)
                 throw new ArgumentException($"ID length doesn't equal {IdLength}.", nameof(id));
@@ -89,25 +86,13 @@ namespace Melanchall.DryWetMidi.Core
         public abstract MidiChunk Clone();
 
         /// <summary>
-        /// Returns array of IDs of standard chunks.
-        /// </summary>
-        /// <remarks>
-        /// Standard chunks are header chunk (ID is MThd) and track chunk (ID is MTrk).
-        /// </remarks>
-        /// <returns>Array of IDs of standard chunks.</returns>
-        public static string[] GetStandardChunkIds()
-        {
-            return StandardChunkIds.GetIds();
-        }
-
-        /// <summary>
         /// Determines whether two specified <see cref="MidiChunk"/> objects have the same content.
         /// </summary>
         /// <param name="chunk1">The first chunk to compare, or <c>null</c>.</param>
         /// <param name="chunk2">The second chunk to compare, or <c>null</c>.</param>
         /// <returns><c>true</c> if the <paramref name="chunk1"/> is equal to the <paramref name="chunk2"/>;
         /// otherwise, <c>false</c>.</returns>
-        public static bool Equals(MidiChunk chunk1, MidiChunk chunk2)
+        public static bool Equals(MidiChunk? chunk1, MidiChunk? chunk2)
         {
             return Equals(chunk1, chunk2, out _);
         }
@@ -121,7 +106,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <paramref name="chunk1"/> and <paramref name="chunk2"/>.</param>
         /// <returns><c>true</c> if the <paramref name="chunk1"/> is equal to the <paramref name="chunk2"/>;
         /// otherwise, <c>false</c>.</returns>
-        public static bool Equals(MidiChunk chunk1, MidiChunk chunk2, out string message)
+        public static bool Equals(MidiChunk? chunk1, MidiChunk? chunk2, out string? message)
         {
             return Equals(chunk1, chunk2, null, out message);
         }
@@ -134,7 +119,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <param name="settings">Settings according to which chunks should be compared.</param>
         /// <returns><c>true</c> if the <paramref name="chunk1"/> is equal to the <paramref name="chunk2"/>;
         /// otherwise, <c>false</c>.</returns>
-        public static bool Equals(MidiChunk chunk1, MidiChunk chunk2, MidiChunkEqualityCheckSettings settings)
+        public static bool Equals(MidiChunk? chunk1, MidiChunk? chunk2, MidiChunkEqualityCheckSettings? settings)
         {
             return Equals(chunk1, chunk2, settings, out _);
         }
@@ -150,7 +135,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <paramref name="chunk1"/> and <paramref name="chunk2"/>.</param>
         /// <returns><c>true</c> if the <paramref name="chunk1"/> is equal to the <paramref name="chunk2"/>;
         /// otherwise, <c>false</c>.</returns>
-        public static bool Equals(MidiChunk chunk1, MidiChunk chunk2, MidiChunkEqualityCheckSettings settings, out string message)
+        public static bool Equals(MidiChunk? chunk1, MidiChunk? chunk2, MidiChunkEqualityCheckSettings? settings, out string? message)
         {
             return MidiChunkEquality.Equals(chunk1, chunk2, settings ?? new MidiChunkEqualityCheckSettings(), out message);
         }

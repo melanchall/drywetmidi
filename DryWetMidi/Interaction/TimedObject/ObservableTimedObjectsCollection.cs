@@ -25,7 +25,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <summary>
         /// Occurs when collection changed (objects have been added, removed or changed).
         /// </summary>
-        public event EventHandler<ObservableTimedObjectsCollectionChangedEventArgs> CollectionChanged;
+        public event EventHandler<ObservableTimedObjectsCollectionChangedEventArgs>? CollectionChanged;
 
         #endregion
 

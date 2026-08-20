@@ -29,15 +29,23 @@ namespace Melanchall.DryWetMidi.Core
                 reader.Position -= chunkId.Length;
         }
 
-        public static MidiChunk TryCreateChunk(string chunkId, ChunkTypesCollection chunksTypes)
+        public static MidiChunk? TryCreateChunk(string chunkId, ChunkTypesCollection? chunksTypes)
         {
             // TODO: get rid of Activator
-            return chunksTypes?.TryGetType(chunkId, out var type) == true && IsChunkType(type)
-                ? (MidiChunk)Activator.CreateInstance(type)
-                : null;
+            if (chunksTypes?.TryGetType(chunkId, out var type) == true && type != null && IsChunkType(type))
+            {
+                // TODO: proper exception
+                var chunkObject = Activator.CreateInstance(type);
+                if (chunkObject == null)
+                    throw new InvalidOperationException($"Cannot create an instance of '{type.FullName}' type.");
+
+                return (MidiChunk)chunkObject;
+            }
+
+            return null;
         }
 
-        private static bool IsChunkType([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor)] Type type)
+        private static bool IsChunkType([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor)] Type? type)
         {
             return type != null &&
                    type.IsSubclassOf(typeof(MidiChunk)) &&

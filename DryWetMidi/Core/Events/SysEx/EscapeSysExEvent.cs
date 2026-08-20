@@ -35,7 +35,7 @@ namespace Melanchall.DryWetMidi.Core
         /// specified data.
         /// </summary>
         /// <param name="data">Data of the "escape" sysex event.</param>
-        public EscapeSysExEvent(byte[] data)
+        public EscapeSysExEvent(byte[]? data)
             : this()
         {
             Data = data;

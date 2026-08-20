@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Melanchall.DryWetMidi.Common;
+using System;
 
 namespace Melanchall.DryWetMidi.Composing
 {
@@ -41,10 +42,13 @@ namespace Melanchall.DryWetMidi.Composing
         /// <param name="action">Action to execute on the <paramref name="symbol"/>.</param>
         /// <returns>An instance of the <see cref="PianoRollAction"/> that holds information
         /// of what to do when the <paramref name="symbol"/> is encountered.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="action"/> is <c>null</c>.</exception>
         public static PianoRollAction CreateSingleCell(
             char symbol,
             Action<PatternBuilder, PianoRollActionContext> action)
         {
+            ThrowIfArgument.IsNull(nameof(action), action);
+
             return new PianoRollAction(symbol, null, action);
         }
 
@@ -59,11 +63,14 @@ namespace Melanchall.DryWetMidi.Composing
         /// <returns>An instance of the <see cref="PianoRollAction"/> that holds information
         /// of what to do when cells span between the <paramref name="startSymbol"/> and
         /// <paramref name="endSymbol"/> is encountered.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="action"/> is <c>null</c>.</exception>
         public static PianoRollAction CreateMultiCell(
             char startSymbol,
             char endSymbol,
             Action<PatternBuilder, PianoRollActionContext> action)
         {
+            ThrowIfArgument.IsNull(nameof(action), action);
+
             return new PianoRollAction(startSymbol, endSymbol, action);
         }
 

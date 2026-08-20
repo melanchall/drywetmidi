@@ -4,7 +4,7 @@
     {
         #region Methods
 
-        public static bool Equals(MidiFile midiFile1, MidiFile midiFile2, MidiFileEqualityCheckSettings settings, out string message)
+        public static bool Equals(MidiFile? midiFile1, MidiFile? midiFile2, MidiFileEqualityCheckSettings settings, out string? message)
         {
             message = null;
 

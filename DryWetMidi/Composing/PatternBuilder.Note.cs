@@ -23,7 +23,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// <returns>The current <see cref="PatternBuilder"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="interval"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">The number of result note is out of valid range.</exception>
-        public PatternBuilder Note(Interval interval, ITimeSpan length = null, SevenBitNumber? velocity = null)
+        public PatternBuilder Note(Interval interval, ITimeSpan? length = null, SevenBitNumber? velocity = null)
         {
             ThrowIfArgument.IsNull(nameof(interval), interval);
 
@@ -51,7 +51,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// To set default octave use <see cref="SetOctave"/> method. By default the octave number is <see cref="DefaultOctave"/>.
         /// </remarks>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="noteName"/> specified an invalid value.</exception>
-        public PatternBuilder Note(NoteName noteName, ITimeSpan length = null, SevenBitNumber? velocity = null)
+        public PatternBuilder Note(NoteName noteName, ITimeSpan? length = null, SevenBitNumber? velocity = null)
         {
             ThrowIfArgument.IsInvalidEnumValue(nameof(noteName), noteName);
 
@@ -71,7 +71,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// to use the <see cref="Velocity"/> property value (see <see cref="SetVelocity"/>).</param>
         /// <returns>The current <see cref="PatternBuilder"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="note"/> is <c>null</c>.</exception>
-        public PatternBuilder Note(MusicTheory.Note note, ITimeSpan length = null, SevenBitNumber? velocity = null)
+        public PatternBuilder Note(MusicTheory.Note note, ITimeSpan? length = null, SevenBitNumber? velocity = null)
         {
             ThrowIfArgument.IsNull(nameof(note), note);
 
@@ -93,7 +93,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// <returns>The current <see cref="PatternBuilder"/>.</returns>
         /// <exception cref="ArgumentException"><paramref name="note"/> is <c>null</c> or contains white-spaces only.</exception>
         /// <exception cref="FormatException"><paramref name="note"/> has invalid format.</exception>
-        public PatternBuilder Note(string note, ITimeSpan length = null, SevenBitNumber? velocity = null)
+        public PatternBuilder Note(string note, ITimeSpan? length = null, SevenBitNumber? velocity = null)
         {
             ThrowIfArgument.IsNullOrWhiteSpaceString(nameof(note), note, "Note");
 

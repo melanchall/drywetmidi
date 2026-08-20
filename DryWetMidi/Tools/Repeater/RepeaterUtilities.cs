@@ -27,7 +27,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="repeatsNumber"/> is negative.</exception>
         /// <exception cref="ArgumentException"><see cref="RepeatingSettings.Shift"/> of the <paramref name="settings"/>
         /// is <c>null</c> for fixed-value shift.</exception>
-        public static MidiFile Repeat(this MidiFile midiFile, int repeatsNumber, RepeatingSettings settings = null)
+        public static MidiFile Repeat(this MidiFile midiFile, int repeatsNumber, RepeatingSettings? settings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
             ThrowIfArgument.IsNegative(nameof(repeatsNumber), repeatsNumber, "Repeats number is negative.");
@@ -59,7 +59,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="repeatsNumber"/> is negative.</exception>
         /// <exception cref="ArgumentException"><see cref="RepeatingSettings.Shift"/> of the <paramref name="settings"/>
         /// is <c>null</c> for fixed-value shift.</exception>
-        public static TrackChunk Repeat(this TrackChunk trackChunk, int repeatsNumber, TempoMap tempoMap, RepeatingSettings settings = null)
+        public static TrackChunk Repeat(this TrackChunk trackChunk, int repeatsNumber, TempoMap tempoMap, RepeatingSettings? settings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
@@ -92,7 +92,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="repeatsNumber"/> is negative.</exception>
         /// <exception cref="ArgumentException"><see cref="RepeatingSettings.Shift"/> of the <paramref name="settings"/>
         /// is <c>null</c> for fixed-value shift.</exception>
-        public static ICollection<TrackChunk> Repeat(this IEnumerable<TrackChunk> trackChunks, int repeatsNumber, TempoMap tempoMap, RepeatingSettings settings = null)
+        public static ICollection<TrackChunk> Repeat(this IEnumerable<TrackChunk?> trackChunks, int repeatsNumber, TempoMap tempoMap, RepeatingSettings? settings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
@@ -125,7 +125,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="repeatsNumber"/> is negative.</exception>
         /// <exception cref="ArgumentException"><see cref="RepeatingSettings.Shift"/> of the <paramref name="settings"/>
         /// is <c>null</c> for fixed-value shift.</exception>
-        public static ICollection<ITimedObject> Repeat(this IEnumerable<ITimedObject> timedObjects, int repeatsNumber, TempoMap tempoMap, RepeatingSettings settings = null)
+        public static ICollection<ITimedObject> Repeat(this IEnumerable<ITimedObject?> timedObjects, int repeatsNumber, TempoMap tempoMap, RepeatingSettings? settings = null)
         {
             ThrowIfArgument.IsNull(nameof(timedObjects), timedObjects);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);

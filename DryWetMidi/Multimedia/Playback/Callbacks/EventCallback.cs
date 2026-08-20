@@ -13,5 +13,5 @@ namespace Melanchall.DryWetMidi.Multimedia
     /// or <c>null</c> if event should be ignored.</returns>
     /// <seealso cref="Playback"/>
     /// <seealso cref="Playback.EventCallback"/>
-    public delegate MidiEvent EventCallback(MidiEvent rawEvent, long rawTime, TimeSpan playbackTime);
+    public delegate MidiEvent? EventCallback(MidiEvent rawEvent, long rawTime, TimeSpan playbackTime);
 }

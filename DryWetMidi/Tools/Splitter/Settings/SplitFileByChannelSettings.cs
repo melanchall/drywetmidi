@@ -24,7 +24,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// an event will be processed; if <c>false</c> - it won't. If the property set to <c>null</c>
         /// (default value), all MIDI events will be processed.
         /// </summary>
-        public Predicate<TimedEvent> Filter { get; set; }
+        public Predicate<TimedEvent>? Filter { get; set; }
 
         #endregion
     }

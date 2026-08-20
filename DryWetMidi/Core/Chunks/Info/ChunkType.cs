@@ -1,7 +1,9 @@
-﻿using System;
+﻿using Melanchall.DryWetMidi.Common;
+using System;
 
 namespace Melanchall.DryWetMidi.Core
 {
+    // TODO: Equals, GetHashCode, ==, !=
     /// <summary>
     /// Represents a chunk's identity described by its type and corresponding ID.
     /// </summary>
@@ -14,8 +16,13 @@ namespace Melanchall.DryWetMidi.Core
         /// </summary>
         /// <param name="type">Type of a chunk.</param>
         /// <param name="id">4-character ID of a chunk.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="type"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentException"><paramref name="id"/> is <c>null</c> or contains white-spaces only.</exception>
         public ChunkType(Type type, string id)
         {
+            ThrowIfArgument.IsNull(nameof(type), type);
+            ThrowIfArgument.IsNullOrWhiteSpaceString(nameof(id), id, "Chunk ID");
+
             Type = type;
             Id = id;
         }
@@ -33,6 +40,15 @@ namespace Melanchall.DryWetMidi.Core
         /// Gets the ID of chunks described by this instance of the <see cref="ChunkType"/>.
         /// </summary>
         public string Id { get; }
+
+        #endregion
+
+        #region Overrides
+
+        override public string ToString()
+        {
+            return $"{Id} -> {Type.Name}";
+        }
 
         #endregion
     }

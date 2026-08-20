@@ -19,7 +19,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <returns>Collection of <see cref="MidiFile"/> where each file contains single chunk from
         /// the original file.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is <c>null</c>.</exception>
-        public static IEnumerable<MidiFile> SplitByChunks(this MidiFile midiFile, SplitFileByChunksSettings settings = null)
+        public static IEnumerable<MidiFile> SplitByChunks(this MidiFile midiFile, SplitFileByChunksSettings? settings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
 
@@ -33,10 +33,10 @@ namespace Melanchall.DryWetMidi.Tools
             {
                 var newFile = new MidiFile(midiChunk.Clone())
                 {
-                    TimeDivision = midiFile.TimeDivision.Clone()
+                    TimeDivision = midiFile.TimeDivision?.Clone()
                 };
 
-                if (settings.PreserveTempoMap)
+                if (settings.PreserveTempoMap && tempoMap != null)
                     newFile.ReplaceTempoMap(tempoMap);
 
                 yield return newFile;

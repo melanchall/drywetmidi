@@ -76,13 +76,13 @@ namespace Melanchall.DryWetMidi.Tools
         /// an object will be processed; if <c>false</c> - it won't. If the property set to <c>null</c>,
         /// (default value) all objects will be processed.
         /// </summary>
-        public Predicate<ITimedObject> Filter { get; set; }
+        public Predicate<ITimedObject>? Filter { get; set; }
 
         /// <summary>
         /// Gets or sets a factory method to create objects merger (see <see cref="ObjectsMerger"/>) to
         /// implement custom merging logic.
         /// </summary>
-        public Func<ILengthedObject, ObjectsMerger> ObjectsMergerFactory { get; set; }
+        public Func<ILengthedObject, ObjectsMerger>? ObjectsMergerFactory { get; set; }
 
         #endregion
     }

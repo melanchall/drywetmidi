@@ -13,5 +13,5 @@ namespace Melanchall.DryWetMidi.Multimedia
     /// or <c>null</c> if note should be ignored.</returns>
     /// <seealso cref="Playback"/>
     /// <seealso cref="Playback.NoteCallback"/>
-    public delegate NotePlaybackData NoteCallback(NotePlaybackData rawNoteData, long rawTime, long rawLength, TimeSpan playbackTime);
+    public delegate NotePlaybackData? NoteCallback(NotePlaybackData rawNoteData, long rawTime, long rawLength, TimeSpan playbackTime);
 }

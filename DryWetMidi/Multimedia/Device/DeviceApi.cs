@@ -50,7 +50,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         #region Methods
 
-        public static DEVICE_GETDEVICEINFORESULT Api_GetDeviceInformation(IntPtr info, MidiConfigurationHandle configuration, out string id, out string name, out string manufacturer, out string model, out string deviceDriver, out int errorCode)
+        public static DEVICE_GETDEVICEINFORESULT Api_GetDeviceInformation(IntPtr info, MidiConfigurationHandle configuration, out string? id, out string? name, out string? manufacturer, out string? model, out string? deviceDriver, out int errorCode)
         {
             id = null;
             name = null;

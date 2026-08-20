@@ -17,18 +17,18 @@ namespace Melanchall.DryWetMidi.Common
 
         #region Methods
 
-        public static bool TryParse<T>(string input, Parsing<T> parsing, out T result)
+        public static bool TryParse<T>(string? input, Parsing<T> parsing, out T? result)
         {
             return parsing(input, out result).Status == ParsingStatus.Parsed;
         }
 
-        public static T Parse<T>(string input, Parsing<T> parsing)
+        public static T Parse<T>(string? input, Parsing<T> parsing)
         {
             var parsingResult = parsing(input, out var result);
             if (parsingResult.Status == ParsingStatus.Parsed)
-                return result;
+                return result!;
 
-            throw parsingResult.Exception;
+            throw parsingResult.Exception!;
         }
 
         public static string GetNonnegativeIntegerNumberGroup(string groupName)
@@ -46,16 +46,18 @@ namespace Melanchall.DryWetMidi.Common
             return $@"(?<{groupName}>\d+({(decimalSeparators?.Any() == true ? $"[{string.Join(string.Empty, decimalSeparators.Select(s => Regex.Escape(s.ToString())))}]" : @"\.")}\d+)?)";
         }
 
-        public static Match Match(string input, IEnumerable<string> patterns, bool ignoreCase = true)
+        public static Match? Match(string input, IEnumerable<string> patterns, bool ignoreCase = true)
         {
-            return patterns.Select(p => Regex.Match(input.Trim(), $"^{p}$", ignoreCase ? RegexOptions.IgnoreCase : RegexOptions.None))
-                           .FirstOrDefault(m => m.Success);
+            return patterns
+                .Select(p => Regex.Match(input.Trim(), $"^{p}$", ignoreCase ? RegexOptions.IgnoreCase : RegexOptions.None))
+                .FirstOrDefault(m => m.Success);
         }
 
-        public static Match[] Matches(string input, IEnumerable<string> patterns, bool ignoreCase = true)
+        public static Match[]? Matches(string input, IEnumerable<string> patterns, bool ignoreCase = true)
         {
-            return patterns.Select(p => Regex.Matches(input.Trim(), p, ignoreCase ? RegexOptions.IgnoreCase : RegexOptions.None).OfType<Match>().ToArray())
-                           .FirstOrDefault(m => m.Any());
+            return patterns
+                .Select(p => Regex.Matches(input.Trim(), p, ignoreCase ? RegexOptions.IgnoreCase : RegexOptions.None).OfType<Match>().ToArray())
+                .FirstOrDefault(m => m.Any());
         }
 
         public static bool ParseNonnegativeInt(Match match, string groupName, int defaultValue, out int value)

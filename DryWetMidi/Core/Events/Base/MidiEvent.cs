@@ -121,7 +121,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <param name="midiEvent2">The second event to compare, or <c>null</c>.</param>
         /// <returns><c>true</c> if the <paramref name="midiEvent1"/> is equal to the <paramref name="midiEvent2"/>;
         /// otherwise, <c>false</c>.</returns>
-        public static bool Equals(MidiEvent midiEvent1, MidiEvent midiEvent2)
+        public static bool Equals(MidiEvent? midiEvent1, MidiEvent? midiEvent2)
         {
             return Equals(midiEvent1, midiEvent2, out _);
         }
@@ -135,7 +135,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <paramref name="midiEvent1"/> and <paramref name="midiEvent2"/>.</param>
         /// <returns><c>true</c> if the <paramref name="midiEvent1"/> is equal to the <paramref name="midiEvent2"/>;
         /// otherwise, <c>false</c>.</returns>
-        public static bool Equals(MidiEvent midiEvent1, MidiEvent midiEvent2, out string message)
+        public static bool Equals(MidiEvent? midiEvent1, MidiEvent? midiEvent2, out string? message)
         {
             return Equals(midiEvent1, midiEvent2, null, out message);
         }
@@ -148,7 +148,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <param name="settings">Settings according to which events should be compared.</param>
         /// <returns><c>true</c> if the <paramref name="midiEvent1"/> is equal to the <paramref name="midiEvent2"/>;
         /// otherwise, <c>false</c>.</returns>
-        public static bool Equals(MidiEvent midiEvent1, MidiEvent midiEvent2, MidiEventEqualityCheckSettings settings)
+        public static bool Equals(MidiEvent? midiEvent1, MidiEvent? midiEvent2, MidiEventEqualityCheckSettings? settings)
         {
             return Equals(midiEvent1, midiEvent2, settings, out _);
         }
@@ -164,7 +164,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <paramref name="midiEvent1"/> and <paramref name="midiEvent2"/>.</param>
         /// <returns><c>true</c> if the <paramref name="midiEvent1"/> is equal to the <paramref name="midiEvent2"/>;
         /// otherwise, <c>false</c>.</returns>
-        public static bool Equals(MidiEvent midiEvent1, MidiEvent midiEvent2, MidiEventEqualityCheckSettings settings, out string message)
+        public static bool Equals(MidiEvent? midiEvent1, MidiEvent? midiEvent2, MidiEventEqualityCheckSettings? settings, out string? message)
         {
             return MidiEventEquality.Equals(midiEvent1, midiEvent2, settings ?? new MidiEventEqualityCheckSettings(), out message);
         }

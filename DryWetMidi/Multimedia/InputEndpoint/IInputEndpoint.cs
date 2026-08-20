@@ -12,7 +12,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <summary>
         /// Occurs when a MIDI event is received.
         /// </summary>
-        event EventHandler<MidiEventReceivedEventArgs> EventReceived;
+        event EventHandler<MidiEventReceivedEventArgs>? EventReceived;
 
         /// <summary>
         /// Gets a value that indicates whether the current input endpoint is currently listening for

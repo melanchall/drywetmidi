@@ -6,17 +6,17 @@ namespace Melanchall.DryWetMidi.Tools
     {
         #region Methods
 
-        public static void ThrowBadFormat(int? lineNumber, string message, Exception innerException = null)
+        public static CsvException BadFormat(int? lineNumber, string message, Exception? innerException = null)
         {
-            throw new CsvException(
+            return new CsvException(
                 $"{(lineNumber != null ? $"Line {lineNumber}: " : string.Empty)}{message}",
                 lineNumber,
                 innerException);
         }
 
-        public static void ThrowBadFormat(string message, Exception innerException = null)
+        public static CsvException BadFormat(string message, Exception? innerException = null)
         {
-            ThrowBadFormat(null, message, innerException);
+            return BadFormat(null, message, innerException);
         }
 
         #endregion

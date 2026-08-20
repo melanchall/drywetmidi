@@ -9,7 +9,7 @@
         {
         }
 
-        public AddAnchorAction(object anchor)
+        public AddAnchorAction(object? anchor)
         {
             Anchor = anchor;
         }
@@ -18,7 +18,7 @@
 
         #region Properties
 
-        public object Anchor { get; }
+        public object? Anchor { get; }
 
         #endregion
 

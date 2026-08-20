@@ -24,7 +24,7 @@
         /// specified device name.
         /// </summary>
         /// <param name="deviceName">Name of the device.</param>
-        public DeviceNameEvent(string deviceName)
+        public DeviceNameEvent(string? deviceName)
             : base(MidiEventType.DeviceName, deviceName)
         {
         }

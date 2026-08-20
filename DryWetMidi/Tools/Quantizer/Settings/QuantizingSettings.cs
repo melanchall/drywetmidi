@@ -31,6 +31,7 @@ namespace Melanchall.DryWetMidi.Tools
 
         #region Properties
 
+        // TODO: check setting null
         /// <summary>
         /// Gets or sets settings according to which randomizing should be performed.
         /// </summary>
@@ -80,7 +81,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// Gets or sets a predicate to filter objects that should be quantized. Use <c>null</c> if
         /// all objects should be processed.
         /// </summary>
-        public Predicate<ITimedObject> Filter { get; set; }
+        public Predicate<ITimedObject>? Filter { get; set; }
 
         /// <summary>
         /// Gets or sets the type of an object's length that should be kept in case the opposite

@@ -31,7 +31,7 @@ namespace Melanchall.DryWetMidi.Core
         /// </summary>
         /// <param name="statusByte">Status byte of the meta event.</param>
         /// <param name="data">Data of an unknown meta event.</param>
-        internal UnknownMetaEvent(byte statusByte, byte[] data)
+        internal UnknownMetaEvent(byte statusByte, byte[]? data)
             : base(MidiEventType.UnknownMeta)
         {
             StatusByte = statusByte;
@@ -50,7 +50,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <summary>
         /// Gets the content of the meta event as array of bytes.
         /// </summary>
-        public byte[] Data { get; private set; }
+        public byte[]? Data { get; private set; }
 
         #endregion
 

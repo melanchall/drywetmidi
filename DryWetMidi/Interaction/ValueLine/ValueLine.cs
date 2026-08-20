@@ -7,10 +7,11 @@ using System.Linq;
 namespace Melanchall.DryWetMidi.Interaction
 {
     internal sealed class ValueLine<TValue> : IEnumerable<ValueChange<TValue>>
+        where TValue : notnull
     {
         #region Events
 
-        internal event EventHandler ValuesChanged;
+        internal event EventHandler? ValuesChanged;
 
         #endregion
 
@@ -133,7 +134,7 @@ namespace Melanchall.DryWetMidi.Interaction
             if (index < _valueChanges.Count)
             {
                 var previousValue = startIndex > 0 ? _valueChanges[startIndex - 1].Value : _defaultValue;
-                if (_valueChanges[index].Value.Equals(previousValue))
+                if (EqualityComparer<TValue>.Default.Equals(_valueChanges[index].Value, previousValue))
                     count++;
             }
 

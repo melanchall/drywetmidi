@@ -26,7 +26,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
 
         #region Fields
 
-        private IReadOnlyCollection<string> _chordNames;
+        private IReadOnlyCollection<string>? _chordNames;
 
         #endregion
 
@@ -145,7 +145,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// <see cref="string.Empty"/>, or is not of the correct format. This parameter is passed uninitialized;
         /// any value originally supplied in result will be overwritten.</param>
         /// <returns><c>true</c> if <paramref name="input"/> was converted successfully; otherwise, <c>false</c>.</returns>
-        public static bool TryParse(string input, out Chord chord)
+        public static bool TryParse(string? input, out Chord? chord)
         {
             return ParsingUtilities.TryParse(input, ChordParser.TryParse, out chord);
         }
@@ -157,7 +157,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// <returns>A <see cref="Chord"/> equivalent to the musical chord contained in <paramref name="input"/>.</returns>
         /// <exception cref="ArgumentException"><paramref name="input"/> is <c>null</c> or contains white-spaces only.</exception>
         /// <exception cref="FormatException"><paramref name="input"/> has invalid format.</exception>
-        public static Chord Parse(string input)
+        public static Chord Parse(string? input)
         {
             return ParsingUtilities.Parse<Chord>(input, ChordParser.TryParse);
         }
@@ -202,7 +202,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// <param name="chord1">The first <see cref="Chord"/> to compare.</param>
         /// <param name="chord2">The second <see cref="Chord"/> to compare.</param>
         /// <returns><c>true</c> if the chords are equal, <c>false</c> otherwise.</returns>
-        public static bool operator ==(Chord chord1, Chord chord2)
+        public static bool operator ==(Chord? chord1, Chord? chord2)
         {
             if (ReferenceEquals(chord1, chord2))
                 return true;
@@ -219,7 +219,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// <param name="chord1">The first <see cref="Chord"/> to compare.</param>
         /// <param name="chord2">The second <see cref="Chord"/> to compare.</param>
         /// <returns><c>false</c> if the chords are equal, <c>true</c> otherwise.</returns>
-        public static bool operator !=(Chord chord1, Chord chord2)
+        public static bool operator !=(Chord? chord1, Chord? chord2)
         {
             return !(chord1 == chord2);
         }
@@ -242,7 +242,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// </summary>
         /// <param name="obj">The object to compare with the current object.</param>
         /// <returns><c>true</c> if the specified object is equal to the current object; otherwise, <c>false</c>.</returns>
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             return this == (obj as Chord);
         }

@@ -68,7 +68,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// <param name="noteDescriptor1">The first <see cref="NoteDescriptor"/> to compare.</param>
         /// <param name="noteDescriptor2">The second <see cref="NoteDescriptor"/> to compare.</param>
         /// <returns><c>true</c> if the descriptors are equal, <c>false</c> otherwise.</returns>
-        public static bool operator ==(NoteDescriptor noteDescriptor1, NoteDescriptor noteDescriptor2)
+        public static bool operator ==(NoteDescriptor? noteDescriptor1, NoteDescriptor? noteDescriptor2)
         {
             if (ReferenceEquals(noteDescriptor1, noteDescriptor2))
                 return true;
@@ -87,7 +87,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// <param name="noteDescriptor1">The first <see cref="NoteDescriptor"/> to compare.</param>
         /// <param name="noteDescriptor2">The second <see cref="NoteDescriptor"/> to compare.</param>
         /// <returns><c>false</c> if the descriptors are equal, <c>true</c> otherwise.</returns>
-        public static bool operator !=(NoteDescriptor noteDescriptor1, NoteDescriptor noteDescriptor2)
+        public static bool operator !=(NoteDescriptor? noteDescriptor1, NoteDescriptor? noteDescriptor2)
         {
             return !(noteDescriptor1 == noteDescriptor2);
         }
@@ -110,7 +110,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// </summary>
         /// <param name="obj">The object to compare with the current object.</param>
         /// <returns><c>true</c> if the specified object is equal to the current object; otherwise, <c>false</c>.</returns>
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             return this == (obj as NoteDescriptor);
         }

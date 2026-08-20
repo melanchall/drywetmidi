@@ -12,7 +12,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <summary>
         /// Occurs on tick generator's tick.
         /// </summary>
-        public event EventHandler TickGenerated;
+        public event EventHandler? TickGenerated;
 
         #endregion
 

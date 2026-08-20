@@ -14,19 +14,19 @@ namespace Melanchall.DryWetMidi.Tools
         /// Gets or sets a factory method to create event that will be placed at the start
         /// of a split MIDI file part.
         /// </summary>
-        public Func<MidiEvent> PartStartMarkerEventFactory { get; set; }
+        public Func<MidiEvent>? PartStartMarkerEventFactory { get; set; }
 
         /// <summary>
         /// Gets or sets a factory method to create event that will be placed at the end
         /// of a split MIDI file part.
         /// </summary>
-        public Func<MidiEvent> PartEndMarkerEventFactory { get; set; }
+        public Func<MidiEvent>? PartEndMarkerEventFactory { get; set; }
 
         /// <summary>
         /// Gets or sets a factory method to create event that will be placed in a split MIDI
         /// file part if it's empty.
         /// </summary>
-        public Func<MidiEvent> EmptyPartMarkerEventFactory { get; set; }
+        public Func<MidiEvent>? EmptyPartMarkerEventFactory { get; set; }
 
         #endregion
     }

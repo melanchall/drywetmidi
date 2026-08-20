@@ -51,8 +51,8 @@ namespace Melanchall.DryWetMidi.Tools
             int partsNumber,
             TimeSpanType lengthType,
             TempoMap tempoMap,
-            ObjectDetectionSettings objectDetectionSettings = null,
-            Predicate<ITimedObject> filter = null)
+            ObjectDetectionSettings? objectDetectionSettings = null,
+            Predicate<ITimedObject>? filter = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
             ThrowIfArgument.IsNonpositive(nameof(partsNumber), partsNumber, "Parts number is zero or negative.");
@@ -101,20 +101,20 @@ namespace Melanchall.DryWetMidi.Tools
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="partsNumber"/> is zero or negative.</exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="lengthType"/> specified an invalid value.</exception>
         public static void SplitObjectsByPartsNumber(
-            this IEnumerable<TrackChunk> trackChunks,
+            this IEnumerable<TrackChunk?> trackChunks,
             ObjectType objectType,
             int partsNumber,
             TimeSpanType lengthType,
             TempoMap tempoMap,
-            ObjectDetectionSettings objectDetectionSettings = null,
-            Predicate<ITimedObject> filter = null)
+            ObjectDetectionSettings? objectDetectionSettings = null,
+            Predicate<ITimedObject>? filter = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
             ThrowIfArgument.IsNonpositive(nameof(partsNumber), partsNumber, "Parts number is zero or negative.");
             ThrowIfArgument.IsInvalidEnumValue(nameof(lengthType), lengthType);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
-            foreach (var trackChunk in trackChunks)
+            foreach (var trackChunk in trackChunks.OfType<TrackChunk>())
             {
                 trackChunk.SplitObjectsByPartsNumber(objectType, partsNumber, lengthType, tempoMap, objectDetectionSettings, filter);
             }
@@ -147,8 +147,8 @@ namespace Melanchall.DryWetMidi.Tools
             ObjectType objectType,
             int partsNumber,
             TimeSpanType lengthType,
-            ObjectDetectionSettings objectDetectionSettings = null,
-            Predicate<ITimedObject> filter = null)
+            ObjectDetectionSettings? objectDetectionSettings = null,
+            Predicate<ITimedObject>? filter = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
             ThrowIfArgument.IsNonpositive(nameof(partsNumber), partsNumber, "Parts number is zero or negative.");
@@ -192,12 +192,12 @@ namespace Melanchall.DryWetMidi.Tools
         /// </exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="partsNumber"/> is zero or negative.</exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="lengthType"/> specified an invalid value.</exception>
-        public static IEnumerable<ITimedObject> SplitObjectsByPartsNumber(
-            this IEnumerable<ITimedObject> objects,
+        public static IEnumerable<ITimedObject?> SplitObjectsByPartsNumber(
+            this IEnumerable<ITimedObject?> objects,
             int partsNumber,
             TimeSpanType lengthType,
             TempoMap tempoMap,
-            Predicate<ITimedObject> filter = null)
+            Predicate<ITimedObject>? filter = null)
         {
             ThrowIfArgument.IsNull(nameof(objects), objects);
             ThrowIfArgument.IsNonpositive(nameof(partsNumber), partsNumber, "Parts number is zero or negative.");

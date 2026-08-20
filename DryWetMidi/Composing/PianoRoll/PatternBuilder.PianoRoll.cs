@@ -55,7 +55,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// </exception>
         public PatternBuilder PianoRoll(
             string pianoRoll,
-            PianoRollSettings settings = null)
+            PianoRollSettings? settings = null)
         {
             ThrowIfArgument.IsNullOrEmptyString(nameof(pianoRoll), pianoRoll, "Piano roll");
 
@@ -120,6 +120,10 @@ namespace Melanchall.DryWetMidi.Composing
                 else
                     note = MusicTheory.Note.Get(noteNumber);
             }
+
+            // TODO: proper exception
+            if (note == null)
+                throw new InvalidOperationException($"Failed to parse a note from '{notePart}' (line {lineIndex}).");
 
             dataStartIndex = notePartEndIndex + 1;
 
@@ -224,12 +228,12 @@ namespace Melanchall.DryWetMidi.Composing
             int lineIndex,
             int symbolIndex,
             bool multiCellActionInProgress,
-            Action action)
+            Action? action)
         {
             if (multiCellActionInProgress)
                 throw new InvalidOperationException($"Single-cell note can't be placed inside a multi-cell one (line {lineIndex}, position {symbolIndex}).");
 
-            action();
+            action?.Invoke();
         }
 
         private static void StartMultiCellAction(
@@ -248,13 +252,13 @@ namespace Melanchall.DryWetMidi.Composing
         private static void EndMultiCellAction(
             int lineIndex,
             int symbolIndex,
-            Action action,
+            Action? action,
             ref bool multiCellActionInProgress)
         {
             if (!multiCellActionInProgress)
                 throw new InvalidOperationException($"Note is not started (line {lineIndex}, position {symbolIndex}).");
 
-            action();
+            action?.Invoke();
             multiCellActionInProgress = false;
         }
 

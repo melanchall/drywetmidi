@@ -34,6 +34,7 @@ namespace Melanchall.DryWetMidi.Multimedia
     /// </summary>
     /// <typeparam name="TData">The type of data attached to snap point.</typeparam>
     public sealed class SnapPoint<TData> : SnapPoint
+        where TData : notnull
     {
         #region Constructor
 

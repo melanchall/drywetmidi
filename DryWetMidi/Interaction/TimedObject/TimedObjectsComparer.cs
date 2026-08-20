@@ -37,7 +37,7 @@ namespace Melanchall.DryWetMidi.Interaction
         ///     </item>
         /// </list>
         /// </returns>
-        public virtual int Compare(ITimedObject x, ITimedObject y)
+        public virtual int Compare(ITimedObject? x, ITimedObject? y)
         {
             if (ReferenceEquals(x, y))
                 return 0;

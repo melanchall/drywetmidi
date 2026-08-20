@@ -30,7 +30,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
         #region Methods
 
-        internal static ParsingResult TryParse(string input, out BarBeatTicksTimeSpan timeSpan)
+        internal static ParsingResult TryParse(string? input, out BarBeatTicksTimeSpan? timeSpan)
         {
             timeSpan = null;
 

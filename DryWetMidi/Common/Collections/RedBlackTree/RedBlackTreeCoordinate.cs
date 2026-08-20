@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Melanchall.DryWetMidi.Common
 {
     internal sealed class RedBlackTreeCoordinate<TKey, TValue>
-        where TKey : IComparable<TKey>
+        where TKey : notnull, IComparable<TKey>
+        where TValue : notnull
     {
         #region Constructor
 
@@ -30,13 +32,14 @@ namespace Melanchall.DryWetMidi.Common
             set { TreeNode.Key = value; }
         }
 
+        [NotNull]
         public TValue Value => NodeElement.Value;
 
         #endregion
 
         #region Overrides
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             var coordinate = obj as RedBlackTreeCoordinate<TKey, TValue>;
             return

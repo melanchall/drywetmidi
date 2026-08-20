@@ -10,7 +10,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         #region Fields
 
         private readonly IList<PlaybackEvent> _playbackEventsBuffer = new List<PlaybackEvent>();
-        private PlaybackEvent[] _playbackEvents = null;
+        private PlaybackEvent[]? _playbackEvents = null;
         private int _playbackEventsPosition = -1;
         private bool _isCompleted;
 
@@ -39,20 +39,23 @@ namespace Melanchall.DryWetMidi.Multimedia
             _playbackEventsBuffer.Clear();
         }
 
-        public PlaybackEvent GetCurrentPlaybackEvent()
+        public PlaybackEvent? GetCurrentPlaybackEvent()
         {
             return IsPositionValid()
-                ? _playbackEvents[_playbackEventsPosition]
+                ? _playbackEvents?[_playbackEventsPosition]
                 : null;
         }
 
-        public PlaybackEvent GetLastPlaybackEvent()
+        public PlaybackEvent? GetLastPlaybackEvent()
         {
-            return IsEmpty() ? null : _playbackEvents.Last();
+            return IsEmpty() ? null : _playbackEvents?.LastOrDefault();
         }
 
-        public SnapPoint GetNextSnapPoint(TimeSpan fromTime, Func<PlaybackEvent, SnapPoint> getSnapPoint)
+        public SnapPoint? GetNextSnapPoint(TimeSpan fromTime, Func<PlaybackEvent, SnapPoint?> getSnapPoint)
         {
+            if (_playbackEvents == null)
+                return null;
+
             MathUtilities.GetFirstElementAboveThreshold(
                 _playbackEvents,
                 fromTime.Ticks,
@@ -69,8 +72,11 @@ namespace Melanchall.DryWetMidi.Multimedia
             return null;
         }
 
-        public SnapPoint GetPreviousSnapPoint(TimeSpan fromTime, Func<PlaybackEvent, SnapPoint> getSnapPoint)
+        public SnapPoint? GetPreviousSnapPoint(TimeSpan fromTime, Func<PlaybackEvent, SnapPoint?> getSnapPoint)
         {
+            if (_playbackEvents == null)
+                return null;
+
             MathUtilities.GetLastElementBelowThreshold(
                 _playbackEvents,
                 fromTime.Ticks,
@@ -103,12 +109,12 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         public bool IsEmpty()
         {
-            return !_playbackEvents.Any();
+            return _playbackEvents == null || !_playbackEvents.Any();
         }
 
         public bool IsPositionValid()
         {
-            return _playbackEventsPosition >= 0 && _playbackEventsPosition < _playbackEvents.Length;
+            return _playbackEventsPosition >= 0 && _playbackEvents != null && _playbackEventsPosition < _playbackEvents.Length;
         }
 
         public void MoveToFirstPosition()
@@ -118,6 +124,13 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         public void MoveToLastPositionBelowThreshold(TimeSpan threshold, ref bool beforeStart)
         {
+            if (_playbackEvents == null)
+            {
+                _playbackEventsPosition = -1;
+                beforeStart = true;
+                return;
+            }
+
             MathUtilities.GetLastElementBelowThreshold(
                 _playbackEvents,
                 threshold,
@@ -130,6 +143,13 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         public void ResetPosition(TimeSpan playbackStart, ref bool beforeStart)
         {
+            if (_playbackEvents == null)
+            {
+                _playbackEventsPosition = -1;
+                beforeStart = true;
+                return;
+            }
+
             MathUtilities.GetLastElementBelowThreshold(
                 _playbackEvents,
                 playbackStart,

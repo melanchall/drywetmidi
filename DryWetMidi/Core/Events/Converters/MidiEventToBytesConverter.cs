@@ -82,7 +82,7 @@ namespace Melanchall.DryWetMidi.Core
         /// class and have parameterless constructor. No exception will be thrown
         /// while writing a MIDI file if some types don't meet these requirements.</para>
         /// </remarks>
-        public EventTypesCollection CustomMetaEventTypes
+        public EventTypesCollection? CustomMetaEventTypes
         {
             get { return _writingSettings.CustomMetaEventTypes; }
             set { _writingSettings.CustomMetaEventTypes = value; }
@@ -178,6 +178,7 @@ namespace Melanchall.DryWetMidi.Core
             return GetBytes(minSize);
         }
 
+        // TODO: check midiEvents containing nulls
         /// <summary>
         /// Converts collection of <see cref="MidiEvent"/> to bytes array.
         /// </summary>
@@ -216,7 +217,8 @@ namespace Melanchall.DryWetMidi.Core
                 if (eventToWrite is NormalSysExEvent && BytesFormat == BytesFormat.Device)
                 {
                     _midiWriter.WriteByte(EventStatusBytes.Global.NormalSysEx);
-                    _midiWriter.WriteBytes(((NormalSysExEvent)eventToWrite).Data);
+                    // TODO: check if data is null or empty and write EndOfEventByte in this case?
+                    _midiWriter.WriteBytes(((NormalSysExEvent)eventToWrite).Data ?? Array.Empty<byte>());
                     continue;
                 }
 

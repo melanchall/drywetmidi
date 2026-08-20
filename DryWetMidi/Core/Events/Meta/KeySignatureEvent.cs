@@ -171,17 +171,19 @@ namespace Melanchall.DryWetMidi.Core
         {
             var invalidMetaEventParameterValuePolicy = settings.InvalidMetaEventParameterValuePolicy;
 
-            Key = (sbyte)ProcessValue(reader.ReadSByte(),
-                                       nameof(Key),
-                                       MinKey,
-                                       MaxKey,
-                                       invalidMetaEventParameterValuePolicy);
+            Key = (sbyte)ProcessValue(
+                reader.ReadSByte(),
+                nameof(Key),
+                MinKey,
+                MaxKey,
+                invalidMetaEventParameterValuePolicy);
 
-            Scale = (byte)ProcessValue(reader.ReadByte(),
-                                        nameof(Scale),
-                                        MinScale,
-                                        MaxScale,
-                                        invalidMetaEventParameterValuePolicy);
+            Scale = (byte)ProcessValue(
+                reader.ReadByte(),
+                nameof(Scale),
+                MinScale,
+                MaxScale,
+                invalidMetaEventParameterValuePolicy);
         }
 
         /// <summary>

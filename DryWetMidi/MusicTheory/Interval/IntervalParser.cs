@@ -45,7 +45,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
             return Patterns;
         }
 
-        internal static ParsingResult TryParse(string input, out Interval interval)
+        internal static ParsingResult TryParse(string? input, out Interval? interval)
         {
             interval = null;
 

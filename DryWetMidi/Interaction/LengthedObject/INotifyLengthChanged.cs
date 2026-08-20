@@ -12,7 +12,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <summary>
         /// Occurs when the length of an object has been changed.
         /// </summary>
-        event EventHandler<LengthChangedEventArgs> LengthChanged;
+        event EventHandler<LengthChangedEventArgs>? LengthChanged;
 
         #endregion
     }

@@ -10,7 +10,7 @@ namespace Melanchall.DryWetMidi.Multimedia
     {
         #region Constructor
 
-        internal MidiEventPlayedEventArgs(MidiEvent midiEvent, object metadata)
+        internal MidiEventPlayedEventArgs(MidiEvent midiEvent, object? metadata)
         {
             Event = midiEvent;
             Metadata = metadata;
@@ -28,7 +28,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <summary>
         /// Gets a metadata associated with the <see cref="Event"/>.
         /// </summary>
-        public object Metadata { get; }
+        public object? Metadata { get; }
 
         #endregion
     }

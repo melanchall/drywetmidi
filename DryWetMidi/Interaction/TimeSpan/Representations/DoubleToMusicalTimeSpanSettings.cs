@@ -3,6 +3,7 @@ using System;
 
 namespace Melanchall.DryWetMidi.Interaction
 {
+    // TODO: rework/remove??
     /// <summary>
     /// Settings which control the process of conversion a double number to an instance
     /// of the <see cref="MusicalTimeSpan"/>.

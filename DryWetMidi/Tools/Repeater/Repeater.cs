@@ -27,7 +27,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="repeatsNumber"/> is negative.</exception>
         /// <exception cref="ArgumentException"><see cref="RepeatingSettings.Shift"/> of the <paramref name="settings"/>
         /// is <c>null</c> for fixed-value shift.</exception>
-        public MidiFile Repeat(MidiFile midiFile, int repeatsNumber, RepeatingSettings settings = null)
+        public MidiFile Repeat(MidiFile midiFile, int repeatsNumber, RepeatingSettings? settings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
             ThrowIfArgument.IsNegative(nameof(repeatsNumber), repeatsNumber, "Repeats number is negative.");
@@ -43,7 +43,7 @@ namespace Melanchall.DryWetMidi.Tools
 
             return new MidiFile(trackChunks)
             {
-                TimeDivision = midiFile.TimeDivision.Clone()
+                TimeDivision = midiFile.TimeDivision?.Clone()
             };
         }
 
@@ -70,7 +70,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="repeatsNumber"/> is negative.</exception>
         /// <exception cref="ArgumentException"><see cref="RepeatingSettings.Shift"/> of the <paramref name="settings"/>
         /// is <c>null</c> for fixed-value shift.</exception>
-        public ICollection<TrackChunk> Repeat(IEnumerable<TrackChunk> trackChunks, int repeatsNumber, TempoMap tempoMap, RepeatingSettings settings = null)
+        public ICollection<TrackChunk> Repeat(IEnumerable<TrackChunk?> trackChunks, int repeatsNumber, TempoMap tempoMap, RepeatingSettings? settings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
@@ -78,11 +78,11 @@ namespace Melanchall.DryWetMidi.Tools
             CheckSettings(settings);
 
             if (repeatsNumber == 0)
-                return trackChunks.Select(c => (TrackChunk)c.Clone()).ToArray();
+                return trackChunks.OfType<TrackChunk>().Select(c => (TrackChunk)c.Clone()).ToArray();
 
             settings = settings ?? new RepeatingSettings();
 
-            var timedEventsCollections = trackChunks.Select(trackChunk => trackChunk.GetTimedEvents()).ToArray();
+            var timedEventsCollections = trackChunks.OfType<TrackChunk>().Select(trackChunk => trackChunk.GetTimedEvents()).ToArray();
             var maxTime = timedEventsCollections.Max(events => events.LastOrDefault()?.Time ?? 0);
 
             var shift = CalculateShift(maxTime, tempoMap, settings);
@@ -114,7 +114,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="repeatsNumber"/> is negative.</exception>
         /// <exception cref="ArgumentException"><see cref="RepeatingSettings.Shift"/> of the <paramref name="settings"/>
         /// is <c>null</c> for fixed-value shift.</exception>
-        public TrackChunk Repeat(TrackChunk trackChunk, int repeatsNumber, TempoMap tempoMap, RepeatingSettings settings = null)
+        public TrackChunk Repeat(TrackChunk trackChunk, int repeatsNumber, TempoMap tempoMap, RepeatingSettings? settings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
@@ -156,7 +156,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="repeatsNumber"/> is negative.</exception>
         /// <exception cref="ArgumentException"><see cref="RepeatingSettings.Shift"/> of the <paramref name="settings"/>
         /// is <c>null</c> for fixed-value shift.</exception>
-        public ICollection<ITimedObject> Repeat(IEnumerable<ITimedObject> timedObjects, int repeatsNumber, TempoMap tempoMap, RepeatingSettings settings = null)
+        public ICollection<ITimedObject> Repeat(IEnumerable<ITimedObject?> timedObjects, int repeatsNumber, TempoMap tempoMap, RepeatingSettings? settings = null)
         {
             ThrowIfArgument.IsNull(nameof(timedObjects), timedObjects);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
@@ -164,7 +164,7 @@ namespace Melanchall.DryWetMidi.Tools
             CheckSettings(settings);
 
             if (repeatsNumber == 0)
-                return timedObjects.Select(o => o.Clone()).ToArray();
+                return timedObjects.OfType<ITimedObject>().Select(o => o.Clone()).ToArray();
 
             settings = settings ?? new RepeatingSettings();
 
@@ -198,7 +198,7 @@ namespace Melanchall.DryWetMidi.Tools
             }
         }
 
-        private void CheckSettings(RepeatingSettings settings)
+        private void CheckSettings(RepeatingSettings? settings)
         {
             if (settings == null)
                 return;
@@ -208,7 +208,7 @@ namespace Melanchall.DryWetMidi.Tools
         }
 
         private ICollection<ITimedObject> Repeat(
-            IEnumerable<ITimedObject> timedObjects,
+            IEnumerable<ITimedObject?> timedObjects,
             long shift,
             int repeatsNumber,
             TempoMap tempoMap,
@@ -216,7 +216,7 @@ namespace Melanchall.DryWetMidi.Tools
         {
             settings = settings ?? new RepeatingSettings();
 
-            var source = timedObjects.Where(obj => obj != null).Select(obj => obj.Clone()).ToArray();
+            var source = timedObjects.OfType<ITimedObject>().Select(obj => obj.Clone()).ToArray();
             var result = new List<ITimedObject>(source);
 
             for (var i = 1; i <= repeatsNumber; i++)
@@ -232,8 +232,8 @@ namespace Melanchall.DryWetMidi.Tools
         {
             var result = new List<ITimedObject>(sourceObjects.Where(o => o != null).Select(o => o.Clone()));
 
-            TimedEvent firstSetTempoEvent = null;
-            TimedEvent firstTimeSignatureEvent = null;
+            TimedEvent? firstSetTempoEvent = null;
+            TimedEvent? firstTimeSignatureEvent = null;
 
             foreach (var timedEvent in sourceObjects.OfType<TimedEvent>())
             {
@@ -247,17 +247,15 @@ namespace Melanchall.DryWetMidi.Tools
                     firstTimeSignatureEvent = timedEvent;
             }
 
-            var context = new PartProcessingContext
-            {
-                SourceObjects = sourceObjects,
-                PartObjects = result,
-                PartIndex = partIndex,
-                Shift = shift,
-                SourceTempoMap = tempoMap,
-                Settings = settings,
-                SourceFirstSetTempoEvent = firstSetTempoEvent,
-                SourceFirstTimeSignatureEvent = firstTimeSignatureEvent
-            };
+            var context = new PartProcessingContext(
+                sourceObjects,
+                result,
+                partIndex,
+                shift,
+                tempoMap,
+                settings,
+                firstSetTempoEvent,
+                firstTimeSignatureEvent);
 
             ProcessPart(context);
             return result;
@@ -278,6 +276,9 @@ namespace Melanchall.DryWetMidi.Tools
                     shift = (MidiTimeSpan)maxTime;
                     break;
             }
+
+            if (shift == null)
+                return 0;
 
             var roundingPolicy = settings.ShiftRoundingPolicy;
             if (roundingPolicy != TimeSpanRoundingPolicy.NoRounding)

@@ -10,7 +10,7 @@ namespace Melanchall.DryWetMidi.Interaction
         #region Methods
 
         public static IEnumerable<TObject> AtTime<TObject>(
-            this IEnumerable<TObject> timedObjects,
+            this IEnumerable<TObject?> timedObjects,
             ITimeSpan time,
             TempoMap tempoMap)
             where TObject : ITimedObject
@@ -23,7 +23,7 @@ namespace Melanchall.DryWetMidi.Interaction
         }
 
         public static IEnumerable<TObject> AtTimeRange<TObject>(
-            this IEnumerable<TObject> timedObjects,
+            this IEnumerable<TObject?> timedObjects,
             ITimeSpan startTime,
             ITimeSpan endTime,
             TempoMap tempoMap)
@@ -59,7 +59,7 @@ namespace Melanchall.DryWetMidi.Interaction
             var result = timedObjects.Where(obj =>
                 obj != null && IsObjectAtTimeRange(obj, startTimeInTicks, endTimeInTicks));
 
-            foreach (var obj in result)
+            foreach (var obj in result.OfType<TObject>())
                 yield return obj;
         }
 

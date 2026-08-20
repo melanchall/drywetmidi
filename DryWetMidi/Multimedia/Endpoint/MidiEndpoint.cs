@@ -30,7 +30,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <summary>
         /// Occurs when an error occurred on endpoint (for example, during MIDI events parsing).
         /// </summary>
-        public event EventHandler<ErrorOccurredEventArgs> ErrorOccurred;
+        public event EventHandler<ErrorOccurredEventArgs>? ErrorOccurred;
 
         #endregion
 
@@ -52,19 +52,21 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// Flag to detect redundant disposing.
         /// </summary>
         protected bool _disposed = false;
+        protected volatile bool _disposing;
         protected bool _enabled = true;
 
 #if TEST
-        private TestCheckpoints _testCheckpoints;
+        private TestCheckpoints? _testCheckpoints;
 #endif
 
         #endregion
 
         #region Constructor
 
-        internal MidiEndpoint(CreationContext context)
+        internal MidiEndpoint(CreationContext context, EndpointHandle handle)
         {
             Context = context;
+            Handle = handle;
         }
 
         #endregion
@@ -108,18 +110,18 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         internal CreationContext Context { get; }
 
-        internal EndpointHandle Handle_ { get; set; }
+        internal EndpointHandle Handle { get; }
 
 #if TEST
-        internal TestCheckpoints TestCheckpoints
+        internal TestCheckpoints? TestCheckpoints
         {
             get { return _testCheckpoints; }
             set
             {
                 _testCheckpoints = value;
 
-                if (Handle_ != null)
-                    Handle_.TestCheckpoints = value;
+                if (Handle != null)
+                    Handle.TestCheckpoints = value;
             }
         }
 #endif
@@ -128,14 +130,21 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         #region Methods
 
-        public DeviceInformation GetDeviceInformation()
+        public DeviceInformation? GetDeviceInformation()
         {
             NativeApiUtilities.EnsureOsIsSupported();
 
-            var result = DeviceApi.Api_GetDeviceInformation(Handle_.DangerousGetHandle(), MidiConfiguration.GetConfigurationHandle(), out var id, out var name, out var manufacturer, out var model, out var deviceDriver, out var errorCode);
+            var result = DeviceApi.Api_GetDeviceInformation(Handle.DangerousGetHandle(), MidiConfiguration.GetConfigurationHandle(), out var id, out var name, out var manufacturer, out var model, out var deviceDriver, out var errorCode);
             NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
 
+            if (string.IsNullOrWhiteSpace(id) || string.IsNullOrWhiteSpace(name))
+                return null;
+
             return DeviceInformation.Get(id, name, manufacturer, model, deviceDriver);
+        }
+
+        protected virtual void OnDisposing()
+        {
         }
 
         internal void EnsureEndpointIsNotDisposed()
@@ -191,13 +200,21 @@ namespace Melanchall.DryWetMidi.Multimedia
             GC.SuppressFinalize(this);
         }
 
-        /// <summary>
-        /// Releases the unmanaged resources used by the MIDI endpoint class and optionally releases
-        /// the managed resources.
-        /// </summary>
-        /// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to
-        /// release only unmanaged resources.</param>
-        internal abstract void Dispose(bool disposing);
+        internal void Dispose(bool disposing)
+        {
+            if (_disposed)
+                return;
+
+            _disposing = true;
+
+            if (disposing)
+            {
+                OnDisposing();
+                Handle?.Dispose();
+            }
+
+            _disposed = true;
+        }
 
         #endregion
     }

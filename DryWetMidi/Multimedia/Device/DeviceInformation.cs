@@ -19,7 +19,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         #region Constructor
 
-        private DeviceInformation(string id, string name, string manufacturer, string model, string driverVersion)
+        private DeviceInformation(string id, string name, string? manufacturer, string? model, string? driverVersion)
         {
             Id = id;
             Name = name;
@@ -36,17 +36,17 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         public string Name { get; }
 
-        public string Manufacturer { get; }
+        public string? Manufacturer { get; }
 
-        public string Model { get; }
+        public string? Model { get; }
 
-        public string DriverVersion { get; }
+        public string? DriverVersion { get; }
 
         #endregion
 
         #region Methods
 
-        internal static DeviceInformation Get(string id, string name, string manufacturer, string model, string driverVersion)
+        internal static DeviceInformation? Get(string id, string name, string? manufacturer, string? model, string? driverVersion)
         {
             if (string.IsNullOrWhiteSpace(id))
                 return null;
@@ -58,7 +58,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         #region Operators
 
-        public static bool operator ==(DeviceInformation deviceInformation1, DeviceInformation deviceInformation2)
+        public static bool operator ==(DeviceInformation? deviceInformation1, DeviceInformation? deviceInformation2)
         {
             if (ReferenceEquals(deviceInformation1, deviceInformation2))
                 return true;
@@ -69,7 +69,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             return deviceInformation1.Id == deviceInformation2.Id;
         }
 
-        public static bool operator !=(DeviceInformation deviceInformation1, DeviceInformation deviceInformation2)
+        public static bool operator !=(DeviceInformation? deviceInformation1, DeviceInformation? deviceInformation2)
         {
             return !(deviceInformation1 == deviceInformation2);
         }
@@ -81,7 +81,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         public override int GetHashCode() =>
             Id.GetHashCode();
 
-        public override bool Equals(object obj) =>
+        public override bool Equals(object? obj) =>
             obj is DeviceInformation device &&
             Id.Equals(device.Id);
 

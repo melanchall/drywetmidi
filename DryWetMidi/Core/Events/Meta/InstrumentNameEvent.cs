@@ -26,7 +26,7 @@
         /// specified instrument name.
         /// </summary>
         /// <param name="instrumentName">Name of the instrument.</param>
-        public InstrumentNameEvent(string instrumentName)
+        public InstrumentNameEvent(string? instrumentName)
             : base(MidiEventType.InstrumentName, instrumentName)
         {
         }

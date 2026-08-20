@@ -8,6 +8,7 @@ namespace Melanchall.DryWetMidi.Tools
     /// </summary>
     public interface IBounds
     {
+        // TODO: use value tuples across all library!!!
         /// <summary>
         /// Gets minimum and maximum times in MIDI ticks for the current time range.
         /// </summary>

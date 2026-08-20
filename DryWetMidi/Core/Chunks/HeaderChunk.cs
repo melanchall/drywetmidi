@@ -30,7 +30,8 @@ namespace Melanchall.DryWetMidi.Core
 
         public ushort FileFormat { get; set; }
 
-        public TimeDivision TimeDivision { get; set; }
+        // TODO: prevent setting null?
+        public TimeDivision TimeDivision { get; set; } = new TicksPerQuarterNoteTimeDivision();
 
         public ushort TracksNumber { get; set; }
 

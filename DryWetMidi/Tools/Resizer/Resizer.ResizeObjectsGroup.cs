@@ -36,10 +36,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// is used for <see cref="ObjectsGroupResizingSettings.DistanceCalculationType"/> of the <paramref name="settings"/>
         /// which is unsupported.</exception>
         public static void ResizeObjectsGroup(
-            this IEnumerable<ITimedObject> objects,
+            this IEnumerable<ITimedObject?> objects,
             ITimeSpan length,
             TempoMap tempoMap,
-            ObjectsGroupResizingSettings settings = null)
+            ObjectsGroupResizingSettings? settings = null)
         {
             ThrowIfArgument.IsNull(nameof(objects), objects);
             ThrowIfArgument.IsNull(nameof(length), length);
@@ -51,7 +51,7 @@ namespace Melanchall.DryWetMidi.Tools
             if (distanceCalculationType == TimeSpanType.BarBeatTicks || distanceCalculationType == TimeSpanType.BarBeatFraction)
                 throw new ArgumentException("Bar/beat distance calculation type is not supported.", nameof(settings));
 
-            var notNullObjects = objects.Where(obj => obj != null);
+            var notNullObjects = objects.OfType<ITimedObject>();
             if (!notNullObjects.Any())
                 return;
 
@@ -112,10 +112,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// is used for <see cref="ObjectsGroupResizingSettings.DistanceCalculationType"/> of the <paramref name="settings"/>
         /// which is unsupported.</exception>
         public static void ResizeObjectsGroup(
-            this IEnumerable<ITimedObject> objects,
+            this IEnumerable<ITimedObject?> objects,
             double ratio,
             TempoMap tempoMap,
-            ObjectsGroupResizingSettings settings = null)
+            ObjectsGroupResizingSettings? settings = null)
         {
             ThrowIfArgument.IsNull(nameof(objects), objects);
             ThrowIfArgument.IsNegative(nameof(ratio), ratio, "Ratio is negative");
@@ -127,7 +127,7 @@ namespace Melanchall.DryWetMidi.Tools
             if (distanceCalculationType == TimeSpanType.BarBeatTicks || distanceCalculationType == TimeSpanType.BarBeatFraction)
                 throw new ArgumentException("BarBeat distance calculation type is not supported.", nameof(distanceCalculationType));
 
-            var notNullObjects = objects.Where(obj => obj != null);
+            var notNullObjects = objects.OfType<ITimedObject>();
             if (!notNullObjects.Any())
                 return;
 
@@ -156,7 +156,7 @@ namespace Melanchall.DryWetMidi.Tools
                 var scaledShiftFromStart = time.Subtract(startTime, TimeSpanMode.TimeTime).Multiply(ratio);
                 obj.Time = TimeConverter.ConvertFrom(startTime.Add(scaledShiftFromStart, TimeSpanMode.TimeLength), tempoMap);
 
-                if (lengthedObject != null)
+                if (lengthedObject != null && length != null)
                 {
                     var scaledLength = length.Multiply(ratio);
                     lengthedObject.Length = LengthConverter.ConvertFrom(scaledLength, obj.Time, tempoMap);

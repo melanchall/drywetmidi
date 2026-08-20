@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace Melanchall.DryWetMidi.Core
 {
@@ -13,13 +14,13 @@ namespace Melanchall.DryWetMidi.Core
         /// <summary>
         /// Gets a lazy collection of MIDI events.
         /// </summary>
-        public IEnumerable<MidiEvent> Events { get; internal set; }
+        public IEnumerable<MidiEvent> Events { get; internal set; } = Enumerable.Empty<MidiEvent>();
 
         /// <summary>
         /// Gets a MIDI token following the last MIDI event iterated by the
         /// <see cref="MidiTokensReaderUtilities.EnumerateEvents(MidiTokensReader)"/> method.
         /// </summary>
-        public MidiToken NextToken { get; internal set; }
+        public MidiToken? NextToken { get; internal set; }
 
         #endregion
     }

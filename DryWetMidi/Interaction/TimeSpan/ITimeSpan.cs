@@ -49,6 +49,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="multiplier"/> is negative.</exception>
         ITimeSpan Multiply(double multiplier);
 
+        // TODO: in some places ArgumentOutOfRangeException, in some places DivideByZeroException. Make it consistent.
         /// <summary>
         /// Shrinks the current time span by dividing its length by the specified divisor.
         /// </summary>

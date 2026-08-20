@@ -33,8 +33,17 @@ namespace Melanchall.DryWetMidi.Core
         {
             #region IComparer<EventDescriptor>
 
-            public int Compare(EventDescriptor x, EventDescriptor y)
+            public int Compare(EventDescriptor? x, EventDescriptor? y)
             {
+                if (ReferenceEquals(x, y))
+                    return 0;
+
+                if (x == null)
+                    return -1;
+
+                if (y == null)
+                    return 1;
+
                 var absoluteTimeDifference = x.AbsoluteTime - y.AbsoluteTime;
                 if (absoluteTimeDifference != 0)
                     return Math.Sign(absoluteTimeDifference);

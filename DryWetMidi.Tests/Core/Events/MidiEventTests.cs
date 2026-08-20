@@ -1,10 +1,11 @@
-﻿using System;
-using System.Linq;
-using Melanchall.DryWetMidi.Common;
+﻿using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Tests.Utilities;
 using NUnit.Framework;
 using NUnit.Framework.Legacy;
+using System;
+using System.Linq;
+using System.Reflection;
 
 namespace Melanchall.DryWetMidi.Tests.Core
 {
@@ -279,7 +280,12 @@ namespace Melanchall.DryWetMidi.Tests.Core
         [Test]
         public void GetStandardMetaEventStatusBytes()
         {
-            var statusBytes = MetaEvent.GetStandardMetaEventStatusBytes();
+            var statusBytes = typeof(EventStatusBytes.Meta)
+                .GetFields(BindingFlags.Static | BindingFlags.Public)
+                .Select(f => f.GetValue(null))
+                .OfType<byte>()
+                .ToArray();
+
             CollectionAssert.AreEqual(
                 new[]
                 {

@@ -62,8 +62,11 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// <see cref="string.Empty"/>, or is not of the correct format. This parameter is passed uninitialized;
         /// any value originally supplied in result will be overwritten.</param>
         /// <returns><c>true</c> if <paramref name="input"/> was converted successfully; otherwise, <c>false</c>.</returns>
-        public static bool TryParse(string input, Scale scale, out ChordProgression chordProgression)
+        /// <exception cref="ArgumentNullException"><paramref name="scale"/> is <c>null</c>.</exception>
+        public static bool TryParse(string? input, Scale scale, out ChordProgression? chordProgression)
         {
+            ThrowIfArgument.IsNull(nameof(scale), scale);
+
             return ParsingUtilities.TryParse(input, GetParsing(input, scale), out chordProgression);
         }
 
@@ -76,15 +79,18 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// <paramref name="input"/>.</returns>
         /// <exception cref="ArgumentException"><paramref name="input"/> is <c>null</c> or contains white-spaces only.</exception>
         /// <exception cref="FormatException"><paramref name="input"/> has invalid format.</exception>
-        public static ChordProgression Parse(string input, Scale scale)
+        /// <exception cref="ArgumentNullException"><paramref name="scale"/> is <c>null</c>.</exception>
+        public static ChordProgression Parse(string? input, Scale scale)
         {
+            ThrowIfArgument.IsNull(nameof(scale), scale);
+
             return ParsingUtilities.Parse(input, GetParsing(input, scale));
         }
 
-        private static Parsing<ChordProgression> GetParsing(string input, Scale scale)
+        private static Parsing<ChordProgression> GetParsing(string? input, Scale scale)
         {
             var result = ChordProgressionParser.TryParse(input, scale, out var chordProgression);
-            return (string i, out ChordProgression cp) =>
+            return (string? i, out ChordProgression? cp) =>
             {
                 cp = chordProgression;
                 return result;
@@ -101,7 +107,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// <param name="chordProgression1">The first <see cref="ChordProgression"/> to compare.</param>
         /// <param name="chordProgression2">The second <see cref="ChordProgression"/> to compare.</param>
         /// <returns><c>true</c> if the chord progressions are equal, <c>false</c> otherwise.</returns>
-        public static bool operator ==(ChordProgression chordProgression1, ChordProgression chordProgression2)
+        public static bool operator ==(ChordProgression? chordProgression1, ChordProgression? chordProgression2)
         {
             if (ReferenceEquals(chordProgression1, chordProgression2))
                 return true;
@@ -118,7 +124,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// <param name="chordProgression1">The first <see cref="ChordProgression"/> to compare.</param>
         /// <param name="chordProgression2">The second <see cref="ChordProgression"/> to compare.</param>
         /// <returns><c>false</c> if the chord progressions are equal, <c>true</c> otherwise.</returns>
-        public static bool operator !=(ChordProgression chordProgression1, ChordProgression chordProgression2)
+        public static bool operator !=(ChordProgression? chordProgression1, ChordProgression? chordProgression2)
         {
             return !(chordProgression1 == chordProgression2);
         }
@@ -141,7 +147,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// </summary>
         /// <param name="obj">The object to compare with the current object.</param>
         /// <returns><c>true</c> if the specified object is equal to the current object; otherwise, <c>false</c>.</returns>
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             return this == (obj as ChordProgression);
         }

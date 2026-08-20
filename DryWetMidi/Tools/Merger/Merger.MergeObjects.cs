@@ -82,8 +82,8 @@ namespace Melanchall.DryWetMidi.Tools
             this TrackChunk trackChunk,
             ObjectType objectType,
             TempoMap tempoMap,
-            ObjectsMergingSettings settings = null,
-            ObjectDetectionSettings objectDetectionSettings = null)
+            ObjectsMergingSettings? settings = null,
+            ObjectDetectionSettings? objectDetectionSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
@@ -118,16 +118,16 @@ namespace Melanchall.DryWetMidi.Tools
         /// </list>
         /// </exception>
         public static void MergeObjects(
-            this IEnumerable<TrackChunk> trackChunks,
+            this IEnumerable<TrackChunk?> trackChunks,
             ObjectType objectType,
             TempoMap tempoMap,
-            ObjectsMergingSettings settings = null,
-            ObjectDetectionSettings objectDetectionSettings = null)
+            ObjectsMergingSettings? settings = null,
+            ObjectDetectionSettings? objectDetectionSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
-            foreach (var trackChunk in trackChunks)
+            foreach (var trackChunk in trackChunks.OfType<TrackChunk>())
             {
                 trackChunk.MergeObjects(objectType, tempoMap, settings, objectDetectionSettings);
             }
@@ -144,8 +144,8 @@ namespace Melanchall.DryWetMidi.Tools
         public static void MergeObjects(
             this MidiFile midiFile,
             ObjectType objectType,
-            ObjectsMergingSettings settings = null,
-            ObjectDetectionSettings objectDetectionSettings = null)
+            ObjectsMergingSettings? settings = null,
+            ObjectDetectionSettings? objectDetectionSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
 
@@ -173,9 +173,9 @@ namespace Melanchall.DryWetMidi.Tools
         /// </list>
         /// </exception>
         public static IEnumerable<ITimedObject> MergeObjects(
-            this IEnumerable<ITimedObject> objects,
+            this IEnumerable<ITimedObject?> objects,
             TempoMap tempoMap,
-            ObjectsMergingSettings settings = null)
+            ObjectsMergingSettings? settings = null)
         {
             ThrowIfArgument.IsNull(nameof(objects), objects);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
@@ -184,10 +184,10 @@ namespace Melanchall.DryWetMidi.Tools
         }
 
         private static IEnumerable<ITimedObject> MergeObjects(
-            IEnumerable<ITimedObject> objects,
+            IEnumerable<ITimedObject?> objects,
             TempoMap tempoMap,
             bool prepareForEnumeration,
-            ObjectsMergingSettings settings)
+            ObjectsMergingSettings? settings)
         {
             settings = settings ?? new ObjectsMergingSettings();
 
@@ -196,9 +196,9 @@ namespace Melanchall.DryWetMidi.Tools
 
             var objectsMergerFactory = settings.ObjectsMergerFactory ?? (obj => new ObjectsMerger(obj));
 
-            var preparedObjects = objects;
+            var preparedObjects = objects.OfType<ITimedObject>();
             if (prepareForEnumeration)
-                preparedObjects = objects.Where(n => n != null).OrderBy(n => n.Time);
+                preparedObjects = preparedObjects.OrderBy(n => n.Time);
 
             foreach (var obj in preparedObjects)
             {

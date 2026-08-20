@@ -70,14 +70,16 @@ namespace Melanchall.DryWetMidi.Core
         /// class and have parameterless constructor. No exception will be thrown
         /// while writing a MIDI file if some types don't meet these requirements.</para>
         /// </remarks>
-        public EventTypesCollection CustomMetaEventTypes { get; set; }
+        public EventTypesCollection? CustomMetaEventTypes { get; set; }
 
+        // TODO: check setting null
         /// <summary>
         /// Gets or sets an <see cref="Encoding"/> that will be used to write the text of a
         /// text-based meta event. The default is <see cref="Encoding.ASCII"/>.
         /// </summary>
         public Encoding TextEncoding { get; set; } = SmfConstants.DefaultTextEncoding;
 
+        // TODO: check setting null
         /// <summary>
         /// Gets or sets settings according to which <see cref="MidiWriter"/> should write MIDI data.
         /// </summary>

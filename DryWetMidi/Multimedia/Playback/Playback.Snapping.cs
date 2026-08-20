@@ -40,6 +40,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// with <paramref name="data"/> at <paramref name="time"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="time"/> is <c>null</c>.</exception>
         public SnapPoint<TData> AddSnapPoint<TData>(ITimeSpan time, TData data)
+            where TData : notnull
         {
             ThrowIfArgument.IsNull(nameof(time), time);
 
@@ -114,6 +115,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// of snap points to remove.</param>
         /// <exception cref="ArgumentNullException"><paramref name="predicate"/> is <c>null</c>.</exception>
         public void RemoveSnapPointsByData<TData>(Predicate<TData> predicate)
+            where TData : notnull
         {
             ThrowIfArgument.IsNull(nameof(predicate), predicate);
 
@@ -186,7 +188,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             return snapPoint;
         }
 
-        private SnapPoint GetNextSnapPoint(TimeSpan time, SnapPointsGroup snapPointsGroup)
+        private SnapPoint? GetNextSnapPoint(TimeSpan time, SnapPointsGroup snapPointsGroup)
         {
             TraceAction("get next snap point from group...");
 
@@ -204,17 +206,18 @@ namespace Melanchall.DryWetMidi.Multimedia
             return result;
         }
 
-        private SnapPoint GetNextSnapPoint(TimeSpan time)
+        private SnapPoint? GetNextSnapPoint(TimeSpan time)
         {
             return GetNextSnapPoint(time, point => true);
         }
 
-        private SnapPoint<TData> GetNextSnapPoint<TData>(TimeSpan time, TData data)
+        private SnapPoint<TData>? GetNextSnapPoint<TData>(TimeSpan time, TData data)
+            where TData : notnull
         {
-            return (SnapPoint<TData>)GetNextSnapPoint(time, p => IsSnapPointWithData(p, data));
+            return (SnapPoint<TData>?)GetNextSnapPoint(time, p => IsSnapPointWithData(p, data));
         }
 
-        private SnapPoint GetNextSnapPoint(TimeSpan time, Predicate<SnapPoint> predicate)
+        private SnapPoint? GetNextSnapPoint(TimeSpan time, Predicate<SnapPoint> predicate)
         {
             TraceAction("get next snap point...");
 
@@ -254,7 +257,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             return snapPointNode?.Value;
         }
 
-        private SnapPoint GetPreviousSnapPoint(TimeSpan time, SnapPointsGroup snapPointsGroup)
+        private SnapPoint? GetPreviousSnapPoint(TimeSpan time, SnapPointsGroup snapPointsGroup)
         {
             TraceAction("get previous snap point from group...");
 
@@ -272,17 +275,18 @@ namespace Melanchall.DryWetMidi.Multimedia
             return result;
         }
 
-        private SnapPoint GetPreviousSnapPoint(TimeSpan time)
+        private SnapPoint? GetPreviousSnapPoint(TimeSpan time)
         {
             return GetPreviousSnapPoint(time, _ => true);
         }
 
-        private SnapPoint<TData> GetPreviousSnapPoint<TData>(TimeSpan time, TData data)
+        private SnapPoint<TData>? GetPreviousSnapPoint<TData>(TimeSpan time, TData data)
+            where TData : notnull
         {
-            return (SnapPoint<TData>)GetPreviousSnapPoint(time, p => IsSnapPointWithData(p, data));
+            return (SnapPoint<TData>?)GetPreviousSnapPoint(time, p => IsSnapPointWithData(p, data));
         }
 
-        private SnapPoint GetPreviousSnapPoint(TimeSpan time, Predicate<SnapPoint> predicate)
+        private SnapPoint? GetPreviousSnapPoint(TimeSpan time, Predicate<SnapPoint> predicate)
         {
             TraceAction("get previous snap point...");
 
@@ -323,6 +327,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         }
 
         private bool IsSnapPointWithData<TData>(SnapPoint snapPoint, TData data)
+            where TData : notnull
         {
             var snapPointWithData = snapPoint as SnapPoint<TData>;
             return snapPointWithData != null && snapPointWithData.Data.Equals(data);

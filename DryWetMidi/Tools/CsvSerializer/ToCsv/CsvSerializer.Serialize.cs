@@ -50,9 +50,9 @@ namespace Melanchall.DryWetMidi.Tools
         public static void SerializeToCsv(
             this MidiFile midiFile,
             Stream stream,
-            CsvSerializationSettings settings = null,
+            CsvSerializationSettings? settings = null,
             ObjectType objectType = ObjectType.TimedEvent,
-            ObjectDetectionSettings objectDetectionSettings = null)
+            ObjectDetectionSettings? objectDetectionSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
             ThrowIfArgument.IsNull(nameof(stream), stream);
@@ -105,9 +105,9 @@ namespace Melanchall.DryWetMidi.Tools
             this MidiFile midiFile,
             string filePath,
             bool overwriteFile,
-            CsvSerializationSettings settings = null,
+            CsvSerializationSettings? settings = null,
             ObjectType objectType = ObjectType.TimedEvent,
-            ObjectDetectionSettings objectDetectionSettings = null)
+            ObjectDetectionSettings? objectDetectionSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
             ThrowIfArgument.IsNullOrEmptyString(nameof(filePath), filePath, "File path");
@@ -153,12 +153,12 @@ namespace Melanchall.DryWetMidi.Tools
         /// </list>
         /// </exception>
         public static void SerializeToCsv(
-            this IEnumerable<MidiChunk> midiChunks,
+            this IEnumerable<MidiChunk?> midiChunks,
             Stream stream,
             TempoMap tempoMap,
-            CsvSerializationSettings settings = null,
+            CsvSerializationSettings? settings = null,
             ObjectType objectType = ObjectType.TimedEvent,
-            ObjectDetectionSettings objectDetectionSettings = null)
+            ObjectDetectionSettings? objectDetectionSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiChunks), midiChunks);
             ThrowIfArgument.IsNull(nameof(stream), stream);
@@ -174,7 +174,7 @@ namespace Melanchall.DryWetMidi.Tools
 
             using (var writer = new CsvWriter(stream, settings))
             {
-                foreach (var midiChunk in midiChunks)
+                foreach (var midiChunk in midiChunks.OfType<MidiChunk>())
                 {
                     WriteChunk(midiChunk, writer, settings, tempoMap, objectType, objectDetectionSettings, chunkIndex++);
                 }
@@ -217,13 +217,13 @@ namespace Melanchall.DryWetMidi.Tools
         /// </list>
         /// </exception>
         public static void SerializeToCsv(
-            this IEnumerable<MidiChunk> midiChunks,
+            this IEnumerable<MidiChunk?> midiChunks,
             string filePath,
             bool overwriteFile,
             TempoMap tempoMap,
-            CsvSerializationSettings settings = null,
+            CsvSerializationSettings? settings = null,
             ObjectType objectType = ObjectType.TimedEvent,
-            ObjectDetectionSettings objectDetectionSettings = null)
+            ObjectDetectionSettings? objectDetectionSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiChunks), midiChunks);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
@@ -273,9 +273,9 @@ namespace Melanchall.DryWetMidi.Tools
             this MidiChunk midiChunk,
             Stream stream,
             TempoMap tempoMap,
-            CsvSerializationSettings settings = null,
+            CsvSerializationSettings? settings = null,
             ObjectType objectType = ObjectType.TimedEvent,
-            ObjectDetectionSettings objectDetectionSettings = null)
+            ObjectDetectionSettings? objectDetectionSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiChunk), midiChunk);
             ThrowIfArgument.IsNull(nameof(stream), stream);
@@ -333,9 +333,9 @@ namespace Melanchall.DryWetMidi.Tools
             string filePath,
             bool overwriteFile,
             TempoMap tempoMap,
-            CsvSerializationSettings settings = null,
+            CsvSerializationSettings? settings = null,
             ObjectType objectType = ObjectType.TimedEvent,
-            ObjectDetectionSettings objectDetectionSettings = null)
+            ObjectDetectionSettings? objectDetectionSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiChunk), midiChunk);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
@@ -370,10 +370,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// </list>
         /// </exception>
         public static void SerializeToCsv(
-            this IEnumerable<ITimedObject> timedObjects,
+            this IEnumerable<ITimedObject?> timedObjects,
             Stream stream,
             TempoMap tempoMap,
-            CsvSerializationSettings settings = null)
+            CsvSerializationSettings? settings = null)
         {
             ThrowIfArgument.IsNull(nameof(timedObjects), timedObjects);
             ThrowIfArgument.IsNull(nameof(stream), stream);
@@ -414,11 +414,11 @@ namespace Melanchall.DryWetMidi.Tools
         /// </list>
         /// </exception>
         public static void SerializeToCsv(
-            this IEnumerable<ITimedObject> timedObjects,
+            this IEnumerable<ITimedObject?> timedObjects,
             string filePath,
             bool overwriteFile,
             TempoMap tempoMap,
-            CsvSerializationSettings settings = null)
+            CsvSerializationSettings? settings = null)
         {
             ThrowIfArgument.IsNull(nameof(timedObjects), timedObjects);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
@@ -467,7 +467,7 @@ namespace Melanchall.DryWetMidi.Tools
                 HeaderChunk.Id,
                 0,
                 Record.HeaderType,
-                midiFile.TimeDivision.ToInt16());
+                midiFile.TimeDivision!.ToInt16());
         }
 
         private static void WriteTrackChunk(
@@ -505,16 +505,16 @@ namespace Melanchall.DryWetMidi.Tools
         }
 
         private static void WriteObjects(
-            IEnumerable<ITimedObject> timedObjects,
+            IEnumerable<ITimedObject?> timedObjects,
             CsvWriter writer,
             CsvSerializationSettings settings,
             TempoMap tempoMap,
             int? chunkIndex,
-            string chunkId)
+            string? chunkId)
         {
             var objectIndex = 0;
 
-            foreach (var obj in timedObjects)
+            foreach (var obj in timedObjects.OfType<ITimedObject>())
             {
                 WriteObject(obj, writer, settings, tempoMap, chunkIndex, chunkId, objectIndex++);
             }
@@ -526,7 +526,7 @@ namespace Melanchall.DryWetMidi.Tools
             CsvSerializationSettings settings,
             TempoMap tempoMap,
             int? chunkIndex,
-            string chunkId,
+            string? chunkId,
             int objectIndex)
         {
             var timedEvent = timedObject as TimedEvent;
@@ -570,7 +570,7 @@ namespace Melanchall.DryWetMidi.Tools
             CsvSerializationSettings settings,
             TempoMap tempoMap,
             int? chunkIndex,
-            string chunkId,
+            string? chunkId,
             int objectIndex)
         {
             foreach (var timedEvent in registeredParameter.GetTimedEvents())
@@ -585,7 +585,7 @@ namespace Melanchall.DryWetMidi.Tools
             CsvSerializationSettings settings,
             TempoMap tempoMap,
             int? chunkIndex,
-            string chunkId,
+            string? chunkId,
             int objectIndex)
         {
             var midiEvent = timedEvent.Event;
@@ -611,7 +611,7 @@ namespace Melanchall.DryWetMidi.Tools
             CsvSerializationSettings settings,
             TempoMap tempoMap,
             int? chunkIndex,
-            string chunkId,
+            string? chunkId,
             int objectIndex)
         {
             WriteObjectRecord(
@@ -635,7 +635,7 @@ namespace Melanchall.DryWetMidi.Tools
             CsvSerializationSettings settings,
             TempoMap tempoMap,
             int? chunkIndex,
-            string chunkId,
+            string? chunkId,
             int objectIndex)
         {
             foreach (var note in chord.Notes)
@@ -649,7 +649,7 @@ namespace Melanchall.DryWetMidi.Tools
             CsvWriter writer,
             CsvSerializationSettings settings,
             int? chunkIndex,
-            string chunkId,
+            string? chunkId,
             int objectIndex)
         {
         }
@@ -659,10 +659,10 @@ namespace Melanchall.DryWetMidi.Tools
             CsvSerializationSettings settings,
             TempoMap tempoMap,
             int? chunkIndex,
-            string chunkId,
+            string? chunkId,
             int objectIndex,
             ITimedObject obj,
-            params object[] values)
+            params object?[] values)
         {
             writer.WriteRecord(
                 new[]
@@ -673,8 +673,8 @@ namespace Melanchall.DryWetMidi.Tools
                     obj is TimedEvent ? ((TimedEvent)obj).Event.EventType.ToString() : Record.NoteType,
                     CsvFormattingUtilities.FormatTime(obj, settings.TimeType, tempoMap)
                 }
-                .Where(v => v != null)
-                .Concat(values));
+                .Concat(values)
+                .OfType<object>());
         }
 
         #endregion

@@ -21,7 +21,7 @@ namespace Melanchall.DryWetMidi.Interaction
         public static int RemoveObjects(
             this EventsCollection eventsCollection,
             ObjectType objectType,
-            ObjectDetectionSettings settings = null)
+            ObjectDetectionSettings? settings = null)
         {
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
 
@@ -64,7 +64,7 @@ namespace Melanchall.DryWetMidi.Interaction
             this EventsCollection eventsCollection,
             ObjectType objectType,
             Predicate<ITimedObject> match,
-            ObjectDetectionSettings settings = null)
+            ObjectDetectionSettings? settings = null)
         {
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
             ThrowIfArgument.IsNull(nameof(match), match);
@@ -105,7 +105,7 @@ namespace Melanchall.DryWetMidi.Interaction
         public static int RemoveObjects(
             this TrackChunk trackChunk,
             ObjectType objectType,
-            ObjectDetectionSettings settings = null)
+            ObjectDetectionSettings? settings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
 
@@ -148,7 +148,7 @@ namespace Melanchall.DryWetMidi.Interaction
             this TrackChunk trackChunk,
             ObjectType objectType,
             Predicate<ITimedObject> match,
-            ObjectDetectionSettings settings = null)
+            ObjectDetectionSettings? settings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
             ThrowIfArgument.IsNull(nameof(match), match);
@@ -178,7 +178,7 @@ namespace Melanchall.DryWetMidi.Interaction
         public static int RemoveObjects(
             this IEnumerable<TrackChunk> trackChunks,
             ObjectType objectType,
-            ObjectDetectionSettings settings = null)
+            ObjectDetectionSettings? settings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
 
@@ -221,7 +221,7 @@ namespace Melanchall.DryWetMidi.Interaction
             this IEnumerable<TrackChunk> trackChunks,
             ObjectType objectType,
             Predicate<ITimedObject> match,
-            ObjectDetectionSettings settings = null)
+            ObjectDetectionSettings? settings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
             ThrowIfArgument.IsNull(nameof(match), match);
@@ -262,7 +262,7 @@ namespace Melanchall.DryWetMidi.Interaction
         public static int RemoveObjects(
             this MidiFile file,
             ObjectType objectType,
-            ObjectDetectionSettings settings = null)
+            ObjectDetectionSettings? settings = null)
         {
             ThrowIfArgument.IsNull(nameof(file), file);
 
@@ -305,7 +305,7 @@ namespace Melanchall.DryWetMidi.Interaction
             this MidiFile file,
             ObjectType objectType,
             Predicate<ITimedObject> match,
-            ObjectDetectionSettings settings = null)
+            ObjectDetectionSettings? settings = null)
         {
             ThrowIfArgument.IsNull(nameof(file), file);
             ThrowIfArgument.IsNull(nameof(match), match);

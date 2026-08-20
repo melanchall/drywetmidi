@@ -35,7 +35,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <summary>
         /// Gets data contained in the current <see cref="UnknownChunk"/>.
         /// </summary>
-        public byte[] Data { get; internal set; }
+        public byte[]? Data { get; internal set; }
 
         #endregion
 
@@ -71,7 +71,7 @@ namespace Melanchall.DryWetMidi.Core
                 switch (settings.ZeroLengthDataPolicy)
                 {
                     case ZeroLengthDataPolicy.ReadAsEmptyObject:
-                        Data = new byte[0];
+                        Data = Array.Empty<byte>();
                         break;
                     case ZeroLengthDataPolicy.ReadAsNull:
                         Data = null;

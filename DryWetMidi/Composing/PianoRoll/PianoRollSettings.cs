@@ -28,7 +28,7 @@ namespace Melanchall.DryWetMidi.Composing
         private char _multiCellNoteStartSymbol = DefaultMultiCellNoteStartSymbol;
         private char _multiCellNoteEndSymbol = DefaultMultiCellNoteEndSymbol;
 
-        private IEnumerable<PianoRollAction> _customActions;
+        private IEnumerable<PianoRollAction>? _customActions;
 
         #endregion
 
@@ -201,7 +201,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// </item>
         /// </list>
         /// </exception>
-        public IEnumerable<PianoRollAction> CustomActions
+        public IEnumerable<PianoRollAction>? CustomActions
         {
             get { return _customActions; }
             set

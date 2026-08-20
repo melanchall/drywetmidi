@@ -4,6 +4,7 @@ using Melanchall.DryWetMidi.Interaction;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 
 namespace Melanchall.DryWetMidi.Tools
 {
@@ -55,8 +56,8 @@ namespace Melanchall.DryWetMidi.Tools
             ITimeSpan distance,
             LengthedObjectTarget from,
             TempoMap tempoMap,
-            ObjectDetectionSettings objectDetectionSettings = null,
-            Predicate<ITimedObject> filter = null)
+            ObjectDetectionSettings? objectDetectionSettings = null,
+            Predicate<ITimedObject>? filter = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
             ThrowIfArgument.IsNull(nameof(distance), distance);
@@ -103,20 +104,20 @@ namespace Melanchall.DryWetMidi.Tools
         /// </exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="from"/> specified an invalid value.</exception>
         public static void SplitObjectsAtDistance(
-            this IEnumerable<TrackChunk> trackChunks,
+            this IEnumerable<TrackChunk?> trackChunks,
             ObjectType objectType,
             ITimeSpan distance,
             LengthedObjectTarget from,
             TempoMap tempoMap,
-            ObjectDetectionSettings objectDetectionSettings = null,
-            Predicate<ITimedObject> filter = null)
+            ObjectDetectionSettings? objectDetectionSettings = null,
+            Predicate<ITimedObject>? filter = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
             ThrowIfArgument.IsNull(nameof(distance), distance);
             ThrowIfArgument.IsInvalidEnumValue(nameof(from), from);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
-            foreach (var trackChunk in trackChunks)
+            foreach (var trackChunk in trackChunks.OfType<TrackChunk>())
             {
                 trackChunk.SplitObjectsAtDistance(objectType, distance, from, tempoMap, objectDetectionSettings, filter);
             }
@@ -154,8 +155,8 @@ namespace Melanchall.DryWetMidi.Tools
             ObjectType objectType,
             ITimeSpan distance,
             LengthedObjectTarget from,
-            ObjectDetectionSettings objectDetectionSettings = null,
-            Predicate<ITimedObject> filter = null)
+            ObjectDetectionSettings? objectDetectionSettings = null,
+            Predicate<ITimedObject>? filter = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
             ThrowIfArgument.IsNull(nameof(distance), distance);
@@ -214,8 +215,8 @@ namespace Melanchall.DryWetMidi.Tools
             TimeSpanType lengthType,
             LengthedObjectTarget from,
             TempoMap tempoMap,
-            ObjectDetectionSettings objectDetectionSettings = null,
-            Predicate<ITimedObject> filter = null)
+            ObjectDetectionSettings? objectDetectionSettings = null,
+            Predicate<ITimedObject>? filter = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
             ThrowIfArgument.IsOutOfRange(nameof(ratio),
@@ -276,14 +277,14 @@ namespace Melanchall.DryWetMidi.Tools
         /// </list>
         /// </exception>
         public static void SplitObjectsAtDistance(
-            this IEnumerable<TrackChunk> trackChunks,
+            this IEnumerable<TrackChunk?> trackChunks,
             ObjectType objectType,
             double ratio,
             TimeSpanType lengthType,
             LengthedObjectTarget from,
             TempoMap tempoMap,
-            ObjectDetectionSettings objectDetectionSettings = null,
-            Predicate<ITimedObject> filter = null)
+            ObjectDetectionSettings? objectDetectionSettings = null,
+            Predicate<ITimedObject>? filter = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
             ThrowIfArgument.IsOutOfRange(nameof(ratio),
@@ -295,7 +296,7 @@ namespace Melanchall.DryWetMidi.Tools
             ThrowIfArgument.IsInvalidEnumValue(nameof(from), from);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
-            foreach (var trackChunk in trackChunks)
+            foreach (var trackChunk in trackChunks.OfType<TrackChunk>())
             {
                 trackChunk.SplitObjectsAtDistance(objectType, ratio, lengthType, from, tempoMap, objectDetectionSettings, filter);
             }
@@ -337,8 +338,8 @@ namespace Melanchall.DryWetMidi.Tools
             double ratio,
             TimeSpanType lengthType,
             LengthedObjectTarget from,
-            ObjectDetectionSettings objectDetectionSettings = null,
-            Predicate<ITimedObject> filter = null)
+            ObjectDetectionSettings? objectDetectionSettings = null,
+            Predicate<ITimedObject>? filter = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
             ThrowIfArgument.IsOutOfRange(nameof(ratio),
@@ -384,12 +385,12 @@ namespace Melanchall.DryWetMidi.Tools
         /// </list>
         /// </exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="from"/> specified an invalid value.</exception>
-        public static IEnumerable<ITimedObject> SplitObjectsAtDistance(
-            this IEnumerable<ITimedObject> objects,
+        public static IEnumerable<ITimedObject?> SplitObjectsAtDistance(
+            this IEnumerable<ITimedObject?> objects,
             ITimeSpan distance,
             LengthedObjectTarget from,
             TempoMap tempoMap,
-            Predicate<ITimedObject> filter = null)
+            Predicate<ITimedObject>? filter = null)
         {
             ThrowIfArgument.IsNull(nameof(objects), objects);
             ThrowIfArgument.IsNull(nameof(distance), distance);
@@ -461,13 +462,13 @@ namespace Melanchall.DryWetMidi.Tools
         /// </item>
         /// </list>
         /// </exception>
-        public static IEnumerable<ITimedObject> SplitObjectsAtDistance(
-            this IEnumerable<ITimedObject> objects,
+        public static IEnumerable<ITimedObject?> SplitObjectsAtDistance(
+            this IEnumerable<ITimedObject?> objects,
             double ratio,
             TimeSpanType lengthType,
             LengthedObjectTarget from,
             TempoMap tempoMap,
-            Predicate<ITimedObject> filter = null)
+            Predicate<ITimedObject>? filter = null)
         {
             ThrowIfArgument.IsNull(nameof(objects), objects);
             ThrowIfArgument.IsOutOfRange(nameof(ratio),

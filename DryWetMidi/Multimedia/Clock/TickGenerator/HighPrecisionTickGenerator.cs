@@ -30,8 +30,8 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         private bool _disposed = false;
 
-        private TickGeneratorApi.TimerCallback_Win _tickCallback_Win;
-        private TickGeneratorApi.TimerCallback_Mac _tickCallback_Mac;
+        private TickGeneratorApi.TimerCallback_Win? _tickCallback_Win;
+        private TickGeneratorApi.TimerCallback_Mac? _tickCallback_Mac;
         private IntPtr _tickGeneratorInfo;
 
         private readonly object _lockObject = new object();

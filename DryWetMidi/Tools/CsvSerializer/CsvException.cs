@@ -13,7 +13,7 @@ namespace Melanchall.DryWetMidi.Tools
         internal CsvException(
             string message,
             int? lineNumber,
-            Exception innerException)
+            Exception? innerException)
             : base(message, innerException)
         {
             LineNumber = lineNumber;

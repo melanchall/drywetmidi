@@ -36,7 +36,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         public NotePlaybackData RawNotePlaybackData { get; }
 
-        public NotePlaybackData NotePlaybackData { get; private set; }
+        public NotePlaybackData? NotePlaybackData { get; private set; }
 
         public bool IsCustomNotePlaybackDataSet { get; private set; }
 
@@ -48,7 +48,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         #region Methods
 
-        public Note GetEffectiveNote()
+        public Note? GetEffectiveNote()
         {
             var notePlaybackData = NotePlaybackData;
             if (notePlaybackData == null)
@@ -64,7 +64,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             return note;
         }
 
-        public void SetCustomNotePlaybackData(NotePlaybackData notePlaybackData)
+        public void SetCustomNotePlaybackData(NotePlaybackData? notePlaybackData)
         {
             NotePlaybackData = notePlaybackData;
             IsCustomNotePlaybackDataSet = true;

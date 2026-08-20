@@ -207,7 +207,7 @@ namespace Melanchall.DryWetMidi.Core
         /// Gets or sets a callback used to read unknown channel event if <see cref="UnknownChannelEventPolicy"/>
         /// set to <see cref="UnknownChannelEventPolicy.UseCallback"/>.
         /// </summary>
-        public UnknownChannelEventCallback UnknownChannelEventCallback { get; set; }
+        public UnknownChannelEventCallback? UnknownChannelEventCallback { get; set; }
 
         /// <summary>
         /// Gets or sets reaction of the reading engine on invalid value of a channel event's
@@ -325,7 +325,7 @@ namespace Melanchall.DryWetMidi.Core
         /// class and have parameterless constructor. No exception will be thrown if some types don't meet
         /// these requirements.</para>
         /// </remarks>
-        public ChunkTypesCollection CustomChunkTypes { get; set; }
+        public ChunkTypesCollection? CustomChunkTypes { get; set; }
 
         /// <summary>
         /// Gets or sets collection of custom meta events types.
@@ -335,8 +335,9 @@ namespace Melanchall.DryWetMidi.Core
         /// class and have parameterless constructor. No exception will be thrown
         /// if some types don't meet these requirements.</para>
         /// </remarks>
-        public EventTypesCollection CustomMetaEventTypes { get; set; }
+        public EventTypesCollection? CustomMetaEventTypes { get; set; }
 
+        // TODO: check setting null
         /// <summary>
         /// Gets or sets an <see cref="Encoding"/> that will be used to read the text of a
         /// text-based meta events. The default is <see cref="Encoding.ASCII"/>.
@@ -353,7 +354,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <remarks>
         /// <para>If callback is not set, <see cref="TextEncoding"/> will be used.</para>
         /// </remarks>
-        public DecodeTextCallback DecodeTextCallback { get; set; }
+        public DecodeTextCallback? DecodeTextCallback { get; set; }
 
         /// <summary>
         /// Gets or sets reaction of the reading engine on zero-length objects such as strings or arrays.
@@ -387,6 +388,7 @@ namespace Melanchall.DryWetMidi.Core
             }
         }
 
+        // TODO: check setting null
         /// <summary>
         /// Gets or sets settings according to which <see cref="MidiReader"/> should read MIDI data.
         /// </summary>

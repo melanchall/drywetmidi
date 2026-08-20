@@ -27,7 +27,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
         #region Methods
 
-        internal static ParsingResult TryParse(string input, out BarBeatFractionTimeSpan timeSpan)
+        internal static ParsingResult TryParse(string? input, out BarBeatFractionTimeSpan? timeSpan)
         {
             timeSpan = null;
 

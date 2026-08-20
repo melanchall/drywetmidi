@@ -2,6 +2,7 @@
 
 namespace Melanchall.DryWetMidi.Interaction
 {
+    // TODO: maybe <TKey>??
     /// <summary>
     /// Represents a musical rest. More info in the <see href="xref:a_getting_objects#rests">Getting objects: Rests</see> article.
     /// </summary>
@@ -14,12 +15,12 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <summary>
         /// Occurs when the time of an object has been changed.
         /// </summary>
-        public event EventHandler<TimeChangedEventArgs> TimeChanged;
+        public event EventHandler<TimeChangedEventArgs>? TimeChanged;
 
         /// <summary>
         /// Occurs when the length of an object has been changed.
         /// </summary>
-        public event EventHandler<LengthChangedEventArgs> LengthChanged;
+        public event EventHandler<LengthChangedEventArgs>? LengthChanged;
 
         #endregion
 
@@ -98,7 +99,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="rest1">The first <see cref="Rest"/> to compare.</param>
         /// <param name="rest2">The second <see cref="Rest"/> to compare.</param>
         /// <returns><c>true</c> if the rests are equal, <c>false</c> otherwise.</returns>
-        public static bool operator ==(Rest rest1, Rest rest2)
+        public static bool operator ==(Rest? rest1, Rest? rest2)
         {
             if (ReferenceEquals(rest1, rest2))
                 return true;
@@ -117,7 +118,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="rest1">The first <see cref="Rest"/> to compare.</param>
         /// <param name="rest2">The second <see cref="Rest"/> to compare.</param>
         /// <returns><c>false</c> if the rests are equal, <c>true</c> otherwise.</returns>
-        public static bool operator !=(Rest rest1, Rest rest2)
+        public static bool operator !=(Rest? rest1, Rest? rest2)
         {
             return !(rest1 == rest2);
         }
@@ -181,7 +182,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="obj">The object to compare with the current object.</param>
         /// <returns><c>true</c> if the specified object is equal to the current object; otherwise, <c>false</c>.</returns>
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             return this == (obj as Rest);
         }

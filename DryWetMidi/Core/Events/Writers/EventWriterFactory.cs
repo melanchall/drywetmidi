@@ -26,10 +26,6 @@ namespace Melanchall.DryWetMidi.Core
         /// <returns>Writer for the event.</returns>
         internal static IEventWriter GetWriter(MidiEvent midiEvent)
         {
-            Debug.Assert(midiEvent != null);
-
-            //
-
             if (midiEvent is MetaEvent)
                 return MetaEventWriter;
 

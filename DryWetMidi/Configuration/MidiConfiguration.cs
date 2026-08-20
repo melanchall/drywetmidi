@@ -7,7 +7,7 @@ namespace Melanchall.DryWetMidi.Configuration
     {
         #region Events
 
-        internal static event EventHandler<string> NativeApiMessageReceived;
+        internal static event EventHandler<string>? NativeApiMessageReceived;
 
         #endregion
 
@@ -15,8 +15,8 @@ namespace Melanchall.DryWetMidi.Configuration
 
         private static readonly object _lockObject = new object();
 
-        private static MidiConfigurationHandle _handle;
-        private static MidiConfigurationApi.NativeApiActivityCallback _nativeApiActivityCallback;
+        private static MidiConfigurationHandle? _handle;
+        private static MidiConfigurationApi.NativeApiActivityCallback? _nativeApiActivityCallback;
 
         #endregion
 
@@ -25,7 +25,7 @@ namespace Melanchall.DryWetMidi.Configuration
         public static bool UseWindowsMidiServices { get; set; } = true;
 
 #if TEST
-        internal static TestCheckpoints TestCheckpoints { get; set; }
+        internal static TestCheckpoints? TestCheckpoints { get; set; }
 #endif
 
         #endregion
@@ -76,7 +76,7 @@ namespace Melanchall.DryWetMidi.Configuration
             }
         }
 
-        private static void OnDomainUnloadOrExit(object sender, EventArgs e)
+        private static void OnDomainUnloadOrExit(object? sender, EventArgs e)
         {
             if (_handle != null && !_handle.IsInvalid)
             {

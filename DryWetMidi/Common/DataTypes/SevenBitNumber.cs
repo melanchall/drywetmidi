@@ -103,9 +103,9 @@ namespace Melanchall.DryWetMidi.Common
         /// <see cref="string.Empty"/>, or is not of the correct format. This parameter is passed uninitialized;
         /// any value originally supplied in result will be overwritten.</param>
         /// <returns><c>true</c> if <paramref name="input"/> was converted successfully; otherwise, <c>false</c>.</returns>
-        public static bool TryParse(string input, out SevenBitNumber sevenBitNumber)
+        public static bool TryParse(string? input, out SevenBitNumber sevenBitNumber)
         {
-            sevenBitNumber = default(SevenBitNumber);
+            sevenBitNumber = default;
 
             var parsed = ShortByteParser.TryParse(input, Min, Max, out var byteValue).Status == ParsingStatus.Parsed;
             if (parsed)
@@ -122,13 +122,13 @@ namespace Melanchall.DryWetMidi.Common
         /// <paramref name="input"/>.</returns>
         /// <exception cref="ArgumentException"><paramref name="input"/> is <c>null</c> or contains white-spaces only.</exception>
         /// <exception cref="FormatException"><paramref name="input"/> has invalid format.</exception>
-        public static SevenBitNumber Parse(string input)
+        public static SevenBitNumber Parse(string? input)
         {
             var parsingResult = ShortByteParser.TryParse(input, Min, Max, out var byteValue);
             if (parsingResult.Status == ParsingStatus.Parsed)
                 return (SevenBitNumber)byteValue;
 
-            throw parsingResult.Exception;
+            throw parsingResult.Exception!;
         }
 
         #endregion
@@ -212,7 +212,7 @@ namespace Melanchall.DryWetMidi.Common
         /// <param name="provider">An <see cref="IFormatProvider"/> interface implementation that
         /// supplies culture-specific formatting information.</param>
         /// <returns>A <see cref="bool"/> value equivalent to the value of this instance.</returns>
-        bool IConvertible.ToBoolean(IFormatProvider provider)
+        bool IConvertible.ToBoolean(IFormatProvider? provider)
         {
             return ((IConvertible)_value).ToBoolean(provider);
         }
@@ -224,7 +224,7 @@ namespace Melanchall.DryWetMidi.Common
         /// <param name="provider">An <see cref="IFormatProvider"/> interface implementation that
         /// supplies culture-specific formatting information.</param>
         /// <returns>A Unicode character equivalent to the value of this instance.</returns>
-        char IConvertible.ToChar(IFormatProvider provider)
+        char IConvertible.ToChar(IFormatProvider? provider)
         {
             return ((IConvertible)_value).ToChar(provider);
         }
@@ -236,7 +236,7 @@ namespace Melanchall.DryWetMidi.Common
         /// <param name="provider">An <see cref="IFormatProvider"/> interface implementation that
         /// supplies culture-specific formatting information.</param>
         /// <returns>An 8-bit signed integer equivalent to the value of this instance.</returns>
-        sbyte IConvertible.ToSByte(IFormatProvider provider)
+        sbyte IConvertible.ToSByte(IFormatProvider? provider)
         {
             return ((IConvertible)_value).ToSByte(provider);
         }
@@ -248,7 +248,7 @@ namespace Melanchall.DryWetMidi.Common
         /// <param name="provider">An <see cref="IFormatProvider"/> interface implementation that
         /// supplies culture-specific formatting information.</param>
         /// <returns>An 8-bit unsigned integer equivalent to the value of this instance.</returns>
-        byte IConvertible.ToByte(IFormatProvider provider)
+        byte IConvertible.ToByte(IFormatProvider? provider)
         {
             return ((IConvertible)_value).ToByte(provider);
         }
@@ -260,7 +260,7 @@ namespace Melanchall.DryWetMidi.Common
         /// <param name="provider">An <see cref="IFormatProvider"/> interface implementation that
         /// supplies culture-specific formatting information.</param>
         /// <returns>An 16-bit signed integer equivalent to the value of this instance.</returns>
-        short IConvertible.ToInt16(IFormatProvider provider)
+        short IConvertible.ToInt16(IFormatProvider? provider)
         {
             return ((IConvertible)_value).ToInt16(provider);
         }
@@ -272,7 +272,7 @@ namespace Melanchall.DryWetMidi.Common
         /// <param name="provider">An <see cref="IFormatProvider"/> interface implementation that
         /// supplies culture-specific formatting information.</param>
         /// <returns>An 16-bit unsigned integer equivalent to the value of this instance.</returns>
-        ushort IConvertible.ToUInt16(IFormatProvider provider)
+        ushort IConvertible.ToUInt16(IFormatProvider? provider)
         {
             return ((IConvertible)_value).ToUInt16(provider);
         }
@@ -284,7 +284,7 @@ namespace Melanchall.DryWetMidi.Common
         /// <param name="provider">An <see cref="IFormatProvider"/> interface implementation that
         /// supplies culture-specific formatting information.</param>
         /// <returns>An 32-bit signed integer equivalent to the value of this instance.</returns>
-        int IConvertible.ToInt32(IFormatProvider provider)
+        int IConvertible.ToInt32(IFormatProvider? provider)
         {
             return ((IConvertible)_value).ToInt32(provider);
         }
@@ -296,7 +296,7 @@ namespace Melanchall.DryWetMidi.Common
         /// <param name="provider">An <see cref="IFormatProvider"/> interface implementation that
         /// supplies culture-specific formatting information.</param>
         /// <returns>An 32-bit unsigned integer equivalent to the value of this instance.</returns>
-        uint IConvertible.ToUInt32(IFormatProvider provider)
+        uint IConvertible.ToUInt32(IFormatProvider? provider)
         {
             return ((IConvertible)_value).ToUInt32(provider);
         }
@@ -308,7 +308,7 @@ namespace Melanchall.DryWetMidi.Common
         /// <param name="provider">An <see cref="IFormatProvider"/> interface implementation that
         /// supplies culture-specific formatting information.</param>
         /// <returns>An 64-bit signed integer equivalent to the value of this instance.</returns>
-        long IConvertible.ToInt64(IFormatProvider provider)
+        long IConvertible.ToInt64(IFormatProvider? provider)
         {
             return ((IConvertible)_value).ToInt64(provider);
         }
@@ -320,7 +320,7 @@ namespace Melanchall.DryWetMidi.Common
         /// <param name="provider">An <see cref="IFormatProvider"/> interface implementation that
         /// supplies culture-specific formatting information.</param>
         /// <returns>An 64-bit unsigned integer equivalent to the value of this instance.</returns>
-        ulong IConvertible.ToUInt64(IFormatProvider provider)
+        ulong IConvertible.ToUInt64(IFormatProvider? provider)
         {
             return ((IConvertible)_value).ToUInt64(provider);
         }
@@ -332,7 +332,7 @@ namespace Melanchall.DryWetMidi.Common
         /// <param name="provider">An <see cref="IFormatProvider"/> interface implementation that
         /// supplies culture-specific formatting information.</param>
         /// <returns>A single-precision floating-point number equivalent to the value of this instance.</returns>
-        float IConvertible.ToSingle(IFormatProvider provider)
+        float IConvertible.ToSingle(IFormatProvider? provider)
         {
             return ((IConvertible)_value).ToSingle(provider);
         }
@@ -344,7 +344,7 @@ namespace Melanchall.DryWetMidi.Common
         /// <param name="provider">An <see cref="IFormatProvider"/> interface implementation that
         /// supplies culture-specific formatting information.</param>
         /// <returns>A double-precision floating-point number equivalent to the value of this instance.</returns>
-        double IConvertible.ToDouble(IFormatProvider provider)
+        double IConvertible.ToDouble(IFormatProvider? provider)
         {
             return ((IConvertible)_value).ToDouble(provider);
         }
@@ -356,7 +356,7 @@ namespace Melanchall.DryWetMidi.Common
         /// <param name="provider">An <see cref="IFormatProvider"/> interface implementation that
         /// supplies culture-specific formatting information.</param>
         /// <returns>A <see cref="decimal"/> number equivalent to the value of this instance.</returns>
-        decimal IConvertible.ToDecimal(IFormatProvider provider)
+        decimal IConvertible.ToDecimal(IFormatProvider? provider)
         {
             return ((IConvertible)_value).ToDecimal(provider);
         }
@@ -368,7 +368,7 @@ namespace Melanchall.DryWetMidi.Common
         /// <param name="provider">An <see cref="IFormatProvider"/> interface implementation that
         /// supplies culture-specific formatting information.</param>
         /// <returns>A <see cref="DateTime"/> instance equivalent to the value of this instance.</returns>
-        DateTime IConvertible.ToDateTime(IFormatProvider provider)
+        DateTime IConvertible.ToDateTime(IFormatProvider? provider)
         {
             return ((IConvertible)_value).ToDateTime(provider);
         }
@@ -380,7 +380,7 @@ namespace Melanchall.DryWetMidi.Common
         /// <param name="provider">An <see cref="IFormatProvider"/> interface implementation that
         /// supplies culture-specific formatting information.</param>
         /// <returns>A <see cref="string"/> instance equivalent to the value of this instance.</returns>
-        string IConvertible.ToString(IFormatProvider provider)
+        string IConvertible.ToString(IFormatProvider? provider)
         {
             return _value.ToString(provider);
         }
@@ -395,7 +395,7 @@ namespace Melanchall.DryWetMidi.Common
         /// supplies culture-specific formatting information.</param>
         /// <returns>An <see cref="object"/> instance of type conversionType whose value is equivalent to
         /// the value of this instance.</returns>
-        object IConvertible.ToType(Type conversionType, IFormatProvider provider)
+        object IConvertible.ToType(Type conversionType, IFormatProvider? provider)
         {
             return ((IConvertible)_value).ToType(conversionType, provider);
         }
@@ -432,7 +432,7 @@ namespace Melanchall.DryWetMidi.Common
         /// </summary>
         /// <param name="obj">The object to compare with the current object.</param>
         /// <returns><c>true</c> if the specified object is equal to the current object; otherwise, <c>false</c>.</returns>
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (!(obj is SevenBitNumber))
                 return false;

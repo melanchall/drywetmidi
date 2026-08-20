@@ -31,7 +31,13 @@ namespace Melanchall.DryWetMidi.Composing
             if (State != PatternActionState.Enabled)
                 return PatternActionResult.DoNothing;
 
-            var textEvent = (BaseTextEvent)Activator.CreateInstance(typeof(TEvent), Text);
+            var textEventObject = Activator.CreateInstance(typeof(TEvent), Text);
+            
+            // TODO: proper exception
+            if (textEventObject == null)
+                throw new InvalidOperationException($"Failed to create an instance of '{typeof(TEvent)}'.");
+
+            var textEvent = (BaseTextEvent)textEventObject;
             var timedEvent = new TimedEvent(textEvent, time);
 
             return new PatternActionResult(time, new[] { timedEvent });

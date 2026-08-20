@@ -1,7 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net7.0;net8.0</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;netstandard2.1;net5.0;net7.0;net8.0</TargetFrameworks>
+    <Nullable Condition="'$(TargetFramework)' != 'netstandard2.0'">enable</Nullable>
+    <NoWarn Condition="'$(TargetFramework)' == 'netstandard2.0'">$(NoWarn);CS8632</NoWarn>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <LangVersion>11</LangVersion>
     <Configurations>Debug;Release;ReleaseTest;ReleaseTestFull;ReleaseNativeless;DebugNativeless</Configurations>
@@ -10,7 +12,80 @@
     <EnableAotAnalyzer>true</EnableAotAnalyzer>
     <IsTrimmable>true</IsTrimmable>
     <EnableTrimAnalyzer>true</EnableTrimAnalyzer>
-    <WarningsAsErrors>$(WarningsAsErrors);IL2026;IL2087;IL2091;IL3050;IL3051;IL2027;IL2072;IL2075</WarningsAsErrors>
+    <WarningsAsErrors>
+      $(WarningsAsErrors);
+      IL2026;
+      IL2087;
+      IL2091;
+      IL3050;
+      IL3051;
+      IL2027;
+      IL2072;
+      IL2075;
+      CS8597;
+      CS8598;
+      CS8600;
+      CS8601;
+      CS8602;
+      CS8603;
+      CS8604;
+      CS8605;
+      CS8607;
+      CS8608;
+      CS8609;
+      CS8610;
+      CS8611;
+      CS8612;
+      CS8613;
+      CS8614;
+      CS8615;
+      CS8616;
+      CS8617;
+      CS8618;
+      CS8619;
+      CS8620;
+      CS8621;
+      CS8622;
+      CS8623;
+      CS8624;
+      CS8625;
+      CS8628;
+      CS8629;
+      CS8631;
+      CS8632;
+      CS8633;
+      CS8634;
+      CS8636;
+      CS8637;
+      CS8639;
+      CS8643;
+      CS8644;
+      CS8645;
+      CS8650;
+      CS8651;
+      CS8655;
+      CS8667;
+      CS8669;
+      CS8670;
+      CS8714;
+      CS8762;
+      CS8763;
+      CS8764;
+      CS8765;
+      CS8766;
+      CS8767;
+      CS8768;
+      CS8769;
+      CS8770;
+      CS8774;
+      CS8776;
+      CS8775;
+      CS8777;
+      CS8819;
+      CS8824;
+      CS8825;
+      CS8847;
+    </WarningsAsErrors>
   </PropertyGroup>
 
   <PropertyGroup Label="Package">

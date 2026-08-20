@@ -26,7 +26,7 @@
         /// specified text of cue.
         /// </summary>
         /// <param name="text">Text of the cue.</param>
-        public CuePointEvent(string text)
+        public CuePointEvent(string? text)
             : base(MidiEventType.CuePoint, text)
         {
         }

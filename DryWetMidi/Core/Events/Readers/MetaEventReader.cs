@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Melanchall.DryWetMidi.Common;
+using System;
 using System.Diagnostics.CodeAnalysis;
 
 namespace Melanchall.DryWetMidi.Core
@@ -7,7 +8,7 @@ namespace Melanchall.DryWetMidi.Core
     {
         #region IEventReader
 
-        public MidiEvent Read(MidiReader reader, ReadingSettings settings, byte currentStatusByte)
+        public MidiEvent? Read(MidiReader reader, ReadingSettings settings, byte currentStatusByte)
         {
             var statusByte = reader.ReadByte();
             var size = reader.ReadVlqNumber();
@@ -74,10 +75,21 @@ namespace Melanchall.DryWetMidi.Core
                     break;
                 default:
                     {
-                        // TODO: get rid of Activator and reflection at all
-                        metaEvent = settings.CustomMetaEventTypes?.TryGetType(statusByte, out var eventType) == true && IsMetaEventType(eventType)
-                            ? (MetaEvent)Activator.CreateInstance(eventType)
-                            : new UnknownMetaEvent(statusByte);
+                        if (settings.CustomMetaEventTypes?.TryGetType(statusByte, out var eventType) == true && IsMetaEventType(eventType))
+                        {
+                            // TODO: get rid of Activator and reflection at all
+                            var metaEventObject = Activator.CreateInstance(eventType);
+
+                            // TODO: exception class
+                            if (metaEventObject == null)
+                                throw new InvalidOperationException("AAA");
+
+                            metaEvent = (MetaEvent)metaEventObject;
+                        }
+                        else
+                        {
+                            metaEvent = new UnknownMetaEvent(statusByte);
+                        }
                     }
                     break;
             }

@@ -90,7 +90,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
         #region Methods
 
-        internal static ParsingResult TryParse(string input, out MetricTimeSpan timeSpan)
+        internal static ParsingResult TryParse(string? input, out MetricTimeSpan? timeSpan)
         {
             timeSpan = null;
 

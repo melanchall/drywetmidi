@@ -1,16 +1,18 @@
-﻿namespace Melanchall.DryWetMidi.Core
+﻿using System;
+
+namespace Melanchall.DryWetMidi.Core
 {
     internal sealed class SysExEventReader : IEventReader
     {
         #region IEventReader
 
-        public MidiEvent Read(MidiReader reader, ReadingSettings settings, byte currentStatusByte)
+        public MidiEvent? Read(MidiReader reader, ReadingSettings settings, byte currentStatusByte)
         {
             var size = reader.ReadVlqNumber();
 
             //
 
-            SysExEvent sysExEvent = null;
+            SysExEvent? sysExEvent = null;
 
             switch (currentStatusByte)
             {
@@ -20,6 +22,9 @@
                 case EventStatusBytes.Global.EscapeSysEx:
                     sysExEvent = new EscapeSysExEvent();
                     break;
+                default:
+                    // TODO: proper exception
+                    throw new InvalidOperationException($"Unexpected status byte: {currentStatusByte}");
             }
 
             //

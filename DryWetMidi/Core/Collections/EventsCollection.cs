@@ -113,11 +113,10 @@ namespace Melanchall.DryWetMidi.Core
 
             _events.AddRange(events.Where(e =>
             {
-                var result = e != null;
-                if (result && IsTempoMapEvent(e))
+                if (e != null && IsTempoMapEvent(e))
                     _tempoMapEventsCount++;
 
-                return result;
+                return e != null;
             }));
 
             IsInitialState = false;
@@ -187,11 +186,10 @@ namespace Melanchall.DryWetMidi.Core
 
             _events.InsertRange(index, midiEvents.Where(e =>
             {
-                var result = e != null;
-                if (result && IsTempoMapEvent(e))
+                if (e != null && IsTempoMapEvent(e))
                     _tempoMapEventsCount++;
 
-                return result;
+                return e != null;
             }));
 
             IsInitialState = false;

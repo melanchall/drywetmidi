@@ -37,7 +37,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// </item>
         /// </list>
         /// </exception>
-        public static MidiFile CutPart(this MidiFile midiFile, ITimeSpan partStart, ITimeSpan partLength, SliceMidiFileSettings settings = null)
+        public static MidiFile CutPart(this MidiFile midiFile, ITimeSpan partStart, ITimeSpan partLength, SliceMidiFileSettings? settings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
             ThrowIfArgument.IsNull(nameof(partStart), partStart);
@@ -45,7 +45,7 @@ namespace Melanchall.DryWetMidi.Tools
 
             var grid = new ArbitraryGrid(partStart, partStart.Add(partLength, TimeSpanMode.TimeLength));
 
-            var partsStartId = Guid.NewGuid().ToString();
+            var partStartId = Guid.NewGuid().ToString();
             var partEndId = Guid.NewGuid().ToString();
 
             settings = settings ?? new SliceMidiFileSettings();
@@ -57,7 +57,7 @@ namespace Melanchall.DryWetMidi.Tools
                 SplitNotes = settings.SplitNotes,
                 Markers = new SliceMidiFileMarkers
                 {
-                    PartStartMarkerEventFactory = () => new MarkerEvent(partsStartId),
+                    PartStartMarkerEventFactory = () => new MarkerEvent(partStartId),
                     PartEndMarkerEventFactory = () => new MarkerEvent(partEndId)
                 },
                 NoteDetectionSettings = settings.NoteDetectionSettings
@@ -137,7 +137,7 @@ namespace Melanchall.DryWetMidi.Tools
                             if (markerEvent == null)
                                 return false;
 
-                            return markerEvent.Text == partsStartId || markerEvent.Text == partEndId;
+                            return markerEvent.Text == partStartId || markerEvent.Text == partEndId;
                         });
 
                         if (settings.SplitNotes && notesToSplitDescriptorsEnumerator.Current.Any())

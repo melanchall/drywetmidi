@@ -23,7 +23,7 @@
         /// specified text of copyright notice.
         /// </summary>
         /// <param name="text">Text of copyright notice.</param>
-        public CopyrightNoticeEvent(string text)
+        public CopyrightNoticeEvent(string? text)
             : base(MidiEventType.CopyrightNotice, text)
         {
         }

@@ -3,6 +3,7 @@ using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Melanchall.DryWetMidi.Tools
 {
@@ -44,8 +45,8 @@ namespace Melanchall.DryWetMidi.Tools
             ObjectType objectType,
             IGrid grid,
             TempoMap tempoMap,
-            QuantizingSettings quantizerSettings = null,
-            ObjectDetectionSettings objectDetectionSettings = null)
+            QuantizingSettings? quantizerSettings = null,
+            ObjectDetectionSettings? objectDetectionSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
             ThrowIfArgument.IsNull(nameof(grid), grid);
@@ -95,8 +96,8 @@ namespace Melanchall.DryWetMidi.Tools
             ObjectType objectType,
             IGrid grid,
             TempoMap tempoMap,
-            QuantizingSettings quantizerSettings = null,
-            ObjectDetectionSettings objectDetectionSettings = null)
+            QuantizingSettings? quantizerSettings = null,
+            ObjectDetectionSettings? objectDetectionSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
             ThrowIfArgument.IsNull(nameof(quantizer), quantizer);
@@ -134,12 +135,12 @@ namespace Melanchall.DryWetMidi.Tools
         /// </list>
         /// </exception>
         public static void QuantizeObjects(
-            this IEnumerable<TrackChunk> trackChunks,
+            this IEnumerable<TrackChunk?> trackChunks,
             ObjectType objectType,
             IGrid grid,
             TempoMap tempoMap,
-            QuantizingSettings quantizerSettings = null,
-            ObjectDetectionSettings objectDetectionSettings = null)
+            QuantizingSettings? quantizerSettings = null,
+            ObjectDetectionSettings? objectDetectionSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
             ThrowIfArgument.IsNull(nameof(grid), grid);
@@ -184,20 +185,20 @@ namespace Melanchall.DryWetMidi.Tools
         /// </list>
         /// </exception>
         public static void QuantizeObjects(
-            this IEnumerable<TrackChunk> trackChunks,
+            this IEnumerable<TrackChunk?> trackChunks,
             Quantizer quantizer,
             ObjectType objectType,
             IGrid grid,
             TempoMap tempoMap,
-            QuantizingSettings quantizerSettings = null,
-            ObjectDetectionSettings objectDetectionSettings = null)
+            QuantizingSettings? quantizerSettings = null,
+            ObjectDetectionSettings? objectDetectionSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
             ThrowIfArgument.IsNull(nameof(quantizer), quantizer);
             ThrowIfArgument.IsNull(nameof(grid), grid);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
-            foreach (var trackChunk in trackChunks)
+            foreach (var trackChunk in trackChunks.OfType<TrackChunk>())
             {
                 trackChunk.QuantizeObjects(quantizer, objectType, grid, tempoMap, quantizerSettings, objectDetectionSettings);
             }
@@ -227,8 +228,8 @@ namespace Melanchall.DryWetMidi.Tools
             this MidiFile midiFile,
             ObjectType objectType,
             IGrid grid,
-            QuantizingSettings quantizerSettings = null,
-            ObjectDetectionSettings objectDetectionSettings = null)
+            QuantizingSettings? quantizerSettings = null,
+            ObjectDetectionSettings? objectDetectionSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
             ThrowIfArgument.IsNull(nameof(grid), grid);
@@ -271,8 +272,8 @@ namespace Melanchall.DryWetMidi.Tools
             Quantizer quantizer,
             ObjectType objectType,
             IGrid grid,
-            QuantizingSettings quantizerSettings = null,
-            ObjectDetectionSettings objectDetectionSettings = null)
+            QuantizingSettings? quantizerSettings = null,
+            ObjectDetectionSettings? objectDetectionSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
             ThrowIfArgument.IsNull(nameof(quantizer), quantizer);

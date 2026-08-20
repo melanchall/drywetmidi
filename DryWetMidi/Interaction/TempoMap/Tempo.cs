@@ -37,9 +37,10 @@ namespace Melanchall.DryWetMidi.Interaction
         /// is zero or negative.</exception>
         public Tempo(long microsecondsPerQuarterNote)
         {
-            ThrowIfArgument.IsNonpositive(nameof(microsecondsPerQuarterNote),
-                                          microsecondsPerQuarterNote,
-                                          "Number of microseconds per quarter note is zero or negative.");
+            ThrowIfArgument.IsNonpositive(
+                nameof(microsecondsPerQuarterNote),
+                microsecondsPerQuarterNote,
+                "Number of microseconds per quarter note is zero or negative.");
 
             MicrosecondsPerQuarterNote = microsecondsPerQuarterNote;
         }
@@ -73,9 +74,10 @@ namespace Melanchall.DryWetMidi.Interaction
         /// is zero or negative.</exception>
         public static Tempo FromMillisecondsPerQuarterNote(long millisecondsPerQuarterNote)
         {
-            ThrowIfArgument.IsNonpositive(nameof(millisecondsPerQuarterNote),
-                                          millisecondsPerQuarterNote,
-                                          "Number of milliseconds per quarter note is zero or negative.");
+            ThrowIfArgument.IsNonpositive(
+                nameof(millisecondsPerQuarterNote),
+                millisecondsPerQuarterNote,
+                "Number of milliseconds per quarter note is zero or negative.");
 
             return new Tempo(millisecondsPerQuarterNote * MicrosecondsInMillisecond);
         }
@@ -91,9 +93,10 @@ namespace Melanchall.DryWetMidi.Interaction
         /// is zero or negative.</exception>
         public static Tempo FromBeatsPerMinute(double beatsPerMinute)
         {
-            ThrowIfArgument.IsNonpositive(nameof(beatsPerMinute),
-                                          beatsPerMinute,
-                                          "Number of beats per minute is zero or negative.");
+            ThrowIfArgument.IsNonpositive(
+                nameof(beatsPerMinute),
+                beatsPerMinute,
+                "Number of beats per minute is zero or negative.");
 
             return new Tempo(MathUtilities.RoundToLong(MicrosecondsInMinute / beatsPerMinute));
         }
@@ -108,7 +111,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="tempo1">The first <see cref="Tempo"/> to compare.</param>
         /// <param name="tempo2">The second <see cref="Tempo"/> to compare.</param>
         /// <returns><c>true</c> if the tempos are equal, <c>false</c> otherwise.</returns>
-        public static bool operator ==(Tempo tempo1, Tempo tempo2)
+        public static bool operator ==(Tempo? tempo1, Tempo? tempo2)
         {
             if (ReferenceEquals(tempo1, tempo2))
                 return true;
@@ -125,11 +128,12 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="tempo1">The first <see cref="Tempo"/> to compare.</param>
         /// <param name="tempo2">The second <see cref="Tempo"/> to compare.</param>
         /// <returns><c>false</c> if the tempos are equal, <c>true</c> otherwise.</returns>
-        public static bool operator !=(Tempo tempo1, Tempo tempo2)
+        public static bool operator !=(Tempo? tempo1, Tempo? tempo2)
         {
             return !(tempo1 == tempo2);
         }
 
+        // TODO: maybe support nulls in comparisons??
         /// <summary>
         /// Indicates whether a specified <see cref="Tempo"/> is greater than another one.
         /// </summary>
@@ -254,7 +258,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="obj">The object to compare with the current object.</param>
         /// <returns><c>true</c> if the specified object is equal to the current object; otherwise, <c>false</c>.</returns>
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             return this == (obj as Tempo);
         }

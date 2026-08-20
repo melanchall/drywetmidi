@@ -25,7 +25,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// default method will be used (via one of the <see cref="Note"/>'s constructors).
         /// The same behavior will be used if the method returns <c>null</c>.
         /// </summary>
-        public Func<NoteData, Note> Constructor { get; set; }
+        public Func<NoteData, Note>? Constructor { get; set; }
 
         /// <summary>
         /// Gets or sets how start event of a note should be found in case of overlapping notes with

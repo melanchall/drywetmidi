@@ -8,10 +8,10 @@ namespace Melanchall.DryWetMidi.Multimedia
     {
         #region Events
 
-        internal static event EventHandler<IntPtr> InputEndpointAdded;
-        internal static event EventHandler<IntPtr> InputEndpointRemoved;
-        internal static event EventHandler<IntPtr> OutputEndpointAdded;
-        internal static event EventHandler<IntPtr> OutputEndpointRemoved;
+        internal static event EventHandler<IntPtr>? InputEndpointAdded;
+        internal static event EventHandler<IntPtr>? InputEndpointRemoved;
+        internal static event EventHandler<IntPtr>? OutputEndpointAdded;
+        internal static event EventHandler<IntPtr>? OutputEndpointRemoved;
 
         #endregion
 
@@ -19,17 +19,17 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         private static readonly object _lockObject = new object();
 
-        private static MidiDevicesSessionHandle _handle;
+        private static MidiDevicesSessionHandle? _handle;
 
-        private static MidiDevicesSessionApi.InputEndpointCallback _inputEndpointCallback;
-        private static MidiDevicesSessionApi.OutputEndpointCallback _outputEndpointCallback;
+        private static MidiDevicesSessionApi.InputEndpointCallback? _inputEndpointCallback;
+        private static MidiDevicesSessionApi.OutputEndpointCallback? _outputEndpointCallback;
 
         #endregion
 
         #region Properties
 
 #if TEST
-        internal static TestCheckpoints TestCheckpoints { get; set; }
+        internal static TestCheckpoints? TestCheckpoints { get; set; }
 #endif
 
         #endregion
@@ -82,7 +82,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             }
         }
 
-        private static void OnDomainUnloadOrExit(object sender, EventArgs e)
+        private static void OnDomainUnloadOrExit(object? sender, EventArgs e)
         {
             ResetSessionHandle();
         }

@@ -25,7 +25,7 @@
         /// specified sequence or track name.
         /// </summary>
         /// <param name="name">Name of a sequence or track.</param>
-        public SequenceTrackNameEvent(string name)
+        public SequenceTrackNameEvent(string? name)
             : base(MidiEventType.SequenceTrackName, name)
         {
         }

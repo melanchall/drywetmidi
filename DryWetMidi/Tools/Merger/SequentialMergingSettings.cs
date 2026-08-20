@@ -24,7 +24,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// Gets or sets a delay which should be added between files. The default value is
         /// <c>null</c> which means no delay will be added.
         /// </summary>
-        public ITimeSpan DelayBetweenFiles { get; set; }
+        public ITimeSpan? DelayBetweenFiles { get; set; }
 
         /// <summary>
         /// Gets or sets a step which should be used to round an input file duration. Calculated
@@ -32,7 +32,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// value is <c>null</c> which means no rounding should be applied. Note that only rounding
         /// up is supported. See <see cref="TimeSpanRoundingPolicy.RoundUp"/> for more info.
         /// </summary>
-        public ITimeSpan FileDurationRoundingStep { get; set; }
+        public ITimeSpan? FileDurationRoundingStep { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether non-track chunks (like <see cref="UnknownChunk"/> instances
@@ -45,13 +45,13 @@ namespace Melanchall.DryWetMidi.Tools
         /// Gets or sets a factory method to create event that will be placed at the start
         /// of an input MIDI file within the result one.
         /// </summary>
-        public Func<MidiFile, MidiEvent> FileStartMarkerEventFactory { get; set; }
+        public Func<MidiFile, MidiEvent?>? FileStartMarkerEventFactory { get; set; }
 
         /// <summary>
         /// Gets or sets a factory method to create event that will be placed at the end
         /// of an input MIDI file within the result one.
         /// </summary>
-        public Func<MidiFile, MidiEvent> FileEndMarkerEventFactory { get; set; }
+        public Func<MidiFile, MidiEvent?>? FileEndMarkerEventFactory { get; set; }
 
         /// <summary>
         /// Gets or sets a strategy for result track chunks creation when merging MIDI files sequentially. The

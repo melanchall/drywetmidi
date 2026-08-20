@@ -25,8 +25,8 @@ namespace Melanchall.DryWetMidi.Tools
         public static IEnumerable<MidiFile> SplitByObjects(
             this MidiFile midiFile,
             ObjectType objectType,
-            SplitByObjectsSettings settings = null,
-            ObjectDetectionSettings objectDetectionSettings = null)
+            SplitByObjectsSettings? settings = null,
+            ObjectDetectionSettings? objectDetectionSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
 
@@ -62,7 +62,7 @@ namespace Melanchall.DryWetMidi.Tools
                 {
                     var key = keySelector(obj) ?? obj.GetObjectId();
 
-                    List<ITimedObject> objectsByKey;
+                    List<ITimedObject>? objectsByKey;
                     if (!objectsByKeys.TryGetValue(key, out objectsByKey))
                     {
                         objectsByKeys.Add(key, objectsByKey = new List<ITimedObject>(allFilesObjects));
@@ -78,7 +78,7 @@ namespace Melanchall.DryWetMidi.Tools
                 .Select(objectsByKey =>
                 {
                     var file = objectsByKey.ToFile();
-                    file.TimeDivision = midiFile.TimeDivision.Clone();
+                    file.TimeDivision = midiFile.TimeDivision?.Clone();
                     file.ReplaceTempoMap(tempoMap);
                     return file;
                 });

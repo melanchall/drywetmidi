@@ -36,7 +36,7 @@ namespace Melanchall.DryWetMidi.Interaction
         ///     </item>
         /// </list>
         /// </returns>
-        public int Compare(ITimeSpan x, ITimeSpan y)
+        public int Compare(ITimeSpan? x, ITimeSpan? y)
         {
             if (ReferenceEquals(x, y))
                 return 0;

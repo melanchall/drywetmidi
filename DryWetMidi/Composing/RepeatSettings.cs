@@ -12,13 +12,13 @@
         /// Gets or sets a transformation for every repeated note. If set to <c>null</c>,
         /// no transformation will be applied.
         /// </summary>
-        public NoteTransformation NoteTransformation { get; set; }
+        public NoteTransformation? NoteTransformation { get; set; }
 
         /// <summary>
         /// Gets or sets a transformation for every repeated chord. If set to <c>null</c>,
         /// no transformation will be applied.
         /// </summary>
-        public ChordTransformation ChordTransformation { get; set; }
+        public ChordTransformation? ChordTransformation { get; set; }
 
         #endregion
     }

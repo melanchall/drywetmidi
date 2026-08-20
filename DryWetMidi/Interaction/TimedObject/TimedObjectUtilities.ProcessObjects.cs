@@ -67,7 +67,7 @@ namespace Melanchall.DryWetMidi.Interaction
             this EventsCollection eventsCollection,
             ObjectType objectType,
             Action<ITimedObject> action,
-            ObjectDetectionSettings settings = null,
+            ObjectDetectionSettings? settings = null,
             ObjectProcessingHint hint = ObjectProcessingHint.Default)
         {
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
@@ -125,7 +125,7 @@ namespace Melanchall.DryWetMidi.Interaction
             ObjectType objectType,
             Action<ITimedObject> action,
             Predicate<ITimedObject> match,
-            ObjectDetectionSettings settings = null,
+            ObjectDetectionSettings? settings = null,
             ObjectProcessingHint hint = ObjectProcessingHint.Default)
         {
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
@@ -178,7 +178,7 @@ namespace Melanchall.DryWetMidi.Interaction
             this TrackChunk trackChunk,
             ObjectType objectType,
             Action<ITimedObject> action,
-            ObjectDetectionSettings settings = null,
+            ObjectDetectionSettings? settings = null,
             ObjectProcessingHint hint = ObjectProcessingHint.Default)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
@@ -236,7 +236,7 @@ namespace Melanchall.DryWetMidi.Interaction
             ObjectType objectType,
             Action<ITimedObject> action,
             Predicate<ITimedObject> match,
-            ObjectDetectionSettings settings = null,
+            ObjectDetectionSettings? settings = null,
             ObjectProcessingHint hint = ObjectProcessingHint.Default)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
@@ -288,7 +288,7 @@ namespace Melanchall.DryWetMidi.Interaction
             this IEnumerable<TrackChunk> trackChunks,
             ObjectType objectType,
             Action<ITimedObject> action,
-            ObjectDetectionSettings settings = null,
+            ObjectDetectionSettings? settings = null,
             ObjectProcessingHint hint = ObjectProcessingHint.Default)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
@@ -346,7 +346,7 @@ namespace Melanchall.DryWetMidi.Interaction
             ObjectType objectType,
             Action<ITimedObject> action,
             Predicate<ITimedObject> match,
-            ObjectDetectionSettings settings = null,
+            ObjectDetectionSettings? settings = null,
             ObjectProcessingHint hint = ObjectProcessingHint.Default)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
@@ -402,7 +402,7 @@ namespace Melanchall.DryWetMidi.Interaction
             this MidiFile file,
             ObjectType objectType,
             Action<ITimedObject> action,
-            ObjectDetectionSettings settings = null,
+            ObjectDetectionSettings? settings = null,
             ObjectProcessingHint hint = ObjectProcessingHint.Default)
         {
             ThrowIfArgument.IsNull(nameof(file), file);
@@ -460,7 +460,7 @@ namespace Melanchall.DryWetMidi.Interaction
             ObjectType objectType,
             Action<ITimedObject> action,
             Predicate<ITimedObject> match,
-            ObjectDetectionSettings settings = null,
+            ObjectDetectionSettings? settings = null,
             ObjectProcessingHint hint = ObjectProcessingHint.Default)
         {
             ThrowIfArgument.IsNull(nameof(file), file);
@@ -485,7 +485,7 @@ namespace Melanchall.DryWetMidi.Interaction
             ObjectType objectType,
             Action<ITimedObject> action,
             Predicate<ITimedObject> match,
-            ObjectDetectionSettings objectDetectionSettings,
+            ObjectDetectionSettings? objectDetectionSettings,
             ObjectProcessingHint hint)
         {
             var result = 0;
@@ -510,7 +510,7 @@ namespace Melanchall.DryWetMidi.Interaction
                     .GetTimedEventsLazy(objectDetectionSettings?.TimedEventDetectionSettings, i, false)
                     .ToArray();
 
-                IEnumerable<ITimedObject> timedObjects = null;
+                IEnumerable<ITimedObject>? timedObjects = null;
                 if (getChords)
                     timedObjects = timedEvents
                         .GetChordsAndNotesAndTimedEventsLazy(objectDetectionSettings?.ChordDetectionSettings ?? new ChordDetectionSettings(), objectDetectionSettings?.NoteDetectionSettings ?? new NoteDetectionSettings());
@@ -528,9 +528,8 @@ namespace Melanchall.DryWetMidi.Interaction
 
                 foreach (var timedObjectAt in timedObjects)
                 {
-                    if (timedObjectAt is Note && !getNotes && getTimedEvents)
+                    if (timedObjectAt is Note note && !getNotes && getTimedEvents)
                     {
-                        var note = timedObjectAt as Note;
                         if (TryProcessTimedEvent(note.TimedNoteOnEvent, getTimedEvents, action, match, processingContext))
                             iMatched++;
                         if (TryProcessTimedEvent(note.TimedNoteOffEvent, getTimedEvents, action, match, processingContext))
@@ -542,7 +541,7 @@ namespace Melanchall.DryWetMidi.Interaction
                         iMatched++;
                 }
 
-                if (processingContext.HasTimingChanges)
+                if (processingContext.HasTimingChanges && collectedTimedEvents != null)
                     eventsCollection.SortAndUpdateEvents(collectedTimedEvents);
 
                 result += iMatched;
@@ -611,7 +610,7 @@ namespace Melanchall.DryWetMidi.Interaction
             Action<ITimedObject> action,
             Predicate<ITimedObject> match,
             ProcessingContext processingContext,
-            List<TimedEvent> collectedTimedEvents)
+            List<TimedEvent>? collectedTimedEvents)
         {
             var timedObject = timedObjectAt;
             if (!(timedObject is Chord))
@@ -629,10 +628,10 @@ namespace Melanchall.DryWetMidi.Interaction
                 : null;
 
             var notesTimes = processingContext.NoteTimeOrLengthCanBeChanged
-                ? notes.ToDictionary(n => n, n => n.Time)
+                ? notes?.ToDictionary(n => n, n => n.Time)
                 : null;
             var notesLengths = processingContext.NoteTimeOrLengthCanBeChanged
-                ? notes.ToDictionary(n => n, n => n.Length)
+                ? notes?.ToDictionary(n => n, n => n.Length)
                 : null;
 
             action(chord);
@@ -642,23 +641,23 @@ namespace Melanchall.DryWetMidi.Interaction
                 newTime != time ||
                 newLength != length;
 
-            var addedNotes = processingContext.NotesCollectionCanBeChanged ? chord.Notes.Except(notes).ToArray() : null;
-            var removedNotes = processingContext.NotesCollectionCanBeChanged ? notes.Except(chord.Notes).ToArray() : null;
+            var addedNotes = processingContext.NotesCollectionCanBeChanged ? chord.Notes.Except(notes ?? Array.Empty<Note>()).ToArray() : null;
+            var removedNotes = processingContext.NotesCollectionCanBeChanged ? notes?.Except(chord.Notes).ToArray() : null;
             processingContext.NotesCollectionChanged |=
                 addedNotes?.Length > 0 ||
                 removedNotes?.Length > 0;
 
             var savedNotes = processingContext.NoteTimeOrLengthCanBeChanged
-                ? (processingContext.NotesCollectionCanBeChanged ? (IEnumerable<Note>)notes.Intersect(chord.Notes).ToArray() : chord.Notes)
+                ? (processingContext.NotesCollectionCanBeChanged ? (notes?.Intersect(chord.Notes).ToArray() ?? Enumerable.Empty<Note>()) : chord.Notes)
                 : null;
             processingContext.NoteTimeOrLengthChanged |=
-                savedNotes?.Any(n => n.Time != notesTimes[n]) == true ||
-                savedNotes?.Any(n => n.Length != notesLengths[n]) == true;
+                savedNotes?.Any(n => n.Time != notesTimes?[n]) == true ||
+                savedNotes?.Any(n => n.Length != notesLengths?[n]) == true;
 
             if (processingContext.NotesCollectionChanged)
             {
                 // TODO: check this case
-                if (collectedTimedEvents != null)
+                if (collectedTimedEvents != null && addedNotes != null)
                 {
                     foreach (var note in addedNotes)
                     {
@@ -667,9 +666,12 @@ namespace Melanchall.DryWetMidi.Interaction
                     }
                 }
 
-                foreach (var note in removedNotes)
+                if (removedNotes != null)
                 {
-                    note.TimedNoteOnEvent.Event.MustBeRemoved = note.TimedNoteOffEvent.Event.MustBeRemoved = true;
+                    foreach (var note in removedNotes)
+                    {
+                        note.TimedNoteOnEvent.Event.MustBeRemoved = note.TimedNoteOffEvent.Event.MustBeRemoved = true;
+                    }
                 }
             }
 

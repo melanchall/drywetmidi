@@ -51,7 +51,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <exception cref="CsvException">Invalid CSV representation.</exception>
         public static MidiFile DeserializeFileFromCsv(
             Stream stream,
-            CsvDeserializationSettings settings = null)
+            CsvDeserializationSettings? settings = null)
         {
             ThrowIfArgument.IsNull(nameof(stream), stream);
 
@@ -71,12 +71,15 @@ namespace Melanchall.DryWetMidi.Tools
                     true);
 
                 if (chunks == null || !chunks.Any())
-                    CsvError.ThrowBadFormat("No CSV data.");
+                    throw CsvError.BadFormat("No CSV data.");
 
-                var headerChunk = chunks.OfType<HeaderChunk>().First();
+                if (chunks != null)
+                {
+                    var headerChunk = chunks.OfType<HeaderChunk>().First();
 
-                midiFile.TimeDivision = headerChunk.TimeDivision;
-                midiFile.Chunks.AddRange(chunks.Where(c => !(c is HeaderChunk)));
+                    midiFile.TimeDivision = headerChunk.TimeDivision;
+                    midiFile.Chunks.AddRange(chunks.Where(c => !(c is HeaderChunk)));
+                }
             }
 
             return midiFile;
@@ -95,7 +98,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <exception cref="CsvException">Invalid CSV representation.</exception>
         public static MidiFile DeserializeFileFromCsv(
             string filePath,
-            CsvDeserializationSettings settings = null)
+            CsvDeserializationSettings? settings = null)
         {
             ThrowIfArgument.IsNullOrEmptyString(nameof(filePath), filePath, "File path");
 
@@ -130,7 +133,7 @@ namespace Melanchall.DryWetMidi.Tools
         public static ICollection<MidiChunk> DeserializeChunksFromCsv(
             Stream stream,
             TempoMap tempoMap,
-            CsvDeserializationSettings settings = null)
+            CsvDeserializationSettings? settings = null)
         {
             ThrowIfArgument.IsNull(nameof(stream), stream);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
@@ -167,7 +170,7 @@ namespace Melanchall.DryWetMidi.Tools
         public static ICollection<MidiChunk> DeserializeChunksFromCsv(
             string filePath,
             TempoMap tempoMap,
-            CsvDeserializationSettings settings = null)
+            CsvDeserializationSettings? settings = null)
         {
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
             ThrowIfArgument.IsNullOrEmptyString(nameof(filePath), filePath, "File path");
@@ -203,7 +206,7 @@ namespace Melanchall.DryWetMidi.Tools
         public static MidiChunk DeserializeChunkFromCsv(
             Stream stream,
             TempoMap tempoMap,
-            CsvDeserializationSettings settings = null)
+            CsvDeserializationSettings? settings = null)
         {
             ThrowIfArgument.IsNull(nameof(stream), stream);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
@@ -222,7 +225,7 @@ namespace Melanchall.DryWetMidi.Tools
                     true);
 
                 if (!chunks.Any())
-                    CsvError.ThrowBadFormat("No CSV data.");
+                    throw CsvError.BadFormat("No CSV data.");
 
                 return chunks.First();
             }
@@ -245,7 +248,7 @@ namespace Melanchall.DryWetMidi.Tools
         public static MidiChunk DeserializeChunkFromCsv(
             string filePath,
             TempoMap tempoMap,
-            CsvDeserializationSettings settings = null)
+            CsvDeserializationSettings? settings = null)
         {
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
             ThrowIfArgument.IsNullOrEmptyString(nameof(filePath), filePath, "File path");
@@ -281,7 +284,7 @@ namespace Melanchall.DryWetMidi.Tools
         public static ICollection<ITimedObject> DeserializeObjectsFromCsv(
             Stream stream,
             TempoMap tempoMap,
-            CsvDeserializationSettings settings = null)
+            CsvDeserializationSettings? settings = null)
         {
             ThrowIfArgument.IsNull(nameof(stream), stream);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
@@ -300,9 +303,9 @@ namespace Melanchall.DryWetMidi.Tools
                     false);
 
                 if (!objects.Any())
-                    CsvError.ThrowBadFormat("No CSV data.");
+                    throw CsvError.BadFormat("No CSV data.");
 
-                return objects.FirstOrDefault() ?? new ITimedObject[0];
+                return objects.FirstOrDefault() ?? Array.Empty<ITimedObject>();
             }
         }
 
@@ -323,7 +326,7 @@ namespace Melanchall.DryWetMidi.Tools
         public static ICollection<ITimedObject> DeserializeObjectsFromCsv(
             string filePath,
             TempoMap tempoMap,
-            CsvDeserializationSettings settings = null)
+            CsvDeserializationSettings? settings = null)
         {
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
             ThrowIfArgument.IsNullOrEmptyString(nameof(filePath), filePath, "File path");
@@ -345,7 +348,7 @@ namespace Melanchall.DryWetMidi.Tools
             var objects = new List<CsvObject>();
             var chords = new Dictionary<Tuple<int?, int?>, CsvChord>();
 
-            Record record;
+            Record? record;
 
             while ((record = ReadRecord(reader, readChunkId)) != null)
             {
@@ -402,7 +405,7 @@ namespace Melanchall.DryWetMidi.Tools
             var objects = new List<CsvObject>();
             var chords = new Dictionary<Tuple<int?, int?>, CsvChord>();
 
-            Record record;
+            Record? record;
 
             while ((record = ReadRecord(reader, readChunkId)) != null)
             {
@@ -422,7 +425,7 @@ namespace Melanchall.DryWetMidi.Tools
             }
 
             if (!objects.Any())
-                return new ITimedObject[0][];
+                return Array.Empty<ITimedObject[]>();
 
             return GetTimedObjects(objects, tempoMap);
         }
@@ -492,14 +495,14 @@ namespace Melanchall.DryWetMidi.Tools
                             return new Chord(notes);
                         }
 
-                        return (ITimedObject)null;
+                        return (ITimedObject?)null;
                     })
-                    .Where(obj => obj != null)
+                    .OfType<ITimedObject>()
                     .ToArray())
                 .ToArray();
         }
 
-        private static Record ReadRecord(
+        private static Record? ReadRecord(
             CsvReader csvReader,
             bool readChunkId)
         {
@@ -511,47 +514,47 @@ namespace Melanchall.DryWetMidi.Tools
 
             var values = record.Values;
             if (values.Length < requiredPartsCount)
-                CsvError.ThrowBadFormat(record.LineNumber, $"Missed required parameters ({requiredPartsCount} expected).");
+                throw CsvError.BadFormat(record.LineNumber, $"Missed required parameters ({requiredPartsCount} expected).");
 
             int? chunkIndex = null;
-            string chunkId = null;
+            string? chunkId = null;
 
             if (readChunkId)
             {
                 var chunkIndexValue = values[0];
                 if (string.IsNullOrWhiteSpace(chunkIndexValue))
-                    CsvError.ThrowBadFormat(record.LineNumber, $"Missed chunk index.");
+                    throw CsvError.BadFormat(record.LineNumber, $"Missed chunk index.");
 
                 chunkIndex = int.TryParse(chunkIndexValue, out var parsedChunkIndex)
-                    ? (int?)parsedChunkIndex
+                    ? parsedChunkIndex
                     : null;
 
                 if (chunkIndex == null)
-                    CsvError.ThrowBadFormat(record.LineNumber, $"Invalid chunk index ({chunkIndexValue}).");
+                    throw CsvError.BadFormat(record.LineNumber, $"Invalid chunk index ({chunkIndexValue}).");
 
                 chunkId = values[1];
                 if (string.IsNullOrEmpty(chunkId))
-                    CsvError.ThrowBadFormat(record.LineNumber, "Chunk ID isn't specified.");
+                    throw CsvError.BadFormat(record.LineNumber, "Chunk ID isn't specified.");
             }
 
             var objectIndexValue = values[readChunkId ? 2 : 0];
             if (string.IsNullOrWhiteSpace(objectIndexValue))
-                CsvError.ThrowBadFormat(record.LineNumber, $"Missed object index.");
+                throw CsvError.BadFormat(record.LineNumber, $"Missed object index.");
 
             var objectIndex = int.TryParse(objectIndexValue, out var parsedObjectIndex)
                 ? (int?)parsedObjectIndex
                 : null;
 
             if (objectIndex == null)
-                CsvError.ThrowBadFormat(record.LineNumber, $"Invalid object index ({objectIndexValue}).");
+                throw CsvError.BadFormat(record.LineNumber, $"Invalid object index ({objectIndexValue}).");
 
             var recordType = values[readChunkId ? 3 : 1];
             if (string.IsNullOrEmpty(recordType))
-                CsvError.ThrowBadFormat(record.LineNumber, "Missed record type.");
+                throw CsvError.BadFormat(record.LineNumber, "Missed record type.");
 
             var parameters = values.Skip(requiredPartsCount).ToArray();
 
-            return new Record(record, chunkIndex, chunkId, objectIndex, recordType, parameters);
+            return new Record(record, chunkIndex, chunkId!, objectIndex, recordType, parameters);
         }
 
         private static RecordType? GetRecordType(
@@ -564,7 +567,7 @@ namespace Melanchall.DryWetMidi.Tools
                 if (EventsNames.Contains(recordType, StringComparer.OrdinalIgnoreCase))
                     result = RecordType.Event;
                 else if (unknownRecordPolicy == UnknownRecordPolicy.Abort)
-                    CsvError.ThrowBadFormat(lineNumber, $"Unknown record type ({recordType}).");
+                    throw CsvError.BadFormat(lineNumber, $"Unknown record type ({recordType}).");
                 else
                     return null;
             }
@@ -578,10 +581,10 @@ namespace Melanchall.DryWetMidi.Tools
             var lineNumber = record.CsvRecord.LineNumber;
 
             if (parameters.Length < 1)
-                CsvError.ThrowBadFormat(lineNumber, $"Invalid number of parameters provided ({parameters.Length} with 1 expected).");
+                throw CsvError.BadFormat(lineNumber, $"Invalid number of parameters provided ({parameters.Length} with 1 expected).");
 
             if (!short.TryParse(parameters[0], out var timeDivision))
-                CsvError.ThrowBadFormat(lineNumber, $"Invalid time division ({parameters[0]}).");
+                throw CsvError.BadFormat(lineNumber, $"Invalid time division ({parameters[0]}).");
 
             return new HeaderChunk
             {
@@ -600,7 +603,7 @@ namespace Melanchall.DryWetMidi.Tools
             var time = ParseTime(parameters[0], lineNumber, settings);
 
             if (!Enum.TryParse(record.RecordType, out MidiEventType eventType))
-                CsvError.ThrowBadFormat(lineNumber, $"Invalid event type ({record.RecordType}).");
+                throw CsvError.BadFormat(lineNumber, $"Invalid event type ({record.RecordType}).");
 
             try
             {
@@ -618,8 +621,7 @@ namespace Melanchall.DryWetMidi.Tools
             }
             catch (Exception ex)
             {
-                CsvError.ThrowBadFormat(lineNumber, "Invalid format of event record.", ex);
-                return null;
+                throw CsvError.BadFormat(lineNumber, "Invalid format of event record.", ex);
             }
         }
 
@@ -632,7 +634,7 @@ namespace Melanchall.DryWetMidi.Tools
 
             var parameters = record.Parameters;
             if (parameters.Length < 6)
-                CsvError.ThrowBadFormat(lineNumber, $"Invalid number of parameters provided ({parameters.Length} with 6 expected).");
+                throw CsvError.BadFormat(lineNumber, $"Invalid number of parameters provided ({parameters.Length} with 6 expected).");
 
             var time = ParseTime(parameters[0], lineNumber, settings);
             var length = ParseLength(parameters[1], lineNumber, settings);
@@ -682,7 +684,7 @@ namespace Melanchall.DryWetMidi.Tools
             int lineNumber,
             CsvDeserializationSettings settings)
         {
-            ITimeSpan time;
+            ITimeSpan? time;
 
             var timeType = settings.TimeType;
             if (timeType == null)
@@ -691,9 +693,9 @@ namespace Melanchall.DryWetMidi.Tools
                 TimeSpanUtilities.TryParse(value, timeType.Value, out time);
 
             if (time == null)
-                CsvError.ThrowBadFormat(lineNumber, $"Invalid time ({value} with {(timeType != null ? $"{timeType} time type expected" : "time type resolved automatically")}).");
+                throw CsvError.BadFormat(lineNumber, $"Invalid time ({value} with {(timeType != null ? $"{timeType} time type expected" : "time type resolved automatically")}).");
 
-            return time;
+            return time!;
         }
 
         private static ITimeSpan ParseLength(
@@ -701,7 +703,7 @@ namespace Melanchall.DryWetMidi.Tools
             int lineNumber,
             CsvDeserializationSettings settings)
         {
-            ITimeSpan length;
+            ITimeSpan? length;
 
             var lengthType = settings.LengthType;
             if (lengthType == null)
@@ -710,9 +712,9 @@ namespace Melanchall.DryWetMidi.Tools
                 TimeSpanUtilities.TryParse(value, lengthType.Value, out length);
 
             if (length == null)
-                CsvError.ThrowBadFormat(lineNumber, $"Invalid length ({value} with {(lengthType != null ? $"{lengthType} length type expected" : "length type resolved automatically")}).");
+                throw CsvError.BadFormat(lineNumber, $"Invalid length ({value} with {(lengthType != null ? $"{lengthType} length type expected" : "length type resolved automatically")}).");
 
-            return length;
+            return length!;
         }
 
         private static TempoMap GetTempoMap(ICollection<CsvObject> objects, TimeDivision timeDivision)

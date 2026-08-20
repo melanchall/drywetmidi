@@ -22,7 +22,7 @@ namespace Melanchall.DryWetMidi.Core
         #region Fields
 
         private readonly MemoryStream _dataBytesStream;
-        private MidiReader _midiReader;
+        private MidiReader _midiReader = default!;
 
         private BytesFormat _bytesFormat = BytesFormat.File;
 
@@ -76,7 +76,7 @@ namespace Melanchall.DryWetMidi.Core
         /// Gets or sets a callback used to read unknown channel event if <see cref="UnknownChannelEventPolicy"/>
         /// set to <see cref="UnknownChannelEventPolicy.UseCallback"/>.
         /// </summary>
-        public UnknownChannelEventCallback UnknownChannelEventCallback
+        public UnknownChannelEventCallback? UnknownChannelEventCallback
         {
             get { return ReadingSettings.UnknownChannelEventCallback; }
             set { ReadingSettings.UnknownChannelEventCallback = value; }
@@ -156,7 +156,7 @@ namespace Melanchall.DryWetMidi.Core
         /// class and have parameterless constructor. No exception will be thrown
         /// if some types don't meet these requirements.</para>
         /// </remarks>
-        public EventTypesCollection CustomMetaEventTypes
+        public EventTypesCollection? CustomMetaEventTypes
         {
             get { return ReadingSettings.CustomMetaEventTypes; }
             set { ReadingSettings.CustomMetaEventTypes = value; }
@@ -182,7 +182,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <remarks>
         /// <para>If callback is not set, <see cref="TextEncoding"/> will be used.</para>
         /// </remarks>
-        public DecodeTextCallback DecodeTextCallback
+        public DecodeTextCallback? DecodeTextCallback
         {
             get { return ReadingSettings.DecodeTextCallback; }
             set { ReadingSettings.DecodeTextCallback = value; }
@@ -312,8 +312,11 @@ namespace Melanchall.DryWetMidi.Core
                     if (midiEvent is ChannelEvent)
                         channelEventStatusByte = statusByte;
 
-                    midiEvent.DeltaTime = deltaTime;
-                    result.Add(midiEvent);
+                    if (midiEvent != null)
+                    {
+                        midiEvent.DeltaTime = deltaTime;
+                        result.Add(midiEvent);
+                    }
                 }
             }
             catch (EndOfStreamException ex)
@@ -362,8 +365,11 @@ namespace Melanchall.DryWetMidi.Core
         /// if MIDI event has no data bytes.</param>
         /// <returns><see cref="MidiEvent"/> read from <paramref name="statusByte"/> and <paramref name="dataBytes"/>.</returns>
         /// <exception cref="VlqNumberOverflowException">A variable-length quantity (VLQ) number in the file is too large.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="dataBytes"/> is <c>null</c>.</exception>
         public MidiEvent Convert(byte statusByte, byte[] dataBytes)
         {
+            ThrowIfArgument.IsNull(nameof(dataBytes), dataBytes);
+
             PrepareStreamWithBytes(dataBytes, 0, dataBytes?.Length ?? 0);
             return ReadEvent(statusByte);
         }
@@ -438,8 +444,12 @@ namespace Melanchall.DryWetMidi.Core
 
             var statusByte = _midiReader.ReadByte();
             var midiEvent = ReadEvent(statusByte);
-            midiEvent.DeltaTime = deltaTime;
 
+            // TODO: proper exception
+            if (midiEvent == null)
+                throw new InvalidOperationException($"MIDI event with status byte '{statusByte}' cannot be read.");
+
+            midiEvent.DeltaTime = deltaTime;
             return midiEvent;
         }
 
@@ -466,7 +476,13 @@ namespace Melanchall.DryWetMidi.Core
             if (BytesFormat == BytesFormat.File && statusByte == EventStatusBytes.Global.Meta)
                 eventReader = MetaEventReader;
 
-            return eventReader.Read(_midiReader, ReadingSettings, statusByte);
+            var midiEvent = eventReader.Read(_midiReader, ReadingSettings, statusByte);
+
+            // TODO: proper exception
+            if (midiEvent == null)
+                throw new InvalidOperationException($"MIDI event with status byte '{statusByte}' cannot be read.");
+            
+            return midiEvent;
         }
 
         private byte[] ReadDeviceSysExBytes()

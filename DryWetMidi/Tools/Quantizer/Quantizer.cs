@@ -41,7 +41,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// </item>
         /// </list>
         /// </exception>
-        public void Quantize(IEnumerable<ITimedObject> objects, IGrid grid, TempoMap tempoMap, QuantizingSettings settings = null)
+        public void Quantize(IEnumerable<ITimedObject?> objects, IGrid grid, TempoMap tempoMap, QuantizingSettings? settings = null)
         {
             ThrowIfArgument.IsNull(nameof(objects), objects);
             ThrowIfArgument.IsNull(nameof(grid), grid);
@@ -55,7 +55,7 @@ namespace Melanchall.DryWetMidi.Tools
 
             var times = GetGridTimes(objects, filter, grid, tempoMap);
 
-            foreach (var obj in objects.Where(filter))
+            foreach (var obj in objects.OfType<ITimedObject>().Where(filter))
             {
                 QuantizeObject(obj, grid, times, tempoMap, settings);
             }
@@ -75,7 +75,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// or not. Also returned object contains that new time.</returns>
         protected virtual TimeProcessingInstruction OnObjectQuantizing(
             ITimedObject obj,
-            QuantizedTime quantizedTime,
+            QuantizedTime? quantizedTime,
             IGrid grid,
             LengthedObjectTarget target,
             TempoMap tempoMap,
@@ -111,8 +111,8 @@ namespace Melanchall.DryWetMidi.Tools
                 ?? new TimeProcessingInstruction(time);
         }
 
-        private TimeProcessingInstruction TrySetLengthedObjectTime(
-            ILengthedObject obj,
+        private TimeProcessingInstruction? TrySetLengthedObjectTime(
+            ILengthedObject? obj,
             long time,
             LengthedObjectTarget target,
             TempoMap tempoMap,
@@ -178,15 +178,18 @@ namespace Melanchall.DryWetMidi.Tools
                 settings.QuantizingLevel,
                 tempoMap);
 
-            if (quantizedStartTime.NewTime > oldEndTime)
+            if (quantizedStartTime != null && quantizedEndTime != null)
             {
-                QuantizeObjectTime(obj, quantizedEndTime, grid, LengthedObjectTarget.End, tempoMap, settings);
-                QuantizeObjectTime(obj, quantizedStartTime, grid, LengthedObjectTarget.Start, tempoMap, settings);
-            }
-            else
-            {
-                QuantizeObjectTime(obj, quantizedStartTime, grid, LengthedObjectTarget.Start, tempoMap, settings);
-                QuantizeObjectTime(obj, quantizedEndTime, grid, LengthedObjectTarget.End, tempoMap, settings);
+                if (quantizedStartTime.NewTime > oldEndTime)
+                {
+                    QuantizeObjectTime(obj, quantizedEndTime, grid, LengthedObjectTarget.End, tempoMap, settings);
+                    QuantizeObjectTime(obj, quantizedStartTime, grid, LengthedObjectTarget.Start, tempoMap, settings);
+                }
+                else
+                {
+                    QuantizeObjectTime(obj, quantizedStartTime, grid, LengthedObjectTarget.Start, tempoMap, settings);
+                    QuantizeObjectTime(obj, quantizedEndTime, grid, LengthedObjectTarget.End, tempoMap, settings);
+                }
             }
 
             RandomizeObjectTime(obj, grid, LengthedObjectTarget.Start, tempoMap, settings);
@@ -215,7 +218,7 @@ namespace Melanchall.DryWetMidi.Tools
 
         private void QuantizeObjectTime(
             ITimedObject obj,
-            QuantizedTime quantizedTime,
+            QuantizedTime? quantizedTime,
             IGrid grid,
             LengthedObjectTarget target,
             TempoMap tempoMap,
@@ -305,12 +308,13 @@ namespace Melanchall.DryWetMidi.Tools
         }
 
         private static long[] GetGridTimes(
-            IEnumerable<ITimedObject> objects,
+            IEnumerable<ITimedObject?> objects,
             Func<ITimedObject, bool> filter,
             IGrid grid,
             TempoMap tempoMap)
         {
             var lastTime = objects
+                .OfType<ITimedObject>()
                 .Where(filter)
                 .Select(obj =>
                 {
@@ -343,7 +347,7 @@ namespace Melanchall.DryWetMidi.Tools
             }
         }
 
-        private static QuantizedTime FindNearestTime(
+        private static QuantizedTime? FindNearestTime(
             long[] grid,
             long time,
             TimeSpanType distanceCalculationType,
@@ -493,7 +497,7 @@ namespace Melanchall.DryWetMidi.Tools
             return new TimeProcessingInstruction(time);
         }
 
-        private static TimeProcessingInstruction ProcessQuantizingBeyondFixedEnd(
+        private static TimeProcessingInstruction? ProcessQuantizingBeyondFixedEnd(
             ref long newTime,
             ref long oldTime,
             QuantizingBeyondFixedEndPolicy quantizingBeyondFixedEndPolicy,

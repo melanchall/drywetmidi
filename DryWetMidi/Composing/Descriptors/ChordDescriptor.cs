@@ -70,7 +70,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// <param name="chordDescriptor1">The first <see cref="ChordDescriptor"/> to compare.</param>
         /// <param name="chordDescriptor2">The second <see cref="ChordDescriptor"/> to compare.</param>
         /// <returns><c>true</c> if the descriptors are equal, <c>false</c> otherwise.</returns>
-        public static bool operator ==(ChordDescriptor chordDescriptor1, ChordDescriptor chordDescriptor2)
+        public static bool operator ==(ChordDescriptor? chordDescriptor1, ChordDescriptor? chordDescriptor2)
         {
             if (ReferenceEquals(chordDescriptor1, chordDescriptor2))
                 return true;
@@ -89,7 +89,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// <param name="chordDescriptor1">The first <see cref="ChordDescriptor"/> to compare.</param>
         /// <param name="chordDescriptor2">The second <see cref="ChordDescriptor"/> to compare.</param>
         /// <returns><c>false</c> if the descriptors are equal, <c>true</c> otherwise.</returns>
-        public static bool operator !=(ChordDescriptor chordDescriptor1, ChordDescriptor chordDescriptor2)
+        public static bool operator !=(ChordDescriptor? chordDescriptor1, ChordDescriptor? chordDescriptor2)
         {
             return !(chordDescriptor1 == chordDescriptor2);
         }
@@ -112,7 +112,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// </summary>
         /// <param name="obj">The object to compare with the current object.</param>
         /// <returns><c>true</c> if the specified object is equal to the current object; otherwise, <c>false</c>.</returns>
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             return this == (obj as ChordDescriptor);
         }

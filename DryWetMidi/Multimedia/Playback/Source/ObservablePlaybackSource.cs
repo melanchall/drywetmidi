@@ -12,7 +12,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         #region Fields
 
         private readonly PlaybackEventsCollection _playbackEvents = new PlaybackEventsCollection();
-        private PlaybackEventsPosition _playbackEventsPosition;
+        private PlaybackEventsPosition? _playbackEventsPosition;
 
         #endregion
 
@@ -20,7 +20,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         public PlaybackEventsCollection PlaybackEvents => _playbackEvents;
 
-        public PlaybackEventsPosition PlaybackEventsPosition
+        public PlaybackEventsPosition? PlaybackEventsPosition
         {
             get { return _playbackEventsPosition; }
             set { _playbackEventsPosition = value; }
@@ -90,19 +90,19 @@ namespace Melanchall.DryWetMidi.Multimedia
             return _playbackEventsPosition != null;
         }
 
-        public PlaybackEvent GetCurrentPlaybackEvent()
+        public PlaybackEvent? GetCurrentPlaybackEvent()
         {
             return IsPositionValid()
-                ? _playbackEventsPosition.Value
+                ? _playbackEventsPosition?.Value
                 : null;
         }
 
-        public PlaybackEvent GetLastPlaybackEvent()
+        public PlaybackEvent? GetLastPlaybackEvent()
         {
             return _playbackEvents.GetMaximumCoordinate()?.Value;
         }
 
-        public SnapPoint GetNextSnapPoint(TimeSpan fromTime, Func<PlaybackEvent, SnapPoint> getSnapPoint)
+        public SnapPoint? GetNextSnapPoint(TimeSpan fromTime, Func<PlaybackEvent, SnapPoint?> getSnapPoint)
         {
             var node = _playbackEvents.GetFirstCoordinateAboveThreshold(fromTime);
 
@@ -118,7 +118,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             return null;
         }
 
-        public SnapPoint GetPreviousSnapPoint(TimeSpan fromTime, Func<PlaybackEvent, SnapPoint> getSnapPoint)
+        public SnapPoint? GetPreviousSnapPoint(TimeSpan fromTime, Func<PlaybackEvent, SnapPoint?> getSnapPoint)
         {
             var node = _playbackEvents.GetLastCoordinateBelowThreshold(fromTime);
 

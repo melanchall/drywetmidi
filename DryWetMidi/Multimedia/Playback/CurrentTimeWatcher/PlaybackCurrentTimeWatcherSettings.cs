@@ -11,7 +11,7 @@
         /// Gets or sets settings for internal <see cref="MidiClock"/> used to watch
         /// playbacks by <see cref="PlaybackCurrentTimeWatcher"/>.
         /// </summary>
-        public MidiClockSettings ClockSettings { get; set; }
+        public MidiClockSettings? ClockSettings { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether current time should be reported for only

@@ -35,45 +35,45 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <summary>
         /// Occurs when playback started via the <see cref="Start"/> method.
         /// </summary>
-        public event EventHandler Started;
+        public event EventHandler? Started;
 
         /// <summary>
         /// Occurs when playback stopped via the <see cref="Stop"/> method.
         /// </summary>
-        public event EventHandler Stopped;
+        public event EventHandler? Stopped;
 
         /// <summary>
         /// Occurs when playback finished, i.e. last event has been played and no
         /// need to restart playback due to value of the <see cref="Loop"/>.
         /// </summary>
-        public event EventHandler Finished;
+        public event EventHandler? Finished;
 
         /// <summary>
         /// Occurs when playback started new cycle of the data playing in case of <see cref="Loop"/> set to <c>true</c>.
         /// </summary>
-        public event EventHandler RepeatStarted;
+        public event EventHandler? RepeatStarted;
 
         /// <summary>
         /// Occurs when notes started to play. It will raised if playback's cursor
         /// gets in to notes.
         /// </summary>
-        public event EventHandler<NotesEventArgs> NotesPlaybackStarted;
+        public event EventHandler<NotesEventArgs>? NotesPlaybackStarted;
 
         /// <summary>
         /// Occurs when notes finished to play. It will raised if playback's cursor
         /// gets out from notes.
         /// </summary>
-        public event EventHandler<NotesEventArgs> NotesPlaybackFinished;
+        public event EventHandler<NotesEventArgs>? NotesPlaybackFinished;
 
         /// <summary>
         /// Occurs when MIDI event played.
         /// </summary>
-        public event EventHandler<MidiEventPlayedEventArgs> EventPlayed;
+        public event EventHandler<MidiEventPlayedEventArgs>? EventPlayed;
 
         /// <summary>
         /// Occurs when an error happened.
         /// </summary>
-        public event EventHandler<PlaybackErrorOccurredEventArgs> ErrorOccurred;
+        public event EventHandler<PlaybackErrorOccurredEventArgs>? ErrorOccurred;
 
         #endregion
 
@@ -82,9 +82,9 @@ namespace Melanchall.DryWetMidi.Multimedia
         private TimeSpan _duration = TimeSpan.Zero;
         private long _durationInTicks;
 
-        private ITimeSpan _playbackStart;
+        private ITimeSpan? _playbackStart;
         private TimeSpan _playbackStartMetric = MinPlaybackTime;
-        private ITimeSpan _playbackEnd;
+        private ITimeSpan? _playbackEnd;
         private TimeSpan _playbackEndMetric = MaxPlaybackTime;
 
         private readonly List<Note> _notes = new List<Note>();
@@ -122,7 +122,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// </item>
         /// </list>
         /// </exception>
-        public Playback(IEnumerable<ITimedObject> timedObjects, TempoMap tempoMap, PlaybackSettings playbackSettings = null)
+        public Playback(IEnumerable<ITimedObject> timedObjects, TempoMap tempoMap, PlaybackSettings? playbackSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(timedObjects), timedObjects);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
@@ -167,7 +167,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// </item>
         /// </list>
         /// </exception>
-        public Playback(IEnumerable<ITimedObject> timedObjects, TempoMap tempoMap, IOutputEndpoint outputEndpoint, PlaybackSettings playbackSettings = null)
+        public Playback(IEnumerable<ITimedObject> timedObjects, TempoMap tempoMap, IOutputEndpoint outputEndpoint, PlaybackSettings? playbackSettings = null)
             : this(timedObjects, tempoMap, playbackSettings)
         {
             ThrowIfArgument.IsNull(nameof(outputEndpoint), outputEndpoint);
@@ -179,6 +179,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         #region Finalizer
 
+        // TODO: need it?? or must be removed??
         /// <summary>
         /// Finalizes the current instance of the <see cref="Playback"/>.
         /// </summary>
@@ -201,7 +202,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <summary>
         /// Gets or sets the output MIDI endpoint to play MIDI data through.
         /// </summary>
-        public IOutputEndpoint OutputEndpoint { get; set; }
+        public IOutputEndpoint? OutputEndpoint { get; set; }
 
         /// <summary>
         /// Gets a value indicating whether playing is currently running or not.
@@ -326,7 +327,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         ///         : rawNoteData;
         /// </code>
         /// </example>
-        public NoteCallback NoteCallback { get; set; }
+        public NoteCallback? NoteCallback { get; set; }
 
         /// <summary>
         /// Gets or sets callback used to process MIDI event to be played.
@@ -357,7 +358,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         ///         : midiEvent;
         /// </code>
         /// </example>
-        public EventCallback EventCallback { get; set; }
+        public EventCallback? EventCallback { get; set; }
 
         /// <summary>
         /// Gets or sets the start time of the current playback. It defines start time of
@@ -368,7 +369,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// current playback which will be played. If you set the property to <c>null</c> the
         /// start of playback (zero) will be used.
         /// </remarks>
-        public ITimeSpan PlaybackStart
+        public ITimeSpan? PlaybackStart
         {
             get { return _playbackStart; }
             set
@@ -387,7 +388,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// current playback which will be played. If you set the property to <c>null</c> the
         /// end of playback will be used.
         /// </remarks>
-        public ITimeSpan PlaybackEnd
+        public ITimeSpan? PlaybackEnd
         {
             get { return _playbackEnd; }
             set
@@ -400,7 +401,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 #if TRACE
         internal PlaybackActionsTracer ActionsTracer { get; set; } = new PlaybackActionsTracer();
 
-        internal MidiClockTracer ClockTracer
+        internal MidiClockTracer? ClockTracer
         {
             get
             {
@@ -569,6 +570,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <exception cref="ObjectDisposedException">The current <see cref="Playback"/> is disposed.</exception>
         /// <exception cref="NativeApiException">An error occurred on MIDI output endpoint.</exception>
         public bool MoveToFirstSnapPoint<TData>(TData data)
+            where TData : notnull
         {
             EnsureIsNotDisposed();
 
@@ -628,6 +630,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <exception cref="ObjectDisposedException">The current <see cref="Playback"/> is disposed.</exception>
         /// <exception cref="NativeApiException">An error occurred on MIDI output endpoint.</exception>
         public bool MoveToPreviousSnapPoint<TData>(TData data)
+            where TData : notnull
         {
             EnsureIsNotDisposed();
 
@@ -686,6 +689,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <exception cref="ObjectDisposedException">The current <see cref="Playback"/> is disposed.</exception>
         /// <exception cref="NativeApiException">An error occurred on MIDI output endpoint.</exception>
         public bool MoveToNextSnapPoint<TData>(TData data)
+            where TData : notnull
         {
             EnsureIsNotDisposed();
 
@@ -720,6 +724,9 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <exception cref="NativeApiException">An error occurred on MIDI output endpoint.</exception>
         public void MoveToTime(ITimeSpan time)
         {
+            ThrowIfArgument.IsNull(nameof(time), time);
+            EnsureIsNotDisposed();
+
             TraceAction("move to time...");
 
             MoveToTimeInternal(time);
@@ -787,7 +794,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <param name="midiEvent">MIDI event to try to play.</param>
         /// <param name="metadata">Metadata attached to <paramref name="midiEvent"/>.</param>
         /// <returns><c>true</c> if <paramref name="midiEvent"/> was played; otherwise, <c>false</c>.</returns>
-        protected virtual bool TryPlayEvent(MidiEvent midiEvent, object metadata)
+        protected virtual bool TryPlayEvent(MidiEvent midiEvent, object? metadata)
         {
             OutputEndpoint?.SendEvent(midiEvent);
 
@@ -839,7 +846,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
             foreach (var noteMetadata in _activeNotesMetadata.Values)
             {
-                if (TryPlayNoteEvent(noteMetadata, false, currentTime, out var note, out var originalNote))
+                if (TryPlayNoteEvent(noteMetadata, false, currentTime, out var note, out var originalNote) && note != null && originalNote != null)
                 {
                     notes.Add(note);
                     originalNotes.Add(originalNote);
@@ -874,7 +881,7 @@ namespace Melanchall.DryWetMidi.Multimedia
                 : MinPlaybackTime;
         }
 
-        private bool TryToMoveToSnapPoint(SnapPoint snapPoint)
+        private bool TryToMoveToSnapPoint(SnapPoint? snapPoint)
         {
             TraceAction("try to move to snap point...");
 
@@ -918,12 +925,15 @@ namespace Melanchall.DryWetMidi.Multimedia
             _notes.Clear();
             _originalNotes.Clear();
 
-            Note note;
-            Note originalNote;
+            Note? note;
+            Note? originalNote;
 
             foreach (var noteMetadata in offNotesMetadata)
             {
                 TryPlayNoteEvent(noteMetadata, false, currentTime, out note, out originalNote);
+                if (note == null || originalNote == null)
+                    continue;
+
                 _notes.Add(note);
                 _originalNotes.Add(originalNote);
             }
@@ -936,6 +946,9 @@ namespace Melanchall.DryWetMidi.Multimedia
             foreach (var noteMetadata in onNotesMetadata)
             {
                 TryPlayNoteEvent(noteMetadata, true, currentTime, out note, out originalNote);
+                if (note == null || originalNote == null)
+                    continue;
+
                 _notes.Add(note);
                 _originalNotes.Add(originalNote);
             }
@@ -993,7 +1006,7 @@ namespace Melanchall.DryWetMidi.Multimedia
                 new NotesEventArgs(notes, originalNotes));
         }
 
-        private void OnEventPlayed(MidiEvent midiEvent, object metadata)
+        private void OnEventPlayed(MidiEvent midiEvent, object? metadata)
         {
             HandleEvent(
                 EventPlayed,
@@ -1021,7 +1034,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             }
         }
 
-        private void HandleEvent(EventHandler eventHandler, PlaybackErrorSite site)
+        private void HandleEvent(EventHandler? eventHandler, PlaybackErrorSite site)
         {
             if (eventHandler == null)
                 return;
@@ -1039,7 +1052,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             }
         }
 
-        private void HandleEvent<T>(EventHandler<T> eventHandler, PlaybackErrorSite site, T eventArgs)
+        private void HandleEvent<T>(EventHandler<T>? eventHandler, PlaybackErrorSite site, T eventArgs)
         {
             if (eventHandler == null)
                 return;
@@ -1057,7 +1070,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             }
         }
 
-        private void OnClockTicked(object sender, EventArgs e)
+        private void OnClockTicked(object? sender, EventArgs e)
         {
             TraceTick("clock ticked");
 
@@ -1097,7 +1110,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
                         if (TryPlayNoteEvent(playbackEvent, out var note, out var originalNote))
                         {
-                            if (note != null)
+                            if (note != null && originalNote != null)
                             {
                                 if (playbackEvent.Event is NoteOnEvent)
                                     OnNotesPlaybackStarted(new[] { note }, new[] { originalNote });
@@ -1225,7 +1238,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             MoveToNextPlaybackEvent();
         }
 
-        private void PlayEvent(MidiEvent midiEvent, object metadata)
+        private void PlayEvent(MidiEvent midiEvent, object? metadata)
         {
             UpdateCurrentTrackedData(midiEvent, metadata);
 
@@ -1244,8 +1257,8 @@ namespace Melanchall.DryWetMidi.Multimedia
             NotePlaybackEventMetadata noteMetadata,
             bool isNoteOnEvent,
             TimeSpan time,
-            out Note note,
-            out Note originalNote)
+            out Note? note,
+            out Note? originalNote)
         {
             return TryPlayNoteEvent(
                 noteMetadata,
@@ -1258,8 +1271,8 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         private bool TryPlayNoteEvent(
             PlaybackEvent playbackEvent,
-            out Note note,
-            out Note originalNote)
+            out Note? note,
+            out Note? originalNote)
         {
             return TryPlayNoteEvent(
                 playbackEvent.NoteMetadata,
@@ -1271,12 +1284,12 @@ namespace Melanchall.DryWetMidi.Multimedia
         }
 
         private bool TryPlayNoteEvent(
-            NotePlaybackEventMetadata noteMetadata,
-            MidiEvent midiEvent,
+            NotePlaybackEventMetadata? noteMetadata,
+            MidiEvent? midiEvent,
             bool isNoteOnEvent,
             TimeSpan time,
-            out Note note,
-            out Note originalNote)
+            out Note? note,
+            out Note? originalNote)
         {
             note = null;
             originalNote = null;
@@ -1317,14 +1330,14 @@ namespace Melanchall.DryWetMidi.Multimedia
                 {
                     note = noteMetadata.GetEffectiveNote();
                     midiEvent = isNoteOnEvent
-                        ? (MidiEvent)notePlaybackData.GetNoteOnEvent()
+                        ? notePlaybackData.GetNoteOnEvent()
                         : notePlaybackData.GetNoteOffEvent();
                 }
             }
             else if (midiEvent == null)
                 midiEvent = isNoteOnEvent
-                    ? (MidiEvent)notePlaybackData.GetNoteOnEvent()
-                    : notePlaybackData.GetNoteOffEvent();
+                    ? notePlaybackData?.GetNoteOnEvent()
+                    : notePlaybackData?.GetNoteOffEvent();
 
             if (midiEvent != null)
             {

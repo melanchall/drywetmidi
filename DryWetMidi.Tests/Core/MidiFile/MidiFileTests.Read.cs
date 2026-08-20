@@ -1580,6 +1580,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
             trimBytesCount,
             trimBytesCount > 2 ? null : new[] { new EscapeSysExEvent(new byte[] { 1, 0xF7 }.Take(2 - trimBytesCount).ToArray()) });
 
+        // TODO: handle TimeDivision default/null
         [Test]
         public void Read_NotEnoughBytes_Ignore_HeaderChunkId([Values(1, 2, 3)] int takeBytesCount) => Read_NotEnoughBytes_Ignore(
             new MidiFile(new TrackChunk(new TextEvent("A"))) { TimeDivision = new TicksPerQuarterNoteTimeDivision(80) },
@@ -1590,25 +1591,25 @@ namespace Melanchall.DryWetMidi.Tests.Core
         public void Read_NotEnoughBytes_Ignore_HeaderChunkSize([Values(1, 2, 3)] int takeBytesCount) => Read_NotEnoughBytes_Ignore(
             new MidiFile(new TrackChunk(new TextEvent("A"))) { TimeDivision = new TicksPerQuarterNoteTimeDivision(80) },
             bytes => bytes.Take(4 /* chunk ID */ + takeBytesCount).ToArray(),
-            new MidiFile { TimeDivision = null });
+            new MidiFile());
 
         [Test]
         public void Read_NotEnoughBytes_Ignore_HeaderChunkFileFormat() => Read_NotEnoughBytes_Ignore(
             new MidiFile(new TrackChunk(new TextEvent("A"))) { TimeDivision = new TicksPerQuarterNoteTimeDivision(80) },
             bytes => bytes.Take(4 /* chunk ID */ + 4 /* chunk size */ + 1).ToArray(),
-            new MidiFile { TimeDivision = null });
+            new MidiFile());
 
         [Test]
         public void Read_NotEnoughBytes_Ignore_HeaderChunkTracksNumber() => Read_NotEnoughBytes_Ignore(
             new MidiFile(new TrackChunk(new TextEvent("A"))) { TimeDivision = new TicksPerQuarterNoteTimeDivision(80) },
             bytes => bytes.Take(4 /* chunk ID */ + 4 /* chunk size */ + 2 /* file format */ + 1).ToArray(),
-            new MidiFile { TimeDivision = null });
+            new MidiFile ());
 
         [Test]
         public void Read_NotEnoughBytes_Ignore_HeaderChunkTimeDivision() => Read_NotEnoughBytes_Ignore(
             new MidiFile(new TrackChunk(new TextEvent("A"))) { TimeDivision = new TicksPerQuarterNoteTimeDivision(80) },
             bytes => bytes.Take(4 /* chunk ID */ + 4 /* chunk size */ + 2 /* file format */ + 2 /* tracks number */ + 1).ToArray(),
-            new MidiFile { TimeDivision = null });
+            new MidiFile ());
 
         [Test]
         public void Read_NotEnoughBytes_Ignore_TrackChunkId([Values(1, 2, 3)] int takeBytesCount) => Read_NotEnoughBytes_Ignore(

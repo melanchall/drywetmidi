@@ -34,11 +34,11 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         public ITimedObject ObjectReference { get; }
 
-        public ICollection<RedBlackTreeCoordinate<TimeSpan, PlaybackEvent>> EventsGroup { get; set; }
+        public ICollection<RedBlackTreeCoordinate<TimeSpan, PlaybackEvent>>? EventsGroup { get; set; }
 
-        public NotePlaybackEventMetadata NoteMetadata { get; set; }
+        public NotePlaybackEventMetadata? NoteMetadata { get; set; }
 
-        public object TimedEventMetadata { get; set; }
+        public object? TimedEventMetadata { get; set; }
 
         #endregion
 

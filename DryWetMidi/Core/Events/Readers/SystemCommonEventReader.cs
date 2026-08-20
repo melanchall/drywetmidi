@@ -4,9 +4,9 @@
     {
         #region IEventReader
 
-        public MidiEvent Read(MidiReader reader, ReadingSettings settings, byte currentStatusByte)
+        public MidiEvent? Read(MidiReader reader, ReadingSettings settings, byte currentStatusByte)
         {
-            SystemCommonEvent systemCommonEvent = null;
+            SystemCommonEvent? systemCommonEvent = null;
 
             switch (currentStatusByte)
             {

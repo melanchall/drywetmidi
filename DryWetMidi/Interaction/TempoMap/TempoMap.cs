@@ -2,6 +2,7 @@
 using Melanchall.DryWetMidi.Core;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace Melanchall.DryWetMidi.Interaction
@@ -25,7 +26,7 @@ namespace Melanchall.DryWetMidi.Interaction
         private ValueLine<TimeSignature> _timeSignatureLine;
         private ValueLine<Tempo> _tempoLine;
 
-        private MetricTempoMapValuesCache _metricValuesCache;
+        private MetricTempoMapValuesCache? _metricValuesCache;
 
         private bool _isTempoMapReady = true;
 
@@ -61,6 +62,7 @@ namespace Melanchall.DryWetMidi.Interaction
         internal ValueLine<TimeSignature> TimeSignatureLine
         {
             get { return _timeSignatureLine; }
+            [MemberNotNull(nameof(_timeSignatureLine))]
             set
             {
                 if (_timeSignatureLine != null)
@@ -74,6 +76,7 @@ namespace Melanchall.DryWetMidi.Interaction
         internal ValueLine<Tempo> TempoLine
         {
             get { return _tempoLine; }
+            [MemberNotNull(nameof(_tempoLine))]
             set
             {
                 if (_tempoLine != null)
@@ -375,12 +378,12 @@ namespace Melanchall.DryWetMidi.Interaction
             _metricValuesCache?.Invalidate(this);
         }
 
-        private void OnTimeSignatureChanged(object sender, EventArgs args)
+        private void OnTimeSignatureChanged(object? sender, EventArgs args)
         {
             InvalidateCaches(TempoMapLine.TimeSignature);
         }
 
-        private void OnTempoChanged(object sender, EventArgs args)
+        private void OnTempoChanged(object? sender, EventArgs args)
         {
             InvalidateCaches(TempoMapLine.Tempo);
         }
@@ -394,7 +397,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="obj">The object to compare with the current object.</param>
         /// <returns><c>true</c> if the specified object is equal to the current object; otherwise, <c>false</c>.</returns>
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (ReferenceEquals(obj, this))
                 return true;

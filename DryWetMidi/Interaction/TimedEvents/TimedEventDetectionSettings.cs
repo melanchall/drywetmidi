@@ -16,7 +16,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// default method will be used (via one of the <see cref="TimedEvent"/>'s constructors).
         /// The same behavior will be used if the method returns <c>null</c>.
         /// </summary>
-        public Func<TimedEventData, TimedEvent> Constructor { get; set; }
+        public Func<TimedEventData, TimedEvent>? Constructor { get; set; }
 
         #endregion
     }

@@ -19,7 +19,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <summary>
         /// Occurs when objects collection changes (an object added or removed).
         /// </summary>
-        public event TimedObjectsCollectionChangedEventHandler<TObject> CollectionChanged;
+        public event TimedObjectsCollectionChangedEventHandler<TObject>? CollectionChanged;
 
         #endregion
 
@@ -32,7 +32,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
         #region Constructor
 
-        internal TimedObjectsCollection(IEnumerable<TObject> objects, TimedObjectsComparer comparer)
+        internal TimedObjectsCollection(IEnumerable<TObject> objects, TimedObjectsComparer? comparer)
         {
             Debug.Assert(objects != null);
 
@@ -77,11 +77,11 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="objects">Objects to add to the collection.</param>
         /// <exception cref="ArgumentNullException"><paramref name="objects"/> is <c>null</c>.</exception>
-        public void Add(IEnumerable<TObject> objects)
+        public void Add(IEnumerable<TObject?> objects)
         {
             ThrowIfArgument.IsNull(nameof(objects), objects);
 
-            var addedObjects = objects.Where(o => o != null).ToList();
+            var addedObjects = objects.OfType<TObject>().ToList();
             _objects.AddRange(addedObjects);
             OnObjectsAdded(addedObjects);
         }
@@ -91,11 +91,11 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="objects">Objects to add to the collection.</param>
         /// <exception cref="ArgumentNullException"><paramref name="objects"/> is <c>null</c>.</exception>
-        public void Add(params TObject[] objects)
+        public void Add(params TObject?[] objects)
         {
             ThrowIfArgument.IsNull(nameof(objects), objects);
 
-            Add((IEnumerable<TObject>)objects);
+            Add((IEnumerable<TObject?>)objects);
         }
 
         /// <summary>
@@ -124,12 +124,12 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <returns><c>true</c> if objects were successfully removed from the collection;
         /// otherwise, <c>false</c>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="objects"/> is <c>null</c>.</exception>
-        public bool Remove(IEnumerable<TObject> objects)
+        public bool Remove(IEnumerable<TObject?> objects)
         {
             ThrowIfArgument.IsNull(nameof(objects), objects);
 
             var removedObjects = new List<TObject>();
-            foreach (var obj in objects)
+            foreach (var obj in objects.OfType<TObject>())
             {
                 if (_objects.Remove(obj))
                     removedObjects.Add(obj);
@@ -146,11 +146,11 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <returns><c>true</c> if objects were successfully removed from the collection;
         /// otherwise, <c>false</c>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="objects"/> is <c>null</c>.</exception>
-        public bool Remove(params TObject[] objects)
+        public bool Remove(params TObject?[] objects)
         {
             ThrowIfArgument.IsNull(nameof(objects), objects);
 
-            return Remove((IEnumerable<TObject>)objects);
+            return Remove((IEnumerable<TObject?>)objects);
         }
 
         /// <summary>
@@ -237,7 +237,7 @@ namespace Melanchall.DryWetMidi.Interaction
             OnCollectionChanged(null, removedObjects);
         }
 
-        private void OnCollectionChanged(IEnumerable<TObject> addedObjects, IEnumerable<TObject> removedObjects)
+        private void OnCollectionChanged(IEnumerable<TObject>? addedObjects, IEnumerable<TObject>? removedObjects)
         {
             CollectionChanged?.Invoke(this, new TimedObjectsCollectionChangedEventArgs<TObject>(addedObjects, removedObjects));
         }

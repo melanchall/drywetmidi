@@ -13,7 +13,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <summary>
         /// Occurs when a MIDI event is sent.
         /// </summary>
-        event EventHandler<MidiEventSentEventArgs> EventSent;
+        event EventHandler<MidiEventSentEventArgs>? EventSent;
 
         // TODO: docs on this method. It is needed to call it before sending events to the endpoint
         /// <summary>

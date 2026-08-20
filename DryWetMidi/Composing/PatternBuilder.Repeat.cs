@@ -36,7 +36,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// </item>
         /// </list>
         /// </exception>
-        public PatternBuilder Repeat(int actionsCount, int repeatsNumber, RepeatSettings settings = null)
+        public PatternBuilder Repeat(int actionsCount, int repeatsNumber, RepeatSettings? settings = null)
         {
             ThrowIfArgument.IsNegative(nameof(actionsCount), actionsCount, "Actions count is negative.");
             ThrowIfArgument.IsGreaterThan(
@@ -62,7 +62,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// </remarks>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="repeatsNumber"/> is negative.</exception>
         /// <exception cref="InvalidOperationException">There are no actions to repeat.</exception>
-        public PatternBuilder Repeat(int repeatsNumber, RepeatSettings settings = null)
+        public PatternBuilder Repeat(int repeatsNumber, RepeatSettings? settings = null)
         {
             ThrowIfArgument.IsNegative(nameof(repeatsNumber), repeatsNumber, "Repetitions count is negative.");
 
@@ -83,7 +83,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// actions and will not be repeated since default values applies immediately on next actions.
         /// </remarks>
         /// <exception cref="InvalidOperationException">There are no actions to repeat.</exception>
-        public PatternBuilder Repeat(RepeatSettings settings = null)
+        public PatternBuilder Repeat(RepeatSettings? settings = null)
         {
             if (!_actions.Any())
                 throw new InvalidOperationException("There is no action to repeat.");
@@ -91,7 +91,7 @@ namespace Melanchall.DryWetMidi.Composing
             return RepeatActions(1, 1, settings);
         }
 
-        private PatternBuilder RepeatActions(int actionsCount, int repeatsNumber, RepeatSettings settings)
+        private PatternBuilder RepeatActions(int actionsCount, int repeatsNumber, RepeatSettings? settings)
         {
             settings = settings ?? new RepeatSettings();
 

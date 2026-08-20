@@ -32,7 +32,7 @@ namespace Melanchall.DryWetMidi.Core
         private readonly bool _isStreamWrapped;
 
         private readonly bool _useBuffering;
-        private byte[] _buffer;
+        private byte[]? _buffer;
         private int _bufferSize;
         private int _bufferPosition;
         private long _bufferStart = -1;
@@ -138,7 +138,7 @@ namespace Melanchall.DryWetMidi.Core
                 if (!EnsureBufferIsReadyForReading())
                     throw new EndOfStreamException();
 
-                var result = _buffer[_bufferPosition];
+                var result = _buffer![_bufferPosition];
                 Position++;
                 return result;
             }
@@ -390,7 +390,7 @@ namespace Melanchall.DryWetMidi.Core
         private byte[] ReadBytesFromBuffer(int count)
         {
             var result = new byte[count];
-            Buffer.BlockCopy(_buffer, _bufferPosition, result, 0, count);
+            Buffer.BlockCopy(_buffer!, _bufferPosition, result, 0, count);
             Position += count;
             return result;
         }
@@ -428,7 +428,7 @@ namespace Melanchall.DryWetMidi.Core
 
             if (_position < _bufferStart || _position >= _bufferStart + _bufferSize)
             {
-                _stream.Position = (_position / _buffer.Length) * _buffer.Length;
+                _stream.Position = (_position / _buffer!.Length) * _buffer.Length;
                 _bufferStart = _stream.Position;
 
                 var totalReadBytesCount = 0;

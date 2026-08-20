@@ -14,8 +14,6 @@ namespace Melanchall.DryWetMidi.Core
                 writer.WriteByte(statusByte);
             }
 
-            //
-
             midiEvent.Write(writer, settings);
         }
 

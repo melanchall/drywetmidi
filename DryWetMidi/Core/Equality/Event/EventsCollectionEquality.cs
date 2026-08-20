@@ -4,7 +4,7 @@
     {
         #region Methods
 
-        public static bool Equals(EventsCollection eventsCollection1, EventsCollection eventsCollection2, MidiEventEqualityCheckSettings settings, out string message)
+        public static bool Equals(EventsCollection? eventsCollection1, EventsCollection? eventsCollection2, MidiEventEqualityCheckSettings? settings, out string? message)
         {
             message = null;
 

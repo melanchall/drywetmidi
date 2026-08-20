@@ -24,7 +24,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// to use the <see cref="Velocity"/> property value (see <see cref="SetVelocity"/>).</param>
         /// <returns>The current <see cref="PatternBuilder"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="chord"/> is <c>null</c>.</exception>
-        public PatternBuilder Chord(MusicTheory.Chord chord, Octave octave = null, ITimeSpan length = null, SevenBitNumber? velocity = null)
+        public PatternBuilder Chord(MusicTheory.Chord chord, Octave? octave = null, ITimeSpan? length = null, SevenBitNumber? velocity = null)
         {
             ThrowIfArgument.IsNull(nameof(chord), chord);
 
@@ -50,7 +50,7 @@ namespace Melanchall.DryWetMidi.Composing
         public PatternBuilder Chord(
             IEnumerable<Interval> intervals,
             NoteName rootNoteName,
-            ITimeSpan length = null,
+            ITimeSpan? length = null,
             SevenBitNumber? velocity = null)
         {
             ThrowIfArgument.IsInvalidEnumValue(nameof(rootNoteName), rootNoteName);
@@ -83,8 +83,8 @@ namespace Melanchall.DryWetMidi.Composing
         /// <exception cref="ArgumentOutOfRangeException">The number of result chord's note is out of valid range.</exception>
         public PatternBuilder Chord(
             IEnumerable<Interval> intervals,
-            MusicTheory.Note rootNote = null,
-            ITimeSpan length = null,
+            MusicTheory.Note? rootNote = null,
+            ITimeSpan? length = null,
             SevenBitNumber? velocity = null)
         {
             ThrowIfArgument.IsNull(nameof(intervals), intervals);
@@ -112,7 +112,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// <exception cref="ArgumentNullException"><paramref name="noteNames"/> is <c>null</c>.</exception>
         public PatternBuilder Chord(
             IEnumerable<NoteName> noteNames,
-            ITimeSpan length = null,
+            ITimeSpan? length = null,
             SevenBitNumber? velocity = null)
         {
             ThrowIfArgument.IsNull(nameof(noteNames), noteNames);
@@ -135,7 +135,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// <exception cref="ArgumentNullException"><paramref name="notes"/> is <c>null</c>.</exception>
         public PatternBuilder Chord(
             IEnumerable<MusicTheory.Note> notes,
-            ITimeSpan length = null,
+            ITimeSpan? length = null,
             SevenBitNumber? velocity = null)
         {
             ThrowIfArgument.IsNull(nameof(notes), notes);
@@ -162,8 +162,8 @@ namespace Melanchall.DryWetMidi.Composing
         /// <exception cref="FormatException"><paramref name="chord"/> has invalid format.</exception>
         public PatternBuilder Chord(
             string chord,
-            Octave octave = null,
-            ITimeSpan length = null,
+            Octave? octave = null,
+            ITimeSpan? length = null,
             SevenBitNumber? velocity = null)
         {
             ThrowIfArgument.IsNullOrWhiteSpaceString(nameof(chord), chord, "Chord");

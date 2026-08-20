@@ -35,7 +35,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
 
         #region Methods
 
-        internal static ParsingResult TryParse(string input, Scale scale, out ChordProgression chordProgression)
+        internal static ParsingResult TryParse(string? input, Scale scale, out ChordProgression? chordProgression)
         {
             chordProgression = null;
 
@@ -79,7 +79,8 @@ namespace Melanchall.DryWetMidi.MusicTheory
                 if (chordParsingResult.Status != ParsingStatus.Parsed)
                     return chordParsingResult;
 
-                chords.Add(chord);
+                if (chord != null)
+                    chords.Add(chord);
             }
 
             chordProgression = new ChordProgression(chords);

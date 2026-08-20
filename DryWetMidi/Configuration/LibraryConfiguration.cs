@@ -12,7 +12,7 @@ namespace Melanchall.DryWetMidi.Configuration
         #region Events
 
 #if !NATIVELESS
-        public static event EventHandler<LibraryActivityMessageReceivedEventArgs> LibraryActivityMessageReceived;
+        public static event EventHandler<LibraryActivityMessageReceivedEventArgs>? LibraryActivityMessageReceived;
 #endif
 
         #endregion
@@ -125,7 +125,7 @@ namespace Melanchall.DryWetMidi.Configuration
             return true;
         }
 
-        private static void OnLibraryActivityMessageReceived(object sender, string text)
+        private static void OnLibraryActivityMessageReceived(object? sender, string text)
         {
             var eventArgs = new LibraryActivityMessageReceivedEventArgs(text);
             LibraryActivityMessageReceived?.Invoke(null, eventArgs);

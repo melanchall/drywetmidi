@@ -678,7 +678,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// <returns>Intervals sequence for the scale with the name <paramref name="name"/>; or <c>null</c> if
         /// there is no a scale with this name.</returns>
         /// <exception cref="ArgumentException"><paramref name="name"/> is <c>null</c> or contains white-spaces only.</exception>
-        public static IEnumerable<Interval> GetByName(string name)
+        public static IEnumerable<Interval>? GetByName(string name)
         {
             ThrowIfArgument.IsNullOrWhiteSpaceString(nameof(name), name, "Scale's name");
 

@@ -58,7 +58,7 @@ namespace Melanchall.DryWetMidi.Composing
             var context = new PatternContext(tempoMap, channel);
             var result = InvokeActions(0, context);
 
-            return ((IEnumerable<ITimedObject>)result.Events ?? Enumerable.Empty<TimedEvent>())
+            return ((IEnumerable<ITimedObject>?)result.Events ?? Enumerable.Empty<TimedEvent>())
                 .Concat(result.Notes ?? Enumerable.Empty<Note>())
                 .ToTrackChunk();
         }

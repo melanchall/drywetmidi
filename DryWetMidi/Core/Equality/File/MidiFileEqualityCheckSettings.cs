@@ -20,11 +20,12 @@
         /// </remarks>
         public bool CompareOriginalFormat { get; set; } = true;
 
+        // TODO: check setting null
         /// <summary>
         /// Gets or sets settings according to which <see cref="MidiChunk"/> objects should
         /// be compared for equality.
         /// </summary>
-        public MidiChunkEqualityCheckSettings ChunkEqualityCheckSettings { get; set; } = new MidiChunkEqualityCheckSettings();
+        public MidiChunkEqualityCheckSettings? ChunkEqualityCheckSettings { get; set; } = new MidiChunkEqualityCheckSettings();
 
         #endregion
     }

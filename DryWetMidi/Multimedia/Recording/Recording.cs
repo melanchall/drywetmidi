@@ -20,17 +20,17 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <summary>
         /// Occurs when recording started via <see cref="Start"/> method.
         /// </summary>
-        public event EventHandler Started;
+        public event EventHandler? Started;
 
         /// <summary>
         /// Occurs when recording stopped via <see cref="Stop"/> method.
         /// </summary>
-        public event EventHandler Stopped;
+        public event EventHandler? Stopped;
 
         /// <summary>
         /// Occurs when a MIDI event is captured by the current recording.
         /// </summary>
-        public event EventHandler<MidiEventRecordedEventArgs> EventRecorded;
+        public event EventHandler<MidiEventRecordedEventArgs>? EventRecorded;
 
         #endregion
 
@@ -107,9 +107,10 @@ namespace Melanchall.DryWetMidi.Multimedia
         {
             ThrowIfArgument.IsInvalidEnumValue(nameof(durationType), durationType);
 
-            return TimeConverter.ConvertTo((MetricTimeSpan)_events.LastOrDefault()?.Time ?? new MetricTimeSpan(), durationType, TempoMap);
+            return TimeConverter.ConvertTo((MetricTimeSpan?)_events.LastOrDefault()?.Time ?? new MetricTimeSpan(), durationType, TempoMap);
         }
 
+        // TODO: check with MathTimeSpan; and all <TTimeSpan>
         /// <summary>
         /// Retrieves the duration of the recording in the specified format.
         /// </summary>
@@ -119,7 +120,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         public TTimeSpan GetDuration<TTimeSpan>()
             where TTimeSpan : ITimeSpan
         {
-            return TimeConverter.ConvertTo<TTimeSpan>((MetricTimeSpan)_events.LastOrDefault()?.Time ?? new MetricTimeSpan(), TempoMap);
+            return TimeConverter.ConvertTo<TTimeSpan>((MetricTimeSpan?)_events.LastOrDefault()?.Time ?? new MetricTimeSpan(), TempoMap);
         }
 
         /// <summary>
@@ -172,7 +173,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             Stopped?.Invoke(this, EventArgs.Empty);
         }
 
-        private void OnEventReceived(object sender, MidiEventReceivedEventArgs e)
+        private void OnEventReceived(object? sender, MidiEventReceivedEventArgs e)
         {
             if (!IsRunning)
                 return;

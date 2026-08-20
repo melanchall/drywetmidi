@@ -191,15 +191,16 @@ namespace Melanchall.DryWetMidi.Tools
                                                  .Select(c => c.Events.GetTimedEvents().GetEnumerator())
                                                  .ToArray();
 
-            return new MidiFileSlicer(midiFile.TimeDivision, timedEventsEnumerators);
+            // TODO: what if td is null
+            return new MidiFileSlicer(midiFile.TimeDivision!, timedEventsEnumerators);
         }
 
         private IEnumerable<IEnumerable<TimedEvent>> GetNextTimedEvents(
             long endTime,
             bool preserveTimes,
-            Func<MidiEvent> partStartMarkerEventFactory,
-            Func<MidiEvent> partEndMarkerEventFactory,
-            Func<MidiEvent> emptyPartMarkerEventFactory)
+            Func<MidiEvent>? partStartMarkerEventFactory,
+            Func<MidiEvent>? partEndMarkerEventFactory,
+            Func<MidiEvent>? emptyPartMarkerEventFactory)
         {
             var isPartEmpty = true;
 

@@ -24,7 +24,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// have any length. <see cref="NoteDetectionSettings"/> property affects how notes are detected.
         /// More info in the <see href="xref:a_sanitizer#noteminlength">Sanitizer: NoteMinLength</see> article.
         /// </summary>
-        public ITimeSpan NoteMinLength { get; set; }
+        public ITimeSpan? NoteMinLength { get; set; }
 
         /// <summary>
         /// Gets or sets a minimum velocity for notes within an input file. All notes with velocity below this
@@ -45,7 +45,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// Gets or sets settings which define how notes should be detected and built. More info in the
         /// <see href="xref:a_getting_objects#settings">Getting objects: GetNotes: Settings</see> article.
         /// </summary>
-        public NoteDetectionSettings NoteDetectionSettings { get; set; }
+        public NoteDetectionSettings? NoteDetectionSettings { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether empty track chunks should be removed or not.
@@ -72,6 +72,7 @@ namespace Melanchall.DryWetMidi.Tools
             }
         }
 
+        // TODO: check setting null
         /// <summary>
         /// Gets or sets a maximum length for a new note restored by an orphaned Note On event.
         /// This property is used only when <see cref="OrphanedNoteOnEventsPolicy"/> is set to

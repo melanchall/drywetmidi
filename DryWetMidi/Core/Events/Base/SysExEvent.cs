@@ -24,7 +24,7 @@ namespace Melanchall.DryWetMidi.Core
         #region Fields
 
         private readonly byte _statusByte;
-        private byte[] _data;
+        private byte[]? _data;
 
         #endregion
 
@@ -52,7 +52,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <summary>
         /// Gets or sets the event's data.
         /// </summary>
-        public byte[] Data
+        public byte[]? Data
         {
             get
             {
@@ -138,7 +138,7 @@ namespace Melanchall.DryWetMidi.Core
 
             var data = Data;
             var dataLength = data?.Length ?? 0;
-            if (dataLength == 0)
+            if (data == null || dataLength == 0)
                 return "no data";
 
             var result = $"{dataLength} byte(s): ";

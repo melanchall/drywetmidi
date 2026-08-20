@@ -25,7 +25,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
             public long Time { get; }
 
-            public double Microseconds { get; }
+            public double? Microseconds { get; }
 
             public double MicrosecondsPerTick { get; }
 
@@ -38,7 +38,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
         #region Properties
 
-        public AccumulatedMicroseconds[] Microseconds { get; private set; }
+        public AccumulatedMicroseconds[]? Microseconds { get; private set; }
 
         public double DefaultMicrosecondsPerTick { get; private set; }
 

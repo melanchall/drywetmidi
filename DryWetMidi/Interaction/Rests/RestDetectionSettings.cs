@@ -11,7 +11,7 @@ namespace Melanchall.DryWetMidi.Interaction
     {
         #region Constants
 
-        private static readonly Func<ITimedObject, object> NoNotesKeySelector = obj => obj is Note ? "Note" : null;
+        private static readonly Func<ITimedObject, object?> NoNotesKeySelector = obj => obj is Note ? "Note" : null;
 
         /// <summary>
         /// Rests will be built only at spaces without notes at all.
@@ -45,6 +45,7 @@ namespace Melanchall.DryWetMidi.Interaction
             KeySelector = obj => obj is Note ? Tuple.Create(((Note)obj).Channel, ((Note)obj).NoteNumber) : null
         };
 
+        // TODO: by channel??
         /// <summary>
         /// Rests will be built only at spaces without chords at all.
         /// </summary>
@@ -72,7 +73,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <c>obj => obj is Note ? "Note" : null</c> which means rests will be built
         /// between notes where there are no notes at all.
         /// </summary>
-        public Func<ITimedObject, object> KeySelector { get; set; } = NoNotesKeySelector;
+        public Func<ITimedObject, object?> KeySelector { get; set; } = NoNotesKeySelector;
 
         #endregion
     }

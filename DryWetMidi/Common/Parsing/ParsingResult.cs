@@ -14,7 +14,7 @@ namespace Melanchall.DryWetMidi.Common
 
         #region Fields
 
-        private readonly string _error;
+        private readonly string? _error;
 
         #endregion
 
@@ -30,7 +30,7 @@ namespace Melanchall.DryWetMidi.Common
         {
         }
 
-        private ParsingResult(ParsingStatus status, string error)
+        private ParsingResult(ParsingStatus status, string? error)
         {
             Status = status;
             _error = error;
@@ -42,7 +42,7 @@ namespace Melanchall.DryWetMidi.Common
 
         public ParsingStatus Status { get; }
 
-        public Exception Exception
+        public Exception? Exception
         {
             get
             {

@@ -13,13 +13,13 @@ namespace Melanchall.DryWetMidi.Tools
         /// <summary>
         /// Gets or sets bounds to randomize an object's time within.
         /// </summary>
-        public IBounds Bounds { get; set; }
+        public IBounds? Bounds { get; set; }
 
         /// <summary>
         /// Gets or sets a predicate to filter objects that should be randomized. Use <c>null</c> if
         /// all objects should be processed.
         /// </summary>
-        public Predicate<ITimedObject> Filter { get; set; }
+        public Predicate<ITimedObject>? Filter { get; set; }
 
         #endregion
     }

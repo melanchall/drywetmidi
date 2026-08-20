@@ -8,7 +8,7 @@ namespace Melanchall.DryWetMidi.Common
     {
         #region Fields
 
-        private readonly Dictionary<string, List<object>> _checkpointsReachedStates = new Dictionary<string, List<object>>();
+        private readonly Dictionary<string, List<object?>> _checkpointsReachedStates = new Dictionary<string, List<object?>>();
         private readonly List<string> _errors = new List<string>();
 
         #endregion
@@ -25,10 +25,10 @@ namespace Melanchall.DryWetMidi.Common
             SetCheckpointReached(checkpointName, null);
         }
 
-        public void SetCheckpointReached(string checkpointName, object data)
+        public void SetCheckpointReached(string checkpointName, object? data)
         {
             if (!_checkpointsReachedStates.TryGetValue(checkpointName, out var dataList))
-                _checkpointsReachedStates.Add(checkpointName, dataList = new List<object>());
+                _checkpointsReachedStates.Add(checkpointName, dataList = new List<object?>());
 
             dataList.Add(data);
         }
@@ -38,7 +38,7 @@ namespace Melanchall.DryWetMidi.Common
             return _checkpointsReachedStates.TryGetValue(checkpointName, out var dataList) && dataList.Any();
         }
 
-        public ICollection<object> GetCheckpointDataList(string checkpointName)
+        public ICollection<object?>? GetCheckpointDataList(string checkpointName)
         {
             return _checkpointsReachedStates.TryGetValue(checkpointName, out var dataList)
                 ? dataList

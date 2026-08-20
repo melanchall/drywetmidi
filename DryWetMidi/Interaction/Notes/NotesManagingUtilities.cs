@@ -19,8 +19,8 @@ namespace Melanchall.DryWetMidi.Interaction
 
             private readonly NoteStartDetectionPolicy _noteStartDetectionPolicy;
 
-            private readonly Stack<LinkedListNode<TDescriptor>> _nodesStack;
-            private readonly Queue<LinkedListNode<TDescriptor>> _nodesQueue;
+            private readonly Stack<LinkedListNode<TDescriptor>>? _nodesStack;
+            private readonly Queue<LinkedListNode<TDescriptor>>? _nodesQueue;
 
             protected NoteOnsHolderBase(NoteStartDetectionPolicy noteStartDetectionPolicy)
             {
@@ -44,9 +44,9 @@ namespace Melanchall.DryWetMidi.Interaction
                     switch (_noteStartDetectionPolicy)
                     {
                         case NoteStartDetectionPolicy.LastNoteOn:
-                            return _nodesStack.Count;
+                            return _nodesStack?.Count ?? 0;
                         case NoteStartDetectionPolicy.FirstNoteOn:
-                            return _nodesQueue.Count;
+                            return _nodesQueue?.Count ?? 0;
                     }
 
                     return -1;
@@ -58,22 +58,22 @@ namespace Melanchall.DryWetMidi.Interaction
                 switch (_noteStartDetectionPolicy)
                 {
                     case NoteStartDetectionPolicy.LastNoteOn:
-                        _nodesStack.Push(noteOnNode);
+                        _nodesStack?.Push(noteOnNode);
                         break;
                     case NoteStartDetectionPolicy.FirstNoteOn:
-                        _nodesQueue.Enqueue(noteOnNode);
+                        _nodesQueue?.Enqueue(noteOnNode);
                         break;
                 }
             }
 
-            public LinkedListNode<TDescriptor> GetNext()
+            public LinkedListNode<TDescriptor>? GetNext()
             {
                 switch (_noteStartDetectionPolicy)
                 {
                     case NoteStartDetectionPolicy.LastNoteOn:
-                        return _nodesStack.Pop();
+                        return _nodesStack?.Pop();
                     case NoteStartDetectionPolicy.FirstNoteOn:
-                        return _nodesQueue.Dequeue();
+                        return _nodesQueue?.Dequeue();
                 }
 
                 return null;
@@ -92,7 +92,7 @@ namespace Melanchall.DryWetMidi.Interaction
         {
             bool IsCompleted { get; }
 
-            ITimedObject GetObject(Func<NoteData, Note> constructor);
+            ITimedObject GetObject(Func<NoteData, Note>? constructor);
         }
 
         private class NoteDescriptor : IObjectDescriptor
@@ -104,14 +104,18 @@ namespace Melanchall.DryWetMidi.Interaction
                 _noteOnTimedEvent = noteOnTimedEvent;
             }
 
-            public TimedEvent NoteOffTimedEvent { get; set; }
+            public TimedEvent? NoteOffTimedEvent { get; set; }
 
             public bool IsCompleted => NoteOffTimedEvent != null;
 
-            public ITimedObject GetObject(Func<NoteData, Note> constructor)
+            public ITimedObject GetObject(Func<NoteData, Note>? constructor)
             {
                 if (!IsCompleted)
                     return _noteOnTimedEvent;
+
+                // TODO: proper exception
+                if (NoteOffTimedEvent == null)
+                    throw new InvalidOperationException("Note off event is not set.");
 
                 var note = constructor != null
                     ? constructor(new NoteData(_noteOnTimedEvent, NoteOffTimedEvent))
@@ -135,7 +139,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
             public bool IsCompleted { get; } = true;
 
-            public ITimedObject GetObject(Func<NoteData, Note> constructor)
+            public ITimedObject GetObject(Func<NoteData, Note>? constructor)
             {
                 return _timedObject;
             }
@@ -152,7 +156,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
             public bool IsCompleted { get; } = true;
 
-            public ITimedObject GetObject(Func<NoteData, Note> constructor)
+            public ITimedObject GetObject(Func<NoteData, Note>? constructor)
             {
                 return _timedEvent;
             }
@@ -178,9 +182,9 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <exception cref="ArgumentNullException"><paramref name="eventsCollection"/> is <c>null</c>.</exception>
         public static TimedObjectsManager<Note> ManageNotes(
             this EventsCollection eventsCollection,
-            NoteDetectionSettings settings = null,
-            TimedEventDetectionSettings timedEventDetectionSettings = null,
-            TimedObjectsComparer comparer = null)
+            NoteDetectionSettings? settings = null,
+            TimedEventDetectionSettings? timedEventDetectionSettings = null,
+            TimedObjectsComparer? comparer = null)
         {
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
 
@@ -211,9 +215,9 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is <c>null</c>.</exception>
         public static TimedObjectsManager<Note> ManageNotes(
             this TrackChunk trackChunk,
-            NoteDetectionSettings settings = null,
-            TimedEventDetectionSettings timedEventDetectionSettings = null,
-            TimedObjectsComparer comparer = null)
+            NoteDetectionSettings? settings = null,
+            TimedEventDetectionSettings? timedEventDetectionSettings = null,
+            TimedObjectsComparer? comparer = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
 
@@ -233,8 +237,8 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <seealso cref="GetObjectsUtilities"/>
         public static ICollection<Note> GetNotes(
             this IEnumerable<MidiEvent> midiEvents,
-            NoteDetectionSettings settings = null,
-            TimedEventDetectionSettings timedEventDetectionSettings = null)
+            NoteDetectionSettings? settings = null,
+            TimedEventDetectionSettings? timedEventDetectionSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiEvents), midiEvents);
 
@@ -266,8 +270,8 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <seealso cref="GetObjectsUtilities"/>
         public static ICollection<Note> GetNotes(
             this TrackChunk trackChunk,
-            NoteDetectionSettings settings = null,
-            TimedEventDetectionSettings timedEventDetectionSettings = null)
+            NoteDetectionSettings? settings = null,
+            TimedEventDetectionSettings? timedEventDetectionSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
 
@@ -291,8 +295,8 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <seealso cref="GetObjectsUtilities"/>
         public static ICollection<Note> GetNotes(
             this IEnumerable<TrackChunk> trackChunks,
-            NoteDetectionSettings settings = null,
-            TimedEventDetectionSettings timedEventDetectionSettings = null)
+            NoteDetectionSettings? settings = null,
+            TimedEventDetectionSettings? timedEventDetectionSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
 
@@ -328,8 +332,8 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <seealso cref="GetObjectsUtilities"/>
         public static ICollection<Note> GetNotes(
             this MidiFile file,
-            NoteDetectionSettings settings = null,
-            TimedEventDetectionSettings timedEventDetectionSettings = null)
+            NoteDetectionSettings? settings = null,
+            TimedEventDetectionSettings? timedEventDetectionSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(file), file);
 
@@ -369,8 +373,8 @@ namespace Melanchall.DryWetMidi.Interaction
         public static int ProcessNotes(
             this EventsCollection eventsCollection,
             Action<Note> action,
-            NoteDetectionSettings settings = null,
-            TimedEventDetectionSettings timedEventDetectionSettings = null,
+            NoteDetectionSettings? settings = null,
+            TimedEventDetectionSettings? timedEventDetectionSettings = null,
             NoteProcessingHint hint = NoteProcessingHint.Default)
         {
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
@@ -417,8 +421,8 @@ namespace Melanchall.DryWetMidi.Interaction
             this EventsCollection eventsCollection,
             Action<Note> action,
             Predicate<Note> match,
-            NoteDetectionSettings settings = null,
-            TimedEventDetectionSettings timedEventDetectionSettings = null,
+            NoteDetectionSettings? settings = null,
+            TimedEventDetectionSettings? timedEventDetectionSettings = null,
             NoteProcessingHint hint = NoteProcessingHint.Default)
         {
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
@@ -461,8 +465,8 @@ namespace Melanchall.DryWetMidi.Interaction
         public static int ProcessNotes(
             this TrackChunk trackChunk,
             Action<Note> action,
-            NoteDetectionSettings settings = null,
-            TimedEventDetectionSettings timedEventDetectionSettings = null,
+            NoteDetectionSettings? settings = null,
+            TimedEventDetectionSettings? timedEventDetectionSettings = null,
             NoteProcessingHint hint = NoteProcessingHint.Default)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
@@ -509,8 +513,8 @@ namespace Melanchall.DryWetMidi.Interaction
             this TrackChunk trackChunk,
             Action<Note> action,
             Predicate<Note> match,
-            NoteDetectionSettings settings = null,
-            TimedEventDetectionSettings timedEventDetectionSettings = null,
+            NoteDetectionSettings? settings = null,
+            TimedEventDetectionSettings? timedEventDetectionSettings = null,
             NoteProcessingHint hint = NoteProcessingHint.Default)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
@@ -553,8 +557,8 @@ namespace Melanchall.DryWetMidi.Interaction
         public static int ProcessNotes(
             this IEnumerable<TrackChunk> trackChunks,
             Action<Note> action,
-            NoteDetectionSettings settings = null,
-            TimedEventDetectionSettings timedEventDetectionSettings = null,
+            NoteDetectionSettings? settings = null,
+            TimedEventDetectionSettings? timedEventDetectionSettings = null,
             NoteProcessingHint hint = NoteProcessingHint.Default)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
@@ -602,8 +606,8 @@ namespace Melanchall.DryWetMidi.Interaction
             this IEnumerable<TrackChunk> trackChunks,
             Action<Note> action,
             Predicate<Note> match,
-            NoteDetectionSettings settings = null,
-            TimedEventDetectionSettings timedEventDetectionSettings = null,
+            NoteDetectionSettings? settings = null,
+            TimedEventDetectionSettings? timedEventDetectionSettings = null,
             NoteProcessingHint hint = NoteProcessingHint.Default)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
@@ -649,8 +653,8 @@ namespace Melanchall.DryWetMidi.Interaction
         public static int ProcessNotes(
             this MidiFile file,
             Action<Note> action,
-            NoteDetectionSettings settings = null,
-            TimedEventDetectionSettings timedEventDetectionSettings = null,
+            NoteDetectionSettings? settings = null,
+            TimedEventDetectionSettings? timedEventDetectionSettings = null,
             NoteProcessingHint hint = NoteProcessingHint.Default)
         {
             ThrowIfArgument.IsNull(nameof(file), file);
@@ -697,8 +701,8 @@ namespace Melanchall.DryWetMidi.Interaction
             this MidiFile file,
             Action<Note> action,
             Predicate<Note> match,
-            NoteDetectionSettings settings = null,
-            TimedEventDetectionSettings timedEventDetectionSettings = null,
+            NoteDetectionSettings? settings = null,
+            TimedEventDetectionSettings? timedEventDetectionSettings = null,
             NoteProcessingHint hint = NoteProcessingHint.Default)
         {
             ThrowIfArgument.IsNull(nameof(file), file);
@@ -721,8 +725,8 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <seealso cref="TimedObjectUtilities.RemoveObjects(EventsCollection, ObjectType, ObjectDetectionSettings)"/>
         public static int RemoveNotes(
             this EventsCollection eventsCollection,
-            NoteDetectionSettings settings = null,
-            TimedEventDetectionSettings timedEventDetectionSettings = null)
+            NoteDetectionSettings? settings = null,
+            TimedEventDetectionSettings? timedEventDetectionSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
 
@@ -754,8 +758,8 @@ namespace Melanchall.DryWetMidi.Interaction
         public static int RemoveNotes(
             this EventsCollection eventsCollection,
             Predicate<Note> match,
-            NoteDetectionSettings settings = null,
-            TimedEventDetectionSettings timedEventDetectionSettings = null)
+            NoteDetectionSettings? settings = null,
+            TimedEventDetectionSettings? timedEventDetectionSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
             ThrowIfArgument.IsNull(nameof(match), match);
@@ -787,8 +791,8 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <seealso cref="TimedObjectUtilities.RemoveObjects(TrackChunk, ObjectType, ObjectDetectionSettings)"/>
         public static int RemoveNotes(
             this TrackChunk trackChunk,
-            NoteDetectionSettings settings = null,
-            TimedEventDetectionSettings timedEventDetectionSettings = null)
+            NoteDetectionSettings? settings = null,
+            TimedEventDetectionSettings? timedEventDetectionSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
 
@@ -820,8 +824,8 @@ namespace Melanchall.DryWetMidi.Interaction
         public static int RemoveNotes(
             this TrackChunk trackChunk,
             Predicate<Note> match,
-            NoteDetectionSettings settings = null,
-            TimedEventDetectionSettings timedEventDetectionSettings = null)
+            NoteDetectionSettings? settings = null,
+            TimedEventDetectionSettings? timedEventDetectionSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
             ThrowIfArgument.IsNull(nameof(match), match);
@@ -842,8 +846,8 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <seealso cref="TimedObjectUtilities.RemoveObjects(IEnumerable{TrackChunk}, ObjectType, ObjectDetectionSettings)"/>
         public static int RemoveNotes(
             this IEnumerable<TrackChunk> trackChunks,
-            NoteDetectionSettings settings = null,
-            TimedEventDetectionSettings timedEventDetectionSettings = null)
+            NoteDetectionSettings? settings = null,
+            TimedEventDetectionSettings? timedEventDetectionSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
 
@@ -875,8 +879,8 @@ namespace Melanchall.DryWetMidi.Interaction
         public static int RemoveNotes(
             this IEnumerable<TrackChunk> trackChunks,
             Predicate<Note> match,
-            NoteDetectionSettings settings = null,
-            TimedEventDetectionSettings timedEventDetectionSettings = null)
+            NoteDetectionSettings? settings = null,
+            TimedEventDetectionSettings? timedEventDetectionSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
             ThrowIfArgument.IsNull(nameof(match), match);
@@ -908,8 +912,8 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <seealso cref="TimedObjectUtilities.RemoveObjects(MidiFile, ObjectType, ObjectDetectionSettings)"/>
         public static int RemoveNotes(
             this MidiFile file,
-            NoteDetectionSettings settings = null,
-            TimedEventDetectionSettings timedEventDetectionSettings = null)
+            NoteDetectionSettings? settings = null,
+            TimedEventDetectionSettings? timedEventDetectionSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(file), file);
 
@@ -941,8 +945,8 @@ namespace Melanchall.DryWetMidi.Interaction
         public static int RemoveNotes(
             this MidiFile file,
             Predicate<Note> match,
-            NoteDetectionSettings settings = null,
-            TimedEventDetectionSettings timedEventDetectionSettings = null)
+            NoteDetectionSettings? settings = null,
+            TimedEventDetectionSettings? timedEventDetectionSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(file), file);
             ThrowIfArgument.IsNull(nameof(match), match);
@@ -967,8 +971,8 @@ namespace Melanchall.DryWetMidi.Interaction
             this IEnumerable<EventsCollection> eventsCollections,
             Action<Note> action,
             Predicate<Note> match,
-            NoteDetectionSettings noteDetectionSettings,
-            TimedEventDetectionSettings timedEventDetectionSettings,
+            NoteDetectionSettings? noteDetectionSettings,
+            TimedEventDetectionSettings? timedEventDetectionSettings,
             NoteProcessingHint hint)
         {
             var processedCount = 0;
@@ -1012,14 +1016,14 @@ namespace Melanchall.DryWetMidi.Interaction
 
         internal static IEnumerable<ITimedObject> GetNotesAndTimedEventsLazy(
             this IEnumerable<TimedEvent> timedEvents,
-            NoteDetectionSettings settings)
+            NoteDetectionSettings? settings)
         {
             return GetNotesAndTimedEventsLazy(timedEvents, settings, false);
         }
 
         internal static IEnumerable<ITimedObject> GetNotesAndTimedEventsLazy(
             this IEnumerable<ITimedObject> timedObjects,
-            NoteDetectionSettings settings,
+            NoteDetectionSettings? settings,
             bool completeObjectsAllowed)
         {
             return new SortedLazyCollection<ITimedObject>(GetSortedNotesAndTimedEventsLazy(
@@ -1030,11 +1034,11 @@ namespace Melanchall.DryWetMidi.Interaction
 
         private static IEnumerable<ITimedObject> GetSortedNotesAndTimedEventsLazy(
             this IEnumerable<ITimedObject> timedObjects,
-            NoteDetectionSettings settings,
+            NoteDetectionSettings? settings,
             bool completeObjectsAllowed)
         {
-            settings = settings ?? new NoteDetectionSettings();
-            var constructor = settings?.Constructor;
+            var validSettings = settings ?? new NoteDetectionSettings();
+            var constructor = validSettings.Constructor;
 
             var objectsDescriptors = new LinkedList<IObjectDescriptor>();
             var notesDescriptorsNodes = new Dictionary<int, NoteOnsHolder>();
@@ -1061,7 +1065,7 @@ namespace Melanchall.DryWetMidi.Interaction
                             var node = objectsDescriptors.AddLast(new NoteDescriptor(timedEvent));
 
                             if (!notesDescriptorsNodes.TryGetValue(noteId, out var noteOnsHolder))
-                                notesDescriptorsNodes.Add(noteId, noteOnsHolder = new NoteOnsHolder(settings.NoteStartDetectionPolicy));
+                                notesDescriptorsNodes.Add(noteId, noteOnsHolder = new NoteOnsHolder(validSettings.NoteStartDetectionPolicy));
 
                             noteOnsHolder.Add(node);
                         }
@@ -1070,9 +1074,12 @@ namespace Melanchall.DryWetMidi.Interaction
                         {
                             var noteId = ((NoteOffEvent)timedEvent.Event).GetNoteId();
 
-                            LinkedListNode<IObjectDescriptor> node;
+                            LinkedListNode<IObjectDescriptor>? node;
 
-                            if (!notesDescriptorsNodes.TryGetValue(noteId, out var noteOnsHolder) || noteOnsHolder.Count == 0 || (node = noteOnsHolder.GetNext()).List == null)
+                            if (!notesDescriptorsNodes.TryGetValue(noteId, out var noteOnsHolder) ||
+                                noteOnsHolder == null ||
+                                noteOnsHolder.Count == 0 ||
+                                (node = noteOnsHolder.GetNext())?.List == null)
                             {
                                 objectsDescriptors.AddLast(new TimedEventDescriptor(timedEvent));
                                 break;

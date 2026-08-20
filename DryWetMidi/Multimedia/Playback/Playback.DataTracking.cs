@@ -3,6 +3,7 @@ using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace Melanchall.DryWetMidi.Multimedia
@@ -29,7 +30,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         private sealed class EventWithMetadata
         {
-            public EventWithMetadata(MidiEvent midiEvent, object metadata)
+            public EventWithMetadata(MidiEvent midiEvent, object? metadata)
             {
                 Event = midiEvent;
                 Metadata = metadata;
@@ -37,18 +38,18 @@ namespace Melanchall.DryWetMidi.Multimedia
 
             public MidiEvent Event { get; }
 
-            public object Metadata { get; }
+            public object? Metadata { get; }
         }
 
         private sealed class DataChange<TData> : IMetadata
         {
-            public DataChange(TData data, object metadata)
+            public DataChange(TData data, object? metadata)
             {
                 Data = data;
                 Metadata = metadata;
             }
 
-            public DataChange(TData data, object metadata, bool isDefault)
+            public DataChange(TData data, object? metadata, bool isDefault)
                 : this(data, metadata)
             {
                 IsDefault = isDefault;
@@ -56,21 +57,21 @@ namespace Melanchall.DryWetMidi.Multimedia
 
             public TData Data { get; }
 
-            public object Metadata { get; set; }
+            public object? Metadata { get; set; }
 
             public bool IsDefault { get; }
 
-            public override bool Equals(object obj)
+            public override bool Equals(object? obj)
             {
                 var other = obj as DataChange<TData>;
                 return other != null &&
-                       Data.Equals(other.Data) &&
+                       EqualityComparer<TData>.Default.Equals(Data, other.Data) &&
                        IsDefault == other.IsDefault;
             }
 
             public override int GetHashCode()
             {
-                return Data.GetHashCode();
+                return EqualityComparer<TData>.Default.GetHashCode(Data!);
             }
         }
 
@@ -94,7 +95,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
             public bool IsEnabled { get; set; } = true;
 
-            public DataChange<TData>[] CurrentChangesByChannel { get; } = new DataChange<TData>[FourBitNumber.MaxValue + 1];
+            public DataChange<TData>?[] CurrentChangesByChannel { get; } = new DataChange<TData>?[FourBitNumber.MaxValue + 1];
 
             public RedBlackTree<long, DataChange<TData>>[] ChangesTreesByChannel { get; } = FourBitNumber.Values
                 .Select(n => new RedBlackTree<long, DataChange<TData>>())
@@ -139,9 +140,9 @@ namespace Melanchall.DryWetMidi.Multimedia
             }
 
             public void InitializeData(
-                TEvent midiEvent,
+                TEvent? midiEvent,
                 long time,
-                object metadata)
+                object? metadata)
             {
                 if (midiEvent == null)
                     return;
@@ -150,7 +151,7 @@ namespace Melanchall.DryWetMidi.Multimedia
                 tree.Add(time, new DataChange<TData>(_getEventData(midiEvent), metadata));
             }
 
-            public void UpdateCurrentData(TEvent midiEvent, object metadata)
+            public void UpdateCurrentData(TEvent? midiEvent, object? metadata)
             {
                 if (midiEvent == null)
                     return;
@@ -158,7 +159,7 @@ namespace Melanchall.DryWetMidi.Multimedia
                 CurrentChangesByChannel[midiEvent.Channel] = new DataChange<TData>(_getEventData(midiEvent), metadata);
             }
 
-            public void RemoveData(TEvent midiEvent, long time)
+            public void RemoveData(TEvent? midiEvent, long time)
             {
                 if (midiEvent == null)
                     return;
@@ -177,6 +178,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         }
 
         private sealed class DataChangesManager<TKey, TData, TEvent>
+            where TKey : notnull
             where TData : struct
             where TEvent : ChannelEvent, new()
         {
@@ -227,9 +229,9 @@ namespace Melanchall.DryWetMidi.Multimedia
             }
 
             public void InitializeData(
-                TEvent midiEvent,
+                TEvent? midiEvent,
                 long time,
-                object metadata)
+                object? metadata)
             {
                 if (midiEvent == null)
                     return;
@@ -241,7 +243,7 @@ namespace Melanchall.DryWetMidi.Multimedia
                 changesManager.InitializeData(midiEvent, time, metadata);
             }
 
-            public void UpdateCurrentData(TEvent midiEvent, object metadata)
+            public void UpdateCurrentData(TEvent? midiEvent, object? metadata)
             {
                 if (midiEvent == null)
                     return;
@@ -253,7 +255,7 @@ namespace Melanchall.DryWetMidi.Multimedia
                 changesManager.UpdateCurrentData(midiEvent, metadata);
             }
 
-            public void RemoveData(TEvent midiEvent, long time)
+            public void RemoveData(TEvent? midiEvent, long time)
             {
                 if (midiEvent == null)
                     return;
@@ -415,6 +417,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             _noteAftertouchChangesManager.Clear();
         }
 
+        [MemberNotNull(nameof(_getParameterEventsAtTime))]
         private void InitializeDataTracking()
         {
             _getParameterEventsAtTime = new Dictionary<TrackedParameterType, Func<long, IEnumerable<EventWithMetadata>>>
@@ -427,7 +430,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             };
         }
 
-        private void InitializeTrackedData(MidiEvent midiEvent, long time, object metadata)
+        private void InitializeTrackedData(MidiEvent midiEvent, long time, object? metadata)
         {
             _programChangesManager.InitializeData(midiEvent as ProgramChangeEvent, time, metadata);
             _pitchBendChangesManager.InitializeData(midiEvent as PitchBendEvent, time, metadata);
@@ -436,7 +439,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             _noteAftertouchChangesManager.InitializeData(midiEvent as NoteAftertouchEvent, time, metadata);
         }
 
-        private void UpdateCurrentTrackedData(MidiEvent midiEvent, object metadata)
+        private void UpdateCurrentTrackedData(MidiEvent midiEvent, object? metadata)
         {
             _programChangesManager.UpdateCurrentData(midiEvent as ProgramChangeEvent, metadata);
             _pitchBendChangesManager.UpdateCurrentData(midiEvent as PitchBendEvent, metadata);
@@ -465,6 +468,9 @@ namespace Melanchall.DryWetMidi.Multimedia
         private IEnumerable<EventWithMetadata> GetEventsAtTime(TimeSpan time, TrackedParameterType trackedParameterType)
         {
             var convertedTime = TimeConverter.ConvertFrom((MetricTimeSpan)time, TempoMap);
+
+            if (_getParameterEventsAtTime == null)
+                yield break;
 
             foreach (var getEvents in _getParameterEventsAtTime)
             {

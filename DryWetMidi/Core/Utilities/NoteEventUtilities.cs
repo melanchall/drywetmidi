@@ -64,6 +64,7 @@ namespace Melanchall.DryWetMidi.Core
             noteEvent.NoteNumber = NoteUtilities.GetNoteNumber(noteName, octave);
         }
 
+        // TODO: check and... maybe remove?
         /// <summary>
         /// Checks if the specified <see cref="NoteOnEvent"/> corresponds to the specified
         /// <see cref="NoteOffEvent"/>.

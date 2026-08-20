@@ -182,6 +182,7 @@ namespace Melanchall.DryWetMidi.Interaction
             return Dotted(DoubleDotCount);
         }
 
+        // TODO: more info on tuplets/examples
         /// <summary>
         /// Returns a tuplet based on the current <see cref="MusicalTimeSpan"/>.
         /// </summary>
@@ -270,7 +271,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <see cref="String.Empty"/>, or is not of the correct format. This parameter is passed uninitialized;
         /// any value originally supplied in result will be overwritten.</param>
         /// <returns><c>true</c> if <paramref name="input"/> was converted successfully; otherwise, <c>false</c>.</returns>
-        public static bool TryParse(string input, out MusicalTimeSpan timeSpan)
+        public static bool TryParse(string? input, out MusicalTimeSpan? timeSpan)
         {
             return ParsingUtilities.TryParse(input, MusicalTimeSpanParser.TryParse, out timeSpan);
         }
@@ -284,10 +285,22 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <paramref name="input"/>.</returns>
         /// <exception cref="ArgumentException"><paramref name="input"/> is <c>null</c> or contains white-spaces only.</exception>
         /// <exception cref="FormatException"><paramref name="input"/> has invalid format.</exception>
-        public static MusicalTimeSpan Parse(string input)
+        public static MusicalTimeSpan Parse(string? input)
         {
             return ParsingUtilities.Parse<MusicalTimeSpan>(input, MusicalTimeSpanParser.TryParse);
         }
+
+        // TODO: maybe something simple like
+        //int[] commonDenominators = { 1, 2, 4, 8, 16, 32 };
+        
+        //foreach (int den in commonDenominators)
+        //{
+        //    double num = value * den;
+        //    if (Math.Abs(num - Math.Round(num)) < 0.001)
+        //    {
+        //        return new MusicalTimeSpan((int)Math.Round(num), den);
+        //    }
+        //}
 
         /// <summary>
         /// Creates an instance of the <see cref="MusicalTimeSpan"/> from the specified double number.
@@ -305,7 +318,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="number"/> is negative.</exception>
         /// <exception cref="InvalidOperationException">Failed to find rationalization for the specified number.
         /// Try to refine settings.</exception>
-        public static MusicalTimeSpan FromDouble(double number, DoubleToMusicalTimeSpanSettings settings = null)
+        public static MusicalTimeSpan FromDouble(double number, DoubleToMusicalTimeSpanSettings? settings = null)
         {
             ThrowIfArgument.IsNegative(nameof(number), number, "Number is negative.");
 
@@ -348,7 +361,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="timeSpan1">The first <see cref="MusicalTimeSpan"/> to compare.</param>
         /// <param name="timeSpan2">The second <see cref="MusicalTimeSpan"/> to compare.</param>
         /// <returns><c>true</c> if time spans are equal, <c>false</c> otherwise.</returns>
-        public static bool operator ==(MusicalTimeSpan timeSpan1, MusicalTimeSpan timeSpan2)
+        public static bool operator ==(MusicalTimeSpan? timeSpan1, MusicalTimeSpan? timeSpan2)
         {
             if (ReferenceEquals(timeSpan1, null))
                 return ReferenceEquals(timeSpan2, null);
@@ -362,7 +375,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="timeSpan1">The first <see cref="MusicalTimeSpan"/> to compare.</param>
         /// <param name="timeSpan2">The second <see cref="MusicalTimeSpan"/> to compare.</param>
         /// <returns><c>false</c> if time spans are equal, <c>true</c> otherwise.</returns>
-        public static bool operator !=(MusicalTimeSpan timeSpan1, MusicalTimeSpan timeSpan2)
+        public static bool operator !=(MusicalTimeSpan? timeSpan1, MusicalTimeSpan? timeSpan2)
         {
             return !(timeSpan1 == timeSpan2);
         }
@@ -591,7 +604,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="obj">The object to compare with the current object.</param>
         /// <returns><c>true</c> if the specified object is equal to the current object; otherwise, <c>false</c>.</returns>
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             return Equals(obj as MusicalTimeSpan);
         }
@@ -738,7 +751,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </item>
         /// </list>
         /// </returns>
-        public int CompareTo(object other)
+        public int CompareTo(object? other)
         {
             if (ReferenceEquals(other, null))
                 return 1;
@@ -781,7 +794,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </item>
         /// </list>
         /// </returns>
-        public int CompareTo(MusicalTimeSpan other)
+        public int CompareTo(MusicalTimeSpan? other)
         {
             if (ReferenceEquals(other, null))
                 return 1;
@@ -799,7 +812,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="other">An object to compare with this object.</param>
         /// <returns><c>true</c> if the current object is equal to the other parameter; otherwise, <c>false</c>.</returns>
-        public bool Equals(MusicalTimeSpan other)
+        public bool Equals(MusicalTimeSpan? other)
         {
             if (ReferenceEquals(this, other))
                 return true;

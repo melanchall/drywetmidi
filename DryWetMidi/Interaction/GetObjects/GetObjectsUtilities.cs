@@ -24,9 +24,9 @@ namespace Melanchall.DryWetMidi.Interaction
         /// Objects are ordered by time.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="midiEvents"/> is <c>null</c>.</exception>
         public static ICollection<ITimedObject> GetObjects(
-            this IEnumerable<MidiEvent> midiEvents,
+            this IEnumerable<MidiEvent?> midiEvents,
             ObjectType objectType,
-            ObjectDetectionSettings settings = null)
+            ObjectDetectionSettings? settings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiEvents), midiEvents);
 
@@ -45,9 +45,9 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <returns>A lazy collection of objects built on top of <paramref name="midiEvents"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="midiEvents"/> is <c>null</c>.</exception>
         public static IEnumerable<ITimedObject> EnumerateObjects(
-            this IEnumerable<MidiEvent> midiEvents,
+            this IEnumerable<MidiEvent?> midiEvents,
             ObjectType objectType,
-            ObjectDetectionSettings settings = null)
+            ObjectDetectionSettings? settings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiEvents), midiEvents);
 
@@ -68,7 +68,7 @@ namespace Melanchall.DryWetMidi.Interaction
         public static ICollection<ITimedObject> GetObjects(
             this EventsCollection eventsCollection,
             ObjectType objectType,
-            ObjectDetectionSettings settings = null)
+            ObjectDetectionSettings? settings = null)
         {
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
 
@@ -89,7 +89,7 @@ namespace Melanchall.DryWetMidi.Interaction
         public static ICollection<ITimedObject> GetObjects(
             this TrackChunk trackChunk,
             ObjectType objectType,
-            ObjectDetectionSettings settings = null)
+            ObjectDetectionSettings? settings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
 
@@ -106,14 +106,14 @@ namespace Melanchall.DryWetMidi.Interaction
         /// Objects are ordered by time.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="trackChunks"/> is <c>null</c>.</exception>
         public static ICollection<ITimedObject> GetObjects(
-            this IEnumerable<TrackChunk> trackChunks,
+            this IEnumerable<TrackChunk?> trackChunks,
             ObjectType objectType,
-            ObjectDetectionSettings settings = null)
+            ObjectDetectionSettings? settings = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
 
             return trackChunks
-                .Where(trackChunk => trackChunk != null)
+                .OfType<TrackChunk>()
                 .Select((trackChunk, trackChunkIndex) => trackChunk
                     .Events
                     .GetTimedEventsLazy(settings?.TimedEventDetectionSettings, trackChunkIndex)
@@ -134,7 +134,7 @@ namespace Melanchall.DryWetMidi.Interaction
         public static ICollection<ITimedObject> GetObjects(
             this MidiFile midiFile,
             ObjectType objectType,
-            ObjectDetectionSettings settings = null)
+            ObjectDetectionSettings? settings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
 
@@ -151,9 +151,9 @@ namespace Melanchall.DryWetMidi.Interaction
         /// Objects are ordered by time.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="timedObjects"/> is <c>null</c>.</exception>
         public static ICollection<ITimedObject> GetObjects(
-            this IEnumerable<ITimedObject> timedObjects,
+            this IEnumerable<ITimedObject?> timedObjects,
             ObjectType objectType,
-            ObjectDetectionSettings settings = null)
+            ObjectDetectionSettings? settings = null)
         {
             ThrowIfArgument.IsNull(nameof(timedObjects), timedObjects);
 
@@ -176,7 +176,7 @@ namespace Melanchall.DryWetMidi.Interaction
                 settings);
         }
 
-        private static bool TryProcessTimedEvent(TimedEvent timedEvent, List<ITimedObject> processedTimedObjects)
+        private static bool TryProcessTimedEvent(TimedEvent? timedEvent, List<ITimedObject> processedTimedObjects)
         {
             if (timedEvent == null)
                 return false;
@@ -185,7 +185,7 @@ namespace Melanchall.DryWetMidi.Interaction
             return true;
         }
 
-        private static bool TryProcessNote(Note note, List<ITimedObject> processedTimedObjects, bool getNotes, bool getChords)
+        private static bool TryProcessNote(Note? note, List<ITimedObject> processedTimedObjects, bool getNotes, bool getChords)
         {
             if (note == null)
                 return false;
@@ -201,7 +201,7 @@ namespace Melanchall.DryWetMidi.Interaction
             return true;
         }
 
-        private static bool TryProcessChord(Chord chord, List<ITimedObject> processedTimedObjects, bool getNotes, bool getChords)
+        private static bool TryProcessChord(Chord? chord, List<ITimedObject> processedTimedObjects, bool getNotes, bool getChords)
         {
             if (chord == null)
                 return false;
@@ -225,7 +225,7 @@ namespace Melanchall.DryWetMidi.Interaction
         private static ICollection<ITimedObject> GetObjectsFromSortedTimedObjects(
             this IEnumerable<ITimedObject> processedTimedObjects,
             ObjectType objectType,
-            ObjectDetectionSettings settings)
+            ObjectDetectionSettings? settings)
         {
             var result = new List<ITimedObject>();
             var notesDeconstructed = new ObjectWrapper<bool>();
@@ -243,8 +243,8 @@ namespace Melanchall.DryWetMidi.Interaction
         private static IEnumerable<ITimedObject> EnumerateObjectsFromSortedTimedObjects(
             this IEnumerable<ITimedObject> processedTimedObjects,
             ObjectType objectType,
-            ObjectDetectionSettings settings,
-            ObjectWrapper<bool> notesDeconstructed = null)
+            ObjectDetectionSettings? settings,
+            ObjectWrapper<bool>? notesDeconstructed = null)
         {
             var getChords = objectType.HasFlag(ObjectType.Chord);
             var getNotes = objectType.HasFlag(ObjectType.Note);
@@ -274,15 +274,21 @@ namespace Melanchall.DryWetMidi.Interaction
                 if (getChords)
                 {
                     var chord = timedObject as Chord;
-                    if (processed = (chord != null))
+                    if (chord != null)
+                    {
+                        processed = true;
                         yield return chord;
+                    }
                 }
 
                 if (!processed && getNotes)
                 {
                     var note = timedObject as Note;
-                    if (processed = (note != null))
+                    if (note != null)
+                    {
+                        processed = true;
                         yield return note;
+                    }
                 }
 
                 if (!processed && getTimedEvents)

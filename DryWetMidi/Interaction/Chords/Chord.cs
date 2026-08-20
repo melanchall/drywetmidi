@@ -16,17 +16,17 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <summary>
         /// Occurs when notes collection changes.
         /// </summary>
-        public event TimedObjectsCollectionChangedEventHandler<Note> NotesCollectionChanged;
+        public event TimedObjectsCollectionChangedEventHandler<Note>? NotesCollectionChanged;
 
         /// <summary>
         /// Occurs when the time of an object has been changed.
         /// </summary>
-        public event EventHandler<TimeChangedEventArgs> TimeChanged;
+        public event EventHandler<TimeChangedEventArgs>? TimeChanged;
 
         /// <summary>
         /// Occurs when the length of an object has been changed.
         /// </summary>
-        public event EventHandler<LengthChangedEventArgs> LengthChanged;
+        public event EventHandler<LengthChangedEventArgs>? LengthChanged;
 
         #endregion
 
@@ -377,8 +377,8 @@ namespace Melanchall.DryWetMidi.Interaction
 
             var parts = Notes.Select(n => n.Split(time)).ToArray();
 
-            var leftPart = new Chord(parts.Select(p => (Note)p.LeftPart).Where(p => p != null));
-            var rightPart = new Chord(parts.Select(p => (Note)p.RightPart).Where(p => p != null));
+            var leftPart = new Chord(parts.Select(p => p.LeftPart).OfType<Note>());
+            var rightPart = new Chord(parts.Select(p => p.RightPart).OfType<Note>());
 
             return new SplitLengthedObject(leftPart, rightPart);
         }

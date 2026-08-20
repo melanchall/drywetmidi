@@ -79,7 +79,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="timeSignature1">The first <see cref="TimeSignature"/> to compare.</param>
         /// <param name="timeSignature2">The second <see cref="TimeSignature"/> to compare.</param>
         /// <returns><c>true</c> if the time signatures are equal, <c>false</c> otherwise.</returns>
-        public static bool operator ==(TimeSignature timeSignature1, TimeSignature timeSignature2)
+        public static bool operator ==(TimeSignature? timeSignature1, TimeSignature? timeSignature2)
         {
             if (ReferenceEquals(timeSignature1, timeSignature2))
                 return true;
@@ -97,7 +97,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="timeSignature1">The first <see cref="TimeSignature"/> to compare.</param>
         /// <param name="timeSignature2">The second <see cref="TimeSignature"/> to compare.</param>
         /// <returns><c>false</c> if the time signatures are equal, <c>true</c> otherwise.</returns>
-        public static bool operator !=(TimeSignature timeSignature1, TimeSignature timeSignature2)
+        public static bool operator !=(TimeSignature? timeSignature1, TimeSignature? timeSignature2)
         {
             return !(timeSignature1 == timeSignature2);
         }
@@ -226,7 +226,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="obj">The object to compare with the current object.</param>
         /// <returns><c>true</c> if the specified object is equal to the current object; otherwise, <c>false</c>.</returns>
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             return this == (obj as TimeSignature);
         }

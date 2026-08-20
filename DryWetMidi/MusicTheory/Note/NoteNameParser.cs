@@ -30,7 +30,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
             return Patterns;
         }
 
-        internal static ParsingResult TryParse(string input, out NoteName noteName)
+        internal static ParsingResult TryParse(string? input, out NoteName noteName)
         {
             noteName = default(NoteName);
 

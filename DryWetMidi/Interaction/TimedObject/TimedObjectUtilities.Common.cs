@@ -84,7 +84,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="timedObjects">Collection of objects to create a track chunk from.</param>
         /// <returns><see cref="TrackChunk"/> containing the <paramref name="timedObjects"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="timedObjects"/> is <c>null</c>.</exception>
-        public static TrackChunk ToTrackChunk(this IEnumerable<ITimedObject> timedObjects)
+        public static TrackChunk ToTrackChunk(this IEnumerable<ITimedObject?> timedObjects)
         {
             ThrowIfArgument.IsNull(nameof(timedObjects), timedObjects);
 
@@ -104,7 +104,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="timedObjects">Collection of objects to create a MIDI file from.</param>
         /// <returns><see cref="MidiFile"/> containing the <paramref name="timedObjects"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="timedObjects"/> is <c>null</c>.</exception>
-        public static MidiFile ToFile(this IEnumerable<ITimedObject> timedObjects)
+        public static MidiFile ToFile(this IEnumerable<ITimedObject?> timedObjects)
         {
             ThrowIfArgument.IsNull(nameof(timedObjects), timedObjects);
 
@@ -127,7 +127,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </item>
         /// </list>
         /// </exception>
-        public static void AddObjects(this EventsCollection eventsCollection, IEnumerable<ITimedObject> timedObjects)
+        public static void AddObjects(this EventsCollection eventsCollection, IEnumerable<ITimedObject?> timedObjects)
         {
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
             ThrowIfArgument.IsNull(nameof(timedObjects), timedObjects);
@@ -169,7 +169,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </item>
         /// </list>
         /// </exception>
-        public static void AddObjects(this TrackChunk trackChunk, IEnumerable<ITimedObject> timedObjects)
+        public static void AddObjects(this TrackChunk trackChunk, IEnumerable<ITimedObject?> timedObjects)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
             ThrowIfArgument.IsNull(nameof(timedObjects), timedObjects);
@@ -217,16 +217,18 @@ namespace Melanchall.DryWetMidi.Interaction
             this IEnumerable<IEnumerable<TObject>> sortedObjectsCollections)
             where TObject : ITimedObject
         {
-            var enumerators = sortedObjectsCollections
+            var originalEnumerators = sortedObjectsCollections
                 .Select(c => c.GetEnumerator())
                 .ToArray();
 
-            var enumeratorsLength = enumerators.Length;
+            var enumeratorsLength = originalEnumerators.Length;
+            var enumerators = new IEnumerator<TObject>?[enumeratorsLength];
 
             for (var i = 0; i < enumeratorsLength; i++)
             {
-                if (!enumerators[i].MoveNext())
-                    enumerators[i] = null;
+                enumerators[i] = originalEnumerators[i].MoveNext()
+                    ? originalEnumerators[i]
+                    : null;
             }
 
             var lastTime = -1L;
@@ -260,6 +262,9 @@ namespace Melanchall.DryWetMidi.Interaction
                     break;
 
                 var minTimeEnumerator = enumerators[minTimeEnumeratorIndex];
+                if (minTimeEnumerator == null)
+                    continue;
+
                 yield return minTimeEnumerator.Current;
 
                 lastTime = minTimeEnumerator.Current.Time;

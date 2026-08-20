@@ -69,7 +69,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="timeSpan1">The first <see cref="MathTimeSpan"/> to compare.</param>
         /// <param name="timeSpan2">The second <see cref="MathTimeSpan"/> to compare.</param>
         /// <returns><c>true</c> if time spans are equal, <c>false</c> otherwise.</returns>
-        public static bool operator ==(MathTimeSpan timeSpan1, MathTimeSpan timeSpan2)
+        public static bool operator ==(MathTimeSpan? timeSpan1, MathTimeSpan? timeSpan2)
         {
             if (ReferenceEquals(timeSpan1, timeSpan2))
                 return true;
@@ -89,7 +89,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="timeSpan1">The first <see cref="MathTimeSpan"/> to compare.</param>
         /// <param name="timeSpan2">The second <see cref="MathTimeSpan"/> to compare.</param>
         /// <returns><c>false</c> if time spans are equal, <c>true</c> otherwise.</returns>
-        public static bool operator !=(MathTimeSpan timeSpan1, MathTimeSpan timeSpan2)
+        public static bool operator !=(MathTimeSpan? timeSpan1, MathTimeSpan? timeSpan2)
         {
             return !(timeSpan1 == timeSpan2);
         }
@@ -118,7 +118,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="obj">The object to compare with the current object.</param>
         /// <returns><c>true</c> if the specified object is equal to the current object; otherwise, <c>false</c>.</returns>
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             return this == (obj as MathTimeSpan);
         }
@@ -212,7 +212,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="divisor"/> is zero or negative.</exception>
         public ITimeSpan Divide(double divisor)
         {
-            ThrowIfArgument.IsNegative(nameof(divisor), divisor, "Divisor is negative.");
+            ThrowIfArgument.IsNonpositive(nameof(divisor), divisor, "Divisor is zero or negative.");
 
             return new MathTimeSpan(TimeSpan1.Divide(divisor),
                                     TimeSpan2.Divide(divisor),
@@ -256,7 +256,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </item>
         /// </list>
         /// </returns>
-        public int CompareTo(object other)
+        public int CompareTo(object? other)
         {
             throw new InvalidOperationException("Cannot compare MathTimeSpan.");
         }

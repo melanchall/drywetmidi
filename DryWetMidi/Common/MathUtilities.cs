@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Melanchall.DryWetMidi.Common
 {
@@ -49,7 +50,7 @@ namespace Melanchall.DryWetMidi.Common
             return value + value * margin;
         }
 
-        public static T GetLastElementBelowThreshold<T, TKey>(
+        public static T? GetLastElementBelowThreshold<T, TKey>(
             IList<T> elements,
             TKey keyThreshold,
             Func<T, TKey> keySelector)
@@ -58,7 +59,7 @@ namespace Melanchall.DryWetMidi.Common
             return GetLastElementBelowThreshold(elements, keyThreshold, keySelector, out _);
         }
 
-        public static T GetLastElementBelowThreshold<T, TKey>(
+        public static T? GetLastElementBelowThreshold<T, TKey>(
             IList<T> elements,
             TKey keyThreshold,
             Func<T, TKey> keySelector,
@@ -74,7 +75,7 @@ namespace Melanchall.DryWetMidi.Common
                 out index);
         }
 
-        public static T GetLastElementBelowThreshold<T, TKey>(
+        public static T? GetLastElementBelowThreshold<T, TKey>(
             IList<T> elements,
             int firstIndex,
             int lastIndex,
@@ -101,7 +102,7 @@ namespace Melanchall.DryWetMidi.Common
             return firstIndex > 0 ? elements[firstIndex - 1] : default(T);
         }
 
-        public static T GetFirstElementAboveThreshold<T, TKey>(
+        public static T? GetFirstElementAboveThreshold<T, TKey>(
             IList<T> elements,
             TKey keyThreshold,
             Func<T, TKey> keySelector)
@@ -110,7 +111,7 @@ namespace Melanchall.DryWetMidi.Common
             return GetFirstElementAboveThreshold(elements, keyThreshold, keySelector, out _);
         }
 
-        public static T GetFirstElementAboveThreshold<T, TKey>(
+        public static T? GetFirstElementAboveThreshold<T, TKey>(
             IList<T> elements,
             TKey keyThreshold,
             Func<T, TKey> keySelector,
@@ -126,7 +127,7 @@ namespace Melanchall.DryWetMidi.Common
                 out index);
         }
 
-        public static T GetFirstElementAboveThreshold<T, TKey>(
+        public static T? GetFirstElementAboveThreshold<T, TKey>(
             IList<T> elements,
             int firstIndex,
             int lastIndex,
@@ -221,11 +222,13 @@ namespace Melanchall.DryWetMidi.Common
         }
 
         public static IEnumerable<T[]> GetPermutations<T>(T[] objects)
+            where T : notnull
         {
             return GetPermutations(objects, objects.Length);
         }
 
-        private static IEnumerable<T[]> GetPermutations<T>(T[] objects, int k)
+        private static IEnumerable<T[]> GetPermutations<T>([NotNull] T[] objects, int k)
+            where T : notnull
         {
             if (k == 1)
                 yield return objects;

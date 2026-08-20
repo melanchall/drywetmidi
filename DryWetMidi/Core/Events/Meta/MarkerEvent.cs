@@ -23,7 +23,7 @@
         /// specified text of marker.
         /// </summary>
         /// <param name="text">Text of the marker.</param>
-        public MarkerEvent(string text)
+        public MarkerEvent(string? text)
             : base(MidiEventType.Marker, text)
         {
         }

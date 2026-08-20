@@ -33,7 +33,7 @@ namespace Melanchall.DryWetMidi.Core
         /// specified data.
         /// </summary>
         /// <param name="data">Data of the sysex event.</param>
-        public NormalSysExEvent(byte[] data)
+        public NormalSysExEvent(byte[]? data)
             : this()
         {
             Data = data;

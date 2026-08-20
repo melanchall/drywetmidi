@@ -36,13 +36,13 @@ namespace Melanchall.DryWetMidi.Tools
         /// Gets or sets <see cref="SliceMidiFileMarkers"/> that holds factory methods to create events
         /// to mark parts of split file.
         /// </summary>
-        public SliceMidiFileMarkers Markers { get; set; }
+        public SliceMidiFileMarkers? Markers { get; set; }
 
         /// <summary>
         /// Gets or sets settings which define how notes should be detected and built. You can set it to
         /// <c>null</c> to use default settings.
         /// </summary>
-        public NoteDetectionSettings NoteDetectionSettings { get; set; }
+        public NoteDetectionSettings? NoteDetectionSettings { get; set; }
 
         #endregion
     }

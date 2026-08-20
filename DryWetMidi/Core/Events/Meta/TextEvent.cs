@@ -23,7 +23,7 @@
         /// specified text.
         /// </summary>
         /// <param name="text">Text of the message.</param>
-        public TextEvent(string text)
+        public TextEvent(string? text)
             : base(MidiEventType.Text, text)
         {
         }

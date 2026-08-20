@@ -24,7 +24,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <exception cref="ArgumentNullException"><paramref name="timedObjects"/> is <c>null</c>.</exception>
         public static IEnumerable<ITimedObject> WithRests(
             this IEnumerable<ITimedObject> timedObjects,
-            RestDetectionSettings settings = null)
+            RestDetectionSettings? settings = null)
         {
             ThrowIfArgument.IsNull(nameof(timedObjects), timedObjects);
 
@@ -45,7 +45,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <exception cref="ArgumentNullException"><paramref name="timedObjects"/> is <c>null</c>.</exception>
         public static ICollection<Rest> GetRests(
             this IEnumerable<ITimedObject> timedObjects,
-            RestDetectionSettings settings = null)
+            RestDetectionSettings? settings = null)
         {
             ThrowIfArgument.IsNull(nameof(timedObjects), timedObjects);
 

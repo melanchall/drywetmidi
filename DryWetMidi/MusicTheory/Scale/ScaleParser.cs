@@ -26,7 +26,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
 
         #region Methods
 
-        internal static ParsingResult TryParse(string input, out Scale scale)
+        internal static ParsingResult TryParse(string? input, out Scale? scale)
         {
             scale = null;
 
@@ -45,7 +45,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
 
             //
 
-            IEnumerable<Interval> intervals;
+            IEnumerable<Interval>? intervals;
 
             var intervalGroup = match.Groups[IntervalGroupName];
             if (intervalGroup.Success)
@@ -69,7 +69,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
                 if (notParsedResult != null)
                     return notParsedResult.ParsingResult;
 
-                intervals = intervalsParsingResults.Select(r => r.Interval).ToArray();
+                intervals = intervalsParsingResults.Select(r => r.Interval).ToArray()!;
             }
             else
             {

@@ -289,7 +289,7 @@ namespace Melanchall.DryWetMidi.Composing
             return this;
         }
 
-        private int GetAnchorCounter(object anchor)
+        private int GetAnchorCounter(object? anchor)
         {
             if (anchor == null)
                 return _globalAnchorsCounter;
@@ -300,7 +300,8 @@ namespace Melanchall.DryWetMidi.Composing
             return counter;
         }
 
-        private void UpdateAnchorsCounters(object anchor)
+        // TODO: check all anchors usage, they must be non-null
+        private void UpdateAnchorsCounters(object? anchor)
         {
             _globalAnchorsCounter++;
 

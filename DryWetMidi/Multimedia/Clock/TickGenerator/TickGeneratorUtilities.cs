@@ -7,7 +7,7 @@ namespace Melanchall.DryWetMidi.Multimedia
     {
         #region Methods
 
-        public static void HandleTickGeneratorNativeApiResult<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicFields | DynamicallyAccessedMemberTypes.Interfaces)] TResult>(
+        public static void HandleTickGeneratorNativeApiResult<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicFields | (DynamicallyAccessedMemberTypes)CodeAnalysisUtilities.DynamicallyAccessedMemberTypes_Interfaces)] TResult>(
             TResult result,
             int errorCode)
         {

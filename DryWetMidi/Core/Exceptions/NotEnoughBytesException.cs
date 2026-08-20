@@ -16,7 +16,7 @@ namespace Melanchall.DryWetMidi.Core
     {
         #region Constructors
 
-        internal NotEnoughBytesException(string message, Exception innerException)
+        internal NotEnoughBytesException(string message, Exception? innerException)
             : base(message, innerException)
         {
         }

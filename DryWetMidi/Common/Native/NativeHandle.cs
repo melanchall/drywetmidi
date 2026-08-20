@@ -20,7 +20,7 @@ namespace Melanchall.DryWetMidi.Common
         public object Lock { get; } = new object();
 
 #if TEST
-        public TestCheckpoints TestCheckpoints { get; set; }
+        public TestCheckpoints? TestCheckpoints { get; set; }
 #endif
     }
 }

@@ -56,7 +56,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <see cref="String.Empty"/>, or is not of the correct format. This parameter is passed uninitialized;
         /// any value originally supplied in result will be overwritten.</param>
         /// <returns><c>true</c> if <paramref name="input"/> was converted successfully; otherwise, <c>false</c>.</returns>
-        public static bool TryParse(string input, out ITimeSpan timeSpan)
+        public static bool TryParse(string? input, out ITimeSpan? timeSpan)
         {
             timeSpan = null;
 
@@ -81,7 +81,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <see cref="String.Empty"/>, or is not of the correct format. This parameter is passed uninitialized;
         /// any value originally supplied in result will be overwritten.</param>
         /// <returns><c>true</c> if <paramref name="input"/> was converted successfully; otherwise, <c>false</c>.</returns>
-        public static bool TryParse(string input, TimeSpanType timeSpanType, out ITimeSpan timeSpan)
+        public static bool TryParse(string? input, TimeSpanType timeSpanType, out ITimeSpan? timeSpan)
         {
             return ParsingUtilities.TryParse(input, Parsers[timeSpanType], out timeSpan);
         }
@@ -93,7 +93,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <returns>A <see cref="ITimeSpan"/> equivalent to the time span contained in <paramref name="input"/>.</returns>
         /// <exception cref="ArgumentException"><paramref name="input"/> is <c>null</c> or contains white-spaces only.</exception>
         /// <exception cref="FormatException"><paramref name="input"/> has invalid format.</exception>
-        public static ITimeSpan Parse(string input)
+        public static ITimeSpan Parse(string? input)
         {
             ThrowIfArgument.IsNullOrWhiteSpaceString(nameof(input), input, "Input string");
 
@@ -102,9 +102,9 @@ namespace Melanchall.DryWetMidi.Interaction
                 var parsingResult = parser(input, out var timeSpan);
 
                 if (parsingResult.Status == ParsingStatus.Parsed)
-                    return timeSpan;
+                    return timeSpan!;
                 else if (parsingResult.Status == ParsingStatus.FormatError)
-                    throw parsingResult.Exception;
+                    throw parsingResult.Exception!;
             }
 
             throw new FormatException("Time span has unknown format.");
@@ -149,7 +149,9 @@ namespace Melanchall.DryWetMidi.Interaction
         public static TTimeSpan GetZeroTimeSpan<TTimeSpan>()
             where TTimeSpan : ITimeSpan
         {
-            return (TTimeSpan)ZeroTimeSpans.Values.FirstOrDefault(timeSpan => timeSpan is TTimeSpan);
+            // TODO: math time span???
+
+            return ZeroTimeSpans.Values.OfType<TTimeSpan>().First();
         }
 
         /// <summary>
@@ -163,6 +165,7 @@ namespace Melanchall.DryWetMidi.Interaction
         {
             ThrowIfArgument.IsNull(nameof(timeSpan), timeSpan);
 
+            // TODO: what about math / divide by zero?
             var mathTimeSpan = timeSpan as MathTimeSpan;
             return mathTimeSpan == null
                 ? ZeroTimeSpans.Values.Contains(timeSpan)
@@ -173,15 +176,15 @@ namespace Melanchall.DryWetMidi.Interaction
         {
             var metricTimeSpan = timeSpan1 as MetricTimeSpan;
             if (metricTimeSpan != null)
-                return metricTimeSpan.Divide(timeSpan2 as MetricTimeSpan);
+                return metricTimeSpan.Divide((MetricTimeSpan)timeSpan2);
 
             var midiTimeSpan = timeSpan1 as MidiTimeSpan;
             if (midiTimeSpan != null)
-                return midiTimeSpan.Divide(timeSpan2 as MidiTimeSpan);
+                return midiTimeSpan.Divide((MidiTimeSpan)timeSpan2);
 
             var musicalTimeSpan = timeSpan1 as MusicalTimeSpan;
             if (musicalTimeSpan != null)
-                return musicalTimeSpan.Divide(timeSpan2 as MusicalTimeSpan);
+                return musicalTimeSpan.Divide((MusicalTimeSpan)timeSpan2);
 
             throw new NotSupportedException($"Dividing of time span of the '{timeSpan1.GetType()}' type is not supported.");
         }
@@ -206,7 +209,7 @@ namespace Melanchall.DryWetMidi.Interaction
         private static Parsing<ITimeSpan> GetParsing<TTimeSpan>(Parsing<TTimeSpan> parsing)
             where TTimeSpan : ITimeSpan
         {
-            return (string input, out ITimeSpan timeSpan) =>
+            return (string? input, out ITimeSpan? timeSpan) =>
             {
                 var parsingResult = parsing(input, out var result);
                 timeSpan = result;

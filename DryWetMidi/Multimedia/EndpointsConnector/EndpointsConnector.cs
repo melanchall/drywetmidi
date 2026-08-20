@@ -71,7 +71,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// they will be sent to <see cref="OutputEndpoints"/>. The default value is <c>null</c> which
         /// means no processing will be applied.
         /// </summary>
-        public EndpointsConnectorEventCallback EventCallback { get; set; }
+        public EndpointsConnectorEventCallback? EventCallback { get; set; }
 
         #endregion
 
@@ -100,7 +100,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             InputEndpoint.EventReceived -= OnEventReceived;
         }
 
-        private void OnEventReceived(object sender, MidiEventReceivedEventArgs e)
+        private void OnEventReceived(object? sender, MidiEventReceivedEventArgs e)
         {
             if (!AreEndpointsConnected)
                 return;

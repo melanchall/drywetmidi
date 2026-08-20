@@ -1,6 +1,7 @@
 ﻿using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Configuration;
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Melanchall.DryWetMidi.Multimedia
 {
@@ -16,7 +17,7 @@ namespace Melanchall.DryWetMidi.Multimedia
     {
         #region Events
 
-        public event EventHandler<ErrorOccurredEventArgs> ErrorOccurred;
+        public event EventHandler<ErrorOccurredEventArgs>? ErrorOccurred;
 
         #endregion
 
@@ -28,13 +29,13 @@ namespace Melanchall.DryWetMidi.Multimedia
         private bool _disposed = false;
         private bool _enabled = true;
 
-        private VirtualDeviceApi.Callback_Mac _callbackMac;
+        private VirtualDeviceApi.Callback_Mac? _callbackMac;
 
-        private InputEndpoint _inputEndpoint;
-        private OutputEndpoint _outputEndpoint;
+        private InputEndpoint? _inputEndpoint;
+        private OutputEndpoint? _outputEndpoint;
 
 #if TEST
-        private TestCheckpoints _testCheckpoints;
+        private TestCheckpoints? _testCheckpoints;
 #endif
 
         #endregion
@@ -54,6 +55,8 @@ namespace Melanchall.DryWetMidi.Multimedia
                 case CommonApi.OsType.Windows:
                     InitializeDevice_Win();
                     break;
+                default: // TODO: proper exception
+                    throw new InvalidOperationException($"Virtual device API is not available on {osType}.");
             }
         }
 
@@ -109,7 +112,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             {
                 EnsureDeviceIsNotDisposed();
 
-                return _inputEndpoint;
+                return _inputEndpoint!;
             }
             private set { _inputEndpoint = value; }
         }
@@ -123,13 +126,13 @@ namespace Melanchall.DryWetMidi.Multimedia
             {
                 EnsureDeviceIsNotDisposed();
 
-                return _outputEndpoint;
+                return _outputEndpoint!;
             }
             private set { _outputEndpoint = value; }
         }
 
 #if TEST
-        internal TestCheckpoints TestCheckpoints
+        internal TestCheckpoints? TestCheckpoints
         {
             get { return _testCheckpoints; }
             set
@@ -204,6 +207,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             }
         }
 
+        [MemberNotNull(nameof(_handle), nameof(InputEndpoint), nameof(OutputEndpoint))]
         private void InitializeDevice_Mac()
         {
             var sessionHandle = MidiDevicesSession.GetSessionHandle();
@@ -217,6 +221,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             InitializeDevice(deviceInfo);
         }
 
+        [MemberNotNull(nameof(_handle), nameof(InputEndpoint), nameof(OutputEndpoint))]
         private void InitializeDevice_Win()
         {
             var sessionHandle = MidiDevicesSession.GetSessionHandle();
@@ -228,6 +233,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             InitializeDevice(deviceInfo);
         }
 
+        [MemberNotNull(nameof(_handle), nameof(InputEndpoint), nameof(OutputEndpoint))]
         private void InitializeDevice(IntPtr deviceInfo)
         {
             var inputEndpointInfo = VirtualDeviceApi.Api_GetInputEndpointInfo(deviceInfo);
@@ -277,7 +283,7 @@ namespace Melanchall.DryWetMidi.Multimedia
                 return;
 
             _handle?.Dispose();
-            _handle = null;
+            _handle = null!;
 
             if (disposing)
             {

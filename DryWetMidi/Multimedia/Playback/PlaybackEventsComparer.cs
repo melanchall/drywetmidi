@@ -8,8 +8,17 @@ namespace Melanchall.DryWetMidi.Multimedia
     {
         #region IComparer<PlaybackEvent>
 
-        public int Compare(PlaybackEvent x, PlaybackEvent y)
+        public int Compare(PlaybackEvent? x, PlaybackEvent? y)
         {
+            if (ReferenceEquals(x, y))
+                return 0;
+
+            if (x == null)
+                return -1;
+
+            if (y == null)
+                return 1;
+
             var timeDifference = x.RawTime - y.RawTime;
             if (timeDifference != 0)
                 return Math.Sign(timeDifference);

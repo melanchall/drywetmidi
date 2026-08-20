@@ -4,7 +4,7 @@
     {
         #region Methods
 
-        MidiEvent Read(MidiReader reader, ReadingSettings settings, byte currentStatusByte);
+        MidiEvent? Read(MidiReader reader, ReadingSettings settings, byte currentStatusByte);
 
         #endregion
     }

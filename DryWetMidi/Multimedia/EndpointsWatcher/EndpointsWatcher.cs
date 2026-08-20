@@ -19,21 +19,19 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <summary>
         /// Occurs when a MIDI endpoint has been added to the system.
         /// </summary>
-        public event EventHandler<EndpointAddedRemovedEventArgs> EndpointAdded;
+        public event EventHandler<EndpointAddedRemovedEventArgs>? EndpointAdded;
 
         /// <summary>
         /// Occurs when a MIDI endpoint has been removed from the system.
         /// </summary>
-        public event EventHandler<EndpointAddedRemovedEventArgs> EndpointRemoved;
+        public event EventHandler<EndpointAddedRemovedEventArgs>? EndpointRemoved;
 
         #endregion
 
         #region Fields
 
-        private static volatile EndpointsWatcher _instance;
+        private static volatile EndpointsWatcher? _instance;
         private static readonly object _lockObject = new object();
-
-        private MidiDevicesSessionHandle _sessionHandle;
 
         #endregion
 
@@ -64,10 +62,9 @@ namespace Melanchall.DryWetMidi.Multimedia
                     {
                         if (_instance == null)
                         {
-                            _instance = new EndpointsWatcher
-                            {
-                                _sessionHandle = MidiDevicesSession.GetSessionHandle()
-                            };
+                            MidiDevicesSession.GetSessionHandle();
+
+                            _instance = new EndpointsWatcher();
 
                             MidiDevicesSession.InputEndpointAdded += _instance.OnInputEndpointAdded;
                             MidiDevicesSession.InputEndpointRemoved += _instance.OnInputEndpointRemoved;
@@ -88,7 +85,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         #region Methods
 
-        private static void OnDomainUnloadOrExit(object sender, EventArgs e)
+        private static void OnDomainUnloadOrExit(object? sender, EventArgs e)
         {
             if (_instance != null)
             {
@@ -96,8 +93,6 @@ namespace Melanchall.DryWetMidi.Multimedia
                 {
                     if (_instance != null)
                     {
-                        _instance._sessionHandle = null;
-
                         // TODO: remove all event handlers of the instance
 
                         MidiDevicesSession.InputEndpointAdded -= _instance.OnInputEndpointAdded;
@@ -109,7 +104,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             }
         }
 
-        private void OnInputEndpointAdded(object sender, IntPtr info)
+        private void OnInputEndpointAdded(object? sender, IntPtr info)
         {
             var endpointAddded = EndpointAdded;
             if (endpointAddded != null)
@@ -118,7 +113,7 @@ namespace Melanchall.DryWetMidi.Multimedia
                 InputEndpointApi.Api_DeleteEndpointInfo(info);
         }
 
-        private void OnInputEndpointRemoved(object sender, IntPtr info)
+        private void OnInputEndpointRemoved(object? sender, IntPtr info)
         {
             var endpointRemoved = EndpointRemoved;
             if (endpointRemoved != null)
@@ -127,7 +122,7 @@ namespace Melanchall.DryWetMidi.Multimedia
                 InputEndpointApi.Api_DeleteEndpointInfo(info);
         }
 
-        private void OnOutputEndpointAdded(object sender, IntPtr info)
+        private void OnOutputEndpointAdded(object? sender, IntPtr info)
         {
             var endpointAdded = EndpointAdded;
             if (endpointAdded != null)
@@ -136,7 +131,7 @@ namespace Melanchall.DryWetMidi.Multimedia
                 OutputEndpointApi.Api_DeleteEndpointInfo(info);
         }
 
-        private void OnOutputEndpointRemoved(object sender, IntPtr info)
+        private void OnOutputEndpointRemoved(object? sender, IntPtr info)
         {
             var endpointRemoved = EndpointRemoved;
             if (endpointRemoved != null)

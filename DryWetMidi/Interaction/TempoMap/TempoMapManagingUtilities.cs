@@ -109,7 +109,7 @@ namespace Melanchall.DryWetMidi.Interaction
             if (!file.GetTrackChunks().Any())
                 file.Chunks.Add(new TrackChunk());
 
-            return file.GetTrackChunks().ManageTempoMap(file.TimeDivision);
+            return file.GetTrackChunks().ManageTempoMap(file.TimeDivision!);
         }
 
         /// <summary>
@@ -213,7 +213,7 @@ namespace Melanchall.DryWetMidi.Interaction
         {
             ThrowIfArgument.IsNull(nameof(file), file);
 
-            return file.GetTrackChunks().GetTempoMap(file.TimeDivision);
+            return file.GetTrackChunks().GetTempoMap(file.TimeDivision!);
         }
 
         /// <summary>

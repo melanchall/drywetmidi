@@ -9,7 +9,7 @@ namespace Melanchall.DryWetMidi.Tools
     {
         #region Delegates
 
-        public delegate object[] EventParametersGetter(MidiEvent midiEvent, CsvSerializationSettings settings);
+        public delegate object?[] EventParametersGetter(MidiEvent midiEvent, CsvSerializationSettings settings);
 
         #endregion
 
@@ -113,12 +113,12 @@ namespace Melanchall.DryWetMidi.Tools
 
         #region Methods
 
-        public static object[] GetEventParameters(MidiEvent midiEvent, CsvSerializationSettings settings)
+        public static object?[] GetEventParameters(MidiEvent midiEvent, CsvSerializationSettings settings)
         {
             return EventsParametersGetters[midiEvent.EventType](midiEvent, settings);
         }
 
-        private static EventParametersGetter GetParameters<TEvent>(params Func<TEvent, CsvSerializationSettings, object>[] parametersGetters)
+        private static EventParametersGetter GetParameters<TEvent>(params Func<TEvent, CsvSerializationSettings, object?>[] parametersGetters)
             where TEvent : MidiEvent
         {
             return (e, s) => parametersGetters.Select(g => g((TEvent)e, s)).ToArray();

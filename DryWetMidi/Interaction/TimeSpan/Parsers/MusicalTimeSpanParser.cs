@@ -55,7 +55,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
         #region Methods
 
-        internal static ParsingResult TryParse(string input, out MusicalTimeSpan timeSpan)
+        internal static ParsingResult TryParse(string? input, out MusicalTimeSpan? timeSpan)
         {
             timeSpan = null;
 

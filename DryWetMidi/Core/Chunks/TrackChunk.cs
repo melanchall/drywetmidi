@@ -63,13 +63,9 @@ namespace Melanchall.DryWetMidi.Core
         /// <see cref="MidiFile.Write(string, bool, MidiFileFormat, WritingSettings)"/>.
         /// </remarks>
         /// <exception cref="ArgumentNullException"><paramref name="events"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentException"><paramref name="events"/> contain an instance of <see cref="EndOfTrackEvent"/>; or
-        /// <paramref name="events"/> contain <c>null</c>.
-        /// </exception>
         public TrackChunk(params MidiEvent[] events)
-            : this()
+            : this((IEnumerable<MidiEvent>)events)
         {
-            Events.AddRange(events);
         }
 
         #endregion
@@ -199,7 +195,7 @@ namespace Melanchall.DryWetMidi.Core
 
         #region Methods
 
-        internal static MidiEvent ReadEvent(MidiReader reader, ReadingSettings settings, ref byte? channelEventStatusByte)
+        internal static MidiEvent? ReadEvent(MidiReader reader, ReadingSettings settings, ref byte? channelEventStatusByte)
         {
             var deltaTime = reader.ReadVlqLongNumber();
             if (deltaTime < 0)

@@ -11,7 +11,7 @@ namespace Melanchall.DryWetMidi.Interaction
     {
         #region Constructor
 
-        internal TimedObjectsCollectionChangedEventArgs(IEnumerable<TObject> addedObjects, IEnumerable<TObject> removedObjects)
+        internal TimedObjectsCollectionChangedEventArgs(IEnumerable<TObject>? addedObjects, IEnumerable<TObject>? removedObjects)
         {
             AddedObjects = addedObjects;
             RemovedObjects = removedObjects;
@@ -24,12 +24,12 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <summary>
         /// Gets objects that were added to a <see cref="TimedObjectsCollection{TObject}"/>.
         /// </summary>
-        public IEnumerable<TObject> AddedObjects { get; }
+        public IEnumerable<TObject>? AddedObjects { get; }
 
         /// <summary>
         /// Gets objects that were removed from a <see cref="TimedObjectsCollection{TObject}"/>.
         /// </summary>
-        public IEnumerable<TObject> RemovedObjects { get; }
+        public IEnumerable<TObject>? RemovedObjects { get; }
 
         #endregion
     }

@@ -84,19 +84,6 @@
         #region Methods
 
         /// <summary>
-        /// Returns array of status bytes of standard meta events.
-        /// </summary>
-        /// <returns>Array of status bytes of standard meta events.</returns>
-        /// <remarks>
-        /// This method can be used for choosing status byte for custom meta event to prevent
-        /// the status byte is equal to one of the standard ones.
-        /// </remarks>
-        public static byte[] GetStandardMetaEventStatusBytes()
-        {
-            return StandardMetaEventStatusBytes.GetStatusBytes();
-        }
-
-        /// <summary>
         /// Reads content of a MIDI meta event.
         /// </summary>
         /// <param name="reader">Reader to read the content with.</param>

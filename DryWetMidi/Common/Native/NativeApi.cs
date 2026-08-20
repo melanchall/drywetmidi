@@ -106,7 +106,7 @@ namespace Melanchall.DryWetMidi.Common
             CommonApi.Api_FreeBuffer(stringPointer);
         }
 
-        public static void HandleResult<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicFields | DynamicallyAccessedMemberTypes.Interfaces)] TResult, TException>(
+        public static void HandleResult<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicFields | (DynamicallyAccessedMemberTypes)CodeAnalysisUtilities.DynamicallyAccessedMemberTypes_Interfaces)] TResult, TException>(
             TResult result,
             int errorCode,
             CreateException<TException> createException)
@@ -118,7 +118,7 @@ namespace Melanchall.DryWetMidi.Common
 
             var field = typeof(TResult)
                 .GetFields(BindingFlags.Static | BindingFlags.Public)
-                .FirstOrDefault(f => f.GetValue(null).Equals(result));
+                .FirstOrDefault(f => f.GetValue(null)?.Equals(result) == true);
 
             var attribute = field?
                 .GetCustomAttributes(typeof(NativeErrorTypeAttribute))

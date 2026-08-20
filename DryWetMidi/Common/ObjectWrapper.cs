@@ -4,7 +4,7 @@
     {
         #region Properties
 
-        public TObject Object { get; set; }
+        public TObject? Object { get; set; }
 
         #endregion
     }

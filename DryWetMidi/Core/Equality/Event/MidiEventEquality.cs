@@ -81,7 +81,7 @@ namespace Melanchall.DryWetMidi.Core
 
         #region Methods
 
-        public static bool Equals(MidiEvent midiEvent1, MidiEvent midiEvent2, MidiEventEqualityCheckSettings settings, out string message)
+        public static bool Equals(MidiEvent? midiEvent1, MidiEvent? midiEvent2, MidiEventEqualityCheckSettings settings, out string? message)
         {
             message = null;
 

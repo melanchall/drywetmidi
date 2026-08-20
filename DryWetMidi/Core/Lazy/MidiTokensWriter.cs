@@ -54,7 +54,7 @@ namespace Melanchall.DryWetMidi.Core
 
         internal MidiTokensWriter(
             Stream stream,
-            WritingSettings settings,
+            WritingSettings? settings,
             bool disposeStream,
             MidiFileFormat format,
             TimeDivision timeDivision)
@@ -65,9 +65,7 @@ namespace Melanchall.DryWetMidi.Core
             if (!_stream.CanSeek)
                 throw new ArgumentException("Stream doesn't support seeking.", nameof(stream));
 
-            _settings = settings;
-            if (_settings == null)
-                _settings = new WritingSettings();
+            _settings = settings ?? new WritingSettings();
 
             if (_settings.WriterSettings == null)
                 _settings.WriterSettings = new WriterSettings();
@@ -84,7 +82,7 @@ namespace Melanchall.DryWetMidi.Core
 
         internal long CurrentTime { get; private set; }
 
-        internal Action BeforeEndTrackChunk { get; set; }
+        internal Action? BeforeEndTrackChunk { get; set; }
 
         #endregion
 

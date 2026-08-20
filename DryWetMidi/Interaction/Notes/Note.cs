@@ -30,12 +30,12 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <summary>
         /// Occurs when the time of an object has been changed.
         /// </summary>
-        public event EventHandler<TimeChangedEventArgs> TimeChanged;
+        public event EventHandler<TimeChangedEventArgs>? TimeChanged;
 
         /// <summary>
         /// Occurs when the length of an object has been changed.
         /// </summary>
-        public event EventHandler<LengthChangedEventArgs> LengthChanged;
+        public event EventHandler<LengthChangedEventArgs>? LengthChanged;
 
         #endregion
 
@@ -152,6 +152,7 @@ namespace Melanchall.DryWetMidi.Interaction
             Time = time;
         }
 
+        // TODO: maybe internal?? what about off before on??
         /// <summary>
         /// Initializes a new instance of the <see cref="Note"/> with the specified pair of
         /// timed events holding corresponding <see cref="NoteOnEvent"/> and <see cref="NoteOffEvent"/> events.
@@ -363,6 +364,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         internal TimedEvent TimedNoteOffEvent { get; }
 
+        // TODO: what about just GetMusicTheoryNote??
         internal MusicTheory.Note UnderlyingNote => MusicTheory.Note.Get(NoteNumber);
 
         #endregion

@@ -253,7 +253,7 @@ namespace Melanchall.DryWetMidi.Interaction
                 return result;
 
             var timeSignatureLine = tempoMap.TimeSignatureLine;
-            var ticksPerQuarterNoteTimeDivision = tempoMap.TimeDivision as TicksPerQuarterNoteTimeDivision;
+            var ticksPerQuarterNoteTimeDivision = (TicksPerQuarterNoteTimeDivision)tempoMap.TimeDivision;
             var ticksPerQuarterNote = ticksPerQuarterNoteTimeDivision.TicksPerQuarterNote;
             var maxBarLength = 0;
 

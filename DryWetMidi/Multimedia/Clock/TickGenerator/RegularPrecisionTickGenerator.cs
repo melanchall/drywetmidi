@@ -25,7 +25,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         #region Fields
 
-        private Timer _timer;
+        private Timer? _timer;
         private bool _disposed = false;
 
         #endregion
@@ -57,14 +57,14 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// </summary>
         protected override void Stop()
         {
-            _timer.Stop();
+            _timer?.Stop();
         }
 
         #endregion
 
         #region Methods
 
-        private void OnElapsed(object sender, ElapsedEventArgs e)
+        private void OnElapsed(object? sender, ElapsedEventArgs e)
         {
             if (!IsRunning || _disposed)
                 return;
@@ -84,7 +84,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             if (_disposed)
                 return;
 
-            if (disposing && IsRunning)
+            if (disposing && IsRunning && _timer != null)
             {
                 _timer.Stop();
                 _timer.Elapsed -= OnElapsed;

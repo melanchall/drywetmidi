@@ -25,7 +25,7 @@
         /// specified program name.
         /// </summary>
         /// <param name="programName">Name of the program.</param>
-        public ProgramNameEvent(string programName)
+        public ProgramNameEvent(string? programName)
             : base(MidiEventType.ProgramName, programName)
         {
         }

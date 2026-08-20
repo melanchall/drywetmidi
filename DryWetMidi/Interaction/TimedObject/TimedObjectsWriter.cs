@@ -89,11 +89,11 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <exception cref="IOException">An I/O error occurred while writing the object.</exception>
         /// <exception cref="InvalidOperationException">A track chunk is not started
         /// (see <see cref="MidiTokensWriter.StartTrackChunk"/>).</exception>
-        public void WriteObjects(IEnumerable<ITimedObject> timedObjects)
+        public void WriteObjects(IEnumerable<ITimedObject?> timedObjects)
         {
             ThrowIfArgument.IsNull(nameof(timedObjects), timedObjects);
 
-            foreach (var obj in timedObjects)
+            foreach (var obj in timedObjects.OfType<ITimedObject>())
             {
                 WriteObject(obj);
             }

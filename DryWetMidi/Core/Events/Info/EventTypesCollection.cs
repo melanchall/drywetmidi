@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Melanchall.DryWetMidi.Common;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -13,8 +14,8 @@ namespace Melanchall.DryWetMidi.Core
     {
         #region Fields
 
-        private readonly Dictionary<Type, byte> _statusBytes = new Dictionary<Type, byte>();
-        private readonly Dictionary<byte, Type> _types = new Dictionary<byte, Type>();
+        private readonly Dictionary<Type, byte> _typesToStatusBytes = new Dictionary<Type, byte>();
+        private readonly Dictionary<byte, Type> _statusBytesToTypes = new Dictionary<byte, Type>();
 
         #endregion
 
@@ -30,10 +31,16 @@ namespace Melanchall.DryWetMidi.Core
         /// <paramref name="statusByte"/> already exists in the <see cref="EventsCollection"/>.</exception>
         public void Add([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor)] Type type, byte statusByte)
         {
-            _statusBytes.Add(type, statusByte);
-            _types.Add(statusByte, type);
+            ThrowIfArgument.IsNull(nameof(type), type);
+
+            if (_typesToStatusBytes.ContainsKey(type) || _statusBytesToTypes.ContainsKey(statusByte))
+                throw new ArgumentException($"Event type '{type.Name}' or status byte '{statusByte}' already exists in the collection.");
+
+            _typesToStatusBytes.Add(type, statusByte);
+            _statusBytesToTypes.Add(statusByte, type);
         }
 
+        // TODO: maybe internal?
         /// <summary>
         /// Gets the event type associated with the specified status byte.
         /// </summary>
@@ -44,11 +51,12 @@ namespace Melanchall.DryWetMidi.Core
         /// <returns><c>true</c> if the <see cref="EventTypesCollection"/> contains an event type with the
         /// specified status byte; otherwise, <c>false</c>.</returns>
         [UnconditionalSuppressMessage("Trimming", "IL2067", Justification = "All types stored in this collection are guaranteed to have public parameterless constructors via the Add method's annotation.")]
-        public bool TryGetType(byte statusByte, [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor)] out Type type)
+        public bool TryGetType(byte statusByte, [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor)][NotNullWhen(true)] out Type? type)
         {
-            return _types.TryGetValue(statusByte, out type);
+            return _statusBytesToTypes.TryGetValue(statusByte, out type);
         }
 
+        // TODO: maybe internal?
         /// <summary>
         /// Gets the status byte associated with the specified event type.
         /// </summary>
@@ -60,7 +68,7 @@ namespace Melanchall.DryWetMidi.Core
         /// specified event type; otherwise, <c>false</c>.</returns>
         public bool TryGetStatusByte([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor)] Type type, out byte statusByte)
         {
-            return _statusBytes.TryGetValue(type, out statusByte);
+            return _typesToStatusBytes.TryGetValue(type, out statusByte);
         }
 
         #endregion
@@ -73,8 +81,9 @@ namespace Melanchall.DryWetMidi.Core
         /// <returns>An enumerator that can be used to iterate through the collection.</returns>
         public IEnumerator<EventType> GetEnumerator()
         {
-            return _statusBytes.Select(kv => new EventType(kv.Key, kv.Value))
-                               .GetEnumerator();
+            return _typesToStatusBytes
+                .Select(kv => new EventType(kv.Key, kv.Value))
+                .GetEnumerator();
         }
 
         /// <summary>

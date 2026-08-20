@@ -27,7 +27,7 @@ namespace Melanchall.DryWetMidi.Core
         /// specified data.
         /// </summary>
         /// <param name="data">Sequencer specific data.</param>
-        public SequencerSpecificEvent(byte[] data)
+        public SequencerSpecificEvent(byte[]? data)
             : this()
         {
             Data = data;
@@ -40,7 +40,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <summary>
         /// Gets or sets sequencer specific data.
         /// </summary>
-        public byte[] Data { get; set; }
+        public byte[]? Data { get; set; }
 
         #endregion
 

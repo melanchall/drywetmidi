@@ -14,17 +14,17 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <summary>
         /// Gets or sets a collection of added objects.
         /// </summary>
-        public ICollection<ITimedObject> AddedObjects { get; set; }
+        public ICollection<ITimedObject>? AddedObjects { get; set; }
 
         /// <summary>
         /// Gets or sets a collection of removed objects.
         /// </summary>
-        public ICollection<ITimedObject> RemovedObjects { get; set; }
+        public ICollection<ITimedObject>? RemovedObjects { get; set; }
 
         /// <summary>
         /// Gets or sets a collection of changed objects.
         /// </summary>
-        public ICollection<ChangedTimedObject> ChangedObjects { get; set; }
+        public ICollection<ChangedTimedObject>? ChangedObjects { get; set; }
 
         public bool AllDataRemoved { get; set; }
 

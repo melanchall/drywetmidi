@@ -9,14 +9,14 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         private static readonly object _lockObject = new object();
 
-        private static TickGeneratorSessionHandle _handle;
+        private static TickGeneratorSessionHandle? _handle;
 
         #endregion
 
         #region Properties
 
 #if TEST
-        internal static TestCheckpoints TestCheckpoints { get; set; }
+        internal static TestCheckpoints? TestCheckpoints { get; set; }
 #endif
 
         #endregion
@@ -51,7 +51,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             return _handle;
         }
 
-        private static void OnDomainUnloadOrExit(object sender, EventArgs e)
+        private static void OnDomainUnloadOrExit(object? sender, EventArgs e)
         {
             if (_handle != null && !_handle.IsInvalid)
             {

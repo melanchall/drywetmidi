@@ -27,7 +27,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <returns>Collection of <see cref="MidiFile"/> where each file contains events for single channel
         /// and meta and sysex ones as defined by <paramref name="settings"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is <c>null</c>.</exception>
-        public static IEnumerable<MidiFile> SplitByChannel(this MidiFile midiFile, SplitFileByChannelSettings settings = null)
+        public static IEnumerable<MidiFile> SplitByChannel(this MidiFile midiFile, SplitFileByChannelSettings? settings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
 
@@ -74,7 +74,7 @@ namespace Melanchall.DryWetMidi.Tools
             foreach (var channel in FourBitNumber.Values.Where(c => channelsUsed[c]))
             {
                 var newFile = timedEventsByChannel[channel].ToFile();
-                newFile.TimeDivision = midiFile.TimeDivision.Clone();
+                newFile.TimeDivision = midiFile.TimeDivision?.Clone();
 
                 yield return newFile;
             }

@@ -34,13 +34,13 @@ namespace Melanchall.DryWetMidi.Tools
         private static void SplitTrackChunkObjects(
             TrackChunk trackChunk,
             ObjectType objectType,
-            ObjectDetectionSettings objectDetectionSettings,
-            Func<IEnumerable<ITimedObject>, IEnumerable<ITimedObject>> splitOperation)
+            ObjectDetectionSettings? objectDetectionSettings,
+            Func<IEnumerable<ITimedObject>, IEnumerable<ITimedObject?>> splitOperation)
         {
             using (var objectsManager = new TimedObjectsManager(trackChunk.Events, objectType, objectDetectionSettings))
             {
                 var objects = objectsManager.Objects;
-                var newObjects = splitOperation(objects).ToList();
+                var newObjects = splitOperation(objects!).ToList();
 
                 objects.Clear();
                 objects.Add(newObjects);

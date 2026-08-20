@@ -8,6 +8,6 @@
         /// <summary>
         /// Gets or sets a metadata associated with the current object.
         /// </summary>
-        object Metadata { get; set; }
+        object? Metadata { get; set; }
     }
 }

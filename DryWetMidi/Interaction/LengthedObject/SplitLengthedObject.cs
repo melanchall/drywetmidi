@@ -7,7 +7,7 @@
     {
         #region Constructor
 
-        internal SplitLengthedObject(ILengthedObject leftPart, ILengthedObject rightPart)
+        internal SplitLengthedObject(ILengthedObject? leftPart, ILengthedObject? rightPart)
         {
             LeftPart = leftPart;
             RightPart = rightPart;
@@ -20,12 +20,12 @@
         /// <summary>
         /// The left part of a split object.
         /// </summary>
-        public ILengthedObject LeftPart { get; }
+        public ILengthedObject? LeftPart { get; }
 
         /// <summary>
         /// The right part of a split object.
         /// </summary>
-        public ILengthedObject RightPart { get; }
+        public ILengthedObject? RightPart { get; }
 
         #endregion
     }

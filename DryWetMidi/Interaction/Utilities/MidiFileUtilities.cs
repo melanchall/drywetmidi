@@ -97,7 +97,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </list>
         /// </exception>
         /// <exception cref="NotSupportedException"><typeparamref name="TTimeSpan"/> is not supported.</exception>
-        public static TTimeSpan GetDuration<TTimeSpan>(this IEnumerable<TrackChunk> trackChunks, TempoMap tempoMap)
+        public static TTimeSpan GetDuration<TTimeSpan>(this IEnumerable<TrackChunk?> trackChunks, TempoMap tempoMap)
             where TTimeSpan : class, ITimeSpan
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
@@ -128,7 +128,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </list>
         /// </exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="durationType"/> specified an invalid value.</exception>
-        public static ITimeSpan GetDuration(this IEnumerable<TrackChunk> trackChunks, TimeSpanType durationType, TempoMap tempoMap)
+        public static ITimeSpan GetDuration(this IEnumerable<TrackChunk?> trackChunks, TimeSpanType durationType, TempoMap tempoMap)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
             ThrowIfArgument.IsInvalidEnumValue(nameof(durationType), durationType);
@@ -223,11 +223,11 @@ namespace Melanchall.DryWetMidi.Interaction
             return trackChunk.Events.DefaultIfEmpty().Sum(e => e?.DeltaTime ?? 0L);
         }
 
-        private static long GetMaxTime(IEnumerable<TrackChunk> trackChunks)
+        private static long GetMaxTime(IEnumerable<TrackChunk?> trackChunks)
         {
             var maxTime = 0L;
 
-            foreach (var trackChunk in trackChunks)
+            foreach (var trackChunk in trackChunks.OfType<TrackChunk>())
             {
                 var lastTime = GetLastTime(trackChunk);
                 if (lastTime > maxTime)

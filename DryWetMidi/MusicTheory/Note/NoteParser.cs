@@ -23,7 +23,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
 
         #region Methods
 
-        internal static ParsingResult TryParse(string input, out Note note)
+        internal static ParsingResult TryParse(string? input, out Note? note)
         {
             note = null;
 

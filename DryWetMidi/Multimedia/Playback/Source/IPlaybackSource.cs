@@ -22,13 +22,13 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         bool IsPositionValid();
 
-        PlaybackEvent GetCurrentPlaybackEvent();
+        PlaybackEvent? GetCurrentPlaybackEvent();
 
-        PlaybackEvent GetLastPlaybackEvent();
+        PlaybackEvent? GetLastPlaybackEvent();
 
-        SnapPoint GetNextSnapPoint(TimeSpan fromTime, Func<PlaybackEvent, SnapPoint> getSnapPoint);
+        SnapPoint? GetNextSnapPoint(TimeSpan fromTime, Func<PlaybackEvent, SnapPoint?> getSnapPoint);
 
-        SnapPoint GetPreviousSnapPoint(TimeSpan fromTime, Func<PlaybackEvent, SnapPoint> getSnapPoint);
+        SnapPoint? GetPreviousSnapPoint(TimeSpan fromTime, Func<PlaybackEvent, SnapPoint?> getSnapPoint);
 
         void ScalePlaybackEventsTimes(
             TimeSpan tempoChangeTime,

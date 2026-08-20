@@ -4,7 +4,7 @@
     {
         #region Methods
 
-        public static bool Equals(MidiChunk midiChunk1, MidiChunk midiChunk2, MidiChunkEqualityCheckSettings settings, out string message)
+        public static bool Equals(MidiChunk? midiChunk1, MidiChunk? midiChunk2, MidiChunkEqualityCheckSettings settings, out string? message)
         {
             message = null;
 

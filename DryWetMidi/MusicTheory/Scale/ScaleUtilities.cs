@@ -207,7 +207,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// </item>
         /// </list>
         /// </exception>
-        public static Note GetNextNote(this Scale scale, Note note)
+        public static Note? GetNextNote(this Scale scale, Note note)
         {
             ThrowIfArgument.IsNull(nameof(scale), scale);
             ThrowIfArgument.IsNull(nameof(note), note);
@@ -235,7 +235,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// </item>
         /// </list>
         /// </exception>
-        public static Note GetPreviousNote(this Scale scale, Note note)
+        public static Note? GetPreviousNote(this Scale scale, Note note)
         {
             ThrowIfArgument.IsNull(nameof(scale), scale);
             ThrowIfArgument.IsNull(nameof(note), note);

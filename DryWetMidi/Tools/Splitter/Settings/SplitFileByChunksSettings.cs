@@ -17,7 +17,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// a chunk will be processed; if <c>false</c> - it won't. If the property set to <c>null</c> (default
         /// value), all MIDI chunks will be processed.
         /// </summary>
-        public Predicate<MidiChunk> Filter { get; set; }
+        public Predicate<MidiChunk>? Filter { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether a tempo map should be preserved or not in new files.

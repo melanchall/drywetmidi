@@ -4,8 +4,8 @@ using System.Collections.Generic;
 namespace Melanchall.DryWetMidi.Common
 {
     internal sealed class IntervalTree<TKey, TValue> : RedBlackTree<TKey, TValue>
-        where TKey : IComparable<TKey>
-        where TValue : IInterval<TKey>
+        where TKey : notnull, IComparable<TKey?>
+        where TValue : notnull, IInterval<TKey>
     {
         #region Fields
 
@@ -141,7 +141,7 @@ namespace Melanchall.DryWetMidi.Common
 
             UpdateMax(bottomNode);
 
-            if (bottomNode.Data.CompareTo(topNode.Data) > 0)
+            if (bottomNode.Data?.CompareTo(topNode.Data) > 0)
                 topNode.Data = bottomNode.Data;
         }
 
@@ -158,7 +158,7 @@ namespace Melanchall.DryWetMidi.Common
 
         public bool UpdateMax(RedBlackTreeNode<TKey, TValue> node)
         {
-            if (node.Values.Count == 0)
+            if (node.Values.Count == 0 || node.Values.First is null)
                 return false;
 
             var result = node.Values.First.Value.End;
@@ -173,7 +173,7 @@ namespace Melanchall.DryWetMidi.Common
             if (!IsVoid(left))
             {
                 var leftMax = left.Data;
-                if (leftMax.CompareTo(result) > 0)
+                if (leftMax?.CompareTo(result) > 0)
                     result = leftMax;
             }
 
@@ -181,11 +181,11 @@ namespace Melanchall.DryWetMidi.Common
             if (!IsVoid(right))
             {
                 var rightMax = right.Data;
-                if (rightMax.CompareTo(result) > 0)
+                if (rightMax?.CompareTo(result) > 0)
                     result = rightMax;
             }
 
-            if (node.Data.Equals(result))
+            if (node.Data?.Equals(result) == true)
                 return false;
 
             node.Data = result;

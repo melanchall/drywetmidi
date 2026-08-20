@@ -69,8 +69,11 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// <see cref="Note"/> by.</param>
         /// <returns>The current <see cref="Note"/> transposed by the <paramref name="interval"/>.</returns>
         /// <exception cref="ArgumentOutOfRangeException">Result note's number is out of valid range.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="interval"/> is <c>null</c>.</exception>
         public Note Transpose(Interval interval)
         {
+            ThrowIfArgument.IsNull(nameof(interval), interval);
+
             return Get((SevenBitNumber)(NoteNumber + interval.HalfSteps));
         }
 
@@ -117,7 +120,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// <see cref="string.Empty"/>, or is not of the correct format. This parameter is passed uninitialized;
         /// any value originally supplied in result will be overwritten.</param>
         /// <returns><c>true</c> if <paramref name="input"/> was converted successfully; otherwise, <c>false</c>.</returns>
-        public static bool TryParse(string input, out Note note)
+        public static bool TryParse(string? input, out Note? note)
         {
             return ParsingUtilities.TryParse(input, NoteParser.TryParse, out note);
         }
@@ -129,7 +132,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// <returns>A <see cref="Note"/> equivalent to the musical note contained in <paramref name="input"/>.</returns>
         /// <exception cref="ArgumentException"><paramref name="input"/> is <c>null</c> or contains white-spaces only.</exception>
         /// <exception cref="FormatException"><paramref name="input"/> has invalid format.</exception>
-        public static Note Parse(string input)
+        public static Note Parse(string? input)
         {
             return ParsingUtilities.Parse<Note>(input, NoteParser.TryParse);
         }
@@ -144,7 +147,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// <param name="note1">The first <see cref="Note"/> to compare.</param>
         /// <param name="note2">The second <see cref="Note"/> to compare.</param>
         /// <returns><c>true</c> if the notes are equal, <c>false</c> otherwise.</returns>
-        public static bool operator ==(Note note1, Note note2)
+        public static bool operator ==(Note? note1, Note? note2)
         {
             if (ReferenceEquals(note1, note2))
                 return true;
@@ -161,7 +164,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// <param name="note1">The first <see cref="Note"/> to compare.</param>
         /// <param name="note2">The second <see cref="Note"/> to compare.</param>
         /// <returns><c>false</c> if the notes are equal, <c>true</c> otherwise.</returns>
-        public static bool operator !=(Note note1, Note note2)
+        public static bool operator !=(Note? note1, Note? note2)
         {
             return !(note1 == note2);
         }
@@ -193,6 +196,8 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// <exception cref="ArgumentOutOfRangeException">Result note's number is out of valid range.</exception>
         public static Note operator -(Note note, int halfSteps)
         {
+            ThrowIfArgument.IsNull(nameof(note), note);
+
             return note + (-halfSteps);
         }
 
@@ -227,8 +232,11 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// </item>
         /// </list>
         /// </returns>
-        public int CompareTo(Note other)
+        public int CompareTo(Note? other)
         {
+            if (ReferenceEquals(other, null))
+                return 1;
+
             return NoteNumber.CompareTo(other.NoteNumber);
         }
 
@@ -250,7 +258,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// </summary>
         /// <param name="obj">The object to compare with the current object.</param>
         /// <returns><c>true</c> if the specified object is equal to the current object; otherwise, <c>false</c>.</returns>
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             return this == (obj as Note);
         }

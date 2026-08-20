@@ -15,7 +15,7 @@ namespace Melanchall.DryWetMidi.Interaction
     {
         #region Fields
 
-        private readonly IEnumerable<TimedObjectsManager<TimedEvent>> _timedEventsManagers;
+        private readonly IEnumerable<TimedObjectsManager<TimedEvent>>? _timedEventsManagers;
 
         private bool _disposed;
 
@@ -389,7 +389,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
         private IEnumerable<TimedEvent> GetTimedEvents(Func<TimedEvent, bool> predicate)
         {
-            return _timedEventsManagers.SelectMany(m => m.Objects).Where(predicate);
+            return _timedEventsManagers?.SelectMany(m => m.Objects).Where(predicate) ?? Enumerable.Empty<TimedEvent>();
         }
 
         private void CollectTimeSignatureChanges()

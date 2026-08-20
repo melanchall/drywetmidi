@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Melanchall.DryWetMidi.Common;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -13,8 +14,8 @@ namespace Melanchall.DryWetMidi.Core
     {
         #region Fields
 
-        private readonly Dictionary<Type, string> _ids = new Dictionary<Type, string>();
-        private readonly Dictionary<string, Type> _types = new Dictionary<string, Type>();
+        private readonly Dictionary<Type, string> _typesToIds = new Dictionary<Type, string>();
+        private readonly Dictionary<string, Type> _idsToTypes = new Dictionary<string, Type>();
 
         #endregion
 
@@ -36,14 +37,31 @@ namespace Melanchall.DryWetMidi.Core
         /// </item>
         /// </list>
         /// </exception>
-        /// <exception cref="ArgumentException">Chunk type specified by <paramref name="type"/> and
-        /// <paramref name="id"/> already exists in the <see cref="ChunksCollection"/>.</exception>
+        /// <exception cref="ArgumentException">
+        /// <para>One of the following errors occurred:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description>Chunk type specified by <paramref name="type"/> and
+        /// <paramref name="id"/> already exists in the <see cref="ChunkTypesCollection"/>.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="id"/> is <c>null</c> or contains white-spaces only.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         public void Add([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor)] Type type, string id)
         {
-            _ids.Add(type, id);
-            _types.Add(id, type);
+            ThrowIfArgument.IsNull(nameof(type), type);
+            ThrowIfArgument.IsNullOrWhiteSpaceString(nameof(id), id, "Chunk ID");
+
+            if (_typesToIds.ContainsKey(type) || _idsToTypes.ContainsKey(id))
+                throw new ArgumentException($"Chunk type '{type.Name}' or ID '{id}' already exists in the collection.");
+
+            _typesToIds.Add(type, id);
+            _idsToTypes.Add(id, type);
         }
 
+        // TODO: maybe internal?
         /// <summary>
         /// Gets the chunk type associated with the specified ID.
         /// </summary>
@@ -54,11 +72,12 @@ namespace Melanchall.DryWetMidi.Core
         /// <returns><c>true</c> if the <see cref="ChunkTypesCollection"/> contains a chunk type with the
         /// specified ID; otherwise, <c>false</c>.</returns>
         [UnconditionalSuppressMessage("Trimming", "IL2067", Justification = "All types stored in this collection are guaranteed to have public parameterless constructors via the Add method's annotation.")]
-        public bool TryGetType(string id, [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor)] out Type type)
+        public bool TryGetType(string id, [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor)] out Type? type)
         {
-            return _types.TryGetValue(id, out type);
+            return _idsToTypes.TryGetValue(id, out type);
         }
 
+        // TODO: maybe internal?
         /// <summary>
         /// Gets the ID associated with the specified chunk type.
         /// </summary>
@@ -67,9 +86,9 @@ namespace Melanchall.DryWetMidi.Core
         /// chunk type, if the type is found; otherwise, <c>null</c>. This parameter is passed uninitialized.</param>
         /// <returns><c>true</c> if the <see cref="ChunkTypesCollection"/> contains an ID for the
         /// specified chunk type; otherwise, <c>false</c>.</returns>
-        public bool TryGetId([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor)] Type type, out string id)
+        public bool TryGetId([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor)] Type type, out string? id)
         {
-            return _ids.TryGetValue(type, out id);
+            return _typesToIds.TryGetValue(type, out id);
         }
 
         #endregion
@@ -82,8 +101,9 @@ namespace Melanchall.DryWetMidi.Core
         /// <returns>An enumerator that can be used to iterate through the collection.</returns>
         public IEnumerator<ChunkType> GetEnumerator()
         {
-            return _ids.Select(kv => new ChunkType(kv.Key, kv.Value))
-                               .GetEnumerator();
+            return _typesToIds
+                .Select(kv => new ChunkType(kv.Key, kv.Value))
+                .GetEnumerator();
         }
 
         /// <summary>

@@ -95,6 +95,7 @@ namespace Melanchall.DryWetMidi.Core
 
         #region Properties
 
+        // TODO: maybe not null?
         /// <summary>
         /// Gets or sets the time division of a MIDI file.
         /// </summary>
@@ -104,7 +105,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <see cref="TicksPerQuarterNoteTimeDivision"/> class and the second one represented by
         /// <see cref="SmpteTimeDivision"/> class.</para>
         /// </remarks>
-        public TimeDivision TimeDivision { get; set; } = new TicksPerQuarterNoteTimeDivision();
+        public TimeDivision? TimeDivision { get; set; } = new TicksPerQuarterNoteTimeDivision();
 
         /// <summary>
         /// Gets collection of chunks of a MIDI file.
@@ -166,10 +167,8 @@ namespace Melanchall.DryWetMidi.Core
         /// default settings.</param>
         /// <returns>An instance of the <see cref="MidiFile"/> representing a MIDI file.</returns>
         /// <seealso cref="ReadLazy(string, ReadingSettings)"/>
-        /// <exception cref="ArgumentException"><paramref name="filePath"/> is a zero-length string,
-        /// contains only white space, or contains one or more invalid characters as defined by
-        /// <see cref="Path.InvalidPathChars"/>.</exception>
-        /// <exception cref="ArgumentNullException"><paramref name="filePath"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentException"><paramref name="filePath"/> is <c>null</c> or contains white-spaces only
+        /// or contains one or more invalid characters as defined by <see cref="Path.InvalidPathChars"/>.</exception>
         /// <exception cref="PathTooLongException">The specified path, file name, or both exceed the system-defined
         /// maximum length. For example, on Windows-based platforms, paths must be less than 248 characters,
         /// and file names must be less than 260 characters.</exception>
@@ -225,8 +224,10 @@ namespace Melanchall.DryWetMidi.Core
         /// is <c>null</c> in case of <see cref="ReaderSettings.BufferingPolicy"/> set to
         /// <see cref="BufferingPolicy.UseCustomBuffer"/>.</exception>
         /// <exception cref="VlqNumberOverflowException">A variable-length quantity (VLQ) number in the file is too large.</exception>
-        public static MidiFile Read(string filePath, ReadingSettings settings = null)
+        public static MidiFile Read(string filePath, ReadingSettings? settings = null)
         {
+            ThrowIfArgument.IsNullOrWhiteSpaceString(nameof(filePath), filePath, "File path");
+
             using (var fileStream = FileUtilities.OpenFileForRead(filePath))
             {
                 return Read(fileStream, settings);
@@ -243,10 +244,8 @@ namespace Melanchall.DryWetMidi.Core
         /// default settings.</param>
         /// <returns>An instance of the <see cref="MidiTokensReader"/> wrapped around the specified file.</returns>
         /// <seealso cref="Read(string, ReadingSettings)"/>
-        /// <exception cref="ArgumentException"><paramref name="filePath"/> is a zero-length string,
-        /// contains only white space, or contains one or more invalid characters as defined by
-        /// <see cref="Path.InvalidPathChars"/>.</exception>
-        /// <exception cref="ArgumentNullException"><paramref name="filePath"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentException"><paramref name="filePath"/> is <c>null</c> or contains white-spaces only
+        /// or contains one or more invalid characters as defined by <see cref="Path.InvalidPathChars"/>.</exception>
         /// <exception cref="PathTooLongException">The specified path, file name, or both exceed the system-defined
         /// maximum length. For example, on Windows-based platforms, paths must be less than 248 characters,
         /// and file names must be less than 260 characters.</exception>
@@ -268,8 +267,10 @@ namespace Melanchall.DryWetMidi.Core
         /// </item>
         /// </list>
         /// </exception>
-        public static MidiTokensReader ReadLazy(string filePath, ReadingSettings settings = null)
+        public static MidiTokensReader ReadLazy(string filePath, ReadingSettings? settings = null)
         {
+            ThrowIfArgument.IsNullOrWhiteSpaceString(nameof(filePath), filePath, "File path");
+
             var fileStream = FileUtilities.OpenFileForRead(filePath);
             return ReadLazy(fileStream, true, settings);
         }
@@ -284,10 +285,8 @@ namespace Melanchall.DryWetMidi.Core
         /// <param name="settings">Settings according to which the file must be written. Specify <c>null</c> to use
         /// default settings.</param>
         /// <seealso cref="WriteLazy(string, bool, MidiFileFormat, WritingSettings, TimeDivision)"/>
-        /// <exception cref="ArgumentException"><paramref name="filePath"/> is a zero-length string,
-        /// contains only white space, or contains one or more invalid characters as defined by
-        /// <see cref="Path.InvalidPathChars"/>.</exception>
-        /// <exception cref="ArgumentNullException"><paramref name="filePath"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentException"><paramref name="filePath"/> is <c>null</c> or contains white-spaces only
+        /// or contains one or more invalid characters as defined by <see cref="Path.InvalidPathChars"/>.</exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="format"/> specified an invalid value.</exception>
         /// <exception cref="PathTooLongException">The specified path, file name, or both exceed the system-defined
         /// maximum length. For example, on Windows-based platforms, paths must be less than 248 characters,
@@ -313,8 +312,9 @@ namespace Melanchall.DryWetMidi.Core
         /// <exception cref="InvalidOperationException">Time division is <c>null</c>.</exception>
         /// <exception cref="TooManyTrackChunksException">Count of track chunks presented in the file
         /// exceeds maximum value allowed for MIDI file.</exception>
-        public void Write(string filePath, bool overwriteFile = false, MidiFileFormat format = MidiFileFormat.MultiTrack, WritingSettings settings = null)
+        public void Write(string filePath, bool overwriteFile = false, MidiFileFormat format = MidiFileFormat.MultiTrack, WritingSettings? settings = null)
         {
+            ThrowIfArgument.IsNullOrWhiteSpaceString(nameof(filePath), filePath, "File path");
             ThrowIfArgument.IsInvalidEnumValue(nameof(format), format);
 
             using (var fileStream = FileUtilities.OpenFileForWrite(filePath, overwriteFile))
@@ -339,10 +339,8 @@ namespace Melanchall.DryWetMidi.Core
         /// ticks per quarter note.</param>
         /// <returns>An instance of the <see cref="MidiTokensWriter"/> wrapped around the specified file.</returns>
         /// <seealso cref="Write(string, bool, MidiFileFormat, WritingSettings)"/>
-        /// <exception cref="ArgumentException"><paramref name="filePath"/> is a zero-length string,
-        /// contains only white space, or contains one or more invalid characters as defined by
-        /// <see cref="Path.InvalidPathChars"/>.</exception>
-        /// <exception cref="ArgumentNullException"><paramref name="filePath"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentException"><paramref name="filePath"/> is <c>null</c> or contains white-spaces only
+        /// or contains one or more invalid characters as defined by <see cref="Path.InvalidPathChars"/>.</exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="format"/> specified an invalid value.</exception>
         /// <exception cref="PathTooLongException">The specified path, file name, or both exceed the system-defined
         /// maximum length. For example, on Windows-based platforms, paths must be less than 248 characters,
@@ -372,9 +370,10 @@ namespace Melanchall.DryWetMidi.Core
             string filePath,
             bool overwriteFile = false,
             MidiFileFormat format = MidiFileFormat.MultiTrack,
-            WritingSettings settings = null,
-            TimeDivision timeDivision = null)
+            WritingSettings? settings = null,
+            TimeDivision? timeDivision = null)
         {
+            ThrowIfArgument.IsNullOrWhiteSpaceString(nameof(filePath), filePath, "File path");
             ThrowIfArgument.IsInvalidEnumValue(nameof(format), format);
 
             var fileStream = FileUtilities.OpenFileForWrite(filePath, overwriteFile);
@@ -452,7 +451,7 @@ namespace Melanchall.DryWetMidi.Core
         /// is <c>null</c> in case of <see cref="ReaderSettings.BufferingPolicy"/> set to
         /// <see cref="BufferingPolicy.UseCustomBuffer"/>.</exception>
         /// <exception cref="VlqNumberOverflowException">A variable-length quantity (VLQ) number in the file is too large.</exception>
-        public static MidiFile Read(Stream stream, ReadingSettings settings = null)
+        public static MidiFile Read(Stream stream, ReadingSettings? settings = null)
         {
             ThrowIfArgument.IsNull(nameof(stream), stream);
 
@@ -592,7 +591,7 @@ namespace Melanchall.DryWetMidi.Core
         /// </item>
         /// </list>
         /// </exception>
-        public static MidiTokensReader ReadLazy(Stream stream, ReadingSettings settings = null)
+        public static MidiTokensReader ReadLazy(Stream stream, ReadingSettings? settings = null)
         {
             ThrowIfArgument.IsNull(nameof(stream), stream);
             return ReadLazy(stream, false, settings);
@@ -614,7 +613,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <exception cref="ObjectDisposedException"><paramref name="stream"/> is disposed.</exception>
         /// <exception cref="TooManyTrackChunksException">Count of track chunks presented in the file
         /// exceeds maximum value allowed for MIDI file.</exception>
-        public void Write(Stream stream, MidiFileFormat format = MidiFileFormat.MultiTrack, WritingSettings settings = null)
+        public void Write(Stream stream, MidiFileFormat format = MidiFileFormat.MultiTrack, WritingSettings? settings = null)
         {
             ThrowIfArgument.IsNull(nameof(stream), stream);
             ThrowIfArgument.IsInvalidEnumValue(nameof(format), format);
@@ -697,9 +696,9 @@ namespace Melanchall.DryWetMidi.Core
         /// </exception>
         public static MidiTokensWriter WriteLazy(
             Stream stream,
-            WritingSettings settings = null,
+            WritingSettings? settings = null,
             MidiFileFormat format = MidiFileFormat.MultiTrack,
-            TimeDivision timeDivision = null)
+            TimeDivision? timeDivision = null)
         {
             ThrowIfArgument.IsNull(nameof(stream), stream);
             return WriteLazy(stream, false, settings, format, timeDivision);
@@ -713,7 +712,7 @@ namespace Melanchall.DryWetMidi.Core
         {
             var result = new MidiFile(Chunks.Select(c => c.Clone()))
             {
-                TimeDivision = TimeDivision.Clone()
+                TimeDivision = TimeDivision?.Clone()
             };
             result._originalFormat = _originalFormat;
 
@@ -727,7 +726,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <param name="midiFile2">The second file to compare, or <c>null</c>.</param>
         /// <returns><c>true</c> if the <paramref name="midiFile1"/> is equal to the <paramref name="midiFile2"/>;
         /// otherwise, <c>false</c>.</returns>
-        public static bool Equals(MidiFile midiFile1, MidiFile midiFile2)
+        public static bool Equals(MidiFile? midiFile1, MidiFile? midiFile2)
         {
             return Equals(midiFile1, midiFile2, out _);
         }
@@ -741,7 +740,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <paramref name="midiFile1"/> and <paramref name="midiFile2"/>.</param>
         /// <returns><c>true</c> if the <paramref name="midiFile1"/> is equal to the <paramref name="midiFile2"/>;
         /// otherwise, <c>false</c>.</returns>
-        public static bool Equals(MidiFile midiFile1, MidiFile midiFile2, out string message)
+        public static bool Equals(MidiFile? midiFile1, MidiFile? midiFile2, out string? message)
         {
             return Equals(midiFile1, midiFile2, null, out message);
         }
@@ -754,7 +753,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <param name="settings">Settings according to which files should be compared.</param>
         /// <returns><c>true</c> if the <paramref name="midiFile1"/> is equal to the <paramref name="midiFile2"/>;
         /// otherwise, <c>false</c>.</returns>
-        public static bool Equals(MidiFile midiFile1, MidiFile midiFile2, MidiFileEqualityCheckSettings settings)
+        public static bool Equals(MidiFile? midiFile1, MidiFile? midiFile2, MidiFileEqualityCheckSettings? settings)
         {
             return Equals(midiFile1, midiFile2, settings, out _);
         }
@@ -770,12 +769,12 @@ namespace Melanchall.DryWetMidi.Core
         /// <paramref name="midiFile1"/> and <paramref name="midiFile2"/>.</param>
         /// <returns><c>true</c> if the <paramref name="midiFile1"/> is equal to the <paramref name="midiFile2"/>;
         /// otherwise, <c>false</c>.</returns>
-        public static bool Equals(MidiFile midiFile1, MidiFile midiFile2, MidiFileEqualityCheckSettings settings, out string message)
+        public static bool Equals(MidiFile? midiFile1, MidiFile? midiFile2, MidiFileEqualityCheckSettings? settings, out string? message)
         {
             return MidiFileEquality.Equals(midiFile1, midiFile2, settings ?? new MidiFileEqualityCheckSettings(), out message);
         }
 
-        private static MidiTokensReader ReadLazy(Stream stream, bool disposeStream, ReadingSettings settings)
+        private static MidiTokensReader ReadLazy(Stream stream, bool disposeStream, ReadingSettings? settings)
         {
             ThrowIfArgument.IsNull(nameof(stream), stream);
             return new MidiTokensReader(stream, settings, disposeStream);
@@ -784,9 +783,9 @@ namespace Melanchall.DryWetMidi.Core
         private static MidiTokensWriter WriteLazy(
             Stream stream,
             bool disposeStream,
-            WritingSettings settings,
+            WritingSettings? settings,
             MidiFileFormat format,
-            TimeDivision timeDivision)
+            TimeDivision? timeDivision)
         {
             ThrowIfArgument.IsNull(nameof(stream), stream);
             return new MidiTokensWriter(
@@ -797,9 +796,9 @@ namespace Melanchall.DryWetMidi.Core
                 timeDivision ?? new TicksPerQuarterNoteTimeDivision());
         }
 
-        private static MidiChunk ReadChunk(MidiReader reader, ReadingSettings settings, int actualTrackChunksCount, int? expectedTrackChunksCount)
+        private static MidiChunk? ReadChunk(MidiReader reader, ReadingSettings settings, int actualTrackChunksCount, int? expectedTrackChunksCount)
         {
-            MidiChunk chunk = null;
+            MidiChunk? chunk = null;
 
             try
             {
@@ -809,9 +808,10 @@ namespace Melanchall.DryWetMidi.Core
                     switch (settings.NotEnoughBytesPolicy)
                     {
                         case NotEnoughBytesPolicy.Abort:
-                            throw new NotEnoughBytesException("Chunk ID cannot be read since the reader's underlying stream doesn't have enough bytes.",
-                                                              MidiChunk.IdLength,
-                                                              chunkId.Length);
+                            throw new NotEnoughBytesException(
+                                "Chunk ID cannot be read since the reader's underlying stream doesn't have enough bytes.",
+                                MidiChunk.IdLength,
+                                chunkId.Length);
                         case NotEnoughBytesPolicy.Ignore:
                             return null;
                     }
@@ -826,11 +826,12 @@ namespace Melanchall.DryWetMidi.Core
                         chunk = new TrackChunk();
                         break;
                     default:
-                        chunk = MidiFileReadingUtilities.TryCreateChunk(chunkId, settings.CustomChunkTypes);
+                        chunk = MidiFileReadingUtilities.TryCreateChunk(chunkId, settings?.CustomChunkTypes);
                         break;
                 }
 
-                //
+                if (settings == null)
+                    return null;
 
                 if (chunk == null)
                 {
@@ -849,8 +850,6 @@ namespace Melanchall.DryWetMidi.Core
                             throw new UnknownChunkException(chunkId);
                     }
                 }
-
-                //
 
                 if (chunk is TrackChunk && expectedTrackChunksCount != null && actualTrackChunksCount >= expectedTrackChunksCount)
                 {

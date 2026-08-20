@@ -51,7 +51,7 @@ namespace Melanchall.DryWetMidi.Tools
                     Tuple.Create(TypeParser.DataType.Long, "microseconds per quarter note")),
                 [MidiEventType.SmpteOffset] = GetEventParser(
                     x => new SmpteOffsetEvent(
-                        (SmpteFormat)Enum.Parse(typeof(SmpteFormat), x[0].ToString()),
+                        (SmpteFormat)Enum.Parse(typeof(SmpteFormat), x[0].ToString() ?? string.Empty),
                         (byte)x[1],
                         (byte)x[2],
                         (byte)x[3],
@@ -130,7 +130,7 @@ namespace Melanchall.DryWetMidi.Tools
                     Tuple.Create(TypeParser.DataType.UShort, "pointer value")),
                 [MidiEventType.MidiTimeCode] = GetEventParser(
                     x => new MidiTimeCodeEvent(
-                        (MidiTimeCodeComponent)Enum.Parse(typeof(MidiTimeCodeComponent), x[0].ToString()),
+                        (MidiTimeCodeComponent)Enum.Parse(typeof(MidiTimeCodeComponent), x[0].ToString() ?? string.Empty),
                         (FourBitNumber)x[1]),
                     Tuple.Create(TypeParser.DataType.String, "component"),
                     Tuple.Create(TypeParser.DataType.FourBitNumber, "component value")),
@@ -163,7 +163,7 @@ namespace Melanchall.DryWetMidi.Tools
             return (p, s) =>
             {
                 if (p.Length < parametersParsers.Length)
-                    CsvError.ThrowBadFormat($"Invalid number of parameters provided ({p.Length} with {parametersParsers.Length} expected).");
+                    throw CsvError.BadFormat($"Invalid number of parameters provided ({p.Length} with {parametersParsers.Length} expected).");
 
                 var parameters = new List<object>(parametersParsers.Length);
 

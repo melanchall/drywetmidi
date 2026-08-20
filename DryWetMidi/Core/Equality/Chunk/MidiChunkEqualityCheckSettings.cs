@@ -8,11 +8,12 @@
     {
         #region Properties
 
+        // TODO: check setting null
         /// <summary>
         /// Gets or sets settings according to which <see cref="MidiEvent"/> objects should
         /// be compared for equality.
         /// </summary>
-        public MidiEventEqualityCheckSettings EventEqualityCheckSettings { get; set; } = new MidiEventEqualityCheckSettings();
+        public MidiEventEqualityCheckSettings? EventEqualityCheckSettings { get; set; } = new MidiEventEqualityCheckSettings();
 
         #endregion
     }

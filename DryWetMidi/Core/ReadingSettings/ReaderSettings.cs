@@ -121,7 +121,7 @@ namespace Melanchall.DryWetMidi.Core
         /// Gets or sets the buffer that will be used by <see cref="MidiReader"/> in case of
         /// <see cref="BufferingPolicy.UseCustomBuffer"/> policy used for <see cref="BufferingPolicy"/>.
         /// </summary>
-        public byte[] Buffer { get; set; }
+        public byte[]? Buffer { get; set; }
 
         /// <summary>
         /// Gets or sets the maximum length of a bytes packet that will be used by <see cref="MidiTokensReader"/>.

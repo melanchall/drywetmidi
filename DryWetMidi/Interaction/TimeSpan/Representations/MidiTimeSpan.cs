@@ -75,7 +75,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <see cref="String.Empty"/>, or is not of the correct format. This parameter is passed uninitialized;
         /// any value originally supplied in result will be overwritten.</param>
         /// <returns><c>true</c> if <paramref name="input"/> was converted successfully; otherwise, <c>false</c>.</returns>
-        public static bool TryParse(string input, out MidiTimeSpan timeSpan)
+        public static bool TryParse(string? input, out MidiTimeSpan? timeSpan)
         {
             return MidiTimeSpanParser.TryParse(input, out timeSpan).Status == ParsingStatus.Parsed;
         }
@@ -89,7 +89,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <paramref name="input"/>.</returns>
         /// <exception cref="ArgumentException"><paramref name="input"/> is <c>null</c> or contains white-spaces only.</exception>
         /// <exception cref="FormatException"><paramref name="input"/> has invalid format.</exception>
-        public static MidiTimeSpan Parse(string input)
+        public static MidiTimeSpan Parse(string? input)
         {
             return ParsingUtilities.Parse<MidiTimeSpan>(input, MidiTimeSpanParser.TryParse);
         }
@@ -125,7 +125,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="timeSpan1">The first <see cref="MidiTimeSpan"/> to compare.</param>
         /// <param name="timeSpan2">The second <see cref="MidiTimeSpan"/> to compare.</param>
         /// <returns><c>true</c> if time spans are equal, <c>false</c> otherwise.</returns>
-        public static bool operator ==(MidiTimeSpan timeSpan1, MidiTimeSpan timeSpan2)
+        public static bool operator ==(MidiTimeSpan? timeSpan1, MidiTimeSpan? timeSpan2)
         {
             if (ReferenceEquals(timeSpan1, null))
                 return ReferenceEquals(timeSpan2, null);
@@ -139,7 +139,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="timeSpan1">The first <see cref="MidiTimeSpan"/> to compare.</param>
         /// <param name="timeSpan2">The second <see cref="MidiTimeSpan"/> to compare.</param>
         /// <returns><c>false</c> if time spans are equal, <c>true</c> otherwise.</returns>
-        public static bool operator !=(MidiTimeSpan timeSpan1, MidiTimeSpan timeSpan2)
+        public static bool operator !=(MidiTimeSpan? timeSpan1, MidiTimeSpan? timeSpan2)
         {
             return !(timeSpan1 == timeSpan2);
         }
@@ -324,7 +324,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="obj">The object to compare with the current object.</param>
         /// <returns><c>true</c> if the specified object is equal to the current object; otherwise, <c>false</c>.</returns>
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             return Equals(obj as MidiTimeSpan);
         }
@@ -454,7 +454,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </item>
         /// </list>
         /// </returns>
-        public int CompareTo(object other)
+        public int CompareTo(object? other)
         {
             if (ReferenceEquals(other, null))
                 return 1;
@@ -497,7 +497,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </item>
         /// </list>
         /// </returns>
-        public int CompareTo(MidiTimeSpan other)
+        public int CompareTo(MidiTimeSpan? other)
         {
             if (ReferenceEquals(other, null))
                 return 1;
@@ -514,7 +514,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="other">An object to compare with this object.</param>
         /// <returns><c>true</c> if the current object is equal to the other parameter; otherwise, <c>false</c>.</returns>
-        public bool Equals(MidiTimeSpan other)
+        public bool Equals(MidiTimeSpan? other)
         {
             if (ReferenceEquals(this, other))
                 return true;

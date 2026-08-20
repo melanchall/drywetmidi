@@ -3,6 +3,7 @@ using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Melanchall.DryWetMidi.Tools
 {
@@ -48,8 +49,8 @@ namespace Melanchall.DryWetMidi.Tools
             ObjectType objectType,
             ITimeSpan step,
             TempoMap tempoMap,
-            ObjectDetectionSettings objectDetectionSettings = null,
-            Predicate<ITimedObject> filter = null)
+            ObjectDetectionSettings? objectDetectionSettings = null,
+            Predicate<ITimedObject>? filter = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
             ThrowIfArgument.IsNull(nameof(step), step);
@@ -96,18 +97,18 @@ namespace Melanchall.DryWetMidi.Tools
         /// </list>
         /// </exception>
         public static void SplitObjectsByStep(
-            this IEnumerable<TrackChunk> trackChunks,
+            this IEnumerable<TrackChunk?> trackChunks,
             ObjectType objectType,
             ITimeSpan step,
             TempoMap tempoMap,
-            ObjectDetectionSettings objectDetectionSettings = null,
-            Predicate<ITimedObject> filter = null)
+            ObjectDetectionSettings? objectDetectionSettings = null,
+            Predicate<ITimedObject>? filter = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
             ThrowIfArgument.IsNull(nameof(step), step);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
-            foreach (var trackChunk in trackChunks)
+            foreach (var trackChunk in trackChunks.OfType<TrackChunk>())
             {
                 trackChunk.SplitObjectsByStep(objectType, step, tempoMap, objectDetectionSettings, filter);
             }
@@ -146,8 +147,8 @@ namespace Melanchall.DryWetMidi.Tools
             this MidiFile midiFile,
             ObjectType objectType,
             ITimeSpan step,
-            ObjectDetectionSettings objectDetectionSettings = null,
-            Predicate<ITimedObject> filter = null)
+            ObjectDetectionSettings? objectDetectionSettings = null,
+            Predicate<ITimedObject>? filter = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
             ThrowIfArgument.IsNull(nameof(step), step);
@@ -190,11 +191,11 @@ namespace Melanchall.DryWetMidi.Tools
         /// </item>
         /// </list>
         /// </exception>
-        public static IEnumerable<ITimedObject> SplitObjectsByStep(
-            this IEnumerable<ITimedObject> objects,
+        public static IEnumerable<ITimedObject?> SplitObjectsByStep(
+            this IEnumerable<ITimedObject?> objects,
             ITimeSpan step,
             TempoMap tempoMap,
-            Predicate<ITimedObject> filter = null)
+            Predicate<ITimedObject>? filter = null)
         {
             ThrowIfArgument.IsNull(nameof(objects), objects);
             ThrowIfArgument.IsNull(nameof(step), step);

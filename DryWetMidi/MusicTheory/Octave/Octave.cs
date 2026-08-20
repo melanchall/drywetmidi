@@ -55,8 +55,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="octave"/> is out of valid range.</exception>
         private Octave(int octave)
         {
-            Debug.Assert(octave >= MinOctaveNumber && octave <= MaxOctaveNumber,
-                         "An octave's number is out of range.");
+            // TODO: check octave number
 
             Number = octave;
 
@@ -176,11 +175,12 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="octaveNumber"/> is out of valid range.</exception>
         public static Octave Get(int octaveNumber)
         {
-            ThrowIfArgument.IsOutOfRange(nameof(octaveNumber),
-                                         octaveNumber,
-                                         MinOctaveNumber,
-                                         MaxOctaveNumber,
-                                         $"Octave number is out of [{MinOctaveNumber}, {MaxOctaveNumber}] range.");
+            ThrowIfArgument.IsOutOfRange(
+                nameof(octaveNumber),
+                octaveNumber,
+                MinOctaveNumber,
+                MaxOctaveNumber,
+                $"Octave number is out of [{MinOctaveNumber}, {MaxOctaveNumber}] range.");
 
             if (!Cache.TryGetValue(octaveNumber, out var octave))
                 Cache.TryAdd(octaveNumber, octave = new Octave(octaveNumber));
@@ -199,7 +199,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// <see cref="string.Empty"/>, or is not of the correct format. This parameter is passed uninitialized;
         /// any value originally supplied in result will be overwritten.</param>
         /// <returns><c>true</c> if <paramref name="input"/> was converted successfully; otherwise, <c>false</c>.</returns>
-        public static bool TryParse(string input, out Octave octave)
+        public static bool TryParse(string? input, out Octave? octave)
         {
             return ParsingUtilities.TryParse(input, OctaveParser.TryParse, out octave);
         }
@@ -211,7 +211,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// <returns>A <see cref="Octave"/> equivalent to the musical note contained in <paramref name="input"/>.</returns>
         /// <exception cref="ArgumentException"><paramref name="input"/> is <c>null</c> or contains white-spaces only.</exception>
         /// <exception cref="FormatException"><paramref name="input"/> has invalid format.</exception>
-        public static Octave Parse(string input)
+        public static Octave Parse(string? input)
         {
             return ParsingUtilities.Parse<Octave>(input, OctaveParser.TryParse);
         }
@@ -226,7 +226,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// <param name="octave1">The first <see cref="Octave"/> to compare.</param>
         /// <param name="octave2">The second <see cref="Octave"/> to compare.</param>
         /// <returns><c>true</c> if the octaves are equal, <c>false</c> otherwise.</returns>
-        public static bool operator ==(Octave octave1, Octave octave2)
+        public static bool operator ==(Octave? octave1, Octave? octave2)
         {
             if (ReferenceEquals(octave1, octave2))
                 return true;
@@ -243,7 +243,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// <param name="octave1">The first <see cref="Octave"/> to compare.</param>
         /// <param name="octave2">The second <see cref="Octave"/> to compare.</param>
         /// <returns><c>false</c> if the octaves are equal, <c>true</c> otherwise.</returns>
-        public static bool operator !=(Octave octave1, Octave octave2)
+        public static bool operator !=(Octave? octave1, Octave? octave2)
         {
             return !(octave1 == octave2);
         }
@@ -266,7 +266,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// </summary>
         /// <param name="obj">The object to compare with the current object.</param>
         /// <returns><c>true</c> if the specified object is equal to the current object; otherwise, <c>false</c>.</returns>
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             return this == (obj as Octave);
         }

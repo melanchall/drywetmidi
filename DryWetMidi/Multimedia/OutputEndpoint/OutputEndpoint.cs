@@ -32,7 +32,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <summary>
         /// Occurs when a MIDI event is sent.
         /// </summary>
-        public event EventHandler<MidiEventSentEventArgs> EventSent;
+        public event EventHandler<MidiEventSentEventArgs>? EventSent;
 
         #endregion
 
@@ -41,20 +41,19 @@ namespace Melanchall.DryWetMidi.Multimedia
         private readonly MidiEventToBytesConverter _midiEventToBytesConverter = new MidiEventToBytesConverter(ShortEventBufferSize) { BytesFormat = BytesFormat.Device };
         private readonly BytesToMidiEventConverter _bytesToMidiEventConverter = new BytesToMidiEventConverter { BytesFormat = BytesFormat.Device };
 
-        private OutputEndpointApi.Callback_Win _callback;
+        private OutputEndpointApi.Callback_Win? _callback;
 
         private readonly CommonApi.OsType _osType;
 
-        private string _id;
+        private string? _id;
 
         #endregion
 
         #region Constructor
 
         internal OutputEndpoint(IntPtr info, CreationContext context)
-            : base(context)
+            : base(context, new OutputEndpointHandle(info))
         {
-            Handle_ = new OutputEndpointHandle(info);
             _osType = CommonApi.Api_GetOsType();
         }
 
@@ -72,7 +71,7 @@ namespace Melanchall.DryWetMidi.Multimedia
                 EnsureSessionIsCreated();
                 EnsureEndpointIsNotRemoved();
 
-                var result = OutputEndpointApi.Api_GetEndpointName(Handle_.DangerousGetHandle(), out var name, out var errorCode);
+                var result = OutputEndpointApi.Api_GetEndpointName(Handle.DangerousGetHandle(), out var name, out var errorCode);
                 NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
 
                 return name;
@@ -86,7 +85,7 @@ namespace Melanchall.DryWetMidi.Multimedia
                 if (!string.IsNullOrWhiteSpace(_id))
                     return _id;
 
-                var result = OutputEndpointApi.Api_GetEndpointId(Handle_.DangerousGetHandle(), out _id, out var errorCode);
+                var result = OutputEndpointApi.Api_GetEndpointId(Handle.DangerousGetHandle(), out _id, out var errorCode);
                 NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
                 
                 return _id;
@@ -124,7 +123,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             if (midiEvent is ChannelEvent || midiEvent is SystemCommonEvent || midiEvent is SystemRealTimeEvent)
             {
                 var message = PackShortEvent(midiEvent);
-                var result = OutputEndpointApi.Api_SendShortEvent(Handle_.OpenedEndpointHandle, MidiDevicesSession.GetSessionHandle(), message, out var errorCode);
+                var result = OutputEndpointApi.Api_SendShortEvent(Handle.OpenedEndpointHandle, MidiDevicesSession.GetSessionHandle(), message, out var errorCode);
                 NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
             }
             else
@@ -258,7 +257,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
             var configurationHandle = MidiConfiguration.GetConfigurationHandle();
 
-            var result = OutputEndpointApi.Api_SendSysExEvent_Win(Handle_.OpenedEndpointHandle, MidiDevicesSession.GetSessionHandle(), bufferPointer, bufferLength, out var errorCode);
+            var result = OutputEndpointApi.Api_SendSysExEvent_Win(Handle.OpenedEndpointHandle, MidiDevicesSession.GetSessionHandle(), bufferPointer, bufferLength, out var errorCode);
             if (result != OutputEndpointApi.OUT_SENDSYSEXRESULT.OUT_SENDSYSEXRESULT_OK)
                 Marshal.FreeHGlobal(bufferPointer);
             
@@ -288,7 +287,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         private void EnsureHandleIsCreated()
         {
-            if (Handle_.OpenedEndpointHandle != IntPtr.Zero)
+            if (Handle.OpenedEndpointHandle != IntPtr.Zero)
                 return;
 
             var sessionHandle = MidiDevicesSession.GetSessionHandle();
@@ -301,13 +300,13 @@ namespace Melanchall.DryWetMidi.Multimedia
                 case CommonApi.OsType.Windows:
                     {
                         _callback = OnMessage;
-                        var result = OutputEndpointApi.Api_OpenEndpoint_Win(Handle_.DangerousGetHandle(), sessionHandle, _callback, out rawHandle, out errorCode);
+                        var result = OutputEndpointApi.Api_OpenEndpoint_Win(Handle.DangerousGetHandle(), sessionHandle, _callback, out rawHandle, out errorCode);
                         NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
                     }
                     break;
                 case CommonApi.OsType.MacOS:
                     {
-                        var result = OutputEndpointApi.Api_OpenEndpoint_Mac(Handle_.DangerousGetHandle(), sessionHandle, out rawHandle, out errorCode);
+                        var result = OutputEndpointApi.Api_OpenEndpoint_Mac(Handle.DangerousGetHandle(), sessionHandle, out rawHandle, out errorCode);
                         NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
                     }
                     break;
@@ -315,10 +314,10 @@ namespace Melanchall.DryWetMidi.Multimedia
                     throw new NotSupportedException($"{_osType} API is not supported.");
             }
 
-            Handle_.OpenedEndpointHandle = rawHandle;
+            Handle.OpenedEndpointHandle = rawHandle;
 
 #if TEST
-            Handle_.TestCheckpoints = TestCheckpoints;
+            Handle.TestCheckpoints = TestCheckpoints;
 #endif
         }
 
@@ -364,7 +363,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
             var configurationHandle = MidiConfiguration.GetConfigurationHandle();
 
-            var result = OutputEndpointApi.Api_SendSysExEvent_Win(Handle_.OpenedEndpointHandle, MidiDevicesSession.GetSessionHandle(), bufferPointer, bufferLength, out var errorCode);
+            var result = OutputEndpointApi.Api_SendSysExEvent_Win(Handle.OpenedEndpointHandle, MidiDevicesSession.GetSessionHandle(), bufferPointer, bufferLength, out var errorCode);
             if (result != OutputEndpointApi.OUT_SENDSYSEXRESULT.OUT_SENDSYSEXRESULT_OK ||
                 MidiConfigurationApi.Api_IsWmsInitialized(configurationHandle))
                 Marshal.FreeHGlobal(bufferPointer);
@@ -390,7 +389,7 @@ namespace Melanchall.DryWetMidi.Multimedia
                 hasStartByte ? 0 : 1,
                 data.Length);
 
-            var result = OutputEndpointApi.Api_SendSysExEvent_Mac(Handle_.OpenedEndpointHandle, buffer, (ushort)buffer.Length, out var errorCode);
+            var result = OutputEndpointApi.Api_SendSysExEvent_Mac(Handle.OpenedEndpointHandle, buffer, (ushort)buffer.Length, out var errorCode);
             NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
         }
 
@@ -420,12 +419,12 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         private void OnSysExEventSent(IntPtr sysExHeaderPointer)
         {
-            byte[] data = null;
+            byte[]? data = null;
             IntPtr dataPointer = IntPtr.Zero;
 
             try
             {
-                var result = OutputEndpointApi.Api_GetSysExBufferData(Handle_.OpenedEndpointHandle, sysExHeaderPointer, out dataPointer, out var size, out var errorCode);
+                var result = OutputEndpointApi.Api_GetSysExBufferData(Handle.OpenedEndpointHandle, sysExHeaderPointer, out dataPointer, out var size, out var errorCode);
                 NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
             }
             catch (Exception ex)
@@ -460,7 +459,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <param name="outputEndpoint1">The first <see cref="OutputEndpoint"/> to compare.</param>
         /// <param name="outputEndpoint2">The second <see cref="OutputEndpoint"/> to compare.</param>
         /// <returns><c>true</c> if the endpoints are equal, <c>false</c> otherwise.</returns>
-        public static bool operator ==(OutputEndpoint outputEndpoint1, OutputEndpoint outputEndpoint2)
+        public static bool operator ==(OutputEndpoint? outputEndpoint1, OutputEndpoint? outputEndpoint2)
         {
             if (ReferenceEquals(outputEndpoint1, outputEndpoint2))
                 return true;
@@ -481,7 +480,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <param name="outputEndpoint1">The first <see cref="OutputEndpoint"/> to compare.</param>
         /// <param name="outputEndpoint2">The second <see cref="OutputEndpoint"/> to compare.</param>
         /// <returns><c>false</c> if the endpoints are equal, <c>true</c> otherwise.</returns>
-        public static bool operator !=(OutputEndpoint outputEndpoint1, OutputEndpoint outputEndpoint2)
+        public static bool operator !=(OutputEndpoint? outputEndpoint1, OutputEndpoint? outputEndpoint2)
         {
             return !(outputEndpoint1 == outputEndpoint2);
         }
@@ -499,7 +498,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// </remarks>
         /// <param name="obj">The object to compare with the current object.</param>
         /// <returns><c>true</c> if the specified object is equal to the current object; otherwise, <c>false</c>.</returns>
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             var outputEndpoint = obj as OutputEndpoint;
             if (outputEndpoint == null)
@@ -527,27 +526,12 @@ namespace Melanchall.DryWetMidi.Multimedia
             return $"Output endpoint{(string.IsNullOrWhiteSpace(baseDescription) ? string.Empty : $" ({baseDescription})")}";
         }
 
-        /// <summary>
-        /// Releases the unmanaged resources used by the MIDI endpoint class and optionally releases
-        /// the managed resources.
-        /// </summary>
-        /// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to
-        /// release only unmanaged resources.</param>
-        internal override void Dispose(bool disposing)
+        protected override void OnDisposing()
         {
-            if (_disposed)
-                return;
+            base.OnDisposing();
 
-            if (disposing)
-            {
-                _midiEventToBytesConverter.Dispose();
-                _bytesToMidiEventConverter.Dispose();
-
-                Handle_?.Dispose();
-                Handle_ = null;
-            }
-
-            _disposed = true;
+            _midiEventToBytesConverter.Dispose();
+            _bytesToMidiEventConverter.Dispose();
         }
 
         #endregion

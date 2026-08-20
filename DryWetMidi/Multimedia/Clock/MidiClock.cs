@@ -20,7 +20,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <summary>
         /// Occurs when new tick generated.
         /// </summary>
-        public event EventHandler Ticked;
+        public event EventHandler? Ticked;
 
         #endregion
 
@@ -37,7 +37,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         private double _speed = DefaultSpeed;
 
-        private readonly TickGenerator _tickGenerator;
+        private readonly TickGenerator? _tickGenerator;
 
         #endregion
 
@@ -50,10 +50,10 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// </summary>
         /// <param name="startImmediately">A value indicating whether first tick should be generated
         /// immediately after clock started.</param>
-        /// <param name="tickGenerator">Tick generator used as timer firing at the specified interval. Null for
-        /// no tick generator.</param>
+        /// <param name="tickGenerator">Tick generator used as timer firing at the specified interval. Pass
+        /// <c>null</c> for no tick generator and manual ticking.</param>
         /// <param name="interval">Interval of clock's ticking.</param>
-        public MidiClock(bool startImmediately, TickGenerator tickGenerator, TimeSpan interval)
+        public MidiClock(bool startImmediately, TickGenerator? tickGenerator, TimeSpan interval)
         {
             ThrowIfArgument.IsLessThan(nameof(interval), interval, TimeSpan.FromMilliseconds(1), "Interval is less than 1 ms.");
 
@@ -70,6 +70,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         #region Finalizer
 
+        // TODO: looks like need to be removed
         /// <summary>
         /// Finalizes the current instance of the <see cref="MidiClock"/>.
         /// </summary>
@@ -246,7 +247,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             _stopwatch.Stop();
         }
 
-        private void OnTickGenerated(object sender, EventArgs e)
+        private void OnTickGenerated(object? sender, EventArgs e)
         {
             TraceTick();
             Tick();

@@ -43,11 +43,11 @@ namespace Melanchall.DryWetMidi.Composing
         public long? RestoreTime()
         {
             return _timeHistory.Any() ?
-                (long?)_timeHistory.Pop()
+                _timeHistory.Pop()
                 : null;
         }
 
-        public void AnchorTime(object anchor, long time)
+        public void AnchorTime(object? anchor, long time)
         {
             GetAnchorTimesList(anchor).Add(time);
 
@@ -55,12 +55,12 @@ namespace Melanchall.DryWetMidi.Composing
                 _anchorsList.Add(time);
         }
 
-        public IReadOnlyList<long> GetAnchorTimes(object anchor)
+        public IReadOnlyList<long> GetAnchorTimes(object? anchor)
         {
             return GetAnchorTimesList(anchor).AsReadOnly();
         }
 
-        private List<long> GetAnchorTimesList(object anchor)
+        private List<long> GetAnchorTimesList(object? anchor)
         {
             if (anchor == null)
                 return _anchorsList;

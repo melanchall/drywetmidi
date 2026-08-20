@@ -8,12 +8,12 @@ namespace Melanchall.DryWetMidi.Core
     {
         #region Methods
 
-        internal static bool Equals<T>(T[] array1, T[] array2)
+        internal static bool Equals<T>(T[]? array1, T[]? array2)
         {
             return Equals(array1, 0, array2, 0);
         }
 
-        internal static bool Equals<T>(T[] array1, int offset1, T[] array2, int offset2)
+        internal static bool Equals<T>(T[]? array1, int offset1, T[]? array2, int offset2)
         {
             if (ReferenceEquals(array1, array2))
                 return true;

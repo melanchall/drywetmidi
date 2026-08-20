@@ -32,7 +32,7 @@ namespace Melanchall.DryWetMidi.Composing
         {
         }
 
-        public PatternActionResult(long? time, IEnumerable<Note> notes, IEnumerable<TimedEvent> events)
+        public PatternActionResult(long? time, IEnumerable<Note>? notes, IEnumerable<TimedEvent>? events)
         {
             Time = time;
             Notes = notes;
@@ -45,9 +45,9 @@ namespace Melanchall.DryWetMidi.Composing
 
         public long? Time { get; }
 
-        public IEnumerable<Note> Notes { get; }
+        public IEnumerable<Note>? Notes { get; }
 
-        public IEnumerable<TimedEvent> Events { get; }
+        public IEnumerable<TimedEvent>? Events { get; }
 
         #endregion
     }

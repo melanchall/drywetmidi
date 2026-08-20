@@ -94,8 +94,7 @@ namespace Melanchall.DryWetMidi.Tools
             }
             catch (Exception ex)
             {
-                CsvError.ThrowBadFormat(lineNumber, $"Invalid {valueDescription} ({value}).", ex);
-                return null;
+                throw CsvError.BadFormat(lineNumber, $"Invalid {valueDescription} ({value}).", ex);
             }
         }
 

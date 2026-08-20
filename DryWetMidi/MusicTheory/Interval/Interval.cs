@@ -16,7 +16,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         private static readonly Dictionary<SevenBitNumber, Dictionary<IntervalDirection, Interval>> Cache =
             new Dictionary<SevenBitNumber, Dictionary<IntervalDirection, Interval>>();
 
-        private IReadOnlyCollection<IntervalDefinition> _intervalDefinitions;
+        private IReadOnlyCollection<IntervalDefinition>? _intervalDefinitions;
 
         #endregion
 
@@ -433,7 +433,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// <see cref="string.Empty"/>, or is not of the correct format. This parameter is passed uninitialized;
         /// any value originally supplied in result will be overwritten.</param>
         /// <returns><c>true</c> if <paramref name="input"/> was converted successfully; otherwise, <c>false</c>.</returns>
-        public static bool TryParse(string input, out Interval interval)
+        public static bool TryParse(string? input, out Interval? interval)
         {
             return ParsingUtilities.TryParse(input, IntervalParser.TryParse, out interval);
         }
@@ -445,7 +445,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// <returns>A <see cref="Scale"/> equivalent to the musical interval contained in <paramref name="input"/>.</returns>
         /// <exception cref="ArgumentException"><paramref name="input"/> is <c>null</c> or contains white-spaces only.</exception>
         /// <exception cref="FormatException"><paramref name="input"/> has invalid format.</exception>
-        public static Interval Parse(string input)
+        public static Interval Parse(string? input)
         {
             return ParsingUtilities.Parse<Interval>(input, IntervalParser.TryParse);
         }
@@ -480,7 +480,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// <param name="interval1">The first <see cref="Interval"/> to compare.</param>
         /// <param name="interval2">The second <see cref="Interval"/> to compare.</param>
         /// <returns><c>true</c> if the intervals are equal, <c>false</c> otherwise.</returns>
-        public static bool operator ==(Interval interval1, Interval interval2)
+        public static bool operator ==(Interval? interval1, Interval? interval2)
         {
             if (ReferenceEquals(interval1, interval2))
                 return true;
@@ -497,7 +497,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// <param name="interval1">The first <see cref="Interval"/> to compare.</param>
         /// <param name="interval2">The second <see cref="Interval"/> to compare.</param>
         /// <returns><c>false</c> if the intervals are equal, <c>true</c> otherwise.</returns>
-        public static bool operator !=(Interval interval1, Interval interval2)
+        public static bool operator !=(Interval? interval1, Interval? interval2)
         {
             return !(interval1 == interval2);
         }
@@ -635,8 +635,11 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// </item>
         /// </list>
         /// </returns>
-        public int CompareTo(Interval other)
+        public int CompareTo(Interval? other)
         {
+            if (ReferenceEquals(other, null))
+                return 1;
+
             return HalfSteps.CompareTo(other.HalfSteps);
         }
 
@@ -658,7 +661,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// </summary>
         /// <param name="obj">The object to compare with the current object.</param>
         /// <returns><c>true</c> if the specified object is equal to the current object; otherwise, <c>false</c>.</returns>
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             return this == (obj as Interval);
         }

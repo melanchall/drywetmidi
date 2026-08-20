@@ -7,7 +7,7 @@ namespace Melanchall.DryWetMidi.Core
     {
         #region IEventReader
 
-        public MidiEvent Read(MidiReader reader, ReadingSettings settings, byte currentStatusByte)
+        public MidiEvent? Read(MidiReader reader, ReadingSettings settings, byte currentStatusByte)
         {
             var statusByte = currentStatusByte.GetHead();
             var channel = currentStatusByte.GetTail();

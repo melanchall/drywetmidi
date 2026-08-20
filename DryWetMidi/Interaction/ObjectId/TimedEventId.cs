@@ -21,7 +21,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
         #region Overrides
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (ReferenceEquals(obj, this))
                 return true;

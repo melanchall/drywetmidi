@@ -4,7 +4,7 @@
     {
         #region Methods
 
-        internal static ParsingResult TryParse(string input, byte minValue, byte maxValue, out byte result)
+        internal static ParsingResult TryParse(string? input, byte minValue, byte maxValue, out byte result)
         {
             result = default(byte);
 
