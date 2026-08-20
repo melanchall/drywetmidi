@@ -73,6 +73,78 @@ namespace Melanchall.DryWetMidi.Interaction
             public NoteOnsHolder Holder;
         }
 
+        private readonly struct NoteOnRecord
+        {
+            public readonly TimedEvent TimedEvent;
+            public readonly int Seq;
+
+            public NoteOnRecord(TimedEvent timedEvent, int seq)
+            {
+                TimedEvent = timedEvent;
+                Seq = seq;
+            }
+        }
+
+        private abstract class NoteOnTimedEventsHolder
+        {
+            private const int DefaultCapacity = 2;
+
+            public abstract int Count { get; }
+
+            public abstract void Add(NoteOnRecord record);
+
+            public abstract NoteOnRecord GetNext();
+
+            public static NoteOnTimedEventsHolder Create(NoteStartDetectionPolicy policy, NoteOnRecord first, NoteOnRecord second)
+            {
+                NoteOnTimedEventsHolder holder = policy == NoteStartDetectionPolicy.LastNoteOn
+                    ? (NoteOnTimedEventsHolder)new NoteOnTimedEventsHolderStack(DefaultCapacity)
+                    : new NoteOnTimedEventsHolderQueue(DefaultCapacity);
+
+                holder.Add(first);
+                holder.Add(second);
+                return holder;
+            }
+        }
+
+        private sealed class NoteOnTimedEventsHolderStack : NoteOnTimedEventsHolder
+        {
+            private readonly Stack<NoteOnRecord> _records;
+
+            public NoteOnTimedEventsHolderStack(int capacity)
+            {
+                _records = new Stack<NoteOnRecord>(capacity);
+            }
+
+            public override int Count => _records.Count;
+
+            public override void Add(NoteOnRecord record) => _records.Push(record);
+
+            public override NoteOnRecord GetNext() => _records.Pop();
+        }
+
+        private sealed class NoteOnTimedEventsHolderQueue : NoteOnTimedEventsHolder
+        {
+            private readonly Queue<NoteOnRecord> _records;
+
+            public NoteOnTimedEventsHolderQueue(int capacity)
+            {
+                _records = new Queue<NoteOnRecord>(capacity);
+            }
+
+            public override int Count => _records.Count;
+
+            public override void Add(NoteOnRecord record) => _records.Enqueue(record);
+
+            public override NoteOnRecord GetNext() => _records.Dequeue();
+        }
+
+        private struct NoteOnTimedEventsEntry
+        {
+            public NoteOnRecord Single;
+            public NoteOnTimedEventsHolder Holder;
+        }
+
         private interface IObjectDescriptor
         {
             bool IsCompleted { get; }
@@ -223,15 +295,9 @@ namespace Melanchall.DryWetMidi.Interaction
         {
             ThrowIfArgument.IsNull(nameof(midiEvents), midiEvents);
 
-            var result = new List<Note>();
-
-            // TODO: optimize: get notes only
-            foreach (var note in GetNotesAndTimedEventsLazy(midiEvents.GetTimedEventsLazy(timedEventDetectionSettings, 0), settings).OfType<Note>())
-            {
-                result.Add(note);
-            }
-
-            return new SortedImmutableCollection<Note>(result);
+            return GetNotesOnly(
+                midiEvents.GetTimedEventsLazy(timedEventDetectionSettings, 0),
+                settings ?? new NoteDetectionSettings());
         }
 
         /// <summary>
@@ -1000,6 +1066,108 @@ namespace Melanchall.DryWetMidi.Interaction
             NoteDetectionSettings settings)
         {
             return GetNotesAndTimedEventsLazy(timedEvents, settings, false);
+        }
+
+        private static SortedImmutableCollection<Note> GetNotesOnly(
+            IEnumerable<TimedEvent> timedEvents,
+            NoteDetectionSettings settings)
+        {
+            var constructor = settings.Constructor;
+            var policy = settings.NoteStartDetectionPolicy;
+
+            var noteOns = new Dictionary<int, NoteOnTimedEventsEntry>();
+            var result = new List<(Note Note, int Seq)>();
+            var isSorted = true;
+            var prevTime = long.MinValue;
+            var seqCounter = 0;
+
+            foreach (var timedEvent in timedEvents)
+            {
+                var eventType = timedEvent.Event.EventType;
+
+                if (eventType == MidiEventType.NoteOn)
+                {
+                    var noteId = ((NoteOnEvent)timedEvent.Event).GetNoteId();
+                    var record = new NoteOnRecord(timedEvent, seqCounter++);
+
+                    if (!noteOns.TryGetValue(noteId, out var entry))
+                    {
+                        noteOns[noteId] = new NoteOnTimedEventsEntry { Single = record };
+                    }
+                    else if (entry.Holder == null)
+                    {
+                        noteOns[noteId] = new NoteOnTimedEventsEntry
+                        {
+                            Holder = NoteOnTimedEventsHolder.Create(policy, entry.Single, record)
+                        };
+                    }
+                    else
+                    {
+                        entry.Holder.Add(record);
+                    }
+                }
+                else if (eventType == MidiEventType.NoteOff)
+                {
+                    var noteId = ((NoteOffEvent)timedEvent.Event).GetNoteId();
+
+                    if (!noteOns.TryGetValue(noteId, out var entry))
+                        continue;
+
+                    NoteOnRecord noteOnRecord;
+
+                    if (entry.Holder == null)
+                    {
+                        noteOnRecord = entry.Single;
+                        noteOns.Remove(noteId);
+                    }
+                    else
+                    {
+                        var holder = entry.Holder;
+                        if (holder.Count == 0)
+                        {
+                            noteOns.Remove(noteId);
+                            continue;
+                        }
+
+                        noteOnRecord = holder.GetNext();
+                        if (holder.Count == 0)
+                            noteOns.Remove(noteId);
+                    }
+
+                    var note = constructor != null
+                        ? constructor(new NoteData(noteOnRecord.TimedEvent, timedEvent)) ?? new Note(noteOnRecord.TimedEvent, timedEvent, false)
+                        : new Note(noteOnRecord.TimedEvent, timedEvent, false);
+
+                    if (isSorted)
+                    {
+                        var time = note.Time;
+                        if (time < prevTime)
+                            isSorted = false;
+                        else
+                            prevTime = time;
+                    }
+
+                    result.Add((note, noteOnRecord.Seq));
+                }
+                // Non-note events: not needed for GetNotes, skip to avoid unnecessary work
+            }
+
+            // Orphaned NoteOns (no matching NoteOff) are silently dropped, matching the
+            // behaviour of the GetNotesAndTimedEventsLazy path where they emit as TimedEvents
+            // which are then filtered out by .OfType<Note>().
+
+            if (!isSorted)
+                result.Sort((a, b) =>
+                {
+                    var timeCmp = a.Note.Time.CompareTo(b.Note.Time);
+                    return timeCmp != 0 ? timeCmp : a.Seq.CompareTo(b.Seq);
+                });
+
+            var notes = new Note[result.Count];
+            for (var i = 0; i < result.Count; i++)
+                notes[i] = result[i].Note;
+
+            return new SortedImmutableCollection<Note>(notes);
         }
 
         internal static IEnumerable<ITimedObject> GetNotesAndTimedEventsLazy(
