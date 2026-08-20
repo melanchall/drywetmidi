@@ -352,8 +352,9 @@ namespace Melanchall.DryWetMidi.Interaction
                 case 1: return eventsCollections[0].GetNotes(settings, timedEventDetectionSettings);
             }
 
-            var notes = trackChunks
-                .Select((c, i) => GetNotesAndTimedEventsLazy(c.Events.GetTimedEventsLazy(timedEventDetectionSettings, i), settings).OfType<Note>())
+            var noteDetectionSettings = settings ?? new NoteDetectionSettings();
+            var notes = eventsCollections
+                .Select((c, i) => GetNotesOnly(c.GetTimedEventsLazy(timedEventDetectionSettings, i), noteDetectionSettings))
                 .MergeSortedObjectsCollections();
 
             return new SortedImmutableCollection<Note>(notes.ToArray());
@@ -1076,6 +1077,7 @@ namespace Melanchall.DryWetMidi.Interaction
             var result = new List<(Note Note, int Seq)>();
             var isSorted = true;
             var prevTime = long.MinValue;
+            var prevSeq = -1;
             var seqCounter = 0;
 
             foreach (var timedEvent in timedEvents)
@@ -1138,10 +1140,13 @@ namespace Melanchall.DryWetMidi.Interaction
                     if (isSorted)
                     {
                         var time = note.Time;
-                        if (time < prevTime)
+                        if (time < prevTime || (time == prevTime && noteOnRecord.Seq < prevSeq))
                             isSorted = false;
                         else
+                        {
                             prevTime = time;
+                            prevSeq = noteOnRecord.Seq;
+                        }
                     }
 
                     result.Add((note, noteOnRecord.Seq));

@@ -628,6 +628,30 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             });
 
         [Test]
+        public void GetNotes_DetectionSettings_TrackChunks_LastNoteOn_EqualTimeOrdering([Values] bool wrapToFile) => GetNotes_DetectionSettings_TrackChunks(
+            wrapToFile,
+            new NoteDetectionSettings { NoteStartDetectionPolicy = NoteStartDetectionPolicy.LastNoteOn },
+            midiEvents: new[]
+            {
+                new MidiEvent[]
+                {
+                    new NoteOnEvent((SevenBitNumber)60, (SevenBitNumber)10),
+                    new NoteOnEvent((SevenBitNumber)60, (SevenBitNumber)20),
+                    new NoteOnEvent((SevenBitNumber)60, (SevenBitNumber)30),
+                    new NoteOffEvent((SevenBitNumber)60, (SevenBitNumber)40),
+                    new NoteOffEvent((SevenBitNumber)60, (SevenBitNumber)50),
+                    new NoteOffEvent((SevenBitNumber)60, (SevenBitNumber)60),
+                },
+                new MidiEvent[] { new TextEvent() },
+            },
+            new[]
+            {
+                new Note((SevenBitNumber)60) { Velocity = (SevenBitNumber)10, OffVelocity = (SevenBitNumber)60 },
+                new Note((SevenBitNumber)60) { Velocity = (SevenBitNumber)20, OffVelocity = (SevenBitNumber)50 },
+                new Note((SevenBitNumber)60) { Velocity = (SevenBitNumber)30, OffVelocity = (SevenBitNumber)40 },
+            });
+
+        [Test]
         public void GetNotes_Custom_Null_1() => GetNotes_DetectionSettings_EventsCollection(
             containerType: ContainerType.EventsCollection,
             settings: new NoteDetectionSettings
