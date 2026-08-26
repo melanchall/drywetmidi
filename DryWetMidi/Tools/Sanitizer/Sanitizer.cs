@@ -67,8 +67,8 @@ namespace Melanchall.DryWetMidi.Tools
 
             var trackChunks = midiFile.GetTrackChunks().ToArray();
 
-            var noteOnLastObjects = new Dictionary<int, Tuple<ITimedObject, int>>();
-            var data = new List<Tuple<Tuple<ITimedObject, int>, long?>>();
+            var noteOnLastObjects = new Dictionary<int, (ITimedObject Object, int TrackChunkIndex)>();
+            var data = new List<((ITimedObject Object, int TrackChunkIndex), long? Time)>();
 
             // TODO: simplify
             var notesAndTimedEvents = trackChunks
@@ -76,12 +76,12 @@ namespace Melanchall.DryWetMidi.Tools
                     .Events
                     .GetTimedEventsLazy(new TimedEventDetectionSettings(), i, false)
                     .GetNotesAndTimedEventsLazy(settings.NoteDetectionSettings ?? new NoteDetectionSettings())
-                    .Select(obj => Tuple.Create(obj, i)))
-                .OrderBy(t => t.Item1.Time);
+                    .Select(obj => (Object: obj, TrackChunkIndex: i)))
+                .OrderBy(t => t.Object.Time);
 
             foreach (var timedObjectAt in notesAndTimedEvents)
             {
-                var obj = timedObjectAt.Item1;
+                var obj = timedObjectAt.Object;
 
                 var note = obj as Note;
                 if (note != null)
@@ -89,7 +89,7 @@ namespace Melanchall.DryWetMidi.Tools
                     var noteId = note.GetNoteId();
 
                     if (noteOnLastObjects.TryGetValue(noteId, out var noteOnObject))
-                        data.Add(Tuple.Create(noteOnObject, (long?)obj.Time));
+                        data.Add((noteOnObject, obj.Time));
 
                     noteOnLastObjects.Remove(noteId);
                 }
@@ -102,13 +102,13 @@ namespace Melanchall.DryWetMidi.Tools
                     var noteId = noteOnEvent.GetNoteId();
 
                     if (noteOnLastObjects.TryGetValue(noteId, out var noteOnObject))
-                        data.Add(Tuple.Create(noteOnObject, (long?)obj.Time));
+                        data.Add((noteOnObject, obj.Time));
 
                     noteOnLastObjects[noteId] = timedObjectAt;
                 }
             }
 
-            data.AddRange(noteOnLastObjects.Select(kv => Tuple.Create(kv.Value, (long?)null)));
+            data.AddRange(noteOnLastObjects.Select(kv => (kv.Value, (long?)null)));
 
             //
 
@@ -118,15 +118,15 @@ namespace Melanchall.DryWetMidi.Tools
                 .Select(d =>
                 {
                     var noteOffTime = TimeConverter.ConvertFrom(
-                        new MidiTimeSpan(d.Item1.Item1.Time).Add(maxNoteDuration, TimeSpanMode.TimeLength),
+                        new MidiTimeSpan(d.Item1.Object.Time).Add(maxNoteDuration, TimeSpanMode.TimeLength),
                         tempoMap);
                     if (d.Item2 != null && noteOffTime > d.Item2)
                         noteOffTime = d.Item2.Value;
 
-                    var noteOnEvent = (NoteOnEvent)((TimedEvent)d.Item1.Item1).Event;
+                    var noteOnEvent = (NoteOnEvent)((TimedEvent)d.Item1.Object).Event;
                     return new
                     {
-                        TrackChunkIndex = d.Item1.Item2,
+                        TrackChunkIndex = d.Item1.TrackChunkIndex,
                         NoteOffTimedEvent = new TimedEvent(
                             new NoteOffEvent(noteOnEvent.NoteNumber, SevenBitNumber.MinValue) { Channel = noteOnEvent.Channel },
                             noteOffTime)

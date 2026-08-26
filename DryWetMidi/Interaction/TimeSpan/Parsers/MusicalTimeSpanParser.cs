@@ -8,19 +8,19 @@ namespace Melanchall.DryWetMidi.Interaction
     {
         #region Constants
 
-        private static readonly Dictionary<string, Tuple<int, int>> Fractions = new Dictionary<string, Tuple<int, int>>
+        private static readonly Dictionary<string, (int, int)> Fractions = new Dictionary<string, (int, int)>
         {
-            ["w"] = Tuple.Create(1, 1),
-            ["h"] = Tuple.Create(1, 2),
-            ["q"] = Tuple.Create(1, 4),
-            ["e"] = Tuple.Create(1, 8),
-            ["s"] = Tuple.Create(1, 16),
+            ["w"] = (1, 1),
+            ["h"] = (1, 2),
+            ["q"] = (1, 4),
+            ["e"] = (1, 8),
+            ["s"] = (1, 16),
         };
 
-        private static readonly Dictionary<string, Tuple<int, int>> Tuplets = new Dictionary<string, Tuple<int, int>>
+        private static readonly Dictionary<string, (int TupletNotesCount, int TupletSpaceSize)> Tuplets = new Dictionary<string, (int, int)>
         {
-            ["t"] = Tuple.Create(3, 2),
-            ["d"] = Tuple.Create(2, 3),
+            ["t"] = (3, 2),
+            ["d"] = (2, 3),
         };
 
         private const string NumeratorGroupName = "n";
@@ -92,11 +92,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
             var tupletMnemonicGroup = match.Groups[TupletMnemonicGroupName];
             if (tupletMnemonicGroup.Success)
-            {
-                var tuplet = Tuplets[tupletMnemonicGroup.Value];
-                tupletNotesCount = tuplet.Item1;
-                tupletSpaceSize = tuplet.Item2;
-            }
+                (tupletNotesCount, tupletSpaceSize) = Tuplets[tupletMnemonicGroup.Value];
 
             // Dots
 

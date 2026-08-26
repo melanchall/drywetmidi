@@ -42,7 +42,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         public static readonly RestDetectionSettings NoNotesByChannelAndNoteNumber = new RestDetectionSettings
         {
-            KeySelector = obj => obj is Note ? Tuple.Create(((Note)obj).Channel, ((Note)obj).NoteNumber) : null
+            KeySelector = obj => obj is Note ? (((Note)obj).Channel, ((Note)obj).NoteNumber) : null
         };
 
         // TODO: by channel??

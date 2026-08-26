@@ -35,7 +35,7 @@ namespace Melanchall.DryWetMidi.Tools
                 [MidiEventType.PitchBend] = midiEvent =>
                 {
                     var pitchBendEvent = (PitchBendEvent)midiEvent;
-                    return Tuple.Create(MidiEventType.PitchBend, pitchBendEvent.Channel);
+                    return (MidiEventType.PitchBend, pitchBendEvent.Channel);
                 },
             };
 
@@ -245,7 +245,7 @@ namespace Melanchall.DryWetMidi.Tools
 
             foreach (var channel in FourBitNumber.Values)
             {
-                result.Add(Tuple.Create(MidiEventType.PitchBend, channel), () => new PitchBendEvent { Channel = channel });
+                result.Add((MidiEventType.PitchBend, channel), () => new PitchBendEvent { Channel = channel });
             }
 
             return result;
@@ -334,7 +334,7 @@ namespace Melanchall.DryWetMidi.Tools
             TrackChunk? firstTrackChunk = null;
 
             var eventsAtStart = new Dictionary<object, MidiEvent>();
-            var trackedEvents = new Dictionary<object, Tuple<MidiEvent, long>>();
+            var trackedEvents = new Dictionary<object, (MidiEvent Event, long Time)>();
 
             for (var i = 0; i < chunksCount; i++)
             {
@@ -365,10 +365,10 @@ namespace Melanchall.DryWetMidi.Tools
                             eventsAtStart[key] = midiEvent;
 
                         if (!trackedEvents.TryGetValue(key, out var trackedEvent))
-                            trackedEvents.Add(key, trackedEvent = Tuple.Create(midiEvent, time));
+                            trackedEvents.Add(key, trackedEvent = (midiEvent, time));
 
-                        if (time >= trackedEvent.Item2)
-                            trackedEvents[key] = Tuple.Create(midiEvent, time);
+                        if (time >= trackedEvent.Time)
+                            trackedEvents[key] = (midiEvent, time);
                     }
                 }
 
@@ -394,7 +394,7 @@ namespace Melanchall.DryWetMidi.Tools
 
             foreach (var keyToTrackedEvent in trackedEvents)
             {
-                eventsContext[keyToTrackedEvent.Key] = keyToTrackedEvent.Value.Item1;
+                eventsContext[keyToTrackedEvent.Key] = keyToTrackedEvent.Value.Event;
             }
 
             return result;

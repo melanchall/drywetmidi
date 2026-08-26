@@ -311,12 +311,12 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 },
                 expectedRests: new[]
                 {
-                    new Rest(0, 10, Tuple.Create(channel1, noteNumber1)),
-                    new Rest(0, 30, Tuple.Create(channel1, noteNumber2)),
-                    new Rest(0, 300, Tuple.Create(channel2, noteNumber1)),
-                    new Rest(0, 1000, Tuple.Create(channel2, noteNumber2)),
-                    new Rest(110, 1090, Tuple.Create(channel1, noteNumber1)),
-                    new Rest(130, 1170, Tuple.Create(channel1, noteNumber2)),
+                    new Rest(0, 10, (channel1, noteNumber1)),
+                    new Rest(0, 30, (channel1, noteNumber2)),
+                    new Rest(0, 300, (channel2, noteNumber1)),
+                    new Rest(0, 1000, (channel2, noteNumber2)),
+                    new Rest(110, 1090, (channel1, noteNumber1)),
+                    new Rest(130, 1170, (channel1, noteNumber2)),
                 });
         }
 

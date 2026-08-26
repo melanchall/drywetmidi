@@ -78,7 +78,7 @@ namespace Melanchall.DryWetMidi.Tools
                             .GetNotesAndTimedEventsLazy(settings.NoteDetectionSettings)
                             .OfType<Note>();
 
-                        var descriptors = new List<Tuple<int, SevenBitNumber, SevenBitNumber>>();
+                        var descriptors = new List<(int NoteId, SevenBitNumber Velocity, SevenBitNumber OffVelocity)>();
 
                         foreach (var note in notes)
                         {
@@ -89,13 +89,13 @@ namespace Melanchall.DryWetMidi.Tools
                                 break;
 
                             if (note.Time < times[0] && note.EndTime > times[1])
-                                descriptors.Add(Tuple.Create(note.GetNoteId(), note.Velocity, note.OffVelocity));
+                                descriptors.Add((note.GetNoteId(), note.Velocity, note.OffVelocity));
                         }
 
                         return descriptors;
                     })
                     .ToList()
-                : midiFile.GetTrackChunks().Select(c => new List<Tuple<int, SevenBitNumber, SevenBitNumber>>());
+                : midiFile.GetTrackChunks().Select(c => new List<(int NoteId, SevenBitNumber Velocity, SevenBitNumber OffVelocity)>());
 
             //
 
@@ -159,14 +159,14 @@ namespace Melanchall.DryWetMidi.Tools
                                         if (noteEvent == null)
                                             return false;
 
-                                        if (!noteEvent.GetNoteId().Equals(notesDescriptor.Item1))
+                                        if (!noteEvent.GetNoteId().Equals(notesDescriptor.NoteId))
                                             return false;
 
                                         var noteOnEvent = noteEvent as NoteOnEvent;
                                         if (noteOnEvent != null)
-                                            return noteOnEvent.Velocity == notesDescriptor.Item2;
+                                            return noteOnEvent.Velocity == notesDescriptor.Velocity;
 
-                                        return ((NoteOffEvent)noteEvent).Velocity == notesDescriptor.Item3;
+                                        return ((NoteOffEvent)noteEvent).Velocity == notesDescriptor.OffVelocity;
                                     })
                                     .ToArray();
 

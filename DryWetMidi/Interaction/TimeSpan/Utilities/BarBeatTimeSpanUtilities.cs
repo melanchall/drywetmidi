@@ -33,9 +33,8 @@ namespace Melanchall.DryWetMidi.Interaction
             ThrowIfArgument.IsNegative(nameof(bars), bars, "Bars number is negative.");
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
-            var timeSignatureAndticksPerQuarterNote = GetTimeSignatureAndTicksPerQuarterNote(bars, tempoMap);
-            return GetBarLength(timeSignatureAndticksPerQuarterNote.Item1,
-                                timeSignatureAndticksPerQuarterNote.Item2);
+            var (timeSignature, ticksPerQuarterNote) = GetTimeSignatureAndTicksPerQuarterNote(bars, tempoMap);
+            return GetBarLength(timeSignature, ticksPerQuarterNote);
         }
 
         /// <summary>
@@ -51,9 +50,8 @@ namespace Melanchall.DryWetMidi.Interaction
             ThrowIfArgument.IsNegative(nameof(bars), bars, "Bars number is negative.");
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
-            var timeSignatureAndticksPerQuarterNote = GetTimeSignatureAndTicksPerQuarterNote(bars, tempoMap);
-            return GetBeatLength(timeSignatureAndticksPerQuarterNote.Item1,
-                                 timeSignatureAndticksPerQuarterNote.Item2);
+            var (timeSignature, ticksPerQuarterNote) = GetTimeSignatureAndTicksPerQuarterNote(bars, tempoMap);
+            return GetBeatLength(timeSignature, ticksPerQuarterNote);
         }
 
         internal static int GetBarLength(TimeSignature timeSignature, short ticksPerQuarterNote)
@@ -67,7 +65,7 @@ namespace Melanchall.DryWetMidi.Interaction
             return 4 * ticksPerQuarterNote / timeSignature.Denominator;
         }
 
-        private static Tuple<TimeSignature, short> GetTimeSignatureAndTicksPerQuarterNote(long bars, TempoMap tempoMap)
+        private static (TimeSignature TimeSignature, short TicksPerQuarterNote) GetTimeSignatureAndTicksPerQuarterNote(long bars, TempoMap tempoMap)
         {
             var ticksPerQuarterNoteTimeDivision = tempoMap.TimeDivision as TicksPerQuarterNoteTimeDivision;
             if (ticksPerQuarterNoteTimeDivision == null)
@@ -77,7 +75,7 @@ namespace Melanchall.DryWetMidi.Interaction
             var timeSignature = tempoMap.TimeSignatureLine.GetValueAtTime(ticks);
             var ticksPerQuarterNote = ticksPerQuarterNoteTimeDivision.TicksPerQuarterNote;
 
-            return Tuple.Create(timeSignature, ticksPerQuarterNote);
+            return (timeSignature, ticksPerQuarterNote);
         }
 
         #endregion

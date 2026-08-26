@@ -1020,18 +1020,15 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         [Description("Compare two time spans using CompareTo where second time span is of different type.")]
         public void Compare_TypesMismatch()
         {
-            var timeSpansPairs = new[]
+            var timeSpansPairs = new (BarBeatFractionTimeSpan, ITimeSpan)[]
             {
-                Tuple.Create<BarBeatFractionTimeSpan, ITimeSpan>(new BarBeatFractionTimeSpan(), new MidiTimeSpan(100)),
-                Tuple.Create<BarBeatFractionTimeSpan, ITimeSpan>(new BarBeatFractionTimeSpan(), new MusicalTimeSpan(1, 1000)),
-                Tuple.Create<BarBeatFractionTimeSpan, ITimeSpan>(new BarBeatFractionTimeSpan(), new MetricTimeSpan(1, 2, 3))
+                (new BarBeatFractionTimeSpan(), new MidiTimeSpan(100)),
+                (new BarBeatFractionTimeSpan(), new MusicalTimeSpan(1, 1000)),
+                (new BarBeatFractionTimeSpan(), new MetricTimeSpan(1, 2, 3))
             };
 
-            foreach (var timeSpansPair in timeSpansPairs)
+            foreach (var (timeSpan1, timeSpan2) in timeSpansPairs)
             {
-                var timeSpan1 = timeSpansPair.Item1;
-                var timeSpan2 = timeSpansPair.Item2;
-
                 ClassicAssert.Throws<ArgumentException>(() => timeSpan1.CompareTo(timeSpan2));
             }
         }

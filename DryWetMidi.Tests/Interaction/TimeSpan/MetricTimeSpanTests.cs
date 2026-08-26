@@ -25,33 +25,33 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         private static readonly MetricTimeSpan ShortSpan = new MetricTimeSpan(0, 0, 5);
         private static readonly MetricTimeSpan LongSpan = new MetricTimeSpan(0, 5, 5);
 
-        private static readonly Tuple<MetricTimeSpan, MetricTimeSpan>[] TimeSpansForComparison_Less = new[]
+        private static readonly (MetricTimeSpan, MetricTimeSpan)[] TimeSpansForComparison_Less = new[]
         {
-            Tuple.Create(new MetricTimeSpan(), new MetricTimeSpan(0, 0, 1)),
-            Tuple.Create(new MetricTimeSpan(), new MetricTimeSpan(0, 1, 0)),
-            Tuple.Create(new MetricTimeSpan(), new MetricTimeSpan(1, 0, 0)),
-            Tuple.Create(new MetricTimeSpan(), new MetricTimeSpan(0, 0, 1)),
-            Tuple.Create(new MetricTimeSpan(2, 0, 0), new MetricTimeSpan(10, 0, 1)),
-            Tuple.Create(new MetricTimeSpan(0, 10, 0), new MetricTimeSpan(0, 10, 1)),
-            Tuple.Create(new MetricTimeSpan(10, 10, 0), new MetricTimeSpan(10, 10, 1)),
-            Tuple.Create(new MetricTimeSpan(10000, 899, 0), new MetricTimeSpan(10000, 10000, 0)),
-            Tuple.Create(new MetricTimeSpan(0, 100, 0), new MetricTimeSpan(0, 110, 1)),
-            Tuple.Create(new MetricTimeSpan(199, 0, 1000), new MetricTimeSpan(200, 0, 800)),
-            Tuple.Create(new MetricTimeSpan(), new MetricTimeSpan(10, 110, 891)),
-            Tuple.Create(new MetricTimeSpan(), new MetricTimeSpan(10)),
-            Tuple.Create(new MetricTimeSpan(10), new MetricTimeSpan(1000))
+            (new MetricTimeSpan(), new MetricTimeSpan(0, 0, 1)),
+            (new MetricTimeSpan(), new MetricTimeSpan(0, 1, 0)),
+            (new MetricTimeSpan(), new MetricTimeSpan(1, 0, 0)),
+            (new MetricTimeSpan(), new MetricTimeSpan(0, 0, 1)),
+            (new MetricTimeSpan(2, 0, 0), new MetricTimeSpan(10, 0, 1)),
+            (new MetricTimeSpan(0, 10, 0), new MetricTimeSpan(0, 10, 1)),
+            (new MetricTimeSpan(10, 10, 0), new MetricTimeSpan(10, 10, 1)),
+            (new MetricTimeSpan(10000, 899, 0), new MetricTimeSpan(10000, 10000, 0)),
+            (new MetricTimeSpan(0, 100, 0), new MetricTimeSpan(0, 110, 1)),
+            (new MetricTimeSpan(199, 0, 1000), new MetricTimeSpan(200, 0, 800)),
+            (new MetricTimeSpan(), new MetricTimeSpan(10, 110, 891)),
+            (new MetricTimeSpan(), new MetricTimeSpan(10)),
+            (new MetricTimeSpan(10), new MetricTimeSpan(1000))
         };
 
-        private static readonly Tuple<MetricTimeSpan, MetricTimeSpan>[] TimeSpansForComparison_Equal = new[]
+        private static readonly (MetricTimeSpan, MetricTimeSpan)[] TimeSpansForComparison_Equal = new[]
         {
-            Tuple.Create(new MetricTimeSpan(), new MetricTimeSpan()),
-            Tuple.Create(new MetricTimeSpan(), new MetricTimeSpan(0, 0, 0)),
-            Tuple.Create(new MetricTimeSpan(10, 0, 0), new MetricTimeSpan(10, 0, 0)),
-            Tuple.Create(new MetricTimeSpan(100, 100, 100), new MetricTimeSpan(100, 100, 100)),
-            Tuple.Create(new MetricTimeSpan(0, 345, 0), new MetricTimeSpan(0, 345, 0)),
-            Tuple.Create(new MetricTimeSpan(0, 0, 1234), new MetricTimeSpan(0, 0, 1234)),
-            Tuple.Create(new MetricTimeSpan(0), new MetricTimeSpan()),
-            Tuple.Create(new MetricTimeSpan(10000), new MetricTimeSpan(10000)),
+            (new MetricTimeSpan(), new MetricTimeSpan()),
+            (new MetricTimeSpan(), new MetricTimeSpan(0, 0, 0)),
+            (new MetricTimeSpan(10, 0, 0), new MetricTimeSpan(10, 0, 0)),
+            (new MetricTimeSpan(100, 100, 100), new MetricTimeSpan(100, 100, 100)),
+            (new MetricTimeSpan(0, 345, 0), new MetricTimeSpan(0, 345, 0)),
+            (new MetricTimeSpan(0, 0, 1234), new MetricTimeSpan(0, 0, 1234)),
+            (new MetricTimeSpan(0), new MetricTimeSpan()),
+            (new MetricTimeSpan(10000), new MetricTimeSpan(10000)),
         };
 
         private static readonly object[] ParametersForValidParseCheck =
@@ -907,11 +907,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         [Description("Compare two time spans where first one is less than second one.")]
         public void Compare_Less()
         {
-            foreach (var timeSpansPair in TimeSpansForComparison_Less)
+            foreach (var (timeSpan1, timeSpan2) in TimeSpansForComparison_Less)
             {
-                var timeSpan1 = timeSpansPair.Item1;
-                var timeSpan2 = timeSpansPair.Item2;
-
                 ClassicAssert.IsTrue(timeSpan1 < timeSpan2,
                               $"{timeSpan1} isn't less than {timeSpan2} using <.");
                 ClassicAssert.IsTrue(timeSpan1.CompareTo(timeSpan2) < 0,
@@ -925,11 +922,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         [Description("Compare two time spans where first one is greater than second one.")]
         public void Compare_Greater()
         {
-            foreach (var timeSpansPair in TimeSpansForComparison_Less)
+            foreach (var (timeSpan2, timeSpan1) in TimeSpansForComparison_Less)
             {
-                var timeSpan1 = timeSpansPair.Item2;
-                var timeSpan2 = timeSpansPair.Item1;
-
                 ClassicAssert.IsTrue(timeSpan1 > timeSpan2,
                               $"{timeSpan1} isn't greater than {timeSpan2} using >.");
                 ClassicAssert.IsTrue(timeSpan1.CompareTo(timeSpan2) > 0,
@@ -943,11 +937,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         [Description("Compare two time spans where first one is less than or equal to second one.")]
         public void Compare_LessOrEqual()
         {
-            foreach (var timeSpansPair in TimeSpansForComparison_Less.Concat(TimeSpansForComparison_Equal))
+            foreach (var (timeSpan1, timeSpan2) in TimeSpansForComparison_Less.Concat(TimeSpansForComparison_Equal))
             {
-                var timeSpan1 = timeSpansPair.Item1;
-                var timeSpan2 = timeSpansPair.Item2;
-
                 ClassicAssert.IsTrue(timeSpan1 <= timeSpan2,
                               $"{timeSpan1} isn't less than or equal to {timeSpan2} using <=.");
                 ClassicAssert.IsTrue(timeSpan1.CompareTo(timeSpan2) <= 0,
@@ -961,11 +952,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         [Description("Compare two time spans where first one is greater than or equal to second one.")]
         public void Compare_GreaterOrEqual()
         {
-            foreach (var timeSpansPair in TimeSpansForComparison_Less.Concat(TimeSpansForComparison_Equal))
+            foreach (var (timeSpan2, timeSpan1) in TimeSpansForComparison_Less.Concat(TimeSpansForComparison_Equal))
             {
-                var timeSpan1 = timeSpansPair.Item2;
-                var timeSpan2 = timeSpansPair.Item1;
-
                 ClassicAssert.IsTrue(timeSpan1 >= timeSpan2,
                               $"{timeSpan1} isn't greater than or equal to {timeSpan2} using >=.");
                 ClassicAssert.IsTrue(timeSpan1.CompareTo(timeSpan2) >= 0,
@@ -981,16 +969,13 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var timeSpansPairs = new[]
             {
-                Tuple.Create<MetricTimeSpan, ITimeSpan>(new MetricTimeSpan(), new MidiTimeSpan(100)),
-                Tuple.Create<MetricTimeSpan, ITimeSpan>(new MetricTimeSpan(), new MusicalTimeSpan(1, 1000)),
-                Tuple.Create<MetricTimeSpan, ITimeSpan>(new MetricTimeSpan(), new BarBeatTicksTimeSpan(1, 2, 3))
+                (new MetricTimeSpan(), (ITimeSpan)new MidiTimeSpan(100)),
+                (new MetricTimeSpan(), (ITimeSpan)new MusicalTimeSpan(1, 1000)),
+                (new MetricTimeSpan(), (ITimeSpan)new BarBeatTicksTimeSpan(1, 2, 3))
             };
 
-            foreach (var timeSpansPair in timeSpansPairs)
+            foreach (var (timeSpan1, timeSpan2) in timeSpansPairs)
             {
-                var timeSpan1 = timeSpansPair.Item1;
-                var timeSpan2 = timeSpansPair.Item2;
-
                 ClassicAssert.Throws<ArgumentException>(() => timeSpan1.CompareTo(timeSpan2));
             }
         }
@@ -999,11 +984,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         [Description("Compare two time spans for equality: true expected.")]
         public void Compare_Equal_True()
         {
-            foreach (var timeSpansPair in TimeSpansForComparison_Equal)
+            foreach (var (timeSpan1, timeSpan2) in TimeSpansForComparison_Equal)
             {
-                var timeSpan1 = timeSpansPair.Item2;
-                var timeSpan2 = timeSpansPair.Item1;
-
                 ClassicAssert.IsTrue(timeSpan1 == timeSpan2,
                               $"{timeSpan1} isn't equal to {timeSpan2} using ==.");
                 ClassicAssert.IsTrue(timeSpan1.Equals(timeSpan2),
@@ -1017,11 +999,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         [Description("Compare two time spans for equality: false expected.")]
         public void Compare_Equal_False()
         {
-            foreach (var timeSpansPair in TimeSpansForComparison_Less)
+            foreach (var (timeSpan1, timeSpan2) in TimeSpansForComparison_Less)
             {
-                var timeSpan1 = timeSpansPair.Item2;
-                var timeSpan2 = timeSpansPair.Item1;
-
                 ClassicAssert.IsFalse(timeSpan1 == timeSpan2,
                                $"{timeSpan1} equal to {timeSpan2} using ==.");
                 ClassicAssert.IsFalse(timeSpan1.Equals(timeSpan2),
@@ -1035,11 +1014,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         [Description("Compare two time spans for inequality: true expected.")]
         public void Compare_DoesNotEqual_True()
         {
-            foreach (var timeSpansPair in TimeSpansForComparison_Less)
+            foreach (var (timeSpan1, timeSpan2) in TimeSpansForComparison_Less)
             {
-                var timeSpan1 = timeSpansPair.Item2;
-                var timeSpan2 = timeSpansPair.Item1;
-
                 ClassicAssert.IsTrue(timeSpan1 != timeSpan2,
                               $"{timeSpan1} equal to {timeSpan2} using !=.");
                 ClassicAssert.IsTrue(!timeSpan1.Equals(timeSpan2),
@@ -1053,11 +1029,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         [Description("Compare two time spans for inequality: false expected.")]
         public void Compare_DoesNotEqual_False()
         {
-            foreach (var timeSpansPair in TimeSpansForComparison_Equal)
+            foreach (var (timeSpan1, timeSpan2) in TimeSpansForComparison_Equal)
             {
-                var timeSpan1 = timeSpansPair.Item2;
-                var timeSpan2 = timeSpansPair.Item1;
-
                 ClassicAssert.IsFalse(timeSpan1 != timeSpan2,
                                $"{timeSpan1} isn't equal to {timeSpan2} using !=.");
                 ClassicAssert.IsFalse(!timeSpan1.Equals(timeSpan2),

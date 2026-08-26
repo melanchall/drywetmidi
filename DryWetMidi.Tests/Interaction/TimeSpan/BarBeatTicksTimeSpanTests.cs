@@ -18,29 +18,29 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         private const long ShortTime = 1000;
         private const long LargeTime = 100000;
 
-        private static readonly Tuple<BarBeatTicksTimeSpan, BarBeatTicksTimeSpan>[] TimeSpansForComparison_Less = new[]
+        private static readonly (BarBeatTicksTimeSpan, BarBeatTicksTimeSpan)[] TimeSpansForComparison_Less = new[]
         {
-            Tuple.Create(new BarBeatTicksTimeSpan(), new BarBeatTicksTimeSpan(0, 0, 1)),
-            Tuple.Create(new BarBeatTicksTimeSpan(), new BarBeatTicksTimeSpan(0, 1, 0)),
-            Tuple.Create(new BarBeatTicksTimeSpan(), new BarBeatTicksTimeSpan(1, 0, 0)),
-            Tuple.Create(new BarBeatTicksTimeSpan(), new BarBeatTicksTimeSpan(0, 0, 1)),
-            Tuple.Create(new BarBeatTicksTimeSpan(2, 0, 0), new BarBeatTicksTimeSpan(10, 0, 1)),
-            Tuple.Create(new BarBeatTicksTimeSpan(0, 10, 0), new BarBeatTicksTimeSpan(0, 10, 1)),
-            Tuple.Create(new BarBeatTicksTimeSpan(10, 10, 0), new BarBeatTicksTimeSpan(10, 10, 1)),
-            Tuple.Create(new BarBeatTicksTimeSpan(10000, 899, 0), new BarBeatTicksTimeSpan(10000, 10000, 0)),
-            Tuple.Create(new BarBeatTicksTimeSpan(0, 100), new BarBeatTicksTimeSpan(0, 110, 1)),
-            Tuple.Create(new BarBeatTicksTimeSpan(199, 0, 1000), new BarBeatTicksTimeSpan(200, 0, 800)),
-            Tuple.Create(new BarBeatTicksTimeSpan(), new BarBeatTicksTimeSpan(10, 110, 891))
+            (new BarBeatTicksTimeSpan(), new BarBeatTicksTimeSpan(0, 0, 1)),
+            (new BarBeatTicksTimeSpan(), new BarBeatTicksTimeSpan(0, 1, 0)),
+            (new BarBeatTicksTimeSpan(), new BarBeatTicksTimeSpan(1, 0, 0)),
+            (new BarBeatTicksTimeSpan(), new BarBeatTicksTimeSpan(0, 0, 1)),
+            (new BarBeatTicksTimeSpan(2, 0, 0), new BarBeatTicksTimeSpan(10, 0, 1)),
+            (new BarBeatTicksTimeSpan(0, 10, 0), new BarBeatTicksTimeSpan(0, 10, 1)),
+            (new BarBeatTicksTimeSpan(10, 10, 0), new BarBeatTicksTimeSpan(10, 10, 1)),
+            (new BarBeatTicksTimeSpan(10000, 899, 0), new BarBeatTicksTimeSpan(10000, 10000, 0)),
+            (new BarBeatTicksTimeSpan(0, 100), new BarBeatTicksTimeSpan(0, 110, 1)),
+            (new BarBeatTicksTimeSpan(199, 0, 1000), new BarBeatTicksTimeSpan(200, 0, 800)),
+            (new BarBeatTicksTimeSpan(), new BarBeatTicksTimeSpan(10, 110, 891))
         };
 
-        private static readonly Tuple<BarBeatTicksTimeSpan, BarBeatTicksTimeSpan>[] TimeSpansForComparison_Equal = new[]
+        private static readonly (BarBeatTicksTimeSpan, BarBeatTicksTimeSpan)[] TimeSpansForComparison_Equal = new[]
         {
-            Tuple.Create(new BarBeatTicksTimeSpan(), new BarBeatTicksTimeSpan()),
-            Tuple.Create(new BarBeatTicksTimeSpan(), new BarBeatTicksTimeSpan(0, 0, 0)),
-            Tuple.Create(new BarBeatTicksTimeSpan(10, 0, 0), new BarBeatTicksTimeSpan(10, 0, 0)),
-            Tuple.Create(new BarBeatTicksTimeSpan(100, 100, 100), new BarBeatTicksTimeSpan(100, 100, 100)),
-            Tuple.Create(new BarBeatTicksTimeSpan(0, 345, 0), new BarBeatTicksTimeSpan(0, 345, 0)),
-            Tuple.Create(new BarBeatTicksTimeSpan(0, 0, 1234), new BarBeatTicksTimeSpan(0, 0, 1234))
+            (new BarBeatTicksTimeSpan(), new BarBeatTicksTimeSpan()),
+            (new BarBeatTicksTimeSpan(), new BarBeatTicksTimeSpan(0, 0, 0)),
+            (new BarBeatTicksTimeSpan(10, 0, 0), new BarBeatTicksTimeSpan(10, 0, 0)),
+            (new BarBeatTicksTimeSpan(100, 100, 100), new BarBeatTicksTimeSpan(100, 100, 100)),
+            (new BarBeatTicksTimeSpan(0, 345, 0), new BarBeatTicksTimeSpan(0, 345, 0)),
+            (new BarBeatTicksTimeSpan(0, 0, 1234), new BarBeatTicksTimeSpan(0, 0, 1234))
         };
 
         private static readonly object[] TimeSpansToStrings = new[]
@@ -848,11 +848,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         [Description("Compare two time spans where first one is less than second one.")]
         public void Compare_Less()
         {
-            foreach (var timeSpansPair in TimeSpansForComparison_Less)
+            foreach (var (timeSpan1, timeSpan2) in TimeSpansForComparison_Less)
             {
-                var timeSpan1 = timeSpansPair.Item1;
-                var timeSpan2 = timeSpansPair.Item2;
-
                 ClassicAssert.IsTrue(timeSpan1 < timeSpan2,
                               $"{timeSpan1} isn't less than {timeSpan2} using <.");
                 ClassicAssert.IsTrue(timeSpan1.CompareTo(timeSpan2) < 0,
@@ -866,11 +863,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         [Description("Compare two time spans where first one is greater than second one.")]
         public void Compare_Greater()
         {
-            foreach (var timeSpansPair in TimeSpansForComparison_Less)
+            foreach (var (timeSpan2, timeSpan1) in TimeSpansForComparison_Less)
             {
-                var timeSpan1 = timeSpansPair.Item2;
-                var timeSpan2 = timeSpansPair.Item1;
-
                 ClassicAssert.IsTrue(timeSpan1 > timeSpan2,
                               $"{timeSpan1} isn't greater than {timeSpan2} using >.");
                 ClassicAssert.IsTrue(timeSpan1.CompareTo(timeSpan2) > 0,
@@ -902,11 +896,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         [Description("Compare two time spans where first one is greater than or equal to second one.")]
         public void Compare_GreaterOrEqual()
         {
-            foreach (var timeSpansPair in TimeSpansForComparison_Less.Concat(TimeSpansForComparison_Equal))
+            foreach (var (timeSpan2, timeSpan1) in TimeSpansForComparison_Less.Concat(TimeSpansForComparison_Equal))
             {
-                var timeSpan1 = timeSpansPair.Item2;
-                var timeSpan2 = timeSpansPair.Item1;
-
                 ClassicAssert.IsTrue(timeSpan1 >= timeSpan2,
                               $"{timeSpan1} isn't greater than or equal to {timeSpan2} using >=.");
                 ClassicAssert.IsTrue(timeSpan1.CompareTo(timeSpan2) >= 0,
@@ -922,16 +913,13 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var timeSpansPairs = new[]
             {
-                Tuple.Create<BarBeatTicksTimeSpan, ITimeSpan>(new BarBeatTicksTimeSpan(), new MidiTimeSpan(100)),
-                Tuple.Create<BarBeatTicksTimeSpan, ITimeSpan>(new BarBeatTicksTimeSpan(), new MusicalTimeSpan(1, 1000)),
-                Tuple.Create<BarBeatTicksTimeSpan, ITimeSpan>(new BarBeatTicksTimeSpan(), new MetricTimeSpan(1, 2, 3))
+                (new BarBeatTicksTimeSpan(), (ITimeSpan)new MidiTimeSpan(100)),
+                (new BarBeatTicksTimeSpan(), (ITimeSpan)new MusicalTimeSpan(1, 1000)),
+                (new BarBeatTicksTimeSpan(), (ITimeSpan)new MetricTimeSpan(1, 2, 3))
             };
 
-            foreach (var timeSpansPair in timeSpansPairs)
+            foreach (var (timeSpan1, timeSpan2) in timeSpansPairs)
             {
-                var timeSpan1 = timeSpansPair.Item1;
-                var timeSpan2 = timeSpansPair.Item2;
-
                 ClassicAssert.Throws<ArgumentException>(() => timeSpan1.CompareTo(timeSpan2));
             }
         }

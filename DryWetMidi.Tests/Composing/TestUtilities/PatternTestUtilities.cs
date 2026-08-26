@@ -20,14 +20,14 @@ namespace Melanchall.DryWetMidi.Tests.Composing
 
         #region Methods
 
-        public static MidiFile TestNotes(Pattern pattern, ICollection<NoteInfo> expectedNotesInfos, params Tuple<long, Tempo>[] tempoChanges)
+        public static MidiFile TestNotes(Pattern pattern, ICollection<NoteInfo> expectedNotesInfos, params (long Time, Tempo Tempo)[] tempoChanges)
         {
             TempoMap tempoMap;
             using (var tempoMapManager = new TempoMapManager())
             {
                 foreach (var tempoChange in tempoChanges)
                 {
-                    tempoMapManager.SetTempo(tempoChange.Item1, tempoChange.Item2);
+                    tempoMapManager.SetTempo(tempoChange.Time, tempoChange.Tempo);
                 }
 
                 tempoMap = tempoMapManager.TempoMap;
@@ -58,14 +58,14 @@ namespace Melanchall.DryWetMidi.Tests.Composing
         public static void TestTimedEvents(
             Pattern pattern,
             ICollection<TimedEventInfo> expectedTimedEventsInfos,
-            params Tuple<long, Tempo>[] tempoChanges)
+            params (long Time, Tempo Tempo)[] tempoChanges)
         {
             TempoMap tempoMap;
             using (var tempoMapManager = new TempoMapManager())
             {
                 foreach (var tempoChange in tempoChanges)
                 {
-                    tempoMapManager.SetTempo(tempoChange.Item1, tempoChange.Item2);
+                    tempoMapManager.SetTempo(tempoChange.Time, tempoChange.Tempo);
                 }
 
                 tempoMap = tempoMapManager.TempoMap;
@@ -90,14 +90,14 @@ namespace Melanchall.DryWetMidi.Tests.Composing
         public static void TestTimedEventsWithExactOrder(
             Pattern pattern,
             ICollection<TimedEventInfo> expectedTimedEventsInfos,
-            params Tuple<long, Tempo>[] tempoChanges)
+            params (long Time, Tempo Tempo)[] tempoChanges)
         {
             TempoMap tempoMap;
             using (var tempoMapManager = new TempoMapManager())
             {
                 foreach (var tempoChange in tempoChanges)
                 {
-                    tempoMapManager.SetTempo(tempoChange.Item1, tempoChange.Item2);
+                    tempoMapManager.SetTempo(tempoChange.Time, tempoChange.Tempo);
                 }
 
                 tempoMap = tempoMapManager.TempoMap;

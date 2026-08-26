@@ -348,21 +348,21 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             //  |----+----+----+----|----+----+----+----|--+--+--+--+--|-+-+-+-+-|-+-+-+-+-|-+-+-+-+-|--+--+--+--+--|
             //  0                   1                   2              3         4         5         6              7
 
-            var steps = new[]
+            var steps = new (MusicalTimeSpan, TimeSignature)[]
             {
-                Tuple.Create(2 * MusicalTimeSpan.Whole, new TimeSignature(5, 8)),
-                Tuple.Create(5 * MusicalTimeSpan.Eighth, new TimeSignature(5, 16)),
-                Tuple.Create(15 * MusicalTimeSpan.Sixteenth, new TimeSignature(5, 8)),
+                (2 * MusicalTimeSpan.Whole, new TimeSignature(5, 8)),
+                (5 * MusicalTimeSpan.Eighth, new TimeSignature(5, 16)),
+                (15 * MusicalTimeSpan.Sixteenth, new TimeSignature(5, 8)),
             };
 
             using (var tempoMapManager = new TempoMapManager(new TicksPerQuarterNoteTimeDivision(TicksPerQuarterNote)))
             {
                 var time = new MusicalTimeSpan();
 
-                foreach (var step in steps)
+                foreach (var (stepTime, stepTimeSignature) in steps)
                 {
-                    time += step.Item1;
-                    tempoMapManager.SetTimeSignature(time, step.Item2);
+                    time += stepTime;
+                    tempoMapManager.SetTimeSignature(time, stepTimeSignature);
                 }
 
                 tempoMapManager.SetTempo(new MetricTimeSpan(0, 0, 10), Tempo.FromMillisecondsPerQuarterNote(300));
@@ -379,22 +379,22 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             //  |--+--+--+--+--|-+-+-+-+-|--+--+--|--+--+--+--+--+--+--+--+--+--+--+--+--|
             //  0              1         2        3                                      4
 
-            var steps = new[]
+            var steps = new (MusicalTimeSpan, TimeSignature)[]
             {
-                Tuple.Create(new MusicalTimeSpan(), new TimeSignature(5, 8)),
-                Tuple.Create(5 * MusicalTimeSpan.Eighth, new TimeSignature(5, 16)),
-                Tuple.Create(5 * MusicalTimeSpan.Sixteenth, new TimeSignature(3, 8)),
-                Tuple.Create(3 * MusicalTimeSpan.Eighth, new TimeSignature(13, 8)),
+                (new MusicalTimeSpan(), new TimeSignature(5, 8)),
+                (5 * MusicalTimeSpan.Eighth, new TimeSignature(5, 16)),
+                (5 * MusicalTimeSpan.Sixteenth, new TimeSignature(3, 8)),
+                (3 * MusicalTimeSpan.Eighth, new TimeSignature(13, 8)),
             };
 
             using (var tempoMapManager = new TempoMapManager(new TicksPerQuarterNoteTimeDivision(TicksPerQuarterNote)))
             {
                 var time = new MusicalTimeSpan();
 
-                foreach (var step in steps)
+                foreach (var (stepTime, stepTimeSignature) in steps)
                 {
-                    time += step.Item1;
-                    tempoMapManager.SetTimeSignature(time, step.Item2);
+                    time += stepTime;
+                    tempoMapManager.SetTimeSignature(time, stepTimeSignature);
                 }
 
                 tempoMapManager.SetTempo(new MetricTimeSpan(0, 0, 10), Tempo.FromMillisecondsPerQuarterNote(300));

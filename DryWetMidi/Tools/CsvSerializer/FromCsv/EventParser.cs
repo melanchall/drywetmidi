@@ -29,26 +29,26 @@ namespace Melanchall.DryWetMidi.Tools
                 [MidiEventType.ProgramName] = GetTextEventParser<ProgramNameEvent>(),
                 [MidiEventType.SequenceNumber] = GetEventParser(
                     x => new SequenceNumberEvent((ushort)x[0]),
-                    Tuple.Create(TypeParser.DataType.UShort, "number")),
+                    (TypeParser.DataType.UShort, "number")),
                 [MidiEventType.PortPrefix] = GetEventParser(
                     x => new PortPrefixEvent((byte)x[0]),
-                    Tuple.Create(TypeParser.DataType.Byte, "port")),
+                    (TypeParser.DataType.Byte, "port")),
                 [MidiEventType.ChannelPrefix] = GetEventParser(
                     x => new ChannelPrefixEvent((byte)x[0]),
-                    Tuple.Create(TypeParser.DataType.Byte, "channel")),
+                    (TypeParser.DataType.Byte, "channel")),
                 [MidiEventType.TimeSignature] = GetEventParser(
                     x => new TimeSignatureEvent((byte)x[0], (byte)x[1], (byte)x[2], (byte)x[3]),
-                    Tuple.Create(TypeParser.DataType.Byte, "numerator"),
-                    Tuple.Create(TypeParser.DataType.Byte, "denominator"),
-                    Tuple.Create(TypeParser.DataType.Byte, "clocks per click"),
-                    Tuple.Create(TypeParser.DataType.Byte, "thirty-second notes per beat")),
+                    (TypeParser.DataType.Byte, "numerator"),
+                    (TypeParser.DataType.Byte, "denominator"),
+                    (TypeParser.DataType.Byte, "clocks per click"),
+                    (TypeParser.DataType.Byte, "thirty-second notes per beat")),
                 [MidiEventType.KeySignature] = GetEventParser(
                     x => new KeySignatureEvent((sbyte)x[0], (byte)x[1]),
-                    Tuple.Create(TypeParser.DataType.SByte, "key"),
-                    Tuple.Create(TypeParser.DataType.Byte, "scale")),
+                    (TypeParser.DataType.SByte, "key"),
+                    (TypeParser.DataType.Byte, "scale")),
                 [MidiEventType.SetTempo] = GetEventParser(
                     x => new SetTempoEvent((long)x[0]),
-                    Tuple.Create(TypeParser.DataType.Long, "microseconds per quarter note")),
+                    (TypeParser.DataType.Long, "microseconds per quarter note")),
                 [MidiEventType.SmpteOffset] = GetEventParser(
                     x => new SmpteOffsetEvent(
                         (SmpteFormat)Enum.Parse(typeof(SmpteFormat), x[0].ToString() ?? string.Empty),
@@ -57,57 +57,57 @@ namespace Melanchall.DryWetMidi.Tools
                         (byte)x[3],
                         (byte)x[4],
                         (byte)x[5]),
-                    Tuple.Create(TypeParser.DataType.String, "format"),
-                    Tuple.Create(TypeParser.DataType.Byte, "hours"),
-                    Tuple.Create(TypeParser.DataType.Byte, "minutes"),
-                    Tuple.Create(TypeParser.DataType.Byte, "seconds"),
-                    Tuple.Create(TypeParser.DataType.Byte, "frames"),
-                    Tuple.Create(TypeParser.DataType.Byte, "sub-frames")),
+                    (TypeParser.DataType.String, "format"),
+                    (TypeParser.DataType.Byte, "hours"),
+                    (TypeParser.DataType.Byte, "minutes"),
+                    (TypeParser.DataType.Byte, "seconds"),
+                    (TypeParser.DataType.Byte, "frames"),
+                    (TypeParser.DataType.Byte, "sub-frames")),
                 [MidiEventType.SequencerSpecific] = GetEventParser(
                     x => new SequencerSpecificEvent((byte[])x[0]),
-                    Tuple.Create(TypeParser.DataType.BytesArray, "data")),
+                    (TypeParser.DataType.BytesArray, "data")),
                 [MidiEventType.UnknownMeta] = GetEventParser(
                     x => new UnknownMetaEvent((byte)x[0], (byte[])x[1]),
-                    Tuple.Create(TypeParser.DataType.Byte, "status byte"),
-                    Tuple.Create(TypeParser.DataType.BytesArray, "data")),
+                    (TypeParser.DataType.Byte, "status byte"),
+                    (TypeParser.DataType.BytesArray, "data")),
                 [MidiEventType.NoteOn] = GetEventParser(
                     x => new NoteOnEvent((SevenBitNumber)x[1], (SevenBitNumber)x[2]) { Channel = (FourBitNumber)x[0] },
-                    Tuple.Create(TypeParser.DataType.FourBitNumber, "channel"),
-                    Tuple.Create(TypeParser.DataType.NoteNumber, "note number"),
-                    Tuple.Create(TypeParser.DataType.SevenBitNumber, "velocity")),
+                    (TypeParser.DataType.FourBitNumber, "channel"),
+                    (TypeParser.DataType.NoteNumber, "note number"),
+                    (TypeParser.DataType.SevenBitNumber, "velocity")),
                 [MidiEventType.NoteOff] = GetEventParser(
                     x => new NoteOffEvent((SevenBitNumber)x[1], (SevenBitNumber)x[2]) { Channel = (FourBitNumber)x[0] },
-                    Tuple.Create(TypeParser.DataType.FourBitNumber, "channel"),
-                    Tuple.Create(TypeParser.DataType.NoteNumber, "note number"),
-                    Tuple.Create(TypeParser.DataType.SevenBitNumber, "velocity")),
+                    (TypeParser.DataType.FourBitNumber, "channel"),
+                    (TypeParser.DataType.NoteNumber, "note number"),
+                    (TypeParser.DataType.SevenBitNumber, "velocity")),
                 [MidiEventType.PitchBend] = GetEventParser(
                     x => new PitchBendEvent((ushort)x[1]) { Channel = (FourBitNumber)x[0] },
-                    Tuple.Create(TypeParser.DataType.FourBitNumber, "channel"),
-                    Tuple.Create(TypeParser.DataType.UShort, "pitch value")),
+                    (TypeParser.DataType.FourBitNumber, "channel"),
+                    (TypeParser.DataType.UShort, "pitch value")),
                 [MidiEventType.ControlChange] = GetEventParser(
                     x => new ControlChangeEvent((SevenBitNumber)x[1], (SevenBitNumber)x[2]) { Channel = (FourBitNumber)x[0] },
-                    Tuple.Create(TypeParser.DataType.FourBitNumber, "channel"),
-                    Tuple.Create(TypeParser.DataType.SevenBitNumber, "control number"),
-                    Tuple.Create(TypeParser.DataType.SevenBitNumber, "control value")),
+                    (TypeParser.DataType.FourBitNumber, "channel"),
+                    (TypeParser.DataType.SevenBitNumber, "control number"),
+                    (TypeParser.DataType.SevenBitNumber, "control value")),
                 [MidiEventType.ProgramChange] = GetEventParser(
                     x => new ProgramChangeEvent((SevenBitNumber)x[1]) { Channel = (FourBitNumber)x[0] },
-                    Tuple.Create(TypeParser.DataType.FourBitNumber, "channel"),
-                    Tuple.Create(TypeParser.DataType.SevenBitNumber, "program number")),
+                    (TypeParser.DataType.FourBitNumber, "channel"),
+                    (TypeParser.DataType.SevenBitNumber, "program number")),
                 [MidiEventType.ChannelAftertouch] = GetEventParser(
                     x => new ChannelAftertouchEvent((SevenBitNumber)x[1]) { Channel = (FourBitNumber)x[0] },
-                    Tuple.Create(TypeParser.DataType.FourBitNumber, "channel"),
-                    Tuple.Create(TypeParser.DataType.SevenBitNumber, "aftertouch value")),
+                    (TypeParser.DataType.FourBitNumber, "channel"),
+                    (TypeParser.DataType.SevenBitNumber, "aftertouch value")),
                 [MidiEventType.NoteAftertouch] = GetEventParser(
                     x => new NoteAftertouchEvent((SevenBitNumber)x[1], (SevenBitNumber)x[2]) { Channel = (FourBitNumber)x[0] },
-                    Tuple.Create(TypeParser.DataType.FourBitNumber, "channel"),
-                    Tuple.Create(TypeParser.DataType.NoteNumber, "note number"),
-                    Tuple.Create(TypeParser.DataType.SevenBitNumber, "aftertouch value")),
+                    (TypeParser.DataType.FourBitNumber, "channel"),
+                    (TypeParser.DataType.NoteNumber, "note number"),
+                    (TypeParser.DataType.SevenBitNumber, "aftertouch value")),
                 [MidiEventType.NormalSysEx] = GetEventParser(
                     x => new NormalSysExEvent((byte[])x[0]),
-                    Tuple.Create(TypeParser.DataType.BytesArray, "data")),
+                    (TypeParser.DataType.BytesArray, "data")),
                 [MidiEventType.EscapeSysEx] = GetEventParser(
                     x => new EscapeSysExEvent((byte[])x[0]),
-                    Tuple.Create(TypeParser.DataType.BytesArray, "data")),
+                    (TypeParser.DataType.BytesArray, "data")),
                 [MidiEventType.Start] = GetEventParser(
                     x => new StartEvent()),
                 [MidiEventType.Stop] = GetEventParser(
@@ -124,16 +124,16 @@ namespace Melanchall.DryWetMidi.Tools
                     x => new ActiveSensingEvent()),
                 [MidiEventType.SongSelect] = GetEventParser(
                     x => new SongSelectEvent((SevenBitNumber)x[0]),
-                    Tuple.Create(TypeParser.DataType.SevenBitNumber, "number")),
+                    (TypeParser.DataType.SevenBitNumber, "number")),
                 [MidiEventType.SongPositionPointer] = GetEventParser(
                     x => new SongPositionPointerEvent((ushort)x[0]),
-                    Tuple.Create(TypeParser.DataType.UShort, "pointer value")),
+                    (TypeParser.DataType.UShort, "pointer value")),
                 [MidiEventType.MidiTimeCode] = GetEventParser(
                     x => new MidiTimeCodeEvent(
                         (MidiTimeCodeComponent)Enum.Parse(typeof(MidiTimeCodeComponent), x[0].ToString() ?? string.Empty),
                         (FourBitNumber)x[1]),
-                    Tuple.Create(TypeParser.DataType.String, "component"),
-                    Tuple.Create(TypeParser.DataType.FourBitNumber, "component value")),
+                    (TypeParser.DataType.String, "component"),
+                    (TypeParser.DataType.FourBitNumber, "component value")),
             };
 
         #endregion
@@ -153,12 +153,12 @@ namespace Melanchall.DryWetMidi.Tools
         {
             return GetEventParser(
                 x => new TEvent { Text = (string)x[0] },
-                Tuple.Create(TypeParser.DataType.String, "text"));
+                (TypeParser.DataType.String, "text"));
         }
 
         private static Parser GetEventParser(
             Func<object[], MidiEvent> eventCreator,
-            params Tuple<TypeParser.DataType, string>[] parametersParsers)
+            params (TypeParser.DataType Type, string ValueDescription)[] parametersParsers)
         {
             return (p, s) =>
             {
@@ -171,7 +171,7 @@ namespace Melanchall.DryWetMidi.Tools
                 {
                     var parameterParser = parametersParsers[i];
 
-                    var parameter = TypeParser.Parse(p[i], parameterParser.Item1, parameterParser.Item2, null, s);
+                    var parameter = TypeParser.Parse(p[i], parameterParser.Type, parameterParser.ValueDescription, null, s);
                     parameters.Add(parameter);
                 }
 

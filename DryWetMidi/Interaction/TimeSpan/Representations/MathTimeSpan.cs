@@ -15,13 +15,12 @@ namespace Melanchall.DryWetMidi.Interaction
         private const string TimeModeString = "T";
         private const string LengthModeString = "L";
 
-        private static readonly Dictionary<TimeSpanMode, Tuple<string, string>> ModeStrings =
-            new Dictionary<TimeSpanMode, Tuple<string, string>>
-            {
-                [TimeSpanMode.TimeTime] = Tuple.Create(TimeModeString, TimeModeString),
-                [TimeSpanMode.TimeLength] = Tuple.Create(TimeModeString, LengthModeString),
-                [TimeSpanMode.LengthLength] = Tuple.Create(LengthModeString, LengthModeString),
-            };
+        private static readonly Dictionary<TimeSpanMode, (string FirstTimeSpanMode, string SecondTimeSpanMode)> ModeStrings = new()
+        {
+            [TimeSpanMode.TimeTime] = (TimeModeString, TimeModeString),
+            [TimeSpanMode.TimeLength] = (TimeModeString, LengthModeString),
+            [TimeSpanMode.LengthLength] = (LengthModeString, LengthModeString),
+        };
 
         #endregion
 

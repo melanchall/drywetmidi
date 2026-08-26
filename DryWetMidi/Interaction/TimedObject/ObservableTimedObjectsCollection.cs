@@ -34,7 +34,7 @@ namespace Melanchall.DryWetMidi.Interaction
         private readonly List<ITimedObject> _objects = new List<ITimedObject>();
 
         private bool _batchOperationInProgress = false;
-        private readonly List<Tuple<short, ITimedObject, long>> _batchActions = new List<Tuple<short, ITimedObject, long>>();
+        private readonly List<(short Action, ITimedObject Object, long OldTime)> _batchActions = new();
 
         #endregion
 
@@ -256,7 +256,7 @@ namespace Melanchall.DryWetMidi.Interaction
             {
                 foreach (var obj in addedObjects)
                 {
-                    _batchActions.Add(Tuple.Create(AddAction, obj, 0L));
+                    _batchActions.Add((AddAction, obj, 0L));
                 }
 
                 return;
@@ -288,7 +288,7 @@ namespace Melanchall.DryWetMidi.Interaction
             {
                 foreach (var obj in removedObjects)
                 {
-                    _batchActions.Add(Tuple.Create(RemoveAction, obj, 0L));
+                    _batchActions.Add((RemoveAction, obj, 0L));
                 }
 
                 return;
@@ -318,7 +318,7 @@ namespace Melanchall.DryWetMidi.Interaction
         {
             if (_batchOperationInProgress)
             {
-                _batchActions.Add(Tuple.Create(ChangeAction, timedObject, oldTime));
+                _batchActions.Add((ChangeAction, timedObject, oldTime));
                 return;
             }
 
@@ -344,12 +344,8 @@ namespace Melanchall.DryWetMidi.Interaction
             var removedObjects = new HashSet<ITimedObject>();
             var changedObjects = new HashSet<ChangedTimedObject>();
 
-            foreach (var item in _batchActions)
+            foreach (var (action, timedObject, oldTime) in _batchActions)
             {
-                var action = item.Item1;
-                var timedObject = item.Item2;
-                var oldTime = item.Item3;
-
                 switch (action)
                 {
                     case AddAction:

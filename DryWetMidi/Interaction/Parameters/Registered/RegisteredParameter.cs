@@ -63,10 +63,10 @@ namespace Melanchall.DryWetMidi.Interaction
         /// parameter.</returns>
         public override IEnumerable<TimedEvent> GetTimedEvents()
         {
-            var controlChanges = new List<Tuple<ControlName, SevenBitNumber>>
+            var controlChanges = new List<(ControlName ControlName, SevenBitNumber ControlValue)>
             {
-                Tuple.Create(ControlName.RegisteredParameterNumberMsb, RegisteredParameterNumbers.GetMsb(ParameterType)),
-                Tuple.Create(ControlName.RegisteredParameterNumberLsb, RegisteredParameterNumbers.GetLsb(ParameterType))
+                (ControlName.RegisteredParameterNumberMsb, RegisteredParameterNumbers.GetMsb(ParameterType)),
+                (ControlName.RegisteredParameterNumberLsb, RegisteredParameterNumbers.GetLsb(ParameterType))
             };
 
             switch (ValueType)
@@ -75,9 +75,9 @@ namespace Melanchall.DryWetMidi.Interaction
                     {
                         GetData(out var dataMsb, out var dataLsb);
                         
-                        controlChanges.Add(Tuple.Create(ControlName.DataEntryMsb, dataMsb));
+                        controlChanges.Add((ControlName.DataEntryMsb, dataMsb));
                         if (dataLsb != null)
-                            controlChanges.Add(Tuple.Create(ControlName.LsbForDataEntry, dataLsb.Value));
+                            controlChanges.Add((ControlName.LsbForDataEntry, dataLsb.Value));
 
                         break;
                     }
@@ -90,17 +90,17 @@ namespace Melanchall.DryWetMidi.Interaction
 
                         controlChanges.AddRange(Enumerable
                             .Range(0, GetIncrementStepsCount())
-                            .Select(i => Tuple.Create(controlName, SevenBitNumber.MaxValue)));
+                            .Select(i => (controlName, SevenBitNumber.MaxValue)));
 
                         break;
                     }
             }
 
-            controlChanges.Add(Tuple.Create(ControlName.RegisteredParameterNumberMsb, (SevenBitNumber)0x7F));
-            controlChanges.Add(Tuple.Create(ControlName.RegisteredParameterNumberLsb, (SevenBitNumber)0x7F));
+            controlChanges.Add((ControlName.RegisteredParameterNumberMsb, (SevenBitNumber)0x7F));
+            controlChanges.Add((ControlName.RegisteredParameterNumberLsb, (SevenBitNumber)0x7F));
 
             return controlChanges.Select(controlChange => new TimedEvent(
-                controlChange.Item1.GetControlChangeEvent(controlChange.Item2, Channel),
+                controlChange.ControlName.GetControlChangeEvent(controlChange.ControlValue, Channel),
                 Time));
         }
 

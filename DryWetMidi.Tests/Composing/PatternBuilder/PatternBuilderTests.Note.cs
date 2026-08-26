@@ -73,15 +73,17 @@ namespace Melanchall.DryWetMidi.Tests.Composing
 
                 .Build();
 
-            var midiFile = PatternTestUtilities.TestNotes(pattern, new[]
-            {
-                new NoteInfo(NoteName.G, 2, null, new MetricTimeSpan(0, 0, 24)),
-                new NoteInfo(NoteName.A, 2, new MetricTimeSpan(0, 0, 24), new MetricTimeSpan(0, 1, 0)),
-                new NoteInfo(NoteName.B, 2, new MetricTimeSpan(0, 1, 24), new MetricTimeSpan(0, 0, 5)),
-            },
-            Enumerable.Range(0, 7)
-                      .Select(i => Tuple.Create(i * 1000L, new Tempo(i * 100 + 10)))
-                      .ToArray());
+            var midiFile = PatternTestUtilities.TestNotes(
+                pattern,
+                new[]
+                {
+                    new NoteInfo(NoteName.G, 2, null, new MetricTimeSpan(0, 0, 24)),
+                    new NoteInfo(NoteName.A, 2, new MetricTimeSpan(0, 0, 24), new MetricTimeSpan(0, 1, 0)),
+                    new NoteInfo(NoteName.B, 2, new MetricTimeSpan(0, 1, 24), new MetricTimeSpan(0, 0, 5)),
+                },
+                Enumerable.Range(0, 7)
+                    .Select(i => (i * 1000L, new Tempo(i * 100 + 10)))
+                    .ToArray());
 
             ClassicAssert.AreEqual(new MetricTimeSpan(0, 1, 29).TotalMicroseconds,
                             midiFile.GetDuration<MetricTimeSpan>().TotalMicroseconds);
