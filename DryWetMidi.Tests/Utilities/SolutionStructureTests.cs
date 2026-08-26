@@ -1,7 +1,9 @@
-﻿using Melanchall.DryWetMidi.Core;
+﻿using Melanchall.DryWetMidi.Common;
+using Melanchall.DryWetMidi.Core;
 using NUnit.Framework;
 using NUnit.Framework.Legacy;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Melanchall.DryWetMidi.Tests.Utilities
@@ -41,6 +43,30 @@ namespace Melanchall.DryWetMidi.Tests.Utilities
             ClassicAssert.IsFalse(
                 invalidNamespaces.Any(),
                 $"Following namespaces are invalid: {string.Join(", ", invalidNamespaces.Select(n => $"{n.Namespace} ({n.TypeName})"))}");
+        }
+
+        [Test]
+        public void CheckCustomExceptions()
+        {
+            var customExceptionsTypes = typeof(MidiException)
+                .Assembly
+                .GetTypes()
+                .Where(t => typeof(Exception).IsAssignableFrom(t) && t != typeof(MidiException))
+                .ToArray();
+
+            CollectionAssert.IsNotEmpty(customExceptionsTypes, "No custom exceptions found.");
+
+            var notDerivedFromMidiExceptionTypes = new List<Type>();
+
+            foreach (var exception in customExceptionsTypes)
+            {
+                if (!typeof(MidiException).IsAssignableFrom(exception))
+                    notDerivedFromMidiExceptionTypes.Add(exception);
+            }
+
+            CollectionAssert.IsEmpty(
+                notDerivedFromMidiExceptionTypes,
+                $"Following exceptions are not derived from {nameof(MidiException)}:{Environment.NewLine}{string.Join(", ", notDerivedFromMidiExceptionTypes.Select(t => t.Name))}");
         }
 
         #endregion

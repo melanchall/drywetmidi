@@ -48,6 +48,37 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             Tuple.Create(MusicalTimeSpan.Eighth.Dotted(5).Tuplet(10, 4), MusicalTimeSpan.Eighth.Dotted(5).Tuplet(10, 4))
         };
 
+        private static readonly object[] DoublesToTimeSpans_Known = new[]
+        {
+            new object[] { 0.00000001, new MusicalTimeSpan(0, 1) },
+            new object[] { 1.0, new MusicalTimeSpan(1, 1) },
+            new object[] { 1.0 / 2, new MusicalTimeSpan(1, 2) },
+            new object[] { 1.0 / 4, new MusicalTimeSpan(1, 4) },
+            new object[] { 1.0 / 8, new MusicalTimeSpan(1, 8) },
+            new object[] { 1.0 / 16, new MusicalTimeSpan(1, 16) },
+            new object[] { 1.0 / 32, new MusicalTimeSpan(1, 32) },
+            new object[] { 1.0 / 64, new MusicalTimeSpan(1, 64) },
+            new object[] { 1.0 / 2 + 1.0 / 8, new MusicalTimeSpan(5, 8) },
+            new object[] { 1.0 / 2 + 1.0 / 8 + 1.0 / 16, new MusicalTimeSpan(11, 16) },
+            new object[] { 1.0 / 2 + 1.0 / 8 + 1.0 / 16 + 1.0 / 32 + 1.0 / 64, new MusicalTimeSpan(47, 64) },
+            new object[] { 1.0 / 128, new MusicalTimeSpan(1, 128) },
+            new object[] { 1.0 / 256, new MusicalTimeSpan(1, 256) },
+            new object[] { 1.0 / 512, new MusicalTimeSpan(1, 512) },
+            new object[] { 1.0 / 1024, new MusicalTimeSpan(1, 1024) },
+        };
+
+        private static readonly object[] DoublesToTimeSpansWithEpsilon_Known = new[]
+        {
+            new object[] { 0.00000001, 5, new MusicalTimeSpan(0, 1) },
+            new object[] { 1.0, 0.2, new MusicalTimeSpan(1, 1) },
+            new object[] { 1.0 / 2, 0.5, new MusicalTimeSpan(1, 2) },
+            new object[] { 1.0 / 2, 1, new MusicalTimeSpan(1, 1) },
+            new object[] { 1.0 / 4, 0.5, new MusicalTimeSpan(0, 1) },
+            new object[] { 1.0 / 4, 0.25, new MusicalTimeSpan(1, 4) },
+            new object[] { 1.0 / 4, 0.05, new MusicalTimeSpan(1, 4) },
+            new object[] { 1.0 / 4, 1, new MusicalTimeSpan(0, 1) },
+        };
+
         #endregion
 
         #region Test methods
@@ -1100,46 +1131,28 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
         #region FromDouble
 
-        [TestCase(0.00000001, "0/1")]
-        [TestCase(1.0, "1/1")]
-        [TestCase(1.0 / 2, "1/2")]
-        [TestCase(1.0 / 4, "1/4")]
-        [TestCase(1.0 / 8, "1/8")]
-        [TestCase(1.0 / 16, "1/16")]
-        [TestCase(1.0 / 32, "1/32")]
-        [TestCase(1.0 / 64, "1/64")]
-        [TestCase(1.0 / 2 + 1.0 / 8, "5/8")]
-        [TestCase(1.0 / 2 + 1.0 / 8 + 1.0 / 16, "11/16")]
-        [TestCase(1.0 / 2 + 1.0 / 8 + 1.0 / 16 + 1.0 / 32 + 1.0 / 64, "47/64")]
-        [TestCase(0.123, "23/187")]
-        public void FromDouble(double number, string expectedTimeSpanString)
+        [TestCaseSource(nameof(DoublesToTimeSpans_Known))]
+        public void FromDouble(double number, MusicalTimeSpan expectedTimeSpan)
         {
-            var expectedTimeSpan = MusicalTimeSpan.Parse(expectedTimeSpanString);
-            var actualTimeSpan = MusicalTimeSpan.FromDouble(number);
-            ClassicAssert.AreEqual(expectedTimeSpan, actualTimeSpan, "Invalid time span.");
-        }
-
-        [TestCase(0.123, 0.00001, "23/187")]
-        [TestCase(0.123, 0.0000001, "123/1000")]
-        [TestCase(0.123, 0.5, "0/1")]
-        public void FromDouble_Precision(double number, double precision, string expectedTimeSpanString)
-        {
-            var expectedTimeSpan = MusicalTimeSpan.Parse(expectedTimeSpanString);
-            var actualTimeSpan = MusicalTimeSpan.FromDouble(number, new DoubleToMusicalTimeSpanSettings
+            for (var numeratorMultiplier = 1; numeratorMultiplier <= 10; numeratorMultiplier++)
             {
-                Precision = precision
-            });
-            ClassicAssert.AreEqual(expectedTimeSpan, actualTimeSpan, "Invalid time span.");
+                var actualTimeSpan = MusicalTimeSpan.FromDouble(number * numeratorMultiplier);
+                ClassicAssert.AreEqual(expectedTimeSpan.Multiply(numeratorMultiplier), actualTimeSpan, $"Invalid time span for multiplier {numeratorMultiplier}.");
+            }
         }
 
-        [TestCase]
-        public void FromDouble_MaxIterationsCount()
+        [TestCaseSource(nameof(DoublesToTimeSpansWithEpsilon_Known))]
+        public void FromDouble_Epsilon(double number, double epsilon, MusicalTimeSpan expectedTimeSpan)
         {
-            ClassicAssert.Throws<InvalidOperationException>(
-                () => MusicalTimeSpan.FromDouble(0.123, new DoubleToMusicalTimeSpanSettings
-                {
-                    MaxIterationsCount = 2
-                }),
+            var actualTimeSpan = MusicalTimeSpan.FromDouble(number, epsilon);
+            ClassicAssert.AreEqual(expectedTimeSpan, actualTimeSpan, $"Invalid time span.");
+        }
+
+        [Test]
+        public void FromDouble_Unknown([Values(0.12345, 17.0/79, 2.5/0.567)] double number)
+        {
+            ClassicAssert.Throws<DoubleToMusicalTimeSpanParsingException>(
+                () => MusicalTimeSpan.FromDouble(number),
                 "No exception thrown.");
         }
 
