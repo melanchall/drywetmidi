@@ -1,16 +1,54 @@
-﻿using System;
-using System.Linq;
-using System.Threading;
-using Melanchall.DryWetMidi.Common;
+﻿using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.MusicTheory;
 using NUnit.Framework;
+using NUnit.Framework.Internal;
 using NUnit.Framework.Legacy;
+using System;
+using System.Linq;
+using System.Reflection.Emit;
+using System.Threading;
 
 namespace Melanchall.DryWetMidi.Tests.MusicTheory
 {
     [TestFixture]
     public class NoteTests
     {
+        private static readonly object[] ParseData_Valid = new[]
+        {
+            new object[] { "C#0", Octave.Get(0).CSharp },
+            new object[] { "C#0  ", Octave.Get(0).CSharp },
+            new object[] { "  A+8  ", Octave.Get(8).A },
+            new object[] { "B-1", Octave.Get(-1).B },
+            new object[] { "F sharp 3", Octave.Get(3).FSharp },
+            new object[] { "D3", Octave.Get(3).D },
+            new object[] { "F##3", Octave.Get(3).G },
+            new object[] { "F#sharp #### 3", Octave.Get(3).B },
+            new object[] { "F# # # ### # # # ### 1", Octave.Get(1).F },
+            new object[] { "Fb 1", Octave.Get(1).E },
+            new object[] { "Fb flat flat 1", Octave.Get(1).D },
+            new object[] { "Fbbbb bbbb bbbb flat 1", Octave.Get(1).E },
+            new object[] { "  C#b 4", Octave.Get(4).C },
+            new object[] { "C#b##4", Octave.Get(4).D },
+            new object[] { "C#bbb  4", Octave.Get(4).ASharp },
+        }
+        .Concat(SevenBitNumber
+            .Values
+            .Select(Note.Get)
+            .Select(n => new object[] { n.ToString(), n }))
+        .ToArray();
+
+        private static readonly object[] ParseData_Invalid = new[]
+        {
+            new object[] { "C#10" },
+            new object[] { "C#-2" },
+            new object[] { "B-2" },
+            new object[] { "aC3" },
+            new object[] { "CC5" },
+            new object[] { "abcd" },
+            new object[] { "Aa" },
+            new object[] { "A5C" },
+        };
+
         #region Test methods
 
         [Test]
@@ -86,100 +124,46 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
             });
         }
 
-        [Test]
-        [Description("Parse valid note.")]
-        public void Parse_Valid_ZeroOctave()
+        [TestCaseSource(nameof(ParseData_Valid))]
+        public void Parse_Valid(string s, Note expectedNote)
         {
-            Parse("C#0", Octave.Get(0).CSharp);
+            var actualNote = Note.Parse(s);
+            ClassicAssert.AreEqual(expectedNote, actualNote, $"Parsed note is invalid.");
+
+            ClassicAssert.AreEqual(
+                expectedNote,
+                Note.Parse(expectedNote.ToString()),
+                "String representation was not parsed to the original note.");
         }
 
-        [Test]
-        [Description("Parse valid note of negative octave.")]
-        public void Parse_Valid_NegativeOctave()
+        [TestCaseSource(nameof(ParseData_Valid))]
+        public void TryParse_Valid(string s, Note expectedNote)
         {
-            Parse("B-1", Octave.Get(-1).B);
+            ClassicAssert.IsTrue(Note.TryParse(s, out var actualNote), "Failed to parse.");
+            ClassicAssert.AreEqual(expectedNote, actualNote, "Parsed note is invalid.");
+
+            ClassicAssert.IsTrue(Note.TryParse(expectedNote.ToString(), out actualNote), "Failed to parse string representation.");
+            ClassicAssert.AreEqual(
+                expectedNote,
+                actualNote,
+                "String representation was not parsed to the original note.");
         }
 
-        [Test]
-        [Description("Parse valid note using 'sharp' word.")]
-        public void Parse_Valid_SharpWord()
-        {
-            Parse("F sharp 3", Octave.Get(3).FSharp);
-        }
+        [TestCaseSource(nameof(ParseData_Invalid))]
+        public void Parse_Invalid(string s) =>
+            ClassicAssert.Throws<FormatException>(() => Note.Parse(s));
+
+        [TestCaseSource(nameof(ParseData_Invalid))]
+        public void TryParse_Invalid(string s) =>
+            ClassicAssert.IsFalse(Note.TryParse(s, out var actualNote), "Parsed invalid note.");
 
         [Test]
-        [Description("Parse invalid note where octave number is out of range.")]
-        public void Parse_Invalid_OctaveIsOutOfRange()
-        {
-            ParseInvalid<FormatException>("E10");
-        }
+        public void Parse_Invalid_EmptyOrNull([Values(null, "", "  ")] string s) =>
+            ClassicAssert.Throws<ArgumentException>(() => Note.Parse(s), "Note parsing did not throw an exception.");
 
         [Test]
-        [Description("Parse invalid note where an input string is empty.")]
-        public void Parse_Invalid_EmptyInputString()
-        {
-            ParseInvalid<ArgumentException>(string.Empty);
-        }
-
-        [Test]
-        public void Parse_LetterOnly()
-        {
-            Parse("D3", Octave.Get(3).D);
-        }
-
-        [Test]
-        public void Parse_Sharps_1()
-        {
-            Parse("F##3", Octave.Get(3).G);
-        }
-
-        [Test]
-        public void Parse_Sharps_2()
-        {
-            Parse("F#sharp #### 3", Octave.Get(3).B);
-        }
-
-        [Test]
-        public void Parse_Sharps_3()
-        {
-            Parse("F# # # ### # # # ### 1", Octave.Get(1).F);
-        }
-
-        [Test]
-        public void Parse_Flats_1()
-        {
-            Parse("Fb 1", Octave.Get(1).E);
-        }
-
-        [Test]
-        public void Parse_Flats_2()
-        {
-            Parse("Fb flat flat 1", Octave.Get(1).D);
-        }
-
-        [Test]
-        public void Parse_Flats_3()
-        {
-            Parse("Fbbbb bbbb bbbb flat 1", Octave.Get(1).E);
-        }
-
-        [Test]
-        public void Parse_Sharps_Flats_1()
-        {
-            Parse("C#b4", Octave.Get(4).C);
-        }
-
-        [Test]
-        public void Parse_Sharps_Flats_2()
-        {
-            Parse("C#b##4", Octave.Get(4).D);
-        }
-
-        [Test]
-        public void Parse_Sharps_Flats_3()
-        {
-            Parse("C#bbb4", Octave.Get(4).ASharp);
-        }
+        public void TryParse_Invalid_EmptyOrNull([Values(null, "", "  ")] string s) =>
+            ClassicAssert.IsFalse(Note.TryParse(s, out var actualNote), $"Parsed invalid value '{s}'.");
 
         [Test]
         public void SortNotes()
@@ -252,19 +236,22 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
 
         private static void Parse(string input, Note expectedNote, string label)
         {
-            Note.TryParse(input, out var actualNote);
-            ClassicAssert.AreEqual(expectedNote,
-                            actualNote,
-                            $"TryParse ({label}): incorrect result.");
+            ClassicAssert.IsTrue(Note.TryParse(input, out var actualNote), $"TryParse ({label}): failed to parse.");
+            ClassicAssert.AreEqual(
+                expectedNote,
+                actualNote,
+                $"TryParse ({label}): incorrect result.");
 
             actualNote = Note.Parse(input);
-            ClassicAssert.AreEqual(expectedNote,
-                            actualNote,
-                            $"Parse ({label}): incorrect result.");
+            ClassicAssert.AreEqual(
+                expectedNote,
+                actualNote,
+                $"Parse ({label}): incorrect result.");
 
-            ClassicAssert.AreEqual(expectedNote,
-                            Note.Parse(expectedNote.ToString()),
-                            $"Parse ({label}): string representation was not parsed to the original note.");
+            ClassicAssert.AreEqual(
+                expectedNote,
+                Note.Parse(expectedNote.ToString()),
+                $"Parse ({label}): string representation was not parsed to the original note.");
         }
 
         private static void ParseInvalid<TException>(string input)

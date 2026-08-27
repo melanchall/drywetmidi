@@ -13,13 +13,37 @@ namespace Melanchall.DryWetMidi.Tests.Common
     [TestFixture]
     public sealed class FourBitNumberTests
     {
-        #region Test methods
+        private static readonly object[] ParseData_Valid = new[]
+        {
+            new object[] { "0", (FourBitNumber)0 },
+            new object[] { "  0", (FourBitNumber)0 },
+            new object[] { "1", (FourBitNumber)1 },
+            new object[] { "1   ", (FourBitNumber)1 },
+            new object[] { "15", (FourBitNumber)15 },
+            new object[] { " 15 ", (FourBitNumber)15 },
+        };
+
+        private static readonly object[] ParseData_Invalid = new[]
+        {
+            new object[] { "a0" },
+            new object[] { "1 0" },
+            new object[] { "0b" },
+            new object[] { "16" },
+            new object[] { "abc" },
+            new object[] { "-5" },
+        };
 
 #if NET7_0_OR_GREATER
         [Test]
-        public void SerializeFourBitNumberToJson()
+        public void SerializeFourBitNumberToJson_1()
         {
             ClassicAssert.AreEqual("14", JsonSerializer.Serialize((FourBitNumber)14));
+        }
+
+        [Test]
+        public void SerializeFourBitNumberToJson_2()
+        {
+            ClassicAssert.AreEqual("{\"Key\":14,\"Value\":\"AAA\"}", JsonSerializer.Serialize(new KeyValuePair<FourBitNumber, string>((FourBitNumber)14, "AAA")));
         }
 
         [Test]
@@ -65,53 +89,31 @@ namespace Melanchall.DryWetMidi.Tests.Common
         }
 #endif
 
-        [Test]
-        public void Parse_InvalidFormat()
+        [TestCaseSource(nameof(ParseData_Valid))]
+        public void Parse_Valid(string s, FourBitNumber expectedNumber) =>
+            ClassicAssert.AreEqual(expectedNumber, FourBitNumber.Parse(s));
+
+        [TestCaseSource(nameof(ParseData_Valid))]
+        public void TryParse_Valid(string s, FourBitNumber expectedNumber)
         {
-            ClassicAssert.Throws<FormatException>(() => FourBitNumber.Parse("sdsd"));
+            ClassicAssert.IsTrue(FourBitNumber.TryParse(s, out var result), $"Failed to parse '{s}'.");
+            ClassicAssert.AreEqual(expectedNumber, result, $"Parsed value is invalid.");
         }
 
-        [Test]
-        public void Parse_OutOfRange()
-        {
-            ClassicAssert.Throws<FormatException>(() => FourBitNumber.Parse("200"));
-            ClassicAssert.Throws<FormatException>(() => FourBitNumber.Parse("16"));
-        }
+        [TestCaseSource(nameof(ParseData_Invalid))]
+        public void Parse_Invalid(string s) =>
+            ClassicAssert.Throws<FormatException>(() => FourBitNumber.Parse(s));
+
+        [TestCaseSource(nameof(ParseData_Invalid))]
+        public void TryParse_Invalid(string s) =>
+            ClassicAssert.IsFalse(FourBitNumber.TryParse(s, out _), $"Parsed invalid value '{s}'.");
 
         [Test]
-        public void Parse()
-        {
-            ClassicAssert.AreEqual((FourBitNumber)12, FourBitNumber.Parse("12"));
-            ClassicAssert.AreEqual((FourBitNumber)0, FourBitNumber.Parse("0"));
-            ClassicAssert.AreEqual((FourBitNumber)15, FourBitNumber.Parse("15"));
-        }
+        public void Parse_Invalid_EmptyOrNull([Values(null, "", "  ")] string s) =>
+            ClassicAssert.Throws<ArgumentException>(() => FourBitNumber.Parse(s));
 
         [Test]
-        public void TryParse_InvalidFormat()
-        {
-            ClassicAssert.AreEqual(false, FourBitNumber.TryParse("sdsd", out _));
-        }
-
-        [Test]
-        public void TryParse_OutOfRange()
-        {
-            ClassicAssert.AreEqual(false, FourBitNumber.TryParse("200", out _));
-            ClassicAssert.AreEqual(false, FourBitNumber.TryParse("16", out _));
-        }
-
-        [Test]
-        public void TryParse()
-        {
-            FourBitNumber.TryParse("12", out var result);
-            ClassicAssert.AreEqual((FourBitNumber)12, result);
-
-            FourBitNumber.TryParse("0", out result);
-            ClassicAssert.AreEqual((FourBitNumber)0, result);
-
-            FourBitNumber.TryParse("15", out result);
-            ClassicAssert.AreEqual((FourBitNumber)15, result);
-        }
-
-        #endregion
+        public void TryParse_Invalid_EmptyOrNull([Values(null, "", "  ")] string s) =>
+            ClassicAssert.IsFalse(FourBitNumber.TryParse(s, out _), $"Parsed invalid value '{s}'.");
     }
 }

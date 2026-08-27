@@ -1,53 +1,41 @@
-﻿using System.Text.RegularExpressions;
-using Melanchall.DryWetMidi.Common;
+﻿using Melanchall.DryWetMidi.Common;
+using System;
+using System.Globalization;
 
 namespace Melanchall.DryWetMidi.Interaction
 {
-    internal static class BarBeatFractionTimeSpanParser
+    internal sealed class BarBeatFractionTimeSpanParser : SimpleParser<BarBeatFractionTimeSpan>
     {
-        #region Constants
-
-        private const string BarsGroupName = "bars";
-        private const string BeatsGroupName = "beats";
-
-        private static readonly string BarsGroup = ParsingUtilities.GetNonnegativeDoubleNumberGroup(BarsGroupName, ',');
-        private static readonly string BeatsGroup = ParsingUtilities.GetNonnegativeDoubleNumberGroup(BeatsGroupName, '.', ',');
-
-        private static readonly string Divider = Regex.Escape("_");
-
-        private static readonly string[] Patterns = new[]
+        private static readonly NumberFormatInfo CommaSeparatorFormat = new()
         {
-            $@"{BarsGroup}\s*{Divider}\s*{BeatsGroup}",
+            NumberDecimalSeparator = ","
         };
 
-        private const string BarsIsOutOfRange = "Bars number is out of range.";
-        private const string BeatsIsOutOfRange = "Beats number is out of range.";
-
-        #endregion
-
-        #region Methods
-
-        internal static ParsingResult TryParse(string? input, out BarBeatFractionTimeSpan? timeSpan)
+        private static readonly NumberFormatInfo DotSeparatorFormat = new()
         {
-            timeSpan = null;
+            NumberDecimalSeparator = "."
+        };
 
-            if (string.IsNullOrWhiteSpace(input))
-                return ParsingResult.EmptyInputString;
+        protected override BarBeatFractionTimeSpan ParseInternal(ReadOnlySpan<char> input)
+        {
+            var bars = 0.0;
+            var beats = 0.0;
 
-            var match = ParsingUtilities.Match(input, Patterns);
-            if (match == null)
-                return ParsingResult.NotMatched;
+            var separatorIndex = input.IndexOf('_');
+            if (separatorIndex == -1)
+                ThrowInvalidFormatError();
 
-            if (!ParsingUtilities.ParseNonnegativeDouble(match, BarsGroupName, 0, new[] { ',' }, out var bars))
-                return ParsingResult.Error(BarsIsOutOfRange);
+            var barsSpan = input[..separatorIndex].Trim();
+            var beatsSpan = input[(separatorIndex + 1)..].Trim();
 
-            if (!ParsingUtilities.ParseNonnegativeDouble(match, BeatsGroupName, 0, new[] { '.', ',' }, out var beats))
-                return ParsingResult.Error(BeatsIsOutOfRange);
+            if (!double.TryParse(barsSpan, NumberStyles.AllowDecimalPoint, CommaSeparatorFormat, out bars))
+                ThrowInvalidFormatError();
 
-            timeSpan = new BarBeatFractionTimeSpan(bars, beats);
-            return ParsingResult.Parsed;
+            if (!double.TryParse(beatsSpan, NumberStyles.AllowDecimalPoint, CommaSeparatorFormat, out beats) &&
+                !double.TryParse(beatsSpan, NumberStyles.AllowDecimalPoint, DotSeparatorFormat, out beats))
+                ThrowInvalidFormatError();
+
+            return new BarBeatFractionTimeSpan(bars, beats);
         }
-
-        #endregion
     }
 }

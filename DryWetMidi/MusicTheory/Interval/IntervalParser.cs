@@ -1,81 +1,68 @@
-﻿using System.Collections.Generic;
-using Melanchall.DryWetMidi.Common;
+﻿using Melanchall.DryWetMidi.Common;
+using System;
 
 namespace Melanchall.DryWetMidi.MusicTheory
 {
-    internal static class IntervalParser
+    internal sealed class IntervalParser : SimpleParser<Interval>
     {
-        #region Constants
-
-        private const string HalfStepsGroupName = "hs";
-        private const string IntervalQualityGroupName = "q";
-        private const string IntervalNumberGroupName = "n";
-
-        private static readonly string HalfStepsGroup = ParsingUtilities.GetIntegerNumberGroup(HalfStepsGroupName);
-        private static readonly string IntervalGroup = $@"(?<{IntervalQualityGroupName}>P|p|M|m|D|d|A|a)(?<{IntervalNumberGroupName}>\d+)";
-
-        private static readonly string[] Patterns = new[]
+        public (Interval? Interval, int Length) TryReadInterval(ReadOnlySpan<char> input)
         {
-            IntervalGroup,
-            HalfStepsGroup
-        };
+            var endIndex = 1;
 
-        private static readonly Dictionary<string, IntervalQuality> IntervalQualitiesByLetters =
-            new Dictionary<string, IntervalQuality>
+            if (input[0] == '+' || input[0] == '-' || char.IsDigit(input[0]))
             {
-                ["P"] = IntervalQuality.Perfect,
-                ["p"] = IntervalQuality.Perfect,
-                ["M"] = IntervalQuality.Major,
-                ["m"] = IntervalQuality.Minor,
-                ["D"] = IntervalQuality.Diminished,
-                ["d"] = IntervalQuality.Diminished,
-                ["A"] = IntervalQuality.Augmented,
-                ["a"] = IntervalQuality.Augmented
-            };
+                for (; endIndex < input.Length; endIndex++)
+                {
+                    if (!char.IsDigit(input[endIndex]))
+                        break;
+                }
 
-        private const string HalfStepsNumberIsOutOfRange = "Interval's half steps number is out of range.";
-        private const string IntervalNumberIsOutOfRange = "Interval's number is out of range.";
+                if (!int.TryParse(input.Slice(0, endIndex), out var halfSteps))
+                    return (null, 0);
 
-        #endregion
+                if (!IntervalUtilities.IsIntervalValid(halfSteps))
+                    return (null, 0);
 
-        #region Methods
-
-        internal static IEnumerable<string> GetPatterns()
-        {
-            return Patterns;
-        }
-
-        internal static ParsingResult TryParse(string? input, out Interval? interval)
-        {
-            interval = null;
-
-            if (string.IsNullOrWhiteSpace(input))
-                return ParsingResult.EmptyInputString;
-
-            var match = ParsingUtilities.Match(input, Patterns, ignoreCase: false);
-            if (match == null)
-                return ParsingResult.NotMatched;
-
-            var intervalQualityGroup = match.Groups[IntervalQualityGroupName];
-            if (!intervalQualityGroup.Success)
-            {
-                if (!ParsingUtilities.ParseInt(match, HalfStepsGroupName, 0, out var halfSteps) ||
-                    !IntervalUtilities.IsIntervalValid(halfSteps))
-                    return ParsingResult.Error(HalfStepsNumberIsOutOfRange);
-
-                interval = Interval.FromHalfSteps(halfSteps);
-                return ParsingResult.Parsed;
+                return (Interval.FromHalfSteps(halfSteps), endIndex);
             }
 
-            var intervalQuality = IntervalQualitiesByLetters[intervalQualityGroup.Value];
+            IntervalQuality intervalQuality = default;
+            var qualityLetter = input[0];
+            if (qualityLetter == 'p' || qualityLetter == 'P')
+                intervalQuality = IntervalQuality.Perfect;
+            else if (qualityLetter == 'm')
+                intervalQuality = IntervalQuality.Minor;
+            else if (qualityLetter == 'M')
+                intervalQuality = IntervalQuality.Major;
+            else if (qualityLetter == 'd' || qualityLetter == 'D')
+                intervalQuality = IntervalQuality.Diminished;
+            else if (qualityLetter == 'a' || qualityLetter == 'A')
+                intervalQuality = IntervalQuality.Augmented;
+            else
+                return (null, 0);
 
-            if (!ParsingUtilities.ParseInt(match, IntervalNumberGroupName, 0, out var intervalNumber) || intervalNumber < 1)
-                return ParsingResult.Error(IntervalNumberIsOutOfRange);
+            for (; endIndex < input.Length; endIndex++)
+            {
+                if (!char.IsDigit(input[endIndex]))
+                    break;
+            }
 
-            interval = Interval.Get(intervalQuality, intervalNumber);
-            return ParsingResult.Parsed;
+            if (!int.TryParse(input.Slice(1, endIndex - 1), out var intervalNumber))
+                return (null, 0);
+
+            if (intervalNumber == 0)
+                return (null, 0);
+
+            return (Interval.Get(intervalQuality, intervalNumber), endIndex);
         }
 
-        #endregion
+        protected override Interval ParseInternal(ReadOnlySpan<char> input)
+        {
+            var (interval, length) = TryReadInterval(input);
+            if (interval == null || length != input.Length)
+                ThrowInvalidFormatError();
+
+            return interval;
+        }
     }
 }

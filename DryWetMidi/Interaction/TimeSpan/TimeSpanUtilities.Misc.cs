@@ -13,14 +13,14 @@ namespace Melanchall.DryWetMidi.Interaction
     {
         #region Constants
 
-        private static readonly Dictionary<TimeSpanType, Parsing<ITimeSpan>> Parsers =
-            new Dictionary<TimeSpanType, Parsing<ITimeSpan>>
+        private static readonly Dictionary<TimeSpanType, Func<string?, ITimeSpan>> Parsers =
+            new Dictionary<TimeSpanType, Func<string?, ITimeSpan>>
             {
-                [TimeSpanType.Midi] = GetParsing<MidiTimeSpan>(MidiTimeSpanParser.TryParse),
-                [TimeSpanType.BarBeatTicks] = GetParsing<BarBeatTicksTimeSpan>(BarBeatTicksTimeSpanParser.TryParse),
-                [TimeSpanType.BarBeatFraction] = GetParsing<BarBeatFractionTimeSpan>(BarBeatFractionTimeSpanParser.TryParse),
-                [TimeSpanType.Metric] = GetParsing<MetricTimeSpan>(MetricTimeSpanParser.TryParse),
-                [TimeSpanType.Musical] = GetParsing<MusicalTimeSpan>(MusicalTimeSpanParser.TryParse)
+                [TimeSpanType.Midi] = GetParsing(TimeSpanParsers.MidiTimeSpanParser),
+                [TimeSpanType.BarBeatTicks] = GetParsing(TimeSpanParsers.BarBeatTicksTimeSpanParser),
+                [TimeSpanType.BarBeatFraction] = GetParsing(TimeSpanParsers.BarBeatFractionTimeSpanParser),
+                [TimeSpanType.Metric] = GetParsing(TimeSpanParsers.MetricTimeSpanParser),
+                [TimeSpanType.Musical] = GetParsing(TimeSpanParsers.MusicalTimeSpanParser)
             };
 
         private static readonly Dictionary<TimeSpanType, ITimeSpan> MaximumTimeSpans = new Dictionary<TimeSpanType, ITimeSpan>
@@ -62,8 +62,14 @@ namespace Melanchall.DryWetMidi.Interaction
 
             foreach (var parser in Parsers.Values)
             {
-                if (ParsingUtilities.TryParse(input, parser, out timeSpan))
+                try
+                {
+                    timeSpan = parser(input);
                     return true;
+                }
+                catch
+                {
+                }
             }
 
             return false;
@@ -83,9 +89,20 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <returns><c>true</c> if <paramref name="input"/> was converted successfully; otherwise, <c>false</c>.</returns>
         public static bool TryParse(string? input, TimeSpanType timeSpanType, out ITimeSpan? timeSpan)
         {
-            return ParsingUtilities.TryParse(input, Parsers[timeSpanType], out timeSpan);
+            timeSpan = null;
+
+            try
+            {
+                timeSpan = Parsers[timeSpanType](input);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
+        // TODO: test
         /// <summary>
         /// Converts the string representation of a time span to its <see cref="ITimeSpan"/> equivalent.
         /// </summary>
@@ -99,12 +116,13 @@ namespace Melanchall.DryWetMidi.Interaction
 
             foreach (var parser in Parsers.Values)
             {
-                var parsingResult = parser(input, out var timeSpan);
-
-                if (parsingResult.Status == ParsingStatus.Parsed)
-                    return timeSpan!;
-                else if (parsingResult.Status == ParsingStatus.FormatError)
-                    throw parsingResult.Exception!;
+                try
+                {
+                    return parser(input);
+                }
+                catch
+                {
+                }
             }
 
             throw new FormatException("Time span has unknown format.");
@@ -206,15 +224,10 @@ namespace Melanchall.DryWetMidi.Interaction
             return new MathTimeSpan(timeSpan1, timeSpan2, MathOperation.Subtract, mode);
         }
 
-        private static Parsing<ITimeSpan> GetParsing<TTimeSpan>(Parsing<TTimeSpan> parsing)
+        private static Func<string?, ITimeSpan> GetParsing<TTimeSpan>(SimpleParser<TTimeSpan> parser)
             where TTimeSpan : ITimeSpan
         {
-            return (string? input, out ITimeSpan? timeSpan) =>
-            {
-                var parsingResult = parsing(input, out var result);
-                timeSpan = result;
-                return parsingResult;
-            };
+            return (string? input) => parser.Parse(input);
         }
 
         #endregion

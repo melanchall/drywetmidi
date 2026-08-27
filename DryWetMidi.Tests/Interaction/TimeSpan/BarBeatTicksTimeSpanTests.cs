@@ -55,16 +55,37 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             new object[] { new BarBeatTicksTimeSpan(6.6), "6,6.0.0" },
         };
 
-        private static readonly object[] StringsToTimeSpans = new[]
+        private static readonly object[] ParseData_Valid = new[]
         {
             new object[] { "0.0.0", new BarBeatTicksTimeSpan() },
             new object[] { "10.0.0", new BarBeatTicksTimeSpan(10, 0, 0) },
+            new object[] { "  10. 0.0", new BarBeatTicksTimeSpan(10, 0, 0) },
             new object[] { "100.100.100", new BarBeatTicksTimeSpan(100, 100, 100) },
             new object[] { "0.345.0", new BarBeatTicksTimeSpan(0, 345, 0) },
             new object[] { "0.0.1234", new BarBeatTicksTimeSpan(0, 0, 1234) },
+            new object[] { "0.  0. 1234  ", new BarBeatTicksTimeSpan(0, 0, 1234) },
             new object[] { "10,2.0,3.0", new BarBeatTicksTimeSpan(10.2, 0.3, 0) },
             new object[] { "10,2.0,001.0", new BarBeatTicksTimeSpan(10.2, 0.001, 0) },
             new object[] { "6,6.0.0", new BarBeatTicksTimeSpan(6.6) },
+            new object[] { "6,6 . 0  . 0", new BarBeatTicksTimeSpan(6.6) },
+        };
+
+        private static readonly object[] ParseData_Invalid = new[]
+        {
+            new object[] { "1.invalid.0" },
+            new object[] { "123" },
+            new object[] { "1.2.3a" },
+            new object[] { "x 1.2.3" },
+            new object[] { "123.5" },
+            new object[] { "0.invalid" },
+            new object[] { "invalid.invalid.x" },
+            new object[] { "45..6" },
+            new object[] { "10" },
+            new object[] { ".5." },
+            new object[] { "10,8,0.1.0" },
+            new object[] { "100,100,10.0" },
+            new object[] { "100,100,10  .0" },
+            new object[] { "100.1g0,10  .0" },
         };
 
         #endregion
@@ -425,9 +446,35 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             2 * MusicalTimeSpan.Eighth,
             TimeSpanTestUtilities.ComplexTempoMap2);
 
-        [TestCaseSource(nameof(StringsToTimeSpans))]
-        public void Parse(string s, BarBeatTicksTimeSpan expectedTimeSpan) =>
+        [TestCaseSource(nameof(ParseData_Valid))]
+        public void Parse(string s, BarBeatTicksTimeSpan expectedTimeSpan)
+        {
+            ClassicAssert.AreEqual(expectedTimeSpan, BarBeatTicksTimeSpan.Parse(s), $"Invalid time span parsed for '{s}'.");
             TimeSpanTestUtilities.Parse(s, expectedTimeSpan);
+        }
+
+        [TestCaseSource(nameof(ParseData_Valid))]
+        public void TryParse_Valid(string s, BarBeatTicksTimeSpan expectedTimeSpan)
+        {
+            ClassicAssert.IsTrue(BarBeatTicksTimeSpan.TryParse(s, out var actualTimeSpan), $"Failed to parse '{s}'.");
+            ClassicAssert.AreEqual(expectedTimeSpan, actualTimeSpan, $"Incorrect parsed value for '{s}'.");
+        }
+
+        [TestCaseSource(nameof(ParseData_Invalid))]
+        public void Parse_Invalid(string s) =>
+            ClassicAssert.Throws<FormatException>(() => BarBeatTicksTimeSpan.Parse(s));
+
+        [TestCaseSource(nameof(ParseData_Invalid))]
+        public void TryParse_Invalid(string s) =>
+            ClassicAssert.IsFalse(BarBeatTicksTimeSpan.TryParse(s, out _), $"Parsed invalid value '{s}'.");
+
+        [Test]
+        public void Parse_Invalid_EmptyOrNull([Values(null, "", "  ")] string s) =>
+            ClassicAssert.Throws<ArgumentException>(() => BarBeatTicksTimeSpan.Parse(s));
+
+        [Test]
+        public void TryParse_Invalid_EmptyOrNull([Values(null, "", "  ")] string s) =>
+            ClassicAssert.IsFalse(BarBeatTicksTimeSpan.TryParse(s, out _), $"Parsed invalid value '{s}'.");
 
         [Test]
         public void Add_SameType_1()

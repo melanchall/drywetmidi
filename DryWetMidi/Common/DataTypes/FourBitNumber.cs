@@ -96,11 +96,11 @@ namespace Melanchall.DryWetMidi.Common
         {
             fourBitNumber = default;
 
-            var parsed = ShortByteParser.TryParse(input, Min, Max, out var byteValue).Status == ParsingStatus.Parsed;
-            if (parsed)
-                fourBitNumber = (FourBitNumber)byteValue;
+            var result = DataTypesParsers.FourBitNumberParser.TryParse(input, out var byteValue);
+            if (result)
+                fourBitNumber = new FourBitNumber(byteValue);
 
-            return parsed;
+            return result;
         }
 
         /// <summary>
@@ -113,11 +113,7 @@ namespace Melanchall.DryWetMidi.Common
         /// <exception cref="FormatException"><paramref name="input"/> has invalid format.</exception>
         public static FourBitNumber Parse(string? input)
         {
-            var parsingResult = ShortByteParser.TryParse(input, Min, Max, out var byteValue);
-            if (parsingResult.Status == ParsingStatus.Parsed)
-                return (FourBitNumber)byteValue;
-
-            throw parsingResult.Exception!;
+            return (FourBitNumber)DataTypesParsers.FourBitNumberParser.Parse(input);
         }
 
         #endregion

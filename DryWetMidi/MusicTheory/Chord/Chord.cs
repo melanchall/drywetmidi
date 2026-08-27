@@ -147,7 +147,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// <returns><c>true</c> if <paramref name="input"/> was converted successfully; otherwise, <c>false</c>.</returns>
         public static bool TryParse(string? input, out Chord? chord)
         {
-            return ParsingUtilities.TryParse(input, ChordParser.TryParse, out chord);
+            return MusicTheoryParsers.ChordParser.TryParse(input, out chord);
         }
 
         /// <summary>
@@ -159,7 +159,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// <exception cref="FormatException"><paramref name="input"/> has invalid format.</exception>
         public static Chord Parse(string? input)
         {
-            return ParsingUtilities.Parse<Chord>(input, ChordParser.TryParse);
+            return MusicTheoryParsers.ChordParser.Parse(input);
         }
 
         /// <summary>

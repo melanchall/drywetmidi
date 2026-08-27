@@ -1,8 +1,9 @@
-﻿using System;
-using System.Linq;
+﻿using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Interaction;
 using NUnit.Framework;
 using NUnit.Framework.Legacy;
+using System;
+using System.Linq;
 
 namespace Melanchall.DryWetMidi.Tests.Interaction
 {
@@ -46,20 +47,41 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         private static object[] TimeSpansForComparison_LessOrEqual =
             TimeSpansForComparison_Less.Concat(TimeSpansForComparison_Equal).ToArray();
 
-        private static object[] StringsToTimeSpans = new[]
+        private static object[] ParseData_Valid = new[]
         {
             new object[] { "0_0", new BarBeatFractionTimeSpan() },
             new object[] { "0,0_0.0", new BarBeatFractionTimeSpan() },
+            new object[] { "  0,0 _ 0.0", new BarBeatFractionTimeSpan() },
             new object[] { "0_0.0", new BarBeatFractionTimeSpan() },
             new object[] { "10_0", new BarBeatFractionTimeSpan(10, 0.00) },
             new object[] { "10,8_0", new BarBeatFractionTimeSpan(10.8, 0.00) },
             new object[] { "100_100.10", new BarBeatFractionTimeSpan(100, 100.10) },
             new object[] { "100_100,10", new BarBeatFractionTimeSpan(100, 100.10) },
+            new object[] { "100_100,10  ", new BarBeatFractionTimeSpan(100, 100.10) },
             new object[] { "0_345.00", new BarBeatFractionTimeSpan(0, 345.00) },
             new object[] { "0_345,00", new BarBeatFractionTimeSpan(0, 345.00) },
             new object[] { "10_45.00", new BarBeatFractionTimeSpan(10, 45.00) },
             new object[] { "10_45,00", new BarBeatFractionTimeSpan(10, 45.00) },
+            new object[] { "10 _45,00", new BarBeatFractionTimeSpan(10, 45.00) },
             new object[] { "2_45", new BarBeatFractionTimeSpan(2, 45) }
+        };
+
+        private static object[] ParseData_Invalid = new[]
+        {
+            new object[] { "invalid_0" },
+            new object[] { "0_invalid" },
+            new object[] { "invalid_invalid" },
+            new object[] { "10_0_0" },
+            new object[] { "4.5__6" },
+            new object[] { "10" },
+            new object[] { "_5" },
+            new object[] { "9_" },
+            new object[] { "10,8_0_0" },
+            new object[] { "100_100.10_0" },
+            new object[] { "100_100,10_0" },
+            new object[] { "100_100,10  _0" },
+            new object[] { "1.2.3" },
+            new object[] { "1,2-3" },
         };
 
         private static object[] TimeSpansToStrings = new[]
@@ -538,11 +560,35 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
         #region Parse
 
-        [TestCaseSource(nameof(StringsToTimeSpans))]
-        public void Parse(string s, BarBeatFractionTimeSpan expectedTimeSpan)
+        [TestCaseSource(nameof(ParseData_Valid))]
+        public void Parse_Valid(string s, BarBeatFractionTimeSpan expectedTimeSpan)
         {
+            ClassicAssert.AreEqual(expectedTimeSpan, BarBeatFractionTimeSpan.Parse(s), $"Invalid time span parsed for '{s}'.");
             TimeSpanTestUtilities.Parse(s, expectedTimeSpan);
         }
+
+        [TestCaseSource(nameof(ParseData_Valid))]
+        public void TryParse_Valid(string s, BarBeatFractionTimeSpan expectedTimeSpan)
+        {
+            ClassicAssert.IsTrue(BarBeatFractionTimeSpan.TryParse(s, out var actualTimeSpan), $"Failed to parse '{s}'.");
+            ClassicAssert.AreEqual(expectedTimeSpan, actualTimeSpan, $"Incorrect parsed value for '{s}'.");
+        }
+
+        [TestCaseSource(nameof(ParseData_Invalid))]
+        public void Parse_Invalid(string s) =>
+            ClassicAssert.Throws<FormatException>(() => BarBeatFractionTimeSpan.Parse(s));
+
+        [TestCaseSource(nameof(ParseData_Invalid))]
+        public void TryParse_Invalid(string s) =>
+            ClassicAssert.IsFalse(BarBeatFractionTimeSpan.TryParse(s, out _), $"Parsed invalid value '{s}'.");
+
+        [Test]
+        public void Parse_Invalid_EmptyOrNull([Values(null, "", "  ")] string s) =>
+            ClassicAssert.Throws<ArgumentException>(() => BarBeatFractionTimeSpan.Parse(s));
+
+        [Test]
+        public void TryParse_Invalid_EmptyOrNull([Values(null, "", "  ")] string s) =>
+            ClassicAssert.IsFalse(BarBeatFractionTimeSpan.TryParse(s, out _), $"Parsed invalid value '{s}'.");
 
         [TestCaseSource(nameof(TimeSpansToStrings))]
         public void ToString(BarBeatFractionTimeSpan timeSpan, string expectedString)

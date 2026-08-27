@@ -28,7 +28,7 @@ namespace Melanchall.DryWetMidi.Common
                 throw new ArgumentException($"'{invalidValue}' is the prohibted value for this parameter.", parameterName);
         }
 
-        internal static void IsNull(string parameterName, object argument)
+        internal static void IsNull(string parameterName, object? argument)
         {
             if (argument == null)
                 throw new ArgumentNullException(parameterName);

@@ -1,93 +1,77 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 using Melanchall.DryWetMidi.Common;
 
 namespace Melanchall.DryWetMidi.MusicTheory
 {
-    internal static class ScaleParser
+    internal sealed class ScaleParser : SimpleParser<Scale>
     {
-        #region Constants
-
-        private const string RootNoteNameGroupName = "rn";
-        private const string IntervalsMnemonicGroupName = "im";
-        private const string IntervalGroupName = "i";
-
-        private static readonly string IntervalGroup = $"(?<{IntervalGroupName}>({string.Join("|", IntervalParser.GetPatterns())})\\s*)+";
-        private static readonly string IntervalsMnemonicGroup = $"(?<{IntervalsMnemonicGroupName}>.+?)";
-
-        private static readonly string[] Patterns = NoteNameParser.GetPatterns()
-                                                                  .Select(p => $@"(?<{RootNoteNameGroupName}>{p})\s*({IntervalGroup}|{IntervalsMnemonicGroup})")
-                                                                  .ToArray();
-
-        private const string ScaleIsUnknown = "Scale is unknown.";
-
-        #endregion
-
-        #region Methods
-
-        internal static ParsingResult TryParse(string? input, out Scale? scale)
+        protected override Scale ParseInternal(ReadOnlySpan<char> input)
         {
-            scale = null;
+            var (rootNoteName, rootNoteNamePartLength) = MusicTheoryParsers.NoteNameParser.TryReadNoteName(input);
+            if (rootNoteName == null)
+                ThrowInvalidFormatError();
 
-            if (string.IsNullOrWhiteSpace(input))
-                return ParsingResult.EmptyInputString;
+            ICollection<Interval>? intervals = new List<Interval>();
 
-            var match = ParsingUtilities.Match(input, Patterns);
-            if (match == null)
-                return ParsingResult.NotMatched;
-
-            var rootNoteNameGroup = match.Groups[RootNoteNameGroupName];
-
-            var rootNoteNameParsingResult = NoteNameParser.TryParse(rootNoteNameGroup.Value, out var rootNoteName);
-            if (rootNoteNameParsingResult.Status != ParsingStatus.Parsed)
-                return rootNoteNameParsingResult;
-
-            //
-
-            IEnumerable<Interval>? intervals;
-
-            var intervalGroup = match.Groups[IntervalGroupName];
-            if (intervalGroup.Success)
+            var (interval, intervalPartLength) = MusicTheoryParsers.IntervalParser.TryReadInterval(input.Slice(rootNoteNamePartLength).Trim());
+            if (interval == null)
             {
-                var intervalsParsingResults = intervalGroup
-                    .Captures
-                    .OfType<Capture>()
-                    .Select(c =>
+                var rootNoteNameSlice = input.Slice(0, rootNoteNamePartLength);
+                if (rootNoteNameSlice.EndsWith("b", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    foreach (var n in ScaleIntervals.BNames)
                     {
-                        var parsingResult = IntervalParser.TryParse(c.Value, out var interval);
-
-                        return new
+                        if (input.Slice(rootNoteNamePartLength - 1).StartsWith(n, StringComparison.InvariantCultureIgnoreCase))
                         {
-                            Interval = interval,
-                            ParsingResult = parsingResult
-                        };
-                    })
-                    .ToArray();
+                            rootNoteName = (NoteName)(((int)rootNoteName.Value + 1) % Octave.OctaveSize);
+                            rootNoteNamePartLength--;
+                            break;
+                        }
+                    }
+                }
+                else if (rootNoteNameSlice.EndsWith("flat", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    foreach (var n in ScaleIntervals.FlatNames)
+                    {
+                        if (input.Slice(rootNoteNamePartLength - 4).StartsWith(n, StringComparison.InvariantCultureIgnoreCase))
+                        {
+                            rootNoteName = (NoteName)(((int)rootNoteName.Value + 1) % Octave.OctaveSize);
+                            rootNoteNamePartLength -= 4;
+                            break;
+                        }
+                    }
+                }
 
-                var notParsedResult = intervalsParsingResults.FirstOrDefault(r => r.ParsingResult.Status != ParsingStatus.Parsed);
-                if (notParsedResult != null)
-                    return notParsedResult.ParsingResult;
-
-                intervals = intervalsParsingResults.Select(r => r.Interval).ToArray()!;
+                var scaleName = input.Slice(rootNoteNamePartLength).Trim().ToString();
+                intervals = ScaleIntervals.GetByName(scaleName);
             }
             else
             {
-                var intervalsMnemonicGroup = match.Groups[IntervalsMnemonicGroupName];
-                var intervalsName = intervalsMnemonicGroup.Value;
+                var intervalsSlice = input.Slice(rootNoteNamePartLength).Trim();
 
-                intervals = ScaleIntervals.GetByName(intervalsName);
+                var i = 0;
+                while (i < intervalsSlice.Length)
+                {
+                    (interval, intervalPartLength) = MusicTheoryParsers.IntervalParser.TryReadInterval(intervalsSlice.Slice(i).Trim());
+                    if (interval == null)
+                        ThrowInvalidFormatError();
+
+                    intervals.Add(interval);
+                    i += intervalPartLength;
+
+                    while (i < intervalsSlice.Length && char.IsWhiteSpace(intervalsSlice[i]))
+                    {
+                        i++;
+                    }
+                }
             }
 
-            if (intervals == null)
-                return ParsingResult.Error(ScaleIsUnknown);
+            if (intervals == null || !intervals.Any())
+                ThrowError("Scale is unknown.");
 
-            //
-
-            scale = new Scale(intervals, rootNoteName);
-            return ParsingResult.Parsed;
+            return new Scale(intervals, rootNoteName.Value);
         }
-
-        #endregion
     }
 }

@@ -13,13 +13,37 @@ namespace Melanchall.DryWetMidi.Tests.Common
     [TestFixture]
     public sealed class SevenBitNumberTests
     {
-        #region Test methods
+        private static readonly object[] ParseData_Valid = new[]
+        {
+            new object[] { "0", (SevenBitNumber)0 },
+            new object[] { "  0", (SevenBitNumber)0 },
+            new object[] { "1", (SevenBitNumber)1 },
+            new object[] { "1   ", (SevenBitNumber)1 },
+            new object[] { "127", (SevenBitNumber)127 },
+            new object[] { " 127 ", (SevenBitNumber)127 },
+        };
+
+        private static readonly object[] ParseData_Invalid = new[]
+        {
+            new object[] { "a0" },
+            new object[] { "1 0" },
+            new object[] { "0b" },
+            new object[] { "128" },
+            new object[] { "abc" },
+            new object[] { "-5" },
+        };
 
 #if NET7_0_OR_GREATER
         [Test]
-        public void SerializeSevenBitNumberToJson()
+        public void SerializeSevenBitNumberToJson_1()
         {
             ClassicAssert.AreEqual("42", JsonSerializer.Serialize((SevenBitNumber)42));
+        }
+
+        [Test]
+        public void SerializeSevenBitNumberToJson_2()
+        {
+            ClassicAssert.AreEqual("{\"Key\":42,\"Value\":\"AAA\"}", JsonSerializer.Serialize(new KeyValuePair<SevenBitNumber, string>((SevenBitNumber)42, "AAA")));
         }
 
         [Test]
@@ -65,53 +89,31 @@ namespace Melanchall.DryWetMidi.Tests.Common
         }
 #endif
 
-        [Test]
-        public void Parse_InvalidFormat()
+        [TestCaseSource(nameof(ParseData_Valid))]
+        public void Parse_Valid(string s, SevenBitNumber expectedNumber) =>
+            ClassicAssert.AreEqual(expectedNumber, SevenBitNumber.Parse(s));
+
+        [TestCaseSource(nameof(ParseData_Valid))]
+        public void TryParse_Valid(string s, SevenBitNumber expectedNumber)
         {
-            ClassicAssert.Throws<FormatException>(() => SevenBitNumber.Parse("sdsd"));
+            ClassicAssert.IsTrue(SevenBitNumber.TryParse(s, out var result), $"Failed to parse '{s}'.");
+            ClassicAssert.AreEqual(expectedNumber, result, $"Parsed value is invalid.");
         }
 
-        [Test]
-        public void Parse_OutOfRange()
-        {
-            ClassicAssert.Throws<FormatException>(() => SevenBitNumber.Parse("200"));
-            ClassicAssert.Throws<FormatException>(() => SevenBitNumber.Parse("128"));
-        }
+        [TestCaseSource(nameof(ParseData_Invalid))]
+        public void Parse_Invalid(string s) =>
+            ClassicAssert.Throws<FormatException>(() => SevenBitNumber.Parse(s));
+
+        [TestCaseSource(nameof(ParseData_Invalid))]
+        public void TryParse_Invalid(string s) =>
+            ClassicAssert.IsFalse(SevenBitNumber.TryParse(s, out _), $"Parsed invalid value '{s}'.");
 
         [Test]
-        public void Parse()
-        {
-            ClassicAssert.AreEqual((SevenBitNumber)12, SevenBitNumber.Parse("12"));
-            ClassicAssert.AreEqual((SevenBitNumber)0, SevenBitNumber.Parse("0"));
-            ClassicAssert.AreEqual((SevenBitNumber)127, SevenBitNumber.Parse("127"));
-        }
+        public void Parse_Invalid_EmptyOrNull([Values(null, "", "  ")] string s) =>
+            ClassicAssert.Throws<ArgumentException>(() => SevenBitNumber.Parse(s));
 
         [Test]
-        public void TryParse_InvalidFormat()
-        {
-            ClassicAssert.AreEqual(false, SevenBitNumber.TryParse("sdsd", out _));
-        }
-
-        [Test]
-        public void TryParse_OutOfRange()
-        {
-            ClassicAssert.AreEqual(false, SevenBitNumber.TryParse("200", out _));
-            ClassicAssert.AreEqual(false, SevenBitNumber.TryParse("128", out _));
-        }
-
-        [Test]
-        public void TryParse()
-        {
-            SevenBitNumber.TryParse("12", out var result);
-            ClassicAssert.AreEqual((SevenBitNumber)12, result);
-
-            SevenBitNumber.TryParse("0", out result);
-            ClassicAssert.AreEqual((SevenBitNumber)0, result);
-
-            SevenBitNumber.TryParse("127", out result);
-            ClassicAssert.AreEqual((SevenBitNumber)127, result);
-        }
-
-        #endregion
+        public void TryParse_Invalid_EmptyOrNull([Values(null, "", "  ")] string s) =>
+            ClassicAssert.IsFalse(SevenBitNumber.TryParse(s, out _), $"Parsed invalid value '{s}'.");
     }
 }

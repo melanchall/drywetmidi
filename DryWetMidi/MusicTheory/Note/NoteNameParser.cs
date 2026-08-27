@@ -1,61 +1,63 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text.RegularExpressions;
 using Melanchall.DryWetMidi.Common;
 
 namespace Melanchall.DryWetMidi.MusicTheory
 {
-    internal static class NoteNameParser
+    internal sealed class NoteNameParser : SimpleParser<NoteName>
     {
-        #region Constants
-
-        private const string NoteLetterGroupName = "n";
-        private const string AccidentalGroupName = "a";
-
-        private static readonly string NoteNameGroup = $"(?<{NoteLetterGroupName}>C|D|E|F|G|A|B)";
-        private static readonly string AccidentalGroup = $"((?<{AccidentalGroupName}>{Regex.Escape(Note.SharpShortString)}|{Note.SharpLongString}|{Note.FlatShortString}|{Note.FlatLongString})\\s*)+?";
-
-        private static readonly string[] Patterns = new[]
+        public (NoteName? NoteName, int Length) TryReadNoteName(ReadOnlySpan<char> input)
         {
-            $@"{NoteNameGroup}\s*{AccidentalGroup}",
-            NoteNameGroup,
-        };
+            if (input[0] is not >= 'A' and <= 'G')
+                return (null, 0);
 
-        #endregion
+            if (!Enum.TryParse<NoteName>(input[0].ToString(), true, out var noteName))
+                return (null, 0);
 
-        #region Methods
+            var noteBaseNumber = (int)noteName;
+            var i = 1;
+            var trailingSpacesCount = 0;
 
-        internal static IEnumerable<string> GetPatterns()
-        {
-            return Patterns;
-        }
-
-        internal static ParsingResult TryParse(string? input, out NoteName noteName)
-        {
-            noteName = default(NoteName);
-
-            if (string.IsNullOrWhiteSpace(input))
-                return ParsingResult.EmptyInputString;
-
-            var match = ParsingUtilities.Match(input, Patterns);
-            if (match == null)
-                return ParsingResult.NotMatched;
-
-            var noteLetterGroup = match.Groups[NoteLetterGroupName];
-            var noteBaseNumber = (int)(NoteName)Enum.Parse(typeof(NoteName), noteLetterGroup.Value, true);
-
-            var accidentalGroup = match.Groups[AccidentalGroupName];
-            if (accidentalGroup.Success)
+            while (i < input.Length)
             {
-                foreach (Capture capture in accidentalGroup.Captures)
+                if (input[i] == ' ')
                 {
-                    var accidental = capture.Value;
-                    if (string.Equals(accidental, Note.SharpShortString, StringComparison.OrdinalIgnoreCase) ||
-                        string.Equals(accidental, Note.SharpLongString, StringComparison.OrdinalIgnoreCase))
-                        noteBaseNumber++;
-                    else if (string.Equals(accidental, Note.FlatShortString, StringComparison.OrdinalIgnoreCase) ||
-                        string.Equals(accidental, Note.FlatLongString, StringComparison.OrdinalIgnoreCase))
-                        noteBaseNumber--;
+                    i++;
+                    trailingSpacesCount++;
+                    continue;
+                }
+
+                if (input[i] == '#')
+                {
+                    noteBaseNumber++;
+                    i++;
+                    trailingSpacesCount = 0;
+                    continue;
+                }
+                if (input[i] == 'b' || input[i] == 'B')
+                {
+                    noteBaseNumber--;
+                    i++;
+                    trailingSpacesCount = 0;
+                    continue;
+                }
+
+                var slice = input.Slice(i);
+
+                if (slice.StartsWith(Note.SharpLongString, StringComparison.OrdinalIgnoreCase))
+                {
+                    noteBaseNumber++;
+                    i += Note.SharpLongString.Length;
+                    trailingSpacesCount = 0;
+                }
+                else if (slice.StartsWith(Note.FlatLongString, StringComparison.OrdinalIgnoreCase))
+                {
+                    noteBaseNumber--;
+                    i += Note.FlatLongString.Length;
+                    trailingSpacesCount = 0;
+                }
+                else
+                {
+                    break;
                 }
             }
 
@@ -63,10 +65,16 @@ namespace Melanchall.DryWetMidi.MusicTheory
             if (noteBaseNumber < 0)
                 noteBaseNumber = Octave.OctaveSize + noteBaseNumber;
 
-            noteName = (NoteName)noteBaseNumber;
-            return ParsingResult.Parsed;
+            return ((NoteName)noteBaseNumber, i - trailingSpacesCount);
         }
 
-        #endregion
+        protected override NoteName ParseInternal(ReadOnlySpan<char> input)
+        {
+            var (noteName, length) = TryReadNoteName(input);
+            if (noteName == null || length != input.Length)
+                ThrowInvalidFormatError();
+
+            return noteName.Value;
+        }
     }
 }

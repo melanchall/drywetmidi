@@ -107,11 +107,11 @@ namespace Melanchall.DryWetMidi.Common
         {
             sevenBitNumber = default;
 
-            var parsed = ShortByteParser.TryParse(input, Min, Max, out var byteValue).Status == ParsingStatus.Parsed;
-            if (parsed)
-                sevenBitNumber = (SevenBitNumber)byteValue;
+            var result = DataTypesParsers.SevenBitNumberParser.TryParse(input, out var byteValue);
+            if (result)
+                sevenBitNumber = new SevenBitNumber(byteValue);
 
-            return parsed;
+            return result;
         }
 
         /// <summary>
@@ -124,11 +124,7 @@ namespace Melanchall.DryWetMidi.Common
         /// <exception cref="FormatException"><paramref name="input"/> has invalid format.</exception>
         public static SevenBitNumber Parse(string? input)
         {
-            var parsingResult = ShortByteParser.TryParse(input, Min, Max, out var byteValue);
-            if (parsingResult.Status == ParsingStatus.Parsed)
-                return (SevenBitNumber)byteValue;
-
-            throw parsingResult.Exception!;
+            return (SevenBitNumber)DataTypesParsers.SevenBitNumberParser.Parse(input);
         }
 
         #endregion

@@ -37,6 +37,22 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             (new MidiTimeSpan(12345), new MidiTimeSpan(12345))
         };
 
+        private static readonly object[] ParseData_Valid =
+        {
+            new object[] { "0", new MidiTimeSpan() },
+            new object[] { " 10", new MidiTimeSpan(10) },
+            new object[] { "100  ", new MidiTimeSpan(100) },
+        };
+
+        private static readonly object[] ParseData_Invalid =
+        {
+            new object[] { "abc" },
+            new object[] { "0b" },
+            new object[] { "a120" },
+            new object[] { "-100" },
+            new object[] { "1 0 0" },
+        };
+
         #endregion
 
         #region Test methods
@@ -211,26 +227,35 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
         #region Parse
 
-        [Test]
-        [Description("Parse zero MIDI time span.")]
-        public void Parse_1()
+        [TestCaseSource(nameof(ParseData_Valid))]
+        public void Parse_Valid(string s, MidiTimeSpan expectedTimeSpan)
         {
-            TimeSpanTestUtilities.Parse("0", new MidiTimeSpan());
+            ClassicAssert.AreEqual(expectedTimeSpan, MidiTimeSpan.Parse(s), $"Invalid time span parsed for '{s}'.");
+            TimeSpanTestUtilities.Parse(s, expectedTimeSpan);
         }
 
-        [Test]
-        [Description("Parse short MIDI time span.")]
-        public void Parse_2()
+        [TestCaseSource(nameof(ParseData_Valid))]
+        public void TryParse_Valid(string s, MidiTimeSpan expectedTimeSpan)
         {
-            TimeSpanTestUtilities.Parse("100", new MidiTimeSpan(100));
+            ClassicAssert.IsTrue(MidiTimeSpan.TryParse(s, out var actualTimeSpan), $"Failed to parse '{s}'.");
+            ClassicAssert.AreEqual(expectedTimeSpan, actualTimeSpan, $"Incorrect parsed value for '{s}'.");
         }
 
+        [TestCaseSource(nameof(ParseData_Invalid))]
+        public void Parse_Invalid(string s) =>
+            ClassicAssert.Throws<FormatException>(() => MidiTimeSpan.Parse(s));
+
+        [TestCaseSource(nameof(ParseData_Invalid))]
+        public void TryParse_Invalid(string s) =>
+            ClassicAssert.IsFalse(MidiTimeSpan.TryParse(s, out _), $"Parsed invalid value '{s}'.");
+
         [Test]
-        [Description("Parse long MIDI time span.")]
-        public void Parse_3()
-        {
-            TimeSpanTestUtilities.Parse("123456", new MidiTimeSpan(123456));
-        }
+        public void Parse_Invalid_EmptyOrNull([Values(null, "", "  ")] string s) =>
+            ClassicAssert.Throws<ArgumentException>(() => MidiTimeSpan.Parse(s));
+
+        [Test]
+        public void TryParse_Invalid_EmptyOrNull([Values(null, "", "  ")] string s) =>
+            ClassicAssert.IsFalse(MidiTimeSpan.TryParse(s, out _), $"Parsed invalid value '{s}'.");
 
         #endregion
 

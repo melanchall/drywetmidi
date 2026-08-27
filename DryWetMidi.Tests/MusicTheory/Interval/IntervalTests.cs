@@ -1,9 +1,10 @@
-﻿using System;
-using System.Linq;
-using Melanchall.DryWetMidi.Common;
+﻿using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.MusicTheory;
 using NUnit.Framework;
+using NUnit.Framework.Internal;
 using NUnit.Framework.Legacy;
+using System;
+using System.Linq;
 
 namespace Melanchall.DryWetMidi.Tests.MusicTheory
 {
@@ -39,6 +40,42 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
             new object[] { 20, new int?[] { null, 32, 33, 31, 34 } },
             new object[] { 21, new int?[] { null, 34, 35, 33, 36 } },
             new object[] { 22, new int?[] { 36, null, null, 35, 37 } }
+        };
+
+        private static readonly object[] ParseData_Valid = new[]
+        {
+            new object[] { "7", Interval.FromHalfSteps(7) },
+            new object[] { "+8", Interval.FromHalfSteps(8) },
+            new object[] { " +8", Interval.FromHalfSteps(8) },
+            new object[] { "0", Interval.FromHalfSteps(0) },
+            new object[] { "-123", Interval.FromHalfSteps(-123) },
+            new object[] { "-123  ", Interval.FromHalfSteps(-123) },
+            new object[] { "P5", Interval.Get(IntervalQuality.Perfect, 5) },
+            new object[] { "m3", Interval.Get(IntervalQuality.Minor, 3) },
+            new object[] { "M3", Interval.Get(IntervalQuality.Major, 3) },
+            new object[] { "D21", Interval.Get(IntervalQuality.Diminished, 21) },
+            new object[] { "  D21", Interval.Get(IntervalQuality.Diminished, 21) },
+            new object[] { "d8", Interval.Get(IntervalQuality.Diminished, 8) },
+            new object[] { "A7", Interval.Get(IntervalQuality.Augmented, 7) },
+            new object[] { "a18", Interval.Get(IntervalQuality.Augmented, 18) },
+        };
+
+        private static readonly object[] ParseData_Invalid = new[]
+        {
+            new object[] { "777" },
+            new object[] { "++8" },
+            new object[] { "+239" },
+            new object[] { "+ 8" },
+            new object[] { "x7" },
+            new object[] { "7y" },
+            new object[] { "abc" },
+            new object[] { "--123" },
+            new object[] { "10+" },
+            new object[] { "10-" },
+            new object[] { "92399999999999999999999" },
+            new object[] { "P0" },
+            new object[] { "P-1" },
+            new object[] { "M0" },
         };
 
         #endregion
@@ -78,69 +115,6 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
         public void CheckReferences()
         {
             ClassicAssert.AreSame(Interval.FromHalfSteps(10), Interval.FromHalfSteps(10));
-        }
-
-        [Test]
-        [Description("Parse valid positive interval without leading sign (+).")]
-        public void Parse_Valid_Positive_WithoutLeadingSign()
-        {
-            Parse("7", Interval.FromHalfSteps(7));
-        }
-
-        [Test]
-        [Description("Parse valid positive interval with leading sign (+).")]
-        public void Parse_Valid_Positive_WithLeadingSign()
-        {
-            Parse("+8", Interval.FromHalfSteps(8));
-        }
-
-        [Test]
-        [Description("Parse valid interval of zero half steps.")]
-        public void Parse_Valid_Zero()
-        {
-            Parse("0", Interval.FromHalfSteps(0));
-        }
-
-        [Test]
-        [Description("Parse valid negative interval.")]
-        public void Parse_Valid_Negative()
-        {
-            Parse("-123", Interval.FromHalfSteps(-123));
-        }
-
-        [Test]
-        [Description("Parse invalid interval where an input string is empty.")]
-        public void Parse_Invalid_EmptyInputString()
-        {
-            ParseInvalid<ArgumentException>(string.Empty);
-        }
-
-        [Test]
-        [Description("Parse invalid positive interval where half steps number is out of range.")]
-        public void Parse_Invalid_Positive_OutOfRange()
-        {
-            ParseInvalid<FormatException>("+239");
-        }
-
-        [Test]
-        [Description("Parse invalid negative interval where half steps number is out of range.")]
-        public void Parse_Invalid_Negative_OutOfRange()
-        {
-            ParseInvalid<FormatException>("-9239");
-        }
-
-        [Test]
-        [Description("Parse invalid positive interval where half steps number is out of int range.")]
-        public void Parse_Invalid_Positive_OutOfIntegerRange()
-        {
-            ParseInvalid<FormatException>("92399999999999999999999");
-        }
-
-        [Test]
-        [Description("Parse invalid interval where an input string doesn't represent an interval.")]
-        public void Parse_Invalid_NotAnInterval()
-        {
-            ParseInvalid<FormatException>("abc");
         }
 
         [TestCase(1, true)]
@@ -232,19 +206,36 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
             }
         }
 
-        [TestCase("P5", IntervalQuality.Perfect, 5)]
-        [TestCase("m3", IntervalQuality.Minor, 3)]
-        [TestCase("M3", IntervalQuality.Major, 3)]
-        [TestCase("D21", IntervalQuality.Diminished, 21)]
-        [TestCase("d8", IntervalQuality.Diminished, 8)]
-        [TestCase("A7", IntervalQuality.Augmented, 7)]
-        [TestCase("a18", IntervalQuality.Augmented, 18)]
-        public void Parse_QualityNumber(string input, IntervalQuality expectedIntervalQuality, int expectedIntervalNumber)
+        [TestCaseSource(nameof(ParseData_Valid))]
+        public void Parse_Valid(string input, Interval expectedInterval)
         {
             var parsedInterval = Interval.Parse(input);
-            var expectedInterval = Interval.Get(expectedIntervalQuality, expectedIntervalNumber);
             ClassicAssert.AreEqual(expectedInterval, parsedInterval, "Parsed interval is invalid.");
         }
+
+        [TestCaseSource(nameof(ParseData_Valid))]
+        public void TryParse_Valid(string input, Interval expectedInterval)
+        {
+            var parsedInterval = Interval.TryParse(input, out var interval);
+            ClassicAssert.IsTrue(parsedInterval, "Interval parsing failed.");
+            ClassicAssert.AreEqual(expectedInterval, interval, "Parsed interval is invalid.");
+        }
+
+        [TestCaseSource(nameof(ParseData_Invalid))]
+        public void Parse_Invalid(string input) =>
+            Assert.Throws<FormatException>(() => Interval.Parse(input));
+
+        [TestCaseSource(nameof(ParseData_Invalid))]
+        public void TryParse_Invalid(string input)=>
+            ClassicAssert.IsFalse(Interval.TryParse(input, out var interval), "Interval parsing should have failed.");
+
+        [Test]
+        public void Parse_Invalid_EmptyOrNull([Values(null, "", "  ")] string input) =>
+            ClassicAssert.Throws<ArgumentException>(() => Interval.Parse(input), "Interval parsing did not throw an exception.");
+
+        [Test]
+        public void TryParse_Invalid_EmptyOrNull([Values(null, "", "  ")] string input) =>
+            ClassicAssert.IsFalse(Interval.TryParse(input, out var interval), $"Parsed invalid value '{input}'.");
 
         [TestCase(0, new object[] { new object[] { 1, IntervalQuality.Perfect }, new object[] { 2, IntervalQuality.Diminished } })]
         [TestCase(1, new object[] { new object[] { 2, IntervalQuality.Minor }, new object[] { 1, IntervalQuality.Augmented } })]

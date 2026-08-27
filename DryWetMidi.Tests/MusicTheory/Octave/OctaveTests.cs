@@ -9,25 +9,59 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
     [TestFixture]
     public sealed class OctaveTests
     {
+        private static readonly object[] ParseData_Valid = new[]
+        {
+            new object[] { "5", Octave.Get(5) },
+            new object[] { "3", Octave.Get(3) },
+            new object[] { "3  ", Octave.Get(3) },
+            new object[] { "-1", Octave.Get(-1) },
+            new object[] { "+1", Octave.Get(1) },
+            new object[] { "9", Octave.Get(9) },
+            new object[] { "  9 ", Octave.Get(9) },
+        };
+
+        private static readonly object[] ParseData_Invalid = new[]
+        {
+            new object[] { "-2" },
+            new object[] { "23" },
+            new object[] { "10" },
+            new object[] { "0 9" },
+            new object[] { "a1" },
+            new object[] { "1a" },
+            new object[] { "abc" },
+        };
+
         #region Test methods
 
-        [TestCase("-2")]
-        [TestCase("23")]
-        public void Parse_Invalid(string input)
-        {
-            ClassicAssert.Throws<FormatException>(() => Octave.Parse(input), "Invalid octave parsed.");
-        }
-
-        [TestCase("5", 5)]
-        [TestCase("3", 3)]
-        [TestCase("-1", -1)]
-        [TestCase("9", 9)]
-        public void Parse(string input, int expectedOctaveNumber)
+        [TestCaseSource(nameof(ParseData_Valid))]
+        public void Parse_Valid(string input, Octave expectedOctave)
         {
             var parsedOctave = Octave.Parse(input);
-            var expectedOctave = Octave.Get(expectedOctaveNumber);
             ClassicAssert.AreEqual(expectedOctave, parsedOctave, "Parsed octave is invalid.");
         }
+
+        [TestCaseSource(nameof(ParseData_Valid))]
+        public void TryParse_Valid(string input, Octave expectedOctave)
+        {
+            ClassicAssert.IsTrue(Octave.TryParse(input, out var octave), "Octave was not parsed successfully.");
+            ClassicAssert.AreEqual(expectedOctave, octave, "Parsed octave is invalid.");
+        }
+
+        [TestCaseSource(nameof(ParseData_Invalid))]
+        public void Parse_Invalid(string input) =>
+            ClassicAssert.Throws<FormatException>(() => Octave.Parse(input), "Invalid octave parsed.");
+
+        [TestCaseSource(nameof(ParseData_Invalid))]
+        public void TryParse_Invalid(string input) =>
+            ClassicAssert.IsFalse(Octave.TryParse(input, out var octave), "Octave was parsed successfully.");
+
+        [Test]
+        public void Parse_Invalid_EmptyOrNull([Values(null, "", "  ")] string input) =>
+            ClassicAssert.Throws<ArgumentException>(() => Octave.Parse(input), "Octave parsing did not throw an exception.");
+
+        [Test]
+        public void TryParse_Invalid_EmptyOrNull([Values(null, "", "  ")] string input) =>
+            ClassicAssert.IsFalse(Octave.TryParse(input, out var octave), $"Parsed invalid value '{input}'.");
 
         [Test]
         public void GetOctavesFromDifferentThreads()

@@ -11,6 +11,55 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
     [TestFixture]
     public sealed class ChordTests
     {
+        private static readonly object[] ParseData_Valid = new[]
+        {
+            new object[] { "C", new[] { NoteName.C, NoteName.E, NoteName.G } },
+            new object[] { "  C", new[] { NoteName.C, NoteName.E, NoteName.G } },
+            new object[] { "C6", new[] { NoteName.C, NoteName.E, NoteName.G, NoteName.A } },
+            new object[] { "C7", new[] { NoteName.C, NoteName.E, NoteName.G, NoteName.ASharp } },
+            new object[] { "Caug", new[] { NoteName.C, NoteName.E, NoteName.GSharp } },
+            new object[] { "Caug7", new[] { NoteName.C, NoteName.E, NoteName.GSharp, NoteName.ASharp } },
+            new object[] { "Cm", new[] { NoteName.C, NoteName.DSharp, NoteName.G } },
+            new object[] { "Am", new[] { NoteName.A, NoteName.C, NoteName.E } },
+            new object[] { "Cm", new[] { NoteName.C, NoteName.DSharp, NoteName.G } },
+            new object[] { "C m6", new[] { NoteName.C, NoteName.DSharp, NoteName.G, NoteName.A } },
+            new object[] { "Cm7", new[] { NoteName.C, NoteName.DSharp, NoteName.G, NoteName.ASharp } },
+            new object[] { "CmM7", new[] { NoteName.C, NoteName.DSharp, NoteName.G, NoteName.B } },
+            new object[] { "Cdim", new[] { NoteName.C, NoteName.DSharp, NoteName.FSharp } },
+            new object[] { "Cdim7", new[] { NoteName.C, NoteName.DSharp, NoteName.FSharp, NoteName.A } },
+            new object[] { "Cm7b5", new[] { NoteName.C, NoteName.DSharp, NoteName.FSharp, NoteName.ASharp } },
+            new object[] { "C5", new[] { NoteName.C, NoteName.G } },
+            new object[] { "Csus4", new[] { NoteName.C, NoteName.F, NoteName.G } },
+            new object[] { "Csus2", new[] { NoteName.C, NoteName.D, NoteName.G } },
+            new object[] { "C9", new[] { NoteName.C, NoteName.E, NoteName.G, NoteName.ASharp, NoteName.D } },
+            new object[] { "C9sus4", new[] { NoteName.C, NoteName.F, NoteName.G, NoteName.ASharp, NoteName.D } },
+            new object[] { "F/G", new[] { NoteName.G, NoteName.F, NoteName.A, NoteName.C } },
+            new object[] { "F / G", new[] { NoteName.G, NoteName.F, NoteName.A, NoteName.C } },
+            new object[] { "C11", new[] { NoteName.C, NoteName.E, NoteName.G, NoteName.ASharp, NoteName.D, NoteName.F } },
+            new object[] { "Cm11", new[] { NoteName.C, NoteName.DSharp, NoteName.G, NoteName.ASharp, NoteName.D, NoteName.F } },
+            new object[] { "C7b5", new[] { NoteName.C, NoteName.E, NoteName.FSharp, NoteName.ASharp } },
+            new object[] { "Cadd9", new[] { NoteName.C, NoteName.E, NoteName.G, NoteName.D } },
+            new object[] { "CmAdd9", new[] { NoteName.C, NoteName.DSharp, NoteName.G, NoteName.D } },
+            new object[] { "C6/9", new[] { NoteName.C, NoteName.E, NoteName.G, NoteName.A, NoteName.D } },
+            new object[] { "Cm6/9", new[] { NoteName.C, NoteName.DSharp, NoteName.G, NoteName.A, NoteName.D } },
+        };
+
+        private static readonly object[] ParseData_Invalid = new[]
+        {
+            new object[] { "X" },
+            new object[] { "Cc" },
+            new object[] { "C66" },
+            new object[] { "aC7" },
+            new object[] { "Caugg" },
+            new object[] { "C_aug_7" },
+            new object[] { "C-m" },
+            new object[] { "aam" },
+            new object[] { "cC" },
+            new object[] { "something" },
+            new object[] { "87" },
+            new object[] { "M7" },
+        };
+
         #region Test methods
 
         [Test]
@@ -82,38 +131,35 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
             CollectionAssert.AreEqual(expectedNotesNames, chord.NotesNames, "Notes names are invalid.");
         }
 
-        [TestCase("C", new[] { NoteName.C, NoteName.E, NoteName.G })]
-        [TestCase("C6", new[] { NoteName.C, NoteName.E, NoteName.G, NoteName.A })]
-        [TestCase("C7", new[] { NoteName.C, NoteName.E, NoteName.G, NoteName.ASharp })]
-        [TestCase("Caug", new[] { NoteName.C, NoteName.E, NoteName.GSharp })]
-        [TestCase("Caug7", new[] { NoteName.C, NoteName.E, NoteName.GSharp, NoteName.ASharp })]
-        [TestCase("Cm", new[] { NoteName.C, NoteName.DSharp, NoteName.G })]
-        [TestCase("Am", new[] { NoteName.A, NoteName.C, NoteName.E })]
-        [TestCase("Cm", new[] { NoteName.C, NoteName.DSharp, NoteName.G })]
-        [TestCase("Cm6", new[] { NoteName.C, NoteName.DSharp, NoteName.G, NoteName.A })]
-        [TestCase("Cm7", new[] { NoteName.C, NoteName.DSharp, NoteName.G, NoteName.ASharp })]
-        [TestCase("CmM7", new[] { NoteName.C, NoteName.DSharp, NoteName.G, NoteName.B })]
-        [TestCase("Cdim", new[] { NoteName.C, NoteName.DSharp, NoteName.FSharp })]
-        [TestCase("Cdim7", new[] { NoteName.C, NoteName.DSharp, NoteName.FSharp, NoteName.A })]
-        [TestCase("Cm7b5", new[] { NoteName.C, NoteName.DSharp, NoteName.FSharp, NoteName.ASharp })]
-        [TestCase("C5", new[] { NoteName.C, NoteName.G })]
-        [TestCase("Csus4", new[] { NoteName.C, NoteName.F, NoteName.G })]
-        [TestCase("Csus2", new[] { NoteName.C, NoteName.D, NoteName.G })]
-        [TestCase("C9", new[] { NoteName.C, NoteName.E, NoteName.G, NoteName.ASharp, NoteName.D })]
-        [TestCase("C9sus4", new[] { NoteName.C, NoteName.F, NoteName.G, NoteName.ASharp, NoteName.D })]
-        [TestCase("F/G", new[] { NoteName.G, NoteName.F, NoteName.A, NoteName.C })]
-        [TestCase("C11", new[] { NoteName.C, NoteName.E, NoteName.G, NoteName.ASharp, NoteName.D, NoteName.F })]
-        [TestCase("Cm11", new[] { NoteName.C, NoteName.DSharp, NoteName.G, NoteName.ASharp, NoteName.D, NoteName.F })]
-        [TestCase("C7b5", new[] { NoteName.C, NoteName.E, NoteName.FSharp, NoteName.ASharp })]
-        [TestCase("Cadd9", new[] { NoteName.C, NoteName.E, NoteName.G, NoteName.D })]
-        [TestCase("CmAdd9", new[] { NoteName.C, NoteName.DSharp, NoteName.G, NoteName.D })]
-        [TestCase("C6/9", new[] { NoteName.C, NoteName.E, NoteName.G, NoteName.A, NoteName.D })]
-        [TestCase("Cm6/9", new[] { NoteName.C, NoteName.DSharp, NoteName.G, NoteName.A, NoteName.D })]
-        public void Parse(string input, NoteName[] expectedNotesNames)
+        [TestCaseSource(nameof(ParseData_Valid))]
+        public void Parse_Valid(string input, NoteName[] expectedNotesNames)
         {
             var chord = Chord.Parse(input);
             CollectionAssert.AreEqual(expectedNotesNames, chord.NotesNames, "Notes names are invalid.");
         }
+
+        [TestCaseSource(nameof(ParseData_Valid))]
+        public void TryParse_Valid(string input, NoteName[] expectedNotesNames)
+        {
+            ClassicAssert.IsTrue(Chord.TryParse(input, out var chord), "Chord parsing failed.");
+            CollectionAssert.AreEqual(expectedNotesNames, chord.NotesNames, "Notes names are invalid.");
+        }
+
+        [TestCaseSource(nameof(ParseData_Invalid))]
+        public void Parse_Invalid(string input) =>
+            ClassicAssert.Throws<FormatException>(() => Chord.Parse(input), "Chord parsing did not throw an exception.");
+
+        [TestCaseSource(nameof(ParseData_Invalid))]
+        public void TryParse_Invalid(string input) =>
+            ClassicAssert.IsFalse(Chord.TryParse(input, out var chord), "Chord parsing succeeded.");
+
+        [Test]
+        public void Parse_Invalid_EmptyOrNull([Values(null, "", "  ")] string input) =>
+            ClassicAssert.Throws<ArgumentException>(() => Chord.Parse(input), "Chord parsing did not throw an exception.");
+
+        [Test]
+        public void TryParse_Invalid_EmptyOrNull([Values(null, "", "  ")] string input) =>
+            ClassicAssert.IsFalse(Chord.TryParse(input, out var chord), $"Parsed invalid value '{input}'.");
 
         [TestCase(new[] { NoteName.C, NoteName.E, NoteName.G }, "C")]
         [TestCase(new[] { NoteName.C, NoteName.G, NoteName.E }, "C")]

@@ -1,117 +1,114 @@
 ﻿using Melanchall.DryWetMidi.Common;
 using System;
-using System.Collections.Generic;
 
 namespace Melanchall.DryWetMidi.Interaction
 {
-    internal static class MusicalTimeSpanParser
+    internal sealed class MusicalTimeSpanParser : SimpleParser<MusicalTimeSpan>
     {
-        #region Constants
-
-        private static readonly Dictionary<string, (int, int)> Fractions = new Dictionary<string, (int, int)>
+        protected override MusicalTimeSpan ParseInternal(ReadOnlySpan<char> input)
         {
-            ["w"] = (1, 1),
-            ["h"] = (1, 2),
-            ["q"] = (1, 4),
-            ["e"] = (1, 8),
-            ["s"] = (1, 16),
-        };
-
-        private static readonly Dictionary<string, (int TupletNotesCount, int TupletSpaceSize)> Tuplets = new Dictionary<string, (int, int)>
-        {
-            ["t"] = (3, 2),
-            ["d"] = (2, 3),
-        };
-
-        private const string NumeratorGroupName = "n";
-        private const string DenominatorGroupName = "d";
-        private const string FractionMnemonicGroupName = "fm";
-
-        private const string TupletNotesCountGroupName = "tn";
-        private const string TupletSpaceSizeGroupName = "ts";
-        private const string TupletMnemonicGroupName = "tm";
-
-        private const string DotsGroupName = "dt";
-
-        private static readonly string FractionGroup = $@"(?<{NumeratorGroupName}>\d+)?\/(?<{DenominatorGroupName}>\d+)";
-        private static readonly string FractionMnemonicGroup = GetMnemonicGroup(FractionMnemonicGroupName, Fractions.Keys);
-
-        private static readonly string TupletGroup = $@"\[\s*(?<{TupletNotesCountGroupName}>\d+)\s*\:\s*(?<{TupletSpaceSizeGroupName}>\d+)\s*\]";
-        private static readonly string TupletMnemonicGroup = GetMnemonicGroup(TupletMnemonicGroupName, Tuplets.Keys);
-
-        private static readonly string DotsGroup = $@"(?<{DotsGroupName}>\.+)";
-
-        private static readonly string[] Patterns = new[]
-        {
-            $@"({FractionGroup}|{FractionMnemonicGroup})\s*({TupletGroup}|{TupletMnemonicGroup})?\s*{DotsGroup}?"
-        };
-
-        private const string NumeratorIsOutOfRange = "Numerator is out of range.";
-        private const string DenominatorIsOutOfRange = "Denominator is out of range.";
-        private const string TupletNotesCountIsOutOfRange = "Tuplet's notes count is out of range.";
-        private const string TupletSpaceSizeIsOutOfRange = "Tuplet's space size is out of range.";
-
-        #endregion
-
-        #region Methods
-
-        internal static ParsingResult TryParse(string? input, out MusicalTimeSpan? timeSpan)
-        {
-            timeSpan = null;
-
-            if (string.IsNullOrWhiteSpace(input))
-                return ParsingResult.EmptyInputString;
-
-            var match = ParsingUtilities.Match(input, Patterns);
-            if (match == null)
-                return ParsingResult.NotMatched;
-
-            // Fraction
-
-            if (!ParsingUtilities.ParseNonnegativeLong(match, NumeratorGroupName, 1, out var numerator))
-                return ParsingResult.Error(NumeratorIsOutOfRange);
-
-            if (!ParsingUtilities.ParseNonnegativeLong(match, DenominatorGroupName, 1, out var denominator))
-                return ParsingResult.Error(DenominatorIsOutOfRange);
-
-            var fractionMnemonicGroup = match.Groups[FractionMnemonicGroupName];
-            if (fractionMnemonicGroup.Success)
+            var (numerator, denominator) = input[0] switch
             {
-                var fraction = Fractions[fractionMnemonicGroup.Value];
-                numerator = fraction.Item1;
-                denominator = fraction.Item2;
+                'w' => (1L, 1L),
+                'h' => (1L, 2L),
+                'q' => (1L, 4L),
+                'e' => (1L, 8L),
+                's' => (1L, 16L),
+                _ => (0L, 0L)
+            };
+
+            if (numerator > 0)
+            {
+                input = input.Slice(1).Trim();
             }
+            else
+            {
+                var dividerIndex = input.IndexOf('/');
+                if (dividerIndex < 0)
+                    ThrowInvalidFormatError();
 
-            // Tuplet
+                numerator = 1;
+                if (dividerIndex > 0 && !long.TryParse(input.Slice(0, dividerIndex).Trim(), out numerator))
+                    ThrowInvalidFormatError();
 
-            if (!ParsingUtilities.ParseNonnegativeInt(match, TupletNotesCountGroupName, 1, out var tupletNotesCount))
-                return ParsingResult.Error(TupletNotesCountIsOutOfRange);
+                var i = dividerIndex + 1;
 
-            if (!ParsingUtilities.ParseNonnegativeInt(match, TupletSpaceSizeGroupName, 1, out var tupletSpaceSize))
-                return ParsingResult.Error(TupletSpaceSizeIsOutOfRange);
+                for (; i < input.Length && char.IsWhiteSpace(input[i]); i++) { }
+                for (; i < input.Length && char.IsDigit(input[i]); i++) { }
 
-            var tupletMnemonicGroup = match.Groups[TupletMnemonicGroupName];
-            if (tupletMnemonicGroup.Success)
-                (tupletNotesCount, tupletSpaceSize) = Tuplets[tupletMnemonicGroup.Value];
+                if (!long.TryParse(input.Slice(dividerIndex + 1, i - dividerIndex - 1).Trim(), out denominator))
+                    ThrowInvalidFormatError();
 
-            // Dots
-
-            var dotsGroup = match.Groups[DotsGroupName];
-            var dots = dotsGroup.Success
-                ? dotsGroup.Value.Length
-                : 0;
+                input = input.Slice(i).Trim();
+            }
 
             //
 
-            timeSpan = new MusicalTimeSpan(numerator, denominator).Dotted(dots).Tuplet(tupletNotesCount, tupletSpaceSize);
-            return ParsingResult.Parsed;
-        }
+            if (denominator == 0)
+                ThrowInvalidFormatError();
 
-        private static string GetMnemonicGroup(string groupName, IEnumerable<string> mnemonics)
-        {
-            return $"(?<{groupName}>[{string.Join(string.Empty, mnemonics)}])";
-        }
+            if (input.IsEmpty)
+                return new MusicalTimeSpan(numerator, denominator);
 
-        #endregion
+            //
+
+            var (tupletNotesCount, tupletSpaceSize) = input[0] switch
+            {
+                't' => (3, 2),
+                'd' => (2, 3),
+                _ => (0, 0)
+            };
+
+            if (tupletNotesCount > 0)
+            {
+                input = input.Slice(1).Trim();
+            }
+            else if (input[0] == '[')
+            {
+                var endIndex = input.IndexOf(']');
+                if (endIndex < 0 || endIndex == 1)
+                    ThrowInvalidFormatError();
+
+                var tupletSpan = input.Slice(1, endIndex - 1).Trim();
+                var tupletDividerIndex = tupletSpan.IndexOf(':');
+                if (tupletDividerIndex < 0)
+                    ThrowInvalidFormatError();
+
+                if (!int.TryParse(tupletSpan.Slice(0, tupletDividerIndex).Trim(), out tupletNotesCount) || tupletNotesCount < 1)
+                    ThrowInvalidFormatError();
+
+                if (!int.TryParse(tupletSpan.Slice(tupletDividerIndex + 1).Trim(), out tupletSpaceSize) || tupletSpaceSize < 1)
+                    ThrowInvalidFormatError();
+
+                input = input.Slice(endIndex + 1).Trim();
+            }
+            else
+            {
+                tupletNotesCount = 1;
+                tupletSpaceSize = 1;
+            }
+
+            //
+
+            if (input.IsEmpty)
+                return new MusicalTimeSpan(numerator, denominator).Tuplet(tupletNotesCount, tupletSpaceSize);
+
+            //
+
+            var dotsCount = 0;
+            while (dotsCount < input.Length && input[dotsCount] == '.')
+            {
+                dotsCount++;
+            }
+
+            //
+
+            if (dotsCount < input.Length)
+                ThrowInvalidFormatError();
+
+            //
+
+            return new MusicalTimeSpan(numerator, denominator).Dotted(dotsCount).Tuplet(tupletNotesCount, tupletSpaceSize);
+        }
     }
 }

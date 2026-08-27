@@ -79,6 +79,43 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             new object[] { 1.0 / 4, 1, new MusicalTimeSpan(0, 1) },
         };
 
+        private static readonly object[] ParseData_Valid = new[]
+        {
+            new object[] { "0/1", new MusicalTimeSpan(0, 1) },
+            new object[] { "0 / 1", new MusicalTimeSpan(0, 1) },
+            new object[] { "q", MusicalTimeSpan.Quarter },
+            new object[] { "1/4.", MusicalTimeSpan.Quarter.SingleDotted() },
+            new object[] { "  1/4  .", MusicalTimeSpan.Quarter.SingleDotted() },
+            new object[] { "  1/8.", MusicalTimeSpan.Eighth.SingleDotted() },
+            new object[] { "/8..", MusicalTimeSpan.Eighth.DoubleDotted() },
+            new object[] { "wt.", MusicalTimeSpan.Whole.Triplet().SingleDotted() },
+            new object[] { "w[3:10]", MusicalTimeSpan.Whole.Tuplet(3, 10) },
+            new object[] { "1/1 [3:10]", MusicalTimeSpan.Whole.Tuplet(3, 10) },
+            new object[] { "s[3:10]...", MusicalTimeSpan.Sixteenth.Tuplet(3, 10).Dotted(3) },
+        };
+
+        private static readonly object[] ParseData_Invalid = new[]
+        {
+            new object[] { "invalid" },
+            new object[] { "1/0" },
+            new object[] { "t" },
+            new object[] { "..1/8" },
+            new object[] { ".e" },
+            new object[] { "www" },
+            new object[] { "9[5:a]" },
+            new object[] { "100" },
+            new object[] { "10." },
+            new object[] { "[1:2]" },
+            new object[] { "[10 : c]" },
+            new object[] { "1 / 4...[3:2]" },
+            new object[] { "e[" },
+            new object[] { "e[1" },
+            new object[] { "e[1:" },
+            new object[] { "e6:9]" },
+            new object[] { "e[:]" },
+            new object[] { "...." },
+        };
+
         #endregion
 
         #region Test methods
@@ -364,54 +401,35 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
         #region Parse
 
-        [Test]
-        [Description("Parse zero musical time span.")]
-        public void Parse_1()
+        [TestCaseSource(nameof(ParseData_Valid))]
+        public void Parse_Valid(string s, MusicalTimeSpan expectedTimeSpan)
         {
-            TimeSpanTestUtilities.Parse("0/1", new MusicalTimeSpan(0, 1));
+            ClassicAssert.AreEqual(expectedTimeSpan, MusicalTimeSpan.Parse(s), $"Invalid time span parsed for '{s}'.");
+            TimeSpanTestUtilities.Parse(s, expectedTimeSpan);
         }
 
-        [Test]
-        [Description("Parse quarter musical time span.")]
-        public void Parse_2()
+        [TestCaseSource(nameof(ParseData_Valid))]
+        public void TryParse_Valid(string s, MusicalTimeSpan expectedTimeSpan)
         {
-            TimeSpanTestUtilities.Parse("q", MusicalTimeSpan.Quarter);
+            ClassicAssert.IsTrue(MusicalTimeSpan.TryParse(s, out var actualTimeSpan), $"Failed to parse '{s}'.");
+            ClassicAssert.AreEqual(expectedTimeSpan, actualTimeSpan, $"Incorrect parsed value for '{s}'.");
         }
 
-        [Test]
-        [Description("Parse single dotted quarter musical time span.")]
-        public void Parse_3()
-        {
-            TimeSpanTestUtilities.Parse("1/4.", MusicalTimeSpan.Quarter.SingleDotted());
-        }
+        [TestCaseSource(nameof(ParseData_Invalid))]
+        public void Parse_Invalid(string s) =>
+            ClassicAssert.Throws<FormatException>(() => MusicalTimeSpan.Parse(s));
+
+        [TestCaseSource(nameof(ParseData_Invalid))]
+        public void TryParse_Invalid(string s) =>
+            ClassicAssert.IsFalse(MusicalTimeSpan.TryParse(s, out _), $"Parsed invalid value '{s}'.");
 
         [Test]
-        [Description("Parse double dotted eight musical time span.")]
-        public void Parse_4()
-        {
-            TimeSpanTestUtilities.Parse("/8..", MusicalTimeSpan.Eighth.DoubleDotted());
-        }
+        public void Parse_Invalid_EmptyOrNull([Values(null, "", "  ")] string s) =>
+            ClassicAssert.Throws<ArgumentException>(() => MusicalTimeSpan.Parse(s));
 
         [Test]
-        [Description("Parse single dotted triplet whole musical time span.")]
-        public void Parse_5()
-        {
-            TimeSpanTestUtilities.Parse("wt.", MusicalTimeSpan.Whole.Triplet().SingleDotted());
-        }
-
-        [Test]
-        [Description("Parse tuplet whole musical time span where tuplet is 3 notes in space of 10 ones.")]
-        public void Parse_6()
-        {
-            TimeSpanTestUtilities.Parse("w[3:10]", MusicalTimeSpan.Whole.Tuplet(3, 10));
-        }
-
-        [Test]
-        [Description("Parse triple dotted tuplet sixteenth musical time span where tuplet is 3 notes in space of 10 ones.")]
-        public void Parse_7()
-        {
-            TimeSpanTestUtilities.Parse("s[3:10]...", MusicalTimeSpan.Sixteenth.Tuplet(3, 10).Dotted(3));
-        }
+        public void TryParse_Invalid_EmptyOrNull([Values(null, "", "  ")] string s) =>
+            ClassicAssert.IsFalse(MusicalTimeSpan.TryParse(s, out _), $"Parsed invalid value '{s}'.");
 
         #endregion
 

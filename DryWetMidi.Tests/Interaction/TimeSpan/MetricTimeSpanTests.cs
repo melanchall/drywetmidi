@@ -1,8 +1,9 @@
-﻿using System;
-using System.Linq;
-using Melanchall.DryWetMidi.Interaction;
+﻿using Melanchall.DryWetMidi.Interaction;
 using NUnit.Framework;
 using NUnit.Framework.Legacy;
+using System;
+using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace Melanchall.DryWetMidi.Tests.Interaction
 {
@@ -54,14 +55,14 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             (new MetricTimeSpan(10000), new MetricTimeSpan(10000)),
         };
 
-        private static readonly object[] ParametersForValidParseCheck =
+        private static readonly object[] ParseData_Valid =
         {
             new object[] { "0:0:0:0", new MetricTimeSpan() },
-            new object[] { "0:0:0", new MetricTimeSpan() },
+            new object[] { "0 :0:0", new MetricTimeSpan() },
             new object[] { "0:0", new MetricTimeSpan() },
-            new object[] { "0:0:0:156", new MetricTimeSpan(0, 0, 0, 156) },
-            new object[] { "2:0:156", new MetricTimeSpan(2, 0, 156) },
-            new object[] { "1:156", new MetricTimeSpan(0, 1, 156) },
+            new object[] { "  0: 0:0:156", new MetricTimeSpan(0, 0, 0, 156) },
+            new object[] { "2:0:156 ", new MetricTimeSpan(2, 0, 156) },
+            new object[] { "1:  156", new MetricTimeSpan(0, 1, 156) },
 
             new object[] { "1h2m3s4ms", new MetricTimeSpan(1, 2, 3, 4) },
             new object[] { "1h 2m3s", new MetricTimeSpan(1, 2, 3, 0) },
@@ -74,6 +75,55 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             new object[] { "2M3s", new MetricTimeSpan(0, 2, 3, 0) },
             new object[] { "2 m 4 Ms", new MetricTimeSpan(0, 2, 0, 4) },
             new object[] { "3 s 4 mS", new MetricTimeSpan(0, 0, 3, 4) },
+
+            new object[] { "1:2:3:4", new MetricTimeSpan(1, 2, 3, 4) },
+            new object[] { "1:2:3", new MetricTimeSpan(1, 2, 3, 0) },
+            new object[] { "2:3", new MetricTimeSpan(0, 2, 3, 0) },
+            new object[] { "1h2m3s4ms", new MetricTimeSpan(1, 2, 3, 4) },
+            new object[] { "1h2m3s", new MetricTimeSpan(1, 2, 3, 0) },
+            new object[] { "1h2m3ms", new MetricTimeSpan(1, 2, 0, 3) },
+            new object[] { "1h2s3ms", new MetricTimeSpan(1, 0, 2, 3) },
+            new object[] { "1m2s3ms", new MetricTimeSpan(0, 1, 2, 3) },
+            new object[] { "1h2m", new MetricTimeSpan(1, 2, 0, 0) },
+            new object[] { "1h2s", new MetricTimeSpan(1, 0, 2, 0) },
+            new object[] { "1h2ms", new MetricTimeSpan(1, 0, 0, 2) },
+            new object[] { "1m2s", new MetricTimeSpan(0, 1, 2, 0) },
+            new object[] { "1h2ms", new MetricTimeSpan(1, 0, 0, 2) },
+            new object[] { "1s2ms", new MetricTimeSpan(0, 0, 1, 2) },
+            new object[] { "1h", new MetricTimeSpan(1, 0, 0, 0) },
+            new object[] { "1m", new MetricTimeSpan(0, 1, 0, 0) },
+            new object[] { "1s", new MetricTimeSpan(0, 0, 1, 0) },
+            new object[] { "1ms", new MetricTimeSpan(0, 0, 0, 1) }
+        };
+
+        private static readonly object[] ParseData_Invalid =
+        {
+            new object[] { "0:::" },
+            new object[] { ":0:0" },
+            new object[] { "abc" },
+            new object[] { "a:b:c" },
+            new object[] { "1:156.9" },
+
+            new object[] { "1h2m3s4ms4ms" },
+            new object[] { "1h 2m2m3s" },
+            new object[] { "3h1h2M 4ms" },
+            new object[] { "1 h3s4m s" },
+            new object[] { "2 M 3 Ss 4 MS" },
+            new object[] { "1h2mm" },
+            new object[] { "Xh Ys" },
+            new object[] { "h" },
+            new object[] { "ms" },
+            new object[] { "3mss" },
+            new object[] { "30msa" },
+            new object[] { "m" },
+            new object[] { "10 mm" },
+            new object[] { "s" },
+
+            new object[] { "a1:2:3:4" },
+            new object[] { "1:2b:3" },
+            new object[] { "2c:3" },
+            new object[] { "-1h2m" },
+            new object[] { "-10ms" }
         };
 
         #endregion
@@ -361,19 +411,35 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
         #region Parse
 
-        [TestCaseSource(nameof(ParametersForValidParseCheck))]
-        public void ParseMetricTimeSpan_Valid(string metricTimeSpanString, MetricTimeSpan expectedTimeSpan)
+        [TestCaseSource(nameof(ParseData_Valid))]
+        public void Parse_Valid(string s, MetricTimeSpan expectedTimeSpan)
         {
-            TimeSpanTestUtilities.Parse(metricTimeSpanString, expectedTimeSpan);
+            ClassicAssert.AreEqual(expectedTimeSpan, MetricTimeSpan.Parse(s), $"Invalid time span parsed for '{s}'.");
+            TimeSpanTestUtilities.Parse(s, expectedTimeSpan);
         }
 
-        [TestCase("Not a time span")]
-        [TestCase("h H")]
-        [TestCase("m s")]
-        public void ParseMetricTimeSpan_InvalidInput(string invalidMetricTimeSpanString)
+        [TestCaseSource(nameof(ParseData_Valid))]
+        public void TryParse_Valid(string s, MetricTimeSpan expectedTimeSpan)
         {
-            TimeSpanTestUtilities.ParseInvalidInput(invalidMetricTimeSpanString);
+            ClassicAssert.IsTrue(MetricTimeSpan.TryParse(s, out var actualTimeSpan), $"Failed to parse '{s}'.");
+            ClassicAssert.AreEqual(expectedTimeSpan, actualTimeSpan, $"Incorrect parsed value for '{s}'.");
         }
+
+        [TestCaseSource(nameof(ParseData_Invalid))]
+        public void Parse_Invalid(string s) =>
+            ClassicAssert.Throws<FormatException>(() => MetricTimeSpan.Parse(s));
+
+        [TestCaseSource(nameof(ParseData_Invalid))]
+        public void TryParse_Invalid(string s) =>
+            ClassicAssert.IsFalse(MetricTimeSpan.TryParse(s, out _), $"Parsed invalid value '{s}'.");
+
+        [Test]
+        public void Parse_Invalid_EmptyOrNull([Values(null, "", "  ")] string s) =>
+            ClassicAssert.Throws<ArgumentException>(() => MetricTimeSpan.Parse(s));
+
+        [Test]
+        public void TryParse_Invalid_EmptyOrNull([Values(null, "", "  ")] string s) =>
+            ClassicAssert.IsFalse(MetricTimeSpan.TryParse(s, out _), $"Parsed invalid value '{s}'.");
 
         #endregion
 

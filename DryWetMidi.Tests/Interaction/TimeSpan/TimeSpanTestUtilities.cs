@@ -172,19 +172,22 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
         public static void Parse(string input, ITimeSpan expectedTimeSpan)
         {
-            TimeSpanUtilities.TryParse(input, out var actualTimeSpan);
-            ClassicAssert.AreEqual(expectedTimeSpan,
-                            actualTimeSpan,
-                            $"TryParse: incorrect result for '{input}'.");
+            ClassicAssert.IsTrue(TimeSpanUtilities.TryParse(input, out var actualTimeSpan), $"TryParse: failed for '{input}'.");
+            ClassicAssert.AreEqual(
+                expectedTimeSpan,
+                actualTimeSpan,
+                $"TryParse: incorrect result for '{input}'.");
 
             actualTimeSpan = TimeSpanUtilities.Parse(input);
-            ClassicAssert.AreEqual(expectedTimeSpan,
-                            actualTimeSpan,
-                            $"Parse: incorrect result for '{input}'.");
+            ClassicAssert.AreEqual(
+                expectedTimeSpan,
+                actualTimeSpan,
+                $"Parse: incorrect result for '{input}'.");
 
-            ClassicAssert.AreEqual(expectedTimeSpan,
-                            TimeSpanUtilities.Parse(expectedTimeSpan.ToString()),
-                            $"Parse: string representation was not parsed to the original time span for '{input}'.");
+            ClassicAssert.AreEqual(
+                expectedTimeSpan,
+                TimeSpanUtilities.Parse(expectedTimeSpan.ToString()),
+                $"Parse: string representation was not parsed to the original time span for '{input}'.");
         }
 
         public static void ParseInvalidInput(string input)

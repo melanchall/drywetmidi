@@ -1,107 +1,89 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Melanchall.DryWetMidi.Common;
 
 namespace Melanchall.DryWetMidi.MusicTheory
 {
-    internal static class ChordProgressionParser
+    internal sealed class ChordProgressionParser : ParameterizedParser<ChordProgression, Scale>
     {
-        #region Constants
+        private const string RomanDigits = "IVXLCDM";
 
-        private const char PartsDelimiter = '-';
-        
-        private const string ScaleDegreeGroupName = "sd";
-        private const string AccidentalGroupName = "ac";
-
-        private static readonly string AccidentalGroup = $"(?<{AccidentalGroupName}>b)";
-        private static readonly string ScaleDegreeGroup = $"(?<{ScaleDegreeGroupName}>(?i:M{{0,4}}(CM|CD|D?C{{0,3}})(XC|XL|L?X{{0,3}})(IX|IV|V?I{{0,3}})))";
-
-        private static readonly string[] Patterns = new[]
+        protected override ChordProgression ParseInternal(ReadOnlySpan<char> input, Scale parameter)
         {
-            $@"{AccidentalGroup}?\s*{ScaleDegreeGroup}\s*{ChordParser.ChordCharacteristicsGroup}"
-        };
-
-        private static readonly Dictionary<char, int> RomanMap = new Dictionary<char, int>
-        {
-            ['i'] = 1,
-            ['v'] = 5,
-            ['x'] = 10,
-            ['l'] = 50,
-            ['c'] = 100,
-            ['d'] = 500,
-            ['m'] = 1000
-        };
-
-        #endregion
-
-        #region Methods
-
-        internal static ParsingResult TryParse(string? input, Scale scale, out ChordProgression? chordProgression)
-        {
-            chordProgression = null;
-
-            if (string.IsNullOrWhiteSpace(input))
-                return ParsingResult.EmptyInputString;
-
-            var parts = input.Split(new[] { PartsDelimiter }, global::System.StringSplitOptions.RemoveEmptyEntries);
             var chords = new List<Chord>();
 
-            foreach (var part in parts)
+            while (input.Length > 0)
             {
-                var match = ParsingUtilities.Match(part, Patterns, ignoreCase: false);
-                if (match == null)
-                    return ParsingResult.NotMatched;
+                var delimiterIndex = input.IndexOf('-');
 
-                var degreeGroup = match.Groups[ScaleDegreeGroupName];
-                var degreeRoman = degreeGroup.Value.ToLower();
-                if (string.IsNullOrWhiteSpace(degreeRoman))
-                    continue;
+                var part = delimiterIndex >= 0
+                    ? input.Slice(0, delimiterIndex).Trim()
+                    : input;
 
-                var degree = RomanToInteger(degreeRoman);
-                var rootNoteName = scale.GetStep(degree - 1);
+                if (part.IsEmpty)
+                    ThrowInvalidFormatError();
 
-                var accidentalGroup = match.Groups[AccidentalGroupName];
-                if (accidentalGroup.Success)
+                var b = part[0] == 'b';
+
+                var span = part.Slice(b ? 1 : 0).Trim();
+                var romanLength = 0;
+
+                while (romanLength < span.Length && RomanDigits.Contains(span[romanLength]))
                 {
-                    var accidental = accidentalGroup.Value;
-                    if (accidental == "b")
-                        rootNoteName = (NoteName)(((int)rootNoteName + Octave.OctaveSize - 1) % Octave.OctaveSize);
+                    romanLength++;
                 }
 
-                var fullString = match.Value;
-                var matchIndex = match.Index;
-                var degreeGroupIndex = degreeGroup.Index;
+                if (romanLength == 0)
+                    ThrowInvalidFormatError();
+
+                var degree = RomanToInteger(span.Slice(0, romanLength).ToString());
+                var rootNoteName = parameter.GetStep(degree - 1);
+
+                if (b)
+                    rootNoteName = (NoteName)(((int)rootNoteName + Octave.OctaveSize - 1) % Octave.OctaveSize);
+
                 var chordString =
-                    fullString.Substring(0, degreeGroupIndex - matchIndex - (accidentalGroup.Success ? accidentalGroup.Length : 0)) +
                     rootNoteName +
-                    fullString.Substring(degreeGroupIndex - matchIndex + degreeGroup.Length);
+                    span.Slice(romanLength).ToString();
 
-                var chordParsingResult = ChordParser.TryParse(chordString, out var chord);
-                if (chordParsingResult.Status != ParsingStatus.Parsed)
-                    return chordParsingResult;
+                var chord = MusicTheoryParsers.ChordParser.Parse(chordString);
+                chords.Add(chord);
 
-                if (chord != null)
-                    chords.Add(chord);
+                if (delimiterIndex < 0)
+                    break;
+
+                input = input.Slice(delimiterIndex + 1).Trim();
+                if (input.IsEmpty)
+                    ThrowInvalidFormatError();
             }
 
-            chordProgression = new ChordProgression(chords);
-            return ParsingResult.Parsed;
+            return new ChordProgression(chords);
         }
 
         private static int RomanToInteger(string roman)
         {
             var number = 0;
 
-            for (int i = 0; i < roman.Length; i++)
+            for (var i = 0; i < roman.Length; i++)
             {
-                if (i + 1 < roman.Length && RomanMap[roman[i]] < RomanMap[roman[i + 1]])
-                    number -= RomanMap[roman[i]];
+                if (i + 1 < roman.Length && GetRomanValue(roman[i]) < GetRomanValue(roman[i + 1]))
+                    number -= GetRomanValue(roman[i]);
                 else
-                    number += RomanMap[roman[i]];
+                    number += GetRomanValue(roman[i]);
             }
 
             return number;
         }
 
-        #endregion
+        private static int GetRomanValue(char c) => c switch
+        {
+            'I' => 1,
+            'V' => 5,
+            'X' => 10,
+            'L' => 50,
+            'C' => 100,
+            'D' => 500,
+            'M' => 1000,
+        };
     }
 }

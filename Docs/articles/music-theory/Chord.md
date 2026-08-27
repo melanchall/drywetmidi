@@ -85,7 +85,7 @@ Following table shows what chords are currently supported for parsing from strin
 |`minMaj7(9)`<br/>`mM7(9)`|`0 3 7 11 14`<br/>`0 3 11 14`|
 |`5`|`0 7`|
 |`7b5`<br/>`dom7dim5`<br/>`7dim5`|`0 4 6 10`|
-|`ø`<br/>`ø7`<br/>`m7b5`<br/>`min7dim5`<br/>`m7dim5`<br/>`min7b5`<br/>`m7b5`|`0 3 6 10`|
+|`ø`<br/>`ø7`<br/>`m7b5`<br/>`min7dim5`<br/>`m7dim5`<br/>`min7b5`|`0 3 6 10`|
 |`aug7`<br/>`7#5`<br/>`7+5`|`0 4 8 10`|
 |`dim7`|`0 3 6 9`|
 |`add9`|`0 4 7 14`|
@@ -108,9 +108,9 @@ Following table shows what chords are currently supported for parsing from strin
 |`min13no9`<br/>`m13no9`|`0 3 7 10 21`|
 |`ø9`<br/>`m9b5`<br/>`min9b5`|`0 3 6 10 14`|
 |`9#5`<br/>`aug9`<br/>`9+5`|`0 4 8 10 14`|
-|`13`<br/>`dom13`|`0 4 7 10 14 21`|
+|`13`<br/>`dom13`|`0 4 7 10 14 21`<br/>`0 4 7 10 14 17 21`|
 |`maj9(11)`<br/>`maj7(9,11)`<br/>`M7(9,11)`|`0 4 7 11 14 17`|
-|`min13`<br/>`m13`|`0 3 7 10 14 21`|
+|`min13`<br/>`m13`|`0 3 7 10 14 21`<br/>`0 3 7 10 14 17 21`|
 |`9b13`<br/>`9(b13)`|`0 4 7 10 14 20`|
 |`minMaj9(11)`<br/>`mM7(9,11)`|`0 3 7 11 14 17`|
 |`maj13`<br/>`M13`|`0 4 7 11 14 17 21`|

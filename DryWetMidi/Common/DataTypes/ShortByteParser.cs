@@ -1,23 +1,24 @@
-﻿namespace Melanchall.DryWetMidi.Common
+﻿using System;
+
+namespace Melanchall.DryWetMidi.Common
 {
-    internal static class ShortByteParser
+    internal sealed class ShortByteParser : SimpleParser<byte>
     {
-        #region Methods
+        private readonly byte _minValue;
+        private readonly byte _maxValue;
 
-        internal static ParsingResult TryParse(string? input, byte minValue, byte maxValue, out byte result)
+        public ShortByteParser(byte minValue, byte maxValue)
         {
-            result = default(byte);
-
-            if (string.IsNullOrWhiteSpace(input))
-                return ParsingResult.EmptyInputString;
-
-            if (!byte.TryParse(input.Trim(), out var tmpResult) || tmpResult < minValue || tmpResult > maxValue)
-                return ParsingResult.Error("Number is invalid or is out of valid range.");
-
-            result = tmpResult;
-            return ParsingResult.Parsed;
+            _minValue = minValue;
+            _maxValue = maxValue;
         }
 
-        #endregion
+        protected override byte ParseInternal(ReadOnlySpan<char> input)
+        {
+            if (!byte.TryParse(input, out var result) || result < _minValue || result > _maxValue)
+                ThrowError("Number is invalid or is out of valid range.");
+
+            return result;
+        }
     }
 }
