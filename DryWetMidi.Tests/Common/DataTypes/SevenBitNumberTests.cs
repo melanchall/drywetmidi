@@ -17,9 +17,15 @@ namespace Melanchall.DryWetMidi.Tests.Common
 
 #if NET7_0_OR_GREATER
         [Test]
-        public void SerializeSevenBitNumberToJson()
+        public void SerializeSevenBitNumberToJson_1()
         {
             ClassicAssert.AreEqual("42", JsonSerializer.Serialize((SevenBitNumber)42));
+        }
+
+        [Test]
+        public void SerializeSevenBitNumberToJson_2()
+        {
+            ClassicAssert.AreEqual("{\"Key\":42,\"Value\":\"AAA\"}", JsonSerializer.Serialize(new KeyValuePair<SevenBitNumber, string>((SevenBitNumber)42, "AAA")));
         }
 
         [Test]
