@@ -26,6 +26,21 @@ namespace Melanchall.DryWetMidi.Common
         {
             writer.WriteNumberValue((byte)value);
         }
+
+        public override SevenBitNumber ReadAsPropertyName(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        {
+            var keyText = reader.GetString() ?? throw new JsonException("Key cannot be null.");
+
+            if (SevenBitNumber.TryParse(keyText, out var result))
+                return result;
+
+            throw new JsonException($"Invalid SevenBitNumber key: {keyText}");
+        }
+
+        public override void WriteAsPropertyName(Utf8JsonWriter writer, SevenBitNumber value, JsonSerializerOptions options)
+        {
+            writer.WritePropertyName(value.ToString());
+        }
     }
 }
 #endif

@@ -2,6 +2,7 @@
 using Melanchall.DryWetMidi.Common;
 using NUnit.Framework;
 using NUnit.Framework.Legacy;
+using System.Collections.Generic;
 
 #if NET7_0_OR_GREATER
 using System.Text.Json;
@@ -22,15 +23,45 @@ namespace Melanchall.DryWetMidi.Tests.Common
         }
 
         [Test]
+        public void SerializeSevenBitNumberKeyedDictionaryToJson()
+        {
+            ClassicAssert.AreEqual(
+                "{\"42\":\"AAA\",\"43\":\"BBB\"}",
+                JsonSerializer.Serialize(new Dictionary<SevenBitNumber, string>
+                {
+                    [(SevenBitNumber)42] = "AAA",
+                    [(SevenBitNumber)43] = "BBB",
+                }));
+        }
+
+        [Test]
         public void DeserializeSevenBitNumberFromJson()
         {
             ClassicAssert.AreEqual((SevenBitNumber)42, JsonSerializer.Deserialize<SevenBitNumber>("42"));
         }
 
         [Test]
+        public void DeserializeSevenBitNumberKeyedDictionaryFromJson()
+        {
+            ClassicAssert.AreEqual(
+                new Dictionary<SevenBitNumber, string>
+                {
+                    [(SevenBitNumber)42] = "AAA",
+                    [(SevenBitNumber)43] = "BBB",
+                },
+                JsonSerializer.Deserialize<Dictionary<SevenBitNumber, string>>("{\"42\":\"AAA\",\"43\":\"BBB\"}"));
+        }
+
+        [Test]
         public void DeserializeSevenBitNumberFromJson_OutOfRange()
         {
             ClassicAssert.Throws<JsonException>(() => JsonSerializer.Deserialize<SevenBitNumber>("128"));
+        }
+
+        [Test]
+        public void DeserializeSevenBitNumberKeyedDictionaryFromJson_OutOfRange()
+        {
+            ClassicAssert.Throws<JsonException>(() => JsonSerializer.Deserialize<Dictionary<SevenBitNumber, string>>("{\"42\":\"AAA\",\"145\":\"BBB\"}"));
         }
 #endif
 

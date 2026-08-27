@@ -2,6 +2,7 @@
 using Melanchall.DryWetMidi.Common;
 using NUnit.Framework;
 using NUnit.Framework.Legacy;
+using System.Collections.Generic;
 
 #if NET7_0_OR_GREATER
 using System.Text.Json;
@@ -22,15 +23,45 @@ namespace Melanchall.DryWetMidi.Tests.Common
         }
 
         [Test]
+        public void SerializeFourBitNumberKeyedDictionaryToJson()
+        {
+            ClassicAssert.AreEqual(
+                "{\"14\":\"AAA\",\"15\":\"BBB\"}",
+                JsonSerializer.Serialize(new Dictionary<FourBitNumber, string>
+                {
+                    [(FourBitNumber)14] = "AAA",
+                    [(FourBitNumber)15] = "BBB",
+                }));
+        }
+
+        [Test]
         public void DeserializeFourBitNumberFromJson()
         {
             ClassicAssert.AreEqual((FourBitNumber)4, JsonSerializer.Deserialize<FourBitNumber>("4"));
         }
 
         [Test]
+        public void DeserializeFourBitNumberKeyedDictionaryFromJson()
+        {
+            ClassicAssert.AreEqual(
+                new Dictionary<FourBitNumber, string>
+                {
+                    [(FourBitNumber)14] = "AAA",
+                    [(FourBitNumber)15] = "BBB",
+                },
+                JsonSerializer.Deserialize<Dictionary<FourBitNumber, string>>("{\"14\":\"AAA\",\"15\":\"BBB\"}"));
+        }
+
+        [Test]
         public void DeserializeFourBitNumberFromJson_OutOfRange()
         {
             ClassicAssert.Throws<JsonException>(() => JsonSerializer.Deserialize<FourBitNumber>("17"));
+        }
+
+        [Test]
+        public void DeserializeFourBitNumberKeyedDictionaryFromJson_OutOfRange()
+        {
+            ClassicAssert.Throws<JsonException>(() => JsonSerializer.Deserialize<Dictionary<FourBitNumber, string>>("{\"14\":\"AAA\",\"145\":\"BBB\"}"));
         }
 #endif
 
