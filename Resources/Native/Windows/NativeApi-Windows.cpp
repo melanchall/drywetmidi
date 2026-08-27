@@ -991,7 +991,7 @@ API_EXPORT SESSION_OPENRESULT API_CALL OpenSession_Win(
 
                 try
                 {
-                    auto endpointId = args.EndpointDeviceId();
+                    auto endpointId = args.RemovedDevice().EndpointDeviceId();
                     std::wstring endpointKey = endpointId.c_str();
 
                     EndpointDevicesInfo endpointDevicesInfo;
@@ -2345,9 +2345,8 @@ API_EXPORT VIRTUAL_OPENRESULT API_CALL OpenVirtualDevice_Win(
         definition.Name(winrt::to_hstring(name));
         definition.UniqueId(uniqueId);
 
-        basicLoopback::MidiBasicLoopbackCreationConfig config(
-            virtualDeviceInfo->associationId,
-            definition);
+        basicLoopback::MidiBasicLoopbackCreationConfig config(definition);
+        virtualDeviceInfo->associationId = config.AssociationId();
 
         auto result = basicLoopback::MidiBasicLoopbackManager::CreateTransientLoopback(config);
 
