@@ -1,45 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace Melanchall.DryWetMidi.Common
 {
-    internal abstract class Parser<T>
+    internal abstract class Parser
     {
         private const NumberStyles NonnegativeIntegerNumberStyle = NumberStyles.AllowLeadingWhite | NumberStyles.AllowTrailingWhite;
         private const NumberStyles IntegerNumberStyle = NonnegativeIntegerNumberStyle | NumberStyles.AllowLeadingSign;
         private const NumberStyles NonnegativeDoubleNumberStyle = NonnegativeIntegerNumberStyle | NumberStyles.AllowDecimalPoint;
 
-        public T Parse(string? input)
-        {
-            ThrowIfArgument.IsNullOrWhiteSpaceString(nameof(input), input, "Input");
-
-            return ParseInternal(input);
-        }
-
-        public bool TryParse(string? input, out T result)
-        {
-            try
-            {
-                result = Parse(input);
-                return true;
-            }
-            catch
-            {
-                result = default!;
-                return false;
-            }
-        }
-
-        protected abstract T ParseInternal(string? input);
-
+        [DoesNotReturn]
         protected void ThrowError(string error)
         {
             throw new FormatException(error);
         }
 
+        [DoesNotReturn]
         protected void ThrowInvalidFormatError()
         {
             throw new FormatException("Input string has invalid format.");

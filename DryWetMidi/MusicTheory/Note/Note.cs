@@ -122,7 +122,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// <returns><c>true</c> if <paramref name="input"/> was converted successfully; otherwise, <c>false</c>.</returns>
         public static bool TryParse(string? input, out Note? note)
         {
-            return ParsingUtilities.TryParse(input, NoteParser.TryParse, out note);
+            return MusicTheoryParsers.NoteParser.TryParse(input, out note);
         }
 
         /// <summary>
@@ -134,7 +134,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// <exception cref="FormatException"><paramref name="input"/> has invalid format.</exception>
         public static Note Parse(string? input)
         {
-            return ParsingUtilities.Parse<Note>(input, NoteParser.TryParse);
+            return MusicTheoryParsers.NoteParser.Parse(input);
         }
 
         #endregion

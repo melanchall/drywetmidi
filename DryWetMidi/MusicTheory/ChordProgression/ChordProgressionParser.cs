@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Melanchall.DryWetMidi.Common;
 
 namespace Melanchall.DryWetMidi.MusicTheory
 {
-    internal static class ChordProgressionParser
+    internal sealed class ChordProgressionParser : ParameterizedParser<ChordProgression, Scale>
     {
         #region Constants
 
@@ -35,21 +36,16 @@ namespace Melanchall.DryWetMidi.MusicTheory
 
         #region Methods
 
-        internal static ParsingResult TryParse(string? input, Scale scale, out ChordProgression? chordProgression)
+        protected override ChordProgression ParseInternal(string input, Scale parameter)
         {
-            chordProgression = null;
-
-            if (string.IsNullOrWhiteSpace(input))
-                return ParsingResult.EmptyInputString;
-
-            var parts = input.Split(new[] { PartsDelimiter }, global::System.StringSplitOptions.RemoveEmptyEntries);
+            var parts = input.Split(new[] { PartsDelimiter }, StringSplitOptions.RemoveEmptyEntries);
             var chords = new List<Chord>();
 
             foreach (var part in parts)
             {
-                var match = ParsingUtilities.Match(part, Patterns, ignoreCase: false);
+                var match = Match(part, Patterns, ignoreCase: false);
                 if (match == null)
-                    return ParsingResult.NotMatched;
+                    ThrowInvalidFormatError();
 
                 var degreeGroup = match.Groups[ScaleDegreeGroupName];
                 var degreeRoman = degreeGroup.Value.ToLower();
@@ -57,7 +53,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
                     continue;
 
                 var degree = RomanToInteger(degreeRoman);
-                var rootNoteName = scale.GetStep(degree - 1);
+                var rootNoteName = parameter.GetStep(degree - 1);
 
                 var accidentalGroup = match.Groups[AccidentalGroupName];
                 if (accidentalGroup.Success)
@@ -75,16 +71,11 @@ namespace Melanchall.DryWetMidi.MusicTheory
                     rootNoteName +
                     fullString.Substring(degreeGroupIndex - matchIndex + degreeGroup.Length);
 
-                var chordParsingResult = ChordParser.TryParse(chordString, out var chord);
-                if (chordParsingResult.Status != ParsingStatus.Parsed)
-                    return chordParsingResult;
-
-                if (chord != null)
-                    chords.Add(chord);
+                var chord = MusicTheoryParsers.ChordParser.Parse(chordString);
+                chords.Add(chord);
             }
 
-            chordProgression = new ChordProgression(chords);
-            return ParsingResult.Parsed;
+            return new ChordProgression(chords);
         }
 
         private static int RomanToInteger(string roman)

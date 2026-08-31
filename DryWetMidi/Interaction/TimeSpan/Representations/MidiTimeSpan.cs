@@ -77,7 +77,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <returns><c>true</c> if <paramref name="input"/> was converted successfully; otherwise, <c>false</c>.</returns>
         public static bool TryParse(string? input, out MidiTimeSpan? timeSpan)
         {
-            return MidiTimeSpanParser.TryParse(input, out timeSpan).Status == ParsingStatus.Parsed;
+            return TimeSpanParsers.MidiTimeSpanParser.TryParse(input, out timeSpan);
         }
 
         /// <summary>
@@ -91,7 +91,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <exception cref="FormatException"><paramref name="input"/> has invalid format.</exception>
         public static MidiTimeSpan Parse(string? input)
         {
-            return ParsingUtilities.Parse<MidiTimeSpan>(input, MidiTimeSpanParser.TryParse);
+            return TimeSpanParsers.MidiTimeSpanParser.Parse(input);
         }
 
         #endregion

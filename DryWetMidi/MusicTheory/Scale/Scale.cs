@@ -64,7 +64,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// <returns><c>true</c> if <paramref name="input"/> was converted successfully; otherwise, <c>false</c>.</returns>
         public static bool TryParse(string? input, out Scale? scale)
         {
-            return ParsingUtilities.TryParse(input, ScaleParser.TryParse, out scale);
+            return MusicTheoryParsers.ScaleParser.TryParse(input, out scale);
         }
 
         /// <summary>
@@ -76,7 +76,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// <exception cref="FormatException"><paramref name="input"/> has invalid format.</exception>
         public static Scale Parse(string? input)
         {
-            return ParsingUtilities.Parse<Scale>(input, ScaleParser.TryParse);
+            return MusicTheoryParsers.ScaleParser.Parse(input);
         }
 
         #endregion

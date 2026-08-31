@@ -1,10 +1,9 @@
 ﻿using Melanchall.DryWetMidi.Common;
-using System;
 using System.Collections.Generic;
 
 namespace Melanchall.DryWetMidi.Interaction
 {
-    internal static class MusicalTimeSpanParser
+    internal sealed class MusicalTimeSpanParser : SimpleParser<MusicalTimeSpan>
     {
         #region Constants
 
@@ -55,24 +54,19 @@ namespace Melanchall.DryWetMidi.Interaction
 
         #region Methods
 
-        internal static ParsingResult TryParse(string? input, out MusicalTimeSpan? timeSpan)
+        protected override MusicalTimeSpan ParseInternal(string input)
         {
-            timeSpan = null;
-
-            if (string.IsNullOrWhiteSpace(input))
-                return ParsingResult.EmptyInputString;
-
-            var match = ParsingUtilities.Match(input, Patterns);
+            var match = Match(input, Patterns);
             if (match == null)
-                return ParsingResult.NotMatched;
+                ThrowInvalidFormatError();
 
             // Fraction
 
-            if (!ParsingUtilities.ParseNonnegativeLong(match, NumeratorGroupName, 1, out var numerator))
-                return ParsingResult.Error(NumeratorIsOutOfRange);
+            if (!ParseNonnegativeLong(match, NumeratorGroupName, 1, out var numerator))
+                ThrowError(NumeratorIsOutOfRange);
 
-            if (!ParsingUtilities.ParseNonnegativeLong(match, DenominatorGroupName, 1, out var denominator))
-                return ParsingResult.Error(DenominatorIsOutOfRange);
+            if (!ParseNonnegativeLong(match, DenominatorGroupName, 1, out var denominator))
+                ThrowError(DenominatorIsOutOfRange);
 
             var fractionMnemonicGroup = match.Groups[FractionMnemonicGroupName];
             if (fractionMnemonicGroup.Success)
@@ -84,11 +78,11 @@ namespace Melanchall.DryWetMidi.Interaction
 
             // Tuplet
 
-            if (!ParsingUtilities.ParseNonnegativeInt(match, TupletNotesCountGroupName, 1, out var tupletNotesCount))
-                return ParsingResult.Error(TupletNotesCountIsOutOfRange);
+            if (!ParseNonnegativeInt(match, TupletNotesCountGroupName, 1, out var tupletNotesCount))
+                ThrowError(TupletNotesCountIsOutOfRange);
 
-            if (!ParsingUtilities.ParseNonnegativeInt(match, TupletSpaceSizeGroupName, 1, out var tupletSpaceSize))
-                return ParsingResult.Error(TupletSpaceSizeIsOutOfRange);
+            if (!ParseNonnegativeInt(match, TupletSpaceSizeGroupName, 1, out var tupletSpaceSize))
+                ThrowError(TupletSpaceSizeIsOutOfRange);
 
             var tupletMnemonicGroup = match.Groups[TupletMnemonicGroupName];
             if (tupletMnemonicGroup.Success)
@@ -103,8 +97,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
             //
 
-            timeSpan = new MusicalTimeSpan(numerator, denominator).Dotted(dots).Tuplet(tupletNotesCount, tupletSpaceSize);
-            return ParsingResult.Parsed;
+            return new MusicalTimeSpan(numerator, denominator).Dotted(dots).Tuplet(tupletNotesCount, tupletSpaceSize);
         }
 
         private static string GetMnemonicGroup(string groupName, IEnumerable<string> mnemonics)

@@ -1,9 +1,9 @@
-﻿using System.Linq;
-using Melanchall.DryWetMidi.Common;
+﻿using Melanchall.DryWetMidi.Common;
+using System.Linq;
 
 namespace Melanchall.DryWetMidi.MusicTheory
 {
-    internal static class ChordParser
+    internal sealed class ChordParser : SimpleParser<Chord>
     {
         #region Constants
 
@@ -26,42 +26,28 @@ namespace Melanchall.DryWetMidi.MusicTheory
 
         #region Methods
 
-        internal static ParsingResult TryParse(string? input, out Chord? chord)
+        protected override Chord ParseInternal(string input)
         {
-            chord = null;
-
-            if (string.IsNullOrWhiteSpace(input))
-                return ParsingResult.EmptyInputString;
-
-            var match = ParsingUtilities.Match(input, Patterns, ignoreCase: false);
+            var match = Match(input, Patterns, ignoreCase: false);
             if (match == null)
-                return ParsingResult.NotMatched;
+                ThrowInvalidFormatError();
 
             var rootNoteNameGroup = match.Groups[RootNoteNameGroupName];
 
-            var rootNoteNameParsingResult = NoteNameParser.TryParse(rootNoteNameGroup.Value, out var rootNoteName);
-            if (rootNoteNameParsingResult.Status != ParsingStatus.Parsed)
-                return rootNoteNameParsingResult;
+            var rootNoteName = MusicTheoryParsers.NoteNameParser.Parse(rootNoteNameGroup.Value);
 
             //
 
             NoteName? bassNoteName = null;
             var bassNoteNameGroup = match.Groups[BassNoteNameGroupName];
             if (bassNoteNameGroup.Success)
-            {
-                var bassNoteNameParsingResult = NoteNameParser.TryParse(bassNoteNameGroup.Value, out var actualBassNoteName);
-                if (bassNoteNameParsingResult.Status != ParsingStatus.Parsed)
-                    return bassNoteNameParsingResult;
-
-                bassNoteName = actualBassNoteName;
-            }
+                bassNoteName = MusicTheoryParsers.NoteNameParser.Parse(bassNoteNameGroup.Value);
 
             var notesNames = ChordsNamesTable.GetChordNotesNames(rootNoteName, match.Groups[ChordCharacteristicsGroupName].Value, bassNoteName);
             if (!notesNames.Any())
-                return ParsingResult.Error(ChordCharacteristicIsUnknown);
-            
-            chord = new Chord(notesNames);
-            return ParsingResult.Parsed;
+                ThrowError(ChordCharacteristicIsUnknown);
+
+            return new Chord(notesNames);
         }
 
         #endregion

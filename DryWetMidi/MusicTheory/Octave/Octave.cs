@@ -201,7 +201,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// <returns><c>true</c> if <paramref name="input"/> was converted successfully; otherwise, <c>false</c>.</returns>
         public static bool TryParse(string? input, out Octave? octave)
         {
-            return ParsingUtilities.TryParse(input, OctaveParser.TryParse, out octave);
+            return MusicTheoryParsers.OctaveParser.TryParse(input, out octave);
         }
 
         /// <summary>
@@ -213,7 +213,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// <exception cref="FormatException"><paramref name="input"/> has invalid format.</exception>
         public static Octave Parse(string? input)
         {
-            return ParsingUtilities.Parse<Octave>(input, OctaveParser.TryParse);
+            return MusicTheoryParsers.OctaveParser.Parse(input);
         }
 
         #endregion

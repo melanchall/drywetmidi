@@ -276,7 +276,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <returns><c>true</c> if <paramref name="input"/> was converted successfully; otherwise, <c>false</c>.</returns>
         public static bool TryParse(string? input, out MusicalTimeSpan? timeSpan)
         {
-            return ParsingUtilities.TryParse(input, MusicalTimeSpanParser.TryParse, out timeSpan);
+            return TimeSpanParsers.MusicalTimeSpanParser.TryParse(input, out timeSpan);
         }
 
         /// <summary>
@@ -290,7 +290,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <exception cref="FormatException"><paramref name="input"/> has invalid format.</exception>
         public static MusicalTimeSpan Parse(string? input)
         {
-            return ParsingUtilities.Parse<MusicalTimeSpan>(input, MusicalTimeSpanParser.TryParse);
+            return TimeSpanParsers.MusicalTimeSpanParser.Parse(input);
         }
 
         /// <summary>

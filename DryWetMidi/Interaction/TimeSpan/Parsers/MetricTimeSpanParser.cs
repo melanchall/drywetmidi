@@ -3,7 +3,7 @@ using System.Text.RegularExpressions;
 
 namespace Melanchall.DryWetMidi.Interaction
 {
-    internal static class MetricTimeSpanParser
+    internal sealed class MetricTimeSpanParser : SimpleParser<MetricTimeSpan>
     {
         #region Constants
 
@@ -12,10 +12,10 @@ namespace Melanchall.DryWetMidi.Interaction
         private const string SecondsGroupName = "s";
         private const string MillisecondsGroupName = "ms";
 
-        private static readonly string HoursGroup = ParsingUtilities.GetNonnegativeIntegerNumberGroup(HoursGroupName);
-        private static readonly string MinutesGroup = ParsingUtilities.GetNonnegativeIntegerNumberGroup(MinutesGroupName);
-        private static readonly string SecondsGroup = ParsingUtilities.GetNonnegativeIntegerNumberGroup(SecondsGroupName);
-        private static readonly string MillisecondsGroup = ParsingUtilities.GetNonnegativeIntegerNumberGroup(MillisecondsGroupName);
+        private static readonly string HoursGroup = GetNonnegativeIntegerNumberGroup(HoursGroupName);
+        private static readonly string MinutesGroup = GetNonnegativeIntegerNumberGroup(MinutesGroupName);
+        private static readonly string SecondsGroup = GetNonnegativeIntegerNumberGroup(SecondsGroupName);
+        private static readonly string MillisecondsGroup = GetNonnegativeIntegerNumberGroup(MillisecondsGroupName);
 
         private static readonly string LetteredHoursGroup = $@"{HoursGroup}\s*h";
         private static readonly string LetteredMinutesGroup = $@"{MinutesGroup}\s*m";
@@ -90,31 +90,25 @@ namespace Melanchall.DryWetMidi.Interaction
 
         #region Methods
 
-        internal static ParsingResult TryParse(string? input, out MetricTimeSpan? timeSpan)
+        protected override MetricTimeSpan ParseInternal(string input)
         {
-            timeSpan = null;
-
-            if (string.IsNullOrWhiteSpace(input))
-                return ParsingResult.EmptyInputString;
-
-            var match = ParsingUtilities.Match(input, Patterns);
+            var match = Match(input, Patterns);
             if (match == null)
-                return ParsingResult.NotMatched;
+                ThrowInvalidFormatError();
 
-            if (!ParsingUtilities.ParseNonnegativeInt(match, HoursGroupName, 0, out var hours))
-                return ParsingResult.Error(HoursIsOutOfRange);
+            if (!ParseNonnegativeInt(match, HoursGroupName, 0, out var hours))
+                ThrowError(HoursIsOutOfRange);
 
-            if (!ParsingUtilities.ParseNonnegativeInt(match, MinutesGroupName, 0, out var minutes))
-                return ParsingResult.Error(MinutesIsOutOfRange);
+            if (!ParseNonnegativeInt(match, MinutesGroupName, 0, out var minutes))
+                ThrowError(MinutesIsOutOfRange);
 
-            if (!ParsingUtilities.ParseNonnegativeInt(match, SecondsGroupName, 0, out var seconds))
-                return ParsingResult.Error(SecondsIsOutOfRange);
+            if (!ParseNonnegativeInt(match, SecondsGroupName, 0, out var seconds))
+                ThrowError(SecondsIsOutOfRange);
 
-            if (!ParsingUtilities.ParseNonnegativeInt(match, MillisecondsGroupName, 0, out var milliseconds))
-                return ParsingResult.Error(MillisecondsIsOutOfRange);
+            if (!ParseNonnegativeInt(match, MillisecondsGroupName, 0, out var milliseconds))
+                ThrowError(MillisecondsIsOutOfRange);
 
-            timeSpan = new MetricTimeSpan(hours, minutes, seconds, milliseconds);
-            return ParsingResult.Parsed;
+            return new MetricTimeSpan(hours, minutes, seconds, milliseconds);
         }
 
         #endregion

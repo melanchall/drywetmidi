@@ -5,7 +5,7 @@ using Melanchall.DryWetMidi.Common;
 
 namespace Melanchall.DryWetMidi.MusicTheory
 {
-    internal static class ScaleParser
+    internal sealed class ScaleParser : SimpleParser<Scale>
     {
         #region Constants
 
@@ -26,22 +26,15 @@ namespace Melanchall.DryWetMidi.MusicTheory
 
         #region Methods
 
-        internal static ParsingResult TryParse(string? input, out Scale? scale)
+        protected override Scale ParseInternal(string input)
         {
-            scale = null;
-
-            if (string.IsNullOrWhiteSpace(input))
-                return ParsingResult.EmptyInputString;
-
-            var match = ParsingUtilities.Match(input, Patterns);
+            var match = Match(input, Patterns);
             if (match == null)
-                return ParsingResult.NotMatched;
+                ThrowInvalidFormatError();
 
             var rootNoteNameGroup = match.Groups[RootNoteNameGroupName];
 
-            var rootNoteNameParsingResult = NoteNameParser.TryParse(rootNoteNameGroup.Value, out var rootNoteName);
-            if (rootNoteNameParsingResult.Status != ParsingStatus.Parsed)
-                return rootNoteNameParsingResult;
+            var rootNoteName = MusicTheoryParsers.NoteNameParser.Parse(rootNoteNameGroup.Value);
 
             //
 
@@ -55,19 +48,18 @@ namespace Melanchall.DryWetMidi.MusicTheory
                     .OfType<Capture>()
                     .Select(c =>
                     {
-                        var parsingResult = IntervalParser.TryParse(c.Value, out var interval);
-
+                        var success = MusicTheoryParsers.IntervalParser.TryParse(c.Value, out var interval);
                         return new
                         {
                             Interval = interval,
-                            ParsingResult = parsingResult
+                            Success = success
                         };
                     })
                     .ToArray();
 
-                var notParsedResult = intervalsParsingResults.FirstOrDefault(r => r.ParsingResult.Status != ParsingStatus.Parsed);
-                if (notParsedResult != null)
-                    return notParsedResult.ParsingResult;
+                // TODO: maybe error???
+                if (intervalsParsingResults.Any(r => !r.Success))
+                    ThrowInvalidFormatError();
 
                 intervals = intervalsParsingResults.Select(r => r.Interval).ToArray()!;
             }
@@ -80,12 +72,11 @@ namespace Melanchall.DryWetMidi.MusicTheory
             }
 
             if (intervals == null)
-                return ParsingResult.Error(ScaleIsUnknown);
+                ThrowError(ScaleIsUnknown);
 
             //
 
-            scale = new Scale(intervals, rootNoteName);
-            return ParsingResult.Parsed;
+            return new Scale(intervals, rootNoteName);
         }
 
         #endregion

@@ -2,13 +2,13 @@
 
 namespace Melanchall.DryWetMidi.Interaction
 {
-    internal static class MidiTimeSpanParser
+    internal sealed class MidiTimeSpanParser : SimpleParser<MidiTimeSpan>
     {
         #region Constants
 
         private const string TimeSpanGroupName = "ts";
 
-        private static readonly string TimeSpanGroup = ParsingUtilities.GetNonnegativeIntegerNumberGroup(TimeSpanGroupName);
+        private static readonly string TimeSpanGroup = GetNonnegativeIntegerNumberGroup(TimeSpanGroupName);
 
         private static readonly string[] Patterns = new[]
         {
@@ -21,22 +21,16 @@ namespace Melanchall.DryWetMidi.Interaction
 
         #region Methods
 
-        internal static ParsingResult TryParse(string? input, out MidiTimeSpan? timeSpan)
+        protected override MidiTimeSpan ParseInternal(string input)
         {
-            timeSpan = null;
-
-            if (string.IsNullOrWhiteSpace(input))
-                return ParsingResult.EmptyInputString;
-
-            var match = ParsingUtilities.Match(input, Patterns);
+            var match = Match(input, Patterns);
             if (match == null)
-                return ParsingResult.NotMatched;
+                ThrowInvalidFormatError();
 
-            if (!ParsingUtilities.ParseNonnegativeLong(match, TimeSpanGroupName, 0, out var midiTimeSpan))
-                return ParsingResult.Error(OutOfRange);
+            if (!ParseNonnegativeLong(match, TimeSpanGroupName, 0, out var midiTimeSpan))
+                ThrowError(OutOfRange);
 
-            timeSpan = new MidiTimeSpan(midiTimeSpan);
-            return ParsingResult.Parsed;
+            return new MidiTimeSpan(midiTimeSpan);
         }
 
         #endregion

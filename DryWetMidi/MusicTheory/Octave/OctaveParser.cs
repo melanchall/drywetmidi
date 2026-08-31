@@ -2,13 +2,13 @@
 
 namespace Melanchall.DryWetMidi.MusicTheory
 {
-    internal static class OctaveParser
+    internal sealed class OctaveParser : SimpleParser<Octave>
     {
         #region Constants
 
         private const string OctaveNumberGroupName = "o";
 
-        private static readonly string OctaveNumberGroup = ParsingUtilities.GetIntegerNumberGroup(OctaveNumberGroupName);
+        private static readonly string OctaveNumberGroup = GetIntegerNumberGroup(OctaveNumberGroupName);
 
         private static readonly string[] Patterns = new[]
         {
@@ -21,24 +21,18 @@ namespace Melanchall.DryWetMidi.MusicTheory
 
         #region Methods
 
-        internal static ParsingResult TryParse(string? input, out Octave? octave)
+        protected override Octave ParseInternal(string input)
         {
-            octave = null;
-
-            if (string.IsNullOrWhiteSpace(input))
-                return ParsingResult.EmptyInputString;
-
-            var match = ParsingUtilities.Match(input, Patterns);
+            var match = Match(input, Patterns);
             if (match == null)
-                return ParsingResult.NotMatched;
+                ThrowInvalidFormatError();
 
-            if (!ParsingUtilities.ParseInt(match, OctaveNumberGroupName, Octave.Middle.Number, out var octaveNumber) ||
+            if (!ParseInt(match, OctaveNumberGroupName, Octave.Middle.Number, out var octaveNumber) ||
                 octaveNumber < Octave.MinOctaveNumber ||
                 octaveNumber > Octave.MaxOctaveNumber)
-                return ParsingResult.Error(OctaveIsOutOfRange);
+                ThrowError(OctaveIsOutOfRange);
 
-            octave = Octave.Get(octaveNumber);
-            return ParsingResult.Parsed;
+            return Octave.Get(octaveNumber);
         }
 
         #endregion

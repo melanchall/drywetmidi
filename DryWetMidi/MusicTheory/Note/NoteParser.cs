@@ -3,14 +3,14 @@ using Melanchall.DryWetMidi.Common;
 
 namespace Melanchall.DryWetMidi.MusicTheory
 {
-    internal static class NoteParser
+    internal sealed class NoteParser : SimpleParser<Note>
     {
         #region Constants
 
         private const string NoteNameGroupName = "n";
         private const string OctaveGroupName = "o";
 
-        private static readonly string OctaveGroup = ParsingUtilities.GetIntegerNumberGroup(OctaveGroupName);
+        private static readonly string OctaveGroup = GetIntegerNumberGroup(OctaveGroupName);
 
         private static readonly string[] Patterns = NoteNameParser.GetPatterns()
                                                                   .Select(p => $@"(?<{NoteNameGroupName}>{p})\s*{OctaveGroup}")
@@ -23,31 +23,23 @@ namespace Melanchall.DryWetMidi.MusicTheory
 
         #region Methods
 
-        internal static ParsingResult TryParse(string? input, out Note? note)
+        protected override Note ParseInternal(string input)
         {
-            note = null;
-
-            if (string.IsNullOrWhiteSpace(input))
-                return ParsingResult.EmptyInputString;
-
-            var match = ParsingUtilities.Match(input, Patterns);
+            var match = Match(input, Patterns);
             if (match == null)
-                return ParsingResult.NotMatched;
+                ThrowInvalidFormatError();
 
             var noteNameGroup = match.Groups[NoteNameGroupName];
 
-            var noteNameParsingResult = NoteNameParser.TryParse(noteNameGroup.Value, out var noteName);
-            if (noteNameParsingResult.Status != ParsingStatus.Parsed)
-                return noteNameParsingResult;
+            var noteName = MusicTheoryParsers.NoteNameParser.Parse(noteNameGroup.Value);
 
-            if (!ParsingUtilities.ParseInt(match, OctaveGroupName, Octave.Middle.Number, out var octaveNumber))
-                return ParsingResult.Error(OctaveIsOutOfRange);
+            if (!ParseInt(match, OctaveGroupName, Octave.Middle.Number, out var octaveNumber))
+                ThrowError(OctaveIsOutOfRange);
 
             if (!NoteUtilities.IsNoteValid(noteName, octaveNumber))
-                return ParsingResult.Error(NoteIsOutOfRange);
+                ThrowError(NoteIsOutOfRange);
 
-            note = Note.Get(noteName, octaveNumber);
-            return ParsingResult.Parsed;
+            return Note.Get(noteName, octaveNumber);
         }
 
         #endregion

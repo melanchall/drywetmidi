@@ -1,6 +1,6 @@
 ﻿namespace Melanchall.DryWetMidi.Common
 {
-    internal sealed class ShortByteParser : Parser<byte>
+    internal sealed class ShortByteParser : SimpleParser<byte>
     {
         private readonly byte _minValue;
         private readonly byte _maxValue;

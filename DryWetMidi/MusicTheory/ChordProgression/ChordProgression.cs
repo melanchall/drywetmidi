@@ -67,7 +67,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         {
             ThrowIfArgument.IsNull(nameof(scale), scale);
 
-            return ParsingUtilities.TryParse(input, GetParsing(input, scale), out chordProgression);
+            return MusicTheoryParsers.ChordProgressionParser.TryParse(input, scale, out chordProgression);
         }
 
         /// <summary>
@@ -84,17 +84,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         {
             ThrowIfArgument.IsNull(nameof(scale), scale);
 
-            return ParsingUtilities.Parse(input, GetParsing(input, scale));
-        }
-
-        private static Parsing<ChordProgression> GetParsing(string? input, Scale scale)
-        {
-            var result = ChordProgressionParser.TryParse(input, scale, out var chordProgression);
-            return (string? i, out ChordProgression? cp) =>
-            {
-                cp = chordProgression;
-                return result;
-            };
+            return MusicTheoryParsers.ChordProgressionParser.Parse(input, scale);
         }
 
         #endregion

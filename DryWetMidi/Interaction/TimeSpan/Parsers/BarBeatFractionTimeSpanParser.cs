@@ -1,17 +1,17 @@
-﻿using System.Text.RegularExpressions;
-using Melanchall.DryWetMidi.Common;
+﻿using Melanchall.DryWetMidi.Common;
+using System.Text.RegularExpressions;
 
 namespace Melanchall.DryWetMidi.Interaction
 {
-    internal static class BarBeatFractionTimeSpanParser
+    internal sealed class BarBeatFractionTimeSpanParser : SimpleParser<BarBeatFractionTimeSpan>
     {
         #region Constants
 
         private const string BarsGroupName = "bars";
         private const string BeatsGroupName = "beats";
 
-        private static readonly string BarsGroup = ParsingUtilities.GetNonnegativeDoubleNumberGroup(BarsGroupName, ',');
-        private static readonly string BeatsGroup = ParsingUtilities.GetNonnegativeDoubleNumberGroup(BeatsGroupName, '.', ',');
+        private static readonly string BarsGroup = GetNonnegativeDoubleNumberGroup(BarsGroupName, ',');
+        private static readonly string BeatsGroup = GetNonnegativeDoubleNumberGroup(BeatsGroupName, '.', ',');
 
         private static readonly string Divider = Regex.Escape("_");
 
@@ -27,25 +27,19 @@ namespace Melanchall.DryWetMidi.Interaction
 
         #region Methods
 
-        internal static ParsingResult TryParse(string? input, out BarBeatFractionTimeSpan? timeSpan)
+        protected override BarBeatFractionTimeSpan ParseInternal(string input)
         {
-            timeSpan = null;
-
-            if (string.IsNullOrWhiteSpace(input))
-                return ParsingResult.EmptyInputString;
-
-            var match = ParsingUtilities.Match(input, Patterns);
+            var match = Match(input, Patterns);
             if (match == null)
-                return ParsingResult.NotMatched;
+                ThrowInvalidFormatError();
 
-            if (!ParsingUtilities.ParseNonnegativeDouble(match, BarsGroupName, 0, new[] { ',' }, out var bars))
-                return ParsingResult.Error(BarsIsOutOfRange);
+            if (!ParseNonnegativeDouble(match, BarsGroupName, 0, new[] { ',' }, out var bars))
+                ThrowError(BarsIsOutOfRange);
 
-            if (!ParsingUtilities.ParseNonnegativeDouble(match, BeatsGroupName, 0, new[] { '.', ',' }, out var beats))
-                return ParsingResult.Error(BeatsIsOutOfRange);
+            if (!ParseNonnegativeDouble(match, BeatsGroupName, 0, new[] { '.', ',' }, out var beats))
+                ThrowError(BeatsIsOutOfRange);
 
-            timeSpan = new BarBeatFractionTimeSpan(bars, beats);
-            return ParsingResult.Parsed;
+            return new BarBeatFractionTimeSpan(bars, beats);
         }
 
         #endregion

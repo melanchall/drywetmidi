@@ -5,7 +5,7 @@ using Melanchall.DryWetMidi.Common;
 
 namespace Melanchall.DryWetMidi.MusicTheory
 {
-    internal static class NoteNameParser
+    internal sealed class NoteNameParser : SimpleParser<NoteName>
     {
         #region Constants
 
@@ -30,16 +30,11 @@ namespace Melanchall.DryWetMidi.MusicTheory
             return Patterns;
         }
 
-        internal static ParsingResult TryParse(string? input, out NoteName noteName)
+        protected override NoteName ParseInternal(string input)
         {
-            noteName = default(NoteName);
-
-            if (string.IsNullOrWhiteSpace(input))
-                return ParsingResult.EmptyInputString;
-
-            var match = ParsingUtilities.Match(input, Patterns);
+            var match = Match(input, Patterns);
             if (match == null)
-                return ParsingResult.NotMatched;
+                ThrowInvalidFormatError();
 
             var noteLetterGroup = match.Groups[NoteLetterGroupName];
             var noteBaseNumber = (int)(NoteName)Enum.Parse(typeof(NoteName), noteLetterGroup.Value, true);
@@ -63,8 +58,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
             if (noteBaseNumber < 0)
                 noteBaseNumber = Octave.OctaveSize + noteBaseNumber;
 
-            noteName = (NoteName)noteBaseNumber;
-            return ParsingResult.Parsed;
+            return (NoteName)noteBaseNumber;
         }
 
         #endregion

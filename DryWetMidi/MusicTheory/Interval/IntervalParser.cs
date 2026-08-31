@@ -3,7 +3,7 @@ using Melanchall.DryWetMidi.Common;
 
 namespace Melanchall.DryWetMidi.MusicTheory
 {
-    internal static class IntervalParser
+    internal sealed class IntervalParser : SimpleParser<Interval>
     {
         #region Constants
 
@@ -11,7 +11,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         private const string IntervalQualityGroupName = "q";
         private const string IntervalNumberGroupName = "n";
 
-        private static readonly string HalfStepsGroup = ParsingUtilities.GetIntegerNumberGroup(HalfStepsGroupName);
+        private static readonly string HalfStepsGroup = GetIntegerNumberGroup(HalfStepsGroupName);
         private static readonly string IntervalGroup = $@"(?<{IntervalQualityGroupName}>P|p|M|m|D|d|A|a)(?<{IntervalNumberGroupName}>\d+)";
 
         private static readonly string[] Patterns = new[]
@@ -45,35 +45,28 @@ namespace Melanchall.DryWetMidi.MusicTheory
             return Patterns;
         }
 
-        internal static ParsingResult TryParse(string? input, out Interval? interval)
+        protected override Interval ParseInternal(string input)
         {
-            interval = null;
-
-            if (string.IsNullOrWhiteSpace(input))
-                return ParsingResult.EmptyInputString;
-
-            var match = ParsingUtilities.Match(input, Patterns, ignoreCase: false);
+            var match = Match(input, Patterns, ignoreCase: false);
             if (match == null)
-                return ParsingResult.NotMatched;
+                ThrowInvalidFormatError();
 
             var intervalQualityGroup = match.Groups[IntervalQualityGroupName];
             if (!intervalQualityGroup.Success)
             {
-                if (!ParsingUtilities.ParseInt(match, HalfStepsGroupName, 0, out var halfSteps) ||
+                if (!ParseInt(match, HalfStepsGroupName, 0, out var halfSteps) ||
                     !IntervalUtilities.IsIntervalValid(halfSteps))
-                    return ParsingResult.Error(HalfStepsNumberIsOutOfRange);
+                    ThrowError(HalfStepsNumberIsOutOfRange);
 
-                interval = Interval.FromHalfSteps(halfSteps);
-                return ParsingResult.Parsed;
+                return Interval.FromHalfSteps(halfSteps);
             }
 
             var intervalQuality = IntervalQualitiesByLetters[intervalQualityGroup.Value];
 
-            if (!ParsingUtilities.ParseInt(match, IntervalNumberGroupName, 0, out var intervalNumber) || intervalNumber < 1)
-                return ParsingResult.Error(IntervalNumberIsOutOfRange);
+            if (!ParseInt(match, IntervalNumberGroupName, 0, out var intervalNumber) || intervalNumber < 1)
+                ThrowError(IntervalNumberIsOutOfRange);
 
-            interval = Interval.Get(intervalQuality, intervalNumber);
-            return ParsingResult.Parsed;
+            return Interval.Get(intervalQuality, intervalNumber);
         }
 
         #endregion
