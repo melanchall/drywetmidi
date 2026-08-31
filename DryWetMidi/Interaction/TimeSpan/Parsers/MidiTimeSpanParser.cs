@@ -12,7 +12,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
         protected override MidiTimeSpan ParseInternal(string input)
         {
-            if (!long.TryParse(input, out var midiTimeSpan))
+            if (!long.TryParse(input, out var midiTimeSpan) || midiTimeSpan < 0)
                 ThrowInvalidFormatError();
 
             return new MidiTimeSpan(midiTimeSpan);
