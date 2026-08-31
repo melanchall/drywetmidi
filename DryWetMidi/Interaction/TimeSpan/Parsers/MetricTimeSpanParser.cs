@@ -1,4 +1,5 @@
 ﻿using Melanchall.DryWetMidi.Common;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 namespace Melanchall.DryWetMidi.Interaction
@@ -24,7 +25,16 @@ namespace Melanchall.DryWetMidi.Interaction
 
         private static readonly string Divider = Regex.Escape(":");
 
-        private static readonly string[] Patterns = new[]
+        private const string HoursIsOutOfRange = "Hours number is out of range.";
+        private const string MinutesIsOutOfRange = "Minutes number is out of range.";
+        private const string SecondsIsOutOfRange = "Seconds number is out of range.";
+        private const string MillisecondsIsOutOfRange = "Milliseconds number is out of range.";
+
+        #endregion
+
+        #region Methods
+
+        internal override IEnumerable<string> GetPatterns() => new[]
         {
             // hours:minutes:seconds:milliseconds -> hours:minutes:seconds:milliseconds
             $@"{HoursGroup}\s*{Divider}\s*{MinutesGroup}\s*{Divider}\s*{SecondsGroup}\s*{Divider}\s*{MillisecondsGroup}",
@@ -78,21 +88,12 @@ namespace Melanchall.DryWetMidi.Interaction
             LetteredSecondsGroup,
 
             // milliseconds ms -> 0:0:0:milliseconds
-            LetteredMillisecondsGroup
+            LetteredMillisecondsGroup,
         };
-
-        private const string HoursIsOutOfRange = "Hours number is out of range.";
-        private const string MinutesIsOutOfRange = "Minutes number is out of range.";
-        private const string SecondsIsOutOfRange = "Seconds number is out of range.";
-        private const string MillisecondsIsOutOfRange = "Milliseconds number is out of range.";
-
-        #endregion
-
-        #region Methods
 
         protected override MetricTimeSpan ParseInternal(string input)
         {
-            var match = Match(input, Patterns);
+            var match = Match(input);
             if (match == null)
                 ThrowInvalidFormatError();
 

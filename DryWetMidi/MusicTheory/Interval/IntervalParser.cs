@@ -14,12 +14,6 @@ namespace Melanchall.DryWetMidi.MusicTheory
         private static readonly string HalfStepsGroup = GetIntegerNumberGroup(HalfStepsGroupName);
         private static readonly string IntervalGroup = $@"(?<{IntervalQualityGroupName}>P|p|M|m|D|d|A|a)(?<{IntervalNumberGroupName}>\d+)";
 
-        private static readonly string[] Patterns = new[]
-        {
-            IntervalGroup,
-            HalfStepsGroup
-        };
-
         private static readonly Dictionary<string, IntervalQuality> IntervalQualitiesByLetters =
             new Dictionary<string, IntervalQuality>
             {
@@ -40,14 +34,15 @@ namespace Melanchall.DryWetMidi.MusicTheory
 
         #region Methods
 
-        internal static IEnumerable<string> GetPatterns()
+        internal override IEnumerable<string> GetPatterns() => new[]
         {
-            return Patterns;
-        }
+            IntervalGroup,
+            HalfStepsGroup,
+        };
 
         protected override Interval ParseInternal(string input)
         {
-            var match = Match(input, Patterns, ignoreCase: false);
+            var match = Match(input, ignoreCase: false);
             if (match == null)
                 ThrowInvalidFormatError();
 

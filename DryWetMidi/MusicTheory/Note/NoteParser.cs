@@ -1,5 +1,6 @@
-﻿using System.Linq;
-using Melanchall.DryWetMidi.Common;
+﻿using Melanchall.DryWetMidi.Common;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Melanchall.DryWetMidi.MusicTheory
 {
@@ -12,10 +13,6 @@ namespace Melanchall.DryWetMidi.MusicTheory
 
         private static readonly string OctaveGroup = GetIntegerNumberGroup(OctaveGroupName);
 
-        private static readonly string[] Patterns = NoteNameParser.GetPatterns()
-                                                                  .Select(p => $@"(?<{NoteNameGroupName}>{p})\s*{OctaveGroup}")
-                                                                  .ToArray();
-
         private const string OctaveIsOutOfRange = "Octave number is out of range.";
         private const string NoteIsOutOfRange = "Note is out of range.";
 
@@ -23,9 +20,15 @@ namespace Melanchall.DryWetMidi.MusicTheory
 
         #region Methods
 
+        internal override IEnumerable<string> GetPatterns() => MusicTheoryParsers
+            .NoteNameParser
+            .GetPatterns()
+            .Select(p => $@"(?<{NoteNameGroupName}>{p})\s*{OctaveGroup}")
+            .ToArray();
+
         protected override Note ParseInternal(string input)
         {
-            var match = Match(input, Patterns);
+            var match = Match(input);
             if (match == null)
                 ThrowInvalidFormatError();
 

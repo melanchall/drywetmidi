@@ -6,7 +6,7 @@
         {
             ThrowIfArgument.IsNullOrWhiteSpaceString(nameof(input), input, "Input");
 
-            return ParseInternal(input!.Trim());
+            return ParseInternal(input!);
         }
 
         public bool TryParse(string? input, out T result)

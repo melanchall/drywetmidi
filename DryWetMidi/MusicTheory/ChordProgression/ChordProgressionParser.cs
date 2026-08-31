@@ -16,11 +16,6 @@ namespace Melanchall.DryWetMidi.MusicTheory
         private static readonly string AccidentalGroup = $"(?<{AccidentalGroupName}>b)";
         private static readonly string ScaleDegreeGroup = $"(?<{ScaleDegreeGroupName}>(?i:M{{0,4}}(CM|CD|D?C{{0,3}})(XC|XL|L?X{{0,3}})(IX|IV|V?I{{0,3}})))";
 
-        private static readonly string[] Patterns = new[]
-        {
-            $@"{AccidentalGroup}?\s*{ScaleDegreeGroup}\s*{ChordParser.ChordCharacteristicsGroup}"
-        };
-
         private static readonly Dictionary<char, int> RomanMap = new Dictionary<char, int>
         {
             ['i'] = 1,
@@ -36,6 +31,11 @@ namespace Melanchall.DryWetMidi.MusicTheory
 
         #region Methods
 
+        internal override IEnumerable<string> GetPatterns() => new[]
+        {
+            $@"{AccidentalGroup}?\s*{ScaleDegreeGroup}\s*{ChordParser.ChordCharacteristicsGroup}",
+        };
+
         protected override ChordProgression ParseInternal(string input, Scale parameter)
         {
             var parts = input.Split(new[] { PartsDelimiter }, StringSplitOptions.RemoveEmptyEntries);
@@ -43,7 +43,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
 
             foreach (var part in parts)
             {
-                var match = Match(part, Patterns, ignoreCase: false);
+                var match = Match(part, ignoreCase: false);
                 if (match == null)
                     ThrowInvalidFormatError();
 

@@ -1,4 +1,6 @@
-﻿namespace Melanchall.DryWetMidi.Common
+﻿using System.Collections.Generic;
+
+namespace Melanchall.DryWetMidi.Common
 {
     internal sealed class ShortByteParser : SimpleParser<byte>
     {
@@ -11,7 +13,10 @@
             _maxValue = maxValue;
         }
 
-        #region Methods
+        internal override IEnumerable<string> GetPatterns()
+        {
+            throw new System.NotImplementedException();
+        }
 
         protected override byte ParseInternal(string? input)
         {
@@ -20,7 +25,5 @@
 
             return result;
         }
-
-        #endregion
     }
 }

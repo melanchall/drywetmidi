@@ -15,24 +15,19 @@ namespace Melanchall.DryWetMidi.MusicTheory
         private static readonly string NoteNameGroup = $"(?<{NoteLetterGroupName}>C|D|E|F|G|A|B)";
         private static readonly string AccidentalGroup = $"((?<{AccidentalGroupName}>{Regex.Escape(Note.SharpShortString)}|{Note.SharpLongString}|{Note.FlatShortString}|{Note.FlatLongString})\\s*)+?";
 
-        private static readonly string[] Patterns = new[]
+        #endregion
+
+        #region Methods
+
+        internal override IEnumerable<string> GetPatterns() => new[]
         {
             $@"{NoteNameGroup}\s*{AccidentalGroup}",
             NoteNameGroup,
         };
 
-        #endregion
-
-        #region Methods
-
-        internal static IEnumerable<string> GetPatterns()
-        {
-            return Patterns;
-        }
-
         protected override NoteName ParseInternal(string input)
         {
-            var match = Match(input, Patterns);
+            var match = Match(input);
             if (match == null)
                 ThrowInvalidFormatError();
 

@@ -40,11 +40,6 @@ namespace Melanchall.DryWetMidi.Interaction
 
         private static readonly string DotsGroup = $@"(?<{DotsGroupName}>\.+)";
 
-        private static readonly string[] Patterns = new[]
-        {
-            $@"({FractionGroup}|{FractionMnemonicGroup})\s*({TupletGroup}|{TupletMnemonicGroup})?\s*{DotsGroup}?"
-        };
-
         private const string NumeratorIsOutOfRange = "Numerator is out of range.";
         private const string DenominatorIsOutOfRange = "Denominator is out of range.";
         private const string TupletNotesCountIsOutOfRange = "Tuplet's notes count is out of range.";
@@ -54,9 +49,14 @@ namespace Melanchall.DryWetMidi.Interaction
 
         #region Methods
 
+        internal override IEnumerable<string> GetPatterns() => new[]
+        {
+            $@"({FractionGroup}|{FractionMnemonicGroup})\s*({TupletGroup}|{TupletMnemonicGroup})?\s*{DotsGroup}?",
+        };
+
         protected override MusicalTimeSpan ParseInternal(string input)
         {
-            var match = Match(input, Patterns);
+            var match = Match(input);
             if (match == null)
                 ThrowInvalidFormatError();
 

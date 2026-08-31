@@ -1,4 +1,5 @@
 ﻿using Melanchall.DryWetMidi.Common;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 namespace Melanchall.DryWetMidi.Interaction
@@ -15,11 +16,6 @@ namespace Melanchall.DryWetMidi.Interaction
 
         private static readonly string Divider = Regex.Escape("_");
 
-        private static readonly string[] Patterns = new[]
-        {
-            $@"{BarsGroup}\s*{Divider}\s*{BeatsGroup}",
-        };
-
         private const string BarsIsOutOfRange = "Bars number is out of range.";
         private const string BeatsIsOutOfRange = "Beats number is out of range.";
 
@@ -27,9 +23,14 @@ namespace Melanchall.DryWetMidi.Interaction
 
         #region Methods
 
+        internal override IEnumerable<string> GetPatterns() => new[]
+        {
+            $@"{BarsGroup}\s*{Divider}\s*{BeatsGroup}",
+        };
+
         protected override BarBeatFractionTimeSpan ParseInternal(string input)
         {
-            var match = Match(input, Patterns);
+            var match = Match(input);
             if (match == null)
                 ThrowInvalidFormatError();
 

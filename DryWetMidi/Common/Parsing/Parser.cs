@@ -13,6 +13,8 @@ namespace Melanchall.DryWetMidi.Common
         private const NumberStyles IntegerNumberStyle = NonnegativeIntegerNumberStyle | NumberStyles.AllowLeadingSign;
         private const NumberStyles NonnegativeDoubleNumberStyle = NonnegativeIntegerNumberStyle | NumberStyles.AllowDecimalPoint;
 
+        private Regex[]? _regexes = null;
+
         [DoesNotReturn]
         protected void ThrowError(string error)
         {
@@ -24,6 +26,23 @@ namespace Melanchall.DryWetMidi.Common
         {
             throw new FormatException("Input string has invalid format.");
         }
+
+        protected Match? Match(string input, bool ignoreCase = true)
+        {
+            if (_regexes == null)
+                _regexes = GetPatterns().Select(p => new Regex($"^{p}$", RegexOptions.Compiled | (ignoreCase ? RegexOptions.IgnoreCase : RegexOptions.None))).ToArray();
+
+            foreach (var regex in _regexes)
+            {
+                var match = regex.Match(input.Trim());
+                if (match.Success)
+                    return match;
+            }
+
+            return null;
+        }
+
+        internal abstract IEnumerable<string> GetPatterns();
 
         protected static string GetNonnegativeIntegerNumberGroup(string groupName)
         {

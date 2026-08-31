@@ -13,12 +13,8 @@ namespace Melanchall.DryWetMidi.MusicTheory
         private const string IntervalsMnemonicGroupName = "im";
         private const string IntervalGroupName = "i";
 
-        private static readonly string IntervalGroup = $"(?<{IntervalGroupName}>({string.Join("|", IntervalParser.GetPatterns())})\\s*)+";
+        private static readonly string IntervalGroup = $"(?<{IntervalGroupName}>({string.Join("|", MusicTheoryParsers.IntervalParser.GetPatterns())})\\s*)+";
         private static readonly string IntervalsMnemonicGroup = $"(?<{IntervalsMnemonicGroupName}>.+?)";
-
-        private static readonly string[] Patterns = NoteNameParser.GetPatterns()
-                                                                  .Select(p => $@"(?<{RootNoteNameGroupName}>{p})\s*({IntervalGroup}|{IntervalsMnemonicGroup})")
-                                                                  .ToArray();
 
         private const string ScaleIsUnknown = "Scale is unknown.";
 
@@ -26,9 +22,15 @@ namespace Melanchall.DryWetMidi.MusicTheory
 
         #region Methods
 
+        internal override IEnumerable<string> GetPatterns() => MusicTheoryParsers
+            .NoteNameParser
+            .GetPatterns()
+            .Select(p => $@"(?<{RootNoteNameGroupName}>{p})\s*({IntervalGroup}|{IntervalsMnemonicGroup})")
+            .ToArray();
+
         protected override Scale ParseInternal(string input)
         {
-            var match = Match(input, Patterns);
+            var match = Match(input);
             if (match == null)
                 ThrowInvalidFormatError();
 

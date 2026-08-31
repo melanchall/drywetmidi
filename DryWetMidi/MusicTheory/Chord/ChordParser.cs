@@ -1,4 +1,5 @@
 ﻿using Melanchall.DryWetMidi.Common;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Melanchall.DryWetMidi.MusicTheory
@@ -12,13 +13,8 @@ namespace Melanchall.DryWetMidi.MusicTheory
         private const string ChordCharacteristicsGroupName = "cc";
 
         public static readonly string ChordCharacteristicsGroup = $"(?<{ChordCharacteristicsGroupName}>.*?)";
-        private static readonly string RootNoteNameGroup = $"(?<{RootNoteNameGroupName}>{string.Join("|", NoteNameParser.GetPatterns())})";
-        private static readonly string BassNoteNameGroup = $"(?<{BassNoteNameGroupName}>{string.Join("|", NoteNameParser.GetPatterns())})";
-
-        private static readonly string[] Patterns = new[]
-        {
-            $@"(?i:{RootNoteNameGroup}){ChordCharacteristicsGroup}((\/(?i:{BassNoteNameGroup}))|$)",
-        };
+        private static readonly string RootNoteNameGroup = $"(?<{RootNoteNameGroupName}>{string.Join("|", MusicTheoryParsers.NoteNameParser.GetPatterns())})";
+        private static readonly string BassNoteNameGroup = $"(?<{BassNoteNameGroupName}>{string.Join("|", MusicTheoryParsers.NoteNameParser.GetPatterns())})";
 
         private const string ChordCharacteristicIsUnknown = "Chord characteristic is unknown.";
 
@@ -26,9 +22,14 @@ namespace Melanchall.DryWetMidi.MusicTheory
 
         #region Methods
 
+        internal override IEnumerable<string> GetPatterns() => new[]
+        {
+            $@"(?i:{RootNoteNameGroup}){ChordCharacteristicsGroup}((\/(?i:{BassNoteNameGroup}))|$)",
+        };
+
         protected override Chord ParseInternal(string input)
         {
-            var match = Match(input, Patterns, ignoreCase: false);
+            var match = Match(input, ignoreCase: false);
             if (match == null)
                 ThrowInvalidFormatError();
 
