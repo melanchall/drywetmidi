@@ -7,24 +7,17 @@ namespace Melanchall.DryWetMidi.MusicTheory
     {
         #region Constants
 
-        private const string HalfStepsGroupName = "hs";
-        private const string IntervalQualityGroupName = "q";
-        private const string IntervalNumberGroupName = "n";
-
-        private static readonly string HalfStepsGroup = GetIntegerNumberGroup(HalfStepsGroupName);
-        private static readonly string IntervalGroup = $@"(?<{IntervalQualityGroupName}>P|p|M|m|D|d|A|a)(?<{IntervalNumberGroupName}>\d+)";
-
-        private static readonly Dictionary<string, IntervalQuality> IntervalQualitiesByLetters =
-            new Dictionary<string, IntervalQuality>
+        private static readonly Dictionary<char, IntervalQuality> IntervalQualitiesByLetters =
+            new Dictionary<char, IntervalQuality>
             {
-                ["P"] = IntervalQuality.Perfect,
-                ["p"] = IntervalQuality.Perfect,
-                ["M"] = IntervalQuality.Major,
-                ["m"] = IntervalQuality.Minor,
-                ["D"] = IntervalQuality.Diminished,
-                ["d"] = IntervalQuality.Diminished,
-                ["A"] = IntervalQuality.Augmented,
-                ["a"] = IntervalQuality.Augmented
+                ['P'] = IntervalQuality.Perfect,
+                ['p'] = IntervalQuality.Perfect,
+                ['M'] = IntervalQuality.Major,
+                ['m'] = IntervalQuality.Minor,
+                ['D'] = IntervalQuality.Diminished,
+                ['d'] = IntervalQuality.Diminished,
+                ['A'] = IntervalQuality.Augmented,
+                ['a'] = IntervalQuality.Augmented
             };
 
         private const string HalfStepsNumberIsOutOfRange = "Interval's half steps number is out of range.";
@@ -34,31 +27,29 @@ namespace Melanchall.DryWetMidi.MusicTheory
 
         #region Methods
 
-        internal override IEnumerable<string> GetPatterns() => new[]
+        internal override IEnumerable<string> GetPatterns()
         {
-            IntervalGroup,
-            HalfStepsGroup,
-        };
+            throw new System.NotImplementedException();
+        }
 
         protected override Interval ParseInternal(string input)
         {
-            var match = Match(input, ignoreCase: false);
-            if (match == null)
-                ThrowInvalidFormatError();
-
-            var intervalQualityGroup = match.Groups[IntervalQualityGroupName];
-            if (!intervalQualityGroup.Success)
+            if (input[0] == '+' || input[0] == '-')
             {
-                if (!ParseInt(match, HalfStepsGroupName, 0, out var halfSteps) ||
-                    !IntervalUtilities.IsIntervalValid(halfSteps))
+                if (!int.TryParse(input, out var halfSteps))
+                    ThrowInvalidFormatError();
+
+                if (!IntervalUtilities.IsIntervalValid(halfSteps))
                     ThrowError(HalfStepsNumberIsOutOfRange);
 
                 return Interval.FromHalfSteps(halfSteps);
             }
 
-            var intervalQuality = IntervalQualitiesByLetters[intervalQualityGroup.Value];
+            var intervalQualityLetter = input[0];
+            if (!IntervalQualitiesByLetters.TryGetValue(intervalQualityLetter, out var intervalQuality))
+                ThrowInvalidFormatError();
 
-            if (!ParseInt(match, IntervalNumberGroupName, 0, out var intervalNumber) || intervalNumber < 1)
+            if (!int.TryParse(input.Substring(1), out var intervalNumber))
                 ThrowError(IntervalNumberIsOutOfRange);
 
             return Interval.Get(intervalQuality, intervalNumber);
