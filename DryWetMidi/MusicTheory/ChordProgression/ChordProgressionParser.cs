@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using Melanchall.DryWetMidi.Common;
 
 namespace Melanchall.DryWetMidi.MusicTheory
@@ -31,9 +32,9 @@ namespace Melanchall.DryWetMidi.MusicTheory
 
         #region Methods
 
-        internal override IEnumerable<string> GetPatterns() => new[]
+        internal override Regex[] GetRegexes() => new[]
         {
-            $@"{AccidentalGroup}?\s*{ScaleDegreeGroup}\s*{ChordParser.ChordCharacteristicsGroup}",
+            new Regex($@"^{AccidentalGroup}?\s*{ScaleDegreeGroup}\s*{ChordParser.ChordCharacteristicsGroup}$", RegexOptions.Compiled),
         };
 
         protected override ChordProgression ParseInternal(string input, Scale parameter)
@@ -43,7 +44,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
 
             foreach (var part in parts)
             {
-                var match = Match(part, ignoreCase: false);
+                var match = Match(part);
                 if (match == null)
                     ThrowInvalidFormatError();
 

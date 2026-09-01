@@ -13,7 +13,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         private const string IntervalsMnemonicGroupName = "im";
         private const string IntervalGroupName = "i";
 
-        private static readonly string IntervalGroup = $"(?<{IntervalGroupName}>({string.Join("|", MusicTheoryParsers.IntervalParser.GetPatterns())})\\s*)+";
+        private static readonly string IntervalGroup = @$"(?<{IntervalGroupName}>([pmda]\d+|[\-\+]?\d+)\s*)+";
         private static readonly string IntervalsMnemonicGroup = $"(?<{IntervalsMnemonicGroupName}>.+?)";
 
         private const string ScaleIsUnknown = "Scale is unknown.";
@@ -22,10 +22,10 @@ namespace Melanchall.DryWetMidi.MusicTheory
 
         #region Methods
 
-        internal override IEnumerable<string> GetPatterns() => MusicTheoryParsers
+        internal override Regex[] GetRegexes() => MusicTheoryParsers
             .NoteNameParser
             .GetPatterns()
-            .Select(p => $@"(?<{RootNoteNameGroupName}>{p})\s*({IntervalGroup}|{IntervalsMnemonicGroup})")
+            .Select(p => new Regex($@"^(?<{RootNoteNameGroupName}>{p})\s*({IntervalGroup}|{IntervalsMnemonicGroup})$", RegexOptions.Compiled | RegexOptions.IgnoreCase))
             .ToArray();
 
         protected override Scale ParseInternal(string input)

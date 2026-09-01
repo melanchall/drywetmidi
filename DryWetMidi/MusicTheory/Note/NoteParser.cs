@@ -1,6 +1,6 @@
 ﻿using Melanchall.DryWetMidi.Common;
-using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace Melanchall.DryWetMidi.MusicTheory
 {
@@ -20,10 +20,10 @@ namespace Melanchall.DryWetMidi.MusicTheory
 
         #region Methods
 
-        internal override IEnumerable<string> GetPatterns() => MusicTheoryParsers
+        internal override Regex[] GetRegexes() => MusicTheoryParsers
             .NoteNameParser
             .GetPatterns()
-            .Select(p => $@"(?<{NoteNameGroupName}>{p})\s*{OctaveGroup}")
+            .Select(p => new Regex($@"^(?<{NoteNameGroupName}>{p})\s*{OctaveGroup}$", RegexOptions.Compiled | RegexOptions.IgnoreCase))
             .ToArray();
 
         protected override Note ParseInternal(string input)

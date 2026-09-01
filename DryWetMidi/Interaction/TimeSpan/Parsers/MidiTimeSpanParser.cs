@@ -1,11 +1,12 @@
 ﻿using Melanchall.DryWetMidi.Common;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace Melanchall.DryWetMidi.Interaction
 {
     internal sealed class MidiTimeSpanParser : SimpleParser<MidiTimeSpan>
     {
-        internal override IEnumerable<string> GetPatterns()
+        internal override Regex[] GetRegexes()
         {
             throw new System.NotImplementedException();
         }

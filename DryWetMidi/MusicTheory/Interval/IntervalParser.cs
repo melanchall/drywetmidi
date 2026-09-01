@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using Melanchall.DryWetMidi.Common;
 
 namespace Melanchall.DryWetMidi.MusicTheory
@@ -27,14 +28,14 @@ namespace Melanchall.DryWetMidi.MusicTheory
 
         #region Methods
 
-        internal override IEnumerable<string> GetPatterns()
+        internal override Regex[] GetRegexes()
         {
             throw new System.NotImplementedException();
         }
 
         protected override Interval ParseInternal(string input)
         {
-            if (input[0] == '+' || input[0] == '-')
+            if (input[0] == '+' || input[0] == '-' || char.IsDigit(input[0]))
             {
                 if (!int.TryParse(input, out var halfSteps))
                     ThrowInvalidFormatError();

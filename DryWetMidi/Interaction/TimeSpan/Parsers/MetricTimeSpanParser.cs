@@ -34,61 +34,61 @@ namespace Melanchall.DryWetMidi.Interaction
 
         #region Methods
 
-        internal override IEnumerable<string> GetPatterns() => new[]
+        internal override Regex[] GetRegexes() => new[]
         {
             // hours:minutes:seconds:milliseconds -> hours:minutes:seconds:milliseconds
-            $@"{HoursGroup}\s*{Divider}\s*{MinutesGroup}\s*{Divider}\s*{SecondsGroup}\s*{Divider}\s*{MillisecondsGroup}",
+            new Regex($@"^{HoursGroup}\s*{Divider}\s*{MinutesGroup}\s*{Divider}\s*{SecondsGroup}\s*{Divider}\s*{MillisecondsGroup}$", RegexOptions.Compiled | RegexOptions.IgnoreCase),
 
             // hours:minutes:seconds -> hours:minutes:seconds:0
-            $@"{HoursGroup}\s*{Divider}\s*{MinutesGroup}\s*{Divider}\s*{SecondsGroup}",
+            new Regex($@"^{HoursGroup}\s*{Divider}\s*{MinutesGroup}\s*{Divider}\s*{SecondsGroup}$", RegexOptions.Compiled | RegexOptions.IgnoreCase),
 
             // minutes:seconds -> 0:minutes:seconds:0
-            $@"{MinutesGroup}\s*{Divider}\s*{SecondsGroup}",
+            new Regex($@"^{MinutesGroup}\s*{Divider}\s*{SecondsGroup}$", RegexOptions.Compiled | RegexOptions.IgnoreCase),
 
             // hours h minutes m seconds s milliseconds ms -> hours:minutes:seconds:milliseconds
-            $@"{LetteredHoursGroup}\s*{LetteredMinutesGroup}\s*{LetteredSecondsGroup}\s*{LetteredMillisecondsGroup}",
+            new Regex($@"^{LetteredHoursGroup}\s*{LetteredMinutesGroup}\s*{LetteredSecondsGroup}\s*{LetteredMillisecondsGroup}$", RegexOptions.Compiled | RegexOptions.IgnoreCase),
 
             // hours h minutes m seconds s -> hours:minutes:seconds:0
-            $@"{LetteredHoursGroup}\s*{LetteredMinutesGroup}\s*{LetteredSecondsGroup}",
+            new Regex($@"^{LetteredHoursGroup}\s*{LetteredMinutesGroup}\s*{LetteredSecondsGroup}$", RegexOptions.Compiled | RegexOptions.IgnoreCase),
 
             // hours h minutes m milliseconds ms -> hours:minutes:0:milliseconds
-            $@"{LetteredHoursGroup}\s*{LetteredMinutesGroup}\s*{LetteredMillisecondsGroup}",
+            new Regex($@"^{LetteredHoursGroup}\s*{LetteredMinutesGroup}\s*{LetteredMillisecondsGroup}$", RegexOptions.Compiled | RegexOptions.IgnoreCase),
 
             // hours h seconds s milliseconds ms -> hours:0:seconds:milliseconds
-            $@"{LetteredHoursGroup}\s*{LetteredSecondsGroup}\s*{LetteredMillisecondsGroup}",
+            new Regex($@"^{LetteredHoursGroup}\s*{LetteredSecondsGroup}\s*{LetteredMillisecondsGroup}$", RegexOptions.Compiled | RegexOptions.IgnoreCase),
 
             // minutes m seconds s milliseconds ms -> 0:minutes:seconds:milliseconds
-            $@"{LetteredMinutesGroup}\s*{LetteredSecondsGroup}\s*{LetteredMillisecondsGroup}",
+            new Regex($@"^{LetteredMinutesGroup}\s*{LetteredSecondsGroup}\s*{LetteredMillisecondsGroup}$", RegexOptions.Compiled | RegexOptions.IgnoreCase),
 
             // hours h minutes m -> hours:minutes:0:0
-            $@"{LetteredHoursGroup}\s*{LetteredMinutesGroup}",
+            new Regex($@"^{LetteredHoursGroup}\s*{LetteredMinutesGroup}$", RegexOptions.Compiled | RegexOptions.IgnoreCase),
 
             // hours h seconds s -> hours:0:seconds:0
-            $@"{LetteredHoursGroup}\s*{LetteredSecondsGroup}",
+            new Regex($@"^{LetteredHoursGroup}\s*{LetteredSecondsGroup}$", RegexOptions.Compiled | RegexOptions.IgnoreCase),
 
             // hours h milliseconds ms -> hours:0:0:milliseconds
-            $@"{LetteredHoursGroup}\s*{LetteredMillisecondsGroup}",
+            new Regex($@"^{LetteredHoursGroup}\s*{LetteredMillisecondsGroup}$", RegexOptions.Compiled | RegexOptions.IgnoreCase),
 
             // minutes m seconds s -> 0:minutes:seconds:0
-            $@"{LetteredMinutesGroup}\s*{LetteredSecondsGroup}",
+            new Regex($@"^{LetteredMinutesGroup}\s*{LetteredSecondsGroup}$", RegexOptions.Compiled | RegexOptions.IgnoreCase),
 
             // hours h milliseconds ms -> hours:0:0:milliseconds
-            $@"{LetteredMinutesGroup}\s*{LetteredMillisecondsGroup}",
+            new Regex($@"^{LetteredMinutesGroup}\s*{LetteredMillisecondsGroup}$", RegexOptions.Compiled | RegexOptions.IgnoreCase),
 
             // seconds s milliseconds ms -> 0:0:seconds:milliseconds
-            $@"{LetteredSecondsGroup}\s*{LetteredMillisecondsGroup}",
+            new Regex($@"^{LetteredSecondsGroup}\s*{LetteredMillisecondsGroup}$", RegexOptions.Compiled | RegexOptions.IgnoreCase),
 
             // hours h -> hours:0:0:0
-            LetteredHoursGroup,
+            new Regex($@"^{LetteredHoursGroup}$", RegexOptions.Compiled | RegexOptions.IgnoreCase),
 
             // minutes m -> 0:minutes:0:0
-            LetteredMinutesGroup,
+            new Regex($@"^{LetteredMinutesGroup}$", RegexOptions.Compiled | RegexOptions.IgnoreCase),
 
             // seconds s -> 0:0:seconds:0
-            LetteredSecondsGroup,
+            new Regex($@"^{LetteredSecondsGroup}$", RegexOptions.Compiled | RegexOptions.IgnoreCase),
 
             // milliseconds ms -> 0:0:0:milliseconds
-            LetteredMillisecondsGroup,
+            new Regex($@"^{LetteredMillisecondsGroup}$", RegexOptions.Compiled | RegexOptions.IgnoreCase),
         };
 
         protected override MetricTimeSpan ParseInternal(string input)

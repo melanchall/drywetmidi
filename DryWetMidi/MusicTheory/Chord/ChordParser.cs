@@ -1,6 +1,7 @@
 ﻿using Melanchall.DryWetMidi.Common;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace Melanchall.DryWetMidi.MusicTheory
 {
@@ -22,14 +23,14 @@ namespace Melanchall.DryWetMidi.MusicTheory
 
         #region Methods
 
-        internal override IEnumerable<string> GetPatterns() => new[]
+        internal override Regex[] GetRegexes() => new[]
         {
-            $@"(?i:{RootNoteNameGroup}){ChordCharacteristicsGroup}((\/(?i:{BassNoteNameGroup}))|$)",
+            new Regex($@"(?i:{RootNoteNameGroup}){ChordCharacteristicsGroup}((\/(?i:{BassNoteNameGroup}))|$)", RegexOptions.Compiled),
         };
 
         protected override Chord ParseInternal(string input)
         {
-            var match = Match(input, ignoreCase: false);
+            var match = Match(input);
             if (match == null)
                 ThrowInvalidFormatError();
 

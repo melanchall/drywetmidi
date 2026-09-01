@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using Melanchall.DryWetMidi.Common;
 
@@ -19,11 +19,15 @@ namespace Melanchall.DryWetMidi.MusicTheory
 
         #region Methods
 
-        internal override IEnumerable<string> GetPatterns() => new[]
+        internal string[] GetPatterns() => new[]
         {
             $@"{NoteNameGroup}\s*{AccidentalGroup}",
-            NoteNameGroup,
+            $@"{NoteNameGroup}",
         };
+
+        internal override Regex[] GetRegexes() => GetPatterns()
+            .Select(p => new Regex($@"^{p}$", RegexOptions.Compiled | RegexOptions.IgnoreCase))
+            .ToArray();
 
         protected override NoteName ParseInternal(string input)
         {

@@ -1,11 +1,11 @@
 ﻿using Melanchall.DryWetMidi.Common;
-using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace Melanchall.DryWetMidi.MusicTheory
 {
     internal sealed class OctaveParser : SimpleParser<Octave>
     {
-        internal override IEnumerable<string> GetPatterns()
+        internal override Regex[] GetRegexes()
         {
             throw new System.NotImplementedException();
         }

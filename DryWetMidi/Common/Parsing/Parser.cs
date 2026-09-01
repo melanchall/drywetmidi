@@ -27,10 +27,10 @@ namespace Melanchall.DryWetMidi.Common
             throw new FormatException("Input string has invalid format.");
         }
 
-        protected Match? Match(string input, bool ignoreCase = true)
+        protected Match? Match(string input)
         {
             if (_regexes == null)
-                _regexes = GetPatterns().Select(p => new Regex($"^{p}$", RegexOptions.Compiled | (ignoreCase ? RegexOptions.IgnoreCase : RegexOptions.None))).ToArray();
+                _regexes = GetRegexes();
 
             foreach (var regex in _regexes)
             {
@@ -42,7 +42,7 @@ namespace Melanchall.DryWetMidi.Common
             return null;
         }
 
-        internal abstract IEnumerable<string> GetPatterns();
+        internal abstract Regex[] GetRegexes();
 
         protected static string GetNonnegativeIntegerNumberGroup(string groupName)
         {

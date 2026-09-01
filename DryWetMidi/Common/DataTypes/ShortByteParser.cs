@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System.Text.RegularExpressions;
 
 namespace Melanchall.DryWetMidi.Common
 {
@@ -13,7 +13,7 @@ namespace Melanchall.DryWetMidi.Common
             _maxValue = maxValue;
         }
 
-        internal override IEnumerable<string> GetPatterns()
+        internal override Regex[] GetRegexes()
         {
             throw new System.NotImplementedException();
         }

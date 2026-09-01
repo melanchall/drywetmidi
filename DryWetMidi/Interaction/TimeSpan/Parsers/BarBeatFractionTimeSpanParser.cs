@@ -23,9 +23,9 @@ namespace Melanchall.DryWetMidi.Interaction
 
         #region Methods
 
-        internal override IEnumerable<string> GetPatterns() => new[]
+        internal override Regex[] GetRegexes() => new[]
         {
-            $@"{BarsGroup}\s*{Divider}\s*{BeatsGroup}",
+            new Regex($@"^{BarsGroup}\s*{Divider}\s*{BeatsGroup}$", RegexOptions.Compiled | RegexOptions.IgnoreCase),
         };
 
         protected override BarBeatFractionTimeSpan ParseInternal(string input)

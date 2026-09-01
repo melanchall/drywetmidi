@@ -1,5 +1,6 @@
 ﻿using Melanchall.DryWetMidi.Common;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace Melanchall.DryWetMidi.Interaction
 {
@@ -49,9 +50,9 @@ namespace Melanchall.DryWetMidi.Interaction
 
         #region Methods
 
-        internal override IEnumerable<string> GetPatterns() => new[]
+        internal override Regex[] GetRegexes() => new[]
         {
-            $@"({FractionGroup}|{FractionMnemonicGroup})\s*({TupletGroup}|{TupletMnemonicGroup})?\s*{DotsGroup}?",
+            new Regex($@"^({FractionGroup}|{FractionMnemonicGroup})\s*({TupletGroup}|{TupletMnemonicGroup})?\s*{DotsGroup}?$", RegexOptions.Compiled | RegexOptions.IgnoreCase),
         };
 
         protected override MusicalTimeSpan ParseInternal(string input)
