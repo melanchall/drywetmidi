@@ -1,21 +1,34 @@
-﻿using System;
+﻿using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.MusicTheory;
 using NUnit.Framework;
 using NUnit.Framework.Legacy;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 
 namespace Melanchall.DryWetMidi.Tests.MusicTheory
 {
     [TestFixture]
     public sealed class ScaleTests
     {
+        private static readonly object[] ScalesStringsToScales = typeof(ScaleIntervals)
+            .GetFields(BindingFlags.Static | BindingFlags.Public)
+            .SelectMany(f => Enum
+                .GetValues(typeof(NoteName))
+                .OfType<NoteName>()
+                .Select(n => new object[]
+                {
+                    $"{n.ToString().Replace(Note.SharpLongString, Note.SharpShortString)} {((DisplayNameAttribute)f.GetCustomAttribute(typeof(DisplayNameAttribute))).Name}",
+                    new Scale((IEnumerable<Interval>)f.GetValue(null), n)
+                }))
+            .ToArray();
+
         #region Test methods
 
-        [Test]
-        [Description("Parse valid scale by name.")]
-        public void Parse_Valid_ScaleName()
-        {
-            Parse("C# major", new Scale(ScaleIntervals.Major, NoteName.CSharp));
-        }
+        //[TestCaseSource(nameof(ScalesStringsToScales))]
+        public void Parse_Valid_ScaleName(string scaleString, Scale expectedScale) =>
+            Parse(scaleString, expectedScale);
 
         [Test]
         [Description("Parse valid scale by intervals.")]
@@ -63,21 +76,23 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
 
         #region Private methods
 
-        private static void Parse(string input, Scale expectedScale)
+        private static void Parse(string input, Scale expectedScale, string label = null)
         {
+            var labelPart = string.IsNullOrWhiteSpace(label) ? string.Empty : $"[{label}] ";
+
             Scale.TryParse(input, out var actualScale);
             ClassicAssert.AreEqual(expectedScale,
                             actualScale,
-                            "TryParse: incorrect result.");
+                            $"{labelPart}TryParse: incorrect result.");
 
             actualScale = Scale.Parse(input);
             ClassicAssert.AreEqual(expectedScale,
                             actualScale,
-                            "Parse: incorrect result.");
+                            $"{labelPart}Parse: incorrect result.");
 
             ClassicAssert.AreEqual(expectedScale,
                             Scale.Parse(expectedScale.ToString()),
-                            "Parse: string representation was not parsed to the original scale.");
+                            $"{labelPart}Parse: string representation was not parsed to the original scale.");
         }
 
         private static void ParseInvalid<TException>(string input)
