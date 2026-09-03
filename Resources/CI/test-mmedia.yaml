@@ -66,9 +66,6 @@ stages:
         Windows_Net:
           vmImage: 'windows-latest'
           framework: 'Net'
-        Windows_NetFramework:
-          vmImage: 'windows-latest'
-          framework: 'NetFramework'
         macOS_Net:
           vmImage: 'macos-latest'
           framework: 'Net'
