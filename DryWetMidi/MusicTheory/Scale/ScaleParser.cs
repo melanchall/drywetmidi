@@ -23,11 +23,10 @@ namespace Melanchall.DryWetMidi.MusicTheory
 
         #region Methods
 
-        internal override Regex[] GetRegexes() => MusicTheoryParsers
-            .NoteNameParser
-            .GetPatterns()
-            .Select(p => new Regex($@"^(?<{RootNoteNameGroupName}>{p})\s*({IntervalGroup}|{IntervalsMnemonicGroup})$", RegexOptions.Compiled | RegexOptions.IgnoreCase))
-            .ToArray();
+        internal override Regex[] GetRegexes() => new[]
+        {
+            new Regex($@"^(?<{RootNoteNameGroupName}>{MusicTheoryParsers.NoteNameParser.GetPattern()})\s*({IntervalGroup}|{IntervalsMnemonicGroup})$", RegexOptions.Compiled | RegexOptions.IgnoreCase)
+        };
 
         protected override Scale ParseInternal(string input)
         {

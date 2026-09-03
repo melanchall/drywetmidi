@@ -13,9 +13,9 @@ namespace Melanchall.DryWetMidi.MusicTheory
         private const string BassNoteNameGroupName = "bn";
         private const string ChordCharacteristicsGroupName = "cc";
 
-        public static readonly string ChordCharacteristicsGroup = $"(?<{ChordCharacteristicsGroupName}>.*?)";
-        private static readonly string RootNoteNameGroup = $"(?<{RootNoteNameGroupName}>{string.Join("|", MusicTheoryParsers.NoteNameParser.GetPatterns())})";
-        private static readonly string BassNoteNameGroup = $"(?<{BassNoteNameGroupName}>{string.Join("|", MusicTheoryParsers.NoteNameParser.GetPatterns())})";
+        public const string ChordCharacteristicsGroup = $"(?<{ChordCharacteristicsGroupName}>.*?)";
+        private static readonly string RootNoteNameGroup = $"(?<{RootNoteNameGroupName}>{MusicTheoryParsers.NoteNameParser.GetPattern()})";
+        private static readonly string BassNoteNameGroup = $"(?<{BassNoteNameGroupName}>{MusicTheoryParsers.NoteNameParser.GetPattern()})";
 
         private const string ChordCharacteristicIsUnknown = "Chord characteristic is unknown.";
 
@@ -25,7 +25,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
 
         internal override Regex[] GetRegexes() => new[]
         {
-            new Regex($@"(?i:{RootNoteNameGroup}){ChordCharacteristicsGroup}((\/(?i:{BassNoteNameGroup}))|$)", RegexOptions.Compiled),
+            new Regex($@"^(?i:{RootNoteNameGroup}){ChordCharacteristicsGroup}(\/(?i:{BassNoteNameGroup}))?$", RegexOptions.Compiled),
         };
 
         protected override Chord ParseInternal(string input)
