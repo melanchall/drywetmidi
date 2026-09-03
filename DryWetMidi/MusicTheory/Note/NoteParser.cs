@@ -1,50 +1,38 @@
 ﻿using Melanchall.DryWetMidi.Common;
-using System.Linq;
+using System;
 using System.Text.RegularExpressions;
 
 namespace Melanchall.DryWetMidi.MusicTheory
 {
     internal sealed class NoteParser : SimpleParser<Note>
     {
-        #region Constants
-
-        private const string NoteNameGroupName = "n";
-        private const string OctaveGroupName = "o";
-
-        private static readonly string OctaveGroup = GetIntegerNumberGroup(OctaveGroupName);
-
-        private const string OctaveIsOutOfRange = "Octave number is out of range.";
-        private const string NoteIsOutOfRange = "Note is out of range.";
-
-        #endregion
-
-        #region Methods
-
-        internal override Regex[] GetRegexes() => MusicTheoryParsers
-            .NoteNameParser
-            .GetPatterns()
-            .Select(p => new Regex($@"^(?<{NoteNameGroupName}>{p})\s*{OctaveGroup}$", RegexOptions.Compiled | RegexOptions.IgnoreCase))
-            .ToArray();
+        internal override Regex[] GetRegexes()
+        {
+            throw new System.NotImplementedException();
+        }
 
         protected override Note ParseInternal(string input)
         {
-            var match = Match(input);
-            if (match == null)
+            var span = input.AsSpan();
+
+            if (span.Length < 2)
                 ThrowInvalidFormatError();
 
-            var noteNameGroup = match.Groups[NoteNameGroupName];
+            if (!char.IsDigit(span[^1]))
+                ThrowInvalidFormatError();
 
-            var noteName = MusicTheoryParsers.NoteNameParser.Parse(noteNameGroup.Value);
+            var octaveNumberPartLength = 1;
+            if (span[^2] == '-' || span[^2] == '+')
+                octaveNumberPartLength++;
 
-            if (!ParseInt(match, OctaveGroupName, Octave.Middle.Number, out var octaveNumber))
-                ThrowError(OctaveIsOutOfRange);
+            if (!int.TryParse(span[^octaveNumberPartLength..], out var octaveNumber))
+                ThrowInvalidFormatError();
 
+            var noteName = MusicTheoryParsers.NoteNameParser.Parse(span[..^octaveNumberPartLength].Trim().ToString());
             if (!NoteUtilities.IsNoteValid(noteName, octaveNumber))
-                ThrowError(NoteIsOutOfRange);
+                ThrowError("Note is out of range.");
 
             return Note.Get(noteName, octaveNumber);
         }
-
-        #endregion
     }
 }

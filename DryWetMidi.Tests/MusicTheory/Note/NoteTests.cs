@@ -1,16 +1,40 @@
-﻿using System;
-using System.Linq;
-using System.Threading;
-using Melanchall.DryWetMidi.Common;
+﻿using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.MusicTheory;
 using NUnit.Framework;
+using NUnit.Framework.Internal;
 using NUnit.Framework.Legacy;
+using System;
+using System.Linq;
+using System.Threading;
 
 namespace Melanchall.DryWetMidi.Tests.MusicTheory
 {
     [TestFixture]
     public class NoteTests
     {
+        private static readonly object[] NotesStringsToNotes_Prepared = new[]
+        {
+            new object[] { "C#0", Octave.Get(0).CSharp },
+            new object[] { "B-1", Octave.Get(-1).B },
+            new object[] { "F sharp 3", Octave.Get(3).FSharp },
+            new object[] { "D3", Octave.Get(3).D },
+            new object[] { "F##3", Octave.Get(3).G },
+            new object[] { "F#sharp #### 3", Octave.Get(3).B },
+            new object[] { "F# # # ### # # # ### 1", Octave.Get(1).F },
+            new object[] { "Fb 1", Octave.Get(1).E },
+            new object[] { "Fb flat flat 1", Octave.Get(1).D },
+            new object[] { "Fbbbb bbbb bbbb flat 1", Octave.Get(1).E },
+            new object[] { "C#b 4", Octave.Get(4).C },
+            new object[] { "C#b##4", Octave.Get(4).D },
+            new object[] { "C#bbb  4", Octave.Get(4).ASharp },
+        };
+
+        private static readonly object[] NotesStringsToNotes_All = SevenBitNumber
+            .Values
+            .Select(Note.Get)
+            .Select(n => new object[] { n.ToString(), n })
+            .ToArray();
+
         #region Test methods
 
         [Test]
@@ -86,99 +110,24 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
             });
         }
 
-        [Test]
-        [Description("Parse valid note.")]
-        public void Parse_Valid_ZeroOctave()
-        {
-            Parse("C#0", Octave.Get(0).CSharp);
-        }
+        [TestCaseSource(nameof(NotesStringsToNotes_Prepared))]
+        public void Parse_Valid_Prepared(string s, Note expectedNote) =>
+            Parse(s, expectedNote);
+
+        [TestCaseSource(nameof(NotesStringsToNotes_All))]
+        public void Parse_Valid_All(string s, Note expectedNote) =>
+            Parse(s, expectedNote);
 
         [Test]
-        [Description("Parse valid note of negative octave.")]
-        public void Parse_Valid_NegativeOctave()
-        {
-            Parse("B-1", Octave.Get(-1).B);
-        }
-
-        [Test]
-        [Description("Parse valid note using 'sharp' word.")]
-        public void Parse_Valid_SharpWord()
-        {
-            Parse("F sharp 3", Octave.Get(3).FSharp);
-        }
-
-        [Test]
-        [Description("Parse invalid note where octave number is out of range.")]
         public void Parse_Invalid_OctaveIsOutOfRange()
         {
             ParseInvalid<FormatException>("E10");
         }
 
         [Test]
-        [Description("Parse invalid note where an input string is empty.")]
         public void Parse_Invalid_EmptyInputString()
         {
             ParseInvalid<ArgumentException>(string.Empty);
-        }
-
-        [Test]
-        public void Parse_LetterOnly()
-        {
-            Parse("D3", Octave.Get(3).D);
-        }
-
-        [Test]
-        public void Parse_Sharps_1()
-        {
-            Parse("F##3", Octave.Get(3).G);
-        }
-
-        [Test]
-        public void Parse_Sharps_2()
-        {
-            Parse("F#sharp #### 3", Octave.Get(3).B);
-        }
-
-        [Test]
-        public void Parse_Sharps_3()
-        {
-            Parse("F# # # ### # # # ### 1", Octave.Get(1).F);
-        }
-
-        [Test]
-        public void Parse_Flats_1()
-        {
-            Parse("Fb 1", Octave.Get(1).E);
-        }
-
-        [Test]
-        public void Parse_Flats_2()
-        {
-            Parse("Fb flat flat 1", Octave.Get(1).D);
-        }
-
-        [Test]
-        public void Parse_Flats_3()
-        {
-            Parse("Fbbbb bbbb bbbb flat 1", Octave.Get(1).E);
-        }
-
-        [Test]
-        public void Parse_Sharps_Flats_1()
-        {
-            Parse("C#b4", Octave.Get(4).C);
-        }
-
-        [Test]
-        public void Parse_Sharps_Flats_2()
-        {
-            Parse("C#b##4", Octave.Get(4).D);
-        }
-
-        [Test]
-        public void Parse_Sharps_Flats_3()
-        {
-            Parse("C#bbb4", Octave.Get(4).ASharp);
         }
 
         [Test]
