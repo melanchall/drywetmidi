@@ -23,7 +23,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
             if (input[0] is not >= 'A' and <= 'G')
                 return (null, 0);
 
-            var noteBaseNumber = (int)Enum.Parse<NoteName>(input[0].ToString());
+            var noteBaseNumber = (int)Enum.Parse<NoteName>(input[0].ToString(), true);
             var i = 1;
 
             while (i < input.Length)
@@ -39,7 +39,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
                     i++;
                     continue;
                 }
-                if (input[i] == 'b')
+                if (input[i] == 'b' || input[i] == 'B')
                 {
                     noteBaseNumber--;
                     i++;

@@ -1,7 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.1;net5.0;net7.0;net8.0</TargetFrameworks>
+    <TargetFrameworks Condition="'$(Configuration)' == 'Debug'">netstandard2.1</TargetFrameworks>
+    <TargetFrameworks Condition="'$(Configuration)' != 'Debug'">netstandard2.1;net5.0;net7.0;net8.0</TargetFrameworks>
     <Nullable Condition="'$(TargetFramework)' != 'netstandard2.0'">enable</Nullable>
     <NoWarn Condition="'$(TargetFramework)' == 'netstandard2.0'">$(NoWarn);CS8632</NoWarn>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
