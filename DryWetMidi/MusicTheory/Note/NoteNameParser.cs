@@ -13,7 +13,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         private const string AccidentalGroupName = "a";
 
         private const string NoteNameGroup = $"(?<{NoteLetterGroupName}>C|D|E|F|G|A|B)";
-        private const string AccidentalGroup = $"((?<{AccidentalGroupName}>{Note.SharpShortString}|{Note.SharpLongString}|{Note.FlatShortString}|{Note.FlatLongString})(?=(\\#|b|flat|sharp|\\W|\\d|\\s|$))\\s*)*";
+        private const string AccidentalGroup = $"((?<{AccidentalGroupName}>{Note.SharpShortString}|{Note.SharpLongString}|{Note.FlatShortString}|{Note.FlatLongString})\\s*)*";
 
         #endregion
 
