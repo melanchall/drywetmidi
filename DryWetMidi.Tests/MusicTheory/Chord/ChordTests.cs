@@ -83,6 +83,7 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
         }
 
         [TestCase("C", new[] { NoteName.C, NoteName.E, NoteName.G })]
+        [TestCase("  C", new[] { NoteName.C, NoteName.E, NoteName.G })]
         [TestCase("C6", new[] { NoteName.C, NoteName.E, NoteName.G, NoteName.A })]
         [TestCase("C7", new[] { NoteName.C, NoteName.E, NoteName.G, NoteName.ASharp })]
         [TestCase("Caug", new[] { NoteName.C, NoteName.E, NoteName.GSharp })]
@@ -90,7 +91,7 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
         [TestCase("Cm", new[] { NoteName.C, NoteName.DSharp, NoteName.G })]
         [TestCase("Am", new[] { NoteName.A, NoteName.C, NoteName.E })]
         [TestCase("Cm", new[] { NoteName.C, NoteName.DSharp, NoteName.G })]
-        [TestCase("Cm6", new[] { NoteName.C, NoteName.DSharp, NoteName.G, NoteName.A })]
+        [TestCase("C m6", new[] { NoteName.C, NoteName.DSharp, NoteName.G, NoteName.A })]
         [TestCase("Cm7", new[] { NoteName.C, NoteName.DSharp, NoteName.G, NoteName.ASharp })]
         [TestCase("CmM7", new[] { NoteName.C, NoteName.DSharp, NoteName.G, NoteName.B })]
         [TestCase("Cdim", new[] { NoteName.C, NoteName.DSharp, NoteName.FSharp })]
@@ -102,6 +103,7 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
         [TestCase("C9", new[] { NoteName.C, NoteName.E, NoteName.G, NoteName.ASharp, NoteName.D })]
         [TestCase("C9sus4", new[] { NoteName.C, NoteName.F, NoteName.G, NoteName.ASharp, NoteName.D })]
         [TestCase("F/G", new[] { NoteName.G, NoteName.F, NoteName.A, NoteName.C })]
+        [TestCase("F / G", new[] { NoteName.G, NoteName.F, NoteName.A, NoteName.C })]
         [TestCase("C11", new[] { NoteName.C, NoteName.E, NoteName.G, NoteName.ASharp, NoteName.D, NoteName.F })]
         [TestCase("Cm11", new[] { NoteName.C, NoteName.DSharp, NoteName.G, NoteName.ASharp, NoteName.D, NoteName.F })]
         [TestCase("C7b5", new[] { NoteName.C, NoteName.E, NoteName.FSharp, NoteName.ASharp })]

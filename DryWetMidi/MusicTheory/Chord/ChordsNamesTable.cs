@@ -89,9 +89,9 @@ namespace Melanchall.DryWetMidi.MusicTheory
                 new NameDefinition(new[] { new[] { 0, 3, 7, 10, 14, 21 } }, "min13", "m13"),
                 new NameDefinition(new[] { new[] { 0, 4, 7, 10, 14, 20 } }, "9b13", "9(b13)"),
                 new NameDefinition(new[] { new[] { 0, 3, 7, 11, 14, 17 } }, "minMaj9(11)", "mM7(9,11)"),
-                new NameDefinition(new[] { new[] { 0, 4, 7, 10, 14, 17, 21 } }, "dom13full", "13full"),
+                new NameDefinition(new[] { new[] { 0, 4, 7, 10, 14, 17, 21 } }, "dom13", "13"),
                 new NameDefinition(new[] { new[] { 0, 4, 7, 11, 14, 17, 21 } }, "maj13", "M13"),
-                new NameDefinition(new[] { new[] { 0, 3, 7, 10, 14, 17, 21 } }, "min13full", "m13full"),
+                new NameDefinition(new[] { new[] { 0, 3, 7, 10, 14, 17, 21 } }, "min13", "m13"),
             }
             .OrderByDescending(d => d.Intervals.First().Length)
             .ToArray();

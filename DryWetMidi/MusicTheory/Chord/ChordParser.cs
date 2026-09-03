@@ -1,5 +1,5 @@
 ﻿using Melanchall.DryWetMidi.Common;
-using System.Collections.Generic;
+using System;
 using System.Linq;
 using System.Text.RegularExpressions;
 
@@ -9,45 +9,41 @@ namespace Melanchall.DryWetMidi.MusicTheory
     {
         #region Constants
 
-        private const string RootNoteNameGroupName = "rn";
-        private const string BassNoteNameGroupName = "bn";
         private const string ChordCharacteristicsGroupName = "cc";
 
         public const string ChordCharacteristicsGroup = $"(?<{ChordCharacteristicsGroupName}>.*?)";
-        private static readonly string RootNoteNameGroup = $"(?<{RootNoteNameGroupName}>{MusicTheoryParsers.NoteNameParser.GetPattern()})";
-        private static readonly string BassNoteNameGroup = $"(?<{BassNoteNameGroupName}>{MusicTheoryParsers.NoteNameParser.GetPattern()})";
-
-        private const string ChordCharacteristicIsUnknown = "Chord characteristic is unknown.";
 
         #endregion
 
         #region Methods
 
-        internal override Regex[] GetRegexes() => new[]
+        internal override Regex[] GetRegexes()
         {
-            new Regex($@"^(?i:{RootNoteNameGroup}){ChordCharacteristicsGroup}(\/(?i:{BassNoteNameGroup}))?$", RegexOptions.Compiled),
-        };
+            throw new NotImplementedException();
+        }
 
         protected override Chord ParseInternal(string input)
         {
-            var match = Match(input);
-            if (match == null)
-                ThrowInvalidFormatError();
-
-            var rootNoteNameGroup = match.Groups[RootNoteNameGroupName];
-
-            var rootNoteName = MusicTheoryParsers.NoteNameParser.Parse(rootNoteNameGroup.Value);
-
-            //
+            var span = input.AsSpan();
 
             NoteName? bassNoteName = null;
-            var bassNoteNameGroup = match.Groups[BassNoteNameGroupName];
-            if (bassNoteNameGroup.Success)
-                bassNoteName = MusicTheoryParsers.NoteNameParser.Parse(bassNoteNameGroup.Value);
 
-            var notesNames = ChordsNamesTable.GetChordNotesNames(rootNoteName, match.Groups[ChordCharacteristicsGroupName].Value, bassNoteName);
-            if (!notesNames.Any())
-                ThrowError(ChordCharacteristicIsUnknown);
+            var bassNoteMarkerIndex = span.LastIndexOf('/');
+            if (bassNoteMarkerIndex >= 0 && MusicTheoryParsers.NoteNameParser.TryParse(span[(bassNoteMarkerIndex + 1)..].Trim().ToString(), out var bassNoteNameX))
+                bassNoteName = bassNoteNameX;
+
+            var mainPart = bassNoteName != null
+                ? span[..bassNoteMarkerIndex].Trim().ToString()
+                : input;
+
+            var chordCharacteristic = ChordsNamesTable
+                .NamesDefinitions
+                .SelectMany(d => d.Names)
+                .OrderByDescending(n => n.Length)
+                .FirstOrDefault(d => mainPart.EndsWith(d)) ?? string.Empty;
+
+            var rootNoteName = MusicTheoryParsers.NoteNameParser.Parse(mainPart.Substring(0, mainPart.Length - chordCharacteristic.Length));
+            var notesNames = ChordsNamesTable.GetChordNotesNames(rootNoteName, chordCharacteristic, bassNoteName);
 
             return new Chord(notesNames);
         }
