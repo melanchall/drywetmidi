@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Melanchall.DryWetMidi.Common;
@@ -30,17 +31,26 @@ namespace Melanchall.DryWetMidi.MusicTheory
 
         protected override Scale ParseInternal(string input)
         {
+            IEnumerable<Interval>? intervals;
+            NoteName rootNoteName;
+
+            var scaleNameToScale = ScaleIntervals.ScalesByName.OrderByDescending(sn => sn.Key.Length).FirstOrDefault(sn => input.EndsWith(sn.Key, StringComparison.OrdinalIgnoreCase));
+            if (!string.IsNullOrWhiteSpace(scaleNameToScale.Key))
+            {
+                intervals = scaleNameToScale.Value;
+                rootNoteName = MusicTheoryParsers.NoteNameParser.Parse(input.Substring(0, input.Length - scaleNameToScale.Key.Length).Trim());
+                return new Scale(intervals, rootNoteName);
+            }
+
             var match = Match(input);
             if (match == null)
                 ThrowInvalidFormatError();
 
             var rootNoteNameGroup = match.Groups[RootNoteNameGroupName];
 
-            var rootNoteName = MusicTheoryParsers.NoteNameParser.Parse(rootNoteNameGroup.Value);
+            rootNoteName = MusicTheoryParsers.NoteNameParser.Parse(rootNoteNameGroup.Value);
 
             //
-
-            IEnumerable<Interval>? intervals;
 
             var intervalGroup = match.Groups[IntervalGroupName];
             if (intervalGroup.Success)

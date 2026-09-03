@@ -12,8 +12,8 @@ namespace Melanchall.DryWetMidi.MusicTheory
         private const string NoteLetterGroupName = "n";
         private const string AccidentalGroupName = "a";
 
-        private static readonly string NoteNameGroup = $"(?<{NoteLetterGroupName}>C|D|E|F|G|A|B)";
-        private static readonly string AccidentalGroup = $"((?<{AccidentalGroupName}>{Regex.Escape(Note.SharpShortString)}|{Note.SharpLongString}|{Note.FlatShortString}|{Note.FlatLongString})\\s*)+?";
+        private const string NoteNameGroup = $"(?<{NoteLetterGroupName}>C|D|E|F|G|A|B)";
+        private const string AccidentalGroup = $"((?<{AccidentalGroupName}>{Note.SharpShortString}|{Note.SharpLongString}|{Note.FlatShortString}|{Note.FlatLongString})(?=(\\#|b|flat|sharp|\\W|\\d|\\s|$))\\s*)*";
 
         #endregion
 
@@ -22,7 +22,6 @@ namespace Melanchall.DryWetMidi.MusicTheory
         internal string[] GetPatterns() => new[]
         {
             $@"{NoteNameGroup}\s*{AccidentalGroup}",
-            $@"{NoteNameGroup}",
         };
 
         internal override Regex[] GetRegexes() => GetPatterns()

@@ -12,21 +12,21 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
     [TestFixture]
     public sealed class ScaleTests
     {
-        private static readonly object[] ScalesStringsToScales = typeof(ScaleIntervals)
-            .GetFields(BindingFlags.Static | BindingFlags.Public)
+        private static readonly object[] ScalesStringsToScales = ScaleIntervals
+            .ScalesByName
             .SelectMany(f => Enum
                 .GetValues(typeof(NoteName))
                 .OfType<NoteName>()
                 .Select(n => new object[]
                 {
-                    $"{n.ToString().Replace(Note.SharpLongString, Note.SharpShortString)} {((DisplayNameAttribute)f.GetCustomAttribute(typeof(DisplayNameAttribute))).Name}",
-                    new Scale((IEnumerable<Interval>)f.GetValue(null), n)
+                    $"{n.ToString().Replace(Note.SharpLongString, Note.SharpShortString)} {f.Key}",
+                    new Scale(f.Value, n)
                 }))
             .ToArray();
 
         #region Test methods
 
-        //[TestCaseSource(nameof(ScalesStringsToScales))]
+        [TestCaseSource(nameof(ScalesStringsToScales))]
         public void Parse_Valid_ScaleName(string scaleString, Scale expectedScale) =>
             Parse(scaleString, expectedScale);
 
