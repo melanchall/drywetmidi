@@ -11,12 +11,65 @@ namespace Melanchall.DryWetMidi.MusicTheory
         private const string NoteLetterGroupName = "n";
         private const string AccidentalGroupName = "a";
 
-        private const string NoteNameGroup = $"(?<{NoteLetterGroupName}>C|D|E|F|G|A|B)";
+        private const string NoteNameGroup = $"(?<{NoteLetterGroupName}>[CDEFGAB])";
         private const string AccidentalGroup = $"((?<{AccidentalGroupName}>{Note.SharpShortString}|{Note.SharpLongString}|{Note.FlatShortString}|{Note.FlatLongString})\\s*)*";
 
         #endregion
 
         #region Methods
+
+        public (NoteName? NoteName, int Length) TryReadNoteName(ReadOnlySpan<char> input)
+        {
+            if (input[0] is not >= 'A' and <= 'G')
+                return (null, 0);
+
+            var noteBaseNumber = (int)Enum.Parse<NoteName>(input[0].ToString());
+            var i = 1;
+
+            while (i < input.Length)
+            {
+                if (input[i] == ' ')
+                {
+                    i++;
+                    continue;
+                }
+                if (input[i] == '#')
+                {
+                    noteBaseNumber++;
+                    i++;
+                    continue;
+                }
+                if (input[i] == 'b')
+                {
+                    noteBaseNumber--;
+                    i++;
+                    continue;
+                }
+
+                var slice = input.Slice(i);
+
+                if (slice.StartsWith(Note.SharpLongString, StringComparison.OrdinalIgnoreCase))
+                {
+                    noteBaseNumber++;
+                    i += Note.SharpLongString.Length;
+                }
+                else if (slice.StartsWith(Note.FlatLongString, StringComparison.OrdinalIgnoreCase))
+                {
+                    noteBaseNumber--;
+                    i += Note.FlatLongString.Length;
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            noteBaseNumber %= Octave.OctaveSize;
+            if (noteBaseNumber < 0)
+                noteBaseNumber = Octave.OctaveSize + noteBaseNumber;
+
+            return ((NoteName)noteBaseNumber, i);
+        }
 
         internal string GetPattern() => $@"{NoteNameGroup}\s*{AccidentalGroup}";
 
