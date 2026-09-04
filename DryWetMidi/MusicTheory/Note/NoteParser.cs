@@ -19,7 +19,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
             if (noteName == null)
                 ThrowInvalidFormatError();
 
-            if (!int.TryParse(span[length..], out var octaveNumber))
+            if (!int.TryParse(span[length..].Trim(), out var octaveNumber))
                 ThrowInvalidFormatError();
 
             if (!NoteUtilities.IsNoteValid(noteName.Value, octaveNumber))

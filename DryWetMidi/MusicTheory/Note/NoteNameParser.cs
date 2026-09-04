@@ -25,24 +25,29 @@ namespace Melanchall.DryWetMidi.MusicTheory
 
             var noteBaseNumber = (int)Enum.Parse<NoteName>(input[0].ToString(), true);
             var i = 1;
+            var trailingSpacesCount = 0;
 
             while (i < input.Length)
             {
                 if (input[i] == ' ')
                 {
                     i++;
+                    trailingSpacesCount++;
                     continue;
                 }
+
                 if (input[i] == '#')
                 {
                     noteBaseNumber++;
                     i++;
+                    trailingSpacesCount = 0;
                     continue;
                 }
                 if (input[i] == 'b' || input[i] == 'B')
                 {
                     noteBaseNumber--;
                     i++;
+                    trailingSpacesCount = 0;
                     continue;
                 }
 
@@ -52,11 +57,13 @@ namespace Melanchall.DryWetMidi.MusicTheory
                 {
                     noteBaseNumber++;
                     i += Note.SharpLongString.Length;
+                    trailingSpacesCount = 0;
                 }
                 else if (slice.StartsWith(Note.FlatLongString, StringComparison.OrdinalIgnoreCase))
                 {
                     noteBaseNumber--;
                     i += Note.FlatLongString.Length;
+                    trailingSpacesCount = 0;
                 }
                 else
                 {
@@ -68,7 +75,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
             if (noteBaseNumber < 0)
                 noteBaseNumber = Octave.OctaveSize + noteBaseNumber;
 
-            return ((NoteName)noteBaseNumber, i);
+            return ((NoteName)noteBaseNumber, i - trailingSpacesCount);
         }
 
         internal string GetPattern() => $@"{NoteNameGroup}\s*{AccidentalGroup}";

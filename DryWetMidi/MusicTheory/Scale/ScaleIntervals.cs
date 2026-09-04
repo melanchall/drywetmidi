@@ -670,6 +670,16 @@ namespace Melanchall.DryWetMidi.MusicTheory
             { "whole tone pentatonic", WholeTonePentatonic }
         };
 
+        internal static readonly string[] BNames = ScalesByName
+            .Keys
+            .Where(n => n.StartsWith("b", StringComparison.InvariantCultureIgnoreCase))
+            .ToArray();
+
+        internal static readonly string[] FlatNames = ScalesByName
+            .Keys
+            .Where(n => n.StartsWith("flat", StringComparison.InvariantCultureIgnoreCase))
+            .ToArray();
+
         #endregion
 
         #region Methods

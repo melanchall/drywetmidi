@@ -10,7 +10,6 @@ namespace Melanchall.DryWetMidi.MusicTheory
     {
         #region Constants
 
-        private const string RootNoteNameGroupName = "rn";
         private const string IntervalsMnemonicGroupName = "im";
         private const string IntervalGroupName = "i";
 
@@ -25,31 +24,49 @@ namespace Melanchall.DryWetMidi.MusicTheory
 
         internal override Regex[] GetRegexes() => new[]
         {
-            new Regex($@"^(?<{RootNoteNameGroupName}>{MusicTheoryParsers.NoteNameParser.GetPattern()})\s*({IntervalGroup}|{IntervalsMnemonicGroup})$", RegexOptions.Compiled | RegexOptions.IgnoreCase)
+            new Regex($@"^({IntervalGroup}|{IntervalsMnemonicGroup})$", RegexOptions.Compiled | RegexOptions.IgnoreCase)
         };
 
         protected override Scale ParseInternal(string input)
         {
-            IEnumerable<Interval>? intervals;
-            NoteName rootNoteName;
+            var span = input.AsSpan();
+            var (rootNoteName, rootNoteNamePartLength) = MusicTheoryParsers.NoteNameParser.TryReadNoteName(span);
+            if (rootNoteName == null)
+                ThrowInvalidFormatError();
 
-            var scaleNameToScale = ScaleIntervals.ScalesByName.OrderByDescending(sn => sn.Key.Length).FirstOrDefault(sn => input.EndsWith(sn.Key, StringComparison.OrdinalIgnoreCase));
-            if (!string.IsNullOrWhiteSpace(scaleNameToScale.Key))
+            var slice = span.Slice(0, rootNoteNamePartLength);
+            if (slice.EndsWith("b", StringComparison.InvariantCultureIgnoreCase))
             {
-                intervals = scaleNameToScale.Value;
-                rootNoteName = MusicTheoryParsers.NoteNameParser.Parse(input.Substring(0, input.Length - scaleNameToScale.Key.Length).Trim());
-                return new Scale(intervals, rootNoteName);
+                foreach (var n in ScaleIntervals.BNames)
+                {
+                    if (span.Slice(rootNoteNamePartLength - 1).StartsWith(n, StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        rootNoteName = (NoteName)(((int)rootNoteName.Value + 1) % Octave.OctaveSize);
+                        rootNoteNamePartLength--;
+                        break;
+                    }
+                }
+            }
+            else if (slice.EndsWith("flat", StringComparison.InvariantCultureIgnoreCase))
+            {
+                foreach (var n in ScaleIntervals.FlatNames)
+                {
+                    if (span.Slice(rootNoteNamePartLength - 4).StartsWith(n, StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        rootNoteName = (NoteName)(((int)rootNoteName.Value + 1) % Octave.OctaveSize);
+                        rootNoteNamePartLength -= 4;
+                        break;
+                    }
+                }
             }
 
-            var match = Match(input);
+            var match = Match(span.Slice(rootNoteNamePartLength).Trim().ToString());
             if (match == null)
                 ThrowInvalidFormatError();
 
-            var rootNoteNameGroup = match.Groups[RootNoteNameGroupName];
-
-            rootNoteName = MusicTheoryParsers.NoteNameParser.Parse(rootNoteNameGroup.Value);
-
             //
+
+            IEnumerable<Interval>? intervals;
 
             var intervalGroup = match.Groups[IntervalGroupName];
             if (intervalGroup.Success)
@@ -87,7 +104,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
 
             //
 
-            return new Scale(intervals, rootNoteName);
+            return new Scale(intervals, rootNoteName.Value);
         }
 
         #endregion
