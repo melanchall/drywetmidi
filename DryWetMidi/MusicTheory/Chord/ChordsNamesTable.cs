@@ -61,7 +61,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
                 new NameDefinition(new[] { new[] { 0, 7 } }, "5"),
                 new NameDefinition(new[] { new[] { 0, 4, 6, 10 } }, "7b5", "dom7dim5", "7dim5"),
                 new NameDefinition(new[] { new[] { 0, 4, 7, 10, 13 } }, "7b9"),
-                new NameDefinition(new[] { new[] { 0, 3, 6, 10 } }, "ø", "ø7", "m7b5", "min7dim5", "m7dim5", "min7b5", "m7b5"),
+                new NameDefinition(new[] { new[] { 0, 3, 6, 10 } }, "ø", "ø7", "m7b5", "min7dim5", "m7dim5", "min7b5"),
                 new NameDefinition(new[] { new[] { 0, 4, 8, 10 } }, "aug7", "7#5", "7+5"),
                 new NameDefinition(new[] { new[] { 0, 4, 7, 10, 15 } }, "7#9", "7+9"),
                 new NameDefinition(new[] { new[] { 0, 3, 6, 9 } }, "dim7"),
@@ -84,14 +84,12 @@ namespace Melanchall.DryWetMidi.MusicTheory
                 new NameDefinition(new[] { new[] { 0, 3, 7, 10, 21 } }, "min13no9", "m13no9"),
                 new NameDefinition(new[] { new[] { 0, 3, 6, 10, 14 } }, "ø9", "m9b5", "min9b5"),
                 new NameDefinition(new[] { new[] { 0, 4, 8, 10, 14 } }, "9#5", "aug9", "9+5"),
-                new NameDefinition(new[] { new[] { 0, 4, 7, 10, 14, 21 } }, "13", "dom13"),
+                new NameDefinition(new[] { new[] { 0, 4, 7, 10, 14, 21 }, new[] { 0, 4, 7, 10, 14, 17, 21 } }, "13", "dom13"),
                 new NameDefinition(new[] { new[] { 0, 4, 7, 11, 14, 17 } }, "maj9(11)", "maj7(9,11)", "M7(9,11)"),
-                new NameDefinition(new[] { new[] { 0, 3, 7, 10, 14, 21 } }, "min13", "m13"),
+                new NameDefinition(new[] { new[] { 0, 3, 7, 10, 14, 21 }, new[] { 0, 3, 7, 10, 14, 17, 21 } }, "min13", "m13"),
                 new NameDefinition(new[] { new[] { 0, 4, 7, 10, 14, 20 } }, "9b13", "9(b13)"),
                 new NameDefinition(new[] { new[] { 0, 3, 7, 11, 14, 17 } }, "minMaj9(11)", "mM7(9,11)"),
-                new NameDefinition(new[] { new[] { 0, 4, 7, 10, 14, 17, 21 } }, "dom13", "13"),
                 new NameDefinition(new[] { new[] { 0, 4, 7, 11, 14, 17, 21 } }, "maj13", "M13"),
-                new NameDefinition(new[] { new[] { 0, 3, 7, 10, 14, 17, 21 } }, "min13", "m13"),
             }
             .OrderByDescending(d => d.Intervals.First().Length)
             .ToArray();
@@ -103,6 +101,10 @@ namespace Melanchall.DryWetMidi.MusicTheory
         private static readonly int MaxIntervalsCount = NamesDefinitions
             .SelectMany(d => d.Intervals.Select(i => i.Length))
             .Max();
+
+        private static readonly Dictionary<string, int[]> ChordCharacteristicsToIntervals = NamesDefinitions
+            .SelectMany(d => d.Names.Select(n => new { Name = n, Intervals = d.Intervals.First() }))
+            .ToDictionary(d => d.Name, d => d.Intervals);
 
         #endregion
 
@@ -120,9 +122,10 @@ namespace Melanchall.DryWetMidi.MusicTheory
             if (bassNoteName != null)
                 notesNames.Add(bassNoteName.Value);
 
-            var definition = NamesDefinitions.FirstOrDefault(d => d.Names.Contains(chordCharacteristic.Replace(" ", string.Empty)));
-            if (definition != null)
-                notesNames.AddRange(definition.Intervals.First().Select(i => rootNoteName.Transpose(Interval.FromHalfSteps(i))));
+            chordCharacteristic = chordCharacteristic.Replace(" ", string.Empty);
+
+            if (ChordCharacteristicsToIntervals.TryGetValue(chordCharacteristic, out var intervals))
+                notesNames.AddRange(intervals.Select(i => rootNoteName.Transpose(Interval.FromHalfSteps(i))));
 
             return notesNames.ToArray();
         }
