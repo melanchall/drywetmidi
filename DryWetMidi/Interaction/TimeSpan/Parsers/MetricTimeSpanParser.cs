@@ -1,117 +1,127 @@
 ﻿using Melanchall.DryWetMidi.Common;
-using System.Collections.Generic;
+using System;
 using System.Text.RegularExpressions;
 
 namespace Melanchall.DryWetMidi.Interaction
 {
     internal sealed class MetricTimeSpanParser : SimpleParser<MetricTimeSpan>
     {
-        #region Constants
-
-        private const string HoursGroupName = "h";
-        private const string MinutesGroupName = "m";
-        private const string SecondsGroupName = "s";
-        private const string MillisecondsGroupName = "ms";
-
-        private static readonly string HoursGroup = GetNonnegativeIntegerNumberGroup(HoursGroupName);
-        private static readonly string MinutesGroup = GetNonnegativeIntegerNumberGroup(MinutesGroupName);
-        private static readonly string SecondsGroup = GetNonnegativeIntegerNumberGroup(SecondsGroupName);
-        private static readonly string MillisecondsGroup = GetNonnegativeIntegerNumberGroup(MillisecondsGroupName);
-
-        private static readonly string LetteredHoursGroup = $@"{HoursGroup}\s*h";
-        private static readonly string LetteredMinutesGroup = $@"{MinutesGroup}\s*m";
-        private static readonly string LetteredSecondsGroup = $@"{SecondsGroup}\s*s";
-        private static readonly string LetteredMillisecondsGroup = $@"{MillisecondsGroup}\s*ms";
-
-        private static readonly string Divider = Regex.Escape(":");
-
-        private const string HoursIsOutOfRange = "Hours number is out of range.";
-        private const string MinutesIsOutOfRange = "Minutes number is out of range.";
-        private const string SecondsIsOutOfRange = "Seconds number is out of range.";
-        private const string MillisecondsIsOutOfRange = "Milliseconds number is out of range.";
-
-        #endregion
-
-        #region Methods
-
-        internal override Regex[] GetRegexes() => new[]
+        internal override Regex[] GetRegexes()
         {
-            // hours:minutes:seconds:milliseconds -> hours:minutes:seconds:milliseconds
-            new Regex($@"^{HoursGroup}\s*{Divider}\s*{MinutesGroup}\s*{Divider}\s*{SecondsGroup}\s*{Divider}\s*{MillisecondsGroup}$", RegexOptions.Compiled | RegexOptions.IgnoreCase),
-
-            // hours:minutes:seconds -> hours:minutes:seconds:0
-            new Regex($@"^{HoursGroup}\s*{Divider}\s*{MinutesGroup}\s*{Divider}\s*{SecondsGroup}$", RegexOptions.Compiled | RegexOptions.IgnoreCase),
-
-            // minutes:seconds -> 0:minutes:seconds:0
-            new Regex($@"^{MinutesGroup}\s*{Divider}\s*{SecondsGroup}$", RegexOptions.Compiled | RegexOptions.IgnoreCase),
-
-            // hours h minutes m seconds s milliseconds ms -> hours:minutes:seconds:milliseconds
-            new Regex($@"^{LetteredHoursGroup}\s*{LetteredMinutesGroup}\s*{LetteredSecondsGroup}\s*{LetteredMillisecondsGroup}$", RegexOptions.Compiled | RegexOptions.IgnoreCase),
-
-            // hours h minutes m seconds s -> hours:minutes:seconds:0
-            new Regex($@"^{LetteredHoursGroup}\s*{LetteredMinutesGroup}\s*{LetteredSecondsGroup}$", RegexOptions.Compiled | RegexOptions.IgnoreCase),
-
-            // hours h minutes m milliseconds ms -> hours:minutes:0:milliseconds
-            new Regex($@"^{LetteredHoursGroup}\s*{LetteredMinutesGroup}\s*{LetteredMillisecondsGroup}$", RegexOptions.Compiled | RegexOptions.IgnoreCase),
-
-            // hours h seconds s milliseconds ms -> hours:0:seconds:milliseconds
-            new Regex($@"^{LetteredHoursGroup}\s*{LetteredSecondsGroup}\s*{LetteredMillisecondsGroup}$", RegexOptions.Compiled | RegexOptions.IgnoreCase),
-
-            // minutes m seconds s milliseconds ms -> 0:minutes:seconds:milliseconds
-            new Regex($@"^{LetteredMinutesGroup}\s*{LetteredSecondsGroup}\s*{LetteredMillisecondsGroup}$", RegexOptions.Compiled | RegexOptions.IgnoreCase),
-
-            // hours h minutes m -> hours:minutes:0:0
-            new Regex($@"^{LetteredHoursGroup}\s*{LetteredMinutesGroup}$", RegexOptions.Compiled | RegexOptions.IgnoreCase),
-
-            // hours h seconds s -> hours:0:seconds:0
-            new Regex($@"^{LetteredHoursGroup}\s*{LetteredSecondsGroup}$", RegexOptions.Compiled | RegexOptions.IgnoreCase),
-
-            // hours h milliseconds ms -> hours:0:0:milliseconds
-            new Regex($@"^{LetteredHoursGroup}\s*{LetteredMillisecondsGroup}$", RegexOptions.Compiled | RegexOptions.IgnoreCase),
-
-            // minutes m seconds s -> 0:minutes:seconds:0
-            new Regex($@"^{LetteredMinutesGroup}\s*{LetteredSecondsGroup}$", RegexOptions.Compiled | RegexOptions.IgnoreCase),
-
-            // hours h milliseconds ms -> hours:0:0:milliseconds
-            new Regex($@"^{LetteredMinutesGroup}\s*{LetteredMillisecondsGroup}$", RegexOptions.Compiled | RegexOptions.IgnoreCase),
-
-            // seconds s milliseconds ms -> 0:0:seconds:milliseconds
-            new Regex($@"^{LetteredSecondsGroup}\s*{LetteredMillisecondsGroup}$", RegexOptions.Compiled | RegexOptions.IgnoreCase),
-
-            // hours h -> hours:0:0:0
-            new Regex($@"^{LetteredHoursGroup}$", RegexOptions.Compiled | RegexOptions.IgnoreCase),
-
-            // minutes m -> 0:minutes:0:0
-            new Regex($@"^{LetteredMinutesGroup}$", RegexOptions.Compiled | RegexOptions.IgnoreCase),
-
-            // seconds s -> 0:0:seconds:0
-            new Regex($@"^{LetteredSecondsGroup}$", RegexOptions.Compiled | RegexOptions.IgnoreCase),
-
-            // milliseconds ms -> 0:0:0:milliseconds
-            new Regex($@"^{LetteredMillisecondsGroup}$", RegexOptions.Compiled | RegexOptions.IgnoreCase),
-        };
+            throw new NotImplementedException();
+        }
 
         protected override MetricTimeSpan ParseInternal(string input)
         {
-            var match = Match(input);
-            if (match == null)
-                ThrowInvalidFormatError();
+            var hours = 0;
+            var minutes = 0;
+            var seconds = 0;
+            var milliseconds = 0;
 
-            if (!ParseNonnegativeInt(match, HoursGroupName, 0, out var hours))
-                ThrowError(HoursIsOutOfRange);
+            var span = input.AsSpan();
 
-            if (!ParseNonnegativeInt(match, MinutesGroupName, 0, out var minutes))
-                ThrowError(MinutesIsOutOfRange);
+            var colonCount = 0;
+            foreach (var c in span)
+            {
+                if (c == ':')
+                    colonCount++;
+            }
 
-            if (!ParseNonnegativeInt(match, SecondsGroupName, 0, out var seconds))
-                ThrowError(SecondsIsOutOfRange);
+            if (colonCount > 0)
+            {
+                if (colonCount < 1 || colonCount > 3)
+                    ThrowInvalidFormatError();
 
-            if (!ParseNonnegativeInt(match, MillisecondsGroupName, 0, out var milliseconds))
-                ThrowError(MillisecondsIsOutOfRange);
+                if (colonCount == 1)
+                {
+                    if (!TryReadNextSegment(ref span, out minutes) ||
+                        !TryReadNextSegment(ref span, out seconds))
+                        ThrowInvalidFormatError();
+                }
+                else if (colonCount == 2)
+                {
+                    if (!TryReadNextSegment(ref span, out hours) ||
+                        !TryReadNextSegment(ref span, out minutes) ||
+                        !TryReadNextSegment(ref span, out seconds))
+                        ThrowInvalidFormatError();
+                }
+                else
+                {
+                    if (!TryReadNextSegment(ref span, out hours) ||
+                        !TryReadNextSegment(ref span, out minutes) ||
+                        !TryReadNextSegment(ref span, out seconds) ||
+                        !TryReadNextSegment(ref span, out milliseconds))
+                        ThrowInvalidFormatError();
+                }
+
+                return new MetricTimeSpan(hours, minutes, seconds, milliseconds);
+            }
+
+            //
+
+            ReadOnlySpan<char> remaining = input;
+
+            while (!remaining.IsEmpty)
+            {
+                remaining = remaining.TrimStart();
+                if (remaining.IsEmpty)
+                    break;
+
+                var unitStartIndex = 0;
+                while (unitStartIndex < remaining.Length && char.IsDigit(remaining[unitStartIndex]))
+                {
+                    unitStartIndex++;
+                }
+
+                if (unitStartIndex == 0)
+                    ThrowInvalidFormatError();
+
+                if (!int.TryParse(remaining[..unitStartIndex], out int value))
+                    ThrowInvalidFormatError();
+
+                remaining = remaining[unitStartIndex..];
+                remaining = remaining.TrimStart();
+
+                if (remaining.StartsWith("ms", StringComparison.OrdinalIgnoreCase))
+                {
+                    milliseconds = value;
+                    remaining = remaining[2..];
+                }
+                else if (remaining.StartsWith("h", StringComparison.OrdinalIgnoreCase))
+                {
+                    hours = value;
+                    remaining = remaining[1..];
+                }
+                else if (remaining.StartsWith("m", StringComparison.OrdinalIgnoreCase))
+                {
+                    minutes = value;
+                    remaining = remaining[1..];
+                }
+                else if (remaining.StartsWith("s", StringComparison.OrdinalIgnoreCase))
+                {
+                    seconds = value;
+                    remaining = remaining[1..];
+                }
+                else
+                    ThrowInvalidFormatError();
+            }
 
             return new MetricTimeSpan(hours, minutes, seconds, milliseconds);
         }
 
-        #endregion
+        private static bool TryReadNextSegment(ref ReadOnlySpan<char> remaining, out int value)
+        {
+            var index = remaining.IndexOf(':');
+            var segment = index >= 0 ? remaining[..index] : remaining;
+
+            if (!int.TryParse(segment, out value))
+                return false;
+
+            remaining = index >= 0
+                ? remaining[(index + 1)..]
+                : ReadOnlySpan<char>.Empty;
+            
+            return true;
+        }
     }
 }

@@ -1,8 +1,9 @@
-﻿using System;
-using System.Linq;
-using Melanchall.DryWetMidi.Interaction;
+﻿using Melanchall.DryWetMidi.Interaction;
 using NUnit.Framework;
 using NUnit.Framework.Legacy;
+using System;
+using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace Melanchall.DryWetMidi.Tests.Interaction
 {
@@ -57,11 +58,11 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         private static readonly object[] ParametersForValidParseCheck =
         {
             new object[] { "0:0:0:0", new MetricTimeSpan() },
-            new object[] { "0:0:0", new MetricTimeSpan() },
+            new object[] { "0 :0:0", new MetricTimeSpan() },
             new object[] { "0:0", new MetricTimeSpan() },
-            new object[] { "0:0:0:156", new MetricTimeSpan(0, 0, 0, 156) },
-            new object[] { "2:0:156", new MetricTimeSpan(2, 0, 156) },
-            new object[] { "1:156", new MetricTimeSpan(0, 1, 156) },
+            new object[] { "  0: 0:0:156", new MetricTimeSpan(0, 0, 0, 156) },
+            new object[] { "2:0:156 ", new MetricTimeSpan(2, 0, 156) },
+            new object[] { "1:  156", new MetricTimeSpan(0, 1, 156) },
 
             new object[] { "1h2m3s4ms", new MetricTimeSpan(1, 2, 3, 4) },
             new object[] { "1h 2m3s", new MetricTimeSpan(1, 2, 3, 0) },
@@ -74,6 +75,25 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             new object[] { "2M3s", new MetricTimeSpan(0, 2, 3, 0) },
             new object[] { "2 m 4 Ms", new MetricTimeSpan(0, 2, 0, 4) },
             new object[] { "3 s 4 mS", new MetricTimeSpan(0, 0, 3, 4) },
+
+            new object[] { "1:2:3:4", new MetricTimeSpan(1, 2, 3, 4) },
+            new object[] { "1:2:3", new MetricTimeSpan(1, 2, 3, 0) },
+            new object[] { "2:3", new MetricTimeSpan(0, 2, 3, 0) },
+            new object[] { "1h2m3s4ms", new MetricTimeSpan(1, 2, 3, 4) },
+            new object[] { "1h2m3s", new MetricTimeSpan(1, 2, 3, 0) },
+            new object[] { "1h2m3ms", new MetricTimeSpan(1, 2, 0, 3) },
+            new object[] { "1h2s3ms", new MetricTimeSpan(1, 0, 2, 3) },
+            new object[] { "1m2s3ms", new MetricTimeSpan(0, 1, 2, 3) },
+            new object[] { "1h2m", new MetricTimeSpan(1, 2, 0, 0) },
+            new object[] { "1h2s", new MetricTimeSpan(1, 0, 2, 0) },
+            new object[] { "1h2ms", new MetricTimeSpan(1, 0, 0, 2) },
+            new object[] { "1m2s", new MetricTimeSpan(0, 1, 2, 0) },
+            new object[] { "1h2ms", new MetricTimeSpan(1, 0, 0, 2) },
+            new object[] { "1s2ms", new MetricTimeSpan(0, 0, 1, 2) },
+            new object[] { "1h", new MetricTimeSpan(1, 0, 0, 0) },
+            new object[] { "1m", new MetricTimeSpan(0, 1, 0, 0) },
+            new object[] { "1s", new MetricTimeSpan(0, 0, 1, 0) },
+            new object[] { "1ms", new MetricTimeSpan(0, 0, 0, 1) }
         };
 
         #endregion
