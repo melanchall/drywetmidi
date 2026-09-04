@@ -1,54 +1,54 @@
 ﻿using Melanchall.DryWetMidi.Common;
-using System.Collections.Generic;
+using System;
+using System.Globalization;
 using System.Text.RegularExpressions;
 
 namespace Melanchall.DryWetMidi.Interaction
 {
     internal sealed class BarBeatTicksTimeSpanParser : SimpleParser<BarBeatTicksTimeSpan>
     {
-        #region Constants
-
-        private const string BarsGroupName = "bars";
-        private const string BeatsGroupName = "beats";
-        private const string TicksGroupName = "ticks";
-
-        private static readonly string BarsGroup = GetNonnegativeDoubleNumberGroup(BarsGroupName, ',');
-        private static readonly string BeatsGroup = GetNonnegativeDoubleNumberGroup(BeatsGroupName, ',');
-        private static readonly string TicksGroup = GetNonnegativeIntegerNumberGroup(TicksGroupName);
-
-        private static readonly string Divider = Regex.Escape(".");
-
-        private const string BarsIsOutOfRange = "Bars number is out of range.";
-        private const string BeatsIsOutOfRange = "Beats number is out of range.";
-        private const string TicksIsOutOfRange = "Ticks number is out of range.";
-
-        #endregion
-
-        #region Methods
-
-        internal override Regex[] GetRegexes() => new[]
+        private static readonly NumberFormatInfo CommaSeparatorFormat = new()
         {
-            new Regex($@"^{BarsGroup}\s*{Divider}\s*{BeatsGroup}\s*{Divider}\s*{TicksGroup}$", RegexOptions.Compiled | RegexOptions.IgnoreCase),
+            NumberDecimalSeparator = ","
         };
+
+        internal override Regex[] GetRegexes()
+        {
+            throw new NotImplementedException();
+        }
 
         protected override BarBeatTicksTimeSpan ParseInternal(string input)
         {
-            var match = Match(input);
-            if (match == null)
+            var bars = 0.0;
+            var beats = 0.0;
+            var ticks = 0;
+
+            var span = input.AsSpan();
+
+            var firstDot = span.IndexOf('.');
+            if (firstDot == -1)
                 ThrowInvalidFormatError();
 
-            if (!ParseNonnegativeDouble(match, BarsGroupName, 0, new[] { ',' }, out var bars))
-                ThrowError(BarsIsOutOfRange);
+            var secondDot = span[(firstDot + 1)..].IndexOf('.');
+            if (secondDot == -1) 
+                ThrowInvalidFormatError();
 
-            if (!ParseNonnegativeDouble(match, BeatsGroupName, 0, new[] { ',' }, out var beats))
-                ThrowError(BeatsIsOutOfRange);
+            secondDot = firstDot + 1 + secondDot;
 
-            if (!ParseNonnegativeLong(match, TicksGroupName, 0, out var ticks))
-                ThrowError(TicksIsOutOfRange);
+            var barsSpan = span[..firstDot].Trim();
+            var beatsSpan = span[(firstDot + 1)..secondDot].Trim();
+            var ticksSpan = span[(secondDot + 1)..].Trim();
+
+            if (!double.TryParse(barsSpan, NumberStyles.AllowDecimalPoint, CommaSeparatorFormat, out bars))
+                ThrowInvalidFormatError();
+
+            if (!double.TryParse(beatsSpan, NumberStyles.AllowDecimalPoint, CommaSeparatorFormat, out beats))
+                ThrowInvalidFormatError();
+
+            if (!int.TryParse(ticksSpan, out ticks))
+                ThrowInvalidFormatError();
 
             return new BarBeatTicksTimeSpan(bars, beats, ticks);
         }
-
-        #endregion
     }
 }

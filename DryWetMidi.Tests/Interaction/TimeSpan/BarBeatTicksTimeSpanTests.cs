@@ -59,12 +59,15 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             new object[] { "0.0.0", new BarBeatTicksTimeSpan() },
             new object[] { "10.0.0", new BarBeatTicksTimeSpan(10, 0, 0) },
+            new object[] { "  10. 0.0", new BarBeatTicksTimeSpan(10, 0, 0) },
             new object[] { "100.100.100", new BarBeatTicksTimeSpan(100, 100, 100) },
             new object[] { "0.345.0", new BarBeatTicksTimeSpan(0, 345, 0) },
             new object[] { "0.0.1234", new BarBeatTicksTimeSpan(0, 0, 1234) },
+            new object[] { "0.  0. 1234  ", new BarBeatTicksTimeSpan(0, 0, 1234) },
             new object[] { "10,2.0,3.0", new BarBeatTicksTimeSpan(10.2, 0.3, 0) },
             new object[] { "10,2.0,001.0", new BarBeatTicksTimeSpan(10.2, 0.001, 0) },
             new object[] { "6,6.0.0", new BarBeatTicksTimeSpan(6.6) },
+            new object[] { "6,6 . 0  . 0", new BarBeatTicksTimeSpan(6.6) },
         };
 
         #endregion
