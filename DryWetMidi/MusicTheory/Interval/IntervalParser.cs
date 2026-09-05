@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using Melanchall.DryWetMidi.Common;
+using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using Melanchall.DryWetMidi.Common;
 
 namespace Melanchall.DryWetMidi.MusicTheory
 {
@@ -28,9 +29,45 @@ namespace Melanchall.DryWetMidi.MusicTheory
 
         #region Methods
 
+        public (Interval? Interval, int Length) TryReadInterval(ReadOnlySpan<char> input)
+        {
+            var endIndex = 1;
+
+            if (input[0] == '+' || input[0] == '-' || char.IsDigit(input[0]))
+            {
+                for (; endIndex < input.Length; endIndex++)
+                {
+                    if (!char.IsDigit(input[endIndex]))
+                        break;
+                }
+
+                if (!int.TryParse(input.Slice(0, endIndex), out var halfSteps))
+                    return (null, 0);
+
+                if (!IntervalUtilities.IsIntervalValid(halfSteps))
+                    return (null, 0);
+
+                return (Interval.FromHalfSteps(halfSteps), endIndex);
+            }
+
+            if (!IntervalQualitiesByLetters.TryGetValue(input[0], out var intervalQuality))
+                return (null, 0);
+
+            for (; endIndex < input.Length; endIndex++)
+            {
+                if (!char.IsDigit(input[endIndex]))
+                    break;
+            }
+
+            if (!int.TryParse(input.Slice(1, endIndex - 1), out var intervalNumber))
+                return (null, 0);
+
+            return (Interval.Get(intervalQuality, intervalNumber), endIndex);
+        }
+
         internal override Regex[] GetRegexes()
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         protected override Interval ParseInternal(string input)
