@@ -7,28 +7,6 @@ namespace Melanchall.DryWetMidi.MusicTheory
 {
     internal sealed class IntervalParser : SimpleParser<Interval>
     {
-        #region Constants
-
-        private static readonly Dictionary<char, IntervalQuality> IntervalQualitiesByLetters =
-            new Dictionary<char, IntervalQuality>
-            {
-                ['P'] = IntervalQuality.Perfect,
-                ['p'] = IntervalQuality.Perfect,
-                ['M'] = IntervalQuality.Major,
-                ['m'] = IntervalQuality.Minor,
-                ['D'] = IntervalQuality.Diminished,
-                ['d'] = IntervalQuality.Diminished,
-                ['A'] = IntervalQuality.Augmented,
-                ['a'] = IntervalQuality.Augmented
-            };
-
-        private const string HalfStepsNumberIsOutOfRange = "Interval's half steps number is out of range.";
-        private const string IntervalNumberIsOutOfRange = "Interval's number is out of range.";
-
-        #endregion
-
-        #region Methods
-
         public (Interval? Interval, int Length) TryReadInterval(ReadOnlySpan<char> input)
         {
             var endIndex = 1;
@@ -50,7 +28,19 @@ namespace Melanchall.DryWetMidi.MusicTheory
                 return (Interval.FromHalfSteps(halfSteps), endIndex);
             }
 
-            if (!IntervalQualitiesByLetters.TryGetValue(input[0], out var intervalQuality))
+            IntervalQuality intervalQuality = default;
+            var qualityLetter = input[0];
+            if (qualityLetter == 'p' || qualityLetter == 'P')
+                intervalQuality = IntervalQuality.Perfect;
+            else if (qualityLetter == 'm')
+                intervalQuality = IntervalQuality.Minor;
+            else if (qualityLetter == 'M')
+                intervalQuality = IntervalQuality.Major;
+            else if (qualityLetter == 'd' || qualityLetter == 'D')
+                intervalQuality = IntervalQuality.Diminished;
+            else if (qualityLetter == 'a' || qualityLetter == 'A')
+                intervalQuality = IntervalQuality.Augmented;
+            else
                 return (null, 0);
 
             for (; endIndex < input.Length; endIndex++)
@@ -72,27 +62,11 @@ namespace Melanchall.DryWetMidi.MusicTheory
 
         protected override Interval ParseInternal(string input)
         {
-            if (input[0] == '+' || input[0] == '-' || char.IsDigit(input[0]))
-            {
-                if (!int.TryParse(input, out var halfSteps))
-                    ThrowInvalidFormatError();
-
-                if (!IntervalUtilities.IsIntervalValid(halfSteps))
-                    ThrowError(HalfStepsNumberIsOutOfRange);
-
-                return Interval.FromHalfSteps(halfSteps);
-            }
-
-            var intervalQualityLetter = input[0];
-            if (!IntervalQualitiesByLetters.TryGetValue(intervalQualityLetter, out var intervalQuality))
+            var (interval, length) = TryReadInterval(input);
+            if (interval == null || length != input.Length)
                 ThrowInvalidFormatError();
 
-            if (!int.TryParse(input.Substring(1), out var intervalNumber))
-                ThrowError(IntervalNumberIsOutOfRange);
-
-            return Interval.Get(intervalQuality, intervalNumber);
+            return interval;
         }
-
-        #endregion
     }
 }
