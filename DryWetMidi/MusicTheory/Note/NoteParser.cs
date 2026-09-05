@@ -1,16 +1,10 @@
 ﻿using Melanchall.DryWetMidi.Common;
 using System;
-using System.Text.RegularExpressions;
 
 namespace Melanchall.DryWetMidi.MusicTheory
 {
     internal sealed class NoteParser : SimpleParser<Note>
     {
-        internal override Regex[] GetRegexes()
-        {
-            throw new NotImplementedException();
-        }
-
         protected override Note ParseInternal(ReadOnlySpan<char> input)
         {
             var (noteName, length) = MusicTheoryParsers.NoteNameParser.TryReadNoteName(input);

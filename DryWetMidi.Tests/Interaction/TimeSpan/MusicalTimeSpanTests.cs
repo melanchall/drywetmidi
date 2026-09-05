@@ -79,6 +79,19 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             new object[] { 1.0 / 4, 1, new MusicalTimeSpan(0, 1) },
         };
 
+        private static readonly object[] StringsToTimeSpans = new[]
+        {
+            new object[] { "0/1", new MusicalTimeSpan(0, 1) },
+            new object[] { "q", MusicalTimeSpan.Quarter },
+            new object[] { "1/4.", MusicalTimeSpan.Quarter.SingleDotted() },
+            new object[] { "  1/4  .", MusicalTimeSpan.Quarter.SingleDotted() },
+            new object[] { "/8..", MusicalTimeSpan.Eighth.DoubleDotted() },
+            new object[] { "wt.", MusicalTimeSpan.Whole.Triplet().SingleDotted() },
+            new object[] { "w[3:10]", MusicalTimeSpan.Whole.Tuplet(3, 10) },
+            new object[] { "1/1 [3:10]", MusicalTimeSpan.Whole.Tuplet(3, 10) },
+            new object[] { "s[3:10]...", MusicalTimeSpan.Sixteenth.Tuplet(3, 10).Dotted(3) },
+        };
+
         #endregion
 
         #region Test methods
@@ -364,54 +377,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
         #region Parse
 
-        [Test]
-        [Description("Parse zero musical time span.")]
-        public void Parse_1()
-        {
-            TimeSpanTestUtilities.Parse("0/1", new MusicalTimeSpan(0, 1));
-        }
-
-        [Test]
-        [Description("Parse quarter musical time span.")]
-        public void Parse_2()
-        {
-            TimeSpanTestUtilities.Parse("q", MusicalTimeSpan.Quarter);
-        }
-
-        [Test]
-        [Description("Parse single dotted quarter musical time span.")]
-        public void Parse_3()
-        {
-            TimeSpanTestUtilities.Parse("1/4.", MusicalTimeSpan.Quarter.SingleDotted());
-        }
-
-        [Test]
-        [Description("Parse double dotted eight musical time span.")]
-        public void Parse_4()
-        {
-            TimeSpanTestUtilities.Parse("/8..", MusicalTimeSpan.Eighth.DoubleDotted());
-        }
-
-        [Test]
-        [Description("Parse single dotted triplet whole musical time span.")]
-        public void Parse_5()
-        {
-            TimeSpanTestUtilities.Parse("wt.", MusicalTimeSpan.Whole.Triplet().SingleDotted());
-        }
-
-        [Test]
-        [Description("Parse tuplet whole musical time span where tuplet is 3 notes in space of 10 ones.")]
-        public void Parse_6()
-        {
-            TimeSpanTestUtilities.Parse("w[3:10]", MusicalTimeSpan.Whole.Tuplet(3, 10));
-        }
-
-        [Test]
-        [Description("Parse triple dotted tuplet sixteenth musical time span where tuplet is 3 notes in space of 10 ones.")]
-        public void Parse_7()
-        {
-            TimeSpanTestUtilities.Parse("s[3:10]...", MusicalTimeSpan.Sixteenth.Tuplet(3, 10).Dotted(3));
-        }
+        [TestCaseSource(nameof(StringsToTimeSpans))]
+        public void Parse_Valid(string s, MusicalTimeSpan expectedTimeSpan) =>
+            TimeSpanTestUtilities.Parse(s, expectedTimeSpan);
 
         #endregion
 

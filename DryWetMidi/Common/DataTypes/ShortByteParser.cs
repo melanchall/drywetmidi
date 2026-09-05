@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Text.RegularExpressions;
 
 namespace Melanchall.DryWetMidi.Common
 {
@@ -12,11 +11,6 @@ namespace Melanchall.DryWetMidi.Common
         {
             _minValue = minValue;
             _maxValue = maxValue;
-        }
-
-        internal override Regex[] GetRegexes()
-        {
-            throw new NotImplementedException();
         }
 
         protected override byte ParseInternal(ReadOnlySpan<char> input)

@@ -1,4 +1,6 @@
-﻿namespace Melanchall.DryWetMidi.Common
+﻿using System;
+
+namespace Melanchall.DryWetMidi.Common
 {
     internal abstract class ParameterizedParser<T, TParam> : Parser
     {
@@ -6,7 +8,7 @@
         {
             ThrowIfArgument.IsNullOrWhiteSpaceString(nameof(input), input, "Input");
 
-            return ParseInternal(input!, parameter);
+            return ParseInternal(input.AsSpan().Trim(), parameter);
         }
 
         public bool TryParse(string? input, TParam parameter, out T result)
@@ -23,6 +25,6 @@
             }
         }
 
-        protected abstract T ParseInternal(string input, TParam parameter);
+        protected abstract T ParseInternal(ReadOnlySpan<Char> input, TParam parameter);
     }
 }

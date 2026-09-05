@@ -1,16 +1,10 @@
 ﻿using Melanchall.DryWetMidi.Common;
 using System;
-using System.Text.RegularExpressions;
 
 namespace Melanchall.DryWetMidi.Interaction
 {
     internal sealed class MetricTimeSpanParser : SimpleParser<MetricTimeSpan>
     {
-        internal override Regex[] GetRegexes()
-        {
-            throw new NotImplementedException();
-        }
-
         protected override MetricTimeSpan ParseInternal(ReadOnlySpan<char> input)
         {
             var hours = 0;

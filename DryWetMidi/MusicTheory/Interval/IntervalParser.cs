@@ -1,6 +1,5 @@
 ﻿using Melanchall.DryWetMidi.Common;
 using System;
-using System.Text.RegularExpressions;
 
 namespace Melanchall.DryWetMidi.MusicTheory
 {
@@ -52,11 +51,6 @@ namespace Melanchall.DryWetMidi.MusicTheory
                 return (null, 0);
 
             return (Interval.Get(intervalQuality, intervalNumber), endIndex);
-        }
-
-        internal override Regex[] GetRegexes()
-        {
-            throw new NotImplementedException();
         }
 
         protected override Interval ParseInternal(ReadOnlySpan<char> input)

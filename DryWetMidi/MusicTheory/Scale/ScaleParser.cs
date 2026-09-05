@@ -1,20 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 using Melanchall.DryWetMidi.Common;
 
 namespace Melanchall.DryWetMidi.MusicTheory
 {
     internal sealed class ScaleParser : SimpleParser<Scale>
     {
-        private const string ScaleIsUnknown = "Scale is unknown.";
-
-        internal override Regex[] GetRegexes()
-        {
-            throw new NotImplementedException();
-        }
-
         protected override Scale ParseInternal(ReadOnlySpan<char> input)
         {
             var (rootNoteName, rootNoteNamePartLength) = MusicTheoryParsers.NoteNameParser.TryReadNoteName(input);
@@ -77,7 +69,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
             }
 
             if (intervals == null || !intervals.Any())
-                ThrowError(ScaleIsUnknown);
+                ThrowError("Scale is unknown.");
 
             return new Scale(intervals, rootNoteName.Value);
         }

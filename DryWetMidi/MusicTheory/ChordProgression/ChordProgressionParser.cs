@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text.RegularExpressions;
 using Melanchall.DryWetMidi.Common;
 
 namespace Melanchall.DryWetMidi.MusicTheory
@@ -27,14 +25,9 @@ namespace Melanchall.DryWetMidi.MusicTheory
 
         #region Methods
 
-        internal override Regex[] GetRegexes()
+        protected override ChordProgression ParseInternal(ReadOnlySpan<char> input, Scale parameter)
         {
-            throw new NotImplementedException();
-        }
-
-        protected override ChordProgression ParseInternal(string input, Scale parameter)
-        {
-            var parts = input.Split(new[] { PartsDelimiter }, StringSplitOptions.RemoveEmptyEntries);
+            var parts = input.ToString().Split(new[] { PartsDelimiter }, StringSplitOptions.RemoveEmptyEntries);
             var chords = new List<Chord>();
 
             foreach (var x in parts)

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Text.RegularExpressions;
 using Melanchall.DryWetMidi.Common;
 
 namespace Melanchall.DryWetMidi.MusicTheory
@@ -64,11 +63,6 @@ namespace Melanchall.DryWetMidi.MusicTheory
                 noteBaseNumber = Octave.OctaveSize + noteBaseNumber;
 
             return ((NoteName)noteBaseNumber, i - trailingSpacesCount);
-        }
-
-        internal override Regex[] GetRegexes()
-        {
-            throw new NotImplementedException();
         }
 
         protected override NoteName ParseInternal(ReadOnlySpan<char> input)

@@ -1,17 +1,11 @@
 ﻿using Melanchall.DryWetMidi.Common;
 using System;
 using System.Linq;
-using System.Text.RegularExpressions;
 
 namespace Melanchall.DryWetMidi.MusicTheory
 {
     internal sealed class ChordParser : SimpleParser<Chord>
     {
-        internal override Regex[] GetRegexes()
-        {
-            throw new NotImplementedException();
-        }
-
         protected override Chord ParseInternal(ReadOnlySpan<char> input)
         {
             var (rootNoteName, rootNoteNamePartLength) = MusicTheoryParsers.NoteNameParser.TryReadNoteName(input);

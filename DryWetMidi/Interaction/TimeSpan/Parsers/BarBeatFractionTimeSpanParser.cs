@@ -1,7 +1,6 @@
 ﻿using Melanchall.DryWetMidi.Common;
 using System;
 using System.Globalization;
-using System.Text.RegularExpressions;
 
 namespace Melanchall.DryWetMidi.Interaction
 {
@@ -16,11 +15,6 @@ namespace Melanchall.DryWetMidi.Interaction
         {
             NumberDecimalSeparator = "."
         };
-
-        internal override Regex[] GetRegexes()
-        {
-            throw new NotImplementedException();
-        }
 
         protected override BarBeatFractionTimeSpan ParseInternal(ReadOnlySpan<char> input)
         {
