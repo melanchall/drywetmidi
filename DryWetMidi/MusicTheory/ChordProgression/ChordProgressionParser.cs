@@ -12,12 +12,6 @@ namespace Melanchall.DryWetMidi.MusicTheory
 
         private const char PartsDelimiter = '-';
         
-        private const string ScaleDegreeGroupName = "sd";
-        private const string AccidentalGroupName = "ac";
-
-        private static readonly string AccidentalGroup = $"(?<{AccidentalGroupName}>b)";
-        private static readonly string ScaleDegreeGroup = $"(?<{ScaleDegreeGroupName}>(?i:M{{0,4}}(CM|CD|D?C{{0,3}})(XC|XL|L?X{{0,3}})(IX|IV|V?I{{0,3}})))";
-
         private static readonly Dictionary<char, int> RomanMap = new ()
         {
             ['I'] = 1,
@@ -33,10 +27,10 @@ namespace Melanchall.DryWetMidi.MusicTheory
 
         #region Methods
 
-        internal override Regex[] GetRegexes() => new[]
+        internal override Regex[] GetRegexes()
         {
-            new Regex($@"^{AccidentalGroup}?\s*{ScaleDegreeGroup}\s*{ChordParser.ChordCharacteristicsGroup}$", RegexOptions.Compiled),
-        };
+            throw new NotImplementedException();
+        }
 
         protected override ChordProgression ParseInternal(string input, Scale parameter)
         {

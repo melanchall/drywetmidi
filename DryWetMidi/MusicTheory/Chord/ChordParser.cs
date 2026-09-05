@@ -7,16 +7,6 @@ namespace Melanchall.DryWetMidi.MusicTheory
 {
     internal sealed class ChordParser : SimpleParser<Chord>
     {
-        #region Constants
-
-        private const string ChordCharacteristicsGroupName = "cc";
-
-        public const string ChordCharacteristicsGroup = $"(?<{ChordCharacteristicsGroupName}>.*?)";
-
-        #endregion
-
-        #region Methods
-
         internal override Regex[] GetRegexes()
         {
             throw new NotImplementedException();
@@ -46,7 +36,5 @@ namespace Melanchall.DryWetMidi.MusicTheory
 
             return new Chord(notesNames);
         }
-
-        #endregion
     }
 }
