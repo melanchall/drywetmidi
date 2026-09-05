@@ -15,24 +15,23 @@ namespace Melanchall.DryWetMidi.MusicTheory
             throw new NotImplementedException();
         }
 
-        protected override Scale ParseInternal(string input)
+        protected override Scale ParseInternal(ReadOnlySpan<char> input)
         {
-            var span = input.AsSpan();
-            var (rootNoteName, rootNoteNamePartLength) = MusicTheoryParsers.NoteNameParser.TryReadNoteName(span);
+            var (rootNoteName, rootNoteNamePartLength) = MusicTheoryParsers.NoteNameParser.TryReadNoteName(input);
             if (rootNoteName == null)
                 ThrowInvalidFormatError();
 
             ICollection<Interval>? intervals = new List<Interval>();
 
-            var (interval, intervalPartLength) = MusicTheoryParsers.IntervalParser.TryReadInterval(span.Slice(rootNoteNamePartLength).Trim());
+            var (interval, intervalPartLength) = MusicTheoryParsers.IntervalParser.TryReadInterval(input.Slice(rootNoteNamePartLength).Trim());
             if (interval == null)
             {
-                var rootNoteNameSlice = span.Slice(0, rootNoteNamePartLength);
+                var rootNoteNameSlice = input.Slice(0, rootNoteNamePartLength);
                 if (rootNoteNameSlice.EndsWith("b", StringComparison.InvariantCultureIgnoreCase))
                 {
                     foreach (var n in ScaleIntervals.BNames)
                     {
-                        if (span.Slice(rootNoteNamePartLength - 1).StartsWith(n, StringComparison.InvariantCultureIgnoreCase))
+                        if (input.Slice(rootNoteNamePartLength - 1).StartsWith(n, StringComparison.InvariantCultureIgnoreCase))
                         {
                             rootNoteName = (NoteName)(((int)rootNoteName.Value + 1) % Octave.OctaveSize);
                             rootNoteNamePartLength--;
@@ -44,7 +43,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
                 {
                     foreach (var n in ScaleIntervals.FlatNames)
                     {
-                        if (span.Slice(rootNoteNamePartLength - 4).StartsWith(n, StringComparison.InvariantCultureIgnoreCase))
+                        if (input.Slice(rootNoteNamePartLength - 4).StartsWith(n, StringComparison.InvariantCultureIgnoreCase))
                         {
                             rootNoteName = (NoteName)(((int)rootNoteName.Value + 1) % Octave.OctaveSize);
                             rootNoteNamePartLength -= 4;
@@ -53,12 +52,12 @@ namespace Melanchall.DryWetMidi.MusicTheory
                     }
                 }
 
-                var scaleName = span.Slice(rootNoteNamePartLength).Trim().ToString();
+                var scaleName = input.Slice(rootNoteNamePartLength).Trim().ToString();
                 intervals = ScaleIntervals.GetByName(scaleName);
             }
             else
             {
-                var intervalsSlice = span.Slice(rootNoteNamePartLength).Trim();
+                var intervalsSlice = input.Slice(rootNoteNamePartLength).Trim();
 
                 var i = 0;
                 while (i < intervalsSlice.Length)

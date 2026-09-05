@@ -12,23 +12,21 @@ namespace Melanchall.DryWetMidi.MusicTheory
             throw new NotImplementedException();
         }
 
-        protected override Chord ParseInternal(string input)
+        protected override Chord ParseInternal(ReadOnlySpan<char> input)
         {
-            var span = input.AsSpan().Trim();
-
-            var (rootNoteName, rootNoteNamePartLength) = MusicTheoryParsers.NoteNameParser.TryReadNoteName(span);
+            var (rootNoteName, rootNoteNamePartLength) = MusicTheoryParsers.NoteNameParser.TryReadNoteName(input);
             if (rootNoteName == null)
                 ThrowInvalidFormatError();
 
             NoteName? bassNoteName = null;
 
-            var bassNoteMarkerIndex = span.LastIndexOf('/');
+            var bassNoteMarkerIndex = input.LastIndexOf('/');
             if (bassNoteMarkerIndex >= 0)
-                (bassNoteName, _) = MusicTheoryParsers.NoteNameParser.TryReadNoteName(span.Slice(bassNoteMarkerIndex + 1).Trim());
+                (bassNoteName, _) = MusicTheoryParsers.NoteNameParser.TryReadNoteName(input.Slice(bassNoteMarkerIndex + 1).Trim());
 
             var chordCharacteristic = bassNoteName != null
-                ? span.Slice(rootNoteNamePartLength, bassNoteMarkerIndex - rootNoteNamePartLength).Trim()
-                : span.Slice(rootNoteNamePartLength).Trim();
+                ? input.Slice(rootNoteNamePartLength, bassNoteMarkerIndex - rootNoteNamePartLength).Trim()
+                : input.Slice(rootNoteNamePartLength).Trim();
 
             var notesNames = ChordsNamesTable.GetChordNotesNames(rootNoteName.Value, chordCharacteristic.ToString(), bassNoteName);
             if (!notesNames.Any())

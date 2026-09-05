@@ -17,27 +17,25 @@ namespace Melanchall.DryWetMidi.Interaction
             throw new NotImplementedException();
         }
 
-        protected override BarBeatTicksTimeSpan ParseInternal(string input)
+        protected override BarBeatTicksTimeSpan ParseInternal(ReadOnlySpan<char> input)
         {
             var bars = 0.0;
             var beats = 0.0;
             var ticks = 0;
 
-            var span = input.AsSpan();
-
-            var firstDot = span.IndexOf('.');
+            var firstDot = input.IndexOf('.');
             if (firstDot == -1)
                 ThrowInvalidFormatError();
 
-            var secondDot = span[(firstDot + 1)..].IndexOf('.');
+            var secondDot = input[(firstDot + 1)..].IndexOf('.');
             if (secondDot == -1) 
                 ThrowInvalidFormatError();
 
             secondDot = firstDot + 1 + secondDot;
 
-            var barsSpan = span[..firstDot].Trim();
-            var beatsSpan = span[(firstDot + 1)..secondDot].Trim();
-            var ticksSpan = span[(secondDot + 1)..].Trim();
+            var barsSpan = input[..firstDot].Trim();
+            var beatsSpan = input[(firstDot + 1)..secondDot].Trim();
+            var ticksSpan = input[(secondDot + 1)..].Trim();
 
             if (!double.TryParse(barsSpan, NumberStyles.AllowDecimalPoint, CommaSeparatorFormat, out bars))
                 ThrowInvalidFormatError();

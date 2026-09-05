@@ -11,15 +11,13 @@ namespace Melanchall.DryWetMidi.MusicTheory
             throw new NotImplementedException();
         }
 
-        protected override Note ParseInternal(string input)
+        protected override Note ParseInternal(ReadOnlySpan<char> input)
         {
-            var span = input.AsSpan();
-
-            var (noteName, length) = MusicTheoryParsers.NoteNameParser.TryReadNoteName(span.Trim());
+            var (noteName, length) = MusicTheoryParsers.NoteNameParser.TryReadNoteName(input);
             if (noteName == null)
                 ThrowInvalidFormatError();
 
-            if (!int.TryParse(span[length..].Trim(), out var octaveNumber))
+            if (!int.TryParse(input[length..].Trim(), out var octaveNumber))
                 ThrowInvalidFormatError();
 
             if (!NoteUtilities.IsNoteValid(noteName.Value, octaveNumber))

@@ -22,19 +22,17 @@ namespace Melanchall.DryWetMidi.Interaction
             throw new NotImplementedException();
         }
 
-        protected override BarBeatFractionTimeSpan ParseInternal(string input)
+        protected override BarBeatFractionTimeSpan ParseInternal(ReadOnlySpan<char> input)
         {
             var bars = 0.0;
             var beats = 0.0;
 
-            var span = input.AsSpan();
-
-            var separatorIndex = span.IndexOf('_');
+            var separatorIndex = input.IndexOf('_');
             if (separatorIndex == -1)
                 ThrowInvalidFormatError();
 
-            var barsSpan = span[..separatorIndex].Trim();
-            var beatsSpan = span[(separatorIndex + 1)..].Trim();
+            var barsSpan = input[..separatorIndex].Trim();
+            var beatsSpan = input[(separatorIndex + 1)..].Trim();
 
             if (!double.TryParse(barsSpan, NumberStyles.AllowDecimalPoint, CommaSeparatorFormat, out bars))
                 ThrowInvalidFormatError();

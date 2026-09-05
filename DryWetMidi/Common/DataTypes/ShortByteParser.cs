@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using System;
+using System.Text.RegularExpressions;
 
 namespace Melanchall.DryWetMidi.Common
 {
@@ -15,12 +16,12 @@ namespace Melanchall.DryWetMidi.Common
 
         internal override Regex[] GetRegexes()
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
-        protected override byte ParseInternal(string? input)
+        protected override byte ParseInternal(ReadOnlySpan<char> input)
         {
-            if (!byte.TryParse(input?.Trim(), out var result) || result < _minValue || result > _maxValue)
+            if (!byte.TryParse(input, out var result) || result < _minValue || result > _maxValue)
                 ThrowError("Number is invalid or is out of valid range.");
 
             return result;

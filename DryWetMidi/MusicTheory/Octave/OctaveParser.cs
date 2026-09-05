@@ -1,4 +1,5 @@
 ﻿using Melanchall.DryWetMidi.Common;
+using System;
 using System.Text.RegularExpressions;
 
 namespace Melanchall.DryWetMidi.MusicTheory
@@ -10,7 +11,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
             throw new System.NotImplementedException();
         }
 
-        protected override Octave ParseInternal(string input)
+        protected override Octave ParseInternal(ReadOnlySpan<char> input)
         {
             if (!int.TryParse(input, out var octaveNumber))
                 ThrowInvalidFormatError();

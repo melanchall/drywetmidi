@@ -59,7 +59,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
             throw new NotImplementedException();
         }
 
-        protected override Interval ParseInternal(string input)
+        protected override Interval ParseInternal(ReadOnlySpan<char> input)
         {
             var (interval, length) = TryReadInterval(input);
             if (interval == null || length != input.Length)

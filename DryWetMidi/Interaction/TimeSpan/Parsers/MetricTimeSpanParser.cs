@@ -11,17 +11,15 @@ namespace Melanchall.DryWetMidi.Interaction
             throw new NotImplementedException();
         }
 
-        protected override MetricTimeSpan ParseInternal(string input)
+        protected override MetricTimeSpan ParseInternal(ReadOnlySpan<char> input)
         {
             var hours = 0;
             var minutes = 0;
             var seconds = 0;
             var milliseconds = 0;
 
-            var span = input.AsSpan();
-
             var colonCount = 0;
-            foreach (var c in span)
+            foreach (var c in input)
             {
                 if (c == ':')
                     colonCount++;
@@ -34,23 +32,23 @@ namespace Melanchall.DryWetMidi.Interaction
 
                 if (colonCount == 1)
                 {
-                    if (!TryReadNextSegment(ref span, out minutes) ||
-                        !TryReadNextSegment(ref span, out seconds))
+                    if (!TryReadNextSegment(ref input, out minutes) ||
+                        !TryReadNextSegment(ref input, out seconds))
                         ThrowInvalidFormatError();
                 }
                 else if (colonCount == 2)
                 {
-                    if (!TryReadNextSegment(ref span, out hours) ||
-                        !TryReadNextSegment(ref span, out minutes) ||
-                        !TryReadNextSegment(ref span, out seconds))
+                    if (!TryReadNextSegment(ref input, out hours) ||
+                        !TryReadNextSegment(ref input, out minutes) ||
+                        !TryReadNextSegment(ref input, out seconds))
                         ThrowInvalidFormatError();
                 }
                 else
                 {
-                    if (!TryReadNextSegment(ref span, out hours) ||
-                        !TryReadNextSegment(ref span, out minutes) ||
-                        !TryReadNextSegment(ref span, out seconds) ||
-                        !TryReadNextSegment(ref span, out milliseconds))
+                    if (!TryReadNextSegment(ref input, out hours) ||
+                        !TryReadNextSegment(ref input, out minutes) ||
+                        !TryReadNextSegment(ref input, out seconds) ||
+                        !TryReadNextSegment(ref input, out milliseconds))
                         ThrowInvalidFormatError();
                 }
 

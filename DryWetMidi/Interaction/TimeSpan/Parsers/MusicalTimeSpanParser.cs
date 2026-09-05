@@ -1,4 +1,5 @@
 ﻿using Melanchall.DryWetMidi.Common;
+using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
@@ -55,9 +56,9 @@ namespace Melanchall.DryWetMidi.Interaction
             new Regex($@"^({FractionGroup}|{FractionMnemonicGroup})\s*({TupletGroup}|{TupletMnemonicGroup})?\s*{DotsGroup}?$", RegexOptions.Compiled | RegexOptions.IgnoreCase),
         };
 
-        protected override MusicalTimeSpan ParseInternal(string input)
+        protected override MusicalTimeSpan ParseInternal(ReadOnlySpan<char> input)
         {
-            var match = Match(input);
+            var match = Match(input.ToString());
             if (match == null)
                 ThrowInvalidFormatError();
 
