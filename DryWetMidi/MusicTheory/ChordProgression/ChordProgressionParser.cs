@@ -10,15 +10,22 @@ namespace Melanchall.DryWetMidi.MusicTheory
 
         protected override ChordProgression ParseInternal(ReadOnlySpan<char> input, Scale parameter)
         {
-            var parts = input.ToString().Split('-', StringSplitOptions.RemoveEmptyEntries);
             var chords = new List<Chord>();
 
-            foreach (var x in parts)
+            while (input.Length > 0)
             {
-                var part = x.Trim();
+                var delimiterIndex = input.IndexOf('-');
+
+                var part = delimiterIndex >= 0
+                    ? input.Slice(0, delimiterIndex).Trim()
+                    : input;
+
+                if (part.IsEmpty)
+                    ThrowInvalidFormatError();
+
                 var b = part[0] == 'b';
 
-                var span = part.AsSpan().Slice(b ? 1 : 0).Trim();
+                var span = part.Slice(b ? 1 : 0).Trim();
                 var romanLength = 0;
 
                 while (romanLength < span.Length && RomanDigits.Contains(span[romanLength]))
@@ -38,6 +45,11 @@ namespace Melanchall.DryWetMidi.MusicTheory
 
                 var chord = MusicTheoryParsers.ChordParser.Parse(chordString);
                 chords.Add(chord);
+
+                if (delimiterIndex < 0)
+                    break;
+
+                input = input.Slice(delimiterIndex + 1).Trim();
             }
 
             return new ChordProgression(chords);
