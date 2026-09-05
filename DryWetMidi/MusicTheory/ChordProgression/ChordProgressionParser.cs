@@ -6,28 +6,11 @@ namespace Melanchall.DryWetMidi.MusicTheory
 {
     internal sealed class ChordProgressionParser : ParameterizedParser<ChordProgression, Scale>
     {
-        #region Constants
-
-        private const char PartsDelimiter = '-';
-        
-        private static readonly Dictionary<char, int> RomanMap = new ()
-        {
-            ['I'] = 1,
-            ['V'] = 5,
-            ['X'] = 10,
-            ['L'] = 50,
-            ['C'] = 100,
-            ['D'] = 500,
-            ['M'] = 1000
-        };
-
-        #endregion
-
-        #region Methods
+        private const string RomanDigits = "IVXLCDM";
 
         protected override ChordProgression ParseInternal(ReadOnlySpan<char> input, Scale parameter)
         {
-            var parts = input.ToString().Split(new[] { PartsDelimiter }, StringSplitOptions.RemoveEmptyEntries);
+            var parts = input.ToString().Split('-', StringSplitOptions.RemoveEmptyEntries);
             var chords = new List<Chord>();
 
             foreach (var x in parts)
@@ -38,7 +21,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
                 var span = part.AsSpan().Slice(b ? 1 : 0).Trim();
                 var romanLength = 0;
 
-                while (romanLength < span.Length && RomanMap.ContainsKey(span[romanLength]))
+                while (romanLength < span.Length && RomanDigits.Contains(span[romanLength]))
                 {
                     romanLength++;
                 }
@@ -64,17 +47,26 @@ namespace Melanchall.DryWetMidi.MusicTheory
         {
             var number = 0;
 
-            for (int i = 0; i < roman.Length; i++)
+            for (var i = 0; i < roman.Length; i++)
             {
-                if (i + 1 < roman.Length && RomanMap[roman[i]] < RomanMap[roman[i + 1]])
-                    number -= RomanMap[roman[i]];
+                if (i + 1 < roman.Length && GetRomanValue(roman[i]) < GetRomanValue(roman[i + 1]))
+                    number -= GetRomanValue(roman[i]);
                 else
-                    number += RomanMap[roman[i]];
+                    number += GetRomanValue(roman[i]);
             }
 
             return number;
         }
 
-        #endregion
+        private static int GetRomanValue(char c) => c switch
+        {
+            'I' => 1,
+            'V' => 5,
+            'X' => 10,
+            'L' => 50,
+            'C' => 100,
+            'D' => 500,
+            'M' => 1000,
+        };
     }
 }

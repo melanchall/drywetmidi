@@ -1,44 +1,33 @@
 ﻿using Melanchall.DryWetMidi.Common;
 using System;
-using System.Collections.Generic;
 
 namespace Melanchall.DryWetMidi.Interaction
 {
     internal sealed class MusicalTimeSpanParser : SimpleParser<MusicalTimeSpan>
     {
-        #region Constants
-
-        private static readonly Dictionary<char, (int, int)> Fractions = new Dictionary<char, (int, int)>
-        {
-            ['w'] = (1, 1),
-            ['h'] = (1, 2),
-            ['q'] = (1, 4),
-            ['e'] = (1, 8),
-            ['s'] = (1, 16),
-        };
-
-        private static readonly Dictionary<char, (int TupletNotesCount, int TupletSpaceSize)> Tuplets = new Dictionary<char, (int, int)>
-        {
-            ['t'] = (3, 2),
-            ['d'] = (2, 3),
-        };
-
-        #endregion
-
-        #region Methods
-
         protected override MusicalTimeSpan ParseInternal(ReadOnlySpan<char> input)
         {
-            (int, int) fraction;
-            var numerator = 1L;
-            var denominator = 0L;
+            var (numerator, denominator) = input[0] switch
+            {
+                'w' => (1L, 1L),
+                'h' => (1L, 2L),
+                'q' => (1L, 4L),
+                'e' => (1L, 8L),
+                's' => (1L, 16L),
+                _ => (0L, 0L)
+            };
 
-            if (!Fractions.TryGetValue(input[0], out fraction))
+            if (numerator > 0)
+            {
+                input = input.Slice(1).Trim();
+            }
+            else
             {
                 var dividerIndex = input.IndexOf('/');
                 if (dividerIndex < 0)
                     ThrowInvalidFormatError();
 
+                numerator = 1;
                 if (dividerIndex > 0 && !long.TryParse(input.Slice(0, dividerIndex), out numerator))
                     ThrowInvalidFormatError();
 
@@ -51,12 +40,6 @@ namespace Melanchall.DryWetMidi.Interaction
 
                 input = input.Slice(i).Trim();
             }
-            else
-            {
-                numerator = fraction.Item1;
-                denominator = fraction.Item2;
-                input = input.Slice(1).Trim();
-            }
 
             //
 
@@ -65,10 +48,18 @@ namespace Melanchall.DryWetMidi.Interaction
 
             //
 
-            var tupletNotesCount = 1;
-            var tupletSpaceSize = 1;
+            var (tupletNotesCount, tupletSpaceSize) = input[0] switch
+            {
+                't' => (3, 2),
+                'd' => (2, 3),
+                _ => (0, 0)
+            };
 
-            if (input[0] == '[')
+            if (tupletNotesCount > 0)
+            {
+                input = input.Slice(1).Trim();
+            }
+            else if (input[0] == '[')
             {
                 var endIndex = input.IndexOf(']');
                 if (endIndex < 0 || endIndex == 1)
@@ -87,11 +78,10 @@ namespace Melanchall.DryWetMidi.Interaction
 
                 input = input.Slice(endIndex + 1).Trim();
             }
-            else if (Tuplets.TryGetValue(input[0], out var tuplet))
+            else
             {
-                tupletNotesCount = tuplet.Item1;
-                tupletSpaceSize = tuplet.Item2;
-                input = input.Slice(1).Trim();
+                tupletNotesCount = 1;
+                tupletSpaceSize = 1;
             }
 
             //
@@ -116,7 +106,5 @@ namespace Melanchall.DryWetMidi.Interaction
 
             return new MusicalTimeSpan(numerator, denominator).Dotted(dotsCount).Tuplet(tupletNotesCount, tupletSpaceSize);
         }
-
-        #endregion
     }
 }
