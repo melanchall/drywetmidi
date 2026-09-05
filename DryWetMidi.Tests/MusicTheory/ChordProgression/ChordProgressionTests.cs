@@ -11,9 +11,8 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
         #region Test methods
 
         [TestCase("I-II-IV", "C major", new[] { "C", "D", "F" })]
-        [TestCase("I-II-iv", "C major", new[] { "C", "D", "F" })]
-        [TestCase("Im-ii7-v", "C major", new[] { "Cm", "D7", "G" })]
-        [TestCase("i - bVI - III - bVII", "C major", new[] { "C", "G#", "E", "A#" })]
+        [TestCase("Im-II7-V", "C major", new[] { "Cm", "D7", "G" })]
+        [TestCase("I - bVI - III - bVII", "C major", new[] { "C", "G#", "E", "A#" })]
         public void Parse(string input, string scaleString, string[] expectedChords)
         {
             var chordProgression = ChordProgression.Parse(input, Scale.Parse(scaleString));

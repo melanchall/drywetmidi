@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using Melanchall.DryWetMidi.Common;
 
@@ -17,15 +18,15 @@ namespace Melanchall.DryWetMidi.MusicTheory
         private static readonly string AccidentalGroup = $"(?<{AccidentalGroupName}>b)";
         private static readonly string ScaleDegreeGroup = $"(?<{ScaleDegreeGroupName}>(?i:M{{0,4}}(CM|CD|D?C{{0,3}})(XC|XL|L?X{{0,3}})(IX|IV|V?I{{0,3}})))";
 
-        private static readonly Dictionary<char, int> RomanMap = new Dictionary<char, int>
+        private static readonly Dictionary<char, int> RomanMap = new ()
         {
-            ['i'] = 1,
-            ['v'] = 5,
-            ['x'] = 10,
-            ['l'] = 50,
-            ['c'] = 100,
-            ['d'] = 500,
-            ['m'] = 1000
+            ['I'] = 1,
+            ['V'] = 5,
+            ['X'] = 10,
+            ['L'] = 50,
+            ['C'] = 100,
+            ['D'] = 500,
+            ['M'] = 1000
         };
 
         #endregion
@@ -42,35 +43,28 @@ namespace Melanchall.DryWetMidi.MusicTheory
             var parts = input.Split(new[] { PartsDelimiter }, StringSplitOptions.RemoveEmptyEntries);
             var chords = new List<Chord>();
 
-            foreach (var part in parts)
+            foreach (var x in parts)
             {
-                var match = Match(part);
-                if (match == null)
-                    ThrowInvalidFormatError();
+                var part = x.Trim();
+                var b = part[0] == 'b';
 
-                var degreeGroup = match.Groups[ScaleDegreeGroupName];
-                var degreeRoman = degreeGroup.Value.ToLower();
-                if (string.IsNullOrWhiteSpace(degreeRoman))
-                    continue;
+                var span = part.AsSpan().Slice(b ? 1 : 0).Trim();
+                var romanLength = 0;
 
-                var degree = RomanToInteger(degreeRoman);
-                var rootNoteName = parameter.GetStep(degree - 1);
-
-                var accidentalGroup = match.Groups[AccidentalGroupName];
-                if (accidentalGroup.Success)
+                while (romanLength < span.Length && RomanMap.ContainsKey(span[romanLength]))
                 {
-                    var accidental = accidentalGroup.Value;
-                    if (accidental == "b")
-                        rootNoteName = (NoteName)(((int)rootNoteName + Octave.OctaveSize - 1) % Octave.OctaveSize);
+                    romanLength++;
                 }
 
-                var fullString = match.Value;
-                var matchIndex = match.Index;
-                var degreeGroupIndex = degreeGroup.Index;
+                var degree = RomanToInteger(span.Slice(0, romanLength).ToString());
+                var rootNoteName = parameter.GetStep(degree - 1);
+
+                if (b)
+                    rootNoteName = (NoteName)(((int)rootNoteName + Octave.OctaveSize - 1) % Octave.OctaveSize);
+
                 var chordString =
-                    fullString.Substring(0, degreeGroupIndex - matchIndex - (accidentalGroup.Success ? accidentalGroup.Length : 0)) +
                     rootNoteName +
-                    fullString.Substring(degreeGroupIndex - matchIndex + degreeGroup.Length);
+                    span.Slice(romanLength).ToString();
 
                 var chord = MusicTheoryParsers.ChordParser.Parse(chordString);
                 chords.Add(chord);
