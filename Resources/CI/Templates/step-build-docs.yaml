@@ -19,3 +19,15 @@ steps:
   inputs:
     targetType: 'inline'
     script: docfx Docs/docfx.json
+
+- task: PowerShell@2
+  displayName: Fix sitemap.xml
+  inputs:
+    targetType: 'inline'
+    script: |
+      [xml]$xml = Get-Content Docs/_site/sitemap.xml
+      $node = $xml.urlset.url | Where-Object { $_.loc -like "*404.html*" }
+      if ($node) {
+        $xml.urlset.RemoveChild($node) > $null
+        $xml.Save("$pwd/Docs/_site/sitemap.xml")
+      }

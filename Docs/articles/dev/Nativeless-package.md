@@ -16,12 +16,8 @@ First one is the version containing all the features of the library and you shou
 * [EndpointAddedRemovedEventArgs](xref:Melanchall.DryWetMidi.Multimedia.EndpointAddedRemovedEventArgs);
 * [MidiEndpoint](xref:Melanchall.DryWetMidi.Multimedia.MidiEndpoint);
 * [InputEndpoint](xref:Melanchall.DryWetMidi.Multimedia.InputEndpoint);
-* [InputEndpointProperty](xref:Melanchall.DryWetMidi.Multimedia.InputEndpointProperty);
 * [MidiTimeCodeReceivedEventArgs](xref:Melanchall.DryWetMidi.Multimedia.MidiTimeCodeReceivedEventArgs);
 * [OutputEndpoint](xref:Melanchall.DryWetMidi.Multimedia.OutputEndpoint);
-* [OutputEndpointOption](xref:Melanchall.DryWetMidi.Multimedia.OutputEndpointOption);
-* [OutputEndpointProperty](xref:Melanchall.DryWetMidi.Multimedia.OutputEndpointProperty);
-* [OutputEndpointTechnology](xref:Melanchall.DryWetMidi.Multimedia.OutputEndpointTechnology);
 * [TickGeneratorException](xref:Melanchall.DryWetMidi.Multimedia.TickGeneratorException);
 * [HighPrecisionTickGenerator](xref:Melanchall.DryWetMidi.Multimedia.HighPrecisionTickGenerator).
 

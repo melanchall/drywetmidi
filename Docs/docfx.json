@@ -11,7 +11,7 @@
       "dest": "obj/api",
       "shouldSkipMarkup": true,
       "properties": {
-        "TargetFramework": "netstandard2.0"
+        "TargetFramework": "net8.0"
       }
     }
   ],
@@ -23,15 +23,27 @@
         "dest": "api"
       },
       {
-        "files": [ "**/*.md", "**/toc.yml" ]
+        "files": [ "**/*.md", "**/toc.yml" ],
+        "exclude": [
+          "**/obsolete/OBS[0-9]*/*.md",
+          "**/obsolete/OBS[0-9]*/*.yml",
+          "**/obsolete/template.md"
+        ]
       }
     ],
+    "sitemap": {
+      "baseUrl": "https://melanchall.github.io/drywetmidi",
+      "priority": 0.1,
+      "changefreq": "monthly"
+    },
     "resource": [
       {
         "files": [
           "images/**",
           "articles/**/images/**",
-		  "articles/**/*.mid" ]
+		      "articles/**/*.mid",
+          "robots.txt"
+        ]
       }
     ],
     "globalMetadata": {
@@ -49,7 +61,7 @@
     "markdownEngineName": "markdig",
     "dest": "_site",
     "xrefService": [ "https://xref.docs.microsoft.com/query?uid={uid}" ],
-	"xref": [
+	  "xref": [
       "https://learn.microsoft.com/en-us/dotnet/.xrefmap.json"
     ]
   }

@@ -30,7 +30,7 @@ Now we are going to implement a custom chunk. Custom chunk class must be derived
 * [GetContentSize](xref:Melanchall.DryWetMidi.Core.MidiChunk.GetContentSize(Melanchall.DryWetMidi.Core.WritingSettings));
 * [Clone](xref:Melanchall.DryWetMidi.Core.MidiChunk.Clone).
 
-Also, the class must have a parameterless constructor which calls the constructor of the base class ([MidiChunk](xref:Melanchall.DryWetMidi.Core.MidiChunk)) passing chunk's ID to it. ID is a 4-character string which will be **Hstr** for our chunk. The ID of a custom chunk should not be the same as one of standard chunks IDs. To get IDs of standard chunks you can call [MidiChunk.GetStandardChunkIds](xref:Melanchall.DryWetMidi.Core.MidiChunk.GetStandardChunkIds).
+Also, the class must have a parameterless constructor which calls the constructor of the base class ([MidiChunk](xref:Melanchall.DryWetMidi.Core.MidiChunk)) passing chunk's ID to it. ID is a 4-character string which will be **Hstr** for our chunk. The ID of a custom chunk should not be the same as one of standard chunks IDs.
 
 The class will look like this:
 

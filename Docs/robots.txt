@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: /404.html
+
+Sitemap: https://melanchall.github.io/drywetmidi/sitemap.xml

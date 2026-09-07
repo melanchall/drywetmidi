@@ -61,7 +61,7 @@ stages:
         script: |
           Get-ChildItem $(Build.SourcesDirectory) -Include *.pdb -Recurse | Remove-Item -Force
     
-    - ${{ each tfm in split('netstandard2.0,net7.0,net8.0', ',') }}:
+    - ${{ each tfm in split('netstandard2.1,net5.0,net7.0,net8.0', ',') }}:
       - task: ArchiveFiles@2
         displayName: Archive binaries (${{ tfm }})
         inputs:

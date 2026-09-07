@@ -111,7 +111,7 @@ public override MidiEvent CloneEvent()
 }
 ```
 
-The custom meta event is completely implemented. In order to read and write it we must assign a status byte to the event. You have to pick a value from the **[0x5F; 0x7E]** range which will be the status byte of your event type. You can get status bytes of standard meta events via [MetaEvent.GetStandardMetaEventStatusBytes](xref:Melanchall.DryWetMidi.Core.MetaEvent.GetStandardMetaEventStatusBytes). See code sample below to know how to read and write custom meta event:
+The custom meta event is completely implemented. In order to read and write it we must assign a status byte to the event. You have to pick a value from the **[0x5F; 0x7E]** range which will be the status byte of your event type. See code sample below to know how to read and write custom meta event:
 
 ```csharp
 // Define collection of custom meta event types along with
