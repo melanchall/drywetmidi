@@ -68,7 +68,7 @@ namespace Melanchall.DryWetMidi.Composing
         }
 
         private static Pattern BuildPatternFromPianoRoll(
-            string pianoRoll,
+            ReadOnlySpan<char> pianoRoll,
             PatternBuilder parentPatternBuilder,
             PianoRollSettings settings)
         {
@@ -81,49 +81,69 @@ namespace Melanchall.DryWetMidi.Composing
                 .SetRootNote(parentPatternBuilder.RootNote)
                 .Anchor(pianoRollStartSnchor);
 
-            var lines = GetPianoRollLines(pianoRoll);
             var lineIndex = 0;
+            var separators = new[] { '\n', '\r' };
 
-            foreach (var line in lines)
+            while (!pianoRoll.IsEmpty)
             {
-                patternBuilder.MoveToLastAnchor(pianoRollStartSnchor);
+                var index = pianoRoll.IndexOfAny(separators);
 
-                var note = IdentifyLineNote(line, lineIndex, out var dataStartIndex);
+                var line = index >= 0
+                    ? pianoRoll[..index]
+                    : pianoRoll;
 
-                ProcessLine(
-                    patternBuilder,
-                    settings,
-                    line,
-                    lineIndex++,
-                    note,
-                    dataStartIndex);
+                if (!line.IsEmpty && !line.Trim().IsEmpty)
+                {
+                    patternBuilder.MoveToLastAnchor(pianoRollStartSnchor);
+
+                    var note = IdentifyLineNote(line, lineIndex, out var dataStartIndex);
+
+                    ProcessLine(
+                        patternBuilder,
+                        settings,
+                        line,
+                        lineIndex++,
+                        note,
+                        dataStartIndex);
+                }
+
+                if (index < 0)
+                    break;
+
+                pianoRoll = pianoRoll[(index + 1)..];
             }
 
             return patternBuilder.Build();
         }
 
         private static MusicTheory.Note IdentifyLineNote(
-            string line,
+            ReadOnlySpan<char> line,
             int lineIndex,
             out int dataStartIndex)
         {
             var notePartEndIndex = line.IndexOfAny(Digits);
-            var notePart = line.Substring(0, notePartEndIndex + 1).Trim();
+            var notePart = line[..(notePartEndIndex + 1)].Trim();
 
             if (!MusicTheory.Note.TryParse(notePart, out var note))
             {
-                notePartEndIndex = Enumerable.Range(0, line.Length).FirstOrDefault(i => !char.IsDigit(line[i]) && !char.IsWhiteSpace(line[i])) - 1;
-                notePart = line.Substring(0, notePartEndIndex + 1).Trim();
+                notePartEndIndex = 0;
+                while (notePartEndIndex < line.Length && (char.IsDigit(line[notePartEndIndex]) || char.IsWhiteSpace(line[notePartEndIndex])))
+                {
+                    notePartEndIndex++;
+                }
+
+                notePartEndIndex--;
+                notePart = line[..(notePartEndIndex + 1)].Trim();
 
                 if (!SevenBitNumber.TryParse(notePart, out var noteNumber))
-                    throw new InvalidOperationException($"Failed to parse a note from '{notePart}' (line {lineIndex}).");
+                    throw new InvalidOperationException($"Failed to parse a note from '{notePart.ToString()}' (line {lineIndex}).");
                 else
                     note = MusicTheory.Note.Get(noteNumber);
             }
 
             // TODO: proper exception
             if (note == null)
-                throw new InvalidOperationException($"Failed to parse a note from '{notePart}' (line {lineIndex}).");
+                throw new InvalidOperationException($"Failed to parse a note from '{notePart.ToString()}' (line {lineIndex}).");
 
             dataStartIndex = notePartEndIndex + 1;
 
@@ -133,7 +153,7 @@ namespace Melanchall.DryWetMidi.Composing
         private static void ProcessLine(
             PatternBuilder patternBuilder,
             PianoRollSettings settings,
-            string line,
+            ReadOnlySpan<char> line,
             int lineIndex,
             MusicTheory.Note note,
             int dataStartIndex)

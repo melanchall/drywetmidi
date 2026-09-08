@@ -149,6 +149,12 @@ namespace Melanchall.DryWetMidi.Common
                 throw new ArgumentException($"{stringDescription} is null or contains white-spaces only.", parameterName);
         }
 
+        internal static void IsEmptyOrWhiteSpaceString(string parameterName, ReadOnlySpan<char> value, string stringDescription)
+        {
+            if (value.IsEmpty || value.Trim().IsEmpty)
+                throw new ArgumentException($"{stringDescription} is empty or contains white-spaces only.", parameterName);
+        }
+
         internal static void IsNullOrEmptyString(string parameterName, string? value, string stringDescription)
         {
             if (string.IsNullOrEmpty(value))

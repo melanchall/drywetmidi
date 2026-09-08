@@ -4,14 +4,14 @@ namespace Melanchall.DryWetMidi.Common
 {
     internal abstract class SimpleParser<T> : Parser
     {
-        public T Parse(string? input)
+        public T Parse(ReadOnlySpan<char> input)
         {
-            ThrowIfArgument.IsNullOrWhiteSpaceString(nameof(input), input, "Input");
+            ThrowIfArgument.IsEmptyOrWhiteSpaceString(nameof(input), input, "Input");
 
-            return ParseInternal(input.AsSpan().Trim());
+            return ParseInternal(input.Trim());
         }
 
-        public bool TryParse(string? input, out T result)
+        public bool TryParse(ReadOnlySpan<char> input, out T result)
         {
             try
             {

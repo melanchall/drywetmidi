@@ -145,7 +145,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// <see cref="string.Empty"/>, or is not of the correct format. This parameter is passed uninitialized;
         /// any value originally supplied in result will be overwritten.</param>
         /// <returns><c>true</c> if <paramref name="input"/> was converted successfully; otherwise, <c>false</c>.</returns>
-        public static bool TryParse(string? input, out Chord? chord)
+        public static bool TryParse(ReadOnlySpan<char> input, out Chord? chord)
         {
             return MusicTheoryParsers.ChordParser.TryParse(input, out chord);
         }
@@ -155,9 +155,9 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// </summary>
         /// <param name="input">A string containing a chord to convert.</param>
         /// <returns>A <see cref="Chord"/> equivalent to the musical chord contained in <paramref name="input"/>.</returns>
-        /// <exception cref="ArgumentException"><paramref name="input"/> is <c>null</c> or contains white-spaces only.</exception>
+        /// <exception cref="ArgumentException"><paramref name="input"/> is empty or contains white-spaces only.</exception>
         /// <exception cref="FormatException"><paramref name="input"/> has invalid format.</exception>
-        public static Chord Parse(string? input)
+        public static Chord Parse(ReadOnlySpan<char> input)
         {
             return MusicTheoryParsers.ChordParser.Parse(input);
         }

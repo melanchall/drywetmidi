@@ -4,14 +4,14 @@ namespace Melanchall.DryWetMidi.Common
 {
     internal abstract class ParameterizedParser<T, TParam> : Parser
     {
-        public T Parse(string? input, TParam parameter)
+        public T Parse(ReadOnlySpan<char> input, TParam parameter)
         {
-            ThrowIfArgument.IsNullOrWhiteSpaceString(nameof(input), input, "Input");
+            ThrowIfArgument.IsEmptyOrWhiteSpaceString(nameof(input), input, "Input");
 
-            return ParseInternal(input.AsSpan().Trim(), parameter);
+            return ParseInternal(input.Trim(), parameter);
         }
 
-        public bool TryParse(string? input, TParam parameter, out T result)
+        public bool TryParse(ReadOnlySpan<char> input, TParam parameter, out T result)
         {
             try
             {

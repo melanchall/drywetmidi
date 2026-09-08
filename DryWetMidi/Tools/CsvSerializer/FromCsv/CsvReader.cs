@@ -1,34 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
 
 namespace Melanchall.DryWetMidi.Tools
 {
     internal sealed class CsvReader : IDisposable
     {
-        #region Constants
-
         private const char Quote = '"';
-
-        #endregion
-
-        #region Fields
 
         private readonly StreamReader _streamReader;
         private readonly char _delimiter;
-
         private readonly char[] _buffer;
         private int _bufferLength = 0;
         private int _indexInBuffer = 0;
-
         private bool _disposed = false;
         private int _currentLineNumber = 0;
 
-        #endregion
-
-        #region Constructor
+        private readonly List<string> _recordValuesBuilder = new();
 
         public CsvReader(Stream stream, CsvDeserializationSettings settings)
         {
@@ -37,23 +26,20 @@ namespace Melanchall.DryWetMidi.Tools
             _delimiter = settings.Delimiter;
         }
 
-        #endregion
-
-        #region Methods
-
         public CsvRecord? ReadRecord()
         {
             var line = GetFirstLine();
             var lineNumber = _currentLineNumber - 1;
-            if (string.IsNullOrEmpty(line))
+            if (line == null)
                 return null;
 
-            string[] values;
+            _recordValuesBuilder.Clear();
 
             while (true)
             {
-                values = SplitValues(line, _delimiter).ToArray();
-                if (values.All(IsValueClosed))
+                SplitValues(line, _delimiter, _recordValuesBuilder);
+
+                if (AreAllValuesClosed(_recordValuesBuilder))
                     break;
 
                 var nextLine = GetNextLine();
@@ -61,14 +47,18 @@ namespace Melanchall.DryWetMidi.Tools
                     break;
 
                 line += nextLine;
+
+                _recordValuesBuilder.Clear();
             }
 
-            return new CsvRecord(lineNumber, _currentLineNumber - lineNumber, values.Select(CsvFormattingUtilities.UnescapeString).ToArray());
-        }
+            var finalValues = new string[_recordValuesBuilder.Count];
+            
+            for (int i = 0; i < _recordValuesBuilder.Count; i++)
+            {
+                finalValues[i] = CsvFormattingUtilities.UnescapeString(_recordValuesBuilder[i]);
+            }
 
-        public void Dispose()
-        {
-            Dispose(true);
+            return new CsvRecord(lineNumber, _currentLineNumber - lineNumber, finalValues);
         }
 
         private string? GetFirstLine()
@@ -79,7 +69,7 @@ namespace Melanchall.DryWetMidi.Tools
             {
                 result = GetNextLine();
             }
-            while (result?.Trim() == string.Empty);
+            while (result != null && result.AsSpan().Trim().IsEmpty);
 
             return result;
         }
@@ -87,19 +77,22 @@ namespace Melanchall.DryWetMidi.Tools
         private string? GetNextLine()
         {
             _currentLineNumber++;
-
             var stringBuilder = new StringBuilder();
             var lineEnding = false;
 
             while (true)
             {
+                var start = _indexInBuffer;
+
                 for (; _indexInBuffer < _bufferLength && !lineEnding; _indexInBuffer++)
                 {
-                    var c = _buffer[_indexInBuffer];
-                    if (c == '\n')
+                    if (_buffer[_indexInBuffer] == '\n')
                         lineEnding = true;
+                }
 
-                    stringBuilder.Append(c);
+                if (_indexInBuffer > start)
+                {
+                    stringBuilder.Append(new ReadOnlySpan<char>(_buffer, start, _indexInBuffer - start));
                 }
 
                 if (_indexInBuffer >= _bufferLength)
@@ -111,9 +104,7 @@ namespace Melanchall.DryWetMidi.Tools
                     break;
             }
 
-            return stringBuilder.Length > 0
-                ? stringBuilder.ToString()
-                : null;
+            return stringBuilder.Length > 0 ? stringBuilder.ToString() : null;
         }
 
         private void FillBuffer()
@@ -135,21 +126,27 @@ namespace Melanchall.DryWetMidi.Tools
             _indexInBuffer = 0;
         }
 
-        private static IEnumerable<string> SplitValues(string input, char delimiter)
+        private static void SplitValues(string input, char delimiter, List<string> destination)
         {
-            var valueBuilder = new StringBuilder();
+            var span = input.AsSpan();
+
             var escapedString = false;
             var possibleFinishedValue = false;
+            int startIdx = 0;
 
-            foreach (var c in input)
+            for (int i = 0; i < span.Length; i++)
             {
+                var c = span[i];
+
                 if (c == delimiter && (!escapedString || possibleFinishedValue))
                 {
-                    yield return valueBuilder.ToString().Trim();
+                    var valueSpan = span[startIdx..i].Trim();
+                    destination.Add(valueSpan.ToString());
 
-                    valueBuilder.Clear();
                     possibleFinishedValue = false;
                     escapedString = false;
+                    startIdx = i + 1;
+
                     continue;
                 }
 
@@ -160,39 +157,51 @@ namespace Melanchall.DryWetMidi.Tools
                     else
                         possibleFinishedValue = !possibleFinishedValue;
                 }
-
-                valueBuilder.Append(c);
             }
 
-            yield return valueBuilder.ToString().Trim();
+            var lastSpan = span[startIdx..].Trim();
+            destination.Add(lastSpan.ToString());
         }
 
-        private static bool IsValueClosed(string value)
+        private static bool AreAllValuesClosed(List<string> values)
         {
-            if (string.IsNullOrEmpty(value) || value[0] != Quote)
+            for (var i = 0; i < values.Count; i++)
+            {
+                if (!IsValueClosed(values[i].AsSpan()))
+                    return false;
+            }
+
+            return true;
+        }
+
+        private static bool IsValueClosed(ReadOnlySpan<char> value)
+        {
+            if (value.IsEmpty || value[0] != Quote)
                 return true;
 
             if (value.Length == 1)
                 return false;
 
-            return value.Skip(1).Reverse().TakeWhile(c => c == Quote).Count() % 2 == 1;
+            var quoteCount = 0;
+
+            for (var i = value.Length - 1; i >= 1; i--)
+            {
+                if (value[i] == Quote)
+                    quoteCount++;
+                else
+                    break;
+            }
+
+            return quoteCount % 2 == 1;
         }
 
-        #endregion
-
-        #region IDisposable
-
-        private void Dispose(bool disposing)
+        public void Dispose()
         {
-            if (_disposed)
-                return;
-
-            if (disposing)
+            if (!_disposed)
+            {
                 _streamReader.Dispose();
-
-            _disposed = true;
+                _disposed = true;
+            }
         }
-
-        #endregion
     }
 }

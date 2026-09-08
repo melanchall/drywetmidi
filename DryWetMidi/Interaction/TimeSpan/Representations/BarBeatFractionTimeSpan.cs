@@ -87,7 +87,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <see cref="string.Empty"/>, or is not of the correct format. This parameter is passed uninitialized;
         /// any value originally supplied in result will be overwritten.</param>
         /// <returns><c>true</c> if <paramref name="input"/> was converted successfully; otherwise, <c>false</c>.</returns>
-        public static bool TryParse(string? input, out BarBeatFractionTimeSpan? timeSpan)
+        public static bool TryParse(ReadOnlySpan<char> input, out BarBeatFractionTimeSpan? timeSpan)
         {
             return TimeSpanParsers.BarBeatFractionTimeSpanParser.TryParse(input, out timeSpan);
         }
@@ -99,9 +99,9 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="input">A string containing a time span to convert.</param>
         /// <returns>A <see cref="BarBeatFractionTimeSpan"/> equivalent to the time span contained in
         /// <paramref name="input"/>.</returns>
-        /// <exception cref="ArgumentException"><paramref name="input"/> is <c>null</c> or contains white-spaces only.</exception>
+        /// <exception cref="ArgumentException"><paramref name="input"/> is empty or contains white-spaces only.</exception>
         /// <exception cref="FormatException"><paramref name="input"/> has invalid format.</exception>
-        public static BarBeatFractionTimeSpan Parse(string? input)
+        public static BarBeatFractionTimeSpan Parse(ReadOnlySpan<char> input)
         {
             return TimeSpanParsers.BarBeatFractionTimeSpanParser.Parse(input);
         }

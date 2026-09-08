@@ -92,7 +92,7 @@ namespace Melanchall.DryWetMidi.Common
         /// <see cref="string.Empty"/>, or is not of the correct format. This parameter is passed uninitialized;
         /// any value originally supplied in result will be overwritten.</param>
         /// <returns><c>true</c> if <paramref name="input"/> was converted successfully; otherwise, <c>false</c>.</returns>
-        public static bool TryParse(string? input, out FourBitNumber fourBitNumber)
+        public static bool TryParse(ReadOnlySpan<char> input, out FourBitNumber fourBitNumber)
         {
             fourBitNumber = default;
 
@@ -109,9 +109,9 @@ namespace Melanchall.DryWetMidi.Common
         /// <param name="input">A string containing a number to convert.</param>
         /// <returns>A <see cref="FourBitNumber"/> equivalent to the four-bit number contained in
         /// <paramref name="input"/>.</returns>
-        /// <exception cref="ArgumentException"><paramref name="input"/> is <c>null</c> or contains white-spaces only.</exception>
+        /// <exception cref="ArgumentException"><paramref name="input"/> is empty or contains white-spaces only.</exception>
         /// <exception cref="FormatException"><paramref name="input"/> has invalid format.</exception>
-        public static FourBitNumber Parse(string? input)
+        public static FourBitNumber Parse(ReadOnlySpan<char> input)
         {
             return (FourBitNumber)DataTypesParsers.FourBitNumberParser.Parse(input);
         }

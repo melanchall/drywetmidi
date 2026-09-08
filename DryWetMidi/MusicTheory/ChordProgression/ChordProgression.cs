@@ -63,7 +63,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// any value originally supplied in result will be overwritten.</param>
         /// <returns><c>true</c> if <paramref name="input"/> was converted successfully; otherwise, <c>false</c>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="scale"/> is <c>null</c>.</exception>
-        public static bool TryParse(string? input, Scale scale, out ChordProgression? chordProgression)
+        public static bool TryParse(ReadOnlySpan<char> input, Scale scale, out ChordProgression? chordProgression)
         {
             ThrowIfArgument.IsNull(nameof(scale), scale);
 
@@ -77,10 +77,10 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// <param name="scale">Scale to resolve chords.</param>
         /// <returns>A <see cref="ChordProgression"/> equivalent to the chord progression contained in
         /// <paramref name="input"/>.</returns>
-        /// <exception cref="ArgumentException"><paramref name="input"/> is <c>null</c> or contains white-spaces only.</exception>
+        /// <exception cref="ArgumentException"><paramref name="input"/> is empty or contains white-spaces only.</exception>
         /// <exception cref="FormatException"><paramref name="input"/> has invalid format.</exception>
         /// <exception cref="ArgumentNullException"><paramref name="scale"/> is <c>null</c>.</exception>
-        public static ChordProgression Parse(string? input, Scale scale)
+        public static ChordProgression Parse(ReadOnlySpan<char> input, Scale scale)
         {
             ThrowIfArgument.IsNull(nameof(scale), scale);
 
