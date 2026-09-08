@@ -31,7 +31,12 @@ namespace Melanchall.DryWetMidi.Multimedia
         #region Fields
 
         private static volatile EndpointsWatcher? _instance;
-        private static readonly object _lockObject = new object();
+
+#if NET9_0_OR_GREATER
+        private static readonly System.Threading.Lock _lockObject = new();
+#else
+        private static readonly object _lockObject = new();
+#endif
 
         #endregion
 

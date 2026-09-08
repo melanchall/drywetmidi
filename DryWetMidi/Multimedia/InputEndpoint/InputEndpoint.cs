@@ -68,8 +68,13 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         private readonly CommonApi.OsType _osType;
 
-        private readonly object _handleLock = new object();
-        private readonly object _eventProcessingLock = new object();
+#if NET9_0_OR_GREATER
+        private readonly System.Threading.Lock _handleLock = new();
+        private readonly System.Threading.Lock _eventProcessingLock = new();
+#else
+        private readonly object _handleLock = new();
+        private readonly object _eventProcessingLock = new();
+#endif
 
         private string? _id;
 

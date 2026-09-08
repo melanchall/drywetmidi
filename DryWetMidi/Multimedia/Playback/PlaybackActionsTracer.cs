@@ -34,7 +34,12 @@ namespace Melanchall.DryWetMidi.Multimedia
         #region Fields
 
         private readonly List<Action> _actions = new List<Action>();
-        private readonly object _lockObject = new object();
+
+#if NET9_0_OR_GREATER
+        private readonly System.Threading.Lock _lockObject = new();
+#else
+        private readonly object _lockObject = new();
+#endif
 
         private Stopwatch _stopwatch = new Stopwatch();
         private int _tickCounter = -1;

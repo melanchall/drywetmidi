@@ -33,7 +33,13 @@ namespace Melanchall.DryWetMidi.Multimedia
         private static readonly Lazy<PlaybackCurrentTimeWatcher> _lazyInstance = new Lazy<PlaybackCurrentTimeWatcher>(() => new PlaybackCurrentTimeWatcher());
 
         private readonly Dictionary<Playback, TimeSpanType?> _playbacks = new Dictionary<Playback, TimeSpanType?>();
-        private readonly object _playbacksLock = new object();
+
+#if NET9_0_OR_GREATER
+        private readonly System.Threading.Lock _playbacksLock = new();
+#else
+        private readonly object _playbacksLock = new();
+#endif
+
         private readonly PlaybackCurrentTimeWatcherSettings _settings;
 
         private MidiClock _clock;

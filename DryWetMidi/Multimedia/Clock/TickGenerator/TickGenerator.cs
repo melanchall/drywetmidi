@@ -18,7 +18,11 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         #region Fields
 
-        private readonly object _lockObject = new object();
+#if NET9_0_OR_GREATER
+        private readonly System.Threading.Lock _lockObject = new();
+#else
+        private readonly object _lockObject = new();
+#endif
 
         #endregion
 

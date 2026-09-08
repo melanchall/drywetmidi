@@ -30,7 +30,12 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         private readonly bool _startImmediately;
         private readonly Stopwatch _stopwatch = new Stopwatch();
-        private readonly object _lockObject = new object();
+
+#if NET9_0_OR_GREATER
+        private readonly System.Threading.Lock _lockObject = new();
+#else
+        private readonly object _lockObject = new();
+#endif
 
         private TimeSpan _startTime = TimeSpan.Zero;
         private TimeSpan _elapsed = TimeSpan.Zero;

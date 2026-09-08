@@ -22,7 +22,13 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         private readonly List<PlaybackEvent> _playbackEventsBuffer = new List<PlaybackEvent>();
         private IPlaybackSource _playbackSource = new FixedPlaybackSource();
-        private readonly object _playbackLockObject = new object();
+
+#if NET9_0_OR_GREATER
+        private readonly System.Threading.Lock _playbackLockObject = new();
+#else
+        private readonly object _playbackLockObject = new();
+#endif
+
         private bool _beforeStart = true;
 
         private TempoMap _initialTempoMap;

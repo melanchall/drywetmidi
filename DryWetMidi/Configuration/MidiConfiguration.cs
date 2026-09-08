@@ -13,7 +13,11 @@ namespace Melanchall.DryWetMidi.Configuration
 
         #region Fields
 
-        private static readonly object _lockObject = new object();
+#if NET9_0_OR_GREATER
+        private static readonly System.Threading.Lock _lockObject = new();
+#else
+        private static readonly object _lockObject = new();
+#endif
 
         private static MidiConfigurationHandle? _handle;
         private static MidiConfigurationApi.NativeApiActivityCallback? _nativeApiActivityCallback;
