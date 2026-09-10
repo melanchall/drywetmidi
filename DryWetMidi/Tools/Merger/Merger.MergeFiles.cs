@@ -27,17 +27,14 @@ namespace Melanchall.DryWetMidi.Tools
 
         #region Constants
 
-        private static readonly Dictionary<MidiEventType, Func<MidiEvent, object>> EventsKeysGetters =
-            new Dictionary<MidiEventType, Func<MidiEvent, object>>
+        private static readonly EnumBasedLookup<MidiEventType, Func<MidiEvent, object>> EventsKeysGetters = new(
+            (MidiEventType.SetTempo, midiEvent => MidiEventType.SetTempo),
+            (MidiEventType.TimeSignature, midiEvent => MidiEventType.TimeSignature),
+            (MidiEventType.PitchBend, midiEvent =>
             {
-                [MidiEventType.SetTempo] = midiEvent => MidiEventType.SetTempo,
-                [MidiEventType.TimeSignature] = midiEvent => MidiEventType.TimeSignature,
-                [MidiEventType.PitchBend] = midiEvent =>
-                {
-                    var pitchBendEvent = (PitchBendEvent)midiEvent;
-                    return (MidiEventType.PitchBend, pitchBendEvent.Channel);
-                },
-            };
+                var pitchBendEvent = (PitchBendEvent)midiEvent;
+                return (MidiEventType.PitchBend, pitchBendEvent.Channel);
+            }));
 
         private static readonly Dictionary<object, Func<MidiEvent>> DefaultEventsGetters = GetDefaultEventsGetters();
 
@@ -356,20 +353,23 @@ namespace Melanchall.DryWetMidi.Tools
                     var midiEvent = events[j];
                     time += midiEvent.DeltaTime;
 
-                    EventsKeysGetters.TryGetValue(midiEvent.EventType, out var keyGetter);
+                    var eventType = midiEvent.EventType;
+                    if (eventType != MidiEventType.SetTempo &&
+                        eventType != MidiEventType.TimeSignature &&
+                        eventType != MidiEventType.PitchBend)
+                        continue;
 
-                    if (keyGetter != null)
-                    {
-                        var key = keyGetter(midiEvent);
-                        if (time == 0)
-                            eventsAtStart[key] = midiEvent;
+                    var keyGetter = EventsKeysGetters[eventType];
 
-                        if (!trackedEvents.TryGetValue(key, out var trackedEvent))
-                            trackedEvents.Add(key, trackedEvent = (midiEvent, time));
+                    var key = keyGetter(midiEvent);
+                    if (time == 0)
+                        eventsAtStart[key] = midiEvent;
 
-                        if (time >= trackedEvent.Time)
-                            trackedEvents[key] = (midiEvent, time);
-                    }
+                    if (!trackedEvents.TryGetValue(key, out var trackedEvent))
+                        trackedEvents.Add(key, trackedEvent = (midiEvent, time));
+
+                    if (time >= trackedEvent.Time)
+                        trackedEvents[key] = (midiEvent, time);
                 }
 
                 result[i].LastEventTime = time;

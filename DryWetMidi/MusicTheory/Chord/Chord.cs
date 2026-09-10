@@ -14,13 +14,11 @@ namespace Melanchall.DryWetMidi.MusicTheory
     {
         #region Constants
 
-        private static readonly Dictionary<ChordQuality, IntervalDefinition[]> IntervalsByQuality = new Dictionary<ChordQuality, IntervalDefinition[]>
-        {
-            [ChordQuality.Major] = new[] { new IntervalDefinition(3, IntervalQuality.Major), new IntervalDefinition(5, IntervalQuality.Perfect) },
-            [ChordQuality.Minor] = new[] { new IntervalDefinition(3, IntervalQuality.Minor), new IntervalDefinition(5, IntervalQuality.Perfect) },
-            [ChordQuality.Augmented] = new[] { new IntervalDefinition(3, IntervalQuality.Major), new IntervalDefinition(5, IntervalQuality.Augmented) },
-            [ChordQuality.Diminished] = new[] { new IntervalDefinition(3, IntervalQuality.Minor), new IntervalDefinition(5, IntervalQuality.Diminished) }
-        };
+        private static readonly EnumBasedLookup<ChordQuality, IntervalDefinition[]> IntervalsByQuality = new(
+            (ChordQuality.Major, new[] { new IntervalDefinition(3, IntervalQuality.Major), new IntervalDefinition(5, IntervalQuality.Perfect) }),
+            (ChordQuality.Minor, new[] { new IntervalDefinition(3, IntervalQuality.Minor), new IntervalDefinition(5, IntervalQuality.Perfect) }),
+            (ChordQuality.Augmented, new[] { new IntervalDefinition(3, IntervalQuality.Major), new IntervalDefinition(5, IntervalQuality.Augmented) }),
+            (ChordQuality.Diminished, new[] { new IntervalDefinition(3, IntervalQuality.Minor), new IntervalDefinition(5, IntervalQuality.Diminished) }));
 
         #endregion
 

@@ -346,7 +346,7 @@ namespace Melanchall.DryWetMidi.Tools
             var result = new List<MidiChunk>();
 
             var objects = new List<CsvObject>();
-            var chords = new Dictionary<Tuple<int?, int?>, CsvChord>();
+            var chords = new Dictionary<(int?, int?), CsvChord>();
 
             Record? record;
 
@@ -403,7 +403,7 @@ namespace Melanchall.DryWetMidi.Tools
             bool readChunkId)
         {
             var objects = new List<CsvObject>();
-            var chords = new Dictionary<Tuple<int?, int?>, CsvChord>();
+            var chords = new Dictionary<(int?, int?), CsvChord>();
 
             Record? record;
 
@@ -434,7 +434,7 @@ namespace Melanchall.DryWetMidi.Tools
             Record record,
             RecordType? recordType,
             List<CsvObject> objects,
-            Dictionary<Tuple<int?, int?>, CsvChord> chords,
+            Dictionary<(int?, int?), CsvChord> chords,
             CsvDeserializationSettings settings,
             bool readChunkId)
         {
@@ -451,10 +451,10 @@ namespace Melanchall.DryWetMidi.Tools
                     {
                         var csvNote = ParseNote(record, settings, readChunkId);
 
-                        if (!chords.TryGetValue(Tuple.Create(csvNote.ChunkIndex, csvNote.ObjectIndex), out var csvChord))
+                        if (!chords.TryGetValue((csvNote.ChunkIndex, csvNote.ObjectIndex), out var csvChord))
                         {
                             chords.Add(
-                                Tuple.Create(csvNote.ChunkIndex, csvNote.ObjectIndex),
+                                (csvNote.ChunkIndex, csvNote.ObjectIndex),
                                 csvChord = new CsvChord(csvNote.ChunkIndex, csvNote.ChunkId, csvNote.ObjectIndex));
 
                             objects.Add(csvChord);

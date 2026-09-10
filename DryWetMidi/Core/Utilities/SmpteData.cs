@@ -17,15 +17,13 @@ namespace Melanchall.DryWetMidi.Core
         private const int FormatOffset = 5;
         private const int HoursMask = 0x1F; // 00011111
 
-        private static readonly Dictionary<SmpteFormat, byte> MaxFrames = new Dictionary<SmpteFormat, byte>
-        {
-            [SmpteFormat.TwentyFour] = 23,
-            [SmpteFormat.TwentyFive] = 24,
-            [SmpteFormat.ThirtyDrop] = 28,
-            [SmpteFormat.Thirty] = 29
-        };
+        private static readonly EnumBasedLookup<SmpteFormat, byte> MaxFrames = new(
+            (SmpteFormat.TwentyFour, 23),
+            (SmpteFormat.TwentyFive, 24),
+            (SmpteFormat.ThirtyDrop, 28),
+            (SmpteFormat.Thirty, 29));
 
-        private static readonly SmpteFormat[] Formats = new SmpteFormat[]
+        private static readonly SmpteFormat[] Formats = new[]
         {
             SmpteFormat.TwentyFour,
             SmpteFormat.TwentyFive,

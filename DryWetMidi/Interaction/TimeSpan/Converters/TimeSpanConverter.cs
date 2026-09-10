@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Melanchall.DryWetMidi.Common;
+using System;
 using System.Runtime.CompilerServices;
 
 namespace Melanchall.DryWetMidi.Interaction
@@ -8,14 +8,13 @@ namespace Melanchall.DryWetMidi.Interaction
     {
         #region Constants
 
-        private static readonly Dictionary<TimeSpanType, Type> TimeSpansTypes = new Dictionary<TimeSpanType, Type>
-        {
-            [TimeSpanType.Midi] = typeof(MidiTimeSpan),
-            [TimeSpanType.Metric] = typeof(MetricTimeSpan),
-            [TimeSpanType.Musical] = typeof(MusicalTimeSpan),
-            [TimeSpanType.BarBeatTicks] = typeof(BarBeatTicksTimeSpan),
-            [TimeSpanType.BarBeatFraction] = typeof(BarBeatFractionTimeSpan)
-        };
+        private static readonly EnumBasedLookup<TimeSpanType, Type> TimeSpansTypes = new(
+            (TimeSpanType.Midi, typeof(MidiTimeSpan)),
+            (TimeSpanType.Metric, typeof(MetricTimeSpan)),
+            (TimeSpanType.Musical, typeof(MusicalTimeSpan)),
+            (TimeSpanType.BarBeatTicks, typeof(BarBeatTicksTimeSpan)),
+            (TimeSpanType.BarBeatFraction, typeof(BarBeatFractionTimeSpan))
+        );
 
         private static readonly ITimeSpanConverter MidiTimeSpanConverter = new MidiTimeSpanConverter();
         private static readonly ITimeSpanConverter MetricTimeSpanConverter = new MetricTimeSpanConverter();

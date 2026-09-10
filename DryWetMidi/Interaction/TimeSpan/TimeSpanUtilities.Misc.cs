@@ -1,6 +1,5 @@
 ﻿using Melanchall.DryWetMidi.Common;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 
@@ -13,23 +12,19 @@ namespace Melanchall.DryWetMidi.Interaction
     {
         #region Constants
 
-        private static readonly Dictionary<TimeSpanType, ITimeSpan> MaximumTimeSpans = new Dictionary<TimeSpanType, ITimeSpan>
-        {
-            [TimeSpanType.Midi] = new MidiTimeSpan(long.MaxValue),
-            [TimeSpanType.Metric] = new MetricTimeSpan(TimeSpan.MaxValue),
-            [TimeSpanType.Musical] = new MusicalTimeSpan(long.MaxValue, 1),
-            [TimeSpanType.BarBeatTicks] = new BarBeatTicksTimeSpan(long.MaxValue, long.MaxValue, long.MaxValue),
-            [TimeSpanType.BarBeatFraction] = new BarBeatFractionTimeSpan(long.MaxValue, double.MaxValue)
-        };
+        private static readonly EnumBasedLookup<TimeSpanType, ITimeSpan> MaximumTimeSpans = new(
+            (TimeSpanType.Midi, new MidiTimeSpan(long.MaxValue)),
+            (TimeSpanType.Metric, new MetricTimeSpan(TimeSpan.MaxValue)),
+            (TimeSpanType.Musical, new MusicalTimeSpan(long.MaxValue, 1)),
+            (TimeSpanType.BarBeatTicks, new BarBeatTicksTimeSpan(long.MaxValue, long.MaxValue, long.MaxValue)),
+            (TimeSpanType.BarBeatFraction, new BarBeatFractionTimeSpan(long.MaxValue, double.MaxValue)));
 
-        private static readonly Dictionary<TimeSpanType, ITimeSpan> ZeroTimeSpans = new Dictionary<TimeSpanType, ITimeSpan>
-        {
-            [TimeSpanType.Midi] = new MidiTimeSpan(),
-            [TimeSpanType.Metric] = new MetricTimeSpan(),
-            [TimeSpanType.Musical] = new MusicalTimeSpan(),
-            [TimeSpanType.BarBeatTicks] = new BarBeatTicksTimeSpan(),
-            [TimeSpanType.BarBeatFraction] = new BarBeatFractionTimeSpan()
-        };
+        private static readonly EnumBasedLookup<TimeSpanType, ITimeSpan> ZeroTimeSpans = new(
+            (TimeSpanType.Midi, new MidiTimeSpan()),
+            (TimeSpanType.Metric, new MetricTimeSpan()),
+            (TimeSpanType.Musical, new MusicalTimeSpan()),
+            (TimeSpanType.BarBeatTicks, new BarBeatTicksTimeSpan()),
+            (TimeSpanType.BarBeatFraction, new BarBeatFractionTimeSpan()));
 
         #endregion
 
@@ -197,7 +192,7 @@ namespace Melanchall.DryWetMidi.Interaction
         {
             // TODO: math time span???
 
-            return ZeroTimeSpans.Values.OfType<TTimeSpan>().First();
+            return ZeroTimeSpans.Items.OfType<TTimeSpan>().First();
         }
 
         /// <summary>
@@ -214,7 +209,7 @@ namespace Melanchall.DryWetMidi.Interaction
             // TODO: what about math / divide by zero?
             var mathTimeSpan = timeSpan as MathTimeSpan;
             return mathTimeSpan == null
-                ? ZeroTimeSpans.Values.Contains(timeSpan)
+                ? ZeroTimeSpans.Items.Contains(timeSpan)
                 : (mathTimeSpan.TimeSpan1.IsZeroTimeSpan() && mathTimeSpan.TimeSpan2.IsZeroTimeSpan());
         }
 
