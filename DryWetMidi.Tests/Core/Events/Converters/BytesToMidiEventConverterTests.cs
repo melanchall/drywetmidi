@@ -92,7 +92,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
         }
 
         [Test]
-        public void Convert_Bytes_Offset_Length()
+        public void Convert_Bytes_Offset_Length_1()
         {
             using (var bytesToMidiEventConverter = new BytesToMidiEventConverter())
             {
@@ -115,6 +115,27 @@ namespace Melanchall.DryWetMidi.Tests.Core
                     new ControlChangeEvent((SevenBitNumber)0x23, (SevenBitNumber)0x7F)
                     {
                         Channel = (FourBitNumber)0x3
+                    });
+            }
+        }
+
+        [Test]
+        public void Convert_Bytes_Offset_Length_2([Values(0, 1, 2, 4, 8, 16)] int headSize, [Values(0, 1, 2, 4, 8, 16)] int tailSize)
+        {
+            using (var bytesToMidiEventConverter = new BytesToMidiEventConverter())
+            {
+                var eventBytes = new byte[] { 0x92, 0x12, 0x56 };
+                var bytes = new byte[headSize + eventBytes.Length + tailSize];
+                Array.Copy(eventBytes, 0, bytes, headSize, eventBytes.Length);
+
+                Convert_Bytes_Offset_Length(
+                    bytesToMidiEventConverter,
+                    bytes,
+                    headSize,
+                    eventBytes.Length,
+                    new NoteOnEvent((SevenBitNumber)0x12, (SevenBitNumber)0x56)
+                    {
+                        Channel = (FourBitNumber)0x2
                     });
             }
         }
@@ -249,6 +270,39 @@ namespace Melanchall.DryWetMidi.Tests.Core
         }
 
         [Test]
+        public void ConvertMultiple_Bytes_Offset_Length([Values(0, 1, 2, 4, 8, 16)] int headSize, [Values(0, 1, 2, 4, 8, 16)] int middleSize, [Values(0, 1, 2, 4, 8, 16)] int tailSize)
+        {
+            using (var bytesToMidiEventConverter = new BytesToMidiEventConverter())
+            {
+                var firstEventBytes = new byte[] { 0x92, 0x12, 0x56 };
+                var secondEventBytes = new byte[] { 0xB3, 0x23, 0x7F };
+                
+                var bytes = new byte[headSize + firstEventBytes.Length + middleSize + secondEventBytes.Length + tailSize];
+                Array.Copy(firstEventBytes, 0, bytes, headSize, firstEventBytes.Length);
+                Array.Copy(secondEventBytes, 0, bytes, headSize + firstEventBytes.Length + middleSize, secondEventBytes.Length);
+
+                Convert_Bytes_Offset_Length(
+                    bytesToMidiEventConverter,
+                    bytes,
+                    headSize,
+                    firstEventBytes.Length,
+                    new NoteOnEvent((SevenBitNumber)0x12, (SevenBitNumber)0x56)
+                    {
+                        Channel = (FourBitNumber)0x2
+                    });
+                Convert_Bytes_Offset_Length(
+                    bytesToMidiEventConverter,
+                    bytes,
+                    headSize + firstEventBytes.Length + middleSize,
+                    secondEventBytes.Length,
+                    new ControlChangeEvent((SevenBitNumber)0x23, (SevenBitNumber)0x7F)
+                    {
+                        Channel = (FourBitNumber)0x3
+                    });
+            }
+        }
+
+        [Test]
         public void ConvertMultiple_Bytes_BytesFormat_Device()
         {
             using (var bytesToMidiEventConverter = new BytesToMidiEventConverter())
@@ -278,6 +332,35 @@ namespace Melanchall.DryWetMidi.Tests.Core
         }
 
         [Test]
+        public void ConvertMultiple_Bytes_Offset_Length_BytesFormat_Device([Values(0, 1, 2, 4, 8, 16)] int headSize, [Values(0, 1, 2, 4, 8, 16)] int middleSize, [Values(0, 1, 2, 4, 8, 16)] int tailSize)
+        {
+            using (var bytesToMidiEventConverter = new BytesToMidiEventConverter())
+            {
+                bytesToMidiEventConverter.BytesFormat = BytesFormat.Device;
+
+                var firstEventBytes = new byte[] { 0xF0, 0x12, 0x45, 0xF7 };
+                var secondEventBytes = new byte[] { 0xF0, 0x23, 0xF7 };
+
+                var bytes = new byte[headSize + firstEventBytes.Length + middleSize + secondEventBytes.Length + tailSize];
+                Array.Copy(firstEventBytes, 0, bytes, headSize, firstEventBytes.Length);
+                Array.Copy(secondEventBytes, 0, bytes, headSize + firstEventBytes.Length + middleSize, secondEventBytes.Length);
+
+                Convert_Bytes_Offset_Length(
+                    bytesToMidiEventConverter,
+                    bytes,
+                    headSize,
+                    firstEventBytes.Length,
+                    new NormalSysExEvent([0x12, 0x45, 0xF7]));
+                Convert_Bytes_Offset_Length(
+                    bytesToMidiEventConverter,
+                    bytes,
+                    headSize + firstEventBytes.Length + middleSize,
+                    secondEventBytes.Length,
+                    new NormalSysExEvent([0x23, 0xF7]));
+            }
+        }
+
+        [Test]
         public void ConvertMultiple_Bytes_BytesFormat_File()
         {
             using (var bytesToMidiEventConverter = new BytesToMidiEventConverter())
@@ -303,6 +386,35 @@ namespace Melanchall.DryWetMidi.Tests.Core
                         new NormalSysExEvent(Enumerable.Range(0, 40).Select(_ => (byte)0xA7).Concat(new byte[] { 0xF7 }).ToArray()),
                         new NormalSysExEvent(Enumerable.Range(0, 120).Select(_ => (byte)0xA7).Concat(new byte[] { 0xF7 }).ToArray())
                     });
+            }
+        }
+
+        [Test]
+        public void ConvertMultiple_Bytes_Offset_Length_BytesFormat_File([Values(0, 1, 2, 4, 8, 16)] int headSize, [Values(0, 1, 2, 4, 8, 16)] int middleSize, [Values(0, 1, 2, 4, 8, 16)] int tailSize)
+        {
+            using (var bytesToMidiEventConverter = new BytesToMidiEventConverter())
+            {
+                bytesToMidiEventConverter.BytesFormat = BytesFormat.File;
+
+                var firstEventBytes = new byte[] { 0xF0, 0x03, 0x12, 0x45, 0xF7 };
+                var secondEventBytes = new byte[] { 0xF0, 0x02, 0x23, 0xF7 };
+
+                var bytes = new byte[headSize + firstEventBytes.Length + middleSize + secondEventBytes.Length + tailSize];
+                Array.Copy(firstEventBytes, 0, bytes, headSize, firstEventBytes.Length);
+                Array.Copy(secondEventBytes, 0, bytes, headSize + firstEventBytes.Length + middleSize, secondEventBytes.Length);
+
+                Convert_Bytes_Offset_Length(
+                    bytesToMidiEventConverter,
+                    bytes,
+                    headSize,
+                    firstEventBytes.Length,
+                    new NormalSysExEvent([0x12, 0x45, 0xF7]));
+                Convert_Bytes_Offset_Length(
+                    bytesToMidiEventConverter,
+                    bytes,
+                    headSize + firstEventBytes.Length + middleSize,
+                    secondEventBytes.Length,
+                    new NormalSysExEvent([0x23, 0xF7]));
             }
         }
 

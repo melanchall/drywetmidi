@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
-using System.Linq;
 using System.Text;
 using Melanchall.DryWetMidi.Common;
 
@@ -16,6 +15,7 @@ namespace Melanchall.DryWetMidi.Core
         #region Constants
 
         private static readonly IEventReader MetaEventReader = new MetaEventReader();
+        private static readonly ReaderSettings ReaderSettings = new ReaderSettings();
 
         #endregion
 
@@ -280,7 +280,7 @@ namespace Melanchall.DryWetMidi.Core
             ThrowIfArgument.IsOutOfRange(nameof(offset), offset, 0, bytes.Length - 1, "Offset is out of range.");
             ThrowIfArgument.IsOutOfRange(nameof(length), length, 0, bytes.Length - offset, "Length is out of range.");
 
-            PrepareStreamWithBytes(bytes, offset, length);
+            PrepareReader(bytes, offset, length);
 
             var result = new List<MidiEvent>();
             byte? channelEventStatusByte = null;
@@ -370,7 +370,7 @@ namespace Melanchall.DryWetMidi.Core
         {
             ThrowIfArgument.IsNull(nameof(dataBytes), dataBytes);
 
-            PrepareStreamWithBytes(dataBytes, 0, dataBytes?.Length ?? 0);
+            PrepareReader(dataBytes, 0, dataBytes?.Length ?? 0);
             return ReadEvent(statusByte);
         }
 
@@ -431,7 +431,7 @@ namespace Melanchall.DryWetMidi.Core
             ThrowIfArgument.IsOutOfRange(nameof(offset), offset, 0, bytes.Length - 1, "Offset is out of range.");
             ThrowIfArgument.IsOutOfRange(nameof(length), length, 0, bytes.Length - offset, "Length is out of range.");
 
-            PrepareStreamWithBytes(bytes, offset, length);
+            PrepareReader(bytes, offset, length);
 
             long deltaTime = 0;
 
@@ -444,24 +444,14 @@ namespace Melanchall.DryWetMidi.Core
 
             var statusByte = _midiReader.ReadByte();
             var midiEvent = ReadEvent(statusByte);
-
-            // TODO: proper exception
-            if (midiEvent == null)
-                throw new InvalidOperationException($"MIDI event with status byte '{statusByte}' cannot be read.");
-
             midiEvent.DeltaTime = deltaTime;
             return midiEvent;
         }
 
-        private void PrepareStreamWithBytes(byte[] bytes, int offset, int length)
+        private void PrepareReader(byte[] bytes, int offset, int length)
         {
-            _dataBytesStream.Seek(0, SeekOrigin.Begin);
-            if (bytes != null)
-                _dataBytesStream.Write(bytes, offset, length);
-
             _midiReader?.Dispose();
-            _midiReader = new MidiReader(_dataBytesStream, new ReaderSettings());
-            _midiReader.Position = 0;
+            _midiReader = new MidiReader(bytes, offset, length, ReaderSettings);
         }
 
         private MidiEvent ReadEvent(byte statusByte)
@@ -487,32 +477,21 @@ namespace Melanchall.DryWetMidi.Core
 
         private byte[] ReadDeviceSysExBytes()
         {
-            const int bufferSize = 100;
+            var startPosition = _midiReader.Position;
 
-            // TODO: improve
-            var result = new List<byte[]>();
-            var position = _midiReader.Position;
+            var initialCapacity = (int)Math.Min(4096, _midiReader.Length - startPosition);
+            var result = new List<byte>(initialCapacity);
 
             while (!_midiReader.EndReached)
             {
-                var size = (int)Math.Min(bufferSize, _midiReader.Length - _midiReader.Position);
-                var buffer = _midiReader.ReadBytes(size);
-                var endIndex = Array.IndexOf(buffer, SysExEvent.EndOfEventByte);
-                if (endIndex >= 0)
-                {
-                    var newBuffer = new byte[endIndex + 1];
-                    Array.Copy(buffer, newBuffer, newBuffer.Length);
-                    result.Add(newBuffer);
-                    break;
-                }
+                var b = _midiReader.ReadByte();
+                result.Add(b);
 
-                result.Add(buffer);
+                if (b == SysExEvent.EndOfEventByte)
+                    break;
             }
 
-            var bytes = result.SelectMany(b => b).ToArray();
-
-            _midiReader.Position = position + bytes.Length;
-            return bytes;
+            return result.ToArray();
         }
 
         #endregion

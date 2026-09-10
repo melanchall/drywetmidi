@@ -1,6 +1,7 @@
 ﻿using Melanchall.DryWetMidi.Common;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -85,6 +86,28 @@ namespace Melanchall.DryWetMidi.Core
                 PrepareBuffer();
         }
 
+        internal MidiReader(byte[] bytes, int offset, int length, ReaderSettings settings)
+        {
+            ThrowIfArgument.IsNull(nameof(bytes), bytes);
+            ThrowIfArgument.IsEmptyCollection(nameof(bytes), bytes, "Bytes is empty array.");
+            ThrowIfArgument.IsOutOfRange(nameof(offset), offset, 0, bytes.Length - 1, "Offset is out of range.");
+            ThrowIfArgument.IsOutOfRange(nameof(length), length, 0, bytes.Length - offset, "Length is out of range.");
+            ThrowIfArgument.IsNull(nameof(settings), settings);
+
+            _settings = settings;
+
+            _stream = default!;
+
+            _useBuffering = true;
+            _buffer = bytes;
+            _bufferStart = offset;
+            _bufferSize = offset + length;
+            _position = offset;
+            _bufferPosition = offset;
+
+            Length = offset + length;
+        }
+
         #endregion
 
         #region Properties
@@ -138,7 +161,7 @@ namespace Melanchall.DryWetMidi.Core
                 if (!EnsureBufferIsReadyForReading())
                     throw new EndOfStreamException();
 
-                var result = _buffer![_bufferPosition];
+                var result = _buffer[_bufferPosition];
                 Position++;
                 return result;
             }
@@ -421,6 +444,7 @@ namespace Melanchall.DryWetMidi.Core
             return result;
         }
 
+        [MemberNotNullWhen(true, nameof(_buffer))]
         private bool EnsureBufferIsReadyForReading()
         {
             if (EndReached)
