@@ -36,13 +36,11 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         #region Constants
 
-        private static readonly Dictionary<CreationContext, string> ContextsDescriptions = new Dictionary<CreationContext, string>
-        {
-            [CreationContext.User] = string.Empty,
-            [CreationContext.VirtualDevice] = "endpoint of a virtual device",
-            [CreationContext.AddedEndpoint] = "from 'Endpoint added' notification",
-            [CreationContext.RemovedEndpoint] = "from 'Endpoint removed' notification",
-        };
+        private static readonly EnumBasedLookup<CreationContext, string> ContextsDescriptions = new(
+            (CreationContext.User, string.Empty),
+            (CreationContext.VirtualDevice, "endpoint of a virtual device"),
+            (CreationContext.AddedEndpoint, "from 'Endpoint added' notification"),
+            (CreationContext.RemovedEndpoint, "from 'Endpoint removed' notification"));
 
         #endregion
 

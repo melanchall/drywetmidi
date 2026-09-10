@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using Melanchall.DryWetMidi.Common;
 
@@ -16,17 +15,15 @@ namespace Melanchall.DryWetMidi.Core
     {
         #region Constants
 
-        private static readonly Dictionary<MidiTimeCodeComponent, byte> ComponentValueMasks = new Dictionary<MidiTimeCodeComponent, byte>
-        {
-            [MidiTimeCodeComponent.FramesLsb] = 0xF,
-            [MidiTimeCodeComponent.FramesMsb] = 0x1,
-            [MidiTimeCodeComponent.SecondsLsb] = 0xF,
-            [MidiTimeCodeComponent.SecondsMsb] = 0x3,
-            [MidiTimeCodeComponent.MinutesLsb] = 0xF,
-            [MidiTimeCodeComponent.MinutesMsb] = 0x3,
-            [MidiTimeCodeComponent.HoursLsb] = 0xF,
-            [MidiTimeCodeComponent.HoursMsbAndTimeCodeType] = 0x7
-        };
+        private static readonly EnumBasedLookup<MidiTimeCodeComponent, byte> ComponentValueMasks = new(
+            (MidiTimeCodeComponent.FramesLsb, 0xF),
+            (MidiTimeCodeComponent.FramesMsb, 0x1),
+            (MidiTimeCodeComponent.SecondsLsb, 0xF),
+            (MidiTimeCodeComponent.SecondsMsb, 0x3),
+            (MidiTimeCodeComponent.MinutesLsb, 0xF),
+            (MidiTimeCodeComponent.MinutesMsb, 0x3),
+            (MidiTimeCodeComponent.HoursLsb, 0xF),
+            (MidiTimeCodeComponent.HoursMsbAndTimeCodeType, 0x7));
 
         #endregion
 

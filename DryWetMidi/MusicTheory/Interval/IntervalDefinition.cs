@@ -12,14 +12,12 @@ namespace Melanchall.DryWetMidi.MusicTheory
     {
         #region Constants
 
-        private static readonly Dictionary<IntervalQuality, char> QualitiesSymbols = new Dictionary<IntervalQuality, char>
-        {
-            [IntervalQuality.Perfect] = 'P',
-            [IntervalQuality.Minor] = 'm',
-            [IntervalQuality.Major] = 'M',
-            [IntervalQuality.Augmented] = 'A',
-            [IntervalQuality.Diminished] = 'd'
-        };
+        private static readonly EnumBasedLookup<IntervalQuality, char> QualitiesSymbols = new EnumBasedLookup<IntervalQuality, char>(
+            (IntervalQuality.Perfect, 'P'),
+            (IntervalQuality.Minor, 'm'),
+            (IntervalQuality.Major, 'M'),
+            (IntervalQuality.Augmented, 'A'),
+            (IntervalQuality.Diminished, 'd'));
 
         #endregion
 

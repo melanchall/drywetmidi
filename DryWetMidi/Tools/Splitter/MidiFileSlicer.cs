@@ -1,8 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Melanchall.DryWetMidi.Tools
 {
@@ -79,59 +80,56 @@ namespace Melanchall.DryWetMidi.Tools
 
         #region Constants
 
-        private static readonly Dictionary<MidiEventType, Func<MidiEvent, MidiEvent, bool>> DefaultUpdatePredicates =
-            new Dictionary<MidiEventType, Func<MidiEvent, MidiEvent, bool>>
+        private static readonly EnumBasedLookup<MidiEventType, Func<MidiEvent, MidiEvent, bool>> DefaultUpdatePredicates = new(
+            (MidiEventType.ChannelAftertouch, (midiEvent, existingMidiEvent) =>
             {
-                [MidiEventType.ChannelAftertouch] = (midiEvent, existingMidiEvent) =>
-                {
-                    var currentChannel = ((ChannelAftertouchEvent)midiEvent).Channel;
-                    return ((ChannelAftertouchEvent)existingMidiEvent).Channel == currentChannel;
-                },
-                [MidiEventType.ControlChange] = (midiEvent, existingMidiEvent) =>
-                {
-                    var currentControlChangeEvent = (ControlChangeEvent)midiEvent;
-                    var currentControlNumber = currentControlChangeEvent.ControlNumber;
-                    var currentChannel = currentControlChangeEvent.Channel;
+                var currentChannel = ((ChannelAftertouchEvent)midiEvent).Channel;
+                return ((ChannelAftertouchEvent)existingMidiEvent).Channel == currentChannel;
+            }),
+            (MidiEventType.ControlChange, (midiEvent, existingMidiEvent) =>
+            {
+                var currentControlChangeEvent = (ControlChangeEvent)midiEvent;
+                var currentControlNumber = currentControlChangeEvent.ControlNumber;
+                var currentChannel = currentControlChangeEvent.Channel;
 
-                    var existingControlChangeEvent = (ControlChangeEvent)existingMidiEvent;
+                var existingControlChangeEvent = (ControlChangeEvent)existingMidiEvent;
 
-                    return existingControlChangeEvent.ControlNumber == currentControlNumber &&
-                           existingControlChangeEvent.Channel == currentChannel;
-                },
-                [MidiEventType.NoteAftertouch] = (midiEvent, existingMidiEvent) =>
-                {
-                    var currentNoteAftertouchEvent = (NoteAftertouchEvent)midiEvent;
-                    var currentNoteNumber = currentNoteAftertouchEvent.NoteNumber;
-                    var currentChannel = currentNoteAftertouchEvent.Channel;
+                return existingControlChangeEvent.ControlNumber == currentControlNumber &&
+                        existingControlChangeEvent.Channel == currentChannel;
+            }),
+            (MidiEventType.NoteAftertouch, (midiEvent, existingMidiEvent) =>
+            {
+                var currentNoteAftertouchEvent = (NoteAftertouchEvent)midiEvent;
+                var currentNoteNumber = currentNoteAftertouchEvent.NoteNumber;
+                var currentChannel = currentNoteAftertouchEvent.Channel;
 
-                    var existingNoteAftertouchEvent = (NoteAftertouchEvent)existingMidiEvent;
+                var existingNoteAftertouchEvent = (NoteAftertouchEvent)existingMidiEvent;
 
-                    return existingNoteAftertouchEvent.NoteNumber == currentNoteNumber &&
-                           existingNoteAftertouchEvent.Channel == currentChannel;
-                },
-                [MidiEventType.PitchBend] = (midiEvent, existingMidiEvent) =>
-                {
-                    var currentChannel = ((PitchBendEvent)midiEvent).Channel;
-                    return ((PitchBendEvent)existingMidiEvent).Channel == currentChannel;
-                },
-                [MidiEventType.ProgramChange] = (midiEvent, existingMidiEvent) =>
-                {
-                    var currentChannel = ((ProgramChangeEvent)midiEvent).Channel;
-                    return ((ProgramChangeEvent)existingMidiEvent).Channel == currentChannel;
-                },
-                [MidiEventType.CopyrightNotice] = (midiEvent, existingMidiEvent) => true,
-                [MidiEventType.InstrumentName] = (midiEvent, existingMidiEvent) => true,
-                [MidiEventType.ProgramName] = (midiEvent, existingMidiEvent) => true,
-                [MidiEventType.SequenceTrackName] = (midiEvent, existingMidiEvent) => true,
-                [MidiEventType.DeviceName] = (midiEvent, existingMidiEvent) => true,
-                [MidiEventType.PortPrefix] = (midiEvent, existingMidiEvent) => true,
-                [MidiEventType.SetTempo] = (midiEvent, existingMidiEvent) => true,
-                [MidiEventType.ChannelPrefix] = (midiEvent, existingMidiEvent) => true,
-                [MidiEventType.SequenceNumber] = (midiEvent, existingMidiEvent) => true,
-                [MidiEventType.KeySignature] = (midiEvent, existingMidiEvent) => true,
-                [MidiEventType.SmpteOffset] = (midiEvent, existingMidiEvent) => true,
-                [MidiEventType.TimeSignature] = (midiEvent, existingMidiEvent) => true,
-            };
+                return existingNoteAftertouchEvent.NoteNumber == currentNoteNumber &&
+                        existingNoteAftertouchEvent.Channel == currentChannel;
+            }),
+            (MidiEventType.PitchBend, (midiEvent, existingMidiEvent) =>
+            {
+                var currentChannel = ((PitchBendEvent)midiEvent).Channel;
+                return ((PitchBendEvent)existingMidiEvent).Channel == currentChannel;
+            }),
+            (MidiEventType.ProgramChange, (midiEvent, existingMidiEvent) =>
+            {
+                var currentChannel = ((ProgramChangeEvent)midiEvent).Channel;
+                return ((ProgramChangeEvent)existingMidiEvent).Channel == currentChannel;
+            }),
+            (MidiEventType.CopyrightNotice, (midiEvent, existingMidiEvent) => true),
+            (MidiEventType.InstrumentName, (midiEvent, existingMidiEvent) => true),
+            (MidiEventType.ProgramName, (midiEvent, existingMidiEvent) => true),
+            (MidiEventType.SequenceTrackName, (midiEvent, existingMidiEvent) => true),
+            (MidiEventType.DeviceName, (midiEvent, existingMidiEvent) => true),
+            (MidiEventType.PortPrefix, (midiEvent, existingMidiEvent) => true),
+            (MidiEventType.SetTempo, (midiEvent, existingMidiEvent) => true),
+            (MidiEventType.ChannelPrefix, (midiEvent, existingMidiEvent) => true),
+            (MidiEventType.SequenceNumber, (midiEvent, existingMidiEvent) => true),
+            (MidiEventType.KeySignature, (midiEvent, existingMidiEvent) => true),
+            (MidiEventType.SmpteOffset, (midiEvent, existingMidiEvent) => true),
+            (MidiEventType.TimeSignature, (midiEvent, existingMidiEvent) => true));
 
         #endregion
 

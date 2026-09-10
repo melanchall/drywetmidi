@@ -302,7 +302,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             e => e.NoteNumber);
 
 
-        private Dictionary<TrackedParameterType, Func<long, IEnumerable<EventWithMetadata>>> _getParameterEventsAtTime;
+        private EnumBasedLookup<TrackedParameterType, Func<long, IEnumerable<EventWithMetadata>>> _getParameterEventsAtTime;
 
         #endregion
 
@@ -420,14 +420,12 @@ namespace Melanchall.DryWetMidi.Multimedia
         [MemberNotNull(nameof(_getParameterEventsAtTime))]
         private void InitializeDataTracking()
         {
-            _getParameterEventsAtTime = new Dictionary<TrackedParameterType, Func<long, IEnumerable<EventWithMetadata>>>
-            {
-                [TrackedParameterType.Program] = _programChangesManager.GetEventsAtTime,
-                [TrackedParameterType.PitchValue] = _pitchBendChangesManager.GetEventsAtTime,
-                [TrackedParameterType.ControlValue] = _controlsChangesManager.GetEventsAtTime,
-                [TrackedParameterType.ChannelAftertouch] = _channelAftertouchChangesManager.GetEventsAtTime,
-                [TrackedParameterType.NoteAftertouch] = _noteAftertouchChangesManager.GetEventsAtTime,
-            };
+            _getParameterEventsAtTime = new EnumBasedLookup<TrackedParameterType, Func<long, IEnumerable<EventWithMetadata>>>(
+                (TrackedParameterType.Program, _programChangesManager.GetEventsAtTime),
+                (TrackedParameterType.PitchValue, _pitchBendChangesManager.GetEventsAtTime),
+                (TrackedParameterType.ControlValue, _controlsChangesManager.GetEventsAtTime),
+                (TrackedParameterType.ChannelAftertouch, _channelAftertouchChangesManager.GetEventsAtTime),
+                (TrackedParameterType.NoteAftertouch, _noteAftertouchChangesManager.GetEventsAtTime));
         }
 
         private void InitializeTrackedData(MidiEvent midiEvent, long time, object? metadata)
@@ -472,11 +470,11 @@ namespace Melanchall.DryWetMidi.Multimedia
             if (_getParameterEventsAtTime == null)
                 yield break;
 
-            foreach (var getEvents in _getParameterEventsAtTime)
+            foreach (var parameterType in _getParameterEventsAtTime.Keys)
             {
-                if (trackedParameterType.HasFlag(getEvents.Key))
+                if (trackedParameterType.HasFlag(parameterType))
                 {
-                    foreach (var e in getEvents.Value(convertedTime))
+                    foreach (var e in _getParameterEventsAtTime[parameterType](convertedTime))
                     {
                         yield return e;
                     }

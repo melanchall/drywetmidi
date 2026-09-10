@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Melanchall.DryWetMidi.Common;
+using System;
 
 namespace Melanchall.DryWetMidi.Interaction
 {
@@ -7,13 +7,10 @@ namespace Melanchall.DryWetMidi.Interaction
     {
         #region Constants
 
-        private static readonly Dictionary<TimeSpanMode, Func<MathTimeSpan, long, TempoMap, long>> Converters =
-            new Dictionary<TimeSpanMode, Func<MathTimeSpan, long, TempoMap, long>>
-            {
-                [TimeSpanMode.TimeTime] = ConvertFromTimeTime,
-                [TimeSpanMode.TimeLength] = ConvertFromTimeLength,
-                [TimeSpanMode.LengthLength] = ConvertFromLengthLength
-            };
+        private static readonly EnumBasedLookup<TimeSpanMode, Func<MathTimeSpan, long, TempoMap, long>> Converters = new(
+            (TimeSpanMode.TimeTime, ConvertFromTimeTime),
+            (TimeSpanMode.TimeLength, ConvertFromTimeLength),
+            (TimeSpanMode.LengthLength, ConvertFromLengthLength));
 
         #endregion
 
@@ -27,11 +24,7 @@ namespace Melanchall.DryWetMidi.Interaction
         public long ConvertFrom(ITimeSpan timeSpan, long time, TempoMap tempoMap)
         {
             var mathTimeSpan = (MathTimeSpan)timeSpan;
-
-            if (Converters.TryGetValue(mathTimeSpan.Mode, out var converter))
-                return converter(mathTimeSpan, time, tempoMap);
-            else
-                throw new ArgumentException($"{mathTimeSpan.Mode} mode is not supported by the converter.", nameof(timeSpan));
+            return Converters[mathTimeSpan.Mode](mathTimeSpan, time, tempoMap);
         }
 
         #endregion

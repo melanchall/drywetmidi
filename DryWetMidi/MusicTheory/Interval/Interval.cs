@@ -87,30 +87,27 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// </summary>
         public static readonly Interval Twelve = FromHalfSteps(12);
 
-        private static readonly Dictionary<IntervalQuality, Dictionary<int, int>> IntervalsHalfTones =
-            new Dictionary<IntervalQuality, Dictionary<int, int>>
+        private static readonly EnumBasedLookup<IntervalQuality, Dictionary<int, int>> IntervalsHalfTones = new(
+            (IntervalQuality.Perfect, new Dictionary<int, int>
             {
-                [IntervalQuality.Perfect] = new Dictionary<int, int>
-                {
-                    [1] = 0, [4] = 5, [5] = 7, [8] = 12
-                },
-                [IntervalQuality.Minor] = new Dictionary<int, int>
-                {
-                    [2] = 1, [3] = 3, [6] = 8, [7] = 10
-                },
-                [IntervalQuality.Major] = new Dictionary<int, int>
-                {
-                    [2] = 2, [3] = 4, [6] = 9, [7] = 11
-                },
-                [IntervalQuality.Diminished] = new Dictionary<int, int>
-                {
-                    [1] = -1, [2] = 0, [3] = 2, [4] = 4, [5] = 6, [6] = 7, [7] = 9, [8] = 11
-                },
-                [IntervalQuality.Augmented] = new Dictionary<int, int>
-                {
-                    [1] = 1, [2] = 3, [3] = 5, [4] = 6, [5] = 8, [6] = 10, [7] = 12
-                }
-            };
+                [1] = 0, [4] = 5, [5] = 7, [8] = 12
+            }),
+            (IntervalQuality.Minor, new Dictionary<int, int>
+            {
+                [2] = 1, [3] = 3, [6] = 8, [7] = 10
+            }),
+            (IntervalQuality.Major, new Dictionary<int, int>
+            {
+                [2] = 2, [3] = 4, [6] = 9, [7] = 11
+            }),
+            (IntervalQuality.Diminished, new Dictionary<int, int>
+            {
+                [1] = -1, [2] = 0, [3] = 2, [4] = 4, [5] = 6, [6] = 7, [7] = 9, [8] = 11
+            }),
+            (IntervalQuality.Augmented, new Dictionary<int, int>
+            {
+                [1] = 1, [2] = 3, [3] = 5, [4] = 6, [5] = 8, [6] = 10, [7] = 12
+            }));
 
         private static readonly IntervalQuality?[] QualitiesPattern = new IntervalQuality?[]
         {

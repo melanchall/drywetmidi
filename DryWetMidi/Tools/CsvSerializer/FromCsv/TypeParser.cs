@@ -1,6 +1,5 @@
 ﻿using Melanchall.DryWetMidi.Common;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace Melanchall.DryWetMidi.Tools
@@ -33,47 +32,44 @@ namespace Melanchall.DryWetMidi.Tools
 
         #region Constants
 
-        private static readonly Dictionary<DataType, ParameterParser> ParameterParsers =
-            new Dictionary<DataType, ParameterParser>
+        private static readonly EnumBasedLookup<DataType, ParameterParser> ParameterParsers = new (
+            (DataType.Byte, (p, s) => byte.Parse(p)),
+            (DataType.SByte, (p, s) => sbyte.Parse(p)),
+            (DataType.Long, (p, s) => long.Parse(p)),
+            (DataType.UShort, (p, s) => ushort.Parse(p)),
+            (DataType.String, (p, s) => p),
+            (DataType.Int, (p, s) => int.Parse(p)),
+            (DataType.FourBitNumber, (p, s) => FourBitNumber.Parse(p)),
+            (DataType.SevenBitNumber, (p, s) => SevenBitNumber.Parse(p)),
+            (DataType.NoteNumber, (p, s) =>
             {
-                [DataType.Byte] = (p, s) => byte.Parse(p),
-                [DataType.SByte] = (p, s) => sbyte.Parse(p),
-                [DataType.Long] = (p, s) => long.Parse(p),
-                [DataType.UShort] = (p, s) => ushort.Parse(p),
-                [DataType.String] = (p, s) => p,
-                [DataType.Int] = (p, s) => int.Parse(p),
-                [DataType.FourBitNumber] = (p, s) => FourBitNumber.Parse(p),
-                [DataType.SevenBitNumber] = (p, s) => SevenBitNumber.Parse(p),
-                [DataType.NoteNumber] = (p, s) =>
+                switch (s.NoteFormat)
                 {
-                    switch (s.NoteFormat)
+                    case CsvNoteFormat.NoteNumber:
+                        return SevenBitNumber.Parse(p);
+                    case CsvNoteFormat.Letter:
+                        return MusicTheory.Note.Parse(p).NoteNumber;
+                }
+
+                return !p.Any(char.IsLetter)
+                    ? SevenBitNumber.Parse(p)
+                    : MusicTheory.Note.Parse(p).NoteNumber;
+            }),
+            (DataType.BytesArray, (p, s) =>
+            {
+                return p
+                    .Split(s.BytesArrayDelimiter)
+                    .Select(b => b.Trim())
+                    .Where(b => !string.IsNullOrWhiteSpace(b))
+                    .Select(b =>
                     {
-                        case CsvNoteFormat.NoteNumber:
-                            return SevenBitNumber.Parse(p);
-                        case CsvNoteFormat.Letter:
-                            return MusicTheory.Note.Parse(p).NoteNumber;
-                    }
+                        if (s.BytesArrayFormat == CsvBytesArrayFormat.Hexadecimal)
+                            return Convert.ToByte(b, 16);
 
-                    return !p.Any(char.IsLetter)
-                        ? SevenBitNumber.Parse(p)
-                        : MusicTheory.Note.Parse(p).NoteNumber;
-                },
-                [DataType.BytesArray] = (p, s) =>
-                {
-                    return p
-                        .Split(s.BytesArrayDelimiter)
-                        .Select(b => b.Trim())
-                        .Where(b => !string.IsNullOrWhiteSpace(b))
-                        .Select(b =>
-                        {
-                            if (s.BytesArrayFormat == CsvBytesArrayFormat.Hexadecimal)
-                                return Convert.ToByte(b, 16);
-
-                            return byte.Parse(b);
-                        })
-                        .ToArray();
-                },
-            };
+                        return byte.Parse(b);
+                    })
+                    .ToArray();
+            }));
 
         #endregion
 
