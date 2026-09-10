@@ -53,7 +53,8 @@ namespace Melanchall.DryWetMidi.Multimedia
                         _inputEndpointCallback = InputEndpointCallback;
                         _outputEndpointCallback = OutputEndpointCallback;
 
-                        var openResult = MidiDevicesSessionApi.Api_OpenSession($"DryWetMIDI_{Guid.NewGuid()}", MidiConfiguration.GetConfigurationHandle(), _inputEndpointCallback, _outputEndpointCallback, out var rawHandle, out var errorCode);
+                        var processName = System.Diagnostics.Process.GetCurrentProcess().ProcessName;
+                        var openResult = MidiDevicesSessionApi.Api_OpenSession($"DryWetMIDI: {processName}", MidiConfiguration.GetConfigurationHandle(), _inputEndpointCallback, _outputEndpointCallback, out var rawHandle, out var errorCode);
                         NativeApiUtilities.HandleEndpointNativeApiResult(openResult, errorCode);
 
                         _handle = new MidiDevicesSessionHandle(rawHandle);
