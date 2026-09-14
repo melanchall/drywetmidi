@@ -362,6 +362,8 @@ void EnsureWinMmPortsAvailable()
 
 struct EndpointInfoBase
 {
+    std::wstring name;
+
     std::wstring endpointId;
 
     std::wstring endpointDeviceId;
@@ -1305,7 +1307,16 @@ API_EXPORT IN_GETPROPERTYRESULT API_CALL GetInputEndpointName(InputEndpointInfo*
 
     if (!info->endpointDeviceId.empty() && info->gtb != nullptr)
     {
-        *value = info->gtb.Name().c_str();
+        if (info->gtb.GroupCount() > 1)
+        {
+            info->name = info->gtb.Name() + L" (Group " + std::to_wstring(info->group.Index()) + L")";
+            *value = info->name.c_str();
+        }
+        else
+        {
+            *value = info->gtb.Name().c_str();
+        }
+
         return IN_GETPROPERTYRESULT_OK;
     }
 
@@ -1920,7 +1931,16 @@ API_EXPORT OUT_GETPROPERTYRESULT API_CALL GetOutputEndpointName(OutputEndpointIn
 
     if (!info->endpointDeviceId.empty() && info->gtb != nullptr)
     {
-        *value = info->gtb.Name().c_str();
+        if (info->gtb.GroupCount() > 1)
+        {
+            info->name = info->gtb.Name() + L" (Group " + std::to_wstring(info->group.Index()) + L")";
+            *value = info->name.c_str();
+        }
+        else
+        {
+            *value = info->gtb.Name().c_str();
+        }
+
         return IN_GETPROPERTYRESULT_OK;
     }
 
