@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 
 namespace Melanchall.DryWetMidi.Common
 {
-    internal sealed class EnumBasedLookup<TKey, TValue>
+    internal sealed class EnumBasedLookup<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicFields)] TKey, TValue>
         where TKey : struct, Enum
     {
-#if !(NETCOREAPP1_0_OR_GREATER || NET5_0_OR_GREATER)
+#if NETCOREAPP1_0_OR_GREATER || NET5_0_OR_GREATER
+        private static readonly int KeySize = Unsafe.SizeOf<TKey>();
+#else
         private static class CastHelper<TTarget>
         {
             public static readonly Func<object, TTarget> Cast = FlagsHelper();
@@ -24,14 +27,22 @@ namespace Melanchall.DryWetMidi.Common
         private TValue[]? _denseValues;
         private readonly int _itemsCount;
 
-        private static readonly int CachedMaxEnumValues = GetMaxEnumValue();
-
         public EnumBasedLookup(params (TKey key, TValue value)[] items)
         {
-            _maxSize = CachedMaxEnumValues;
+            _itemsCount = items.Length;
+
+            var maxIndex = 0;
+            for (int i = 0; i < items.Length; i++)
+            {
+                int current = ConvertEnumToInt(items[i].key);
+                if (current > maxIndex)
+                    maxIndex = current;
+            }
+
+            _maxSize = maxIndex + 1;
+
             _usedKeys = new bool[_maxSize];
             _values = new TValue[_maxSize];
-            _itemsCount = items.Length;
 
             for (int i = 0; i < items.Length; i++)
             {
@@ -107,7 +118,13 @@ namespace Melanchall.DryWetMidi.Common
         private static int ConvertEnumToInt(TKey enumKey)
         {
 #if NETCOREAPP1_0_OR_GREATER || NET5_0_OR_GREATER
-            return Unsafe.As<TKey, int>(ref enumKey);
+            if (KeySize == 4)
+                return Unsafe.As<TKey, int>(ref enumKey);
+            
+            if (KeySize == 1)
+                return Unsafe.As<TKey, byte>(ref enumKey);
+            
+            return Unsafe.As<TKey, short>(ref enumKey);
 #else
             return CastHelper<int>.Cast(enumKey);
 #endif
@@ -117,31 +134,20 @@ namespace Melanchall.DryWetMidi.Common
         private static TKey ConvertIntToEnum(int intKey)
         {
 #if NETCOREAPP1_0_OR_GREATER || NET5_0_OR_GREATER
-            return Unsafe.As<int, TKey>(ref intKey);
+            if (KeySize == 4)
+                return Unsafe.As<int, TKey>(ref intKey);
+
+            if (KeySize == 1)
+            {
+                var byteValue = (byte)intKey;
+                return Unsafe.As<byte, TKey>(ref byteValue);
+            }
+
+            var shortValue = (short)intKey;
+            return Unsafe.As<short, TKey>(ref shortValue);
 #else
             return CastHelper<TKey>.Cast(intKey);
 #endif
-        }
-
-        private static int GetMaxEnumValue()
-        {
-#if NET7_0_OR_GREATER
-            var values = Enum.GetValues<TKey>();
-#else
-            var values = Enum.GetValues(typeof(TKey));
-#endif
-            if (values.Length == 0)
-                return 0;
-
-            var max = 0;
-            foreach (var val in values)
-            {
-                var current = Convert.ToInt32(val);
-                if (current > max)
-                    max = current;
-            }
-
-            return max + 1;
         }
     }
 }
