@@ -123,17 +123,14 @@ API_EXPORT void API_CALL GetNativeEnvironmentInfo_Win(
 
     try
     {
-        *wmsAvailable = midi2::MidiApi::EnsureServiceAvailable();
+        *wmsAvailable =
+            midi2::MidiApi::EnsureServiceAvailable() &&
+            midi2::MidiApi::GetCurrentlySelectedApiMode() == midi2::MidiApiMode::FullWindowsMidiServicesMode;
     }
     catch (...)
     {
         *wmsAvailable = false;
     }
-}
-
-int GetPortNumber(const midi2::Enumeration::Legacy::MidiLegacyPortDeviceInformation info)
-{
-    return info.Number();
 }
 
 /* ================================
