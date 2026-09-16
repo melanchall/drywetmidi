@@ -281,12 +281,28 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         public static IN_GETCOUNTRESULT Api_GetEndpointsCount(out int count)
         {
-            return GetInputEndpointsCount(out count);
+            var countLocal = 0;
+            var result = MidiOperationsExecutor.Instance.ExecuteOperation(() =>
+                GetInputEndpointsCount(out countLocal));
+            
+            count = countLocal;
+            return result;
         }
 
         public static IN_GETALLINFORESULT Api_GetEndpointsInfo(MidiConfigurationHandle configuration, MidiDevicesSessionHandle sessionHandle, out IntPtr endpointsInfo, out int endpointsCount, out int errorCode)
         {
-            return GetInputEndpointsInfo(configuration, sessionHandle, out endpointsInfo, out endpointsCount, out errorCode);
+            var endpointsInfoLocal = IntPtr.Zero;
+            var endpointsCountLocal = 0;
+            var errorCodeLocal = 0;
+            
+            var result = MidiOperationsExecutor.Instance.ExecuteOperation(() =>
+                GetInputEndpointsInfo(configuration, sessionHandle, out endpointsInfoLocal, out endpointsCountLocal, out errorCodeLocal));
+            
+            endpointsInfo = endpointsInfoLocal;
+            endpointsCount = endpointsCountLocal;
+            errorCode = errorCodeLocal;
+            
+            return result;
         }
 
         public static void Api_FreeEndpointsInfo(IntPtr array, int size)
@@ -296,49 +312,116 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         public static IN_OPENRESULT Api_OpenEndpoint_Win(IntPtr info, MidiDevicesSessionHandle sessionHandle, Callback_Win callback, BytesReceivedCallback bytesReceivedCallback, int sysExBufferSize, int sysExBufferCount, out IntPtr handle, out int errorCode)
         {
-            return OpenInputEndpoint_Win(info, sessionHandle, callback, bytesReceivedCallback, sysExBufferSize, sysExBufferCount, out handle, out errorCode);
+            var handleLocal = IntPtr.Zero;
+            var errorCodeLocal = 0;
+            
+            var result = MidiOperationsExecutor.Instance.ExecuteOperation(() =>
+                OpenInputEndpoint_Win(info, sessionHandle, callback, bytesReceivedCallback, sysExBufferSize, sysExBufferCount, out handleLocal, out errorCodeLocal));
+            
+            handle = handleLocal;
+            errorCode = errorCodeLocal;
+            
+            return result;
         }
 
         public static IN_OPENRESULT Api_OpenEndpoint_Mac(IntPtr info, MidiDevicesSessionHandle sessionHandle, Callback_Mac callback, out IntPtr handle, out int errorCode)
         {
-            return OpenInputEndpoint_Mac(info, sessionHandle, callback, out handle, out errorCode);
+            var handleLocal = IntPtr.Zero;
+            var errorCodeLocal = 0;
+            
+            var result = MidiOperationsExecutor.Instance.ExecuteOperation(() =>
+                OpenInputEndpoint_Mac(info, sessionHandle, callback, out handleLocal, out errorCodeLocal));
+            
+            handle = handleLocal;
+            errorCode = errorCodeLocal;
+            
+            return result;
         }
 
         public static IN_CLOSERESULT Api_CloseEndpoint(IntPtr handle, out int errorCode)
         {
-            return CloseInputEndpoint(handle, out errorCode);
+            var errorCodeLocal = 0;
+            
+            var result = MidiOperationsExecutor.Instance.ExecuteOperation(() =>
+                CloseInputEndpoint(handle, out errorCodeLocal));
+            
+            errorCode = errorCodeLocal;
+            return result;
         }
 
         public static IN_RENEWSYSEXBUFFERRESULT Api_RenewInputEndpointSysExBuffer(IntPtr handle, IntPtr header, out int errorCode)
         {
-            return RenewInputEndpointSysExBuffer(handle, header, out errorCode);
+            var errorCodeLocal = 0;
+            
+            var result = RenewInputEndpointSysExBuffer(handle, header, out errorCodeLocal);
+            
+            errorCode = errorCodeLocal;
+            return result;
         }
 
         public static IN_CONNECTRESULT Api_Connect(IntPtr handle, out int errorCode)
         {
-            return ConnectToInputEndpoint(handle, out errorCode);
+            var errorCodeLocal = 0;
+            
+            var result = MidiOperationsExecutor.Instance.ExecuteOperation(() =>
+                ConnectToInputEndpoint(handle, out errorCodeLocal));
+            
+            errorCode = errorCodeLocal;
+            return result;
         }
 
         public static IN_DISCONNECTRESULT Api_Disconnect(IntPtr handle, out int errorCode)
         {
-            return DisconnectFromInputEndpoint(handle, out errorCode);
+            var errorCodeLocal = 0;
+            
+            var result = MidiOperationsExecutor.Instance.ExecuteOperation(() =>
+                DisconnectFromInputEndpoint(handle, out errorCodeLocal));
+            
+            errorCode = errorCodeLocal;
+            return result;
         }
 
         public static IN_GETEVENTDATARESULT Api_GetEventData(IntPtr packetList, int packetIndex, out IntPtr data, out int length, out int packetsCount)
         {
-            return GetEventDataFromInputEndpoint(packetList, packetIndex, out data, out length, out packetsCount);
+            var dataLocal = IntPtr.Zero;
+            var lengthLocal = 0;
+            var packetsCountLocal = 0;
+            
+            var result = MidiOperationsExecutor.Instance.ExecuteOperation(() =>
+                GetEventDataFromInputEndpoint(packetList, packetIndex, out dataLocal, out lengthLocal, out packetsCountLocal));
+            
+            data = dataLocal;
+            length = lengthLocal;
+            packetsCount = packetsCountLocal;
+            
+            return result;
         }
 
         public static IN_GETSYSEXDATARESULT Api_GetSysExBufferData(IntPtr header, out IntPtr data, out int size)
         {
-            return GetInputEndpointSysExBufferData(header, out data, out size);
+            var dataLocal = IntPtr.Zero;
+            var sizeLocal = 0;
+            
+            var result = GetInputEndpointSysExBufferData(header, out dataLocal, out sizeLocal);
+            
+            data = dataLocal;
+            size = sizeLocal;
+            
+            return result;
         }
 
         public static IN_GETPROPERTYRESULT Api_GetEndpointName(IntPtr info, out string name, out int errorCode)
         {
             name = string.Empty;
 
-            var result = GetInputEndpointName(info, out var namePointer, out errorCode);
+            var namePointer = IntPtr.Zero;
+            var errorCodeLocal = 0;
+            
+            var result = MidiOperationsExecutor.Instance.ExecuteOperation(() =>
+                GetInputEndpointName(info, out namePointer, out errorCodeLocal));
+            
+            errorCode = errorCodeLocal;
+            
             if (result != IN_GETPROPERTYRESULT.IN_GETPROPERTYRESULT_OK)
                 return result;
 
@@ -356,16 +439,29 @@ namespace Melanchall.DryWetMidi.Multimedia
             IN_GETPROPERTYRESULT result = default;
 
             var osType = CommonApi.Api_GetOsType();
+            var errorCodeLocal = 0;
 
             if (osType == CommonApi.OsType.Windows)
             {
-                result = GetInputEndpointId_Win(info, out var idPointer, out errorCode);
+                var idPointer = IntPtr.Zero;
+                
+                result = MidiOperationsExecutor.Instance.ExecuteOperation(() =>
+                    GetInputEndpointId_Win(info, out idPointer, out errorCodeLocal));
+                
+                errorCode = errorCodeLocal;
+                
                 if (result == IN_GETPROPERTYRESULT.IN_GETPROPERTYRESULT_OK)
                     id = NativeApi.GetStringFromPointer(idPointer);
             }
             else if (osType == CommonApi.OsType.MacOS)
             {
-                result = GetInputEndpointId_Mac(info, out var idValue, out errorCode);
+                var idValue = 0;
+                
+                result = MidiOperationsExecutor.Instance.ExecuteOperation(() =>
+                    GetInputEndpointId_Mac(info, out idValue, out errorCodeLocal));
+                
+                errorCode = errorCodeLocal;
+                
                 if (result == IN_GETPROPERTYRESULT.IN_GETPROPERTYRESULT_OK)
                     id = idValue.ToString();
             }

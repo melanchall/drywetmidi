@@ -1,4 +1,5 @@
 ﻿using Melanchall.DryWetMidi.Common;
+using Melanchall.DryWetMidi.Multimedia;
 using System;
 
 namespace Melanchall.DryWetMidi.Configuration
@@ -46,14 +47,19 @@ namespace Melanchall.DryWetMidi.Configuration
                 {
                     if (_handle == null || _handle.IsInvalid)
                     {
-                        int errorCode = 0;
+                        var errorCode = 0;
                         var rawHandle = IntPtr.Zero;
 
                         _nativeApiActivityCallback = NativeApiActivityCallback;
                         var result = MidiConfigurationApi.Api_GetConfiguration(UseWindowsMidiServices, _nativeApiActivityCallback, out rawHandle, out errorCode);
                         NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
 
+
                         _handle = new MidiConfigurationHandle(rawHandle);
+
+                        var apiType = MidiConfigurationApi.Api_GetApiType(_handle);
+                        if (apiType != ApiType.WindowsMidiServices)
+                            MidiOperationsExecutor.Instance.UseDirectExecution();
 
 #if TEST
                         _handle.TestCheckpoints = TestCheckpoints;

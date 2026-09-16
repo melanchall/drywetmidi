@@ -35,6 +35,14 @@ namespace Melanchall.DryWetMidi.Multimedia
         [LibraryImport(NativeApi.LibraryName)]
         [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
         private static partial void FreeBuffer(IntPtr buffer);
+
+        [LibraryImport(NativeApi.LibraryName)]
+        [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
+        private static partial int InitializeWindowsApartment();
+
+        [LibraryImport(NativeApi.LibraryName)]
+        [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
+        private static partial void UninitializeWindowsApartment();
 #else
         [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
         private static extern OsType GetOsType();
@@ -45,6 +53,12 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
         private static extern void FreeBuffer(IntPtr buffer);
+
+        [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
+        private static extern int InitializeWindowsApartment();
+
+        [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
+        private static extern void UninitializeWindowsApartment();
 #endif
 
         #endregion
@@ -59,13 +73,25 @@ namespace Melanchall.DryWetMidi.Multimedia
         public static void Api_GetNativeEnvironmentInfo_Win(
             out bool wmsAvailable)
         {
-            GetNativeEnvironmentInfo_Win(
-                out wmsAvailable);
+            var wmsAvailableLocal = false;
+            MidiOperationsExecutor.Instance.ExecuteOperation(() =>
+                GetNativeEnvironmentInfo_Win(out wmsAvailableLocal));
+            wmsAvailable = wmsAvailableLocal;
         }
 
         public static void Api_FreeBuffer(IntPtr buffer)
         {
             FreeBuffer(buffer);
+        }
+
+        public static int Api_InitializeWindowsApartment()
+        {
+            return InitializeWindowsApartment();
+        }
+
+        public static void Api_UninitializeWindowsApartment()
+        {
+            UninitializeWindowsApartment();
         }
 
         #endregion

@@ -131,20 +131,33 @@ namespace Melanchall.DryWetMidi.Configuration
             out int errorCode)
         {
             var osType = CommonApi.Api_GetOsType();
-            switch (osType)
-            {
-                case CommonApi.OsType.Windows:
-                    return GetConfiguration_Win(useWms, activityCallback, out configuration, out errorCode);
-                case CommonApi.OsType.MacOS:
-                    return GetConfiguration_Mac(activityCallback, out configuration, out errorCode);
-            }
 
-            throw new NotImplementedException($"OS type {osType} not supported.");
+            var configurationLocal = IntPtr.Zero;
+            var errorCodeLocal = 0;
+
+            var getResult = MidiOperationsExecutor.Instance.ExecuteOperation(() =>
+            {
+                switch (osType)
+                {
+                    case CommonApi.OsType.Windows:
+                        return GetConfiguration_Win(useWms, activityCallback, out configurationLocal, out errorCodeLocal);
+                    case CommonApi.OsType.MacOS:
+                        return GetConfiguration_Mac(activityCallback, out configurationLocal, out errorCodeLocal);
+                }
+
+                throw new NotImplementedException($"OS type {osType} not supported.");
+            });
+
+            configuration = configurationLocal;
+            errorCode = errorCodeLocal;
+
+            return getResult;
         }
 
         public static CONFIGURATION_CLEANUPRESULT Api_CleanupConfiguration(IntPtr configuration)
         {
-            return CleanupConfiguration(configuration);
+            return MidiOperationsExecutor.Instance.ExecuteOperation(() =>
+                CleanupConfiguration(configuration));
         }
 
         public static ApiType Api_GetApiType(MidiConfigurationHandle configuration)
@@ -154,32 +167,38 @@ namespace Melanchall.DryWetMidi.Configuration
 
         public static bool Api_IsVirtualDeviceApiAvailable(MidiConfigurationHandle configuration)
         {
-            return IsVirtualDeviceApiAvailable(configuration);
+            return MidiOperationsExecutor.Instance.ExecuteOperation(() =>
+                IsVirtualDeviceApiAvailable(configuration));
         }
 
         public static bool Api_IsDevicesWatcherApiAvailable(MidiConfigurationHandle configuration)
         {
-            return IsDevicesWatcherApiAvailable(configuration);
+            return MidiOperationsExecutor.Instance.ExecuteOperation(() =>
+                IsDevicesWatcherApiAvailable(configuration));
         }
 
         public static bool Api_IsWmsInitialized(MidiConfigurationHandle configuration)
         {
-            return IsWmsInitialized(configuration);
+            return MidiOperationsExecutor.Instance.ExecuteOperation(() =>
+                IsWmsInitialized(configuration));
         }
 
         public static void Api_CheckNativeApiActivityCallback(MidiConfigurationHandle configuration)
         {
-            CheckNativeApiActivityCallback(configuration);
+            MidiOperationsExecutor.Instance.ExecuteOperation(() =>
+                CheckNativeApiActivityCallback(configuration));
         }
 
         public static void Api_CheckWinRtErrorHandling_Win(MidiConfigurationHandle configuration)
         {
-            CheckWinRtErrorHandling_Win(configuration);
+            MidiOperationsExecutor.Instance.ExecuteOperation(() =>
+                CheckWinRtErrorHandling_Win(configuration));
         }
 
         public static void Api_CheckStdExceptionHandling_Win(MidiConfigurationHandle configuration)
         {
-            CheckStdExceptionHandling_Win(configuration);
+            MidiOperationsExecutor.Instance.ExecuteOperation(() =>
+                CheckStdExceptionHandling_Win(configuration));
         }
 
         #endregion

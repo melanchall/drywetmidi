@@ -30,7 +30,8 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         #region Fields
 
-        private static readonly Lazy<PlaybackCurrentTimeWatcher> _lazyInstance = new Lazy<PlaybackCurrentTimeWatcher>(() => new PlaybackCurrentTimeWatcher());
+        private static readonly Lazy<PlaybackCurrentTimeWatcher> _instance =
+            new (() => new PlaybackCurrentTimeWatcher());
 
         private readonly Dictionary<Playback, TimeSpanType?> _playbacks = new Dictionary<Playback, TimeSpanType?>();
 
@@ -70,7 +71,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <summary>
         /// Gets the default instance of <see cref="PlaybackCurrentTimeWatcher"/>.
         /// </summary>
-        public static PlaybackCurrentTimeWatcher Instance { get { return _lazyInstance.Value; } }
+        public static PlaybackCurrentTimeWatcher Instance => _instance.Value;
 
         /// <summary>
         /// Gets or sets the interval of playbacks current times polling.

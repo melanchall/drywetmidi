@@ -30,13 +30,8 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         #region Fields
 
-        private static volatile EndpointsWatcher? _instance;
-
-#if NET9_0_OR_GREATER
-        private static readonly System.Threading.Lock _lockObject = new();
-#else
-        private static readonly object _lockObject = new();
-#endif
+        private static readonly Lazy<EndpointsWatcher> _instance =
+            new(() => new EndpointsWatcher());
 
         #endregion
 
@@ -44,6 +39,15 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         private EndpointsWatcher()
         {
+            MidiDevicesSession.GetSessionHandle();
+
+            MidiDevicesSession.InputEndpointAdded += OnInputEndpointAdded;
+            MidiDevicesSession.InputEndpointRemoved += OnInputEndpointRemoved;
+            MidiDevicesSession.OutputEndpointAdded += OnOutputEndpointAdded;
+            MidiDevicesSession.OutputEndpointRemoved += OnOutputEndpointRemoved;
+
+            AppDomain.CurrentDomain.DomainUnload += OnDomainUnloadOrExit;
+            AppDomain.CurrentDomain.ProcessExit += OnDomainUnloadOrExit;
         }
 
         #endregion
@@ -61,28 +65,7 @@ namespace Melanchall.DryWetMidi.Multimedia
                 if (!LibraryConfiguration.IsEndpointsWatcherApiAvailable())
                     throw new FeatureNotAvailableException("Endpoints watcher API is not available.");
 
-                if (_instance == null)
-                {
-                    lock (_lockObject)
-                    {
-                        if (_instance == null)
-                        {
-                            MidiDevicesSession.GetSessionHandle();
-
-                            _instance = new EndpointsWatcher();
-
-                            MidiDevicesSession.InputEndpointAdded += _instance.OnInputEndpointAdded;
-                            MidiDevicesSession.InputEndpointRemoved += _instance.OnInputEndpointRemoved;
-                            MidiDevicesSession.OutputEndpointAdded += _instance.OnOutputEndpointAdded;
-                            MidiDevicesSession.OutputEndpointRemoved += _instance.OnOutputEndpointRemoved;
-
-                            AppDomain.CurrentDomain.DomainUnload += OnDomainUnloadOrExit;
-                            AppDomain.CurrentDomain.ProcessExit += OnDomainUnloadOrExit;
-                        }
-                    }
-                }
-
-                return _instance;
+                return _instance.Value;
             }
         }
 
@@ -90,23 +73,16 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         #region Methods
 
-        private static void OnDomainUnloadOrExit(object? sender, EventArgs e)
-        {
-            if (_instance != null)
-            {
-                lock (_lockObject)
-                {
-                    if (_instance != null)
-                    {
-                        // TODO: remove all event handlers of the instance
 
-                        MidiDevicesSession.InputEndpointAdded -= _instance.OnInputEndpointAdded;
-                        MidiDevicesSession.InputEndpointRemoved -= _instance.OnInputEndpointRemoved;
-                        MidiDevicesSession.OutputEndpointAdded -= _instance.OnOutputEndpointAdded;
-                        MidiDevicesSession.OutputEndpointRemoved -= _instance.OnOutputEndpointRemoved;
-                    }
-                }
-            }
+        // TODO: need it?
+        private void OnDomainUnloadOrExit(object? sender, EventArgs e)
+        {
+            // TODO: remove all event handlers of the instance?
+
+            MidiDevicesSession.InputEndpointAdded -= OnInputEndpointAdded;
+            MidiDevicesSession.InputEndpointRemoved -= OnInputEndpointRemoved;
+            MidiDevicesSession.OutputEndpointAdded -= OnOutputEndpointAdded;
+            MidiDevicesSession.OutputEndpointRemoved -= OnOutputEndpointRemoved;
         }
 
         private void OnInputEndpointAdded(object? sender, IntPtr info)

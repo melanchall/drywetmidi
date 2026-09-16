@@ -58,10 +58,19 @@ namespace Melanchall.DryWetMidi.Multimedia
             model = null;
             deviceDriver = null;
 
-            var result = GetDeviceInformation(info, configuration, out var idPointer, out var namePointer, out var manufacturerPointer, out var modelPointer, out var driverVersionPointer, out errorCode);
+            var idPointer = IntPtr.Zero;
+            var namePointer = IntPtr.Zero;
+            var manufacturerPointer = IntPtr.Zero;
+            var modelPointer = IntPtr.Zero;
+            var driverVersionPointer = IntPtr.Zero;
+
+            var errorCodeLocal = 0;
+
+            var result = MidiOperationsExecutor.Instance.ExecuteOperation(() =>
+                GetDeviceInformation(info, configuration, out idPointer, out namePointer, out manufacturerPointer, out modelPointer, out driverVersionPointer, out errorCodeLocal));
+            
             if (result == DEVICE_GETDEVICEINFORESULT.DEVICE_GETDEVICEINFORESULT_OK)
             {
-
                 id = NativeApi.GetStringFromPointer(idPointer);
                 name = NativeApi.GetStringFromPointer(namePointer);
                 manufacturer = NativeApi.GetStringFromPointer(manufacturerPointer);
@@ -69,6 +78,7 @@ namespace Melanchall.DryWetMidi.Multimedia
                 deviceDriver = NativeApi.GetStringFromPointer(driverVersionPointer);
             }
 
+            errorCode = errorCodeLocal;
             return result;
         }
 
