@@ -187,42 +187,66 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         public static VIRTUAL_OPENRESULT Api_OpenDevice_Mac(string name, MidiConfigurationHandle configuration, MidiDevicesSessionHandle sessionHandle, Callback_Mac callback, out IntPtr info, out int errorCode)
         {
-            return OpenVirtualDevice_Mac(name, configuration, sessionHandle, callback, out info, out errorCode);
+            var infoLocal = IntPtr.Zero;
+            var errorCodeLocal = 0;
+            var result = MidiSystem.Instance.EnqueueNativeCall(() =>
+                OpenVirtualDevice_Mac(name, configuration, sessionHandle, callback, out infoLocal, out errorCodeLocal));
+            info = infoLocal;
+            errorCode = errorCodeLocal;
+            return result;
         }
 
         public static VIRTUAL_OPENRESULT Api_OpenDevice_Win(string name, MidiConfigurationHandle configuration, MidiDevicesSessionHandle sessionHandle, out IntPtr info, out int errorCode)
         {
-            return OpenVirtualDevice_Win(name, configuration, sessionHandle, out info, out errorCode);
+            var infoLocal = IntPtr.Zero;
+            var errorCodeLocal = 0;
+            var result = MidiSystem.Instance.EnqueueNativeCall(() =>
+                OpenVirtualDevice_Win(name, configuration, sessionHandle, out infoLocal, out errorCodeLocal));
+            info = infoLocal;
+            errorCode = errorCodeLocal;
+            return result;
         }
 
         public static VIRTUAL_CLOSERESULT Api_CloseDevice(IntPtr info, out int errorCode)
         {
-            return CloseVirtualDevice(info, out errorCode);
+            var errorCodeLocal = 0;
+            var result = MidiSystem.Instance.EnqueueNativeCall(() =>
+                CloseVirtualDevice(info, out errorCodeLocal));
+            errorCode = errorCodeLocal;
+            return result;
         }
 
         public static VIRTUAL_SENDBACKRESULT Api_SendDataBack(IntPtr pktlist, IntPtr readProcRefCon, out int errorCode)
         {
-            return SendDataBackFromVirtualDevice(pktlist, readProcRefCon, out errorCode);
+            var errorCodeLocal = 0;
+            var result = MidiSystem.Instance.EnqueueNativeCall(() =>
+                SendDataBackFromVirtualDevice(pktlist, readProcRefCon, out errorCodeLocal));
+            errorCode = errorCodeLocal;
+            return result;
         }
 
         public static IntPtr Api_GetInputEndpointInfo(IntPtr info)
         {
-            return GetInputEndpointInfoFromVirtualDevice(info);
+            return MidiSystem.Instance.EnqueueNativeCall(() =>
+                GetInputEndpointInfoFromVirtualDevice(info));
         }
 
         public static IntPtr Api_GetOutputEndpointInfo(IntPtr info)
         {
-            return GetOutputEndpointInfoFromVirtualDevice(info);
+            return MidiSystem.Instance.EnqueueNativeCall(() =>
+                GetOutputEndpointInfoFromVirtualDevice(info));
         }
 
         public static VIRTUAL_MUTERESULT Api_MuteDevice(VirtualDeviceHandle info, MidiConfigurationHandle configuration)
         {
-            return MuteVirtualDevice(info, configuration);
+            return MidiSystem.Instance.EnqueueNativeCall(() =>
+                MuteVirtualDevice(info, configuration));
         }
 
         public static VIRTUAL_UNMUTERESULT Api_UnmuteDevice(VirtualDeviceHandle info, MidiConfigurationHandle configuration)
         {
-            return UnmuteVirtualDevice(info, configuration);
+            return MidiSystem.Instance.EnqueueNativeCall(() =>
+                UnmuteVirtualDevice(info, configuration));
         }
 
         #endregion

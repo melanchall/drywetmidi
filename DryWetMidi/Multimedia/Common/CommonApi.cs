@@ -59,8 +59,11 @@ namespace Melanchall.DryWetMidi.Multimedia
         public static void Api_GetNativeEnvironmentInfo_Win(
             out bool wmsAvailable)
         {
+            var wmsAvailableLocal = false;
+            MidiSystem.Instance.EnqueueNativeCall(() =>
             GetNativeEnvironmentInfo_Win(
-                out wmsAvailable);
+                out wmsAvailableLocal));
+            wmsAvailable = wmsAvailableLocal;
         }
 
         public static void Api_FreeBuffer(IntPtr buffer)

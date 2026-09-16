@@ -110,32 +110,41 @@ namespace Melanchall.DryWetMidi.Multimedia
             out IntPtr handle,
             out int errorCode)
         {
-            switch (CommonApi.Api_GetOsType())
+            var handleLocal = IntPtr.Zero;
+            var errorCodeLocal = 0;
+            var result = MidiSystem.Instance.EnqueueNativeCall(() =>
             {
-                case CommonApi.OsType.Windows:
-                    return OpenSession_Win(
-                        name,
-                        configuration,
-                        inputEndpointCallback,
-                        outputEndpointCallback,
-                        out handle,
-                        out errorCode);
-                case CommonApi.OsType.MacOS:
-                    return OpenSession_Mac(
-                        name,
-                        configuration,
-                        inputEndpointCallback,
-                        outputEndpointCallback,
-                        out handle,
-                        out errorCode);
-            }
+                switch (CommonApi.Api_GetOsType())
+                {
+                    case CommonApi.OsType.Windows:
+                        return OpenSession_Win(
+                            name,
+                            configuration,
+                            inputEndpointCallback,
+                            outputEndpointCallback,
+                            out handleLocal,
+                            out errorCodeLocal);
+                    case CommonApi.OsType.MacOS:
+                        return OpenSession_Mac(
+                            name,
+                            configuration,
+                            inputEndpointCallback,
+                            outputEndpointCallback,
+                            out handleLocal,
+                            out errorCodeLocal);
+                }
 
-            throw new NotImplementedException();
+                throw new NotImplementedException();
+            });
+            handle = handleLocal;
+            errorCode = errorCodeLocal;
+            return result;
         }
 
         public static SESSION_CLOSERESULT Api_CloseSession(IntPtr handle)
         {
-            return CloseSession(handle);
+            return MidiSystem.Instance.EnqueueNativeCall(() =>
+                CloseSession(handle));
         }
 
         #endregion

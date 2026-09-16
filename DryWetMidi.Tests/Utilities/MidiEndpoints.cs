@@ -8,8 +8,8 @@ namespace Melanchall.DryWetMidi.Tests
         #region Constants
 
         public const string A = "MIDI A";
-        public const string B = "MIDI B";
-        public const string C = "MIDI C";
+        public const string B = "MIDI B 2";
+        public const string C = "MIDI C 3";
 
         #endregion
 
