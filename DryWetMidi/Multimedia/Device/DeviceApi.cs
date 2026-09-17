@@ -66,11 +66,11 @@ namespace Melanchall.DryWetMidi.Multimedia
 
             var errorCodeLocal = 0;
 
-            var result = MidiSystem.Instance.EnqueueNativeCall(() =>
+            var result = MidiSystem.Instance.ExecuteOperation(() =>
                 GetDeviceInformation(info, configuration, out idPointer, out namePointer, out manufacturerPointer, out modelPointer, out driverVersionPointer, out errorCodeLocal));
+            
             if (result == DEVICE_GETDEVICEINFORESULT.DEVICE_GETDEVICEINFORESULT_OK)
             {
-
                 id = NativeApi.GetStringFromPointer(idPointer);
                 name = NativeApi.GetStringFromPointer(namePointer);
                 manufacturer = NativeApi.GetStringFromPointer(manufacturerPointer);

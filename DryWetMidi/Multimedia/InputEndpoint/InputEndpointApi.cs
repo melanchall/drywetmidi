@@ -282,8 +282,9 @@ namespace Melanchall.DryWetMidi.Multimedia
         public static IN_GETCOUNTRESULT Api_GetEndpointsCount(out int count)
         {
             var countLocal = 0;
-            var result = MidiSystem.Instance.EnqueueNativeCall(() =>
+            var result = MidiSystem.Instance.ExecuteOperation(() =>
                 GetInputEndpointsCount(out countLocal));
+            
             count = countLocal;
             return result;
         }
@@ -293,11 +294,14 @@ namespace Melanchall.DryWetMidi.Multimedia
             var endpointsInfoLocal = IntPtr.Zero;
             var endpointsCountLocal = 0;
             var errorCodeLocal = 0;
-            var result = MidiSystem.Instance.EnqueueNativeCall(() =>
+            
+            var result = MidiSystem.Instance.ExecuteOperation(() =>
                 GetInputEndpointsInfo(configuration, sessionHandle, out endpointsInfoLocal, out endpointsCountLocal, out errorCodeLocal));
+            
             endpointsInfo = endpointsInfoLocal;
             endpointsCount = endpointsCountLocal;
             errorCode = errorCodeLocal;
+            
             return result;
         }
 
@@ -310,10 +314,13 @@ namespace Melanchall.DryWetMidi.Multimedia
         {
             var handleLocal = IntPtr.Zero;
             var errorCodeLocal = 0;
-            var result = MidiSystem.Instance.EnqueueNativeCall(() =>
+            
+            var result = MidiSystem.Instance.ExecuteOperation(() =>
                 OpenInputEndpoint_Win(info, sessionHandle, callback, bytesReceivedCallback, sysExBufferSize, sysExBufferCount, out handleLocal, out errorCodeLocal));
+            
             handle = handleLocal;
             errorCode = errorCodeLocal;
+            
             return result;
         }
 
@@ -321,18 +328,23 @@ namespace Melanchall.DryWetMidi.Multimedia
         {
             var handleLocal = IntPtr.Zero;
             var errorCodeLocal = 0;
-            var result = MidiSystem.Instance.EnqueueNativeCall(() =>
+            
+            var result = MidiSystem.Instance.ExecuteOperation(() =>
                 OpenInputEndpoint_Mac(info, sessionHandle, callback, out handleLocal, out errorCodeLocal));
+            
             handle = handleLocal;
             errorCode = errorCodeLocal;
+            
             return result;
         }
 
         public static IN_CLOSERESULT Api_CloseEndpoint(IntPtr handle, out int errorCode)
         {
             var errorCodeLocal = 0;
-            var result = MidiSystem.Instance.EnqueueNativeCall(() =>
+            
+            var result = MidiSystem.Instance.ExecuteOperation(() =>
                 CloseInputEndpoint(handle, out errorCodeLocal));
+            
             errorCode = errorCodeLocal;
             return result;
         }
@@ -340,9 +352,9 @@ namespace Melanchall.DryWetMidi.Multimedia
         public static IN_RENEWSYSEXBUFFERRESULT Api_RenewInputEndpointSysExBuffer(IntPtr handle, IntPtr header, out int errorCode)
         {
             var errorCodeLocal = 0;
-            var result = //MidiSystem.Instance.EnqueueNativeCall(() =>
-                RenewInputEndpointSysExBuffer(handle, header, out errorCodeLocal);
-                //);
+            
+            var result = RenewInputEndpointSysExBuffer(handle, header, out errorCodeLocal);
+            
             errorCode = errorCodeLocal;
             return result;
         }
@@ -350,8 +362,10 @@ namespace Melanchall.DryWetMidi.Multimedia
         public static IN_CONNECTRESULT Api_Connect(IntPtr handle, out int errorCode)
         {
             var errorCodeLocal = 0;
-            var result = MidiSystem.Instance.EnqueueNativeCall(() =>
+            
+            var result = MidiSystem.Instance.ExecuteOperation(() =>
                 ConnectToInputEndpoint(handle, out errorCodeLocal));
+            
             errorCode = errorCodeLocal;
             return result;
         }
@@ -359,8 +373,10 @@ namespace Melanchall.DryWetMidi.Multimedia
         public static IN_DISCONNECTRESULT Api_Disconnect(IntPtr handle, out int errorCode)
         {
             var errorCodeLocal = 0;
-            var result = MidiSystem.Instance.EnqueueNativeCall(() =>
+            
+            var result = MidiSystem.Instance.ExecuteOperation(() =>
                 DisconnectFromInputEndpoint(handle, out errorCodeLocal));
+            
             errorCode = errorCodeLocal;
             return result;
         }
@@ -370,11 +386,14 @@ namespace Melanchall.DryWetMidi.Multimedia
             var dataLocal = IntPtr.Zero;
             var lengthLocal = 0;
             var packetsCountLocal = 0;
-            var result = MidiSystem.Instance.EnqueueNativeCall(() =>
+            
+            var result = MidiSystem.Instance.ExecuteOperation(() =>
                 GetEventDataFromInputEndpoint(packetList, packetIndex, out dataLocal, out lengthLocal, out packetsCountLocal));
+            
             data = dataLocal;
             length = lengthLocal;
             packetsCount = packetsCountLocal;
+            
             return result;
         }
 
@@ -382,10 +401,12 @@ namespace Melanchall.DryWetMidi.Multimedia
         {
             var dataLocal = IntPtr.Zero;
             var sizeLocal = 0;
-            var result = MidiSystem.Instance.EnqueueNativeCall(() =>
-                GetInputEndpointSysExBufferData(header, out dataLocal, out sizeLocal));
+            
+            var result = GetInputEndpointSysExBufferData(header, out dataLocal, out sizeLocal);
+            
             data = dataLocal;
             size = sizeLocal;
+            
             return result;
         }
 
@@ -395,9 +416,12 @@ namespace Melanchall.DryWetMidi.Multimedia
 
             var namePointer = IntPtr.Zero;
             var errorCodeLocal = 0;
-            var result = MidiSystem.Instance.EnqueueNativeCall(() =>
+            
+            var result = MidiSystem.Instance.ExecuteOperation(() =>
                 GetInputEndpointName(info, out namePointer, out errorCodeLocal));
+            
             errorCode = errorCodeLocal;
+            
             if (result != IN_GETPROPERTYRESULT.IN_GETPROPERTYRESULT_OK)
                 return result;
 
@@ -420,18 +444,24 @@ namespace Melanchall.DryWetMidi.Multimedia
             if (osType == CommonApi.OsType.Windows)
             {
                 var idPointer = IntPtr.Zero;
-                result = MidiSystem.Instance.EnqueueNativeCall(() =>
+                
+                result = MidiSystem.Instance.ExecuteOperation(() =>
                     GetInputEndpointId_Win(info, out idPointer, out errorCodeLocal));
+                
                 errorCode = errorCodeLocal;
+                
                 if (result == IN_GETPROPERTYRESULT.IN_GETPROPERTYRESULT_OK)
                     id = NativeApi.GetStringFromPointer(idPointer);
             }
             else if (osType == CommonApi.OsType.MacOS)
             {
                 var idValue = 0;
-                result = MidiSystem.Instance.EnqueueNativeCall(() =>
+                
+                result = MidiSystem.Instance.ExecuteOperation(() =>
                     GetInputEndpointId_Mac(info, out idValue, out errorCodeLocal));
+                
                 errorCode = errorCodeLocal;
+                
                 if (result == IN_GETPROPERTYRESULT.IN_GETPROPERTYRESULT_OK)
                     id = idValue.ToString();
             }

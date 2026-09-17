@@ -133,6 +133,17 @@ API_EXPORT void API_CALL GetNativeEnvironmentInfo_Win(
     }
 }
 
+API_EXPORT void API_CALL InitializeWindowsApartment()
+{
+    try
+    {
+        winrt::init_apartment(winrt::apartment_type::multi_threaded);
+    }
+    catch (...)
+    {
+    }
+}
+
 /* ================================
    Configuration
 ================================ */

@@ -130,13 +130,12 @@ namespace Melanchall.DryWetMidi.Configuration
             out IntPtr configuration,
             out int errorCode)
         {
-            var osType = MidiSystem.Instance.EnqueueNativeCall(() =>
-                CommonApi.Api_GetOsType());
+            var osType = CommonApi.Api_GetOsType();
 
             var configurationLocal = IntPtr.Zero;
             var errorCodeLocal = 0;
 
-            var getResult = MidiSystem.Instance.EnqueueNativeCall(() =>
+            var getResult = MidiSystem.Instance.ExecuteOperation(() =>
             {
                 switch (osType)
                 {
@@ -151,12 +150,13 @@ namespace Melanchall.DryWetMidi.Configuration
 
             configuration = configurationLocal;
             errorCode = errorCodeLocal;
+
             return getResult;
         }
 
         public static CONFIGURATION_CLEANUPRESULT Api_CleanupConfiguration(IntPtr configuration)
         {
-            return MidiSystem.Instance.EnqueueNativeCall(() =>
+            return MidiSystem.Instance.ExecuteOperation(() =>
                 CleanupConfiguration(configuration));
         }
 
@@ -167,37 +167,37 @@ namespace Melanchall.DryWetMidi.Configuration
 
         public static bool Api_IsVirtualDeviceApiAvailable(MidiConfigurationHandle configuration)
         {
-            return MidiSystem.Instance.EnqueueNativeCall(() =>
+            return MidiSystem.Instance.ExecuteOperation(() =>
                 IsVirtualDeviceApiAvailable(configuration));
         }
 
         public static bool Api_IsDevicesWatcherApiAvailable(MidiConfigurationHandle configuration)
         {
-            return MidiSystem.Instance.EnqueueNativeCall(() =>
+            return MidiSystem.Instance.ExecuteOperation(() =>
                 IsDevicesWatcherApiAvailable(configuration));
         }
 
         public static bool Api_IsWmsInitialized(MidiConfigurationHandle configuration)
         {
-            return MidiSystem.Instance.EnqueueNativeCall(() =>
+            return MidiSystem.Instance.ExecuteOperation(() =>
                 IsWmsInitialized(configuration));
         }
 
         public static void Api_CheckNativeApiActivityCallback(MidiConfigurationHandle configuration)
         {
-            MidiSystem.Instance.EnqueueNativeCall(() =>
+            MidiSystem.Instance.ExecuteOperation(() =>
                 CheckNativeApiActivityCallback(configuration));
         }
 
         public static void Api_CheckWinRtErrorHandling_Win(MidiConfigurationHandle configuration)
         {
-            MidiSystem.Instance.EnqueueNativeCall(() =>
+            MidiSystem.Instance.ExecuteOperation(() =>
                 CheckWinRtErrorHandling_Win(configuration));
         }
 
         public static void Api_CheckStdExceptionHandling_Win(MidiConfigurationHandle configuration)
         {
-            MidiSystem.Instance.EnqueueNativeCall(() =>
+            MidiSystem.Instance.ExecuteOperation(() =>
                 CheckStdExceptionHandling_Win(configuration));
         }
 
