@@ -811,7 +811,9 @@ OUT_SENDSHORTRESULT SendShortEventToOutputDevice(void* handle, int message)
     Byte buffer[dataSize + (sizeof(MIDIPacketList))];
     MIDIPacketList* packetList = (MIDIPacketList*)buffer;
     MIDIPacket* packet = MIDIPacketListInit(packetList);
-    MIDIPacketListAdd(packetList, sizeof(buffer), packet, 0, dataSize, &data[0]);
+
+    MIDITimeStamp currentTime = mach_absolute_time();
+    MIDIPacketListAdd(packetList, sizeof(buffer), packet, currentTime, dataSize, &data[0]);
 
     OSStatus result = MIDISend(outputDeviceHandle->portRef, outputDeviceHandle->info->endpointRef, packetList);
     if (result != noErr)
@@ -841,7 +843,9 @@ OUT_SENDSYSEXRESULT SendSysExEventToOutputDevice_Mac(void* handle, Byte* data, B
     Byte buffer[dataSize + (sizeof(MIDIPacketList))];
     MIDIPacketList* packetList = (MIDIPacketList*)buffer;
     MIDIPacket* packet = MIDIPacketListInit(packetList);
-    MIDIPacketListAdd(packetList, sizeof(buffer), packet, 0, dataSize, &data[0]);
+
+    MIDITimeStamp currentTime = mach_absolute_time();
+    MIDIPacketListAdd(packetList, sizeof(buffer), packet, currentTime, dataSize, &data[0]);
 
     OSStatus result = MIDISend(outputDeviceHandle->portRef, outputDeviceHandle->info->endpointRef, packetList);
     if (result != noErr)
