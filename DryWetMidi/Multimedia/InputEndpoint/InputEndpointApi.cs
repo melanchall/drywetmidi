@@ -340,8 +340,9 @@ namespace Melanchall.DryWetMidi.Multimedia
         public static IN_RENEWSYSEXBUFFERRESULT Api_RenewInputEndpointSysExBuffer(IntPtr handle, IntPtr header, out int errorCode)
         {
             var errorCodeLocal = 0;
-            var result = MidiSystem.Instance.EnqueueNativeCall(() =>
-                RenewInputEndpointSysExBuffer(handle, header, out errorCodeLocal));
+            var result = //MidiSystem.Instance.EnqueueNativeCall(() =>
+                RenewInputEndpointSysExBuffer(handle, header, out errorCodeLocal);
+                //);
             errorCode = errorCodeLocal;
             return result;
         }
