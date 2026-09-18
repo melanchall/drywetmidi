@@ -57,9 +57,9 @@ namespace Melanchall.DryWetMidi.Configuration
 
                         _handle = new MidiConfigurationHandle(rawHandle);
 
-                        //var apiType = MidiConfigurationApi.Api_GetApiType(_handle);
-                        //if (apiType != ApiType.WindowsMidiServices)
-                        //    MidiOperationsExecutor.Instance.UseDirectExecution();
+                        var apiType = MidiConfigurationApi.Api_GetApiType(_handle);
+                        if (apiType != ApiType.WindowsMidiServices)
+                            MidiOperationsExecutor.Instance.UseDirectExecution();
 
 #if TEST
                         _handle.TestCheckpoints = TestCheckpoints;

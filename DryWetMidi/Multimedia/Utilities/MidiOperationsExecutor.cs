@@ -18,7 +18,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         private const long SpinDurationTicks = TimeSpan.TicksPerMillisecond * 10;
         private static readonly double StopwatchTicksPerCacheTick = (double)Stopwatch.Frequency / TimeSpan.TicksPerSecond;
 
-        private static readonly Lazy<MidiOperationsExecutor> _instance =
+        private static Lazy<MidiOperationsExecutor> _instance =
             new(() => new MidiOperationsExecutor());
 
         private MidiOperationsExecutor()
@@ -26,7 +26,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             _needThread =
                 RuntimeInformation.IsOSPlatform(OSPlatform.Windows) &&
                 LibraryConfiguration.UseWindowsMidiServices &&
-                LibraryConfiguration.UseWorkerThreadForWindowsMidiServices;
+                LibraryConfiguration.UseWorkerThread;
 
             if (!_needThread)
                 return;
@@ -42,25 +42,25 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         public static MidiOperationsExecutor Instance => _instance.Value;
 
+        public static void ResetInstance()
+        {
+            var oldInstance = _instance;
+
+            _instance = new(() => new MidiOperationsExecutor());
+
+            if (oldInstance.IsValueCreated)
+                oldInstance.Value.Dispose();
+        }
+
+        public bool IsWorkerThreadUsed => _needThread && _workerThread?.IsAlive == true && _isRunning;
+
         public void UseDirectExecution()
         {
-            if (_workerThread == null)
-                return;
-            
-            _wakeUpEvent.Set();
-            if (_workerThread?.IsAlive == true)
-                _workerThread.Join(TimeSpan.FromMilliseconds(500));
-
-            _wakeUpEvent.Dispose();
-
-            _needThread = false;
+            ShutdownThread();
         }
 
         public void ExecuteOperation(Action nativeAction)
         {
-            if (!_isRunning)
-                throw new ObjectDisposedException(nameof(MidiOperationsExecutor));
-
             if (!_needThread)
             {
                 nativeAction();
@@ -77,9 +77,6 @@ namespace Melanchall.DryWetMidi.Multimedia
         public TResult ExecuteOperation<TResult>(Func<TResult> nativeAction)
             where TResult : struct
         {
-            if (!_isRunning)
-                throw new ObjectDisposedException(nameof(MidiOperationsExecutor));
-
             if (!_needThread)
                 return nativeAction();
 
@@ -171,23 +168,27 @@ namespace Melanchall.DryWetMidi.Multimedia
             return false;
         }
 
-        public void Dispose()
+        private void ShutdownThread()
         {
             if (_workerThread == null)
                 return;
 
             if (!_isRunning)
                 return;
-            
+
             _isRunning = false;
+            _needThread = false;
             _wakeUpEvent.Set();
 
             if (_workerThread?.IsAlive == true)
-            {
                 _workerThread.Join(TimeSpan.FromMilliseconds(500));
-            }
 
             _wakeUpEvent.Dispose();
+        }
+
+        public void Dispose()
+        {
+            ShutdownThread();
         }
     }
 }
