@@ -7,39 +7,26 @@ using System.Threading;
 
 namespace Melanchall.DryWetMidi.Multimedia
 {
-    internal sealed class MidiSystem : IDisposable
+    internal sealed class MidiOperationsExecutor : IDisposable
     {
-        private readonly struct MidiJob
-        {
-            public readonly Action Action;
-
-            public readonly ManualResetEventSlim CompletionSignal;
-
-            public MidiJob(Action action, ManualResetEventSlim completionSignal)
-            {
-                Action = action;
-                CompletionSignal = completionSignal;
-            }
-        }
-
-        private readonly ConcurrentQueue<MidiJob> _jobQueue = new();
+        private readonly ConcurrentQueue<MidiJob> _jobs = new();
         private readonly AutoResetEvent _wakeUpEvent = new(false);
         private readonly Thread? _workerThread;
-        private readonly bool _needThread;
+        private bool _needThread;
         private volatile bool _isRunning = true;
 
         private const long SpinDurationTicks = TimeSpan.TicksPerMillisecond * 10;
         private static readonly double StopwatchTicksPerCacheTick = (double)Stopwatch.Frequency / TimeSpan.TicksPerSecond;
 
-        private static readonly Lazy<MidiSystem> _instance =
-            new(() => new MidiSystem());
+        private static readonly Lazy<MidiOperationsExecutor> _instance =
+            new(() => new MidiOperationsExecutor());
 
-        private MidiSystem()
+        private MidiOperationsExecutor()
         {
-            // TODO: customize
             _needThread =
                 RuntimeInformation.IsOSPlatform(OSPlatform.Windows) &&
-                LibraryConfiguration.UseWindowsMidiServices;
+                LibraryConfiguration.UseWindowsMidiServices &&
+                LibraryConfiguration.UseWorkerThreadForWindowsMidiServices;
 
             if (!_needThread)
                 return;
@@ -51,16 +38,28 @@ namespace Melanchall.DryWetMidi.Multimedia
                 IsBackground = true,
                 Priority = ThreadPriority.Highest
             };
-
-            _workerThread.Start();
         }
 
-        public static MidiSystem Instance => _instance.Value;
+        public static MidiOperationsExecutor Instance => _instance.Value;
+
+        public void UseDirectExecution()
+        {
+            if (_workerThread == null)
+                return;
+            
+            _wakeUpEvent.Set();
+            if (_workerThread?.IsAlive == true)
+                _workerThread.Join(TimeSpan.FromMilliseconds(500));
+
+            _wakeUpEvent.Dispose();
+
+            _needThread = false;
+        }
 
         public void ExecuteOperation(Action nativeAction)
         {
             if (!_isRunning)
-                throw new ObjectDisposedException(nameof(MidiSystem));
+                throw new ObjectDisposedException(nameof(MidiOperationsExecutor));
 
             if (!_needThread)
             {
@@ -68,41 +67,24 @@ namespace Melanchall.DryWetMidi.Multimedia
                 return;
             }
 
-            using (var signal = new ManualResetEventSlim(false))
+            ExecuteOperation(() =>
             {
-                Exception? nativeException = null;
-
-                var job = new MidiJob(() =>
-                {
-                    try
-                    {
-                        nativeAction();
-                    }
-                    catch (Exception ex)
-                    {
-                        nativeException = ex;
-                    }
-                }, signal);
-
-                _jobQueue.Enqueue(job);
-                _wakeUpEvent.Set();
-
-                signal.Wait();
-
-                // TODO: wrap to another exception type?
-                if (nativeException != null)
-                    throw nativeException;
-            }
+                nativeAction();
+                return true;
+            });
         }
 
         public TResult ExecuteOperation<TResult>(Func<TResult> nativeAction)
             where TResult : struct
         {
             if (!_isRunning)
-                throw new ObjectDisposedException(nameof(MidiSystem));
+                throw new ObjectDisposedException(nameof(MidiOperationsExecutor));
 
             if (!_needThread)
                 return nativeAction();
+
+            if (_workerThread?.IsAlive != true)
+                _workerThread?.Start();
 
             using (var signal = new ManualResetEventSlim(false))
             {
@@ -122,7 +104,7 @@ namespace Melanchall.DryWetMidi.Multimedia
                     }
                 }, signal);
 
-                _jobQueue.Enqueue(job);
+                _jobs.Enqueue(job);
                 _wakeUpEvent.Set();
 
                 signal.Wait();
@@ -141,7 +123,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
             while (_isRunning)
             {
-                while (_jobQueue.TryDequeue(out var job))
+                while (_jobs.TryDequeue(out var job))
                 {
                     try
                     {
@@ -164,7 +146,7 @@ namespace Melanchall.DryWetMidi.Multimedia
                 if (ShouldSpinWaitForNextJob())
                     continue;
 
-                if (_isRunning && _jobQueue.IsEmpty)
+                if (_isRunning && _jobs.IsEmpty)
                     _wakeUpEvent.WaitOne();
             }
         }
@@ -176,7 +158,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
             while ((Stopwatch.GetTimestamp() - startTimestamp) < (SpinDurationTicks * StopwatchTicksPerCacheTick))
             {
-                if (!_jobQueue.IsEmpty)
+                if (!_jobs.IsEmpty)
                     return true;
 
                 spinCount++;

@@ -67,7 +67,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             out bool wmsAvailable)
         {
             var wmsAvailableLocal = false;
-            MidiSystem.Instance.ExecuteOperation(() =>
+            MidiOperationsExecutor.Instance.ExecuteOperation(() =>
                 GetNativeEnvironmentInfo_Win(out wmsAvailableLocal));
             wmsAvailable = wmsAvailableLocal;
         }

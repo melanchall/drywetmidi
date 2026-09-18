@@ -45,6 +45,8 @@ namespace Melanchall.DryWetMidi.Configuration
             get => MidiConfiguration.UseWindowsMidiServices;
             set => MidiConfiguration.UseWindowsMidiServices = value;
         }
+
+        public static bool UseWorkerThreadForWindowsMidiServices { get; set; } = true;
 #endif
 
         #endregion

@@ -113,7 +113,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             var handleLocal = IntPtr.Zero;
             var errorCodeLocal = 0;
             
-            var result = MidiSystem.Instance.ExecuteOperation(() =>
+            var result = MidiOperationsExecutor.Instance.ExecuteOperation(() =>
             {
                 switch (CommonApi.Api_GetOsType())
                 {
@@ -146,7 +146,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         public static SESSION_CLOSERESULT Api_CloseSession(IntPtr handle)
         {
-            return MidiSystem.Instance.ExecuteOperation(() =>
+            return MidiOperationsExecutor.Instance.ExecuteOperation(() =>
                 CloseSession(handle));
         }
 

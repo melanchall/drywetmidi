@@ -268,7 +268,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         {
             var countLocal = 0;
             
-            var result = MidiSystem.Instance.ExecuteOperation(() =>
+            var result = MidiOperationsExecutor.Instance.ExecuteOperation(() =>
                 GetOutputEndpointsCount(out countLocal));
             
             count = countLocal;
@@ -281,7 +281,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             var devicesCountLocal = 0;
             var errorCodeLocal = 0;
             
-            var result = MidiSystem.Instance.ExecuteOperation(() =>
+            var result = MidiOperationsExecutor.Instance.ExecuteOperation(() =>
             {
                 switch (CommonApi.Api_GetOsType())
                 {
@@ -312,7 +312,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             var handleLocal = IntPtr.Zero;
             var errorCodeLocal = 0;
             
-            var result = MidiSystem.Instance.ExecuteOperation(() =>
+            var result = MidiOperationsExecutor.Instance.ExecuteOperation(() =>
                 OpenOutputEndpoint_Win(info, sessionHandle, callback, out handleLocal, out errorCodeLocal));
             
             handle = handleLocal;
@@ -326,7 +326,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             var handleLocal = IntPtr.Zero;
             var errorCodeLocal = 0;
             
-            var result = MidiSystem.Instance.ExecuteOperation(() =>
+            var result = MidiOperationsExecutor.Instance.ExecuteOperation(() =>
                 OpenOutputEndpoint_Mac(info, sessionHandle, out handleLocal, out errorCodeLocal));
             
             handle = handleLocal;
@@ -339,7 +339,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         {
             var errorCodeLocal = 0;
             
-            var result = MidiSystem.Instance.ExecuteOperation(() =>
+            var result = MidiOperationsExecutor.Instance.ExecuteOperation(() =>
                 CloseOutputEndpoint(handle, out errorCodeLocal));
             
             errorCode = errorCodeLocal;
@@ -350,7 +350,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         {
             var errorCodeLocal = 0;
             
-            var result = MidiSystem.Instance.ExecuteOperation(() =>
+            var result = MidiOperationsExecutor.Instance.ExecuteOperation(() =>
                 SendShortEventToOutputEndpoint(handle, sessionHandle, message, out errorCodeLocal));
             
             errorCode = errorCodeLocal;
@@ -361,7 +361,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         {
             var errorCodeLocal = 0;
             
-            var result = MidiSystem.Instance.ExecuteOperation(() =>
+            var result = MidiOperationsExecutor.Instance.ExecuteOperation(() =>
                 SendSysExEventToOutputEndpoint_Mac(handle, data, dataSize, out errorCodeLocal));
             
             errorCode = errorCodeLocal;
@@ -372,7 +372,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         {
             var errorCodeLocal = 0;
             
-            var result = MidiSystem.Instance.ExecuteOperation(() =>
+            var result = MidiOperationsExecutor.Instance.ExecuteOperation(() =>
                 SendSysExEventToOutputEndpoint_Win(handle, sessionHandle, data, size, out errorCodeLocal));
             
             errorCode = errorCodeLocal;
@@ -401,7 +401,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             var namePointer = IntPtr.Zero;
             var errorCodeLocal = 0;
             
-            var result = MidiSystem.Instance.ExecuteOperation(() =>
+            var result = MidiOperationsExecutor.Instance.ExecuteOperation(() =>
                 GetOutputEndpointName(info, out namePointer, out errorCodeLocal));
             
             errorCode = errorCodeLocal;
@@ -429,7 +429,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             {
                 var idPointer = IntPtr.Zero;
                 
-                result = MidiSystem.Instance.ExecuteOperation(() =>
+                result = MidiOperationsExecutor.Instance.ExecuteOperation(() =>
                     GetOutputEndpointId_Win(info, out idPointer, out errorCodeLocal));
                 
                 errorCode = errorCodeLocal;
@@ -441,7 +441,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             {
                 var idValue = 0;
                 
-                result = MidiSystem.Instance.ExecuteOperation(() =>
+                result = MidiOperationsExecutor.Instance.ExecuteOperation(() =>
                     GetOutputEndpointId_Mac(info, out idValue, out errorCodeLocal));
                 
                 errorCode = errorCodeLocal;

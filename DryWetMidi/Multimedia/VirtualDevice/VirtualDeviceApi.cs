@@ -190,7 +190,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             var infoLocal = IntPtr.Zero;
             var errorCodeLocal = 0;
             
-            var result = MidiSystem.Instance.ExecuteOperation(() =>
+            var result = MidiOperationsExecutor.Instance.ExecuteOperation(() =>
                 OpenVirtualDevice_Mac(name, configuration, sessionHandle, callback, out infoLocal, out errorCodeLocal));
             
             info = infoLocal;
@@ -204,7 +204,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             var infoLocal = IntPtr.Zero;
             var errorCodeLocal = 0;
             
-            var result = MidiSystem.Instance.ExecuteOperation(() =>
+            var result = MidiOperationsExecutor.Instance.ExecuteOperation(() =>
                 OpenVirtualDevice_Win(name, configuration, sessionHandle, out infoLocal, out errorCodeLocal));
             
             info = infoLocal;
@@ -217,7 +217,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         {
             var errorCodeLocal = 0;
             
-            var result = MidiSystem.Instance.ExecuteOperation(() =>
+            var result = MidiOperationsExecutor.Instance.ExecuteOperation(() =>
                 CloseVirtualDevice(info, out errorCodeLocal));
             
             errorCode = errorCodeLocal;
@@ -228,7 +228,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         {
             var errorCodeLocal = 0;
             
-            var result = MidiSystem.Instance.ExecuteOperation(() =>
+            var result = MidiOperationsExecutor.Instance.ExecuteOperation(() =>
                 SendDataBackFromVirtualDevice(pktlist, readProcRefCon, out errorCodeLocal));
             
             errorCode = errorCodeLocal;
@@ -237,25 +237,25 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         public static IntPtr Api_GetInputEndpointInfo(IntPtr info)
         {
-            return MidiSystem.Instance.ExecuteOperation(() =>
+            return MidiOperationsExecutor.Instance.ExecuteOperation(() =>
                 GetInputEndpointInfoFromVirtualDevice(info));
         }
 
         public static IntPtr Api_GetOutputEndpointInfo(IntPtr info)
         {
-            return MidiSystem.Instance.ExecuteOperation(() =>
+            return MidiOperationsExecutor.Instance.ExecuteOperation(() =>
                 GetOutputEndpointInfoFromVirtualDevice(info));
         }
 
         public static VIRTUAL_MUTERESULT Api_MuteDevice(VirtualDeviceHandle info, MidiConfigurationHandle configuration)
         {
-            return MidiSystem.Instance.ExecuteOperation(() =>
+            return MidiOperationsExecutor.Instance.ExecuteOperation(() =>
                 MuteVirtualDevice(info, configuration));
         }
 
         public static VIRTUAL_UNMUTERESULT Api_UnmuteDevice(VirtualDeviceHandle info, MidiConfigurationHandle configuration)
         {
-            return MidiSystem.Instance.ExecuteOperation(() =>
+            return MidiOperationsExecutor.Instance.ExecuteOperation(() =>
                 UnmuteVirtualDevice(info, configuration));
         }
 

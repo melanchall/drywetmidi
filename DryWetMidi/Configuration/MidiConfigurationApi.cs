@@ -135,7 +135,7 @@ namespace Melanchall.DryWetMidi.Configuration
             var configurationLocal = IntPtr.Zero;
             var errorCodeLocal = 0;
 
-            var getResult = MidiSystem.Instance.ExecuteOperation(() =>
+            var getResult = MidiOperationsExecutor.Instance.ExecuteOperation(() =>
             {
                 switch (osType)
                 {
@@ -156,7 +156,7 @@ namespace Melanchall.DryWetMidi.Configuration
 
         public static CONFIGURATION_CLEANUPRESULT Api_CleanupConfiguration(IntPtr configuration)
         {
-            return MidiSystem.Instance.ExecuteOperation(() =>
+            return MidiOperationsExecutor.Instance.ExecuteOperation(() =>
                 CleanupConfiguration(configuration));
         }
 
@@ -167,37 +167,37 @@ namespace Melanchall.DryWetMidi.Configuration
 
         public static bool Api_IsVirtualDeviceApiAvailable(MidiConfigurationHandle configuration)
         {
-            return MidiSystem.Instance.ExecuteOperation(() =>
+            return MidiOperationsExecutor.Instance.ExecuteOperation(() =>
                 IsVirtualDeviceApiAvailable(configuration));
         }
 
         public static bool Api_IsDevicesWatcherApiAvailable(MidiConfigurationHandle configuration)
         {
-            return MidiSystem.Instance.ExecuteOperation(() =>
+            return MidiOperationsExecutor.Instance.ExecuteOperation(() =>
                 IsDevicesWatcherApiAvailable(configuration));
         }
 
         public static bool Api_IsWmsInitialized(MidiConfigurationHandle configuration)
         {
-            return MidiSystem.Instance.ExecuteOperation(() =>
+            return MidiOperationsExecutor.Instance.ExecuteOperation(() =>
                 IsWmsInitialized(configuration));
         }
 
         public static void Api_CheckNativeApiActivityCallback(MidiConfigurationHandle configuration)
         {
-            MidiSystem.Instance.ExecuteOperation(() =>
+            MidiOperationsExecutor.Instance.ExecuteOperation(() =>
                 CheckNativeApiActivityCallback(configuration));
         }
 
         public static void Api_CheckWinRtErrorHandling_Win(MidiConfigurationHandle configuration)
         {
-            MidiSystem.Instance.ExecuteOperation(() =>
+            MidiOperationsExecutor.Instance.ExecuteOperation(() =>
                 CheckWinRtErrorHandling_Win(configuration));
         }
 
         public static void Api_CheckStdExceptionHandling_Win(MidiConfigurationHandle configuration)
         {
-            MidiSystem.Instance.ExecuteOperation(() =>
+            MidiOperationsExecutor.Instance.ExecuteOperation(() =>
                 CheckStdExceptionHandling_Win(configuration));
         }
 
