@@ -8,23 +8,27 @@ namespace Melanchall.DryWetMidi.Common
         {
             ThrowIfArgument.IsEmptyOrWhiteSpaceString(nameof(input), input, "Input");
 
-            return ParseInternal(input.Trim(), parameter);
+            if (!TryParseInternal(input.Trim(), parameter, out var result, out var error))
+                throw new FormatException(error ?? "Input string has invalid format.");
+
+            return result;
         }
 
         public bool TryParse(ReadOnlySpan<char> input, TParam parameter, out T result)
         {
-            try
-            {
-                result = Parse(input, parameter);
-                return true;
-            }
-            catch
+            if (input.IsEmpty || input.Trim().IsEmpty)
             {
                 result = default!;
                 return false;
             }
+
+            return TryParseInternal(input.Trim(), parameter, out result, out _);
         }
 
-        protected abstract T ParseInternal(ReadOnlySpan<Char> input, TParam parameter);
+        internal abstract bool TryParseInternal(
+            ReadOnlySpan<char> input,
+            TParam parameter,
+            out T result,
+            out string? error);
     }
 }

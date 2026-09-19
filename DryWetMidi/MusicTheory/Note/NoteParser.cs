@@ -5,19 +5,33 @@ namespace Melanchall.DryWetMidi.MusicTheory
 {
     internal sealed class NoteParser : SimpleParser<Note>
     {
-        protected override Note ParseInternal(ReadOnlySpan<char> input)
+        internal override bool TryParseInternal(ReadOnlySpan<char> input, out Note result, out string? error)
         {
             var (noteName, length) = MusicTheoryParsers.NoteNameParser.TryReadNoteName(input);
             if (noteName == null)
-                ThrowInvalidFormatError();
+            {
+                error = "Input string has invalid format.";
+                result = default!;
+                return false;
+            }
 
             if (!int.TryParse(input[length..].Trim(), out var octaveNumber))
-                ThrowInvalidFormatError();
+            {
+                error = "Input string has invalid format.";
+                result = default!;
+                return false;
+            }
 
             if (!NoteUtilities.IsNoteValid(noteName.Value, octaveNumber))
-                ThrowError("Note is out of range.");
+            {
+                error = "Note is out of range.";
+                result = default!;
+                return false;
+            }
 
-            return Note.Get(noteName.Value, octaveNumber);
+            result = Note.Get(noteName.Value, octaveNumber);
+            error = null;
+            return true;
         }
     }
 }

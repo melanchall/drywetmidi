@@ -5,12 +5,18 @@ namespace Melanchall.DryWetMidi.Interaction
 {
     internal sealed class MidiTimeSpanParser : SimpleParser<MidiTimeSpan>
     {
-        protected override MidiTimeSpan ParseInternal(ReadOnlySpan<char> input)
+        internal override bool TryParseInternal(ReadOnlySpan<char> input, out MidiTimeSpan result, out string? error)
         {
             if (!long.TryParse(input, out var midiTimeSpan) || midiTimeSpan < 0)
-                ThrowInvalidFormatError();
+            {
+                error = "Input string has invalid format.";
+                result = default!;
+                return false;
+            }
 
-            return new MidiTimeSpan(midiTimeSpan);
+            result = new MidiTimeSpan(midiTimeSpan);
+            error = null;
+            return true;
         }
     }
 }

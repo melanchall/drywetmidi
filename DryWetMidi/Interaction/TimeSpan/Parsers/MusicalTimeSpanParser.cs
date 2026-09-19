@@ -5,7 +5,7 @@ namespace Melanchall.DryWetMidi.Interaction
 {
     internal sealed class MusicalTimeSpanParser : SimpleParser<MusicalTimeSpan>
     {
-        protected override MusicalTimeSpan ParseInternal(ReadOnlySpan<char> input)
+        internal override bool TryParseInternal(ReadOnlySpan<char> input, out MusicalTimeSpan result, out string? error)
         {
             var (numerator, denominator) = input[0] switch
             {
@@ -25,11 +25,19 @@ namespace Melanchall.DryWetMidi.Interaction
             {
                 var dividerIndex = input.IndexOf('/');
                 if (dividerIndex < 0)
-                    ThrowInvalidFormatError();
+                {
+                    error = "Input string has invalid format.";
+                    result = default!;
+                    return false;
+                }
 
                 numerator = 1;
                 if (dividerIndex > 0 && !long.TryParse(input.Slice(0, dividerIndex).Trim(), out numerator))
-                    ThrowInvalidFormatError();
+                {
+                    error = "Input string has invalid format.";
+                    result = default!;
+                    return false;
+                }
 
                 var i = dividerIndex + 1;
 
@@ -37,7 +45,11 @@ namespace Melanchall.DryWetMidi.Interaction
                 for (; i < input.Length && char.IsDigit(input[i]); i++) { }
 
                 if (!long.TryParse(input.Slice(dividerIndex + 1, i - dividerIndex - 1).Trim(), out denominator))
-                    ThrowInvalidFormatError();
+                {
+                    error = "Input string has invalid format.";
+                    result = default!;
+                    return false;
+                }
 
                 input = input.Slice(i).Trim();
             }
@@ -45,10 +57,18 @@ namespace Melanchall.DryWetMidi.Interaction
             //
 
             if (denominator == 0)
-                ThrowInvalidFormatError();
+            {
+                error = "Input string has invalid format.";
+                result = default!;
+                return false;
+            }
 
             if (input.IsEmpty)
-                return new MusicalTimeSpan(numerator, denominator);
+            {
+                result = new MusicalTimeSpan(numerator, denominator);
+                error = null;
+                return true;
+            }
 
             //
 
@@ -67,18 +87,34 @@ namespace Melanchall.DryWetMidi.Interaction
             {
                 var endIndex = input.IndexOf(']');
                 if (endIndex < 0 || endIndex == 1)
-                    ThrowInvalidFormatError();
+                {
+                    error = "Input string has invalid format.";
+                    result = default!;
+                    return false;
+                }
 
                 var tupletSpan = input.Slice(1, endIndex - 1).Trim();
                 var tupletDividerIndex = tupletSpan.IndexOf(':');
                 if (tupletDividerIndex < 0)
-                    ThrowInvalidFormatError();
+                {
+                    error = "Input string has invalid format.";
+                    result = default!;
+                    return false;
+                }
 
                 if (!int.TryParse(tupletSpan.Slice(0, tupletDividerIndex).Trim(), out tupletNotesCount) || tupletNotesCount < 1)
-                    ThrowInvalidFormatError();
+                {
+                    error = "Input string has invalid format.";
+                    result = default!;
+                    return false;
+                }
 
                 if (!int.TryParse(tupletSpan.Slice(tupletDividerIndex + 1).Trim(), out tupletSpaceSize) || tupletSpaceSize < 1)
-                    ThrowInvalidFormatError();
+                {
+                    error = "Input string has invalid format.";
+                    result = default!;
+                    return false;
+                }
 
                 input = input.Slice(endIndex + 1).Trim();
             }
@@ -91,7 +127,11 @@ namespace Melanchall.DryWetMidi.Interaction
             //
 
             if (input.IsEmpty)
-                return new MusicalTimeSpan(numerator, denominator).Tuplet(tupletNotesCount, tupletSpaceSize);
+            {
+                result = new MusicalTimeSpan(numerator, denominator).Tuplet(tupletNotesCount, tupletSpaceSize);
+                error = null;
+                return true;
+            }
 
             //
 
@@ -104,11 +144,17 @@ namespace Melanchall.DryWetMidi.Interaction
             //
 
             if (dotsCount < input.Length)
-                ThrowInvalidFormatError();
+            {
+                error = "Input string has invalid format.";
+                result = default!;
+                return false;
+            }
 
             //
 
-            return new MusicalTimeSpan(numerator, denominator).Dotted(dotsCount).Tuplet(tupletNotesCount, tupletSpaceSize);
+            result = new MusicalTimeSpan(numerator, denominator).Dotted(dotsCount).Tuplet(tupletNotesCount, tupletSpaceSize);
+            error = null;
+            return true;
         }
     }
 }

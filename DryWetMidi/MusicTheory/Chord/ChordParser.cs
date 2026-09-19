@@ -6,27 +6,44 @@ namespace Melanchall.DryWetMidi.MusicTheory
 {
     internal sealed class ChordParser : SimpleParser<Chord>
     {
-        protected override Chord ParseInternal(ReadOnlySpan<char> input)
+        internal override bool TryParseInternal(ReadOnlySpan<char> input, out Chord result, out string? error)
         {
             var (rootNoteName, rootNoteNamePartLength) = MusicTheoryParsers.NoteNameParser.TryReadNoteName(input);
             if (rootNoteName == null)
-                ThrowInvalidFormatError();
+            {
+                error = "Input string has invalid format.";
+                result = default!;
+                return false;
+            }
 
             NoteName? bassNoteName = null;
 
             var bassNoteMarkerIndex = input.LastIndexOf('/');
             if (bassNoteMarkerIndex >= 0)
-                (bassNoteName, _) = MusicTheoryParsers.NoteNameParser.TryReadNoteName(input.Slice(bassNoteMarkerIndex + 1).Trim());
+            {
+                var bassPart = input.Slice(bassNoteMarkerIndex + 1).Trim();
+
+                var (candidateBassNoteName, length) = MusicTheoryParsers.NoteNameParser.TryReadNoteName(bassPart);
+
+                if (candidateBassNoteName != null && length == bassPart.Length)
+                    bassNoteName = candidateBassNoteName;
+            }
 
             var chordCharacteristic = bassNoteName != null
                 ? input.Slice(rootNoteNamePartLength, bassNoteMarkerIndex - rootNoteNamePartLength).Trim()
                 : input.Slice(rootNoteNamePartLength).Trim();
 
-            var notesNames = ChordsNamesTable.GetChordNotesNames(rootNoteName.Value, chordCharacteristic.ToString(), bassNoteName);
+            var notesNames = ChordsNamesTable.GetChordNotesNames(rootNoteName.Value, chordCharacteristic, bassNoteName);
             if (!notesNames.Any())
-                ThrowError("Chord characteristic is unknown.");
+            {
+                error = "Chord characteristic is unknown.";
+                result = default!;
+                return false;
+            }
 
-            return new Chord(notesNames);
+            result = new Chord(notesNames);
+            error = null;
+            return true;
         }
     }
 }

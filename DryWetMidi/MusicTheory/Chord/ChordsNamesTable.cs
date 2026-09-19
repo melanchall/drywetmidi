@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Melanchall.DryWetMidi.MusicTheory
@@ -102,10 +103,6 @@ namespace Melanchall.DryWetMidi.MusicTheory
             .SelectMany(d => d.Intervals.Select(i => i.Length))
             .Max();
 
-        private static readonly Dictionary<string, int[]> ChordCharacteristicsToIntervals = NamesDefinitions
-            .SelectMany(d => d.Names.Select(n => new { Name = n, Intervals = d.Intervals.First() }))
-            .ToDictionary(d => d.Name, d => d.Intervals);
-
         #endregion
 
         #region Fields
@@ -116,16 +113,21 @@ namespace Melanchall.DryWetMidi.MusicTheory
 
         #region Methods
 
-        public static NoteName[] GetChordNotesNames(NoteName rootNoteName, string chordCharacteristic, NoteName? bassNoteName)
+        public static NoteName[] GetChordNotesNames(NoteName rootNoteName, ReadOnlySpan<char> chordCharacteristic, NoteName? bassNoteName)
         {
             var notesNames = new List<NoteName>();
+
             if (bassNoteName != null)
                 notesNames.Add(bassNoteName.Value);
 
-            chordCharacteristic = chordCharacteristic.Replace(" ", string.Empty);
-
-            if (ChordCharacteristicsToIntervals.TryGetValue(chordCharacteristic, out var intervals))
-                notesNames.AddRange(intervals.Select(i => rootNoteName.Transpose(Interval.FromHalfSteps(i))));
+            var intervals = GetIntervals(chordCharacteristic);
+            if (intervals != null)
+            {
+                foreach (var interval in intervals)
+                {
+                    notesNames.Add(rootNoteName.Transpose(Interval.FromHalfSteps(interval)));
+                }
+            }
 
             return notesNames.ToArray();
         }
@@ -159,6 +161,46 @@ namespace Melanchall.DryWetMidi.MusicTheory
             }
 
             return result.Distinct().OrderBy(n => n.Length).ToArray();
+        }
+
+        private static int[]? GetIntervals(ReadOnlySpan<char> chordCharacteristic)
+        {
+            foreach (var definition in NamesDefinitions)
+            {
+                foreach (var name in definition.Names)
+                {
+                    if (EqualsIgnoringSpaces(chordCharacteristic, name))
+                        return definition.Intervals[0];
+                }
+            }
+
+            return null;
+        }
+
+        private static bool EqualsIgnoringSpaces(
+            ReadOnlySpan<char> input,
+            ReadOnlySpan<char> value)
+        {
+            var inputIndex = 0;
+            var valueIndex = 0;
+
+            while (true)
+            {
+                while (inputIndex < input.Length && input[inputIndex] == ' ')
+                    inputIndex++;
+
+                while (valueIndex < value.Length && value[valueIndex] == ' ')
+                    valueIndex++;
+
+                if (inputIndex == input.Length || valueIndex == value.Length)
+                    return inputIndex == input.Length && valueIndex == value.Length;
+
+                if (input[inputIndex] != value[valueIndex])
+                    return false;
+
+                inputIndex++;
+                valueIndex++;
+            }
         }
 
         private static string GetPrettyName(NoteName noteName)

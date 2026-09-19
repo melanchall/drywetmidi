@@ -13,12 +13,16 @@ namespace Melanchall.DryWetMidi.Common
             _maxValue = maxValue;
         }
 
-        protected override byte ParseInternal(ReadOnlySpan<char> input)
+        internal override bool TryParseInternal(ReadOnlySpan<char> input, out byte result, out string? error)
         {
-            if (!byte.TryParse(input, out var result) || result < _minValue || result > _maxValue)
-                ThrowError("Number is invalid or is out of valid range.");
+            if (!byte.TryParse(input, out result) || result < _minValue || result > _maxValue)
+            {
+                error = "Number is invalid or is out of valid range.";
+                return false;
+            }
 
-            return result;
+            error = null;
+            return true;
         }
     }
 }

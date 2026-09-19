@@ -7,10 +7,22 @@ namespace Melanchall.DryWetMidi.MusicTheory
     {
         public (NoteName? NoteName, int Length) TryReadNoteName(ReadOnlySpan<char> input)
         {
-            if (input[0] is not >= 'A' and <= 'G')
+            if (input.Length == 0)
                 return (null, 0);
 
-            if (!Enum.TryParse<NoteName>(input[0].ToString(), true, out var noteName))
+            var noteName = (char.ToLower(input[0])) switch
+            {
+                'a' => NoteName.A,
+                'b' => NoteName.B,
+                'c' => NoteName.C,
+                'd' => NoteName.D,
+                'e' => NoteName.E,
+                'f' => NoteName.F,
+                'g' => NoteName.G,
+                _ => (NoteName?)null,
+            };
+
+            if (noteName == null)
                 return (null, 0);
 
             var noteBaseNumber = (int)noteName;
@@ -19,7 +31,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
 
             while (i < input.Length)
             {
-                if (input[i] == ' ')
+                if (char.IsWhiteSpace(input[i]))
                 {
                     i++;
                     trailingSpacesCount++;
@@ -68,13 +80,19 @@ namespace Melanchall.DryWetMidi.MusicTheory
             return ((NoteName)noteBaseNumber, i - trailingSpacesCount);
         }
 
-        protected override NoteName ParseInternal(ReadOnlySpan<char> input)
+        internal override bool TryParseInternal(ReadOnlySpan<char> input, out NoteName result, out string? error)
         {
             var (noteName, length) = TryReadNoteName(input);
             if (noteName == null || length != input.Length)
-                ThrowInvalidFormatError();
+            {
+                error = "Input string has invalid format.";
+                result = default!;
+                return false;
+            }
 
-            return noteName.Value;
+            result = noteName.Value;
+            error = null;
+            return true;
         }
     }
 }

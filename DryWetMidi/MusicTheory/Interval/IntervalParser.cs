@@ -56,13 +56,19 @@ namespace Melanchall.DryWetMidi.MusicTheory
             return (Interval.Get(intervalQuality, intervalNumber), endIndex);
         }
 
-        protected override Interval ParseInternal(ReadOnlySpan<char> input)
+        internal override bool TryParseInternal(ReadOnlySpan<char> input, out Interval result, out string? error)
         {
             var (interval, length) = TryReadInterval(input);
             if (interval == null || length != input.Length)
-                ThrowInvalidFormatError();
+            {
+                error = "Input string has invalid format.";
+                result = default!;
+                return false;
+            }
 
-            return interval;
+            result = interval;
+            error = null;
+            return true;
         }
     }
 }

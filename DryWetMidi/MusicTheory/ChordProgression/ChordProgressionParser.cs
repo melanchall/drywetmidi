@@ -8,7 +8,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
     {
         private const string RomanDigits = "IVXLCDM";
 
-        protected override ChordProgression ParseInternal(ReadOnlySpan<char> input, Scale parameter)
+        internal override bool TryParseInternal(ReadOnlySpan<char> input, Scale parameter, out ChordProgression result, out string? error)
         {
             var chords = new List<Chord>();
 
@@ -21,7 +21,11 @@ namespace Melanchall.DryWetMidi.MusicTheory
                     : input;
 
                 if (part.IsEmpty)
-                    ThrowInvalidFormatError();
+                {
+                    error = "Input string has invalid format.";
+                    result = default!;
+                    return false;
+                }
 
                 var b = part[0] == 'b';
 
@@ -34,9 +38,13 @@ namespace Melanchall.DryWetMidi.MusicTheory
                 }
 
                 if (romanLength == 0)
-                    ThrowInvalidFormatError();
+                {
+                    error = "Input string has invalid format.";
+                    result = default!;
+                    return false;
+                }
 
-                var degree = RomanToInteger(span.Slice(0, romanLength).ToString());
+                var degree = RomanToInteger(span.Slice(0, romanLength));
                 var rootNoteName = parameter.GetStep(degree - 1);
 
                 if (b)
@@ -46,7 +54,12 @@ namespace Melanchall.DryWetMidi.MusicTheory
                     rootNoteName +
                     span.Slice(romanLength).ToString();
 
-                var chord = MusicTheoryParsers.ChordParser.Parse(chordString);
+                if (!MusicTheoryParsers.ChordParser.TryParseInternal(chordString, out var chord, out error))
+                {
+                    result = default!;
+                    return false;
+                }
+
                 chords.Add(chord);
 
                 if (delimiterIndex < 0)
@@ -54,13 +67,19 @@ namespace Melanchall.DryWetMidi.MusicTheory
 
                 input = input.Slice(delimiterIndex + 1).Trim();
                 if (input.IsEmpty)
-                    ThrowInvalidFormatError();
+                {
+                    error = "Input string has invalid format.";
+                    result = default!;
+                    return false;
+                }
             }
 
-            return new ChordProgression(chords);
+            result = new ChordProgression(chords);
+            error = null;
+            return true;
         }
 
-        private static int RomanToInteger(string roman)
+        private static int RomanToInteger(ReadOnlySpan<char> roman)
         {
             var number = 0;
 

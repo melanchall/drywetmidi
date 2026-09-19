@@ -5,7 +5,7 @@ namespace Melanchall.DryWetMidi.Interaction
 {
     internal sealed class MetricTimeSpanParser : SimpleParser<MetricTimeSpan>
     {
-        protected override MetricTimeSpan ParseInternal(ReadOnlySpan<char> input)
+        internal override bool TryParseInternal(ReadOnlySpan<char> input, out MetricTimeSpan result, out string? error)
         {
             var hours = 0;
             var minutes = 0;
@@ -22,20 +22,32 @@ namespace Melanchall.DryWetMidi.Interaction
             if (colonCount > 0)
             {
                 if (colonCount < 1 || colonCount > 3)
-                    ThrowInvalidFormatError();
+                {
+                    error = "Input string has invalid format.";
+                    result = default!;
+                    return false;
+                }
 
                 if (colonCount == 1)
                 {
                     if (!TryReadNextSegment(ref input, out minutes) ||
                         !TryReadNextSegment(ref input, out seconds))
-                        ThrowInvalidFormatError();
+                    {
+                        error = "Input string has invalid format.";
+                        result = default!;
+                        return false;
+                    }
                 }
                 else if (colonCount == 2)
                 {
                     if (!TryReadNextSegment(ref input, out hours) ||
                         !TryReadNextSegment(ref input, out minutes) ||
                         !TryReadNextSegment(ref input, out seconds))
-                        ThrowInvalidFormatError();
+                    {
+                        error = "Input string has invalid format.";
+                        result = default!;
+                        return false;
+                    }
                 }
                 else
                 {
@@ -43,10 +55,16 @@ namespace Melanchall.DryWetMidi.Interaction
                         !TryReadNextSegment(ref input, out minutes) ||
                         !TryReadNextSegment(ref input, out seconds) ||
                         !TryReadNextSegment(ref input, out milliseconds))
-                        ThrowInvalidFormatError();
+                    {
+                        error = "Input string has invalid format.";
+                        result = default!;
+                        return false;
+                    }
                 }
 
-                return new MetricTimeSpan(hours, minutes, seconds, milliseconds);
+                result = new MetricTimeSpan(hours, minutes, seconds, milliseconds);
+                error = null;
+                return true;
             }
 
             //
@@ -71,10 +89,18 @@ namespace Melanchall.DryWetMidi.Interaction
                 }
 
                 if (unitStartIndex == 0)
-                    ThrowInvalidFormatError();
+                {
+                    error = "Input string has invalid format.";
+                    result = default!;
+                    return false;
+                }
 
                 if (!int.TryParse(remaining[..unitStartIndex], out int value))
-                    ThrowInvalidFormatError();
+                {
+                    error = "Input string has invalid format.";
+                    result = default!;
+                    return false;
+                }
 
                 remaining = remaining[unitStartIndex..];
                 remaining = remaining.TrimStart();
@@ -82,7 +108,11 @@ namespace Melanchall.DryWetMidi.Interaction
                 if (remaining.StartsWith("ms", StringComparison.OrdinalIgnoreCase))
                 {
                     if (millisecondsParsed)
-                        ThrowInvalidFormatError();
+                    {
+                        error = "Input string has invalid format.";
+                        result = default!;
+                        return false;
+                    }
 
                     millisecondsParsed = true;
 
@@ -92,7 +122,11 @@ namespace Melanchall.DryWetMidi.Interaction
                 else if (remaining.StartsWith("h", StringComparison.OrdinalIgnoreCase))
                 {
                     if (hoursParsed)
-                        ThrowInvalidFormatError();
+                    {
+                        error = "Input string has invalid format.";
+                        result = default!;
+                        return false;
+                    }
 
                     hoursParsed = true;
 
@@ -102,8 +136,12 @@ namespace Melanchall.DryWetMidi.Interaction
                 else if (remaining.StartsWith("m", StringComparison.OrdinalIgnoreCase))
                 {
                     if (minutesParsed)
-                        ThrowInvalidFormatError();
-                    
+                    {
+                        error = "Input string has invalid format.";
+                        result = default!;
+                        return false;
+                    }
+
                     minutesParsed = true;
 
                     minutes = value;
@@ -112,7 +150,11 @@ namespace Melanchall.DryWetMidi.Interaction
                 else if (remaining.StartsWith("s", StringComparison.OrdinalIgnoreCase))
                 {
                     if (secondsParsed)
-                        ThrowInvalidFormatError();
+                    {
+                        error = "Input string has invalid format.";
+                        result = default!;
+                        return false;
+                    }
 
                     secondsParsed = true;
 
@@ -120,10 +162,16 @@ namespace Melanchall.DryWetMidi.Interaction
                     remaining = remaining[1..];
                 }
                 else
-                    ThrowInvalidFormatError();
+                {
+                    error = "Input string has invalid format.";
+                    result = default!;
+                    return false;
+                }
             }
 
-            return new MetricTimeSpan(hours, minutes, seconds, milliseconds);
+            result = new MetricTimeSpan(hours, minutes, seconds, milliseconds);
+            error = null;
+            return true;
         }
 
         private static bool TryReadNextSegment(ref ReadOnlySpan<char> remaining, out int value)

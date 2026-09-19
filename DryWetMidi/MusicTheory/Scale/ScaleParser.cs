@@ -7,11 +7,15 @@ namespace Melanchall.DryWetMidi.MusicTheory
 {
     internal sealed class ScaleParser : SimpleParser<Scale>
     {
-        protected override Scale ParseInternal(ReadOnlySpan<char> input)
+        internal override bool TryParseInternal(ReadOnlySpan<char> input, out Scale result, out string? error)
         {
             var (rootNoteName, rootNoteNamePartLength) = MusicTheoryParsers.NoteNameParser.TryReadNoteName(input);
             if (rootNoteName == null)
-                ThrowInvalidFormatError();
+            {
+                error = "Input string has invalid format.";
+                result = default!;
+                return false;
+            }
 
             ICollection<Interval>? intervals = new List<Interval>();
 
@@ -56,7 +60,11 @@ namespace Melanchall.DryWetMidi.MusicTheory
                 {
                     (interval, intervalPartLength) = MusicTheoryParsers.IntervalParser.TryReadInterval(intervalsSlice.Slice(i).Trim());
                     if (interval == null)
-                        ThrowInvalidFormatError();
+                    {
+                        error = "Input string has invalid format.";
+                        result = default!;
+                        return false;
+                    }
 
                     intervals.Add(interval);
                     i += intervalPartLength;
@@ -69,9 +77,15 @@ namespace Melanchall.DryWetMidi.MusicTheory
             }
 
             if (intervals == null || !intervals.Any())
-                ThrowError("Scale is unknown.");
+            {
+                error = "Scale is unknown.";
+                result = default!;
+                return false;
+            }
 
-            return new Scale(intervals, rootNoteName.Value);
+            result = new Scale(intervals, rootNoteName.Value);
+            error = null;
+            return true;
         }
     }
 }

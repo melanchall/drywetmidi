@@ -11,19 +11,27 @@ namespace Melanchall.DryWetMidi.Interaction
             NumberDecimalSeparator = ","
         };
 
-        protected override BarBeatTicksTimeSpan ParseInternal(ReadOnlySpan<char> input)
+        internal override bool TryParseInternal(ReadOnlySpan<char> input, out BarBeatTicksTimeSpan result, out string? error)
         {
             var bars = 0.0;
             var beats = 0.0;
-            var ticks = 0;
+            var ticks = 0L;
 
             var firstDot = input.IndexOf('.');
             if (firstDot == -1)
-                ThrowInvalidFormatError();
+            {
+                error = "Input string has invalid format.";
+                result = default!;
+                return false;
+            }
 
             var secondDot = input[(firstDot + 1)..].IndexOf('.');
             if (secondDot == -1) 
-                ThrowInvalidFormatError();
+            {
+                error = "Input string has invalid format.";
+                result = default!;
+                return false;
+            }
 
             secondDot = firstDot + 1 + secondDot;
 
@@ -32,15 +40,29 @@ namespace Melanchall.DryWetMidi.Interaction
             var ticksSpan = input[(secondDot + 1)..].Trim();
 
             if (!double.TryParse(barsSpan, NumberStyles.AllowDecimalPoint, CommaSeparatorFormat, out bars))
-                ThrowInvalidFormatError();
+            {
+                error = "Input string has invalid format.";
+                result = default!;
+                return false;
+            }
 
             if (!double.TryParse(beatsSpan, NumberStyles.AllowDecimalPoint, CommaSeparatorFormat, out beats))
-                ThrowInvalidFormatError();
+            {
+                error = "Input string has invalid format.";
+                result = default!;
+                return false;
+            }
 
-            if (!int.TryParse(ticksSpan, out ticks))
-                ThrowInvalidFormatError();
+            if (!long.TryParse(ticksSpan, out ticks))
+            {
+                error = "Input string has invalid format.";
+                result = default!;
+                return false;
+            }
 
-            return new BarBeatTicksTimeSpan(bars, beats, ticks);
+            result = new BarBeatTicksTimeSpan(bars, beats, ticks);
+            error = null;
+            return true;
         }
     }
 }

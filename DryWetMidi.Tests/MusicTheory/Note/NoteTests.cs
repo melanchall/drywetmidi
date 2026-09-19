@@ -30,6 +30,8 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
             new object[] { "  C#b 4", Octave.Get(4).C },
             new object[] { "C#b##4", Octave.Get(4).D },
             new object[] { "C#bbb  4", Octave.Get(4).ASharp },
+            new object[] { "c#0", Octave.Get(0).CSharp },
+            new object[] { "fb 1", Octave.Get(1).E },
         }
         .Concat(SevenBitNumber
             .Values

@@ -14,6 +14,7 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
         private static readonly object[] ParseData_Valid = new[]
         {
             new object[] { "C", new[] { NoteName.C, NoteName.E, NoteName.G } },
+            new object[] { "c", new[] { NoteName.C, NoteName.E, NoteName.G } },
             new object[] { "  C", new[] { NoteName.C, NoteName.E, NoteName.G } },
             new object[] { "C6", new[] { NoteName.C, NoteName.E, NoteName.G, NoteName.A } },
             new object[] { "C7", new[] { NoteName.C, NoteName.E, NoteName.G, NoteName.ASharp } },
@@ -42,6 +43,10 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
             new object[] { "CmAdd9", new[] { NoteName.C, NoteName.DSharp, NoteName.G, NoteName.D } },
             new object[] { "C6/9", new[] { NoteName.C, NoteName.E, NoteName.G, NoteName.A, NoteName.D } },
             new object[] { "Cm6/9", new[] { NoteName.C, NoteName.DSharp, NoteName.G, NoteName.A, NoteName.D } },
+            new object[] { "C m6 / 9", new[] { NoteName.C, NoteName.DSharp, NoteName.G, NoteName.A, NoteName.D } },
+            new object[] { "Cmaj7/E", new[] { NoteName.E, NoteName.C, NoteName.E, NoteName.G, NoteName.B } },
+            new object[] { "C maj7 / E", new[] { NoteName.E, NoteName.C, NoteName.E, NoteName.G, NoteName.B } },
+            new object[] { "am", new[] { NoteName.A, NoteName.C, NoteName.E } },
         };
 
         private static readonly object[] ParseData_Invalid = new[]
@@ -58,6 +63,9 @@ namespace Melanchall.DryWetMidi.Tests.MusicTheory
             new object[] { "something" },
             new object[] { "87" },
             new object[] { "M7" },
+            new object[] { "Cmaj7/Egarbage" },
+            new object[] { "C/J" },
+            new object[] { "C/" },
         };
 
         #region Test methods
