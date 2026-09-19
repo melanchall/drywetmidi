@@ -82,14 +82,13 @@ namespace Melanchall.CheckDwmApi
             var average = deltas.Average();
             reportWriter.WriteOperationSubTitle($"average = {average:F2} ms");
 
-            int[] percentsAreas = [5, 10, 20, 50];
+            var percentiles = new[] { 50, 70, 90, 95, 97, 99 };
+            deltas = [.. deltas.OrderBy(d => d)];
 
-            foreach (var percent in percentsAreas)
+            foreach (var percentile in percentiles)
             {
-                var lowerBound = (int)Math.Round(intervalMs * (1 - percent / 100.0));
-                var upperBound = (int)Math.Round(intervalMs * (1 + percent / 100.0));
-                var percentInArea = deltas.Count(d => d >= lowerBound && d <= upperBound) * 100.0 / deltas.Count;
-                reportWriter.WriteOperationSubTitle($"{percent} % area ({lowerBound} ms - {upperBound} ms) = {percentInArea:F2} %");
+                var value = deltas[(int)Math.Round(deltas.Count * percentile / 100.0)];
+                reportWriter.WriteOperationSubTitle($"{percentile}th percentile: {value} ms");
             }
         }
     }

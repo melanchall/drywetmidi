@@ -161,6 +161,7 @@
 
   <ItemGroup Condition="'$(Configuration)'=='ReleaseNativeless' OR '$(Configuration)'=='DebugNativeless'">
     <Compile Remove="Multimedia\VirtualDevice\**\*.cs" />
+    <Compile Remove="Multimedia\System\**\*.cs" />
     <Compile Remove="Multimedia\EndpointsWatcher\**\*.cs" />
     <Compile Remove="Multimedia\Session\**\*.cs" />
     <Compile Remove="Multimedia\Common\**\*.cs" />

@@ -69,6 +69,10 @@ that report is just what you'll see in the console. The file will be written to
 
             using var reportWriter = new ReportWriter(reportFilePath);
 
+            reportWriter.WriteLine(string.Empty);
+            reportWriter.WriteLine($"Started at: {DateTime.UtcNow:u}");
+            reportWriter.WriteLine(string.Empty);
+
             for (var i = 0; i < tasks.Count; i++)
             {
                 var task = tasks[i];
