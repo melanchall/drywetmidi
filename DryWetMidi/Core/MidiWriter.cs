@@ -115,14 +115,7 @@ namespace Melanchall.DryWetMidi.Core
 
         public void WriteBytes(byte[] bytes, int offset, int length)
         {
-            // TODO: check offset and length?
-
-            if (_useBuffering)
-                WriteBytesWithBuffering(bytes, offset, length);
-            else
-                _stream.Write(bytes, offset, length);
-
-            _length += length;
+            WriteBytes(bytes.AsSpan(offset, length));
         }
 
         /// <summary>
@@ -191,12 +184,10 @@ namespace Melanchall.DryWetMidi.Core
         /// <exception cref="IOException">An I/O error occurred on the underlying stream.</exception>
         public void WriteString(string? value)
         {
-            var chars = value?.ToCharArray();
-            if (chars == null || chars.Length == 0)
+            if (string.IsNullOrEmpty(value))
                 return;
 
-            var bytes = SmfConstants.DefaultTextEncoding.GetBytes(chars);
-            WriteBytes(bytes);
+            WriteBytes(SmfConstants.DefaultTextEncoding.GetBytes(value));
         }
 
         /// <summary>
@@ -279,6 +270,33 @@ namespace Melanchall.DryWetMidi.Core
             }
         }
 
+        private void WriteBytesWithBuffering(ReadOnlySpan<byte> bytes)
+        {
+            if (_bufferPosition > 0)
+            {
+                var bytesToBuffer = Math.Min(_buffer!.Length - _bufferPosition, bytes.Length);
+                bytes.Slice(0, bytesToBuffer).CopyTo(_buffer.AsSpan(_bufferPosition));
+
+                _bufferPosition += bytesToBuffer;
+                bytes = bytes.Slice(bytesToBuffer);
+
+                if (_bufferPosition == _buffer.Length)
+                    FlushBuffer();
+            }
+
+            while (bytes.Length >= _buffer!.Length)
+            {
+                _stream.Write(bytes.Slice(0, _buffer.Length));
+                bytes = bytes.Slice(_buffer.Length);
+            }
+
+            if (!bytes.IsEmpty)
+            {
+                bytes.CopyTo(_buffer);
+                _bufferPosition = bytes.Length;
+            }
+        }
+
         private void WriteBytesToBuffer(byte[] bytes, int offset, int length)
         {
             if (_buffer == null)
@@ -286,6 +304,16 @@ namespace Melanchall.DryWetMidi.Core
 
             Buffer.BlockCopy(bytes, offset, _buffer, _bufferPosition, length);
             _bufferPosition += length;
+        }
+
+        private void WriteBytes(ReadOnlySpan<byte> bytes)
+        {
+            if (_useBuffering)
+                WriteBytesWithBuffering(bytes);
+            else
+                _stream.Write(bytes);
+
+            _length += bytes.Length;
         }
 
         #endregion

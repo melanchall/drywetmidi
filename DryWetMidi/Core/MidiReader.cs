@@ -1,5 +1,6 @@
 ﻿using Melanchall.DryWetMidi.Common;
 using System;
+using System.Buffers.Binary;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
@@ -232,11 +233,12 @@ namespace Melanchall.DryWetMidi.Core
         {
             const int wordSize = sizeof(ushort);
 
-            var bytes = ReadBytes(wordSize);
-            if (bytes.Length < wordSize)
-                throw new NotEnoughBytesException("Not enough bytes in the stream to read a WORD.", wordSize, bytes.Length);
+            Span<byte> bytes = stackalloc byte[wordSize];
+            var bytesRead = ReadBytesInternal(bytes);
+            if (bytesRead < wordSize)
+                throw new NotEnoughBytesException("Not enough bytes in the stream to read a WORD.", wordSize, bytesRead);
 
-            return (ushort)((bytes[0] << 8) + bytes[1]);
+            return BinaryPrimitives.ReadUInt16BigEndian(bytes);
         }
 
         /// <summary>
@@ -251,11 +253,12 @@ namespace Melanchall.DryWetMidi.Core
         {
             const int dwordSize = sizeof(uint);
 
-            var bytes = ReadBytes(dwordSize);
-            if (bytes.Length < dwordSize)
-                throw new NotEnoughBytesException("Not enough bytes in the stream to read a DWORD.", dwordSize, bytes.Length);
+            Span<byte> bytes = stackalloc byte[dwordSize];
+            var bytesRead = ReadBytesInternal(bytes);
+            if (bytesRead < dwordSize)
+                throw new NotEnoughBytesException("Not enough bytes in the stream to read a DWORD.", dwordSize, bytesRead);
 
-            return (uint)((bytes[0] << 24) + (bytes[1] << 16) + (bytes[2] << 8) + bytes[3]);
+            return BinaryPrimitives.ReadUInt32BigEndian(bytes);
         }
 
         /// <summary>
@@ -270,11 +273,12 @@ namespace Melanchall.DryWetMidi.Core
         {
             const int int16Size = sizeof(short);
 
-            var bytes = ReadBytes(int16Size);
-            if (bytes.Length < int16Size)
-                throw new NotEnoughBytesException("Not enough bytes in the stream to read a INT16.", int16Size, bytes.Length);
+            Span<byte> bytes = stackalloc byte[int16Size];
+            var bytesRead = ReadBytesInternal(bytes);
+            if (bytesRead < int16Size)
+                throw new NotEnoughBytesException("Not enough bytes in the stream to read a INT16.", int16Size, bytesRead);
 
-            return (short)((bytes[0] << 8) + bytes[1]);
+            return BinaryPrimitives.ReadInt16BigEndian(bytes);
         }
 
         /// <summary>
@@ -338,9 +342,10 @@ namespace Melanchall.DryWetMidi.Core
         {
             const int dwordSize = 3;
 
-            var bytes = ReadBytes(dwordSize);
-            if (bytes.Length < dwordSize)
-                throw new NotEnoughBytesException("Not enough bytes in the stream to read a 3-byte DWORD.", dwordSize, bytes.Length);
+            Span<byte> bytes = stackalloc byte[dwordSize];
+            var bytesRead = ReadBytesInternal(bytes);
+            if (bytesRead < dwordSize)
+                throw new NotEnoughBytesException("Not enough bytes in the stream to read a 3-byte DWORD.", dwordSize, bytesRead);
 
             return (uint)((bytes[0] << 16) + (bytes[1] << 8) + bytes[2]);
         }
@@ -382,66 +387,60 @@ namespace Melanchall.DryWetMidi.Core
             if (count == 0)
                 return EmptyByteArray;
 
-            if (_useBuffering)
-                return ReadBytesWithBuffering(count);
-            else
-                return ReadBytesWithoutBuffering(count);
-        }
-
-        private byte[] ReadBytesWithBuffering(int count)
-        {
-            if (!EnsureBufferIsReadyForReading())
-                return EmptyByteArray;
-
-            if (_bufferPosition + count <= _bufferSize)
-                return ReadBytesFromBuffer(count);
-
-            var availableBytesCount = _bufferSize - _bufferPosition;
-            if (availableBytesCount == 0)
-                return EmptyByteArray;
-
-            var firstBytes = ReadBytesFromBuffer(availableBytesCount);
-            var lastBytes = ReadBytesWithBuffering(count - availableBytesCount);
-            
-            var fullBytes = new byte[firstBytes.Length + lastBytes.Length];
-            Buffer.BlockCopy(firstBytes, 0, fullBytes, 0, firstBytes.Length);
-            Buffer.BlockCopy(lastBytes, 0, fullBytes, firstBytes.Length, lastBytes.Length);
-
-            return fullBytes;
-        }
-
-        private byte[] ReadBytesFromBuffer(int count)
-        {
             var result = new byte[count];
-            Buffer.BlockCopy(_buffer!, _bufferPosition, result, 0, count);
-            Position += count;
-            return result;
+            var bytesRead = ReadBytesInternal(result);
+
+            if (bytesRead == result.Length)
+                return result;
+
+            var copy = new byte[bytesRead];
+            result.AsSpan(0, bytesRead).CopyTo(copy);
+            return copy;
         }
 
-        private byte[] ReadBytesWithoutBuffering(int count)
+        private int ReadBytesInternal(Span<byte> destination)
         {
-            var result = new byte[count];
-            var totalReadBytesCount = 0;
+            if (destination.IsEmpty)
+                return 0;
+
+            return _useBuffering
+                ? ReadBytesWithBuffering(destination)
+                : ReadBytesWithoutBuffering(destination);
+        }
+
+        private int ReadBytesWithBuffering(Span<byte> destination)
+        {
+            var bytesRead = 0;
+
+            while (!destination.IsEmpty && EnsureBufferIsReadyForReading())
+            {
+                var bytesToRead = Math.Min(_bufferSize - _bufferPosition, destination.Length);
+                _buffer!.AsSpan(_bufferPosition, bytesToRead).CopyTo(destination);
+                Position += bytesToRead;
+
+                destination = destination.Slice(bytesToRead);
+                bytesRead += bytesToRead;
+            }
+
+            return bytesRead;
+        }
+
+        private int ReadBytesWithoutBuffering(Span<byte> destination)
+        {
+            var bytesRead = 0;
 
             do
             {
-                var readBytesCount = _stream.Read(result, totalReadBytesCount, count);
+                var readBytesCount = _stream.Read(destination);
                 if (readBytesCount == 0)
                     break;
 
-                totalReadBytesCount += readBytesCount;
-                count -= readBytesCount;
+                bytesRead += readBytesCount;
+                destination = destination.Slice(readBytesCount);
             }
-            while (count > 0);
+            while (!destination.IsEmpty);
 
-            if (totalReadBytesCount != result.Length)
-            {
-                var copy = new byte[totalReadBytesCount];
-                Buffer.BlockCopy(result, 0, copy, 0, totalReadBytesCount);
-                result = copy;
-            }
-
-            return result;
+            return bytesRead;
         }
 
         [MemberNotNullWhen(true, nameof(_buffer))]
@@ -460,7 +459,7 @@ namespace Melanchall.DryWetMidi.Core
 
                 do
                 {
-                    var readBytesCount = _stream.Read(_buffer, totalReadBytesCount, count);
+                    var readBytesCount = _stream.Read(_buffer.AsSpan(totalReadBytesCount, count));
                     if (readBytesCount == 0)
                         break;
 
@@ -510,7 +509,7 @@ namespace Melanchall.DryWetMidi.Core
                     {
                         if (_settings.Buffer == null)
                             throw new InvalidOperationException($"Buffer is null for {_settings.BufferingPolicy} buffering policy.");
-                        
+
                         _buffer = _settings.Buffer;
                     }
                     break;
