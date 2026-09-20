@@ -112,11 +112,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 using (var inputB = TestDeviceManager.GetInputEndpoint(MidiEndpoints.B))
                 using (var inputC = TestDeviceManager.GetInputEndpoint(MidiEndpoints.C))
                 {
-                    inputB.EventReceived += (_, e) => receivedEventsB.Add(new TimestampedEvent(e.Event, stopwatch.Elapsed));
-                    inputB.StartEventsListening();
+                    inputB.EventReceived += (_, e) => receivedEventsB.Add(e.GetReceivedTimestampedEvent(stopwatch));
+                    var startInfoB = inputB.StartEventsListening();
 
-                    inputC.EventReceived += (_, e) => receivedEventsC.Add(new TimestampedEvent(e.Event, stopwatch.Elapsed));
-                    inputC.StartEventsListening();
+                    inputC.EventReceived += (_, e) => receivedEventsC.Add(e.GetReceivedTimestampedEvent(stopwatch));
+                    var startInfoC = inputC.StartEventsListening();
 
                     using (var inputA = InputEndpoint.GetByName(MidiEndpoints.A))
                     {
@@ -142,6 +142,16 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                             ClassicAssert.IsFalse(midiEndpointsConnector.AreEndpointsConnected, "Endpoints aren't disconnected.");
                         }
                     }
+
+                    SendReceiveUtilities.CheckReceivedEventsTimestamps(
+                        eventsToSend.ToArray(),
+                        startInfoB.Timestamp,
+                        receivedEventsB.ToArray());
+
+                    SendReceiveUtilities.CheckReceivedEventsTimestamps(
+                        eventsToSend.ToArray(),
+                        startInfoC.Timestamp,
+                        receivedEventsC.ToArray());
                 }
             }
 

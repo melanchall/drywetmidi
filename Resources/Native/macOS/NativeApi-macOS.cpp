@@ -1118,11 +1118,13 @@ API_EXPORT IN_CLOSERESULT CloseInputEndpoint(void* handle, int* errorCode)
     return IN_CLOSERESULT_OK;
 }
 
-API_EXPORT IN_CONNECTRESULT ConnectToInputEndpoint(void* handle, int* errorCode)
+API_EXPORT IN_CONNECTRESULT ConnectToInputEndpoint(void* handle, SessionHandle* sessionHandle, uint64_t* timestamp, int* errorCode)
 {
     *errorCode = 0;
 
     InputEndpointHandle* inputEndpointHandle = static_cast<InputEndpointHandle*>(handle);
+
+    *timestamp = mach_absolute_time();
 
     OSStatus status = MIDIPortConnectSource(inputEndpointHandle->portRef, inputEndpointHandle->info->endpointRef, nullptr);
     if (status != noErr)
@@ -1131,11 +1133,11 @@ API_EXPORT IN_CONNECTRESULT ConnectToInputEndpoint(void* handle, int* errorCode)
 
         switch (status)
         {
-        case kMIDIInvalidPort: return IN_CONNECTRESULT_INVALIDPORT;
-        case kMIDIWrongThread: return IN_CONNECTRESULT_WRONGTHREAD;
-        case kMIDINotPermitted: return IN_CONNECTRESULT_NOTPERMITTED;
-        case kMIDIUnknownEndpoint: return IN_CONNECTRESULT_UNKNOWNENDPOINT;
-        case kMIDIWrongEndpointType: return IN_CONNECTRESULT_WRONGENDPOINT;
+            case kMIDIInvalidPort: return IN_CONNECTRESULT_INVALIDPORT;
+            case kMIDIWrongThread: return IN_CONNECTRESULT_WRONGTHREAD;
+            case kMIDINotPermitted: return IN_CONNECTRESULT_NOTPERMITTED;
+            case kMIDIUnknownEndpoint: return IN_CONNECTRESULT_UNKNOWNENDPOINT;
+            case kMIDIWrongEndpointType: return IN_CONNECTRESULT_WRONGENDPOINT;
         }
 
         return IN_CONNECTRESULT_UNKNOWNERROR;
@@ -1157,12 +1159,12 @@ API_EXPORT IN_DISCONNECTRESULT DisconnectFromInputEndpoint(void* handle, int* er
 
         switch (status)
         {
-        case kMIDIInvalidPort: return IN_DISCONNECTRESULT_INVALIDPORT;
-        case kMIDIWrongThread: return IN_DISCONNECTRESULT_WRONGTHREAD;
-        case kMIDINotPermitted: return IN_DISCONNECTRESULT_NOTPERMITTED;
-        case kMIDIUnknownEndpoint: return IN_DISCONNECTRESULT_UNKNOWNENDPOINT;
-        case kMIDIWrongEndpointType: return IN_DISCONNECTRESULT_WRONGENDPOINT;
-        case kMIDINoConnection: return IN_DISCONNECTRESULT_NOCONNECTION;
+            case kMIDIInvalidPort: return IN_DISCONNECTRESULT_INVALIDPORT;
+            case kMIDIWrongThread: return IN_DISCONNECTRESULT_WRONGTHREAD;
+            case kMIDINotPermitted: return IN_DISCONNECTRESULT_NOTPERMITTED;
+            case kMIDIUnknownEndpoint: return IN_DISCONNECTRESULT_UNKNOWNENDPOINT;
+            case kMIDIWrongEndpointType: return IN_DISCONNECTRESULT_WRONGENDPOINT;
+            case kMIDINoConnection: return IN_DISCONNECTRESULT_NOCONNECTION;
         }
 
         return IN_DISCONNECTRESULT_UNKNOWNERROR;
@@ -1171,7 +1173,7 @@ API_EXPORT IN_DISCONNECTRESULT DisconnectFromInputEndpoint(void* handle, int* er
     return IN_DISCONNECTRESULT_OK;
 }
 
-API_EXPORT IN_GETEVENTDATARESULT GetEventDataFromInputEndpoint(MIDIPacketList* packetList, int packetIndex, Byte** data, int* length, int* packetsCount)
+API_EXPORT IN_GETEVENTDATARESULT GetEventDataFromInputEndpoint(MIDIPacketList* packetList, int packetIndex, Byte** data, int* length, int* packetsCount, uint64_t* timestamp)
 {
     *packetsCount = packetList->numPackets;
 
@@ -1179,6 +1181,7 @@ API_EXPORT IN_GETEVENTDATARESULT GetEventDataFromInputEndpoint(MIDIPacketList* p
     {
         *data = packetList->packet[0].data;
         *length = packetList->packet[0].length;
+        *timestamp = packetList->packet[0].timeStamp;
         return IN_GETEVENTDATARESULT_OK;
     }
 
@@ -1191,6 +1194,7 @@ API_EXPORT IN_GETEVENTDATARESULT GetEventDataFromInputEndpoint(MIDIPacketList* p
 
     *data = packetPtr->data;
     *length = packetPtr->length;
+    *timestamp = packetPtr->timeStamp;
 
     return IN_GETEVENTDATARESULT_OK;
 }

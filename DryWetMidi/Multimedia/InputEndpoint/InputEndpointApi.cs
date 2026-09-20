@@ -150,7 +150,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         public delegate void Callback_Mac(IntPtr pktlist, IntPtr readProcRefCon, IntPtr srcConnRefCon);
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public delegate void BytesReceivedCallback(IntPtr bytes, int size);
+        public delegate void BytesReceivedCallback(IntPtr bytes, int size, long timestamp);
 
         #endregion
 
@@ -203,7 +203,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         [LibraryImport(NativeApi.LibraryName)]
         [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-        private static partial IN_CONNECTRESULT ConnectToInputEndpoint(IntPtr handle, out int errorCode);
+        private static partial IN_CONNECTRESULT ConnectToInputEndpoint(IntPtr handle, MidiDevicesSessionHandle sessionHandle, out long timestamp, out int errorCode);
 
         [LibraryImport(NativeApi.LibraryName)]
         [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
@@ -211,7 +211,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         [LibraryImport(NativeApi.LibraryName)]
         [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-        private static partial IN_GETEVENTDATARESULT GetEventDataFromInputEndpoint(IntPtr packetList, int packetIndex, out IntPtr data, out int length, out int packetsCount);
+        private static partial IN_GETEVENTDATARESULT GetEventDataFromInputEndpoint(IntPtr packetList, int packetIndex, out IntPtr data, out int length, out int packetsCount, out long timestamp);
 
         [LibraryImport(NativeApi.LibraryName)]
         [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
@@ -255,13 +255,13 @@ namespace Melanchall.DryWetMidi.Multimedia
         private static extern IN_RENEWSYSEXBUFFERRESULT RenewInputEndpointSysExBuffer(IntPtr handle, IntPtr header, out int errorCode);
 
         [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
-        private static extern IN_CONNECTRESULT ConnectToInputEndpoint(IntPtr handle, out int errorCode);
+        private static extern IN_CONNECTRESULT ConnectToInputEndpoint(IntPtr handle, MidiDevicesSessionHandle sessionHandle, out long timestamp, out int errorCode);
 
         [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
         private static extern IN_DISCONNECTRESULT DisconnectFromInputEndpoint(IntPtr handle, out int errorCode);
 
         [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
-        private static extern IN_GETEVENTDATARESULT GetEventDataFromInputEndpoint(IntPtr packetList, int packetIndex, out IntPtr data, out int length, out int packetsCount);
+        private static extern IN_GETEVENTDATARESULT GetEventDataFromInputEndpoint(IntPtr packetList, int packetIndex, out IntPtr data, out int length, out int packetsCount, out long timestamp);
 
         [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
         private static extern IN_GETSYSEXDATARESULT GetInputEndpointSysExBufferData(IntPtr header, out IntPtr data, out int size);
@@ -359,14 +359,17 @@ namespace Melanchall.DryWetMidi.Multimedia
             return result;
         }
 
-        public static IN_CONNECTRESULT Api_Connect(IntPtr handle, out int errorCode)
+        public static IN_CONNECTRESULT Api_Connect(IntPtr handle, MidiDevicesSessionHandle sessionHandle, out long timestamp, out int errorCode)
         {
+            var timestampLocal = 0L;
             var errorCodeLocal = 0;
             
             var result = MidiOperationsExecutor.Instance.ExecuteOperation(() =>
-                ConnectToInputEndpoint(handle, out errorCodeLocal));
+                ConnectToInputEndpoint(handle, sessionHandle, out timestampLocal, out errorCodeLocal));
             
+            timestamp = timestampLocal;
             errorCode = errorCodeLocal;
+
             return result;
         }
 
@@ -381,18 +384,20 @@ namespace Melanchall.DryWetMidi.Multimedia
             return result;
         }
 
-        public static IN_GETEVENTDATARESULT Api_GetEventData(IntPtr packetList, int packetIndex, out IntPtr data, out int length, out int packetsCount)
+        public static IN_GETEVENTDATARESULT Api_GetEventData(IntPtr packetList, int packetIndex, out IntPtr data, out int length, out int packetsCount, out long timestamp)
         {
             var dataLocal = IntPtr.Zero;
             var lengthLocal = 0;
             var packetsCountLocal = 0;
+            var timestampLocal = 0L;
             
             var result = MidiOperationsExecutor.Instance.ExecuteOperation(() =>
-                GetEventDataFromInputEndpoint(packetList, packetIndex, out dataLocal, out lengthLocal, out packetsCountLocal));
+                GetEventDataFromInputEndpoint(packetList, packetIndex, out dataLocal, out lengthLocal, out packetsCountLocal, out timestampLocal));
             
             data = dataLocal;
             length = lengthLocal;
             packetsCount = packetsCountLocal;
+            timestamp = timestampLocal;
             
             return result;
         }

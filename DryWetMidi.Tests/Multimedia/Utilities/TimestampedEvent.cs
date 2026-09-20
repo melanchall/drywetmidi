@@ -5,33 +5,27 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 {
     internal sealed class TimestampedEvent
     {
-        #region Constructor
-
         public TimestampedEvent(MidiEvent midiEvent, TimeSpan time)
+            : this(midiEvent, time, TimeSpan.Zero)
+        {
+        }
+
+        public TimestampedEvent(MidiEvent midiEvent, TimeSpan time, TimeSpan receivedTimestamp)
         {
             Event = midiEvent;
             Time = time;
+            ReceivedTimestamp = receivedTimestamp;
         }
-
-        #endregion
-
-        #region Properties
 
         public MidiEvent Event { get; }
 
         public TimeSpan Time { get; }
 
+        public TimeSpan ReceivedTimestamp { get; }
+
         public long DelayMs { get; set; }
 
-        #endregion
-
-        #region Overrides
-
-        public override string ToString()
-        {
-            return $"{Time}{(DelayMs > 0 ? $" + {DelayMs}ms" : null)}: {Event}";
-        }
-
-        #endregion
+        public override string ToString() =>
+            $"{Time}{(DelayMs > 0 ? $" + {DelayMs}ms" : null)}: {Event}";
     }
 }

@@ -2,6 +2,7 @@
 using Melanchall.DryWetMidi.Multimedia;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Melanchall.DryWetMidi.Tests.Multimedia
 {
@@ -37,9 +38,10 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
                 public bool IsListeningForEvents { get; private set; }
 
-                public void StartEventsListening()
+                public InputEndpointStartInformation StartEventsListening()
                 {
                     IsListeningForEvents = true;
+                    return new InputEndpointStartInformation(Stopwatch.GetTimestamp() * 1000000000 / Stopwatch.Frequency);
                 }
 
                 public void StopEventsListening()
@@ -49,7 +51,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
                 public void FireEventReceived(MidiEvent midiEvent)
                 {
-                    EventReceived?.Invoke(this, new MidiEventReceivedEventArgs(midiEvent));
+                    EventReceived?.Invoke(this, new MidiEventReceivedEventArgs(midiEvent, Stopwatch.GetTimestamp() * 1000000000 / Stopwatch.Frequency));
                 }
             }
 

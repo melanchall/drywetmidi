@@ -8,6 +8,7 @@ using NUnit.Framework;
 using NUnit.Framework.Legacy;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 
@@ -183,9 +184,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             using (var outputEndpoint = OutputEndpoint.GetByName(MidiEndpoints.A))
             using (var inputEndpoint = InputEndpoint.GetByName(MidiEndpoints.A))
             {
-                var receivedEvents = new List<MidiEvent>();
+                var receivedEvents = new List<(MidiEvent Event, long Timestamp)>();
 
-                inputEndpoint.EventReceived += (_, e) => receivedEvents.Add(e.Event);
+                inputEndpoint.EventReceived += (_, e) => receivedEvents.Add((e.Event, e.Timestamp));
                 inputEndpoint.MidiTimeCodeReceived += (_, e) => midiTimeCodeReceived = new MidiTimeCode(e.Format, e.Hours, e.Minutes, e.Seconds, e.Frames);
 
                 outputEndpoint.PrepareForEventsSending();
@@ -562,6 +563,41 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var inputEndpoint = InputEndpoint.GetByName(MidiEndpoints.A);
             ClassicAssert.IsTrue(dictionary.TryGetValue(inputEndpoint, out var value), "Failed to find endpoint in dictionary.");
             ClassicAssert.AreEqual(label, value, "Endpoint label is invalid.");
+        }
+
+        [TimingCritical]
+        [Test]
+        public void CheckReceivedEventsTimestamps()
+        {
+            var eventsToSend = new[]
+            {
+                new TimestampedEvent(new NoteOnEvent((SevenBitNumber)70, (SevenBitNumber)50), TimeSpan.FromMilliseconds(50)),
+                new TimestampedEvent(new NoteOffEvent((SevenBitNumber)70, (SevenBitNumber)60), TimeSpan.FromMilliseconds(100))
+            };
+
+            using (var inputEndpoint = InputEndpoint.GetByName(MidiEndpoints.A))
+            using (var outputEndpoint = OutputEndpoint.GetByName(MidiEndpoints.A))
+            {
+                var receivedEvents = new List<TimestampedEvent>();
+                var stopwatch = new Stopwatch();
+                
+                outputEndpoint.PrepareForEventsSending();
+                inputEndpoint.EventReceived += (_, e) => receivedEvents.Add(e.GetReceivedTimestampedEvent(stopwatch));
+                
+                var startInfo = inputEndpoint.StartEventsListening();
+                stopwatch.Start();
+
+                SendReceiveUtilities.SendEvents(eventsToSend, outputEndpoint);
+
+                var timeout = SendReceiveUtilities.MaximumEventSendReceiveDelay;
+                var success = WaitOperations.Wait(() => receivedEvents.Count == eventsToSend.Length, timeout);
+                ClassicAssert.IsTrue(success, "Events are not received.");
+
+                SendReceiveUtilities.CheckReceivedEventsTimestamps(
+                    eventsToSend,
+                    startInfo.Timestamp,
+                    receivedEvents.ToArray());
+            }
         }
 
         #endregion

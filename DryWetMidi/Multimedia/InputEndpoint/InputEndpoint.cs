@@ -78,6 +78,8 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         private string? _id;
 
+        private InputEndpointStartInformation? _startInformation;
+
         #endregion
 
         #region Constructor
@@ -255,20 +257,24 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <exception cref="NativeApiException">An error occurred on endpoint.</exception>
         /// <exception cref="InvalidOperationException">The current <see cref="InputEndpoint"/> instance is created by
         /// <see cref="EndpointsWatcher.EndpointRemoved"/> event and thus considered as removed so you cannot interact with it.</exception>
-        public void StartEventsListening()
+        public InputEndpointStartInformation StartEventsListening()
         {
             if (IsListeningForEvents)
-                return;
+                return _startInformation!;
 
             EnsureEndpointIsNotDisposed();
             EnsureEndpointIsNotRemoved();
             EnsureSessionIsCreated();
             EnsureHandleIsCreated();
 
-            var result = InputEndpointApi.Api_Connect(Handle.OpenedEndpointHandle, out var errorCode);
+            var result = InputEndpointApi.Api_Connect(Handle.OpenedEndpointHandle, MidiDevicesSession.GetSessionHandle(), out var timestamp, out var errorCode);
             NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
 
             IsListeningForEvents = true;
+
+            _startInformation = new InputEndpointStartInformation(timestamp);
+            return _startInformation;
+
         }
 
         /// <summary>
@@ -289,6 +295,8 @@ namespace Melanchall.DryWetMidi.Multimedia
 
             var result = StopEventsListeningSilently(out var errorCode);
             NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
+
+            _startInformation = null;
         }
 
         /// <summary>
@@ -364,9 +372,9 @@ namespace Melanchall.DryWetMidi.Multimedia
             return endpoint;
         }
 
-        private void OnEventReceived(MidiEvent midiEvent)
+        private void OnEventReceived(MidiEvent midiEvent, long timestamp)
         {
-            EventReceived?.Invoke(this, new MidiEventReceivedEventArgs(midiEvent));
+            EventReceived?.Invoke(this, new MidiEventReceivedEventArgs(midiEvent, timestamp));
 
             if (RaiseMidiTimeCodeReceived)
             {
@@ -426,17 +434,21 @@ namespace Melanchall.DryWetMidi.Multimedia
             if (_disposing || !IsListeningForEvents || !IsEnabled)
                 return;
 
+            var milliseconds = (ulong)dwParam2;
+            var offset = (long)(milliseconds * 1000000L);
+            var timestamp = _startInformation!.Timestamp + offset;
+
             lock (_eventProcessingLock)
             {
                 switch (wMsg)
                 {
                     case NativeApi.MidiMessage.MIM_DATA:
                     case NativeApi.MidiMessage.MIM_MOREDATA:
-                        OnShortMessage(dwParam1.ToInt32());
+                        OnShortMessage(dwParam1.ToInt32(), timestamp);
                         break;
 
                     case NativeApi.MidiMessage.MIM_LONGDATA:
-                        OnSysExMessage(dwParam1);
+                        OnSysExMessage(dwParam1, timestamp);
                         break;
 
                     case NativeApi.MidiMessage.MIM_ERROR:
@@ -450,7 +462,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             }
         }
 
-        private void OnBytesReceived(IntPtr bytes, int size)
+        private void OnBytesReceived(IntPtr bytes, int size, long timestamp)
         {
             if (_disposing || !IsListeningForEvents || !IsEnabled)
                 return;
@@ -469,16 +481,16 @@ namespace Melanchall.DryWetMidi.Multimedia
 
                 if (data[0] == EventStatusBytes.Global.NormalSysEx)
                 {
-                    HandleSysExStartPart(data);
+                    HandleSysExStartPart(data, timestamp);
                     return;
                 }
                 else if (_sysExParts.Any())
                 {
-                    HandleSysExSubsequentPart(data);
+                    HandleSysExSubsequentPart(data, timestamp);
                     return;
                 }
 
-                HandleEvents(data);
+                HandleEvents(data, timestamp);
             }
         }
 
@@ -510,7 +522,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             try
             {
                 NativeApiUtilities.HandleEndpointNativeApiResult(
-                    InputEndpointApi.Api_GetEventData(pktlist, packetIndex, out var dataPtr, out var length, out packetsCount), 0);
+                    InputEndpointApi.Api_GetEventData(pktlist, packetIndex, out var dataPtr, out var length, out packetsCount, out var timestamp), 0);
 
                 data = new byte[length];
                 Marshal.Copy(dataPtr, data, 0, length);
@@ -521,16 +533,16 @@ namespace Melanchall.DryWetMidi.Multimedia
 
                 if (data[0] == EventStatusBytes.Global.NormalSysEx)
                 {
-                    HandleSysExStartPart(data);
+                    HandleSysExStartPart(data, timestamp);
                     return;
                 }
                 else if (_sysExParts.Any())
                 {
-                    HandleSysExSubsequentPart(data);
+                    HandleSysExSubsequentPart(data, timestamp);
                     return;
                 }
 
-                HandleEvents(data);
+                HandleEvents(data, timestamp);
             }
             catch (Exception ex)
             {
@@ -540,7 +552,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             }
         }
 
-        private void HandleSysExStartPart(byte[] data)
+        private void HandleSysExStartPart(byte[] data, long timestamp)
         {
             var sysExData = new byte[data.Length - 1];
             Buffer.BlockCopy(data, 1, sysExData, 0, sysExData.Length);
@@ -548,13 +560,13 @@ namespace Melanchall.DryWetMidi.Multimedia
             if (data[data.Length - 1] == SysExEvent.EndOfEventByte || !WaitForCompleteSysExEvent)
             {
                 var midiEvent = new NormalSysExEvent(sysExData);
-                OnEventReceived(midiEvent);
+                OnEventReceived(midiEvent, timestamp);
             }
             else
                 _sysExParts.Add(sysExData);
         }
 
-        private void HandleSysExSubsequentPart(byte[] data)
+        private void HandleSysExSubsequentPart(byte[] data, long timestamp)
         {
             _sysExParts.Add(data);
 
@@ -572,17 +584,16 @@ namespace Melanchall.DryWetMidi.Multimedia
                 _sysExParts.Clear();
 
                 var midiEvent = new NormalSysExEvent(sysExData);
-                OnEventReceived(midiEvent);
+                OnEventReceived(midiEvent, timestamp);
             }
         }
 
-        private void HandleEvents(byte[] data)
+        private void HandleEvents(byte[] data, long timestamp)
         {
             byte? runningStatusByte = null;
             var length = data.Length;
 
-            using (var stream = new MemoryStream(data))
-            using (var midiReader = new MidiReader(stream, new ReaderSettings()))
+            using (var midiReader = new MidiReader(data, 0, length, new ReaderSettings()))
             {
                 midiReader.Position = 0;
 
@@ -615,7 +626,7 @@ namespace Melanchall.DryWetMidi.Multimedia
                         }
 
                         if (sysExEvent.Completed || !WaitForCompleteSysExEvent)
-                            OnEventReceived(midiEvent);
+                            OnEventReceived(midiEvent, timestamp);
                         else
                         {
                             var buffer = new byte[sysExEvent.Data.Length + 1];
@@ -625,7 +636,7 @@ namespace Melanchall.DryWetMidi.Multimedia
                         }
                     }
                     else
-                        OnEventReceived(midiEvent);
+                        OnEventReceived(midiEvent, timestamp);
                 }
             }
         }
@@ -653,7 +664,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             OnError(exception);
         }
 
-        private void OnShortMessage(int message)
+        private void OnShortMessage(int message, long timestamp)
         {
             try
             {
@@ -664,7 +675,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
                 // TODO: Convert mustn't return null
                 var midiEvent = _bytesToMidiEventConverter.Convert(statusByte, _channelParametersBuffer);
-                OnEventReceived(midiEvent!);
+                OnEventReceived(midiEvent!, timestamp);
             }
             catch (Exception ex)
             {
@@ -674,7 +685,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             }
         }
 
-        private void OnSysExMessage(IntPtr sysExHeaderPointer)
+        private void OnSysExMessage(IntPtr sysExHeaderPointer, long timestamp)
         {
             byte[]? data = null;
 
@@ -694,9 +705,9 @@ namespace Melanchall.DryWetMidi.Multimedia
 #endif
 
                 if (data[0] == EventStatusBytes.Global.NormalSysEx)
-                    HandleSysExStartPart(data);
+                    HandleSysExStartPart(data, timestamp);
                 else if (_sysExParts.Any())
-                    HandleSysExSubsequentPart(data);
+                    HandleSysExSubsequentPart(data, timestamp);
 
                 if (_disposing || Handle.OpenedEndpointHandle == IntPtr.Zero)
                     return;

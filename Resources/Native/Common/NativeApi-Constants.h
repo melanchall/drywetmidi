@@ -33,6 +33,7 @@ typedef int CONFIGURATION_API_TYPE;
 #define CONFIGURATION_API_TYPE_WINMM 1
 #define CONFIGURATION_API_TYPE_WMS 2
 
+
 /* ================================
    High-precision tick generator
 ================================ */

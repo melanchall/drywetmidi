@@ -1194,9 +1194,12 @@ struct InputEndpointHandle : EndpointHandleBase
     LONG isClosing;
     MidiGroupEndpointListener groupListener{nullptr};
     winrt::event_token revokeOnGroupListener;
+    
+    bool timestampsBaselineSet = false;
+    uint64_t timestampsBaseline;
 };
 
-typedef void (*BytesReceivedCallback)(const uint8_t* bytes, int size);
+typedef void (*BytesReceivedCallback)(const uint8_t* bytes, int size, uint64_t timestamp);
 
 IN_GETALLINFORESULT ConvertToGetAllInInfoResult(IN_GETINFORESULT getInfoResult)
 {
@@ -1503,7 +1506,7 @@ API_EXPORT IN_OPENRESULT API_CALL OpenInputEndpoint_Win(InputEndpointInfo* info,
                 words.GetMany(0, temp);
                 std::memcpy(bytes, temp.data(), byteCount);
 
-                bytesReceivedCallback(bytes, byteCount);
+                bytesReceivedCallback(bytes, byteCount, ump.Timestamp() * 1000000000 / midi2::MidiClock::TimestampFrequency());
 
                 delete[] bytes;
             };
@@ -1714,7 +1717,16 @@ API_EXPORT IN_CLOSERESULT API_CALL CloseInputEndpoint(void* handle, int* errorCo
     return IN_CLOSERESULT_OK;
 }
 
-API_EXPORT IN_CONNECTRESULT API_CALL ConnectToInputEndpoint(void* handle, int* errorCode)
+uint64_t GetAbsoluteNanoseconds()
+{
+    LARGE_INTEGER qpc, freq;
+    QueryPerformanceCounter(&qpc);
+    QueryPerformanceFrequency(&freq);
+
+    return (static_cast<uint64_t>(qpc.QuadPart) * 1'000'000'000ULL) / static_cast<uint64_t>(freq.QuadPart);
+}
+
+API_EXPORT IN_CONNECTRESULT API_CALL ConnectToInputEndpoint(void* handle, SessionHandle* sessionHandle, uint64_t* timestamp, int* errorCode)
 {
     *errorCode = 0;
 
@@ -1722,9 +1734,28 @@ API_EXPORT IN_CONNECTRESULT API_CALL ConnectToInputEndpoint(void* handle, int* e
 
     if (inputEndpointHandle->groupListener != nullptr)
     {
+        try
+        {
+            *timestamp = midi2::MidiClock::Now() * 1000000000 / midi2::MidiClock::TimestampFrequency();
+        }
+        catch (const winrt::hresult_error& e)
+        {
+            sessionHandle->configuration->activityCallback(FormatError(e, L"Failed to get current timestamp from WMS"));
+        }
+        catch (const std::exception& e)
+        {
+            sessionHandle->configuration->activityCallback(FormatError(e, L"Failed to get current timestamp from WMS"));
+        }
+        catch (...)
+        {
+            sessionHandle->configuration->activityCallback(L"Failed to get current timestamp from WMS");
+        }
+
         inputEndpointHandle->groupListener.IsEnabled(true);
         return IN_CONNECTRESULT_OK;
     }
+
+    *timestamp = GetAbsoluteNanoseconds();
 
     MMRESULT result = midiInStart(inputEndpointHandle->handle);
     if (result != MMSYSERR_NOERROR)
@@ -1747,6 +1778,8 @@ API_EXPORT IN_DISCONNECTRESULT API_CALL DisconnectFromInputEndpoint(void* handle
     *errorCode = 0;
 
     InputEndpointHandle* inputEndpointHandle = static_cast<InputEndpointHandle*>(handle);
+
+    inputEndpointHandle->timestampsBaselineSet = false;
 
     if (inputEndpointHandle->groupListener != nullptr)
     {

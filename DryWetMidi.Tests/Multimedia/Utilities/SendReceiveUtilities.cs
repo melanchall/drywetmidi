@@ -21,6 +21,30 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
         #region Methods
 
+        public static TimestampedEvent GetReceivedTimestampedEvent(this MidiEventReceivedEventArgs args, Stopwatch stopwatch) =>
+            new TimestampedEvent(args.Event, stopwatch.Elapsed, TimeSpan.FromMicroseconds(args.Timestamp / 1000));
+
+        public static void CheckReceivedEventsTimestamps(
+            TimestampedEvent[] eventsToSend,
+            long startTimestamp,
+            TimestampedEvent[] receivedEvents)
+        {
+            TimeSpan GetTimeSpan(long timestamp) =>
+                TimeSpan.FromMicroseconds(timestamp / 1000);
+
+            var relativeTimestamps = receivedEvents
+                .Select(e => e.ReceivedTimestamp - GetTimeSpan(startTimestamp))
+                .ToArray();
+
+            var deltas = relativeTimestamps
+                .Zip(eventsToSend, (actual, expected) => TimeSpan.FromMicroseconds(Math.Abs((actual - expected.Time).TotalMicroseconds)))
+                .ToArray();
+
+            ClassicAssert.IsTrue(
+                deltas.All(d => d <= TimeSpan.FromMilliseconds(20)),
+                "Timestamps are not within the acceptable range.");
+        }
+
         public static void WaitEventsReceivingStarted()
         {
             WaitOperations.Wait(TimeSpan.FromSeconds(2));
@@ -30,6 +54,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             TimestampedEvent[] eventsToSend,
             IOutputEndpoint outputEndpoint,
             IInputEndpoint inputEndpoint,
+            long startTimestamp,
             TimeSpan? sendReceiveTimeout = null)
         {
             var receivedEvents = new List<TimestampedEvent>();
@@ -40,7 +65,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 sentEvents.Add(new TimestampedEvent(args.Event, stopwatch.Elapsed));
 
             void OnEventReceived(object sender, MidiEventReceivedEventArgs args) =>
-                receivedEvents.Add(new TimestampedEvent(args.Event, stopwatch.Elapsed));
+                receivedEvents.Add(args.GetReceivedTimestampedEvent(stopwatch));
 
             outputEndpoint.EventSent += OnEventSent;
             inputEndpoint.EventReceived += OnEventReceived;
@@ -76,6 +101,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     expectedReceivedEvents,
                     sendReceiveTimeout,
                     "Invalid received events.");
+
+                CheckReceivedEventsTimestamps(
+                    eventsToSend,
+                    startTimestamp,
+                    receivedEvents.ToArray());
             }
             finally
             {
