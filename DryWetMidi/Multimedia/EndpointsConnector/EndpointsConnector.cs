@@ -115,7 +115,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             foreach (var outputEndpoint in OutputEndpoints)
             {
                 if (AreEndpointsConnected)
-                    outputEndpoint.SendEvent(e.Event);
+                    outputEndpoint.SendEvent(midiEvent);
             }
         }
 

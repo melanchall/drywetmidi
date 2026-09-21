@@ -32,26 +32,36 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             {
                 public event EventHandler<MidiEventReceivedEventArgs> EventReceived;
 
+                private readonly Stopwatch _stopwatch = new ();
+
                 public void Dispose()
                 {
                 }
 
                 public bool IsListeningForEvents { get; private set; }
 
-                public InputEndpointStartInformation StartEventsListening()
+                public void StartEventsListening()
                 {
                     IsListeningForEvents = true;
-                    return new InputEndpointStartInformation(Stopwatch.GetTimestamp() * 1000000000 / Stopwatch.Frequency);
+                    _stopwatch.Start();
                 }
 
                 public void StopEventsListening()
                 {
+                    _stopwatch.Stop();
+                    _stopwatch.Reset();
+
                     IsListeningForEvents = false;
                 }
 
                 public void FireEventReceived(MidiEvent midiEvent)
                 {
-                    EventReceived?.Invoke(this, new MidiEventReceivedEventArgs(midiEvent, Stopwatch.GetTimestamp() * 1000000000 / Stopwatch.Frequency));
+                    EventReceived?.Invoke(this, new MidiEventReceivedEventArgs(midiEvent, _stopwatch.ElapsedMilliseconds * 1000000));
+                }
+
+                public long GetCurrentTimestamp()
+                {
+                    return _stopwatch.ElapsedMilliseconds * 1000000;
                 }
             }
 

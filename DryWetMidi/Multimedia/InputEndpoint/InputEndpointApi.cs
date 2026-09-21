@@ -139,6 +139,14 @@ namespace Melanchall.DryWetMidi.Multimedia
             IN_GETPROPERTYRESULT_FAILEDFILLVALUEBUFFER = 103,
         }
 
+        public enum IN_GETCURRENTTIMESTAMP
+        {
+            IN_GETCURRENTTIMESTAMP_OK = 0,
+
+            [NativeApi.NativeErrorType(NativeApi.NativeErrorType.WmsError)]
+            IN_GETCURRENTTIMESTAMP_UNKNOWNWMSERROR = 1,
+        }
+
         #endregion
 
         #region Delegates
@@ -203,7 +211,11 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         [LibraryImport(NativeApi.LibraryName)]
         [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-        private static partial IN_CONNECTRESULT ConnectToInputEndpoint(IntPtr handle, MidiDevicesSessionHandle sessionHandle, out long timestamp, out int errorCode);
+        private static partial IN_GETCURRENTTIMESTAMP GetCurrentTimestamp(MidiDevicesSessionHandle sessionHandle, out long timestamp);
+
+        [LibraryImport(NativeApi.LibraryName)]
+        [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
+        private static partial IN_CONNECTRESULT ConnectToInputEndpoint(IntPtr handle, MidiDevicesSessionHandle sessionHandle, out int errorCode);
 
         [LibraryImport(NativeApi.LibraryName)]
         [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
@@ -255,7 +267,10 @@ namespace Melanchall.DryWetMidi.Multimedia
         private static extern IN_RENEWSYSEXBUFFERRESULT RenewInputEndpointSysExBuffer(IntPtr handle, IntPtr header, out int errorCode);
 
         [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
-        private static extern IN_CONNECTRESULT ConnectToInputEndpoint(IntPtr handle, MidiDevicesSessionHandle sessionHandle, out long timestamp, out int errorCode);
+        private static extern IN_GETCURRENTTIMESTAMP GetCurrentTimestamp(MidiDevicesSessionHandle sessionHandle, out long timestamp);
+
+        [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
+        private static extern IN_CONNECTRESULT ConnectToInputEndpoint(IntPtr handle, MidiDevicesSessionHandle sessionHandle, out int errorCode);
 
         [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
         private static extern IN_DISCONNECTRESULT DisconnectFromInputEndpoint(IntPtr handle, out int errorCode);
@@ -359,17 +374,25 @@ namespace Melanchall.DryWetMidi.Multimedia
             return result;
         }
 
-        public static IN_CONNECTRESULT Api_Connect(IntPtr handle, MidiDevicesSessionHandle sessionHandle, out long timestamp, out int errorCode)
+        public static IN_GETCURRENTTIMESTAMP Api_GetCurrentTimestamp(MidiDevicesSessionHandle sessionHandle, out long timestamp)
         {
             var timestampLocal = 0L;
+
+            var result = MidiOperationsExecutor.Instance.ExecuteOperation(() =>
+                GetCurrentTimestamp(sessionHandle, out timestampLocal));
+
+            timestamp = timestampLocal;
+            return result;
+        }
+
+        public static IN_CONNECTRESULT Api_Connect(IntPtr handle, MidiDevicesSessionHandle sessionHandle, out int errorCode)
+        {
             var errorCodeLocal = 0;
             
             var result = MidiOperationsExecutor.Instance.ExecuteOperation(() =>
-                ConnectToInputEndpoint(handle, sessionHandle, out timestampLocal, out errorCodeLocal));
+                ConnectToInputEndpoint(handle, sessionHandle, out errorCodeLocal));
             
-            timestamp = timestampLocal;
             errorCode = errorCodeLocal;
-
             return result;
         }
 

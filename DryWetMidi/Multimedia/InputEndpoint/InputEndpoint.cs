@@ -78,7 +78,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         private string? _id;
 
-        private InputEndpointStartInformation? _startInformation;
+        private long _timestampsBaseline = 0;
 
         #endregion
 
@@ -257,24 +257,22 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <exception cref="NativeApiException">An error occurred on endpoint.</exception>
         /// <exception cref="InvalidOperationException">The current <see cref="InputEndpoint"/> instance is created by
         /// <see cref="EndpointsWatcher.EndpointRemoved"/> event and thus considered as removed so you cannot interact with it.</exception>
-        public InputEndpointStartInformation StartEventsListening()
+        public void StartEventsListening()
         {
             if (IsListeningForEvents)
-                return _startInformation!;
+                return;
 
             EnsureEndpointIsNotDisposed();
             EnsureEndpointIsNotRemoved();
             EnsureSessionIsCreated();
             EnsureHandleIsCreated();
 
-            var result = InputEndpointApi.Api_Connect(Handle.OpenedEndpointHandle, MidiDevicesSession.GetSessionHandle(), out var timestamp, out var errorCode);
+            _timestampsBaseline = GetCurrentTimestamp();
+            
+            var result = InputEndpointApi.Api_Connect(Handle.OpenedEndpointHandle, MidiDevicesSession.GetSessionHandle(), out var errorCode);
             NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
-
+            
             IsListeningForEvents = true;
-
-            _startInformation = new InputEndpointStartInformation(timestamp);
-            return _startInformation;
-
         }
 
         /// <summary>
@@ -295,8 +293,17 @@ namespace Melanchall.DryWetMidi.Multimedia
 
             var result = StopEventsListeningSilently(out var errorCode);
             NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
+        }
 
-            _startInformation = null;
+        public long GetCurrentTimestamp()
+        {
+            NativeApiUtilities.EnsureOsIsSupported();
+            EnsureSessionIsCreated();
+
+            var result = InputEndpointApi.Api_GetCurrentTimestamp(MidiDevicesSession.GetSessionHandle(), out var timestamp);
+            NativeApiUtilities.HandleEndpointNativeApiResult(result, 0);
+
+            return timestamp;
         }
 
         /// <summary>
@@ -436,7 +443,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
             var milliseconds = (ulong)dwParam2;
             var offset = (long)(milliseconds * 1000000L);
-            var timestamp = _startInformation!.Timestamp + offset;
+            var timestamp = _timestampsBaseline + offset;
 
             lock (_eventProcessingLock)
             {

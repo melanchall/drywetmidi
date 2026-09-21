@@ -91,6 +91,57 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 new TimestampedEvent(new NoteOffEvent { NoteNumber = (SevenBitNumber)70 }, TimeSpan.FromMilliseconds(500)),
             });
 
+        [TimingCritical]
+        [Test]
+        public void CheckEventsReceivingWithCallback_ReplaceEvents() => CheckEventsReceivingWithCallback(
+            eventsToSend: new[]
+            {
+                new TimestampedEvent(new NoteOnEvent((SevenBitNumber)10, (SevenBitNumber)20) { Channel = (FourBitNumber)1 }, TimeSpan.Zero),
+                new TimestampedEvent(new ControlChangeEvent((SevenBitNumber)11, (SevenBitNumber)21) { Channel = (FourBitNumber)2 }, TimeSpan.FromMilliseconds(250)),
+                new TimestampedEvent(new NoteOffEvent((SevenBitNumber)12, (SevenBitNumber)22) { Channel = (FourBitNumber)3 }, TimeSpan.FromMilliseconds(500)),
+            },
+            eventCallback: e => new ProgramChangeEvent((SevenBitNumber)42)
+            {
+                Channel = ((ChannelEvent)e).Channel
+            },
+            expectedReceivedEvents: new[]
+            {
+                new TimestampedEvent(new ProgramChangeEvent((SevenBitNumber)42) { Channel = (FourBitNumber)1 }, TimeSpan.Zero),
+                new TimestampedEvent(new ProgramChangeEvent((SevenBitNumber)42) { Channel = (FourBitNumber)2 }, TimeSpan.FromMilliseconds(250)),
+                new TimestampedEvent(new ProgramChangeEvent((SevenBitNumber)42) { Channel = (FourBitNumber)3 }, TimeSpan.FromMilliseconds(500)),
+            });
+
+        [TimingCritical]
+        [Test]
+        public void CheckEventsReceivingWithCallback_InvokesCallbackOncePerInputEvent()
+        {
+            var callbackInvocations = 0;
+
+            CheckEventsReceivingWithCallback(
+                eventsToSend: new[]
+                {
+                    new TimestampedEvent(new NoteOnEvent(), TimeSpan.Zero),
+                    new TimestampedEvent(new ControlChangeEvent(), TimeSpan.FromMilliseconds(250)),
+                    new TimestampedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(500)),
+                },
+                eventCallback: e =>
+                {
+                    callbackInvocations++;
+                    return e;
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new TimestampedEvent(new NoteOnEvent(), TimeSpan.Zero),
+                    new TimestampedEvent(new ControlChangeEvent(), TimeSpan.FromMilliseconds(250)),
+                    new TimestampedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(500)),
+                });
+
+            ClassicAssert.AreEqual(
+                3,
+                callbackInvocations,
+                "Callback was not invoked exactly once for each received input event.");
+        }
+
         #endregion
 
         #region Private methods
@@ -113,10 +164,12 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 using (var inputC = TestDeviceManager.GetInputEndpoint(MidiEndpoints.C))
                 {
                     inputB.EventReceived += (_, e) => receivedEventsB.Add(e.GetReceivedTimestampedEvent(stopwatch));
-                    var startInfoB = inputB.StartEventsListening();
+                    inputB.StartEventsListening();
 
                     inputC.EventReceived += (_, e) => receivedEventsC.Add(e.GetReceivedTimestampedEvent(stopwatch));
-                    var startInfoC = inputC.StartEventsListening();
+                    inputC.StartEventsListening();
+
+                    var timestampsBaseline = inputB.GetCurrentTimestamp();
 
                     using (var inputA = InputEndpoint.GetByName(MidiEndpoints.A))
                     {
@@ -145,12 +198,12 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
                     SendReceiveUtilities.CheckReceivedEventsTimestamps(
                         eventsToSend.ToArray(),
-                        startInfoB.Timestamp,
+                        timestampsBaseline,
                         receivedEventsB.ToArray());
 
                     SendReceiveUtilities.CheckReceivedEventsTimestamps(
                         eventsToSend.ToArray(),
-                        startInfoC.Timestamp,
+                        timestampsBaseline,
                         receivedEventsC.ToArray());
                 }
             }

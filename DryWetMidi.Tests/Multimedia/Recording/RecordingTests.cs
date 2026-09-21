@@ -16,9 +16,40 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
     [TestFixture]
     public sealed class RecordingTests
     {
-        #region Constants
+        private sealed class TimestampedInputEndpoint : IInputEndpoint
+        {
+            public event EventHandler<MidiEventReceivedEventArgs> EventReceived;
 
-        private const int RetriesNumber = 3;
+            public bool IsListeningForEvents { get; private set; }
+
+            public long CurrentTimestamp { get; set; }
+
+            public void StartEventsListening()
+            {
+                IsListeningForEvents = true;
+            }
+
+            public void StopEventsListening()
+            {
+                IsListeningForEvents = false;
+            }
+
+            public long GetCurrentTimestamp()
+            {
+                return CurrentTimestamp;
+            }
+
+            public void RaiseEvent(MidiEvent midiEvent)
+            {
+                EventReceived?.Invoke(
+                    this,
+                    new MidiEventReceivedEventArgs(midiEvent, CurrentTimestamp));
+            }
+
+            public void Dispose()
+            {
+            }
+        }
 
         private static readonly object[] ParametersForDurationCheck =
         {
@@ -27,10 +58,6 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             new object[] { TimeSpan.Zero, TimeSpan.FromSeconds(1) },
             new object[] { TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(2) }
         };
-
-        #endregion
-
-        #region Test methods
 
         [Test]
         public void StartRecording_EndpointNotListeningEvents()
@@ -83,7 +110,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
         [TimingCritical]
         [Test]
-        public void CheckRecording()
+        public void CheckRecording([Values(0, 100, 500)] long delayAfterStartEventsListeningMs)
         {
             var tempoMap = TempoMap.Default;
 
@@ -107,7 +134,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 new TimestampedEvent(new NoteOnEvent(), TimeSpan.Zero),
                 new TimestampedEvent(new NoteOffEvent(), TimeSpan.FromMilliseconds(500)),
                 new TimestampedEvent(new TimingClockEvent(), TimeSpan.FromMilliseconds(3500))
-            }.ToList();
+            };
 
             var timeout = expectedRecordedEvents.Max(e => e.Time) + SendReceiveUtilities.MaximumEventSendReceiveDelay;
 
@@ -116,8 +143,10 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             {
                 outputEndpoint.EventSent += (_, e) => sentEvents.Add(new TimestampedEvent(e.Event, stopwatch.Elapsed));
 
+                inputEndpoint.EventReceived += (_, e) => receivedEvents.Add(e.GetReceivedTimestampedEvent(stopwatch));
                 inputEndpoint.StartEventsListening();
-                inputEndpoint.EventReceived += (_, e) => receivedEvents.Add(new TimestampedEvent(e.Event, stopwatch.Elapsed));
+
+                WaitOperations.Wait(TimeSpan.FromMilliseconds(delayAfterStartEventsListeningMs));
 
                 using (var recording = new Recording(tempoMap, inputEndpoint))
                 {
@@ -130,7 +159,10 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
                     stopwatch.Start();
                     recording.Start();
+
+                    var receivedEventsTimestampBaseline = inputEndpoint.GetCurrentTimestamp();
                     sendingThread.Start();
+
                     WaitOperations.Wait(stopAfter);
 
                     recording.Stop();
@@ -144,7 +176,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     var threadExited = WaitOperations.Wait(() => !sendingThread.IsAlive, threadAliveTimeout);
                     ClassicAssert.IsTrue(threadExited, $"Sending thread is alive after [{threadAliveTimeout}].");
 
-                    var areEventsReceived = WaitOperations.Wait(() => receivedEvents.Count >= expectedRecordedEvents.Count, timeout);
+                    var areEventsReceived = WaitOperations.Wait(() => receivedEvents.Count >= expectedRecordedEvents.Length, timeout);
                     ClassicAssert.IsTrue(areEventsReceived, $"Events are not received for [{timeout}] (received are: {string.Join(", ", receivedEvents)}).");
 
                     CompareSentReceivedEvents(sentEvents, receivedEvents, expectedRecordedEvents);
@@ -155,13 +187,137 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                         events.ToList(),
                         expectedRecordedEvents.Select(e => (e.Event, e.Time)).ToList(),
                         tempoMap);
+
+                    SendReceiveUtilities.CheckReceivedEventsTimestamps(
+                        eventsToSend,
+                        receivedEventsTimestampBaseline,
+                        receivedEvents.ToArray());
                 }
             }
         }
 
-        #endregion
+        [TimingCritical]
+        [Test]
+        public void RecordingStartsFromCurrentEndpointTimestamp()
+        {
+            const long listeningStartedAt = 1_000_000_000L;
+            const long recordingStartedAt = listeningStartedAt + 10_000_000_000L;
+            const long eventReceivedAt = recordingStartedAt + 25_000_000L;
 
-        #region Private methods
+            using (var inputEndpoint = new TimestampedInputEndpoint
+            {
+                CurrentTimestamp = listeningStartedAt
+            })
+            using (var recording = new Recording(TempoMap.Default, inputEndpoint))
+            {
+                inputEndpoint.StartEventsListening();
+
+                inputEndpoint.CurrentTimestamp = recordingStartedAt;
+                recording.Start();
+
+                inputEndpoint.CurrentTimestamp = eventReceivedAt;
+                inputEndpoint.RaiseEvent(new NoteOnEvent());
+
+                var recordedEvent = recording.GetEvents().Single();
+
+                var expectedTimestamp = TimeSpan.FromMilliseconds(25);
+                var actualTimestamp = (TimeSpan)recordedEvent.TimeAs<MetricTimeSpan>(TempoMap.Default);
+                ClassicAssert.IsTrue(
+                    AreTimeSpansEqual(expectedTimestamp, actualTimestamp),
+                    $"Duration is invalid. Actual is {actualTimestamp}. Expected is {expectedTimestamp}.");
+            }
+        }
+
+        [TimingCritical]
+        [Test]
+        public void RecordingExcludesPausedTimeAndContinuesFromPreviousActiveDuration()
+        {
+            using (var inputEndpoint = new TimestampedInputEndpoint
+            {
+                CurrentTimestamp = 1_000_000_000L
+            })
+            using (var recording = new Recording(TempoMap.Default, inputEndpoint))
+            {
+                inputEndpoint.StartEventsListening();
+                recording.Start();
+
+                inputEndpoint.CurrentTimestamp += 100_000_000L;
+                inputEndpoint.RaiseEvent(new NoteOnEvent());
+
+                inputEndpoint.CurrentTimestamp += 900_000_000L;
+                recording.Stop();
+
+                inputEndpoint.CurrentTimestamp += 5_000_000_000L;
+                recording.Start();
+
+                inputEndpoint.CurrentTimestamp += 200_000_000L;
+                inputEndpoint.RaiseEvent(new NoteOffEvent());
+
+                var recordedEvents = recording.GetEvents().ToArray();
+
+                ClassicAssert.AreEqual(2, recordedEvents.Length);
+
+                var expectedFirstTimestamp = TimeSpan.FromMilliseconds(100);
+                var actualFirstTimestamp = (TimeSpan)recordedEvents[0].TimeAs<MetricTimeSpan>(TempoMap.Default);
+                ClassicAssert.IsTrue(
+                    AreTimeSpansEqual(expectedFirstTimestamp, actualFirstTimestamp),
+                    $"Duration is invalid. Actual is {actualFirstTimestamp}. Expected is {expectedFirstTimestamp}.");
+                
+                var expectedSecondTimestamp = TimeSpan.FromMilliseconds(1200);
+                var actualSecondTimestamp = (TimeSpan)recordedEvents[1].TimeAs<MetricTimeSpan>(TempoMap.Default);
+                ClassicAssert.IsTrue(
+                    AreTimeSpansEqual(expectedSecondTimestamp, actualSecondTimestamp),
+                    $"Duration is invalid. Actual is {actualSecondTimestamp}. Expected is {expectedSecondTimestamp}.");
+            }
+        }
+
+        [TimingCritical]
+        [Test]
+        public void RecordingIgnoresEventsReceivedWhileStoppedAndKeepsCorrectDuration()
+        {
+            using (var inputEndpoint = new TimestampedInputEndpoint
+            {
+                CurrentTimestamp = 1_000_000_000L
+            })
+            using (var recording = new Recording(TempoMap.Default, inputEndpoint))
+            {
+                inputEndpoint.StartEventsListening();
+                recording.Start();
+
+                inputEndpoint.CurrentTimestamp += 200_000_000L;
+                inputEndpoint.RaiseEvent(new NoteOnEvent());
+
+                inputEndpoint.CurrentTimestamp += 100_000_000L;
+                recording.Stop();
+
+                inputEndpoint.CurrentTimestamp += 5_000_000_000L;
+                inputEndpoint.RaiseEvent(new ProgramChangeEvent());
+
+                inputEndpoint.CurrentTimestamp += 1_000_000_000L;
+                recording.Start();
+
+                inputEndpoint.CurrentTimestamp += 100_000_000L;
+                inputEndpoint.RaiseEvent(new NoteOffEvent());
+
+                var recordedEvents = recording.GetEvents().ToArray();
+                var duration = recording.GetDuration<MetricTimeSpan>();
+
+                ClassicAssert.AreEqual(2, recordedEvents.Length);
+                ClassicAssert.IsFalse(recordedEvents.Any(e => e.Event is ProgramChangeEvent));
+                
+                var expectedFirstTimestamp = TimeSpan.FromMilliseconds(400);
+                var actualFirstTimestamp = (TimeSpan)recordedEvents[1].TimeAs<MetricTimeSpan>(TempoMap.Default);
+                ClassicAssert.IsTrue(
+                    AreTimeSpansEqual(expectedFirstTimestamp, actualFirstTimestamp),
+                    $"Duration is invalid. Actual is {actualFirstTimestamp}. Expected is {expectedFirstTimestamp}.");
+                
+                var expectedDuration = TimeSpan.FromMilliseconds(400);
+                var actualDuration = (TimeSpan)duration;
+                ClassicAssert.IsTrue(
+                    AreTimeSpansEqual(expectedDuration, actualDuration),
+                    $"Duration is invalid. Actual is {actualDuration}. Expected is {expectedDuration}.");
+            }
+        }
 
         private void CompareSentReceivedEvents(
             IReadOnlyList<TimestampedEvent> sentEvents,
@@ -214,7 +370,5 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             var delta = (timeSpan1 - timeSpan2).Duration();
             return delta <= epsilon;
         }
-
-        #endregion
     }
 }

@@ -29,7 +29,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             using (var inputEndpoint = InputEndpoint.GetByName(SendReceiveUtilities.EndpointToTestOnName))
             {
                 outputEndpoint.PrepareForEventsSending();
-                var startInfo = inputEndpoint.StartEventsListening();
+                inputEndpoint.StartEventsListening();
+                var timestampsBaseline = inputEndpoint.GetCurrentTimestamp();
 
                 SendReceiveUtilities.CheckEventsReceiving(
                     new[]
@@ -43,7 +44,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     },
                     outputEndpoint,
                     inputEndpoint,
-                    startInfo.Timestamp);
+                    timestampsBaseline);
 
                 inputEndpoint.StopEventsListening();
             }
@@ -64,13 +65,14 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             using (var inputEndpoint = InputEndpoint.GetByName(SendReceiveUtilities.EndpointToTestOnName))
             {
                 outputEndpoint.PrepareForEventsSending();
-                var startInfo = inputEndpoint.StartEventsListening();
+                inputEndpoint.StartEventsListening();
+                var timestampsBaseline = inputEndpoint.GetCurrentTimestamp();
 
                 SendReceiveUtilities.CheckEventsReceiving(
                     events.Select((e, i) => new TimestampedEvent(e, TimeSpan.FromMilliseconds(50).MultiplyBy(i))).ToArray(),
                     outputEndpoint,
                     inputEndpoint,
-                    startInfo.Timestamp);
+                    timestampsBaseline);
 
                 inputEndpoint.StopEventsListening();
             }

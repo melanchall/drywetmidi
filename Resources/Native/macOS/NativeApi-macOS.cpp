@@ -965,6 +965,24 @@ API_EXPORT SESSION_CLOSERESULT CloseSession(SessionHandle* sessionHandle)
     return result;
 }
 
+uint64_t ConvertMachTimeToNanoseconds(uint64_t machTime)
+{
+    static const mach_timebase_info_data_t timebase = []()
+    {
+        mach_timebase_info_data_t value{};
+        const kern_return_t result = mach_timebase_info(&value);
+        return value;
+    }();
+
+    return (machTime / timebase.denom) * timebase.numer +
+        ((machTime % timebase.denom) * timebase.numer) / timebase.denom;
+}
+
+uint64_t GetCurrentTimestampInNanoseconds()
+{
+    return ConvertMachTimeToNanoseconds(mach_absolute_time());
+}
+
 /* ================================
    Input device
  ================================ */
@@ -1118,13 +1136,17 @@ API_EXPORT IN_CLOSERESULT CloseInputEndpoint(void* handle, int* errorCode)
     return IN_CLOSERESULT_OK;
 }
 
-API_EXPORT IN_CONNECTRESULT ConnectToInputEndpoint(void* handle, SessionHandle* sessionHandle, uint64_t* timestamp, int* errorCode)
+API_EXPORT IN_GETCURRENTTIMESTAMP GetCurrentTimestamp(SessionHandle* sessionHandle, uint64_t* timestamp)
+{
+    *timestamp = GetCurrentTimestampInNanoseconds();
+    return IN_GETCURRENTTIMESTAMP_OK;
+}
+
+API_EXPORT IN_CONNECTRESULT ConnectToInputEndpoint(void* handle, SessionHandle* sessionHandle, int* errorCode)
 {
     *errorCode = 0;
 
     InputEndpointHandle* inputEndpointHandle = static_cast<InputEndpointHandle*>(handle);
-
-    *timestamp = mach_absolute_time();
 
     OSStatus status = MIDIPortConnectSource(inputEndpointHandle->portRef, inputEndpointHandle->info->endpointRef, nullptr);
     if (status != noErr)
@@ -1181,7 +1203,7 @@ API_EXPORT IN_GETEVENTDATARESULT GetEventDataFromInputEndpoint(MIDIPacketList* p
     {
         *data = packetList->packet[0].data;
         *length = packetList->packet[0].length;
-        *timestamp = packetList->packet[0].timeStamp;
+        *timestamp = ConvertMachTimeToNanoseconds(packetList->packet[0].timeStamp);
         return IN_GETEVENTDATARESULT_OK;
     }
 
@@ -1194,7 +1216,7 @@ API_EXPORT IN_GETEVENTDATARESULT GetEventDataFromInputEndpoint(MIDIPacketList* p
 
     *data = packetPtr->data;
     *length = packetPtr->length;
-    *timestamp = packetPtr->timeStamp;
+    *timestamp = ConvertMachTimeToNanoseconds(packetPtr->timeStamp);
 
     return IN_GETEVENTDATARESULT_OK;
 }

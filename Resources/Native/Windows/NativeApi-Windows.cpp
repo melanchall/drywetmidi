@@ -1726,7 +1726,37 @@ uint64_t GetAbsoluteNanoseconds()
     return (static_cast<uint64_t>(qpc.QuadPart) * 1'000'000'000ULL) / static_cast<uint64_t>(freq.QuadPart);
 }
 
-API_EXPORT IN_CONNECTRESULT API_CALL ConnectToInputEndpoint(void* handle, SessionHandle* sessionHandle, uint64_t* timestamp, int* errorCode)
+API_EXPORT IN_GETCURRENTTIMESTAMP API_CALL GetCurrentTimestamp(SessionHandle* sessionHandle, uint64_t* timestamp)
+{
+    if (sessionHandle->configuration->wmsInitialized)
+    {
+        try
+        {
+            *timestamp = midi2::MidiClock::Now() * 1000000000 / midi2::MidiClock::TimestampFrequency();
+            return IN_GETCURRENTTIMESTAMP_OK;
+        }
+        catch (const winrt::hresult_error& e)
+        {
+            sessionHandle->configuration->activityCallback(FormatError(e, L"Failed to get current timestamp from WMS"));
+            return IN_GETCURRENTTIMESTAMP_UNKNOWNWMSERROR;
+        }
+        catch (const std::exception& e)
+        {
+            sessionHandle->configuration->activityCallback(FormatError(e, L"Failed to get current timestamp from WMS"));
+            return IN_GETCURRENTTIMESTAMP_UNKNOWNWMSERROR;
+        }
+        catch (...)
+        {
+            sessionHandle->configuration->activityCallback(L"Failed to get current timestamp from WMS");
+            return IN_GETCURRENTTIMESTAMP_UNKNOWNWMSERROR;
+        }
+    }
+
+    *timestamp = GetAbsoluteNanoseconds();
+    return IN_GETCURRENTTIMESTAMP_OK;
+}
+
+API_EXPORT IN_CONNECTRESULT API_CALL ConnectToInputEndpoint(void* handle, SessionHandle* sessionHandle, int* errorCode)
 {
     *errorCode = 0;
 
@@ -1734,28 +1764,9 @@ API_EXPORT IN_CONNECTRESULT API_CALL ConnectToInputEndpoint(void* handle, Sessio
 
     if (inputEndpointHandle->groupListener != nullptr)
     {
-        try
-        {
-            *timestamp = midi2::MidiClock::Now() * 1000000000 / midi2::MidiClock::TimestampFrequency();
-        }
-        catch (const winrt::hresult_error& e)
-        {
-            sessionHandle->configuration->activityCallback(FormatError(e, L"Failed to get current timestamp from WMS"));
-        }
-        catch (const std::exception& e)
-        {
-            sessionHandle->configuration->activityCallback(FormatError(e, L"Failed to get current timestamp from WMS"));
-        }
-        catch (...)
-        {
-            sessionHandle->configuration->activityCallback(L"Failed to get current timestamp from WMS");
-        }
-
         inputEndpointHandle->groupListener.IsEnabled(true);
         return IN_CONNECTRESULT_OK;
     }
-
-    *timestamp = GetAbsoluteNanoseconds();
 
     MMRESULT result = midiInStart(inputEndpointHandle->handle);
     if (result != MMSYSERR_NOERROR)

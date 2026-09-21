@@ -37,7 +37,10 @@ namespace Melanchall.DryWetMidi.Multimedia
         #region Fields
 
         private readonly List<RecordingEvent> _events = new List<RecordingEvent>();
-        private readonly Stopwatch _stopwatch = new Stopwatch();
+        private readonly Stopwatch _timestampsStopwatch = new Stopwatch();
+
+        private long _timestampsBaseline = 0;
+        private long _recordedTimeNs;
 
         private bool _disposed = false;
 
@@ -89,7 +92,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <summary>
         /// Gets a value indicating whether recording is currently running or not.
         /// </summary>
-        public bool IsRunning => _stopwatch.IsRunning;
+        public bool IsRunning => _timestampsStopwatch.IsRunning;
 
         #endregion
 
@@ -107,7 +110,10 @@ namespace Melanchall.DryWetMidi.Multimedia
         {
             ThrowIfArgument.IsInvalidEnumValue(nameof(durationType), durationType);
 
-            return TimeConverter.ConvertTo((MetricTimeSpan?)_events.LastOrDefault()?.Time ?? new MetricTimeSpan(), durationType, TempoMap);
+            if (_events.Count == 0)
+                return TimeSpanUtilities.GetZeroTimeSpan(durationType);
+
+            return TimeConverter.ConvertTo((MetricTimeSpan)GetTimeSpanFromNanoseconds(_events.Last().TimeNs), durationType, TempoMap);
         }
 
         // TODO: check with MathTimeSpan; and all <TTimeSpan>
@@ -120,7 +126,10 @@ namespace Melanchall.DryWetMidi.Multimedia
         public TTimeSpan GetDuration<TTimeSpan>()
             where TTimeSpan : ITimeSpan
         {
-            return TimeConverter.ConvertTo<TTimeSpan>((MetricTimeSpan?)_events.LastOrDefault()?.Time ?? new MetricTimeSpan(), TempoMap);
+            if (_events.Count == 0)
+                return TimeSpanUtilities.GetZeroTimeSpan<TTimeSpan>();
+
+            return TimeConverter.ConvertTo<TTimeSpan>((MetricTimeSpan)GetTimeSpanFromNanoseconds(_events.Last().TimeNs), TempoMap);
         }
 
         /// <summary>
@@ -130,7 +139,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         public ICollection<TimedEvent> GetEvents()
         {
             return _events
-                .Select(e => new TimedEvent(e.Event, TimeConverter.ConvertFrom((MetricTimeSpan)e.Time, TempoMap)))
+                .Select(e => new TimedEvent(e.Event, TimeConverter.ConvertFrom((MetricTimeSpan)GetTimeSpanFromNanoseconds(e.TimeNs), TempoMap)))
                 .ToArray();
         }
 
@@ -146,7 +155,9 @@ namespace Melanchall.DryWetMidi.Multimedia
             if (!InputEndpoint.IsListeningForEvents)
                 throw new InvalidOperationException($"Input MIDI endpoint is not listening for MIDI events. Call {nameof(InputEndpoint.StartEventsListening)} prior to start recording.");
 
-            _stopwatch.Start();
+            _timestampsStopwatch.Start();
+            _timestampsBaseline = InputEndpoint.GetCurrentTimestamp();
+
             OnStarted();
         }
 
@@ -159,7 +170,9 @@ namespace Melanchall.DryWetMidi.Multimedia
             if (!IsRunning)
                 return;
 
-            _stopwatch.Stop();
+            _recordedTimeNs += InputEndpoint.GetCurrentTimestamp() - _timestampsBaseline;
+            _timestampsStopwatch.Stop();
+
             OnStopped();
         }
 
@@ -178,7 +191,12 @@ namespace Melanchall.DryWetMidi.Multimedia
             if (!IsRunning)
                 return;
 
-            _events.Add(new RecordingEvent(e.Event, _stopwatch.Elapsed));
+            var time = _recordedTimeNs + e.Timestamp - _timestampsBaseline;
+
+            // TODO: use _timestampsStopwatch.ElapsedTicks * 1000000000L / Stopwatch.Frequency
+            // for bad timestamps
+
+            _events.Add(new RecordingEvent(e.Event, time));
 
             OnEventRecorded(e.Event);
         }
@@ -187,6 +205,9 @@ namespace Melanchall.DryWetMidi.Multimedia
         {
             EventRecorded?.Invoke(this, new MidiEventRecordedEventArgs(midiEvent));
         }
+
+        private static TimeSpan GetTimeSpanFromNanoseconds(long nanoseconds) =>
+            TimeSpan.FromMilliseconds(nanoseconds / 1000000.0);
 
         #endregion
 

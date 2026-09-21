@@ -23,11 +23,13 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <summary>
         /// Starts listening for incoming MIDI events on the current input endpoint.
         /// </summary>
-        InputEndpointStartInformation StartEventsListening();
+        void StartEventsListening();
 
         /// <summary>
         /// Stops listening for incoming MIDI events on the current input endpoint.
         /// </summary>
         void StopEventsListening();
+
+        long GetCurrentTimestamp();
     }
 }

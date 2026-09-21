@@ -1,5 +1,4 @@
-﻿using System;
-using Melanchall.DryWetMidi.Core;
+﻿using Melanchall.DryWetMidi.Core;
 
 namespace Melanchall.DryWetMidi.Multimedia
 {
@@ -7,10 +6,10 @@ namespace Melanchall.DryWetMidi.Multimedia
     {
         #region Constructor
 
-        public RecordingEvent(MidiEvent midiEvent, TimeSpan time)
+        public RecordingEvent(MidiEvent midiEvent, long timeNs)
         {
             Event = midiEvent;
-            Time = time;
+            TimeNs = timeNs;
         }
 
         #endregion
@@ -19,7 +18,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         public MidiEvent Event { get; }
 
-        public TimeSpan Time { get; }
+        public long TimeNs { get; }
 
         #endregion
     }

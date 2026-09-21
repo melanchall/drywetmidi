@@ -13,6 +13,9 @@ namespace Melanchall.DryWetMidi.Tests
 
         public static long Wait(long waitTimeMs)
         {
+            if (waitTimeMs <= 0)
+                return 0;
+
             var stopwatch = Stopwatch.StartNew();
 
             while (stopwatch.ElapsedMilliseconds < waitTimeMs)

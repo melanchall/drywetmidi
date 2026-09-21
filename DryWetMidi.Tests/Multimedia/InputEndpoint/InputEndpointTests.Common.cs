@@ -584,7 +584,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 outputEndpoint.PrepareForEventsSending();
                 inputEndpoint.EventReceived += (_, e) => receivedEvents.Add(e.GetReceivedTimestampedEvent(stopwatch));
                 
-                var startInfo = inputEndpoint.StartEventsListening();
+                inputEndpoint.StartEventsListening();
+                var timestampsBaseline = inputEndpoint.GetCurrentTimestamp();
                 stopwatch.Start();
 
                 SendReceiveUtilities.SendEvents(eventsToSend, outputEndpoint);
@@ -595,7 +596,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
                 SendReceiveUtilities.CheckReceivedEventsTimestamps(
                     eventsToSend,
-                    startInfo.Timestamp,
+                    timestampsBaseline,
                     receivedEvents.ToArray());
             }
         }
