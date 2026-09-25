@@ -30,9 +30,10 @@ namespace Melanchall.DryWetMidi.Interaction
         {
             ThrowIfArgument.IsNull(nameof(midiEvents), midiEvents);
 
-            return midiEvents
-                .GetTimedEventsLazy(settings?.TimedEventDetectionSettings, 0)
-                .GetObjectsFromSortedTimedObjects(objectType, settings);
+            return GetObjectsFromTimedEvents(
+                midiEvents.GetTimedEventsLazy(settings?.TimedEventDetectionSettings, 0),
+                objectType,
+                settings);
         }
 
         /// <summary>
@@ -72,9 +73,10 @@ namespace Melanchall.DryWetMidi.Interaction
         {
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
 
-            return eventsCollection
-                .GetTimedEventsLazy(settings?.TimedEventDetectionSettings, 0)
-                .GetObjectsFromSortedTimedObjects(objectType, settings);
+            return GetObjectsFromTimedEvents(
+                eventsCollection.GetTimedEventsLazy(settings?.TimedEventDetectionSettings, 0),
+                objectType,
+                settings);
         }
 
         /// <summary>
@@ -117,7 +119,7 @@ namespace Melanchall.DryWetMidi.Interaction
                 .Select((trackChunk, trackChunkIndex) => trackChunk
                     .Events
                     .GetTimedEventsLazy(settings?.TimedEventDetectionSettings, trackChunkIndex)
-                    .GetObjectsFromSortedTimedObjects(objectType, settings))
+                    .GetObjectsFromTimedEvents(objectType, settings))
                 .MergeSortedObjectsCollections()
                 .ToArray();
         }
@@ -238,6 +240,28 @@ namespace Melanchall.DryWetMidi.Interaction
             return new SortedImmutableCollection<ITimedObject>(notesDeconstructed.Object
                 ? result.OrderBy(o => o.Time).ToArray()
                 : (ICollection<ITimedObject>)result);
+        }
+
+        private static ICollection<ITimedObject> GetObjectsFromTimedEvents(
+            this IEnumerable<TimedEvent> timedEvents,
+            ObjectType objectType,
+            ObjectDetectionSettings? settings)
+        {
+            switch (objectType)
+            {
+                case ObjectType.Chord:
+                    return new SortedImmutableCollection<ITimedObject>(
+                        ChordsManagingUtilities.GetChordsOnly(
+                            NotesManagingUtilities.GetNotesOnly(
+                                timedEvents,
+                                settings?.NoteDetectionSettings ?? new NoteDetectionSettings()),
+                            settings?.ChordDetectionSettings)
+                        .Cast<ITimedObject>()
+                        .ToArray());
+
+                default:
+                    return timedEvents.GetObjectsFromSortedTimedObjects(objectType, settings);
+            }
         }
 
         private static IEnumerable<ITimedObject> EnumerateObjectsFromSortedTimedObjects(

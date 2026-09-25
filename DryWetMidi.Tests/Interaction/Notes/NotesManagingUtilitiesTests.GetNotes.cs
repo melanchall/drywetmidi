@@ -648,6 +648,28 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 expectedNotes: new Note[0]);
         }
 
+        [Test]
+        public void GetNotes_EventsCollection_OverlappedSameId_HolderExhaustedThenReused([Values] ContainerType containerType)
+        {
+            GetNotes_EventsCollection(
+                containerType,
+                midiEvents: new MidiEvent[]
+                {
+                    new NoteOnEvent(),
+                    new NoteOnEvent { DeltaTime = 10 },
+                    new NoteOffEvent { DeltaTime = 10 },
+                    new NoteOffEvent { DeltaTime = 10 },
+                    new NoteOnEvent { DeltaTime = 10 },
+                    new NoteOffEvent { DeltaTime = 10 },
+                },
+                expectedNotes: new[]
+                {
+                    new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue, Time = 0, Length = 20 },
+                    new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue, Time = 10, Length = 20 },
+                    new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue, Time = 40, Length = 10 },
+                });
+        }
+
         #endregion
 
         #region Private methods

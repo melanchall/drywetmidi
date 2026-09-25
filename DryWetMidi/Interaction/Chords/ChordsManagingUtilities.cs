@@ -169,15 +169,11 @@ namespace Melanchall.DryWetMidi.Interaction
         {
             ThrowIfArgument.IsNull(nameof(midiEvents), midiEvents);
 
-            var result = new List<Chord>();
-
-            // TODO: optimize: get chords only
-            foreach (var chord in GetChordsAndNotesAndTimedEventsLazy(midiEvents.GetTimedEventsLazy(timedEventDetectionSettings, 0), settings, noteDetectionSettings).OfType<Chord>())
-            {
-                result.Add(chord);
-            }
-
-            return new SortedImmutableCollection<Chord>(result);
+            return GetChordsOnly(
+                NotesManagingUtilities.GetNotesOnly(
+                    midiEvents.GetTimedEventsLazy(timedEventDetectionSettings, 0),
+                    noteDetectionSettings ?? new NoteDetectionSettings()),
+                settings);
         }
 
         /// <summary>
@@ -241,12 +237,12 @@ namespace Melanchall.DryWetMidi.Interaction
                 case 1: return eventsCollections[0].GetChords(settings, noteDetectionSettings, timedEventDetectionSettings);
             }
 
-            // TODO: optimize: get chords only
             var chords = trackChunks
-                .Select((trackChunk, i) => GetChordsAndNotesAndTimedEventsLazy(
-                    trackChunk.Events.GetTimedEventsLazy(timedEventDetectionSettings, i),
-                    settings,
-                    noteDetectionSettings).OfType<Chord>())
+                .Select((trackChunk, i) => (IEnumerable<Chord>)GetChordsOnly(
+                    NotesManagingUtilities.GetNotesOnly(
+                        trackChunk.Events.GetTimedEventsLazy(timedEventDetectionSettings, i),
+                        noteDetectionSettings ?? new NoteDetectionSettings()),
+                    settings))
                 .MergeSortedObjectsCollections();
 
             return new SortedImmutableCollection<Chord>(chords.ToArray());
@@ -299,7 +295,7 @@ namespace Melanchall.DryWetMidi.Interaction
         {
             ThrowIfArgument.IsNull(nameof(notes), notes);
 
-            return new SortedImmutableCollection<Chord>(notes.GetChordsAndNotesAndTimedEventsLazy(settings).OfType<Chord>().ToArray());
+            return GetChordsOnly(notes, settings);
         }
 
         /// <summary>
@@ -1021,6 +1017,63 @@ namespace Melanchall.DryWetMidi.Interaction
             ChordDetectionSettings? settings)
         {
             return notesAndTimedEvents.GetChordsAndNotesAndTimedEventsLazy(settings, false);
+        }
+
+        internal static SortedImmutableCollection<Chord> GetChordsOnly(
+            IEnumerable<Note> notes,
+            ChordDetectionSettings? settings)
+        {
+            settings = settings ?? new ChordDetectionSettings();
+
+            var constructor = settings.Constructor;
+            var notesByChannel = new List<Note>?[FourBitNumber.MaxValue + 1];
+            var chordStartTimes = new long[FourBitNumber.MaxValue + 1];
+            var result = new List<(Chord Chord, int Sequence)>();
+            var sequenceCounter = 0;
+
+            void AddChord(List<Note> chordNotes)
+            {
+                if (chordNotes.Count < settings.NotesMinCount)
+                    return;
+
+                var chordData = new ChordData(chordNotes.ToArray());
+                var chord = constructor != null ? constructor(chordData) : null;
+                result.Add((chord ?? new Chord(chordData.Notes), sequenceCounter++));
+            }
+
+            foreach (var note in notes)
+            {
+                var channel = (byte)note.Channel;
+                var chordNotes = notesByChannel[channel];
+                if (chordNotes == null)
+                {
+                    chordNotes = new List<Note>(settings.NotesMinCount);
+                    notesByChannel[channel] = chordNotes;
+                    chordStartTimes[channel] = note.Time;
+                }
+                else if (note.Time - chordStartTimes[channel] > settings.NotesTolerance)
+                {
+                    AddChord(chordNotes);
+                    chordNotes.Clear();
+                    chordStartTimes[channel] = note.Time;
+                }
+
+                chordNotes.Add(note);
+            }
+
+            foreach (var chordNotes in notesByChannel)
+            {
+                if (chordNotes != null)
+                    AddChord(chordNotes);
+            }
+
+            result.Sort((a, b) =>
+            {
+                var timeComparison = a.Chord.Time.CompareTo(b.Chord.Time);
+                return timeComparison != 0 ? timeComparison : a.Sequence.CompareTo(b.Sequence);
+            });
+
+            return new SortedImmutableCollection<Chord>(result.Select(c => c.Chord).ToArray());
         }
 
         internal static IEnumerable<ITimedObject> GetChordsAndNotesAndTimedEventsLazy(
