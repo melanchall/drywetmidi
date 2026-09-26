@@ -29,11 +29,6 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         [LibraryImport(NativeApi.LibraryName)]
         [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-        private static partial void GetNativeEnvironmentInfo_Win(
-            [MarshalAs(UnmanagedType.U1)] out bool wmsAvailable);
-
-        [LibraryImport(NativeApi.LibraryName)]
-        [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
         private static partial void FreeBuffer(IntPtr buffer);
 
         [LibraryImport(NativeApi.LibraryName)]
@@ -46,10 +41,6 @@ namespace Melanchall.DryWetMidi.Multimedia
 #else
         [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
         private static extern OsType GetOsType();
-
-        [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
-        private static extern void GetNativeEnvironmentInfo_Win(
-            [MarshalAs(UnmanagedType.U1)] out bool wmsAvailable);
 
         [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
         private static extern void FreeBuffer(IntPtr buffer);
@@ -68,15 +59,6 @@ namespace Melanchall.DryWetMidi.Multimedia
         public static OsType Api_GetOsType()
         {
             return GetOsType();
-        }
-
-        public static void Api_GetNativeEnvironmentInfo_Win(
-            out bool wmsAvailable)
-        {
-            var wmsAvailableLocal = false;
-            MidiOperationsExecutor.Instance.ExecuteOperation(() =>
-                GetNativeEnvironmentInfo_Win(out wmsAvailableLocal));
-            wmsAvailable = wmsAvailableLocal;
         }
 
         public static void Api_FreeBuffer(IntPtr buffer)

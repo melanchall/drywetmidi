@@ -1,4 +1,5 @@
 ﻿using Melanchall.DryWetMidi.Common;
+using Melanchall.DryWetMidi.Configuration;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Multimedia;
 using Melanchall.DryWetMidi.Tests.Attributes;
@@ -140,7 +141,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
             EventHandler<EndpointAddedRemovedEventArgs> addedHandler1 = (_, e) => addedEndpoints1.Add(e.Endpoint);
             EventHandler<EndpointAddedRemovedEventArgs> addedHandler2 = (_, e) => addedEndpoints2.Add(e.Endpoint);
-            
+
             EndpointsWatcher.Instance.EndpointAdded += addedHandler1;
             EndpointsWatcher.Instance.EndpointAdded += addedHandler2;
 

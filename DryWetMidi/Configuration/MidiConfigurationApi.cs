@@ -45,7 +45,7 @@ namespace Melanchall.DryWetMidi.Configuration
 #if NET7_0_OR_GREATER
         [LibraryImport(NativeApi.LibraryName)]
         [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-        private static partial CONFIGURATION_GETRESULT GetConfiguration_Win([MarshalAs(UnmanagedType.U1)] bool useWms, NativeApiActivityCallback activityCallback, out IntPtr configuration, out int errorCode);
+        private static partial CONFIGURATION_GETRESULT GetConfiguration_Win([MarshalAs(UnmanagedType.U1)] bool useWms, [MarshalAs(UnmanagedType.U1)] bool enableAppLocalWmsBootstrap, NativeApiActivityCallback activityCallback, out IntPtr configuration, out int errorCode);
 
         [LibraryImport(NativeApi.LibraryName)]
         [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
@@ -87,7 +87,7 @@ namespace Melanchall.DryWetMidi.Configuration
         private static partial void CheckStdExceptionHandling_Win(MidiConfigurationHandle configuration);
 #else
         [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
-        private static extern CONFIGURATION_GETRESULT GetConfiguration_Win([MarshalAs(UnmanagedType.U1)] bool useWms, NativeApiActivityCallback activityCallback, out IntPtr configuration, out int errorCode);
+        private static extern CONFIGURATION_GETRESULT GetConfiguration_Win([MarshalAs(UnmanagedType.U1)] bool useWms, [MarshalAs(UnmanagedType.U1)] bool enableAppLocalWmsBootstrap, NativeApiActivityCallback activityCallback, out IntPtr configuration, out int errorCode);
 
         [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
         private static extern CONFIGURATION_GETRESULT GetConfiguration_Mac(NativeApiActivityCallback activityCallback, out IntPtr configuration, out int errorCode);
@@ -126,6 +126,7 @@ namespace Melanchall.DryWetMidi.Configuration
 
         public static CONFIGURATION_GETRESULT Api_GetConfiguration(
             bool useWms,
+            bool enableAppLocalWmsBootstrap,
             NativeApiActivityCallback activityCallback,
             out IntPtr configuration,
             out int errorCode)
@@ -140,7 +141,7 @@ namespace Melanchall.DryWetMidi.Configuration
                 switch (osType)
                 {
                     case CommonApi.OsType.Windows:
-                        return GetConfiguration_Win(useWms, activityCallback, out configurationLocal, out errorCodeLocal);
+                        return GetConfiguration_Win(useWms, enableAppLocalWmsBootstrap, activityCallback, out configurationLocal, out errorCodeLocal);
                     case CommonApi.OsType.MacOS:
                         return GetConfiguration_Mac(activityCallback, out configurationLocal, out errorCodeLocal);
                 }

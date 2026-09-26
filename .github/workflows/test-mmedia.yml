@@ -53,8 +53,8 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          #- os: windows-11-arm
-          #  framework: Net
+          - os: windows-11-arm
+            framework: Net
           - os: macos-latest
             framework:  Net
     
@@ -74,35 +74,56 @@ jobs:
           net-sdk-version:  ${{ vars.BUILD_FRAMEWORK_NET_SDK_VERSION }}
           netframework-tfm: ${{ vars.BUILD_FRAMEWORK_NETFRAMEWORK_TFM }}
           netframework-sdk-version: ${{ vars.BUILD_FRAMEWORK_NETFRAMEWORK_SDK_VERSION }}
-      
+
       - name: Build tests
         uses: ./.github/actions/build-tests
         with:
           tfm: ${{ steps.framework.outputs.tfm }}
           configuration: ${{ vars.TEST_BUILD_CONFIGURATION || 'Release' }}
+
+      - name: Prepare Windows MIDI Services
+        if: runner.os == 'Windows' && matrix.os == 'windows-11-arm'
+        uses: ./.github/actions/prepare-wms
+        with: 
+          wms_basic_loopback_installer_url: '${{ vars.WMS_BASIC_LOOPBACK_INSTALLER_URL }}'
+          wms_tools_installer_url: '${{ vars.WMS_TOOLS_INSTALLER_URL }}'
+          wms_preview_package_name: '${{ vars.WMS_PREVIEW_PACKAGE_NAME }}'
+          test_build_configuration: '${{ vars.TEST_BUILD_CONFIGURATION }}'
       
       - name: Build test data sending utility
+        if: runner.os == 'macOS'
         uses: ./.github/actions/build-test-data-sending-utility
         with:
           enabled: ${{ runner.os == 'macOS' }}
           tfm: ${{ steps.framework.outputs.tfm }}
           configuration: ${{ vars.TEST_BUILD_CONFIGURATION || 'Release' }}
           suffix: _${{ matrix.os }}_${{ matrix.framework }}
-      
-      - name: Create MIDI ports (Windows)
-        if: runner.os == 'Windows'
+
+      - name: Create MIDI ports (Windows, non-WMS)
+        if: runner.os == 'Windows' && matrix.os != 'windows-11-arm'
         uses: ./.github/actions/create-ports-windows
         with:
           enabled: 'true'
           ports-names: 'MIDI A,MIDI B,MIDI C'
+
+      - name: Create MIDI ports (Windows, WMS)
+        if: runner.os == 'Windows' && matrix.os == 'windows-11-arm'
+        shell: pwsh
+        run: |
+          $midiNames = "MIDI A", "MIDI B", "MIDI C"
+
+          foreach ($name in $midiNames) {
+              Write-Host "Creating '$name'..."
+              midi basic-loopback create -n "$name"
+          }
       
       - name: Create MIDI ports (macOS)
         if: runner.os == 'macOS'
         uses: ./.github/actions/create-ports-macos
         with: 
           enabled: 'true'
-      
-      - name: Run unit tests
+
+      - name: Run tests
         continue-on-error: false
         shell: pwsh
         run: |

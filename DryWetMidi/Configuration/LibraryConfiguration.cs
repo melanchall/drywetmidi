@@ -168,10 +168,8 @@ namespace Melanchall.DryWetMidi.Configuration
 
         private static bool AreWindowsMidiServicesAvailable()
         {
-            CommonApi.Api_GetNativeEnvironmentInfo_Win(
-                out var wmsAvailable);
-
-            return wmsAvailable;
+            var apiType = MidiConfigurationApi.Api_GetApiType(MidiConfiguration.GetConfigurationHandle());
+            return apiType == ApiType.WindowsMidiServices;
         }
 
         private static void AddWindowsNativeBackendInfo(List<string> resultLines)

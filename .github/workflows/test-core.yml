@@ -86,6 +86,15 @@ jobs:
           tfm: ${{ steps.framework.outputs.tfm }}
           configuration: ${{ vars.TEST_BUILD_CONFIGURATION || 'Release' }}
       
+      - name: Prepare Windows MIDI Services
+        if: runner.os == 'Windows' && matrix.os == 'windows-11-arm'
+        uses: ./.github/actions/prepare-wms
+        with: 
+          wms_basic_loopback_installer_url: '${{ vars.WMS_BASIC_LOOPBACK_INSTALLER_URL }}'
+          wms_tools_installer_url: '${{ vars.WMS_TOOLS_INSTALLER_URL }}'
+          wms_preview_package_name: '${{ vars.WMS_PREVIEW_PACKAGE_NAME }}'
+          test_build_configuration: '${{ vars.TEST_BUILD_CONFIGURATION }}'
+
       - name: Run unit tests
         continue-on-error: false
         shell: pwsh

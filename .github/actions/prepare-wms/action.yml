@@ -1,0 +1,89 @@
+name: 'Setup Windows MIDI Services'
+description: 'Sets up the required .NET framework and sets TFM variables'
+
+inputs:
+  wms_basic_loopback_installer_url:
+    required: true
+  wms_tools_installer_url:
+    required: true
+  wms_preview_package_name:
+    required: true
+  test_build_configuration:
+    required: true
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Install basic loopback transport
+      if: runner.os == 'Windows' && matrix.os == 'windows-11-arm'
+      shell: pwsh
+      run: |
+        & "${{ github.workspace }}/Resources/Scripts/Install WMS tool.ps1" -workingDirectory "$($env:RUNNER_TEMP)" -installerUrl "${{ inputs.wms_basic_loopback_installer_url }}"
+
+    - name: Install MIDI tools
+      if: runner.os == 'Windows' && matrix.os == 'windows-11-arm'
+      shell: pwsh
+      run: |
+        & "${{ github.workspace }}/Resources/Scripts/Install WMS tool.ps1" -workingDirectory "$($env:RUNNER_TEMP)" -installerUrl "${{ inputs.wms_tools_installer_url }}"
+        "C:\Program Files\Windows MIDI Services\Tools\Console" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+
+    - name: Check WMS
+      if: runner.os == 'Windows' && matrix.os == 'windows-11-arm'
+      shell: pwsh
+      run: |
+        Write-Host "Checking WMS status..."
+        midi service status
+
+        Write-Host "Checking WMS transports..."
+        midi enumerate transport-plugins
+
+        Write-Host "Checking WMS API mode..."
+        midi api-mode get
+
+    - name: Get Windows.Devices.Midi2 files
+      if: runner.os == 'Windows' && matrix.os == 'windows-11-arm'
+      shell: pwsh
+      run: |
+        Add-Type -AssemblyName System.IO.Compression.FileSystem
+
+        # --- settings ---
+        $nupkgUrl  = "https://github.com/microsoft/MIDI/releases/download/${{ inputs.wms_preview_package_name }}"
+        $workDir   = "$($env:RUNNER_TEMP)"
+        $nupkgPath = Join-Path $workDir "package.nupkg"
+        $outputDir = "DryWetMidi.Tests/bin/${{ inputs.test_build_configuration || 'Release' }}/${{ steps.framework.outputs.tfm }}"
+
+        $filesToExtract = @(
+            "runtimes/win-arm64/native/Windows.Devices.Midi2.dll",
+            "runtimes/win-arm64/native/Windows.Devices.Midi2.pri"
+        )
+
+        Invoke-WebRequest -Uri $nupkgUrl -OutFile $nupkgPath
+
+        $zip = [System.IO.Compression.ZipFile]::OpenRead($nupkgPath)
+
+        try {
+            foreach ($relativePath in $filesToExtract) {
+                $entry = $zip.Entries | Where-Object { $_.FullName -eq $relativePath }
+
+                if (-not $entry) {
+                    Write-Warning "Entry not found in package: $relativePath"
+                    continue
+                }
+
+                # Extract flat: only file name, no subfolders
+                $fileName = [System.IO.Path]::GetFileName($relativePath)
+                $destinationPath = Join-Path $outputDir $fileName
+
+                [System.IO.Compression.ZipFileExtensions]::ExtractToFile($entry, $destinationPath, $true)
+                Write-Host "Extracted: $relativePath -> $destinationPath"
+            }
+        }
+        finally {
+            $zip.Dispose()
+        }
+
+    - name: Enable app-local WMS bootstrap
+      if: runner.os == 'Windows' && runner.arch == 'ARM64'
+      shell: pwsh
+      run: |
+        "DRYWETMIDI_ENABLE_APPLOCAL_WMS_BOOTSTRAP=true" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
