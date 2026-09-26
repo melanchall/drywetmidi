@@ -957,6 +957,16 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 new TrackChunk(
                     new TextEvent("B") { DeltaTime = 400 })));
 
+        [Test]
+        public void Deserialize_File_DoubleQuoteEscaping() => DeserializeFileAndChunksAndSeparateChunks(
+            csvLines: new[]
+            {
+                $"0,\"MThd\",0,\"Header\",{TicksPerQuarterNoteTimeDivision.DefaultTicksPerQuarterNote}",
+                "1,\"MTrk\",0,\"Text\",0,\"\"\"a\"\"\"\"b\"\"\"",
+            },
+            settings: null,
+            expectedMidiFile: new MidiFile(new TrackChunk(new TextEvent("\"a\"\"b\""))));
+
         #endregion
 
         #region Private methods

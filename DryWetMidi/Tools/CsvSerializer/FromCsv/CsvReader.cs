@@ -34,31 +34,26 @@ namespace Melanchall.DryWetMidi.Tools
                 return null;
 
             _recordValuesBuilder.Clear();
+            StringBuilder? recordBuilder = null;
 
             while (true)
             {
-                SplitValues(line, _delimiter, _recordValuesBuilder);
-
-                if (AreAllValuesClosed(_recordValuesBuilder))
+                if (SplitValues(line, _delimiter, _recordValuesBuilder))
                     break;
+
+                recordBuilder ??= new StringBuilder(line);
 
                 var nextLine = GetNextLine();
                 if (nextLine == null)
                     break;
 
-                line += nextLine;
+                recordBuilder.Append(nextLine);
+                line = recordBuilder.ToString();
 
                 _recordValuesBuilder.Clear();
             }
 
-            var finalValues = new string[_recordValuesBuilder.Count];
-            
-            for (int i = 0; i < _recordValuesBuilder.Count; i++)
-            {
-                finalValues[i] = CsvFormattingUtilities.UnescapeString(_recordValuesBuilder[i]);
-            }
-
-            return new CsvRecord(lineNumber, _currentLineNumber - lineNumber, finalValues);
+            return new CsvRecord(lineNumber, _currentLineNumber - lineNumber, _recordValuesBuilder.ToArray());
         }
 
         private string? GetFirstLine()
@@ -77,34 +72,42 @@ namespace Melanchall.DryWetMidi.Tools
         private string? GetNextLine()
         {
             _currentLineNumber++;
-            var stringBuilder = new StringBuilder();
-            var lineEnding = false;
+            StringBuilder? stringBuilder = null;
 
             while (true)
             {
+                if (_indexInBuffer >= _bufferLength)
+                    FillBuffer();
+
+                if (_bufferLength == 0)
+                    break;
+
                 var start = _indexInBuffer;
 
-                for (; _indexInBuffer < _bufferLength && !lineEnding; _indexInBuffer++)
+                for (; _indexInBuffer < _bufferLength; _indexInBuffer++)
                 {
                     if (_buffer[_indexInBuffer] == '\n')
-                        lineEnding = true;
+                    {
+                        _indexInBuffer++;
+
+                        if (stringBuilder == null)
+                            return new string(_buffer, start, _indexInBuffer - start);
+
+                        stringBuilder.Append(new ReadOnlySpan<char>(_buffer, start, _indexInBuffer - start));
+                        return stringBuilder.ToString();
+                    }
                 }
 
                 if (_indexInBuffer > start)
                 {
+                    stringBuilder ??= new StringBuilder();
                     stringBuilder.Append(new ReadOnlySpan<char>(_buffer, start, _indexInBuffer - start));
                 }
 
-                if (_indexInBuffer >= _bufferLength)
-                    FillBuffer();
-                else
-                    break;
-
-                if (_bufferLength == 0)
-                    break;
+                FillBuffer();
             }
 
-            return stringBuilder.Length > 0 ? stringBuilder.ToString() : null;
+            return stringBuilder?.Length > 0 ? stringBuilder.ToString() : null;
         }
 
         private void FillBuffer()
@@ -126,7 +129,7 @@ namespace Melanchall.DryWetMidi.Tools
             _indexInBuffer = 0;
         }
 
-        private static void SplitValues(string input, char delimiter, List<string> destination)
+        private static bool SplitValues(string input, char delimiter, List<string> destination)
         {
             var span = input.AsSpan();
 
@@ -140,8 +143,7 @@ namespace Melanchall.DryWetMidi.Tools
 
                 if (c == delimiter && (!escapedString || possibleFinishedValue))
                 {
-                    var valueSpan = span[startIdx..i].Trim();
-                    destination.Add(valueSpan.ToString());
+                    destination.Add(CreateValue(input, startIdx, i));
 
                     possibleFinishedValue = false;
                     escapedString = false;
@@ -159,19 +161,53 @@ namespace Melanchall.DryWetMidi.Tools
                 }
             }
 
-            var lastSpan = span[startIdx..].Trim();
-            destination.Add(lastSpan.ToString());
+            destination.Add(CreateValue(input, startIdx, input.Length));
+            return IsValueClosed(span[startIdx..].Trim());
         }
 
-        private static bool AreAllValuesClosed(List<string> values)
+        private static string CreateValue(string input, int startIndex, int endIndex)
         {
-            for (var i = 0; i < values.Count; i++)
+            while (startIndex < endIndex && char.IsWhiteSpace(input[startIndex]))
+                startIndex++;
+
+            while (endIndex > startIndex && char.IsWhiteSpace(input[endIndex - 1]))
+                endIndex--;
+
+            if (endIndex - startIndex <= 1 || input[startIndex] != Quote || input[endIndex - 1] != Quote)
+                return input.AsSpan(startIndex, endIndex - startIndex).ToString();
+
+            startIndex++;
+            endIndex--;
+
+            var escapedQuotesCount = 0;
+            for (var i = startIndex; i < endIndex; i++)
             {
-                if (!IsValueClosed(values[i].AsSpan()))
-                    return false;
+                if (input[i] == Quote && i + 1 < endIndex && input[i + 1] == Quote)
+                {
+                    escapedQuotesCount++;
+                    i++;
+                }
             }
 
-            return true;
+            if (escapedQuotesCount == 0)
+                return input.AsSpan(startIndex, endIndex - startIndex).ToString();
+
+            return string.Create(
+                endIndex - startIndex - escapedQuotesCount,
+                (input, startIndex, endIndex),
+                static (destination, state) =>
+                {
+                    var destinationIndex = 0;
+
+                    for (var i = state.startIndex; i < state.endIndex; i++)
+                    {
+                        var c = state.input[i];
+                        if (c == Quote && i + 1 < state.endIndex && state.input[i + 1] == Quote)
+                            i++;
+
+                        destination[destinationIndex++] = c;
+                    }
+                });
         }
 
         private static bool IsValueClosed(ReadOnlySpan<char> value)
