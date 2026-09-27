@@ -116,6 +116,7 @@ const wchar_t* FormatError(const std::exception& e, const wchar_t* label)
 namespace
 {
     using GetActivationFactory = HRESULT(STDAPICALLTYPE*)(HSTRING, void**);
+    using IsWow64Process2Function = BOOL(WINAPI*)(HANDLE, USHORT*, USHORT*);
 
     std::once_flag midi2RuntimeInitializationFlag;
     HMODULE midi2RuntimeModule{ nullptr };
@@ -390,8 +391,13 @@ namespace
         USHORT processMachine = IMAGE_FILE_MACHINE_UNKNOWN;
         USHORT nativeMachine = IMAGE_FILE_MACHINE_UNKNOWN;
 
-        const auto processHandle = GetCurrentProcess();
-        if (IsWow64Process2(processHandle, &processMachine, &nativeMachine))
+        const auto kernel32Module = GetModuleHandleW(L"kernel32.dll");
+        const auto isWow64Process2 =
+            kernel32Module != nullptr
+            ? reinterpret_cast<IsWow64Process2Function>(GetProcAddress(kernel32Module, "IsWow64Process2"))
+            : nullptr;
+
+        if (isWow64Process2 != nullptr && isWow64Process2(GetCurrentProcess(), &processMachine, &nativeMachine))
         {
             const auto effectiveMachine =
                 processMachine == IMAGE_FILE_MACHINE_UNKNOWN ? nativeMachine : processMachine;
