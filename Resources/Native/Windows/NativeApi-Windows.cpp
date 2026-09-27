@@ -320,7 +320,10 @@ namespace
             if (!FileExists(candidate))
                 continue;
 
-            auto module = LoadLibraryExW(candidate.c_str(), nullptr, LOAD_WITH_ALTERED_SEARCH_PATH);
+            auto module = LoadLibraryExW(
+                candidate.c_str(),
+                nullptr,
+                LOAD_LIBRARY_SEARCH_DLL_LOAD_DIR | LOAD_LIBRARY_SEARCH_DEFAULT_DIRS);
             if (module == nullptr)
             {
                 midi2RuntimeLoadError =
