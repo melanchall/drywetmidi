@@ -312,9 +312,6 @@ namespace
 
     void InitializeMidi2Runtime()
     {
-        if (midi2RuntimeModule != nullptr)
-            return;
-
         for (const auto& candidate : GetMidi2RuntimeCandidates())
         {
             if (!FileExists(candidate))
@@ -338,7 +335,7 @@ namespace
             {
                 midi2RuntimeLoadError =
                     std::wstring(L"Failed to resolve DllGetActivationFactory from ") + candidate +
-                    L": " + GetLastErrorMessage(GetLastError());
+                    L": export was not found.";
 
                 FreeLibrary(module);
                 continue;
