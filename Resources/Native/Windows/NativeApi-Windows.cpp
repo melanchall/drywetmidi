@@ -13,6 +13,10 @@
 #define DRV_QUERYDEVICEINTERFACE 0x80C
 #endif
 
+#ifndef IMAGE_FILE_MACHINE_ARM64EC
+#define IMAGE_FILE_MACHINE_ARM64EC 0xA641
+#endif
+
 #include <initguid.h>
 #include <windows.h>
 #include <roapi.h>
