@@ -15,6 +15,8 @@
 
 #include <initguid.h>
 #include <windows.h>
+#include <roapi.h>
+#include <winstring.h>
 #include <mmsystem.h>
 #include <mmreg.h>
 #include <setupapi.h>
@@ -111,6 +113,300 @@ const wchar_t* FormatError(const std::exception& e, const wchar_t* label)
     return ToWide(e.what(), label);
 }
 
+namespace
+{
+    using GetActivationFactory = HRESULT(STDAPICALLTYPE*)(HSTRING, void**);
+
+    std::once_flag midi2RuntimeInitializationFlag;
+    HMODULE midi2RuntimeModule{ nullptr };
+    GetActivationFactory midi2GetActivationFactory{ nullptr };
+    decltype(winrt_activation_handler) previousActivationHandler{ nullptr };
+    std::wstring midi2RuntimePath;
+    std::wstring midi2RuntimeLoadError;
+
+    bool StartsWith(const wchar_t* text, const wchar_t* prefix)
+    {
+        return
+            text != nullptr &&
+            prefix != nullptr &&
+            wcsncmp(text, prefix, wcslen(prefix)) == 0;
+    }
+
+    std::wstring GetDirectoryPath(const std::wstring& filePath)
+    {
+        const auto separatorIndex = filePath.find_last_of(L"\\/");
+        if (separatorIndex == std::wstring::npos)
+            return {};
+
+        return filePath.substr(0, separatorIndex + 1);
+    }
+
+    std::wstring GetModulePath(HMODULE module)
+    {
+        if (module == nullptr)
+            return {};
+
+        std::vector<wchar_t> buffer(MAX_PATH);
+
+        while (true)
+        {
+            const auto size = GetModuleFileNameW(module, buffer.data(), static_cast<DWORD>(buffer.size()));
+            if (size == 0)
+                return {};
+
+            if (size < buffer.size() - 1)
+                return std::wstring(buffer.data(), size);
+
+            buffer.resize(buffer.size() * 2);
+        }
+    }
+
+    std::wstring GetCurrentModulePath()
+    {
+        HMODULE module{ nullptr };
+        if (!GetModuleHandleExW(
+            GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS | GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,
+            reinterpret_cast<LPCWSTR>(&GetCurrentModulePath),
+            &module))
+        {
+            return {};
+        }
+
+        return GetModulePath(module);
+    }
+
+    std::wstring GetCurrentDirectoryPath()
+    {
+        std::vector<wchar_t> buffer(MAX_PATH);
+
+        while (true)
+        {
+            const auto size = GetCurrentDirectoryW(static_cast<DWORD>(buffer.size()), buffer.data());
+            if (size == 0)
+                return {};
+
+            if (size < buffer.size())
+            {
+                std::wstring result(buffer.data(), size);
+                if (!result.empty() && result.back() != L'\\' && result.back() != L'/')
+                    result += L'\\';
+
+                return result;
+            }
+
+            buffer.resize(size + 1);
+        }
+    }
+
+    std::wstring CombinePath(const std::wstring& directoryPath, const wchar_t* fileName)
+    {
+        if (directoryPath.empty())
+            return {};
+
+        std::wstring result = directoryPath;
+        if (result.back() != L'\\' && result.back() != L'/')
+            result += L'\\';
+
+        result += fileName;
+        return result;
+    }
+
+    bool FileExists(const std::wstring& filePath)
+    {
+        const auto attributes = GetFileAttributesW(filePath.c_str());
+        return attributes != INVALID_FILE_ATTRIBUTES && (attributes & FILE_ATTRIBUTE_DIRECTORY) == 0;
+    }
+
+    std::vector<std::wstring> GetMidi2RuntimeCandidates()
+    {
+        std::vector<std::wstring> candidates;
+
+        const auto currentModuleDirectory = GetDirectoryPath(GetCurrentModulePath());
+        if (!currentModuleDirectory.empty())
+            candidates.push_back(CombinePath(currentModuleDirectory, L"Windows.Devices.Midi2.dll"));
+
+        const auto currentDirectory = GetCurrentDirectoryPath();
+        if (!currentDirectory.empty())
+        {
+            const auto currentDirectoryCandidate = CombinePath(currentDirectory, L"Windows.Devices.Midi2.dll");
+            if (std::find(candidates.cbegin(), candidates.cend(), currentDirectoryCandidate) == candidates.cend())
+                candidates.push_back(currentDirectoryCandidate);
+        }
+
+        wchar_t programFilesPath[MAX_PATH]{};
+        const auto programFilesPathSize = GetEnvironmentVariableW(L"ProgramFiles", programFilesPath, ARRAYSIZE(programFilesPath));
+        if (programFilesPathSize > 0 && programFilesPathSize < ARRAYSIZE(programFilesPath))
+        {
+            const auto installedToolsCandidate =
+                CombinePath(std::wstring(programFilesPath) + L"\\Windows MIDI Services\\Tools\\Console", L"Windows.Devices.Midi2.dll");
+
+            if (std::find(candidates.cbegin(), candidates.cend(), installedToolsCandidate) == candidates.cend())
+                candidates.push_back(installedToolsCandidate);
+        }
+
+        return candidates;
+    }
+
+    HRESULT FromLibrary(GetActivationFactory getActivationFactory, void* classId, const winrt::guid& iid, void** factory)
+    {
+        IUnknown* activationFactory{ nullptr };
+
+        const auto getFactoryResult =
+            getActivationFactory(static_cast<HSTRING>(classId), reinterpret_cast<void**>(&activationFactory));
+
+        if (FAILED(getFactoryResult) || activationFactory == nullptr)
+            return FAILED(getFactoryResult) ? getFactoryResult : E_NOINTERFACE;
+
+        const auto queryResult =
+            activationFactory->QueryInterface(reinterpret_cast<const GUID&>(iid), factory);
+
+        activationFactory->Release();
+        return queryResult;
+    }
+
+    int32_t __stdcall Midi2ActivationHandler(void* classId, const winrt::guid& iid, void** factory) noexcept
+    {
+        *factory = nullptr;
+
+        auto result = previousActivationHandler != nullptr
+            ? previousActivationHandler(classId, iid, factory)
+            : RoGetActivationFactory(static_cast<HSTRING>(classId), reinterpret_cast<const GUID&>(iid), factory);
+
+        if (SUCCEEDED(result) || midi2GetActivationFactory == nullptr)
+            return result;
+
+        const auto className = WindowsGetStringRawBuffer(static_cast<HSTRING>(classId), nullptr);
+        if (!StartsWith(className, L"Windows.Devices.Midi2."))
+            return result;
+
+        return FromLibrary(midi2GetActivationFactory, classId, iid, factory);
+    }
+
+    std::wstring GetLastErrorMessage(DWORD errorCode)
+    {
+        wchar_t* buffer{ nullptr };
+
+        const auto size = FormatMessageW(
+            FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
+            nullptr,
+            errorCode,
+            MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+            reinterpret_cast<LPWSTR>(&buffer),
+            0,
+            nullptr);
+
+        if (size == 0 || buffer == nullptr)
+            return L"Unknown error";
+
+        std::wstring message(buffer, size);
+        LocalFree(buffer);
+
+        while (!message.empty() && (message.back() == L'\r' || message.back() == L'\n'))
+        {
+            message.pop_back();
+        }
+
+        return message;
+    }
+
+    void InitializeMidi2Runtime()
+    {
+        if (midi2RuntimeModule != nullptr)
+            return;
+
+        for (const auto& candidate : GetMidi2RuntimeCandidates())
+        {
+            if (!FileExists(candidate))
+                continue;
+
+            auto module = LoadLibraryExW(candidate.c_str(), nullptr, LOAD_WITH_ALTERED_SEARCH_PATH);
+            if (module == nullptr)
+            {
+                midi2RuntimeLoadError =
+                    std::wstring(L"Failed to load ") + candidate + L": " + GetLastErrorMessage(GetLastError());
+                continue;
+            }
+
+            auto getActivationFactory =
+                reinterpret_cast<GetActivationFactory>(GetProcAddress(module, "DllGetActivationFactory"));
+
+            if (getActivationFactory == nullptr)
+            {
+                midi2RuntimeLoadError =
+                    std::wstring(L"Failed to resolve DllGetActivationFactory from ") + candidate +
+                    L": " + GetLastErrorMessage(GetLastError());
+
+                FreeLibrary(module);
+                continue;
+            }
+
+            midi2RuntimeModule = module;
+            midi2GetActivationFactory = getActivationFactory;
+            midi2RuntimePath = GetModulePath(module);
+            previousActivationHandler = winrt_activation_handler;
+            winrt_activation_handler = Midi2ActivationHandler;
+            midi2RuntimeLoadError.clear();
+            return;
+        }
+
+        if (midi2RuntimeLoadError.empty())
+            midi2RuntimeLoadError = L"Windows.Devices.Midi2.dll was not found in any supported app-local location.";
+    }
+
+    void EnsureMidi2RuntimeLoaded()
+    {
+        std::call_once(midi2RuntimeInitializationFlag, []()
+        {
+            InitializeMidi2Runtime();
+        });
+    }
+
+    std::wstring GetProcessorArchitectureName(USHORT architecture)
+    {
+        switch (architecture)
+        {
+        case IMAGE_FILE_MACHINE_AMD64:
+        case PROCESSOR_ARCHITECTURE_AMD64:
+            return L"x64";
+        case IMAGE_FILE_MACHINE_ARM64:
+        case PROCESSOR_ARCHITECTURE_ARM64:
+            return L"arm64";
+        case IMAGE_FILE_MACHINE_ARM64EC:
+            return L"arm64ec";
+        case IMAGE_FILE_MACHINE_I386:
+        case PROCESSOR_ARCHITECTURE_INTEL:
+            return L"x86";
+        default:
+        {
+            wchar_t buffer[64]{};
+            swprintf_s(buffer, L"0x%04X", architecture);
+            return buffer;
+        }
+        }
+    }
+
+    std::wstring GetProcessArchitectureDescription()
+    {
+        USHORT processMachine = IMAGE_FILE_MACHINE_UNKNOWN;
+        USHORT nativeMachine = IMAGE_FILE_MACHINE_UNKNOWN;
+
+        const auto processHandle = GetCurrentProcess();
+        if (IsWow64Process2(processHandle, &processMachine, &nativeMachine))
+        {
+            const auto effectiveMachine =
+                processMachine == IMAGE_FILE_MACHINE_UNKNOWN ? nativeMachine : processMachine;
+
+            return std::wstring(L"Process architecture: ") + GetProcessorArchitectureName(effectiveMachine) +
+                L"; Native architecture: " + GetProcessorArchitectureName(nativeMachine);
+        }
+
+        SYSTEM_INFO systemInfo{};
+        GetNativeSystemInfo(&systemInfo);
+        return std::wstring(L"Process architecture: unknown; Native architecture: ") +
+            GetProcessorArchitectureName(systemInfo.wProcessorArchitecture);
+    }
+}
+
 API_EXPORT OS_TYPE API_CALL GetOsType()
 {
     return OS_TYPE_WIN;
@@ -120,6 +416,7 @@ API_EXPORT void API_CALL GetNativeEnvironmentInfo_Win(
     bool* wmsAvailable)
 {
     *wmsAvailable = false;
+    EnsureMidi2RuntimeLoaded();
 
     try
     {
@@ -187,6 +484,20 @@ API_EXPORT CONFIGURATION_GETRESULT API_CALL GetConfiguration_Win(
     {
         try
         {
+            if (config->activityCallback != nullptr)
+            {
+                config->activityCallback(GetProcessArchitectureDescription().c_str());
+                config->activityCallback((std::wstring(L"Native module path: ") + GetCurrentModulePath()).c_str());
+                config->activityCallback((std::wstring(L"Current directory: ") + GetCurrentDirectoryPath()).c_str());
+            }
+
+            EnsureMidi2RuntimeLoaded();
+
+            if (config->activityCallback != nullptr && !midi2RuntimePath.empty())
+                config->activityCallback((std::wstring(L"Resolved Windows.Devices.Midi2.dll path: ") + midi2RuntimePath).c_str());
+            else if (config->activityCallback != nullptr && !midi2RuntimeLoadError.empty())
+                config->activityCallback(midi2RuntimeLoadError.c_str());
+
             GetNativeEnvironmentInfo_Win(&config->wmsAvailable);
 
             if (config->wmsAvailable)

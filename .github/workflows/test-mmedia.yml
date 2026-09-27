@@ -101,7 +101,83 @@ jobs:
         uses: ./.github/actions/create-ports-macos
         with: 
           enabled: 'true'
-      
+
+      - name: Print Windows multimedia diagnostics
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          function Get-PeMachine([string]$Path)
+          {
+            if (-not (Test-Path $Path))
+            {
+              return "missing"
+            }
+
+            $stream = [System.IO.File]::Open($Path, [System.IO.FileMode]::Open, [System.IO.FileAccess]::Read, [System.IO.FileShare]::ReadWrite)
+            $reader = $null
+            try
+            {
+              $reader = [System.IO.BinaryReader]::new($stream)
+              $stream.Seek(0x3C, [System.IO.SeekOrigin]::Begin) | Out-Null
+              $peOffset = $reader.ReadInt32()
+              $stream.Seek($peOffset + 4, [System.IO.SeekOrigin]::Begin) | Out-Null
+              $machine = $reader.ReadUInt16()
+
+              switch ($machine)
+              {
+                0x8664 { return "x64" }
+                0xAA64 { return "arm64" }
+                0xA641 { return "arm64ec" }
+                0x014C { return "x86" }
+                default { return ('0x{0:X4}' -f $machine) }
+              }
+            }
+            finally
+            {
+              if ($reader -ne $null)
+              {
+                $reader.Dispose()
+              }
+              $stream.Dispose()
+            }
+          }
+
+          $testOutputPath = Join-Path "${{ github.workspace }}" "DryWetMidi.Tests/bin/${{ vars.TEST_BUILD_CONFIGURATION || 'Release' }}/${{ steps.framework.outputs.tfm }}"
+          $dotnetPath = (Get-Command dotnet).Source
+
+          Write-Host "Current directory: $(Get-Location)"
+          Write-Host "PROCESSOR_ARCHITECTURE: $env:PROCESSOR_ARCHITECTURE"
+          Write-Host "PROCESSOR_ARCHITEW6432: $env:PROCESSOR_ARCHITEW6432"
+          Write-Host "dotnet path: $dotnetPath"
+          Write-Host "dotnet machine: $(Get-PeMachine $dotnetPath)"
+          dotnet --info
+
+          Get-CimInstance Win32_Processor | Select-Object Name, NumberOfCores, NumberOfLogicalProcessors, MaxClockSpeed
+
+          $diagnosticFiles = @(
+            $dotnetPath,
+            (Join-Path $testOutputPath "Melanchall_DryWetMidi_Native.dll"),
+            (Join-Path $testOutputPath "Windows.Devices.Midi2.dll"),
+            (Join-Path $testOutputPath "testhost.exe"),
+            (Join-Path "${{ github.workspace }}" "Melanchall_DryWetMidi_Native.dll"),
+            (Join-Path "${{ github.workspace }}" "Windows.Devices.Midi2.dll")
+          )
+
+          foreach ($filePath in $diagnosticFiles)
+          {
+            if (Test-Path $filePath)
+            {
+              $fileInfo = Get-Item $filePath
+              Write-Host "$filePath | size=$($fileInfo.Length) | machine=$(Get-PeMachine $filePath)"
+            }
+            else
+            {
+              Write-Host "$filePath | missing"
+            }
+          }
+
+          Get-ChildItem -Path $testOutputPath -File | Select-Object Name, Length
+
       - name: Run unit tests
         continue-on-error: false
         shell: pwsh
