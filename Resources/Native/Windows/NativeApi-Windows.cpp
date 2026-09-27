@@ -321,6 +321,14 @@ namespace
                 candidate.c_str(),
                 nullptr,
                 LOAD_LIBRARY_SEARCH_DLL_LOAD_DIR | LOAD_LIBRARY_SEARCH_DEFAULT_DIRS);
+
+            if (module == nullptr)
+            {
+                const auto loadError = GetLastError();
+                if (loadError == ERROR_INVALID_PARAMETER || loadError == ERROR_CALL_NOT_IMPLEMENTED)
+                    module = LoadLibraryW(candidate.c_str());
+            }
+
             if (module == nullptr)
             {
                 midi2RuntimeLoadError =
