@@ -70,6 +70,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
             var getConfigurationResult = MidiConfigurationApi.Api_GetConfiguration(
                 true,
+                false,
                 nativeApiActivityCallback,
                 out var configurationRawHandle,
                 out _);

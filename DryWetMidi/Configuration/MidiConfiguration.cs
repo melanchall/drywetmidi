@@ -6,6 +6,8 @@ namespace Melanchall.DryWetMidi.Configuration
 {
     internal static class MidiConfiguration
     {
+        private const string AppLocalWmsBootstrapEnvironmentVariableName = "DRYWETMIDI_ENABLE_APPLOCAL_WMS_BOOTSTRAP";
+
         #region Events
 
         internal static event EventHandler<string>? NativeApiMessageReceived;
@@ -49,9 +51,10 @@ namespace Melanchall.DryWetMidi.Configuration
                     {
                         var errorCode = 0;
                         var rawHandle = IntPtr.Zero;
+                        var enableAppLocalWmsBootstrap = IsAppLocalWmsBootstrapEnabled();
 
                         _nativeApiActivityCallback = NativeApiActivityCallback;
-                        var result = MidiConfigurationApi.Api_GetConfiguration(UseWindowsMidiServices, _nativeApiActivityCallback, out rawHandle, out errorCode);
+                        var result = MidiConfigurationApi.Api_GetConfiguration(UseWindowsMidiServices, enableAppLocalWmsBootstrap, _nativeApiActivityCallback, out rawHandle, out errorCode);
                         NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
 
 
@@ -105,6 +108,14 @@ namespace Melanchall.DryWetMidi.Configuration
         {
             var text = NativeApi.GetStringFromPointer(record);
             NativeApiMessageReceived?.Invoke(null, text);
+        }
+
+        private static bool IsAppLocalWmsBootstrapEnabled()
+        {
+            var value = Environment.GetEnvironmentVariable(AppLocalWmsBootstrapEnvironmentVariableName);
+            return
+                string.Equals(value, bool.TrueString, StringComparison.OrdinalIgnoreCase) ||
+                string.Equals(value, "1", StringComparison.Ordinal);
         }
 
         #endregion

@@ -97,6 +97,12 @@ jobs:
           tfm: ${{ steps.framework.outputs.tfm }}
           configuration: ${{ vars.TEST_BUILD_CONFIGURATION || 'Release' }}
           suffix: _${{ matrix.os }}_${{ matrix.framework }}
+
+      - name: Enable app-local WMS bootstrap
+        if: runner.os == 'Windows' && runner.arch == 'ARM64'
+        shell: pwsh
+        run: |
+          "DRYWETMIDI_ENABLE_APPLOCAL_WMS_BOOTSTRAP=true" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
       
       - name: Create MIDI ports (Windows)
         if: runner.os == 'Windows'
