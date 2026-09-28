@@ -227,7 +227,14 @@ foreach ($filePath in $diagnosticFiles | Select-Object -Unique)
   }
 }
 
-Get-ChildItem -Path $testOutputPath -File | Select-Object Name, Length
+if (Test-Path $testOutputPath)
+{
+  Get-ChildItem -Path $testOutputPath -File | Select-Object Name, Length
+}
+else
+{
+  Write-Host "$testOutputPath | missing directory"
+}
 
 Write-Host "Windows.Devices.Midi2.dll candidates:"
 foreach ($candidatePath in $candidatePaths)
