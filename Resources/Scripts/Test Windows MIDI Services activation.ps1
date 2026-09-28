@@ -96,7 +96,7 @@ public static class WmsActivationProbe
     public static extern void RoUninitialize();
 
     [DllImport("combase.dll")]
-    public static extern int RoGetActivationFactory(IntPtr activatableClassId, ref Guid iid, out IntPtr factory);
+    public static extern int RoGetActivationFactory(IntPtr activatableClassId, ref Guid iid, ref IntPtr factory);
 
     [DllImport("api-ms-win-core-winrt-string-l1-1-0.dll", CharSet = CharSet.Unicode)]
     public static extern int WindowsCreateString(string sourceString, int length, out IntPtr hstring);
@@ -105,7 +105,7 @@ public static class WmsActivationProbe
     public static extern int WindowsDeleteString(IntPtr hstring);
 
     [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-    public delegate int DllGetActivationFactoryDelegate(IntPtr activatableClassId, out IntPtr factory);
+    public delegate int DllGetActivationFactoryDelegate(IntPtr activatableClassId, ref IntPtr factory);
 
     public static readonly Guid IActivationFactoryIid = new Guid("00000035-0000-0000-C000-000000000046");
 }
