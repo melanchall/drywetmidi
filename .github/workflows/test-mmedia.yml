@@ -82,6 +82,13 @@ jobs:
         with:
           tfm: ${{ steps.framework.outputs.tfm }}
           configuration: ${{ vars.TEST_BUILD_CONFIGURATION || 'Release' }}
+
+      - name: Print Windows multimedia diagnostics
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $testOutputPath = Join-Path "${{ github.workspace }}" "DryWetMidi.Tests/bin/${{ vars.TEST_BUILD_CONFIGURATION || 'Release' }}/${{ steps.framework.outputs.tfm }}"
+          & "${{ github.workspace }}/Resources/Scripts/Test Windows MIDI Services activation.ps1" -testOutputPath $testOutputPath
       
       - name: Build test data sending utility
         uses: ./.github/actions/build-test-data-sending-utility
@@ -103,13 +110,6 @@ jobs:
         uses: ./.github/actions/create-ports-macos
         with: 
           enabled: 'true'
-
-      - name: Print Windows multimedia diagnostics
-        if: runner.os == 'Windows'
-        shell: pwsh
-        run: |
-          $testOutputPath = Join-Path "${{ github.workspace }}" "DryWetMidi.Tests/bin/${{ vars.TEST_BUILD_CONFIGURATION || 'Release' }}/${{ steps.framework.outputs.tfm }}"
-          & "${{ github.workspace }}/Resources/Scripts/Test Windows MIDI Services activation.ps1" -testOutputPath $testOutputPath
 
       - name: Run unit tests
         continue-on-error: false
