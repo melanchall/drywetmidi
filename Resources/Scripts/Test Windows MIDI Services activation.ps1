@@ -109,8 +109,7 @@ public static class WmsActivationProbe
 function New-HString([string]$Value)
 {
   $handle = [IntPtr]::Zero
-  $utf16CodeUnitCount = [System.Text.Encoding]::Unicode.GetByteCount($Value) / 2
-  $result = [WmsActivationProbe]::WindowsCreateString($Value, $utf16CodeUnitCount, [ref]$handle)
+  $result = [WmsActivationProbe]::WindowsCreateString($Value, $Value.Length, [ref]$handle)
   if ($result -lt 0)
   {
     throw "WindowsCreateString failed for '$Value' with $(Format-HResult $result)."
