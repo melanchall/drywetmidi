@@ -52,7 +52,7 @@ function Get-PeMachine([string]$Path)
 
 function Format-HResult([int]$Value)
 {
-  $unsigned = [uint32]$Value
+  $unsigned = [uint32]([int64]$Value -band 0xFFFFFFFF)
   return ('0x{0:X8}' -f $unsigned)
 }
 
