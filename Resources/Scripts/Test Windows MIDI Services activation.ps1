@@ -79,9 +79,6 @@ public static class WmsActivationProbe
     [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
     public static extern IntPtr LoadLibraryExW(string fileName, IntPtr fileHandle, uint flags);
 
-    [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
-    public static extern IntPtr LoadLibraryW(string fileName);
-
     [DllImport("kernel32.dll", SetLastError = true)]
     public static extern IntPtr GetProcAddress(IntPtr module, string procName);
 
@@ -287,14 +284,7 @@ try
       if ($module -eq [IntPtr]::Zero)
       {
         $lastError = [System.Runtime.InteropServices.Marshal]::GetLastWin32Error()
-        Write-Host "LoadLibraryExW($selectedMidi2RuntimePath) failed with Win32 error $lastError; retrying LoadLibraryW."
-        $module = [WmsActivationProbe]::LoadLibraryW($selectedMidi2RuntimePath)
-      }
-
-      if ($module -eq [IntPtr]::Zero)
-      {
-        $lastError = [System.Runtime.InteropServices.Marshal]::GetLastWin32Error()
-        Write-Host "LoadLibraryW($selectedMidi2RuntimePath) failed with Win32 error $lastError."
+        Write-Host "LoadLibraryExW($selectedMidi2RuntimePath) failed with Win32 error $lastError."
       }
       else
       {
