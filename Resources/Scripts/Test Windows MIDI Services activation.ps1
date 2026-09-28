@@ -19,10 +19,9 @@ function Get-PeMachine([string]$Path)
     {
       return "not-pe"
     }
-
     $stream.Seek(0x3C, [System.IO.SeekOrigin]::Begin) | Out-Null
     $peOffset = $reader.ReadInt32()
-    $stream.Seek($peOffset + 4, [System.IO.SeekOrigin]::Begin) | Out-Null
+    $peOffset = $reader.ReadInt32()
 
     $stream.Seek($peOffset, [System.IO.SeekOrigin]::Begin) | Out-Null
     if ($reader.ReadUInt32() -ne 0x00004550)
