@@ -252,57 +252,64 @@ $classesToProbe = @(
 
 try
 {
-  foreach ($className in $classesToProbe)
+  if ($roInitializationResult -lt 0)
   {
-    $result = Invoke-RoGetActivationFactory $className
-    Write-Host "RoGetActivationFactory($className): $(Format-HResult $result)"
-  }
-
-  if (-not [string]::IsNullOrWhiteSpace($selectedMidi2RuntimePath))
-  {
-    $module = [WmsActivationProbe]::LoadLibraryExW(
-      $selectedMidi2RuntimePath,
-      [IntPtr]::Zero,
-      [WmsActivationProbe]::LOAD_LIBRARY_SEARCH_DLL_LOAD_DIR -bor [WmsActivationProbe]::LOAD_LIBRARY_SEARCH_DEFAULT_DIRS)
-
-    if ($module -eq [IntPtr]::Zero)
-    {
-      $lastError = [System.Runtime.InteropServices.Marshal]::GetLastWin32Error()
-      Write-Host "LoadLibraryExW($selectedMidi2RuntimePath) failed with Win32 error $lastError; retrying LoadLibraryW."
-      $module = [WmsActivationProbe]::LoadLibraryW($selectedMidi2RuntimePath)
-    }
-
-    if ($module -eq [IntPtr]::Zero)
-    {
-      $lastError = [System.Runtime.InteropServices.Marshal]::GetLastWin32Error()
-      Write-Host "LoadLibraryW($selectedMidi2RuntimePath) failed with Win32 error $lastError."
-    }
-    else
-    {
-      Write-Host "Loaded Windows.Devices.Midi2.dll from $selectedMidi2RuntimePath"
-
-      $dllGetActivationFactoryExport = [WmsActivationProbe]::GetProcAddress($module, "DllGetActivationFactory")
-      if ($dllGetActivationFactoryExport -eq [IntPtr]::Zero)
-      {
-        Write-Host "DllGetActivationFactory export is missing."
-      }
-      else
-      {
-        Write-Host "DllGetActivationFactory export found."
-
-        foreach ($className in $classesToProbe)
-        {
-          $result = Invoke-DllGetActivationFactory $module $className
-          Write-Host "DllGetActivationFactory($className): $(Format-HResult $result)"
-        }
-      }
-
-      [WmsActivationProbe]::FreeLibrary($module) | Out-Null
-    }
+    Write-Host "Skipping activation probes because RoInitialize failed."
   }
   else
   {
-    Write-Host "No Windows.Devices.Midi2.dll candidate was found."
+    foreach ($className in $classesToProbe)
+    {
+      $result = Invoke-RoGetActivationFactory $className
+      Write-Host "RoGetActivationFactory($className): $(Format-HResult $result)"
+    }
+
+    if (-not [string]::IsNullOrWhiteSpace($selectedMidi2RuntimePath))
+    {
+      $module = [WmsActivationProbe]::LoadLibraryExW(
+        $selectedMidi2RuntimePath,
+        [IntPtr]::Zero,
+        [WmsActivationProbe]::LOAD_LIBRARY_SEARCH_DLL_LOAD_DIR -bor [WmsActivationProbe]::LOAD_LIBRARY_SEARCH_DEFAULT_DIRS)
+
+      if ($module -eq [IntPtr]::Zero)
+      {
+        $lastError = [System.Runtime.InteropServices.Marshal]::GetLastWin32Error()
+        Write-Host "LoadLibraryExW($selectedMidi2RuntimePath) failed with Win32 error $lastError; retrying LoadLibraryW."
+        $module = [WmsActivationProbe]::LoadLibraryW($selectedMidi2RuntimePath)
+      }
+
+      if ($module -eq [IntPtr]::Zero)
+      {
+        $lastError = [System.Runtime.InteropServices.Marshal]::GetLastWin32Error()
+        Write-Host "LoadLibraryW($selectedMidi2RuntimePath) failed with Win32 error $lastError."
+      }
+      else
+      {
+        Write-Host "Loaded Windows.Devices.Midi2.dll from $selectedMidi2RuntimePath"
+
+        $dllGetActivationFactoryExport = [WmsActivationProbe]::GetProcAddress($module, "DllGetActivationFactory")
+        if ($dllGetActivationFactoryExport -eq [IntPtr]::Zero)
+        {
+          Write-Host "DllGetActivationFactory export is missing."
+        }
+        else
+        {
+          Write-Host "DllGetActivationFactory export found."
+
+          foreach ($className in $classesToProbe)
+          {
+            $result = Invoke-DllGetActivationFactory $module $className
+            Write-Host "DllGetActivationFactory($className): $(Format-HResult $result)"
+          }
+        }
+
+        [WmsActivationProbe]::FreeLibrary($module) | Out-Null
+      }
+    }
+    else
+    {
+      Write-Host "No Windows.Devices.Midi2.dll candidate was found."
+    }
   }
 }
 finally
