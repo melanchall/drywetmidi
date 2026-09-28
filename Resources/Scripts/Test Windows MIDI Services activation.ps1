@@ -299,7 +299,14 @@ try
           foreach ($className in $classesToProbe)
           {
             $result = Invoke-DllGetActivationFactory $module $className
-            Write-Host "DllGetActivationFactory($className): $(Format-HResult $result)"
+            if ($null -eq $result)
+            {
+              Write-Host "DllGetActivationFactory($className): export was not found."
+            }
+            else
+            {
+              Write-Host "DllGetActivationFactory($className): $(Format-HResult $result)"
+            }
           }
         }
 
