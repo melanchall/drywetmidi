@@ -15,9 +15,21 @@ function Get-PeMachine([string]$Path)
   try
   {
     $reader = [System.IO.BinaryReader]::new($stream)
+    if ($reader.ReadUInt16() -ne 0x5A4D)
+    {
+      return "not-pe"
+    }
+
     $stream.Seek(0x3C, [System.IO.SeekOrigin]::Begin) | Out-Null
     $peOffset = $reader.ReadInt32()
     $stream.Seek($peOffset + 4, [System.IO.SeekOrigin]::Begin) | Out-Null
+
+    $stream.Seek($peOffset, [System.IO.SeekOrigin]::Begin) | Out-Null
+    if ($reader.ReadUInt32() -ne 0x00004550)
+    {
+      return "not-pe"
+    }
+
     $machine = $reader.ReadUInt16()
 
     switch ($machine)
