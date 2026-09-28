@@ -52,7 +52,7 @@ function Get-PeMachine([string]$Path)
 
 function Format-HResult([int]$Value)
 {
-  $unsigned = [uint32]([int64]$Value -band 0xFFFFFFFF)
+  $unsigned = [System.BitConverter]::ToUInt32([System.BitConverter]::GetBytes($Value), 0)
   return ('0x{0:X8}' -f $unsigned)
 }
 
@@ -251,6 +251,12 @@ foreach ($candidatePath in $candidatePaths)
 
 $roInitializationResult = [WmsActivationProbe]::RoInitialize([WmsActivationProbe]::RO_INIT_MULTITHREADED)
 Write-Host "RoInitialize result: $(Format-HResult $roInitializationResult)"
+$shouldRunActivationProbes = $roInitializationResult -ge 0 -or $roInitializationResult -eq -2147417850
+
+if ($roInitializationResult -eq -2147417850)
+{
+  Write-Host "RoInitialize returned RPC_E_CHANGED_MODE; continuing with activation probes."
+}
 
 $classesToProbe = @(
   "Windows.Devices.Midi2.MidiApi",
@@ -259,7 +265,7 @@ $classesToProbe = @(
 
 try
 {
-  if ($roInitializationResult -lt 0)
+  if (-not $shouldRunActivationProbes)
   {
     Write-Host "Skipping activation probes because RoInitialize failed."
   }
