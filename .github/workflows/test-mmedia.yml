@@ -88,7 +88,7 @@ jobs:
           wms_basic_loopback_installer_url: '${{ vars.WMS_BASIC_LOOPBACK_INSTALLER_URL }}'
           wms_tools_installer_url: '${{ vars.WMS_TOOLS_INSTALLER_URL }}'
           wms_preview_package_name: '${{ vars.WMS_PREVIEW_PACKAGE_NAME }}'
-          test_build_configuration: '${{ vars.TEST_BUILD_CONFIGURATION }}'
+          wms_binaries_location: 'DryWetMidi.Tests/bin/${{ vars.TEST_BUILD_CONFIGURATION }}/${{ steps.framework.outputs.tfm }}'
       
       - name: Build test data sending utility
         if: runner.os == 'macOS'

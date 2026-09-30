@@ -10,6 +10,8 @@ inputs:
     required: true
   test_build_configuration:
     required: true
+  wms_binaries_location:
+    required: true
 
 runs:
   using: 'composite'
@@ -50,7 +52,7 @@ runs:
         $nupkgUrl  = "https://github.com/microsoft/MIDI/releases/download/${{ inputs.wms_preview_package_name }}"
         $workDir   = "$($env:RUNNER_TEMP)"
         $nupkgPath = Join-Path $workDir "package.nupkg"
-        $outputDir = "DryWetMidi.Tests/bin/${{ inputs.test_build_configuration || 'Release' }}/${{ steps.framework.outputs.tfm }}"
+        $outputDir = "${{ inputs.wms_binaries_location }}"
 
         $filesToExtract = @(
             "runtimes/win-arm64/native/Windows.Devices.Midi2.dll",
@@ -87,3 +89,4 @@ runs:
       shell: pwsh
       run: |
         "DRYWETMIDI_ENABLE_APPLOCAL_WMS_BOOTSTRAP=true" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+        "WMS_ACTIVE=true" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append

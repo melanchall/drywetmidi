@@ -34,11 +34,9 @@ jobs:
       fail-fast: false
       matrix: 
         include:
-          # Waiting for MIDI Services rollout in Win 11
-          # and ability to install midi-console
-          #- os: windows-11-arm
-          #  framework: Net
-          #  win-arch: 'arm64'
+          - os: windows-11-arm
+            framework: Net
+            win-arch: 'arm64'
           - os: macos-latest
             framework: Net
             win-arch: 'x64'
@@ -64,23 +62,34 @@ jobs:
           net-sdk-version: ${{ vars.BUILD_FRAMEWORK_NET_SDK_VERSION }}
           netframework-tfm: ${{ vars.BUILD_FRAMEWORK_NETFRAMEWORK_TFM }}
           netframework-sdk-version: ${{ vars.BUILD_FRAMEWORK_NETFRAMEWORK_SDK_VERSION }}
+
+      - name: Prepare Windows MIDI Services
+        if: runner.os == 'Windows' && matrix.os == 'windows-11-arm'
+        uses: ./.github/actions/prepare-wms
+        with: 
+          wms_basic_loopback_installer_url: '${{ vars.WMS_BASIC_LOOPBACK_INSTALLER_URL }}'
+          wms_tools_installer_url: '${{ vars.WMS_TOOLS_INSTALLER_URL }}'
+          wms_preview_package_name: '${{ vars.WMS_PREVIEW_PACKAGE_NAME }}'
+          wms_binaries_location: '${{ runner.temp }}'
       
-      - name: Create MIDI ports (Windows)
-        if: runner.os == 'Windows'
+      - name:  Create MIDI ports (Windows, non-WMS)
+        if: runner.os == 'Windows' && matrix.os != 'windows-11-arm'
         uses: ./.github/actions/create-ports-windows
         with:
           enabled: 'true'
-          ports-names: 'TestVirtualMidiDevice'
-          arch: '${{ matrix.win-arch }}'
+          ports-names: 'MIDI A,MIDI B,MIDI C'
       
       - name: Run CheckDwmApi tool
         continue-on-error: false
         shell: pwsh
         run: |
-          dotnet run --project Utilities/CheckDwmApi/Melanchall.CheckDwmApi.csproj `
-            --configuration ${{ vars.BUILD_CONFIGURATION }} `
-            -p:SolutionDir="${{ github.workspace }}/" `
-            -- -noninteractive -exitontaskfailure
+          $path = Resolve-Path 'Utilities/CheckDwmApi/Melanchall.CheckDwmApi.csproj'
+          if ("${{ matrix.os }}" -eq "windows-11-arm") {
+            dotnet run --project "$path" --configuration ${{ vars.BUILD_CONFIGURATION }} -p:SolutionDir="${{ github.workspace }}/" -p:None="${{ runner.temp }}\Windows.Devices.Midi2.dll" -p:None="${{ runner.temp }}\Windows.Devices.Midi2.pri" -p:CopyToOutputDirectory=Always -- -noninteractive -exitontaskfailure
+          }
+          else {
+            dotnet run --project "$path" --configuration ${{ vars.BUILD_CONFIGURATION }} -p:SolutionDir="${{ github.workspace }}/" -- -noninteractive -exitontaskfailure
+          }
       
       - name: Upload CheckDwmApi report
         if: always()

@@ -6,15 +6,19 @@ using Melanchall.DryWetMidi.Multimedia;
 using Melanchall.DryWetMidi.Interaction;
 using System.Collections.Generic;
 using System.Diagnostics;
+using Melanchall.DryWetMidi.Configuration;
 
 namespace DwmNetConsoleApp
 {
     class Program
     {
+        private const string WmsActiveEnvironmentVariableName = "WMS_ACTIVE";
+
         static void Main(string[] args)
         {
             Console.WriteLine($"OS version: {Environment.OSVersion}");
             Console.WriteLine($"CLR version: {Environment.Version}");
+            Console.WriteLine($"Library configuration summary:{Environment.NewLine}{LibraryConfiguration.GetConfigurationSummary()}");
             Console.WriteLine("---------------------------------");
 
             Console.WriteLine("Playing MIDI data...");
@@ -58,7 +62,22 @@ namespace DwmNetConsoleApp
             if (!ok)
                 throw new InvalidOperationException($"Playback was not completed within {timeout}.");
 
+            if (IsWmsActive())
+            {
+                Console.WriteLine("WMS is active. Checking Virtual devices API...");
+                var virtualDevice = VirtualDevice.Create(Guid.NewGuid().ToString().Trim('{', '}'));
+                Console.WriteLine($"Virtual device created: {virtualDevice.Name}.");
+            }
+
             Console.WriteLine($"[{stopwatch.ElapsedMilliseconds} ms] Played.");
+        }
+
+        private static bool IsWmsActive()
+        {
+            var value = Environment.GetEnvironmentVariable(WmsActiveEnvironmentVariableName);
+            return
+                string.Equals(value, bool.TrueString, StringComparison.OrdinalIgnoreCase) ||
+                string.Equals(value, "1", StringComparison.Ordinal);
         }
     }
 }

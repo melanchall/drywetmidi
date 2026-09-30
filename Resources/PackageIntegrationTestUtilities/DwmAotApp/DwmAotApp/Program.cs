@@ -16,6 +16,8 @@ namespace DwmAotApp
 {
     internal class Program
     {
+        private const string WmsActiveEnvironmentVariableName = "WMS_ACTIVE";
+
         static void Main(string[] args)
         {
             CheckAddTextEventAction();
@@ -24,6 +26,12 @@ namespace DwmAotApp
             CheckOctave();
             CheckCsvSerializer();
             CheckPlayback();
+
+            if (IsWmsActive())
+            {
+                Console.WriteLine("WMS is active. Checking Virtual devices API...");
+                CheckVirtualDevice();
+            }
 
             Console.WriteLine("All done.");
         }
@@ -244,6 +252,20 @@ namespace DwmAotApp
             {
                 File.Delete(tempFilePath);
             }
+        }
+
+        private static void CheckVirtualDevice()
+        {
+            var virtualDevice = VirtualDevice.Create(Guid.NewGuid().ToString().Trim('{', '}'));
+            Console.WriteLine($"Virtual device created: {virtualDevice.Name}.");
+        }
+
+        private static bool IsWmsActive()
+        {
+            var value = Environment.GetEnvironmentVariable(WmsActiveEnvironmentVariableName);
+            return
+                string.Equals(value, bool.TrueString, StringComparison.OrdinalIgnoreCase) ||
+                string.Equals(value, "1", StringComparison.Ordinal);
         }
     }
 }
