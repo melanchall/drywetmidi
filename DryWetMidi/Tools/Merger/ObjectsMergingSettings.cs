@@ -73,7 +73,7 @@ namespace Melanchall.DryWetMidi.Tools
 
         /// <summary>
         /// Gets or sets a predicate to filter objects out. If predicate returns <c>true</c>,
-        /// an object will be processed; if <c>false</c> - it won't. If the property set to <c>null</c>,
+        /// an object will be processed; if <c>false</c> - it won't. If the property is set to <c>null</c>,
         /// (default value) all objects will be processed.
         /// </summary>
         public Predicate<ITimedObject>? Filter { get; set; }

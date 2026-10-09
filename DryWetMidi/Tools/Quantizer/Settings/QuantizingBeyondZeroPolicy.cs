@@ -1,8 +1,8 @@
 ﻿namespace Melanchall.DryWetMidi.Tools
 {
     /// <summary>
-    /// Policy which defines how a quantizer should act in case of an object is going
-    /// to be moved beyond zero. The default value is <see cref="FixAtZero"/>.
+    /// Policy that defines how a quantizer should act when an object is about to be moved
+    /// beyond zero. The default value is <see cref="FixAtZero"/>.
     /// </summary>
     public enum QuantizingBeyondZeroPolicy
     {

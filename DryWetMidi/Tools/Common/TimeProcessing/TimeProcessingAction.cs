@@ -1,7 +1,7 @@
 ﻿namespace Melanchall.DryWetMidi.Tools
 {
     /// <summary>
-    /// Indicates whether an object is being processed should be skipped or not.
+    /// Indicates whether an object being processed should be skipped or not.
     /// The default value is <see cref="Apply"/>.
     /// </summary>
     public enum TimeProcessingAction

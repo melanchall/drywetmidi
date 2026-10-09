@@ -7,7 +7,7 @@ using Melanchall.DryWetMidi.Core;
 namespace Melanchall.DryWetMidi.Tools
 {
     /// <summary>
-    /// Privides settings that control the process of CSV deserialization.
+    /// Provides settings that control the process of CSV deserialization.
     /// </summary>
     /// <seealso cref="CsvSerializer"/>
     public sealed class CsvDeserializationSettings

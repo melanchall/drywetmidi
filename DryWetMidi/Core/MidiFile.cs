@@ -280,7 +280,7 @@ namespace Melanchall.DryWetMidi.Core
         /// </summary>
         /// <param name="filePath">Full path of the file to write to.</param>
         /// <param name="overwriteFile">If <c>true</c> and file specified by <paramref name="filePath"/> already
-        /// exists it will be overwritten; if <c>false</c> and the file exists exception will be thrown.</param>
+        /// exists it will be overwritten; if <c>false</c> and the file exists, an exception will be thrown.</param>
         /// <param name="format">Format of a MIDI file.</param>
         /// <param name="settings">Settings according to which the file must be written. Specify <c>null</c> to use
         /// default settings.</param>
@@ -330,7 +330,7 @@ namespace Melanchall.DryWetMidi.Core
         /// </summary>
         /// <param name="filePath">Full path of the file to write to.</param>
         /// <param name="overwriteFile">If <c>true</c> and file specified by <paramref name="filePath"/> already
-        /// exists it will be overwritten; if <c>false</c> and the file exists exception will be thrown.</param>
+        /// exists it will be overwritten; if <c>false</c> and the file exists, an exception will be thrown.</param>
         /// <param name="format">Format of a MIDI file (default value is <see cref="MidiFileFormat.MultiTrack"/>).</param>
         /// <param name="settings">Settings according to which the file must be written. Specify <c>null</c>
         /// (default value) to use default settings.</param>

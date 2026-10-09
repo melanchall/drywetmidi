@@ -83,7 +83,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="midiFile"><see cref="MidiFile"/> to serialize to CSV representation.</param>
         /// <param name="filePath">Path to the file to write the <paramref name="midiFile"/> to.</param>
         /// <param name="overwriteFile">If <c>true</c> and file specified by <paramref name="filePath"/> already
-        /// exists it will be overwritten; if <c>false</c> and the file exists exception will be thrown.</param>
+        /// exists it will be overwritten; if <c>false</c> and the file exists, an exception will be thrown.</param>
         /// <param name="settings">Settings according to which <paramref name="midiFile"/> should be serialized.</param>
         /// <param name="objectType">Types of objects within track chunks of the <paramref name="midiFile"/>
         /// to serialize (see Remarks section).</param>
@@ -187,7 +187,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="midiChunks">Collection of <see cref="MidiChunk"/> to serialize to CSV representation.</param>
         /// <param name="filePath">Path to the file to write the <paramref name="midiChunks"/> to.</param>
         /// <param name="overwriteFile">If <c>true</c> and file specified by <paramref name="filePath"/> already
-        /// exists it will be overwritten; if <c>false</c> and the file exists exception will be thrown.</param>
+        /// exists it will be overwritten; if <c>false</c> and the file exists, an exception will be thrown.</param>
         /// <param name="tempoMap"><see cref="TempoMap"/> to use for time/length conversions.</param>
         /// <param name="settings">Settings according to which <paramref name="midiChunks"/> should be serialized.</param>
         /// <param name="objectType">Types of objects within track chunks of the <paramref name="midiChunks"/>
@@ -299,7 +299,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="midiChunk"><see cref="MidiChunk"/> to serialize to CSV representation.</param>
         /// <param name="filePath">Path to the file to write the <paramref name="midiChunk"/> to.</param>
         /// <param name="overwriteFile">If <c>true</c> and file specified by <paramref name="filePath"/> already
-        /// exists it will be overwritten; if <c>false</c> and the file exists exception will be thrown.</param>
+        /// exists it will be overwritten; if <c>false</c> and the file exists, an exception will be thrown.</param>
         /// <param name="tempoMap"><see cref="TempoMap"/> to use for time/length conversions.</param>
         /// <param name="settings">Settings according to which <paramref name="midiChunk"/> should be serialized.</param>
         /// <param name="objectType">Types of objects within <paramref name="midiChunk"/> to serialize
@@ -396,7 +396,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="timedObjects">Collection of <see cref="ITimedObject"/> to serialize to CSV representation.</param>
         /// <param name="filePath">Path to the file to write the <paramref name="timedObjects"/> to.</param>
         /// <param name="overwriteFile">If <c>true</c> and file specified by <paramref name="filePath"/> already
-        /// exists it will be overwritten; if <c>false</c> and the file exists exception will be thrown.</param>
+        /// exists it will be overwritten; if <c>false</c> and the file exists, an exception will be thrown.</param>
         /// <param name="tempoMap"><see cref="TempoMap"/> to use for time/length conversions.</param>
         /// <param name="settings">Settings according to which <paramref name="timedObjects"/> should be serialized.</param>
         /// <exception cref="ArgumentException"><paramref name="filePath"/> is a zero-length string,
