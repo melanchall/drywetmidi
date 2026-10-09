@@ -41,7 +41,7 @@
     public enum ResultTrackChunksCreationPolicy
     {
         /// <summary>
-        /// Each track chunk of every file is being merged will lead to separate track chunk
+        /// Each track chunk of every file being merged will lead to a separate track chunk
         /// creation in the result file.
         /// </summary>
         CreateForEachFile = 0,
