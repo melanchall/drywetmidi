@@ -31,7 +31,7 @@ midiFile.ProcessTimedEvents(
     e => e.Event.EventType == MidiEventType.Text);
 ```
 
-After this instruction executed, the file will be equal to this one:
+After this instruction is executed, the file will be equal to this one:
 
 ```csharp
 var midiFile = new MidiFile(
@@ -173,7 +173,7 @@ But for chords processing there are two additional options to control performanc
 * [NoteTimeOrLengthCanBeChanged](xref:Melanchall.DryWetMidi.Interaction.ChordProcessingHint.NoteTimeOrLengthCanBeChanged): time or length of a note within a chord's notes can be changed;
 * [NotesCollectionCanBeChanged](xref:Melanchall.DryWetMidi.Interaction.ChordProcessingHint.NotesCollectionCanBeChanged): chord's notes collection can be changed, for example, a note can be added or removed.
 
-By default those two options are not enabled. So if you want to say the engine that all chord's properties can be changed:
+By default those two options are not enabled. So if you want to tell the engine that all chord's properties can be changed:
 
 ```csharp
 midiFile.ProcessChords(

@@ -4,7 +4,7 @@ uid: a_tempo_map
 
 # Tempo map
 
-Tempo map is a set of changes of time signature and tempo. Tempo map is one of the key objects in high-level management of MIDI data. You need to have a tempo map to convert [time and length](Time-and-length.md) between different representations, either explicitly or internally at some parts of the library (for example, in [tools](xref:a_tools_overview)). Following image shows how tempo map constructed for a given set of events or MIDI file:
+Tempo map is a set of changes of time signature and tempo. Tempo map is one of the key objects in high-level management of MIDI data. You need to have a tempo map to convert [time and length](Time-and-length.md) between different representations, either explicitly or internally at some parts of the library (for example, in [tools](xref:a_tools_overview)). The following image shows how a tempo map is constructed for a given set of events or MIDI file:
 
 ![Tempo map](images/TempoMap.png)
 

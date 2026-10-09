@@ -30,7 +30,7 @@ midiFile.RemoveTimedEvents(
     e => e.Event.EventType == MidiEventType.Text);
 ```
 
-After this instruction executed, the file will be equal to this one:
+After this instruction is executed, the file will be equal to this one:
 
 ```csharp
 var midiFile = new MidiFile(
