@@ -27,7 +27,7 @@ var newFiles = midiFile.SplitByObjects(
     });
 ```
 
-Here we specify that we need to split the file by notes and timed events, but every timed event must be written to all result files. So in fact we're splitting the file by notes having all non-notes timed events presented in each new file. The image below illustrates the process:
+Here we specify that we need to split the file by notes and timed events, but every timed event must be written to all result files. So in fact we're splitting the file by notes, with all non-note timed events present in each new file. The image below illustrates the process:
 
 ![Split MIDI file by objects](images/Splitter/SplitByObjects.png)
 
@@ -93,17 +93,17 @@ Please see documentation on [SplitByObjectsSettings](xref:Melanchall.DryWetMidi.
 
 ![Split MIDI file by grid](images/Splitter/SplitFileByGrid.png)
 
-Splitting can be adjusted via the `settings` parameter of the [SliceMidiFileSettings](xref:Melanchall.DryWetMidi.Tools.SliceMidiFileSettings) type. [SplitNotes](xref:Melanchall.DryWetMidi.Tools.SliceMidiFileSettings.SplitNotes) and [PreserveTimes](xref:Melanchall.DryWetMidi.Tools.SliceMidiFileSettings.PreserveTimes) properties described below. Please see all available properties in documentation for [SliceMidiFileSettings](xref:Melanchall.DryWetMidi.Tools.SliceMidiFileSettings).
+Splitting can be adjusted via the `settings` parameter of the [SliceMidiFileSettings](xref:Melanchall.DryWetMidi.Tools.SliceMidiFileSettings) type. The [SplitNotes](xref:Melanchall.DryWetMidi.Tools.SliceMidiFileSettings.SplitNotes) and [PreserveTimes](xref:Melanchall.DryWetMidi.Tools.SliceMidiFileSettings.PreserveTimes) properties are described below. Please see all available properties in the documentation for [SliceMidiFileSettings](xref:Melanchall.DryWetMidi.Tools.SliceMidiFileSettings).
 
 ### SplitNotes
 
-[SplitNotes](xref:Melanchall.DryWetMidi.Tools.SliceMidiFileSettings.SplitNotes) indicates whether notes should be split at points of grid intersection or not. The default value is `true`. If `false` used, notes treated as just Note On / Note Off events rather than note objects. Splitting notes produces new Note On / Note Off events at points where grid intersects notes if the property set to `true`. The following image shows splitting by grid if `SplitNotes` set to `false`:
+[SplitNotes](xref:Melanchall.DryWetMidi.Tools.SliceMidiFileSettings.SplitNotes) indicates whether notes should be split at points of grid intersection or not. The default value is `true`. If `false` is used, notes are treated as just Note On / Note Off events rather than note objects. Splitting notes produces new Note On / Note Off events at points where the grid intersects notes if the property is set to `true`. The following image shows splitting by grid if `SplitNotes` is set to `false`:
 
 ![Split MIDI file by grid without splitting notes](images/Splitter/SplitByGridDontSplitNotes.png)
 
 ### PreserveTimes
 
-[PreserveTimes](xref:Melanchall.DryWetMidi.Tools.SliceMidiFileSettings.PreserveTimes) indicates whether original times of events should be preserved or not. The default value is `false`. If `false` used, events will be moved to the start of a new file. If `true` used, events will be placed in new files at the same times as in the input file. The following image shows splitting in case of `PreserveTimes` set to `true`:
+[PreserveTimes](xref:Melanchall.DryWetMidi.Tools.SliceMidiFileSettings.PreserveTimes) indicates whether original times of events should be preserved or not. The default value is `false`. If `false` is used, events will be moved to the start of a new file. If `true` is used, events will be placed in new files at the same times as in the input file. The following image shows splitting when `PreserveTimes` is set to `true`:
 
 ![Split MIDI file by grid preserving times](images/Splitter/SplitByGridPreserveTimes.png)
 
