@@ -8,13 +8,13 @@ DryWetMIDI provides a tool to perform quantization of objects of different types
 
 Note that quantizing routine modifies passed objects instead of returning new ones with quantized times. So be sure you've cloned input objects if you want to save them. All classes implementing [ITimedObject](xref:Melanchall.DryWetMidi.Interaction.ITimedObject) as well as [MidiFile](xref:Melanchall.DryWetMidi.Core.MidiFile) and [TrackChunk](xref:Melanchall.DryWetMidi.Core.TrackChunk) have `Clone` method you can use for that purpose.
 
-Also there are [QuantizerUtilities](xref:Melanchall.DryWetMidi.Tools.QuantizerUtilities) class that contains useful methods to quantize objects inside [TrackChunk](xref:Melanchall.DryWetMidi.Core.TrackChunk) and [MidiFile](xref:Melanchall.DryWetMidi.Core.MidiFile) without necessity to work with objects collections directly.
+Also, the [QuantizerUtilities](xref:Melanchall.DryWetMidi.Tools.QuantizerUtilities) class contains useful methods to quantize objects inside [TrackChunk](xref:Melanchall.DryWetMidi.Core.TrackChunk) and [MidiFile](xref:Melanchall.DryWetMidi.Core.MidiFile) without the need to work directly with object collections.
 
 Please note that the article doesn't cover all settings and use cases so please read API documentation on [Quantizer](xref:Melanchall.DryWetMidi.Tools.Quantizer) to get complete information.
 
 ## General information
 
-First of all let's see how arbitrary [timed objects](xref:Melanchall.DryWetMidi.Interaction.ITimedObject) quantized:
+First of all, let's see how arbitrary [timed objects](xref:Melanchall.DryWetMidi.Interaction.ITimedObject) are quantized:
 
 ![Quantize](images/Quantizer/QuantizeStart.png)
 
@@ -38,11 +38,11 @@ By default if an object is quantized, it will be entirely moved to a grid positi
 
 Of course this property works in case of end time quantizing too.
 
-When the start time of an object is not fixed, there is a chance that the object's end time will be quantized in such a way that the start time will be negative due to the object is moved to the left. Negative time is invalid so you can set [QuantizingSettings.QuantizingBeyondZeroPolicy](xref:Melanchall.DryWetMidi.Tools.QuantizingSettings.QuantizingBeyondZeroPolicy) property to desired value to handle this situation. The image below shows how quantizing works if the property set to [FixAtZero](xref:Melanchall.DryWetMidi.Tools.QuantizingBeyondZeroPolicy.FixAtZero):
+When the start time of an object is not fixed, there is a chance that the object's end time will be quantized in such a way that the start time will be negative because the object is moved to the left. Negative time is invalid, so you can set the [QuantizingSettings.QuantizingBeyondZeroPolicy](xref:Melanchall.DryWetMidi.Tools.QuantizingSettings.QuantizingBeyondZeroPolicy) property to a desired value to handle this situation. The image below shows how quantizing works if the property is set to [FixAtZero](xref:Melanchall.DryWetMidi.Tools.QuantizingBeyondZeroPolicy.FixAtZero):
 
 ![Quantizing with QuantizeEndBeyondZero set to FixAtZero](images/Quantizer/QuantizeEndBeyondZero.png)
 
-Also if one side (start or end) of an object is fixed, there is a chance that the object's opposite time will be quantized in such a way that the object will be reversed resulting to negative length. You can handle this situation with the [QuantizingSettings.QuantizingBeyondFixedEndPolicy](xref:Melanchall.DryWetMidi.Tools.QuantizingSettings.QuantizingBeyondFixedEndPolicy) property. The image below shows some options in action when start time is being quantized beyond the end one:
+Also, if one side (start or end) of an object is fixed, there is a chance that the object's opposite time will be quantized in such a way that the object will be reversed, resulting in a negative length. You can handle this situation with the [QuantizingSettings.QuantizingBeyondFixedEndPolicy](xref:Melanchall.DryWetMidi.Tools.QuantizingSettings.QuantizingBeyondFixedEndPolicy) property. The image below shows some options in action when the start time is quantized beyond the end time:
 
 ![Quantize start time beyond fixed end](images/Quantizer/QuantizeBeyondFixedEnd.png)
 
@@ -68,7 +68,7 @@ The distance between an object's current time and the nearest grid time. There i
 
 **D**: [Shift](xref:Melanchall.DryWetMidi.Tools.QuantizedTime.Shift)
 
-The distance an object is going to be moved on toward the new time. If [QuantizingLevel](xref:Melanchall.DryWetMidi.Tools.QuantizingSettings.QuantizingLevel) is less than `1.0`, `D` will be less than `C`.
+The distance an object is going to be moved toward the new time. If [QuantizingLevel](xref:Melanchall.DryWetMidi.Tools.QuantizingSettings.QuantizingLevel) is less than `1.0`, `D` will be less than `C`.
 
 Let's create a simple custom quantizer. We will call it `SoftQuantizer`:
 
