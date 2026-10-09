@@ -63,7 +63,7 @@ namespace Melanchall.DryWetMidi.Core
 
         /// <summary>
         /// Gets or sets reaction of the reading engine on new track chunk if already read
-        /// track chunks count is greater or equals the one declared in the file's header chunk.
+        /// track chunks count is greater than or equal to the one declared in the file's header chunk.
         /// The default is <see cref="ExtraTrackChunkPolicy.Read"/>.
         /// </summary>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="value"/> specified an invalid value.</exception>
