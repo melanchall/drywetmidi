@@ -14,7 +14,7 @@ namespace Melanchall.DryWetMidi.Tools
 
         /// <summary>
         /// Gets or sets a predicate to filter chunks out before processing. If predicate returns <c>true</c>,
-        /// a chunk will be processed; if <c>false</c> - it won't. If the property set to <c>null</c> (default
+        /// a chunk will be processed; if <c>false</c> - it won't. If the property is set to <c>null</c> (default
         /// value), all MIDI chunks will be processed.
         /// </summary>
         public Predicate<MidiChunk>? Filter { get; set; }
