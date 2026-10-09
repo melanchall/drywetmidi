@@ -164,7 +164,7 @@ namespace Melanchall.DryWetMidi.Core
 
         /// <summary>
         /// Gets or sets an <see cref="Encoding"/> that will be used to read the text of a
-        /// text-based meta events. The default is <see cref="Encoding.ASCII"/>.
+        /// text-based meta event. The default is <see cref="Encoding.ASCII"/>.
         /// </summary>
         /// <remarks>
         /// <para>Value of this property will be used only if <see cref="DecodeTextCallback"/> is not set.</para>

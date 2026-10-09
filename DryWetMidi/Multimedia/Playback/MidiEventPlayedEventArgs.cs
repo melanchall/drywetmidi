@@ -21,7 +21,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         #region Properties
 
         /// <summary>
-        /// Gets a MIDI event played.
+        /// Gets the MIDI event that was played.
         /// </summary>
         public MidiEvent Event { get; }
 
