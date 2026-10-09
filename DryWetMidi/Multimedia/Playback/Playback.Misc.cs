@@ -54,14 +54,14 @@ namespace Melanchall.DryWetMidi.Multimedia
         public event EventHandler? RepeatStarted;
 
         /// <summary>
-        /// Occurs when notes start playing. It will be raised if the playback's cursor
-        /// gets into notes.
+        /// Occurs when notes start playing. It will be raised when the playback cursor
+        /// enters the time range of one or more notes.
         /// </summary>
         public event EventHandler<NotesEventArgs>? NotesPlaybackStarted;
 
         /// <summary>
-        /// Occurs when notes finish playing. It will be raised if the playback's cursor
-        /// gets out from notes.
+        /// Occurs when notes finish playing. It will be raised when the playback cursor
+        /// leaves the time range of one or more notes.
         /// </summary>
         public event EventHandler<NotesEventArgs>? NotesPlaybackFinished;
 

@@ -41,7 +41,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         public event EventHandler<MidiEventReceivedEventArgs>? EventReceived;
 
         /// <summary>
-        /// Occurs when MIDI time code is received, i.e. when all MIDI events to complete MIDI time code are received.
+        /// Occurs when MIDI time code is received, i.e. when all events needed to complete the MIDI time code have been received.
         /// </summary>
         /// <remarks>
         /// This event will be raised only if <see cref="RaiseMidiTimeCodeReceived"/> is set to <c>true</c>.

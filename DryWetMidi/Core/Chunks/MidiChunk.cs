@@ -25,7 +25,7 @@ namespace Melanchall.DryWetMidi.Core
     /// The structure of a MIDI chunk allows any custom chunks to be placed in a MIDI file along with the standard
     /// ones described above. You can implement custom chunks that can be read from and written to a MIDI
     /// file. See the <see href="xref:a_custom_chunk">Custom chunks</see> article to learn more. If you don't specify information
-    /// about your custom chunk types the reading engine will read them as instances of the <see cref="UnknownChunk"/> class where
+    /// about your custom chunk types, the reading engine will read them as instances of the <see cref="UnknownChunk"/> class where
     /// <see cref="UnknownChunk.Data"/> property will hold chunk's data and <see cref="ChunkId"/> will hold the ID of a chunk.
     /// </para>
     /// <para>

@@ -35,7 +35,7 @@ namespace Melanchall.DryWetMidi.Common
     /// </code>
     /// <para>
     /// where <c>SevenBitNumber.MinValue</c> is passed to the <c>noteNumber</c> parameter and
-    /// <c>(SevenBitNumber)70</c> passed to the <c>velocity</c> one.
+    /// <c>(SevenBitNumber)70</c> is passed to the <c>velocity</c> parameter.
     /// </para>
     /// </example>
 #if NET7_0_OR_GREATER
