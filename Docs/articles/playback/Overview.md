@@ -8,7 +8,7 @@ uid: a_playback_overview
 
 Also please note that Playback API provides a way to add, remove or change objects within a playback on the fly, without needing to recreate the Playback instance. More info in the [Dynamic changes](xref:a_playback_dynamic) article.
 
-Following example shows a simple console app where the specified MIDI file is played until the end of the file reached or `B` note is about to be played. So in our example `B` note means to stop playback.
+The following example shows a simple console app where the specified MIDI file is played until the end of the file is reached or the `B` note is about to be played. So, in our example, the `B` note means that playback should stop.
 
 ```csharp
 using System;
@@ -54,10 +54,10 @@ Please read [Tick generator](Tick-generator.md) article and [PlaybackSettings](x
 
 Playback supports on-the-fly changes of the data being played. You can find detailed information on how to use this feature in the [Dynamic changes](xref:a_playback_dynamic) article.
 
-If you call the [Start](xref:Melanchall.DryWetMidi.Multimedia.Playback.Start) method of the [Playback](xref:Melanchall.DryWetMidi.Multimedia.Playback), execution of the calling thread will continue immediately after the method is called. To stop playback use the [Stop](xref:Melanchall.DryWetMidi.Multimedia.Playback.Stop) method. Note that there is no any pausing method since it's useless. `Stop` leaves playback at the point where the method was called. To move to the start of the playback use the [MoveToStart](xref:Melanchall.DryWetMidi.Multimedia.Playback.MoveToStart) method.
+If you call the [Start](xref:Melanchall.DryWetMidi.Multimedia.Playback.Start) method of the [Playback](xref:Melanchall.DryWetMidi.Multimedia.Playback), execution of the calling thread will continue immediately after the method is called. To stop playback, use the [Stop](xref:Melanchall.DryWetMidi.Multimedia.Playback.Stop) method. Note that there is no pausing method since it's useless. `Stop` leaves playback at the point where the method was called. To move to the start of the playback, use the [MoveToStart](xref:Melanchall.DryWetMidi.Multimedia.Playback.MoveToStart) method.
 
 > [!WARNING]
-> You should be very careful with `using` block. Example below shows the case where part of MIDI data **will not be played** because of playback is disposed before the last MIDI event will be played:
+> You should be very careful with a `using` block. The example below shows the case where part of the MIDI data **will not be played** because the playback is disposed before the last MIDI event is played:
 > 
 > ```csharp
 > using (var outputEndpoint = OutputEndpoint.GetByName("Output MIDI device"))
@@ -73,6 +73,6 @@ If you call the [Start](xref:Melanchall.DryWetMidi.Multimedia.Playback.Start) me
 
 ## Playback without device
 
-There are constructors of [Playback](xref:Melanchall.DryWetMidi.Multimedia.Playback) that don't accept [IOutputEndpoint](xref:Melanchall.DryWetMidi.Multimedia.IOutputEndpoint) as an argument. It can be useful, for example, for notes visualization without sound. [Playback](xref:Melanchall.DryWetMidi.Multimedia.Playback) provides events that will be fired with or without an output endpoint (see [Events](xref:Melanchall.DryWetMidi.Multimedia.Playback#events) section of the [Playback](xref:Melanchall.DryWetMidi.Multimedia.Playback) API page). Also all `GetPlayback` extensions methods have overloads without the `outputEndpoint` parameter.
+There are constructors of [Playback](xref:Melanchall.DryWetMidi.Multimedia.Playback) that don't accept [IOutputEndpoint](xref:Melanchall.DryWetMidi.Multimedia.IOutputEndpoint) as an argument. It can be useful, for example, for notes visualization without sound. [Playback](xref:Melanchall.DryWetMidi.Multimedia.Playback) provides events that will be fired with or without an output endpoint (see the [Events](xref:Melanchall.DryWetMidi.Multimedia.Playback#events) section of the [Playback](xref:Melanchall.DryWetMidi.Multimedia.Playback) API page). Also, all `GetPlayback` extension methods have overloads without the `outputEndpoint` parameter.
 
 Also if you don't specify an output endpoint and use a [tick generator](Tick-generator.md) other than [HighPrecisionTickGenerator](xref:Melanchall.DryWetMidi.Multimedia.HighPrecisionTickGenerator), you can use `Playback` in a cross-platform app like Unity game that is supposed to be built for different platforms (you can find currently supported OS in the [Supported OS](xref:a_develop_supported_os) article).

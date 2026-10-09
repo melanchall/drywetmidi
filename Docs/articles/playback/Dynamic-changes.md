@@ -334,7 +334,7 @@ It's important to note that when you change the tempo map, some time-based thing
 
 ![BeforeTempoChange](images/BeforeTempoChange.png)
 
-If we change the _Set Tempo_ event so that the tempo will be 180 BPM (instead of current 90 BPM), the data will be shrinked by two times:
+If we change the _Set Tempo_ event so that the tempo will be 180 BPM (instead of the current 90 BPM), the data will shrink by half:
 
 ![AfterTempoChange](images/AfterTempoChange.png)
 

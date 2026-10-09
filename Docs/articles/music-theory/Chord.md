@@ -4,7 +4,7 @@ uid: a_mt_chord
 
 # Chord
 
-[Chord](xref:Melanchall.DryWetMidi.MusicTheory.Chord) represents a musical chord as a collection of notes names. Some examples of usage:
+[Chord](xref:Melanchall.DryWetMidi.MusicTheory.Chord) represents a musical chord as a collection of note names. Some examples of usage:
 
 ```csharp
 // Create chord by root note name and intervals from root
@@ -55,7 +55,7 @@ Examples of valid chord strings:
 
 ## Chords names table
 
-Following table shows what chords are currently supported for parsing from string and for retrieving names by chords notes. First column lists names and the second one shows intervals from root. For example, `0 1 5` for `C` give us following chord: `C C# E`.
+The following table shows which chords are currently supported for parsing from strings and for retrieving names from chord notes. The first column lists chord names, and the second one shows the intervals from the root. For example, intervals `0 1 5` for `C` give us the following chord: `C C# F`.
 
 |Names|Intervals|
 |-----|---------|
