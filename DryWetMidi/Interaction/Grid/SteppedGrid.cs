@@ -59,7 +59,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <remarks>
         /// Grid's times will be distributed according to provided steps. So distance between first
         /// adjacent times will be equal to first step, distance between second adjacent times will
-        /// be equal to second step and so on. When last step reached, steps will go from the first one.
+        /// be equal to second step and so on. When the last step is reached, steps will go from the first one.
         /// </remarks>
         /// <param name="steps">Collection of grid's steps.</param>
         /// <exception cref="ArgumentNullException"><paramref name="steps"/> is <c>null</c>.</exception>
@@ -76,7 +76,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <remarks>
         /// Grid's times will be distributed according to provided steps. So distance between first
         /// adjacent times will be equal to first step, distance between second adjacent times will
-        /// be equal to second step and so on. When last step reached steps will go from the first one.
+        /// be equal to second step and so on. When the last step is reached, steps will go from the first one.
         /// </remarks>
         /// <param name="start">Start time of the grid.</param>
         /// <param name="steps">Collection of grid's steps.</param>

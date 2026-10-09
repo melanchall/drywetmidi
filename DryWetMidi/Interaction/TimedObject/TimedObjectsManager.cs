@@ -13,7 +13,7 @@ namespace Melanchall.DryWetMidi.Interaction
     /// </summary>
     /// <remarks>
     /// <para>
-    /// To start manage objects you need to get an instance of the <see cref="TimedObjectsManager"/>.
+    /// To start managing objects, you need to get an instance of the <see cref="TimedObjectsManager"/>.
     /// </para>
     /// <para>
     /// To finish managing you need to call the <see cref="TimedObjectsManager{TObject}.SaveChanges"/> or
@@ -59,7 +59,7 @@ namespace Melanchall.DryWetMidi.Interaction
     /// </summary>
     /// <remarks>
     /// <para>
-    /// To start manage objects you need to get an instance of the <see cref="TimedObjectsManager{TObject}"/>.
+    /// To start managing objects, you need to get an instance of the <see cref="TimedObjectsManager{TObject}"/>.
     /// Also <c>ManageX</c> methods within specific object type utilities class (for example,
     /// <see cref="NotesManagingUtilities.ManageNotes(TrackChunk, NoteDetectionSettings, TimedEventDetectionSettings, TimedObjectsComparer)"/>
     /// or <see cref="ChordsManagingUtilities.ManageChords(TrackChunk, ChordDetectionSettings, NoteDetectionSettings, TimedEventDetectionSettings, TimedObjectsComparer)"/>)
@@ -149,8 +149,8 @@ namespace Melanchall.DryWetMidi.Interaction
         /// updating underlying events collection.
         /// </summary>
         /// <remarks>
-        /// This method will rewrite content of the events collection was used to construct the current
-        /// <see cref="TimedObjectsManager{TObject}"/> with events were managed by this manager.
+        /// This method will rewrite the content of the events collection that was used to construct the current
+        /// <see cref="TimedObjectsManager{TObject}"/> with events managed by this manager.
         /// </remarks>
         public void SaveChanges()
         {

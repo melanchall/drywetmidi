@@ -67,7 +67,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// length and velocity.
         /// </summary>
         /// <param name="intervals">The <see cref="Interval"/> objects which define
-        /// a numbers of half steps from the <paramref name="rootNote"/>.</param>
+        /// a number of half steps from the <paramref name="rootNote"/>.</param>
         /// <param name="rootNote">The chord's root note. <c>null</c> can be passed
         /// to use the <see cref="RootNote"/> property value (see <see cref="SetRootNote"/>).</param>
         /// <param name="length">Chord's notes length. <c>null</c> can be passed

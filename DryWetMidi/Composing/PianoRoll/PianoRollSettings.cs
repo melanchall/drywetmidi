@@ -6,7 +6,7 @@ using System.Linq;
 namespace Melanchall.DryWetMidi.Composing
 {
     /// <summary>
-    /// Settings to control handling of a piano roll be the
+    /// Settings to control the handling of a piano roll by the
     /// <see cref="PatternBuilder.PianoRoll(string, PianoRollSettings)"/> method. More info in the
     /// <see href="xref:a_composing_pattern#customization">Pattern: Piano roll: Customization</see> article.
     /// </summary>
@@ -38,7 +38,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// Gets or sets a symbol which means a single-cell note. The default value
         /// is <c>'|'</c>.
         /// </summary>
-        /// <exception cref="ArgumentException">Space (' ') is the prohibted character.</exception>
+        /// <exception cref="ArgumentException">Space (' ') is the prohibited character.</exception>
         /// <exception cref="ArgumentOutOfRangeException">
         /// One of the following errors occurred:
         /// <list type="bullet">
@@ -49,7 +49,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// <description>The same symbol defined by the <see cref="MultiCellNoteEndSymbol"/> property.</description>
         /// </item>
         /// <item>
-        /// <description>The symbol used for a custom action wuthin the <see cref="CustomActions"/>.</description>
+        /// <description>The symbol used for a custom action within the <see cref="CustomActions"/>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -86,7 +86,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// Gets or sets a symbol which means the start of a multi-cell note. The default value
         /// is <c>'['</c>.
         /// </summary>
-        /// <exception cref="ArgumentException">Space (' ') is the prohibted character.</exception>
+        /// <exception cref="ArgumentException">Space (' ') is the prohibited character.</exception>
         /// <exception cref="ArgumentOutOfRangeException">
         /// One of the following errors occurred:
         /// <list type="bullet">
@@ -97,7 +97,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// <description>The same symbol defined by the <see cref="MultiCellNoteEndSymbol"/> property.</description>
         /// </item>
         /// <item>
-        /// <description>The symbol used for a custom action wuthin the <see cref="CustomActions"/>.</description>
+        /// <description>The symbol used for a custom action within the <see cref="CustomActions"/>.</description>
         /// </item>
         /// </list>
         /// </exception>
@@ -134,7 +134,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// Gets or sets a symbol which means the end of a multi-cell note. The default value
         /// is <c>']'</c>.
         /// </summary>
-        /// <exception cref="ArgumentException">Space (' ') is the prohibted character.</exception>
+        /// <exception cref="ArgumentException">Space (' ') is the prohibited character.</exception>
         /// <exception cref="ArgumentOutOfRangeException">
         /// One of the following errors occurred:
         /// <list type="bullet">
@@ -145,7 +145,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// <description>The same symbol defined by the <see cref="MultiCellNoteStartSymbol"/> property.</description>
         /// </item>
         /// <item>
-        /// <description>The symbol used for a custom action wuthin the <see cref="CustomActions"/>.</description>
+        /// <description>The symbol used for a custom action within the <see cref="CustomActions"/>.</description>
         /// </item>
         /// </list>
         /// </exception>
