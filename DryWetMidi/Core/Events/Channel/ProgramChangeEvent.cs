@@ -6,7 +6,7 @@ namespace Melanchall.DryWetMidi.Core
     /// Represents a Program Change message.
     /// </summary>
     /// <remarks>
-    /// This message sent when the patch number changes.
+    /// This message is sent when the patch number changes.
     /// </remarks>
     public sealed class ProgramChangeEvent : ChannelEvent
     {

@@ -99,9 +99,9 @@ namespace Melanchall.DryWetMidi.Core
         /// <param name="reader">Reader to read the chunk's content with.</param>
         /// <param name="settings">Settings according to which the chunk's content must be read.</param>
         /// <param name="size">Expected size of the content taken from the chunk's header.</param>
-        /// <exception cref="ObjectDisposedException">Method was called after the writer's underlying stream
+        /// <exception cref="ObjectDisposedException">Method was called after the reader's underlying stream
         /// was disposed.</exception>
-        /// <exception cref="IOException">An I/O error occurred on the writer's underlying stream.</exception>
+        /// <exception cref="IOException">An I/O error occurred on the reader's underlying stream.</exception>
         /// <exception cref="UnexpectedRunningStatusException">Unexpected running status is encountered.</exception>
         /// <exception cref="UnknownChannelEventException">Reader has encountered an unknown channel event.</exception>
         /// <exception cref="NotEnoughBytesException">Not enough bytes to read an event.</exception>

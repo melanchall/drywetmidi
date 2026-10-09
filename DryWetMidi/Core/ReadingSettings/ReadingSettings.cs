@@ -44,7 +44,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <see cref="UnexpectedTrackChunksCountPolicy.Ignore"/>.
         /// </summary>
         /// <remarks>
-        /// <para>This policy will be taken into account if actual track chunks count is less or greater than
+        /// <para>This policy will be taken into account if the actual track chunk count is less than or greater than
         /// tracks number specified in the file's header chunk. If <see cref="UnexpectedTrackChunksCountPolicy.Abort"/>
         /// is used, an instance of the <see cref="UnexpectedTrackChunksCountException"/> will be thrown if
         /// track chunks count is unexpected.</para>
@@ -215,7 +215,7 @@ namespace Melanchall.DryWetMidi.Core
         /// </summary>
         /// <remarks>
         /// <para>Valid values are 0-127 so, for example, 128 is the invalid one
-        /// and will be processed according with this policy. If <see cref="InvalidChannelEventParameterValuePolicy.Abort"/>
+        /// and will be processed according to this policy. If <see cref="InvalidChannelEventParameterValuePolicy.Abort"/>
         /// is used, an instance of the <see cref="InvalidChannelEventParameterValueException"/> will be thrown if
         /// event's parameter value just read is invalid.</para>
         /// </remarks>
@@ -237,7 +237,7 @@ namespace Melanchall.DryWetMidi.Core
         /// </summary>
         /// <remarks>
         /// <para>For example, 255 is the invalid value for the <see cref="KeySignatureEvent.Scale"/>
-        /// and will be processed according with this policy. If <see cref="InvalidMetaEventParameterValuePolicy.Abort"/>
+        /// and will be processed according to this policy. If <see cref="InvalidMetaEventParameterValuePolicy.Abort"/>
         /// is used, an instance of the <see cref="InvalidMetaEventParameterValueException"/> will be thrown if event's
         /// parameter value just read is invalid.</para>
         /// </remarks>
@@ -259,7 +259,7 @@ namespace Melanchall.DryWetMidi.Core
         /// </summary>
         /// <remarks>
         /// <para>For example, 255 is the invalid value for the <see cref="SongSelectEvent.Number"/>
-        /// and will be processed according with this policy. If <see cref="InvalidSystemCommonEventParameterValuePolicy.Abort"/>
+        /// and will be processed according to this policy. If <see cref="InvalidSystemCommonEventParameterValuePolicy.Abort"/>
         /// is used, an instance of the <see cref="InvalidSystemCommonEventParameterValueException"/> will be thrown if event's
         /// parameter value just read is invalid.</para>
         /// </remarks>
@@ -340,7 +340,7 @@ namespace Melanchall.DryWetMidi.Core
         // TODO: check setting null
         /// <summary>
         /// Gets or sets an <see cref="Encoding"/> that will be used to read the text of a
-        /// text-based meta events. The default is <see cref="Encoding.ASCII"/>.
+        /// text-based meta event. The default is <see cref="Encoding.ASCII"/>.
         /// </summary>
         /// <remarks>
         /// <para>Value of this property will be used only if <see cref="DecodeTextCallback"/> is not set.</para>
@@ -393,7 +393,7 @@ namespace Melanchall.DryWetMidi.Core
         /// Gets or sets settings according to which <see cref="MidiReader"/> should read MIDI data.
         /// </summary>
         /// <remarks>
-        /// <para>These settings specify reading binary data without knowledge about MIDI data structures.</para>
+        /// <para>These settings specify reading binary data without knowledge of MIDI data structures.</para>
         /// </remarks>
         public ReaderSettings ReaderSettings { get; set; } = new ReaderSettings();
 

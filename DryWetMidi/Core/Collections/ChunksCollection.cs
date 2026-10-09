@@ -78,7 +78,7 @@ namespace Melanchall.DryWetMidi.Core
         }
 
         /// <summary>
-        /// Adds chunks the end of the collection.
+        /// Adds chunks to the end of the collection.
         /// </summary>
         /// <param name="chunks">Chunks to add to the collection.</param>
         /// <remarks>

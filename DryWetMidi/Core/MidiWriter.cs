@@ -162,7 +162,7 @@ namespace Melanchall.DryWetMidi.Core
         }
 
         /// <summary>
-        /// Writes a INT16 value (16-bit signed integer) to the underlying stream and
+        /// Writes an INT16 value (16-bit signed integer) to the underlying stream and
         /// advances the current position by two bytes.
         /// </summary>
         /// <param name="value">INT16 value to write.</param>

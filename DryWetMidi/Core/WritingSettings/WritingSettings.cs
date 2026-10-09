@@ -84,7 +84,7 @@ namespace Melanchall.DryWetMidi.Core
         /// Gets or sets settings according to which <see cref="MidiWriter"/> should write MIDI data.
         /// </summary>
         /// <remarks>
-        /// <para>These settings specify reading binary data without knowledge about MIDI data structures.</para>
+        /// <para>These settings specify writing binary data without knowledge of MIDI data structures.</para>
         /// </remarks>
         public WriterSettings WriterSettings { get; set; } = new WriterSettings();
 

@@ -14,7 +14,7 @@ namespace Melanchall.DryWetMidi.Core
     /// <para>An instance of <see cref="MidiFile"/> can be obtained via one of <c>Read</c>
     /// (<see cref="Read(string, ReadingSettings)"/> or <see cref="Read(Stream, ReadingSettings)"/>)
     /// static methods or via constructor which allows to create a MIDI file from scratch.</para>
-    /// <para>Content of MIDI file available via <see cref="Chunks"/> property which contains instances of
+    /// <para>Content of a MIDI file is available via the <see cref="Chunks"/> property, which contains instances of
     /// following chunk classes (derived from <see cref="MidiChunk"/>):</para>
     /// <list type="bullet">
     /// <item>
@@ -101,8 +101,8 @@ namespace Melanchall.DryWetMidi.Core
         /// </summary>
         /// <remarks>
         /// <para>Time division specifies the meaning of the delta-times of MIDI events within <see cref="TrackChunk"/>.
-        /// There are two types of the time division: ticks per quarter note and SMPTE. The first type represented by
-        /// <see cref="TicksPerQuarterNoteTimeDivision"/> class and the second one represented by
+        /// There are two types of the time division: ticks per quarter note and SMPTE. The first type is represented by
+        /// the <see cref="TicksPerQuarterNoteTimeDivision"/> class and the second one is represented by
         /// <see cref="SmpteTimeDivision"/> class.</para>
         /// </remarks>
         public TimeDivision? TimeDivision { get; set; } = new TicksPerQuarterNoteTimeDivision();

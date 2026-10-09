@@ -7,12 +7,12 @@
     public enum NoHeaderChunkPolicy
     {
         /// <summary>
-        /// Abort reading and throw an <see cref="NoHeaderChunkException"/>.
+        /// Abort reading and throw a <see cref="NoHeaderChunkException"/>.
         /// </summary>
         Abort = 0,
 
         /// <summary>
-        /// Ignore missing of the header chunk. You'll be able specify time division manually
+        /// Ignore the missing header chunk. You'll be able to specify the time division manually
         /// after reading via <see cref="MidiFile.TimeDivision"/> property.
         /// </summary>
         Ignore

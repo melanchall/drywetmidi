@@ -35,7 +35,7 @@ namespace Melanchall.DryWetMidi.Core
         public UnknownChannelEventInstruction Instruction { get; }
 
         /// <summary>
-        /// Gets count of data bytes to skip be reading engine. Data bytes are event bytes without status byte.
+        /// Gets the count of data bytes to be skipped by the reading engine. Data bytes are event bytes without the status byte.
         /// </summary>
         public int DataBytesToSkipCount { get; }
 
@@ -47,8 +47,8 @@ namespace Melanchall.DryWetMidi.Core
         /// Creates an instance of the <see cref="UnknownChannelEventAction"/> to skip data bytes of
         /// unknown channel event.
         /// </summary>
-        /// <param name="dataBytesToSkipCount">Count of data bytes to skip be reading engine.
-        /// Data bytes are event bytes without status byte.</param>
+        /// <param name="dataBytesToSkipCount">The count of data bytes to be skipped by the reading engine.
+        /// Data bytes are event bytes without the status byte.</param>
         /// <returns>an instance of the <see cref="UnknownChannelEventAction"/> to skip data bytes of
         /// unknown channel event.</returns>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="dataBytesToSkipCount"/> is negative.</exception>
