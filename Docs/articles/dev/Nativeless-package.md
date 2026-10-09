@@ -21,6 +21,6 @@ First one is the version containing all the features of the library and you shou
 * [TickGeneratorException](xref:Melanchall.DryWetMidi.Multimedia.TickGeneratorException);
 * [HighPrecisionTickGenerator](xref:Melanchall.DryWetMidi.Multimedia.HighPrecisionTickGenerator).
 
-Also default tick generator for [Playback](xref:Melanchall.DryWetMidi.Multimedia.Playback) there is [RegularPrecisionTickGenerator](xref:Melanchall.DryWetMidi.Multimedia.RegularPrecisionTickGenerator) instead of [HighPrecisionTickGenerator](xref:Melanchall.DryWetMidi.Multimedia.HighPrecisionTickGenerator).
+Also, the default tick generator for [Playback](xref:Melanchall.DryWetMidi.Multimedia.Playback) is [RegularPrecisionTickGenerator](xref:Melanchall.DryWetMidi.Multimedia.RegularPrecisionTickGenerator) instead of [HighPrecisionTickGenerator](xref:Melanchall.DryWetMidi.Multimedia.HighPrecisionTickGenerator).
 
 Although built-in implementations of [IInputEndpoint](xref:Melanchall.DryWetMidi.Multimedia.IInputEndpoint) and [IOutputEndpoint](xref:Melanchall.DryWetMidi.Multimedia.IOutputEndpoint) are unavailable in the nativeless package, you are still able to create your own implementations and use them across the library API (in [Playback](xref:Melanchall.DryWetMidi.Multimedia.Playback) for example).

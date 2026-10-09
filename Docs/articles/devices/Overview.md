@@ -14,7 +14,7 @@ Endpoints are "sockets" from the DryWetMIDI side to work with MIDI devices. An i
 
 ![Devices](images/Devices.png)
 
-So, as you can see, although a MIDI port is _MIDI IN_ for a MIDI device, it will be an **output endpoint** in DryWetMIDI because your application will **send MIDI data to** this port. _MIDI OUT_ of MIDI device will be an **input endpoint** in DryWetMIDI because a program will **receive MIDI data from** the port. In some other libraries and frameworks you may see that input endpoints named as sources and output endpoints named as destinations.
+So, as you can see, although a MIDI port is _MIDI IN_ for a MIDI device, it will be an **output endpoint** in DryWetMIDI because your application will **send MIDI data to** this port. _MIDI OUT_ of MIDI device will be an **input endpoint** in DryWetMIDI because a program will **receive MIDI data from** the port. In some other libraries and frameworks you may see that input endpoints are named sources and output endpoints are named destinations.
 
 The library provides implementations for both `IInputEndpoint` and `IOutputEndpoint`: [`InputEndpoint`](xref:Melanchall.DryWetMidi.Multimedia.InputEndpoint) and [`OutputEndpoint`](xref:Melanchall.DryWetMidi.Multimedia.OutputEndpoint) correspondingly which represent endpoints of MIDI devices visible by the operating system. Both classes implement [`IDisposable`](xref:System.IDisposable) interface so you should always dispose them to free ports for use by other applications.
 

@@ -30,7 +30,7 @@ private void OnEventReceived(object sender, MidiEventReceivedEventArgs e)
 }
 ```
 
-What happens when the `StartListening` method exits? Right, all local variables are marked as ready for garbage collection, so they will be deleted within a short time span. So the `OnEventReceived` method becomes attached to a deleted entity (`inputEndpoint`) when the `StartListening` exited. In the best case you just won't get `OnEventReceived` called. In worst case you may get different strange things, see this issues:
+What happens when the `StartListening` method exits? Right, all local variables are marked as ready for garbage collection, so they will be deleted within a short time span. So the `OnEventReceived` method becomes attached to a deleted entity (`inputEndpoint`) when the `StartListening` method exits. In the best case you just won't get `OnEventReceived` called. In the worst case you may get different strange things; see these issues:
 
 * [InputEndpoint event listening crash](https://github.com/melanchall/drywetmidi/issues/262)
 * [Crash when running in Unity on M2 MacBook](https://github.com/melanchall/drywetmidi/issues/267)
@@ -62,6 +62,6 @@ private void SendEvent()
 }
 ```
 
-`SendEvent` sends MIDI event to a device driver where it will be processed. If `outputEndpoint` collected by GC during sending an event to the driver, undefined behavior possible including app crash.
+`SendEvent` sends a MIDI event to a device driver where it will be processed. If `outputEndpoint` is collected by GC during sending an event to the driver, undefined behavior is possible, including an app crash.
 
 As with input endpoint, output endpoint **must always** be stored in a class field. Don't forget to dispose the endpoint when you're done with it. Please read the [Output endpoint](xref:a_dev_output) article to learn more.
