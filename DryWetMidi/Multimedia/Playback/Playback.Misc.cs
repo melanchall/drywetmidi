@@ -54,19 +54,19 @@ namespace Melanchall.DryWetMidi.Multimedia
         public event EventHandler? RepeatStarted;
 
         /// <summary>
-        /// Occurs when notes started to play. It will raised if playback's cursor
-        /// gets in to notes.
+        /// Occurs when notes start playing. It will be raised if the playback's cursor
+        /// gets into notes.
         /// </summary>
         public event EventHandler<NotesEventArgs>? NotesPlaybackStarted;
 
         /// <summary>
-        /// Occurs when notes finished to play. It will raised if playback's cursor
+        /// Occurs when notes finish playing. It will be raised if the playback's cursor
         /// gets out from notes.
         /// </summary>
         public event EventHandler<NotesEventArgs>? NotesPlaybackFinished;
 
         /// <summary>
-        /// Occurs when MIDI event played.
+        /// Occurs when a MIDI event is played.
         /// </summary>
         public event EventHandler<MidiEventPlayedEventArgs>? EventPlayed;
 
@@ -109,7 +109,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// collection of timed objects and tempo map.
         /// </summary>
         /// <param name="timedObjects">Collection of timed objects to play.</param>
-        /// <param name="tempoMap">Tempo map used to calculate events times.</param>
+        /// <param name="tempoMap">Tempo map used to calculate the times of events.</param>
         /// <param name="playbackSettings">Settings according to which a playback should be created.</param>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occurred:</para>
@@ -150,7 +150,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// collection of timed objects, tempo map and output MIDI endpoint to play events through.
         /// </summary>
         /// <param name="timedObjects">Collection of timed objects to play.</param>
-        /// <param name="tempoMap">Tempo map used to calculate events times.</param>
+        /// <param name="tempoMap">Tempo map used to calculate the times of events.</param>
         /// <param name="outputEndpoint">Output MIDI endpoint to play <paramref name="timedObjects"/> through.</param>
         /// <param name="playbackSettings">Settings according to which a playback should be created.</param>
         /// <exception cref="ArgumentNullException">
@@ -193,7 +193,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         #region Properties
 
         /// <summary>
-        /// Gets the tempo map used to calculate events times. You should use this property
+        /// Gets the tempo map used to calculate the times of events. You should use this property
         /// when the current playback has been created from a <see cref="IObservableTimedObjectsCollection"/>
         /// (more info in the <see href="xref:a_playback_dynamic">Dynamic changes</see> article).
         /// </summary>
@@ -244,7 +244,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <remarks>
         /// If there is a Note Off event and we are in the point (for example, by jumping with the
         /// <see cref="MoveToTime(ITimeSpan)"/>) where there is no currently playing note with the
-        /// same note number and channel, the event won't be played when this property set to <c>false</c>
+        /// same note number and channel, the event won't be played when this property is set to <c>false</c>
         /// (which is the default value). To send Note Off event anyway, set this property to <c>true</c>.
         /// </remarks>
         public bool SendNoteOffEventsForNonActiveNotes { get; set; }
@@ -256,7 +256,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <remarks>
         /// If there is a Note On event and we are in the point (for example, by jumping with the
         /// <see cref="MoveToTime(ITimeSpan)"/>) where there is currently playing note with the
-        /// same note number and channel, the event won't be played when this property set to <c>false</c>
+        /// same note number and channel, the event won't be played when this property is set to <c>false</c>
         /// (which is the default value). To send Note On event anyway, set this property to <c>true</c>.
         /// </remarks>
         public bool SendNoteOnEventsForActiveNotes { get; set; }

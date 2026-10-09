@@ -453,8 +453,8 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// Determines if two <see cref="OutputEndpoint"/> objects are equal.
         /// </summary>
         /// <remarks>
-        /// On Windows the operator will just compare objects references. "True" equality check available
-        /// on macOS only.
+        /// On Windows, the operator compares object references only. A true equality check is available
+        /// only on macOS.
         /// </remarks>
         /// <param name="outputEndpoint1">The first <see cref="OutputEndpoint"/> to compare.</param>
         /// <param name="outputEndpoint2">The second <see cref="OutputEndpoint"/> to compare.</param>
@@ -474,8 +474,8 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// Determines if two <see cref="OutputEndpoint"/> objects are not equal.
         /// </summary>
         /// <remarks>
-        /// On Windows the operator will just compare objects references. "True" inequality check available
-        /// on macOS only.
+        /// On Windows, the operator compares object references only. A true inequality check is available
+        /// only on macOS.
         /// </remarks>
         /// <param name="outputEndpoint1">The first <see cref="OutputEndpoint"/> to compare.</param>
         /// <param name="outputEndpoint2">The second <see cref="OutputEndpoint"/> to compare.</param>
@@ -493,8 +493,8 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// Determines whether the specified object is equal to the current object.
         /// </summary>
         /// <remarks>
-        /// On Windows the method will just compare objects references. "True" equality check available
-        /// on macOS only.
+        /// On Windows, the method compares object references only. A true equality check is available
+        /// only on macOS.
         /// </remarks>
         /// <param name="obj">The object to compare with the current object.</param>
         /// <returns><c>true</c> if the specified object is equal to the current object; otherwise, <c>false</c>.</returns>

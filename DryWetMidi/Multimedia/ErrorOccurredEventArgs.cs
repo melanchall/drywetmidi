@@ -19,7 +19,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         #region Properties
 
         /// <summary>
-        /// Gets the exception caused an error.
+        /// Gets the exception that caused an error.
         /// </summary>
         public Exception Exception { get; }
 

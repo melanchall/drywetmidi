@@ -74,7 +74,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         public static PlaybackCurrentTimeWatcher Instance => _instance.Value;
 
         /// <summary>
-        /// Gets or sets the interval of playbacks current times polling.
+        /// Gets or sets the interval at which the current times of playbacks are polled.
         /// </summary>
         public TimeSpan PollingInterval
         {
@@ -102,13 +102,13 @@ namespace Melanchall.DryWetMidi.Multimedia
         }
 
         /// <summary>
-        /// Gets a value indicating whether the watcher polls playbacks current times or not.
+        /// Gets a value indicating whether the watcher polls the current times of playbacks.
         /// </summary>
         public bool IsWatching => _clock?.IsRunning ?? false;
 
         /// <summary>
-        /// Gets or sets the type of a playback's time to convert to in case of playback
-        /// was added in the watcher via <see cref="AddPlayback(Playback)"/> method (without
+        /// Gets or sets the time type to which a playback's time is converted if the playback
+        /// was added to the watcher via the <see cref="AddPlayback(Playback)"/> method (without
         /// specifying desired time type). The default value is <see cref="TimeSpanType.Midi"/>.
         /// </summary>
         /// <remarks>
@@ -203,7 +203,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// </summary>
         /// <param name="playback">Playback to set time type for.</param>
         /// <param name="timeType">Type to convert current time of the <paramref name="playback"/> to.</param>
-        /// /// <exception cref="ArgumentNullException"><paramref name="playback"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="playback"/> is <c>null</c>.</exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="timeType"/> specified an invalid value.</exception>
         /// <exception cref="ObjectDisposedException">The current <see cref="PlaybackCurrentTimeWatcher"/>
         /// is disposed.</exception>

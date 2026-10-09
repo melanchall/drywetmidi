@@ -18,7 +18,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         #region Events
 
         /// <summary>
-        /// Occurs when new tick generated.
+        /// Occurs when a new tick is generated.
         /// </summary>
         public event EventHandler? Ticked;
 
@@ -175,7 +175,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         }
 
         /// <summary>
-        /// Stops the clock.Current time will not be changed.
+        /// Stops the clock. Current time will not be changed.
         /// </summary>
         /// <exception cref="ObjectDisposedException">The current <see cref="MidiClock"/> is disposed.</exception>
         public void Stop()

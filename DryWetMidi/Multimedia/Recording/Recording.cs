@@ -52,7 +52,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// Initializes a new instance of the <see cref="Recording"/> with the specified
         /// tempo map and input MIDI endpoint to capture MIDI data from.
         /// </summary>
-        /// <param name="tempoMap">Tempo map used to calculate events times.</param>
+        /// <param name="tempoMap">Tempo map used to calculate the times of events.</param>
         /// <param name="inputEndpoint">Input MIDI endpoint to capture MIDI data from.</param>
         /// <exception cref="ArgumentNullException">
         /// <para>One of the following errors occurred:</para>
@@ -80,7 +80,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         #region Properties
 
         /// <summary>
-        /// Gets the tempo map used to calculate recorded events times.
+        /// Gets the tempo map used to calculate the times of recorded events.
         /// </summary>
         public TempoMap TempoMap { get; }
 

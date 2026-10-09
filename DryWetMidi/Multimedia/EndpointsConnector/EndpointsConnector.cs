@@ -61,7 +61,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         public IReadOnlyCollection<IOutputEndpoint> OutputEndpoints { get; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether <see cref="InputEndpoint"/> currently connected
+        /// Gets or sets a value indicating whether <see cref="InputEndpoint"/> is currently connected
         /// to <see cref="OutputEndpoints"/> or not (i.e. <see cref="Connect"/> method has been called).
         /// </summary>
         public bool AreEndpointsConnected { get; private set; }

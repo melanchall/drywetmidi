@@ -26,7 +26,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         public MidiEvent Event { get; }
 
         /// <summary>
-        /// Gets a metadata associated with the <see cref="Event"/>.
+        /// Gets the metadata associated with the <see cref="Event"/>.
         /// </summary>
         public object? Metadata { get; }
 

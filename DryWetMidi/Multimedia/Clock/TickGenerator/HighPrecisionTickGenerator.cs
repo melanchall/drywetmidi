@@ -4,7 +4,7 @@ using Melanchall.DryWetMidi.Common;
 namespace Melanchall.DryWetMidi.Multimedia
 {
     /// <summary>
-    /// Tick generator providing most accurate ticking, allowing firing intervals of 1 ms which
+    /// Tick generator providing the most accurate ticking, allowing firing intervals of 1 ms which
     /// is the smallest possible one.
     /// </summary>
     /// <remarks>
