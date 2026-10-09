@@ -73,9 +73,9 @@ public sealed class HistoryChunk : MidiChunk
 }
 ```
 
-Before we will start to implement four methods mentioned above, we need to determine the structure of change records according to which it should be read and written.
+Before we start to implement the four methods mentioned above, we need to determine the structure of change records according to which it should be read and written.
 
-Chunk's content will be started with the count of changes. We will write this count as a [variable-length quantity](https://en.wikipedia.org/wiki/Variable-length_quantity) (VLQ) number. The count followed by change records.
+Chunk's content will start with the count of changes. We will write this count as a [variable-length quantity](https://en.wikipedia.org/wiki/Variable-length_quantity) (VLQ) number. The count is followed by change records.
 
 Each change is:
 
@@ -153,7 +153,7 @@ protected override void WriteContent(MidiWriter writer, WritingSettings settings
 }
 ```
 
-Every chunk starts with an ID and its size. DryWetMIDI calls `GetContentSize` method of the `MidiChunk` to write its return value as chunk's size. You must calculate the real size of the chunk's content in order to programs which will read a MIDI file with your custom chunk will be able to skip it by advancing the position of the reader on this size. Let's implement `GetContentSize`:
+Every chunk starts with an ID and its size. DryWetMIDI calls the `GetContentSize` method of the `MidiChunk` to write its return value as the chunk's size. You must calculate the real size of the chunk's content so that programs that read a MIDI file with your custom chunk can skip it by advancing the reader's position by this size. Let's implement `GetContentSize`:
 
 ```csharp
 protected override uint GetContentSize(WritingSettings settings)
