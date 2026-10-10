@@ -337,6 +337,18 @@ namespace Melanchall.DryWetMidi.Core
         /// </remarks>
         public EventTypesCollection? CustomMetaEventTypes { get; set; }
 
+        /// <summary>
+        /// Gets or sets the maximum estimated size in bytes that a <see cref="MidiFile"/> being read is
+        /// allowed to occupy in memory. If the estimate exceeds the value while reading,
+        /// <see cref="MidiFileTooLargeException"/> is thrown. The default is <c>null</c> which means no limit.
+        /// </summary>
+        /// <remarks>
+        /// <para>The size is an approximation calculated from the objects (events, chunks) created during reading,
+        /// so it can be much greater than the size of the data in the input stream. Applies to
+        /// <see cref="MidiFile.Read(System.IO.Stream, ReadingSettings)"/> and its overloads.</para>
+        /// </remarks>
+        public long? MaxMemorySize { get; set; }
+
         // TODO: check setting null
         /// <summary>
         /// Gets or sets an <see cref="Encoding"/> that will be used to read the text of a

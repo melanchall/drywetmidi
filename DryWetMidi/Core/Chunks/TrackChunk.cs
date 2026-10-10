@@ -112,6 +112,9 @@ namespace Melanchall.DryWetMidi.Core
                 if (midiEvent == null)
                     continue;
 
+                if (settings.MaxMemorySize != null)
+                    reader.AddEstimatedMemory(MemorySizeEstimator.EstimateDeep(midiEvent) + MemorySizeEstimator.ReferenceSlotSize, settings);
+
                 if (midiEvent is EndOfTrackEvent)
                 {
                     endOfTrackPresented = true;

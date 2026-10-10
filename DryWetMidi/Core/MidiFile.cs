@@ -451,6 +451,7 @@ namespace Melanchall.DryWetMidi.Core
         /// is <c>null</c> in case of <see cref="ReaderSettings.BufferingPolicy"/> set to
         /// <see cref="BufferingPolicy.UseCustomBuffer"/>.</exception>
         /// <exception cref="VlqNumberOverflowException">A variable-length quantity (VLQ) number in the file is too large.</exception>
+        /// <exception cref="MidiFileTooLargeException">Estimated size of the file in memory exceeds <see cref="ReadingSettings.MaxMemorySize"/>.</exception>
         public static MidiFile Read(Stream stream, ReadingSettings? settings = null)
         {
             ThrowIfArgument.IsNull(nameof(stream), stream);
