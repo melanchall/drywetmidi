@@ -201,6 +201,15 @@ namespace Melanchall.DryWetMidi.Core
         /// <exception cref="IOException">An I/O error occurred on the underlying stream.</exception>
         public byte[] ReadBytes(int count)
         {
+            if (!_isStreamWrapped && count > 0)
+            {
+                // Declared size can be far greater than the actual data (malformed or malicious file),
+                // so don't allocate more than the stream can provide
+                var available = Length - Position;
+                if (available < count)
+                    count = (int)Math.Max(available, 0);
+            }
+
             if (_isStreamWrapped && count > _settings.NonSeekableStreamIncrementalBytesReadingThreshold)
             {
                 var bytesList = new List<byte[]>();
