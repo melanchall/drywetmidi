@@ -76,6 +76,7 @@ namespace Melanchall.DryWetMidi.Core
 
             var availableSize = reader.Length - reader.Position;
             var bytesCount = availableSize < size ? availableSize : size;
+            reader.AddEstimatedMemory(48 + bytesCount, settings);
             var bytes = reader.ReadBytes((int)Math.Min(bytesCount, int.MaxValue));
             if (bytes.Length < size && settings.NotEnoughBytesPolicy == NotEnoughBytesPolicy.Abort)
                 throw new NotEnoughBytesException(
