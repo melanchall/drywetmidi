@@ -104,6 +104,16 @@ namespace Melanchall.DryWetMidi.Tests.Core
             }
         }
 
+        [Test]
+        public void Read_HugeDeclaredUnknownChunkSize_Skip()
+        {
+            var bytes = new byte[] { 0x4D, 0x54, 0x68, 0x64, 0, 0, 0, 6, 0, 0, 0, 0, 0, 96, 0x58, 0x58, 0x58, 0x58, 0xFF, 0xFF, 0xFF, 0xFF, 1, 2, 3 };
+            var settings = new ReadingSettings { UnknownChunkIdPolicy = UnknownChunkIdPolicy.Skip };
+            MidiFile file = null;
+            Assert.DoesNotThrow(() => file = MidiFile.Read(new MemoryStream(bytes), settings));
+            ClassicAssert.AreEqual(0, file.Chunks.Count);
+        }
+
         private static MidiFile ReadFromBytes(byte[] bytes, NotEnoughBytesPolicy policy, bool nonSeekable)
         {
             var settings = new ReadingSettings

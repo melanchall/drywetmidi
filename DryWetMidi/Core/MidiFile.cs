@@ -843,7 +843,7 @@ namespace Melanchall.DryWetMidi.Core
 
                         case UnknownChunkIdPolicy.Skip:
                             var size = reader.ReadDword();
-                            reader.Position += size;
+                            reader.Position = Math.Min(reader.Position + size, reader.Length);
                             return null;
 
                         case UnknownChunkIdPolicy.Abort:
@@ -860,7 +860,7 @@ namespace Melanchall.DryWetMidi.Core
 
                         case ExtraTrackChunkPolicy.Skip:
                             var size = reader.ReadDword();
-                            reader.Position += size;
+                            reader.Position = Math.Min(reader.Position + size, reader.Length);
                             return null;
                     }
                 }
