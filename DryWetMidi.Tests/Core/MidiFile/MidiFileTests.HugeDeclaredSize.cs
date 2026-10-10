@@ -8,46 +8,64 @@ namespace Melanchall.DryWetMidi.Tests.Core
 {
     public sealed partial class MidiFileTests
     {
-        private static readonly byte[] HugeVlq = new byte[] { 0x87, 0xFF, 0xFF, 0xFF, 0x7F };
+        #region Nested classes
 
-        [TestCase(0xFF, 0x01)] // Text
-        [TestCase(0xFF, 0x05)] // Lyric
-        [TestCase(0xFF, 0x7F)] // Sequencer specific
-        [TestCase(0xFF, 0x60)] // Unknown meta
-        [TestCase(0xF0)]       // Normal SysEx
-        [TestCase(0xF7)]       // Escape SysEx
-        public void Read_HugeDeclaredEventSize_Abort(params int[] header)
+        private sealed class NonSeekableMemoryStream : MemoryStream
         {
-            var bytes = GetFileWithHugeEvent(header);
-            Assert.Throws<NotEnoughBytesException>(() => ReadFromBytes(bytes, NotEnoughBytesPolicy.Abort, false));
+            public NonSeekableMemoryStream(byte[] bytes) : base(bytes) { }
+            public override bool CanSeek => false;
         }
 
-        [TestCase(0xFF, 0x01)]
-        [TestCase(0xFF, 0x05)]
-        [TestCase(0xFF, 0x7F)]
-        [TestCase(0xFF, 0x60)]
-        [TestCase(0xF0)]
-        [TestCase(0xF7)]
-        public void Read_HugeDeclaredEventSize_Ignore(params int[] header)
+        #endregion
+
+        #region Constants
+
+        private const byte UnknownMetaEventType = 0x60;
+
+        // VLQ encoding of 0x7FFFFFFF (about 2 GB)
+        private static readonly byte[] HugeVlq = new byte[] { 0x87, 0xFF, 0xFF, 0xFF, 0x7F };
+
+        #endregion
+
+        #region Test methods
+
+        [TestCase(EventStatusBytes.Global.Meta, EventStatusBytes.Meta.Text)]
+        [TestCase(EventStatusBytes.Global.Meta, EventStatusBytes.Meta.Lyric)]
+        [TestCase(EventStatusBytes.Global.Meta, EventStatusBytes.Meta.SequencerSpecific)]
+        [TestCase(EventStatusBytes.Global.Meta, UnknownMetaEventType)]
+        [TestCase(EventStatusBytes.Global.NormalSysEx)]
+        [TestCase(EventStatusBytes.Global.EscapeSysEx)]
+        public void Read_HugeDeclaredEventSize_Abort(params byte[] header)
         {
             var bytes = GetFileWithHugeEvent(header);
-            MidiFile file = null;
-            Assert.DoesNotThrow(() => file = ReadFromBytes(bytes, NotEnoughBytesPolicy.Ignore, false));
-            ClassicAssert.AreEqual(1, file.GetTrackChunks().Count());
+            Assert.Throws<NotEnoughBytesException>(() => ReadFromBytes(bytes, NotEnoughBytesPolicy.Abort, false), "Exception not thrown.");
+        }
+
+        [TestCase(EventStatusBytes.Global.Meta, EventStatusBytes.Meta.Text)]
+        [TestCase(EventStatusBytes.Global.Meta, EventStatusBytes.Meta.Lyric)]
+        [TestCase(EventStatusBytes.Global.Meta, EventStatusBytes.Meta.SequencerSpecific)]
+        [TestCase(EventStatusBytes.Global.Meta, UnknownMetaEventType)]
+        [TestCase(EventStatusBytes.Global.NormalSysEx)]
+        [TestCase(EventStatusBytes.Global.EscapeSysEx)]
+        public void Read_HugeDeclaredEventSize_Ignore(params byte[] header)
+        {
+            var bytes = GetFileWithHugeEvent(header);
+            var file = ReadFromBytes(bytes, NotEnoughBytesPolicy.Ignore, false);
+            ClassicAssert.AreEqual(1, file.GetTrackChunks().Count(), "Track chunk is not read.");
         }
 
         [Test]
         public void Read_HugeDeclaredEventSize_Ignore_NonSeekableStream()
         {
-            var bytes = GetFileWithHugeEvent(0xFF, 0x01);
-            Assert.DoesNotThrow(() => ReadFromBytes(bytes, NotEnoughBytesPolicy.Ignore, true));
+            var bytes = GetFileWithHugeEvent(EventStatusBytes.Global.Meta, EventStatusBytes.Meta.Text);
+            ReadFromBytes(bytes, NotEnoughBytesPolicy.Ignore, true);
         }
 
         [Test]
         public void Read_HugeDeclaredEventSize_Abort_NonSeekableStream()
         {
-            var bytes = GetFileWithHugeEvent(0xF0);
-            Assert.Throws<NotEnoughBytesException>(() => ReadFromBytes(bytes, NotEnoughBytesPolicy.Abort, true));
+            var bytes = GetFileWithHugeEvent(EventStatusBytes.Global.NormalSysEx);
+            Assert.Throws<NotEnoughBytesException>(() => ReadFromBytes(bytes, NotEnoughBytesPolicy.Abort, true), "Exception not thrown.");
         }
 
         [Test]
@@ -56,9 +74,10 @@ namespace Melanchall.DryWetMidi.Tests.Core
             var path = Path.GetTempFileName();
             try
             {
-                File.WriteAllBytes(path, GetFileWithHugeEvent(0xFF, 0x01));
+                File.WriteAllBytes(path, GetFileWithHugeEvent(EventStatusBytes.Global.Meta, EventStatusBytes.Meta.Text));
                 Assert.Throws<NotEnoughBytesException>(() =>
-                    MidiFile.Read(path, new ReadingSettings { NotEnoughBytesPolicy = NotEnoughBytesPolicy.Abort }));
+                    MidiFile.Read(path, new ReadingSettings { NotEnoughBytesPolicy = NotEnoughBytesPolicy.Abort }),
+                    "Exception not thrown.");
             }
             finally
             {
@@ -79,8 +98,8 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 ms.Position = 0;
                 var read = MidiFile.Read(ms, new ReadingSettings { NotEnoughBytesPolicy = NotEnoughBytesPolicy.Abort });
                 var events = read.GetTrackChunks().Single().Events;
-                ClassicAssert.AreEqual("Name", ((SequenceTrackNameEvent)events[0]).Text);
-                CollectionAssert.AreEqual(new byte[] { 1, 2, 3, 0xF7 }, ((NormalSysExEvent)events[1]).Data);
+                ClassicAssert.AreEqual("Name", ((SequenceTrackNameEvent)events[0]).Text, "Track name is invalid.");
+                CollectionAssert.AreEqual(new byte[] { 1, 2, 3, 0xF7 }, ((NormalSysExEvent)events[1]).Data, "SysEx data is invalid.");
             }
         }
 
@@ -89,8 +108,8 @@ namespace Melanchall.DryWetMidi.Tests.Core
         {
             using (var reader = new MidiReader(new MemoryStream(new byte[] { 1, 2, 3 }), new ReaderSettings()))
             {
-                CollectionAssert.AreEqual(new byte[] { 1, 2, 3 }, reader.ReadBytes(int.MaxValue));
-                ClassicAssert.AreEqual(0, reader.ReadBytes(int.MaxValue).Length);
+                CollectionAssert.AreEqual(new byte[] { 1, 2, 3 }, reader.ReadBytes(int.MaxValue), "Bytes are invalid.");
+                ClassicAssert.AreEqual(0, reader.ReadBytes(int.MaxValue).Length, "Bytes are returned at the end of stream.");
             }
         }
 
@@ -99,20 +118,33 @@ namespace Melanchall.DryWetMidi.Tests.Core
         {
             using (var reader = new MidiReader(new MemoryStream(new byte[] { 1, 2, 3, 4 }), new ReaderSettings()))
             {
-                CollectionAssert.AreEqual(new byte[] { 1, 2 }, reader.ReadBytes(2));
-                CollectionAssert.AreEqual(new byte[] { 3, 4 }, reader.ReadBytes(2));
+                CollectionAssert.AreEqual(new byte[] { 1, 2 }, reader.ReadBytes(2), "Bytes are invalid.");
+                CollectionAssert.AreEqual(new byte[] { 3, 4 }, reader.ReadBytes(2), "Bytes are invalid.");
             }
         }
 
         [Test]
         public void Read_HugeDeclaredUnknownChunkSize_Skip()
         {
-            var bytes = new byte[] { 0x4D, 0x54, 0x68, 0x64, 0, 0, 0, 6, 0, 0, 0, 0, 0, 96, 0x58, 0x58, 0x58, 0x58, 0xFF, 0xFF, 0xFF, 0xFF, 1, 2, 3 };
+            var bytes = new byte[]
+            {
+                0x4D, 0x54, 0x68, 0x64, // Header chunk ID (MThd)
+                0, 0, 0, 6,             // Header chunk size
+                0, 0,                   // File format
+                0, 0,                   // Tracks count
+                0, 96,                  // Time division
+                0x58, 0x58, 0x58, 0x58, // Unknown chunk ID (XXXX)
+                0xFF, 0xFF, 0xFF, 0xFF, // Unknown chunk declared size (4 GB)
+                1, 2, 3                 // Actual chunk data (3 bytes)
+            };
             var settings = new ReadingSettings { UnknownChunkIdPolicy = UnknownChunkIdPolicy.Skip };
-            MidiFile file = null;
-            Assert.DoesNotThrow(() => file = MidiFile.Read(new MemoryStream(bytes), settings));
-            ClassicAssert.AreEqual(0, file.Chunks.Count);
+            var file = MidiFile.Read(new MemoryStream(bytes), settings);
+            ClassicAssert.AreEqual(0, file.Chunks.Count, "Unknown chunk is not skipped.");
         }
+
+        #endregion
+
+        #region Private methods
 
         private static MidiFile ReadFromBytes(byte[] bytes, NotEnoughBytesPolicy policy, bool nonSeekable)
         {
@@ -129,25 +161,31 @@ namespace Melanchall.DryWetMidi.Tests.Core
             }
         }
 
-        private sealed class NonSeekableMemoryStream : MemoryStream
-        {
-            public NonSeekableMemoryStream(byte[] bytes) : base(bytes) { }
-            public override bool CanSeek => false;
-        }
-
-        private static byte[] GetFileWithHugeEvent(params int[] statusAndType)
+        private static byte[] GetFileWithHugeEvent(params byte[] statusAndType)
         {
             using (var ms = new MemoryStream())
             {
-                ms.Write(new byte[] { 0x4D, 0x54, 0x68, 0x64, 0, 0, 0, 6, 0, 0, 0, 1, 0, 96 }, 0, 14);
-                ms.Write(new byte[] { 0x4D, 0x54, 0x72, 0x6B, 0, 0, 0, 20 }, 0, 8);
-                ms.WriteByte(0);
-                foreach (var b in statusAndType)
-                    ms.WriteByte((byte)b);
-                ms.Write(HugeVlq, 0, HugeVlq.Length);
-                ms.Write(new byte[] { 1, 2, 3 }, 0, 3);
+                ms.Write(new byte[]
+                {
+                    0x4D, 0x54, 0x68, 0x64, // Header chunk ID (MThd)
+                    0, 0, 0, 6,             // Header chunk size
+                    0, 0,                   // File format
+                    0, 1,                   // Tracks count
+                    0, 96                   // Time division
+                }, 0, 14);
+                ms.Write(new byte[]
+                {
+                    0x4D, 0x54, 0x72, 0x6B, // Track chunk ID (MTrk)
+                    0, 0, 0, 20             // Track chunk size
+                }, 0, 8);
+                ms.WriteByte(0);            // Delta-time
+                ms.Write(statusAndType, 0, statusAndType.Length);                // Status byte (and meta event type)
+                ms.Write(HugeVlq, 0, HugeVlq.Length);                            // Declared size of event data
+                ms.Write(new byte[] { 1, 2, 3 }, 0, 3);                          // Actual event data (3 bytes)
                 return ms.ToArray();
             }
         }
+
+        #endregion
     }
 }
