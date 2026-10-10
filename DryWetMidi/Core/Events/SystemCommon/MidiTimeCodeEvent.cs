@@ -121,10 +121,7 @@ namespace Melanchall.DryWetMidi.Core
             return 1;
         }
 
-        /// <summary>
-        /// Clones event by creating a copy of it.
-        /// </summary>
-        /// <returns>Copy of the event.</returns>
+        /// <inheritdoc/>
         protected override MidiEvent CloneEvent()
         {
             return new MidiTimeCodeEvent
@@ -134,10 +131,7 @@ namespace Melanchall.DryWetMidi.Core
             };
         }
 
-        /// <summary>
-        /// Returns a string that represents the current object.
-        /// </summary>
-        /// <returns>A string that represents the current object.</returns>
+        /// <inheritdoc/>
         public override string ToString()
         {
             return $"MIDI Time Code ({Component}, {ComponentValue})";

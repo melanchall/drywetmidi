@@ -173,10 +173,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         #region Overrides
 
-        /// <summary>
-        /// Returns a string that represents the current object.
-        /// </summary>
-        /// <returns>A string that represents the current object.</returns>
+        /// <inheritdoc/>
         public override string ToString()
         {
             return ContextsDescriptions[Context];

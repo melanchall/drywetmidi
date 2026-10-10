@@ -127,12 +127,7 @@ namespace Melanchall.DryWetMidi.Core
 
         #region Overrides
 
-        /// <summary>
-        /// Reads content of a MIDI meta event.
-        /// </summary>
-        /// <param name="reader">Reader to read the content with.</param>
-        /// <param name="settings">Settings according to which the event's content must be read.</param>
-        /// <param name="size">Size of the event's content.</param>
+        /// <inheritdoc/>
         protected override void ReadContent(MidiReader reader, ReadingSettings settings, int size)
         {
             Numerator = reader.ReadByte();
@@ -145,11 +140,7 @@ namespace Melanchall.DryWetMidi.Core
             }
         }
 
-        /// <summary>
-        /// Writes content of a MIDI meta event.
-        /// </summary>
-        /// <param name="writer">Writer to write the content with.</param>
-        /// <param name="settings">Settings according to which the event's content must be written.</param>
+        /// <inheritdoc/>
         protected override void WriteContent(MidiWriter writer, WritingSettings settings)
         {
             writer.WriteByte(Numerator);
@@ -158,20 +149,13 @@ namespace Melanchall.DryWetMidi.Core
             writer.WriteByte(ThirtySecondNotesPerBeat);
         }
 
-        /// <summary>
-        /// Gets the size of the content of a MIDI meta event.
-        /// </summary>
-        /// <param name="settings">Settings according to which the event's content must be written.</param>
-        /// <returns>Size of the event's content.</returns>
+        /// <inheritdoc/>
         protected override int GetContentSize(WritingSettings settings)
         {
             return 4;
         }
 
-        /// <summary>
-        /// Clones event by creating a copy of it.
-        /// </summary>
-        /// <returns>Copy of the event.</returns>
+        /// <inheritdoc/>
         protected override MidiEvent CloneEvent()
         {
             return new TimeSignatureEvent
@@ -183,10 +167,7 @@ namespace Melanchall.DryWetMidi.Core
             };
         }
 
-        /// <summary>
-        /// Returns a string that represents the current object.
-        /// </summary>
-        /// <returns>A string that represents the current object.</returns>
+        /// <inheritdoc/>
         public override string ToString()
         {
             return $"Time Signature ({Numerator}/{Denominator}, {ClocksPerClick} clock/click, {ThirtySecondNotesPerBeat} 32nd/beat)";

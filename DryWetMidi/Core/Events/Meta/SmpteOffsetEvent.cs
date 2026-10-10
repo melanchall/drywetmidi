@@ -188,12 +188,7 @@ namespace Melanchall.DryWetMidi.Core
 
         #region Overrides
 
-        /// <summary>
-        /// Reads content of a MIDI meta event.
-        /// </summary>
-        /// <param name="reader">Reader to read the content with.</param>
-        /// <param name="settings">Settings according to which the event's content must be read.</param>
-        /// <param name="size">Size of the event's content.</param>
+        /// <inheritdoc/>
         protected override void ReadContent(MidiReader reader, ReadingSettings settings, int size)
         {
             _smpteData = SmpteData.Read(
@@ -201,30 +196,19 @@ namespace Melanchall.DryWetMidi.Core
                 (value, propertyName, max) => ProcessValue(value, propertyName, max, settings.InvalidMetaEventParameterValuePolicy));
         }
 
-        /// <summary>
-        /// Writes content of a MIDI meta event.
-        /// </summary>
-        /// <param name="writer">Writer to write the content with.</param>
-        /// <param name="settings">Settings according to which the event's content must be written.</param>
+        /// <inheritdoc/>
         protected override void WriteContent(MidiWriter writer, WritingSettings settings)
         {
             _smpteData.Write(writer.WriteByte);
         }
 
-        /// <summary>
-        /// Gets the size of the content of a MIDI meta event.
-        /// </summary>
-        /// <param name="settings">Settings according to which the event's content must be written.</param>
-        /// <returns>Size of the event's content.</returns>
+        /// <inheritdoc/>
         protected override int GetContentSize(WritingSettings settings)
         {
             return 5;
         }
 
-        /// <summary>
-        /// Clones event by creating a copy of it.
-        /// </summary>
-        /// <returns>Copy of the event.</returns>
+        /// <inheritdoc/>
         protected override MidiEvent CloneEvent()
         {
             return new SmpteOffsetEvent
@@ -233,10 +217,7 @@ namespace Melanchall.DryWetMidi.Core
             };
         }
 
-        /// <summary>
-        /// Returns a string that represents the current object.
-        /// </summary>
-        /// <returns>A string that represents the current object.</returns>
+        /// <inheritdoc/>
         public override string ToString()
         {
             return $"SMPTE Offset ({Format}, {Hours}:{Minutes}:{Seconds}:{Frames}:{SubFrames})";

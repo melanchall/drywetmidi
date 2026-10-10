@@ -146,9 +146,9 @@ namespace Melanchall.DryWetMidi.Core
         /// </summary>
         /// <param name="reader">Reader to read the chunk's data with.</param>
         /// <param name="settings">Settings according to which the chunk's data must be read.</param>
-        /// <exception cref="ObjectDisposedException">Method was called after <paramref name="reader"/>
+        /// <exception cref="System.ObjectDisposedException">Method was called after <paramref name="reader"/>
         /// was disposed.</exception>
-        /// <exception cref="IOException">An I/O error occurred on the <paramref name="reader"/>'s
+        /// <exception cref="System.IO.IOException">An I/O error occurred on the <paramref name="reader"/>'s
         /// underlying stream.</exception>
         /// <exception cref="InvalidChunkSizeException">Actual chunk's size differs from the one declared
         /// in its header.</exception>
@@ -209,6 +209,10 @@ namespace Melanchall.DryWetMidi.Core
         /// <param name="reader">Reader to read the chunk's content with.</param>
         /// <param name="settings">Settings according to which the chunk's content must be read.</param>
         /// <param name="size">Expected size of the content taken from the chunk's header.</param>
+        /// <exception cref="ObjectDisposedException">Method was called after <paramref name="reader"/>
+        /// was disposed.</exception>
+        /// <exception cref="IOException">An I/O error occurred on the <paramref name="reader"/>'s
+        /// underlying stream.</exception>
         protected abstract void ReadContent(MidiReader reader, ReadingSettings settings, uint size);
 
         /// <summary>
@@ -216,6 +220,10 @@ namespace Melanchall.DryWetMidi.Core
         /// </summary>
         /// <param name="writer">Writer to write the chunk's content with.</param>
         /// <param name="settings">Settings according to which the chunk's content must be written.</param>
+        /// <exception cref="System.ObjectDisposedException">Method was called after <paramref name="writer"/>
+        /// was disposed.</exception>
+        /// <exception cref="System.IO.IOException">An I/O error occurred on the <paramref name="writer"/>'s
+        /// underlying stream.</exception>
         protected abstract void WriteContent(MidiWriter writer, WritingSettings settings);
 
         /// <summary>
