@@ -102,7 +102,7 @@ namespace Melanchall.DryWetMidi.Core
             var bytesRead = reader.Position - readerPosition;
             var bytesUnread = size - bytesRead;
             if (bytesUnread > 0)
-                reader.Position += bytesUnread;
+                reader.Position = Math.Min(reader.Position + bytesUnread, reader.Length);
 
             return metaEvent;
         }
