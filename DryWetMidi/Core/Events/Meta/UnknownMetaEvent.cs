@@ -56,12 +56,7 @@ namespace Melanchall.DryWetMidi.Core
 
         #region Overrides
 
-        /// <summary>
-        /// Reads content of a MIDI meta event.
-        /// </summary>
-        /// <param name="reader">Reader to read the content with.</param>
-        /// <param name="settings">Settings according to which the event's content must be read.</param>
-        /// <param name="size">Size of the event's content.</param>
+        /// <inheritdoc/>
         /// <exception cref="ArgumentOutOfRangeException">Unknown meta event cannot be read since the size is
         /// negative number.</exception>
         protected override void ReadContent(MidiReader reader, ReadingSettings settings, int size)
@@ -93,11 +88,7 @@ namespace Melanchall.DryWetMidi.Core
             Data = data;
         }
 
-        /// <summary>
-        /// Writes content of a MIDI meta event.
-        /// </summary>
-        /// <param name="writer">Writer to write the content with.</param>
-        /// <param name="settings">Settings according to which the event's content must be written.</param>
+        /// <inheritdoc/>
         protected override void WriteContent(MidiWriter writer, WritingSettings settings)
         {
             var data = Data;
@@ -105,20 +96,13 @@ namespace Melanchall.DryWetMidi.Core
                 writer.WriteBytes(data);
         }
 
-        /// <summary>
-        /// Gets the size of the content of a MIDI meta event.
-        /// </summary>
-        /// <param name="settings">Settings according to which the event's content must be written.</param>
-        /// <returns>Size of the event's content.</returns>
+        /// <inheritdoc/>
         protected override int GetContentSize(WritingSettings settings)
         {
             return Data?.Length ?? 0;
         }
 
-        /// <summary>
-        /// Clones event by creating a copy of it.
-        /// </summary>
-        /// <returns>Copy of the event.</returns>
+        /// <inheritdoc/>
         protected override MidiEvent CloneEvent()
         {
             return new UnknownMetaEvent(StatusByte, Data?.Clone() as byte[]);

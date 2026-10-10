@@ -48,32 +48,19 @@
 
         #region Overrides
 
-        /// <summary>
-        /// Reads content of a MIDI event.
-        /// </summary>
-        /// <param name="reader">Reader to read the content with.</param>
-        /// <param name="settings">Settings according to which the event's content must be read.</param>
-        /// <param name="size">Size of the event's content.</param>
+        /// <inheritdoc/>
         internal sealed override void Read(MidiReader reader, ReadingSettings settings, int size)
         {
             ReadContent(reader, settings, size);
         }
 
-        /// <summary>
-        /// Writes content of a MIDI event.
-        /// </summary>
-        /// <param name="writer">Writer to write the content with.</param>
-        /// <param name="settings">Settings according to which the event's content must be written.</param>
+        /// <inheritdoc/>
         internal sealed override void Write(MidiWriter writer, WritingSettings settings)
         {
             WriteContent(writer, settings);
         }
 
-        /// <summary>
-        /// Gets the size of the content of a MIDI event.
-        /// </summary>
-        /// <param name="settings">Settings according to which the event's content must be written.</param>
-        /// <returns>Size of the event's content.</returns>
+        /// <inheritdoc/>
         internal sealed override int GetSize(WritingSettings settings)
         {
             return GetContentSize(settings);
@@ -89,6 +76,10 @@
         /// <param name="reader">Reader to read the content with.</param>
         /// <param name="settings">Settings according to which the event's content must be read.</param>
         /// <param name="size">Size of the event's content.</param>
+        /// <exception cref="System.ObjectDisposedException">Method was called after <paramref name="reader"/>
+        /// was disposed.</exception>
+        /// <exception cref="System.IO.IOException">An I/O error occurred on the <paramref name="reader"/>'s
+        /// underlying stream.</exception>
         protected abstract void ReadContent(MidiReader reader, ReadingSettings settings, int size);
 
         /// <summary>
@@ -96,6 +87,10 @@
         /// </summary>
         /// <param name="writer">Writer to write the content with.</param>
         /// <param name="settings">Settings according to which the event's content must be written.</param>
+        /// <exception cref="System.ObjectDisposedException">Method was called after <paramref name="writer"/>
+        /// was disposed.</exception>
+        /// <exception cref="System.IO.IOException">An I/O error occurred on the <paramref name="writer"/>'s
+        /// underlying stream.</exception>
         protected abstract void WriteContent(MidiWriter writer, WritingSettings settings);
 
         /// <summary>

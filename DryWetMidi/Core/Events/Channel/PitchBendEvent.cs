@@ -117,10 +117,7 @@ namespace Melanchall.DryWetMidi.Core
             return 2;
         }
 
-        /// <summary>
-        /// Clones event by creating a copy of it.
-        /// </summary>
-        /// <returns>Copy of the event.</returns>
+        /// <inheritdoc/>
         protected override MidiEvent CloneEvent()
         {
             return new PitchBendEvent

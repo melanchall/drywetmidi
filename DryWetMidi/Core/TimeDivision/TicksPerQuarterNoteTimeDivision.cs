@@ -92,10 +92,7 @@ namespace Melanchall.DryWetMidi.Core
             return TicksPerQuarterNote;
         }
 
-        /// <summary>
-        /// Clones time division by creating a copy of it.
-        /// </summary>
-        /// <returns>Copy of the time division.</returns>
+        /// <inheritdoc/>
         public override TimeDivision Clone()
         {
             return new TicksPerQuarterNoteTimeDivision(TicksPerQuarterNote);

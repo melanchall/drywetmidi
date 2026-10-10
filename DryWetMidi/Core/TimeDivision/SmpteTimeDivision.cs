@@ -82,10 +82,7 @@ namespace Melanchall.DryWetMidi.Core
             return (short)DataTypesUtilities.Combine((byte)-(byte)Format, Resolution);
         }
 
-        /// <summary>
-        /// Clones time division by creating a copy of it.
-        /// </summary>
-        /// <returns>Copy of the time division.</returns>
+        /// <inheritdoc/>
         public override TimeDivision Clone()
         {
             return new SmpteTimeDivision(Format, Resolution);
