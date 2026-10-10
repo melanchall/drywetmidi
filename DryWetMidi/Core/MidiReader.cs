@@ -142,9 +142,14 @@ namespace Melanchall.DryWetMidi.Core
         internal void AddEstimatedMemory(long bytes, ReadingSettings settings)
         {
             EstimatedMemorySize += bytes;
+            ThrowIfMemoryLimitExceeded(0, settings);
+        }
 
-            if (settings.MaxMemorySize != null && EstimatedMemorySize > settings.MaxMemorySize.Value)
-                throw new MidiFileTooLargeException(EstimatedMemorySize, settings.MaxMemorySize.Value);
+        internal void ThrowIfMemoryLimitExceeded(long additionalBytes, ReadingSettings settings)
+        {
+            var estimatedSize = EstimatedMemorySize + additionalBytes;
+            if (settings.MaxMemorySize != null && estimatedSize > settings.MaxMemorySize.Value)
+                throw new MidiFileTooLargeException(estimatedSize, settings.MaxMemorySize.Value);
         }
 
         /// <summary>

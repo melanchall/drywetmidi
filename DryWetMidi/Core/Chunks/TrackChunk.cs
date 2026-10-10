@@ -112,7 +112,8 @@ namespace Melanchall.DryWetMidi.Core
                 if (midiEvent == null)
                     continue;
 
-                reader.AddEstimatedMemory(EstimateEventSize(midiEvent), settings);
+                if (settings.MaxMemorySize != null)
+                    reader.AddEstimatedMemory(MemorySizeEstimator.EstimateDeep(midiEvent) + MemorySizeEstimator.ReferenceSlotSize, settings);
 
                 if (midiEvent is EndOfTrackEvent)
                 {
@@ -171,30 +172,6 @@ namespace Melanchall.DryWetMidi.Core
         #endregion
 
         #region Methods
-
-        private static long EstimateEventSize(MidiEvent midiEvent)
-        {
-            // Object header, delta time, list slot and other fields
-            long size = 64;
-
-            switch (midiEvent)
-            {
-                case BaseTextEvent textEvent:
-                    size += 2L * (textEvent.Text?.Length ?? 0);
-                    break;
-                case SysExEvent sysExEvent:
-                    size += 24 + (sysExEvent.Data?.Length ?? 0);
-                    break;
-                case SequencerSpecificEvent sequencerSpecificEvent:
-                    size += 24 + (sequencerSpecificEvent.Data?.Length ?? 0);
-                    break;
-                case UnknownMetaEvent unknownMetaEvent:
-                    size += 24 + (unknownMetaEvent.Data?.Length ?? 0);
-                    break;
-            }
-
-            return size;
-        }
 
         internal static MidiEvent? ReadEvent(MidiReader reader, ReadingSettings settings, ref byte? channelEventStatusByte)
         {
