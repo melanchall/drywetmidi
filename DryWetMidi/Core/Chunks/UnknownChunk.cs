@@ -121,10 +121,7 @@ namespace Melanchall.DryWetMidi.Core
             return (uint)(Data?.Length ?? 0);
         }
 
-        /// <summary>
-        /// Returns a string that represents the current object.
-        /// </summary>
-        /// <returns>A string that represents the current object.</returns>
+        /// <inheritdoc/>
         public override string ToString()
         {
             return $"Unknown chunk ({ChunkId})";

@@ -392,11 +392,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
         #region Overrides
 
-        /// <summary>
-        /// Determines whether the specified object is equal to the current object.
-        /// </summary>
-        /// <param name="obj">The object to compare with the current object.</param>
-        /// <returns><c>true</c> if the specified object is equal to the current object; otherwise, <c>false</c>.</returns>
+        /// <inheritdoc/>
         public override bool Equals(object? obj)
         {
             if (ReferenceEquals(obj, this))
@@ -412,10 +408,7 @@ namespace Melanchall.DryWetMidi.Interaction
                 GetTimeSignatureChanges().SequenceEqual(tempoMap.GetTimeSignatureChanges());
         }
 
-        /// <summary>
-        /// Returns the hash code for this instance.
-        /// </summary>
-        /// <returns>A 32-bit signed integer hash code.</returns>
+        /// <inheritdoc/>
         public override int GetHashCode()
         {
             unchecked

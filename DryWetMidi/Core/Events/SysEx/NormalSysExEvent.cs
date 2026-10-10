@@ -52,10 +52,7 @@ namespace Melanchall.DryWetMidi.Core
             return new NormalSysExEvent(Data?.ToArray());
         }
 
-        /// <summary>
-        /// Returns a string that represents the current object.
-        /// </summary>
-        /// <returns>A string that represents the current object.</returns>
+        /// <inheritdoc/>
         public override string ToString()
         {
             return $"Normal SysEx ({base.ToString()})";

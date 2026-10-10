@@ -41,11 +41,7 @@
 
         #region Overrides
 
-        /// <summary>
-        /// Determines whether the specified object is equal to the current object.
-        /// </summary>
-        /// <param name="obj">The object to compare with the current object.</param>
-        /// <returns><c>true</c> if the specified object is equal to the current object; otherwise, <c>false</c>.</returns>
+        /// <inheritdoc/>
         public override bool Equals(object? obj)
         {
             var changedTimedObject = obj as ChangedTimedObject;
@@ -56,10 +52,7 @@
                 object.ReferenceEquals(Object, changedTimedObject.Object);
         }
 
-        /// <summary>
-        /// Serves as the default hash function.
-        /// </summary>
-        /// <returns>A hash code for the current object.</returns>
+        /// <inheritdoc/>
         public override int GetHashCode()
         {
             unchecked
@@ -70,10 +63,7 @@
             }
         }
 
-        /// <summary>
-        /// Returns a string that represents the current object.
-        /// </summary>
-        /// <returns>A string that represents the current object.</returns>
+        /// <inheritdoc/>
         public override string ToString()
         {
             return $"{OldTime}: {Object}";

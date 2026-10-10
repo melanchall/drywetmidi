@@ -578,20 +578,13 @@ namespace Melanchall.DryWetMidi.Interaction
 
         #region Overrides
 
-        /// <summary>
-        /// Determines whether the specified object is equal to the current object.
-        /// </summary>
-        /// <param name="obj">The object to compare with the current object.</param>
-        /// <returns><c>true</c> if the specified object is equal to the current object; otherwise, <c>false</c>.</returns>
+        /// <inheritdoc/>
         public override bool Equals(object? obj)
         {
             return Equals(obj as MusicalTimeSpan);
         }
 
-        /// <summary>
-        /// Returns the hash code for this instance.
-        /// </summary>
-        /// <returns>A 32-bit signed integer hash code.</returns>
+        /// <inheritdoc/>
         public override int GetHashCode()
         {
             unchecked
@@ -603,10 +596,7 @@ namespace Melanchall.DryWetMidi.Interaction
             }
         }
 
-        /// <summary>
-        /// Returns a string that represents the current object.
-        /// </summary>
-        /// <returns>A string that represents the current object.</returns>
+        /// <inheritdoc/>
         public override string ToString()
         {
             return $"{Numerator}/{Denominator}";

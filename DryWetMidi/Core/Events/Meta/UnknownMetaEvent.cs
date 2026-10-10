@@ -124,10 +124,7 @@ namespace Melanchall.DryWetMidi.Core
             return new UnknownMetaEvent(StatusByte, Data?.Clone() as byte[]);
         }
 
-        /// <summary>
-        /// Returns a string that represents the current object.
-        /// </summary>
-        /// <returns>A string that represents the current object.</returns>
+        /// <inheritdoc/>
         public override string ToString()
         {
             return $"Unknown meta event ({StatusByte})";
