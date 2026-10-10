@@ -337,6 +337,14 @@ namespace Melanchall.DryWetMidi.Core
         /// </remarks>
         public EventTypesCollection? CustomMetaEventTypes { get; set; }
 
+        /// <summary>
+        /// Gets or sets the maximum size in bytes of MIDI data (from the current position of the stream) allowed
+        /// to be read by <see cref="MidiFile.Read(System.IO.Stream, ReadingSettings)"/>. If the data is larger,
+        /// <see cref="MidiDataTooLargeException"/> is thrown before any chunk is read, which prevents
+        /// allocating a huge <see cref="MidiFile"/> in memory. The default is <c>null</c> which means no limit.
+        /// </summary>
+        public long? MaxDataSize { get; set; }
+
         // TODO: check setting null
         /// <summary>
         /// Gets or sets an <see cref="Encoding"/> that will be used to read the text of a

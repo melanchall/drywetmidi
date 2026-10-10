@@ -451,6 +451,7 @@ namespace Melanchall.DryWetMidi.Core
         /// is <c>null</c> in case of <see cref="ReaderSettings.BufferingPolicy"/> set to
         /// <see cref="BufferingPolicy.UseCustomBuffer"/>.</exception>
         /// <exception cref="VlqNumberOverflowException">A variable-length quantity (VLQ) number in the file is too large.</exception>
+        /// <exception cref="MidiDataTooLargeException">Size of data to read exceeds <see cref="ReadingSettings.MaxDataSize"/>.</exception>
         public static MidiFile Read(Stream stream, ReadingSettings? settings = null)
         {
             ThrowIfArgument.IsNull(nameof(stream), stream);
@@ -480,6 +481,13 @@ namespace Melanchall.DryWetMidi.Core
                 {
                     if (reader.EndReached)
                         throw new ArgumentException("Stream is already read.", nameof(stream));
+
+                    if (settings.MaxDataSize != null)
+                    {
+                        var dataSize = reader.Length - reader.Position;
+                        if (dataSize > settings.MaxDataSize.Value)
+                            throw new MidiDataTooLargeException(dataSize, settings.MaxDataSize.Value);
+                    }
 
                     // Read RIFF header
 
