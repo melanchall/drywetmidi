@@ -48,7 +48,7 @@ namespace Melanchall.DryWetMidi.Composing
         }
 
         /// <summary>
-        /// Move to the first anchor.
+        /// Moves to the first anchor.
         /// </summary>
         /// <returns>The current <see cref="PatternBuilder"/>.</returns>
         /// <exception cref="InvalidOperationException">There are no anchors.</exception>
@@ -83,7 +83,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// Moves to the last anchor.
         /// </summary>
         /// <returns>The current <see cref="PatternBuilder"/>.</returns>
-        /// <exception cref="InvalidOperationException">The are no anchors.</exception>
+        /// <exception cref="InvalidOperationException">There are no anchors.</exception>
         public PatternBuilder MoveToLastAnchor()
         {
             var counter = GetAnchorCounter(null);

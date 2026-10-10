@@ -20,7 +20,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// <remarks>
         /// Note that <see cref="SetNoteLength(ITimeSpan)"/>, <see cref="SetOctave"/>,
         /// <see cref="SetStep(ITimeSpan)"/> and <see cref="SetVelocity(SevenBitNumber)"/> are not
-        /// actions and will not be repeated since default values applies immediately on next actions.
+        /// actions and will not be repeated since default values apply immediately on next actions.
         /// </remarks>
         /// <exception cref="ArgumentOutOfRangeException">
         /// <para>One of the following errors occurred:</para>
@@ -58,7 +58,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// <remarks>
         /// Note that <see cref="SetNoteLength(ITimeSpan)"/>, <see cref="SetOctave"/>,
         /// <see cref="SetStep(ITimeSpan)"/> and <see cref="SetVelocity(SevenBitNumber)"/> are not
-        /// actions and will not be repeated since default values applies immediately on next actions.
+        /// actions and will not be repeated since default values apply immediately on next actions.
         /// </remarks>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="repeatsNumber"/> is negative.</exception>
         /// <exception cref="InvalidOperationException">There are no actions to repeat.</exception>
@@ -80,7 +80,7 @@ namespace Melanchall.DryWetMidi.Composing
         /// <remarks>
         /// Note that <see cref="SetNoteLength(ITimeSpan)"/>, <see cref="SetOctave"/>,
         /// <see cref="SetStep(ITimeSpan)"/> and <see cref="SetVelocity(SevenBitNumber)"/> are not
-        /// actions and will not be repeated since default values applies immediately on next actions.
+        /// actions and will not be repeated since default values apply immediately on next actions.
         /// </remarks>
         /// <exception cref="InvalidOperationException">There are no actions to repeat.</exception>
         public PatternBuilder Repeat(RepeatSettings? settings = null)

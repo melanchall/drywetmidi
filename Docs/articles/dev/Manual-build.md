@@ -27,12 +27,12 @@ _master_ branch contains code that the library releases built on. _develop_ one 
 
 ## Build configuration
 
-There are four build configurations available:
+There are six build configurations available:
 
 * `Debug` – for development, debugging and testing. The library is not optimized and contains all debug information. [Traces](#traces) are generated.
 * `DebugNativeless` – the same as `Debug` but with native API cut out. Use it to build nativeless version of the library.
 * `Release` – for production. The library is optimized and does not contain debug information. It's the configuration used to build official releases. [Traces](#traces) are disabled.
-* `ReleaseTest` – for running tests in release mode. The library is optimized and does not contains debug information. Additional tests are enabled in this configuration. Use it to run tests without generating additional files on your machine. [Traces](#traces) are disabled.
+* `ReleaseTest` – for running tests in release mode. The library is optimized and does not contain debug information. Additional tests are enabled in this configuration. Use it to run tests without generating additional files on your machine. [Traces](#traces) are disabled.
 * `ReleaseTestFull` – for running tests in release mode with gathering additional information (playback traces, for example). The library is optimized and does not contain debug information. [Traces](#traces) are generated.
 * `ReleaseNativeless` – the same as `Release` but with native API cut out. Use it to build nativeless version of the library.
 

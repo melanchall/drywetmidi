@@ -12,7 +12,7 @@ namespace Melanchall.DryWetMidi.Common
     /// </summary>
     /// <remarks>
     /// <para>
-    /// Seven-bit numbers widely used by MIDI protocol as parameters of MIDI events (note number or
+    /// Seven-bit numbers are widely used by the MIDI protocol as parameters of MIDI events (note number or
     /// velocity). Instead of manipulating built-in .NET numeric types (like <c>byte</c> or <c>int</c>)
     /// and checking for out-of-range errors all validation of numbers in the [0; 127] range happens
     /// on data type level via casting .NET integer values to the <see cref="SevenBitNumber"/>
@@ -34,8 +34,8 @@ namespace Melanchall.DryWetMidi.Common
     /// var noteOffEvent = new NoteOffEvent(SevenBitNumber.MinValue, (SevenBitNumber)70);
     /// </code>
     /// <para>
-    /// where <c>SevenBitNumber.MinValue</c> passed to the <c>noteNumber</c> parameter and
-    /// <c>(SevenBitNumber)70</c> passed to the <c>velocity</c> one.
+    /// where <c>SevenBitNumber.MinValue</c> is passed to the <c>noteNumber</c> parameter and
+    /// <c>(SevenBitNumber)70</c> is passed to the <c>velocity</c> parameter.
     /// </para>
     /// </example>
 #if NET7_0_OR_GREATER
@@ -255,7 +255,7 @@ namespace Melanchall.DryWetMidi.Common
         /// </summary>
         /// <param name="provider">An <see cref="IFormatProvider"/> interface implementation that
         /// supplies culture-specific formatting information.</param>
-        /// <returns>An 16-bit signed integer equivalent to the value of this instance.</returns>
+        /// <returns>A 16-bit signed integer equivalent to the value of this instance.</returns>
         short IConvertible.ToInt16(IFormatProvider? provider)
         {
             return ((IConvertible)_value).ToInt16(provider);
@@ -267,7 +267,7 @@ namespace Melanchall.DryWetMidi.Common
         /// </summary>
         /// <param name="provider">An <see cref="IFormatProvider"/> interface implementation that
         /// supplies culture-specific formatting information.</param>
-        /// <returns>An 16-bit unsigned integer equivalent to the value of this instance.</returns>
+        /// <returns>A 16-bit unsigned integer equivalent to the value of this instance.</returns>
         ushort IConvertible.ToUInt16(IFormatProvider? provider)
         {
             return ((IConvertible)_value).ToUInt16(provider);
@@ -279,7 +279,7 @@ namespace Melanchall.DryWetMidi.Common
         /// </summary>
         /// <param name="provider">An <see cref="IFormatProvider"/> interface implementation that
         /// supplies culture-specific formatting information.</param>
-        /// <returns>An 32-bit signed integer equivalent to the value of this instance.</returns>
+        /// <returns>A 32-bit signed integer equivalent to the value of this instance.</returns>
         int IConvertible.ToInt32(IFormatProvider? provider)
         {
             return ((IConvertible)_value).ToInt32(provider);
@@ -291,7 +291,7 @@ namespace Melanchall.DryWetMidi.Common
         /// </summary>
         /// <param name="provider">An <see cref="IFormatProvider"/> interface implementation that
         /// supplies culture-specific formatting information.</param>
-        /// <returns>An 32-bit unsigned integer equivalent to the value of this instance.</returns>
+        /// <returns>A 32-bit unsigned integer equivalent to the value of this instance.</returns>
         uint IConvertible.ToUInt32(IFormatProvider? provider)
         {
             return ((IConvertible)_value).ToUInt32(provider);
@@ -303,7 +303,7 @@ namespace Melanchall.DryWetMidi.Common
         /// </summary>
         /// <param name="provider">An <see cref="IFormatProvider"/> interface implementation that
         /// supplies culture-specific formatting information.</param>
-        /// <returns>An 64-bit signed integer equivalent to the value of this instance.</returns>
+        /// <returns>A 64-bit signed integer equivalent to the value of this instance.</returns>
         long IConvertible.ToInt64(IFormatProvider? provider)
         {
             return ((IConvertible)_value).ToInt64(provider);
@@ -315,7 +315,7 @@ namespace Melanchall.DryWetMidi.Common
         /// </summary>
         /// <param name="provider">An <see cref="IFormatProvider"/> interface implementation that
         /// supplies culture-specific formatting information.</param>
-        /// <returns>An 64-bit unsigned integer equivalent to the value of this instance.</returns>
+        /// <returns>A 64-bit unsigned integer equivalent to the value of this instance.</returns>
         ulong IConvertible.ToUInt64(IFormatProvider? provider)
         {
             return ((IConvertible)_value).ToUInt64(provider);
@@ -382,7 +382,7 @@ namespace Melanchall.DryWetMidi.Common
         }
 
         /// <summary>
-        /// Converts the value of this instance to an System.Object of the specified <see cref="Type"/>
+        /// Converts the value of this instance to a System.Object of the specified <see cref="Type"/>
         /// that has an equivalent value, using the specified culture-specific formatting
         /// information.
         /// </summary>

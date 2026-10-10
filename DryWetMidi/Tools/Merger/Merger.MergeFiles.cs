@@ -48,7 +48,7 @@ namespace Melanchall.DryWetMidi.Tools
         #region Methods
 
         /// <summary>
-        /// Merges the specified MIDI files sequentially so they are placed one after other in the result file.
+        /// Merges the specified MIDI files sequentially so they are placed one after another in the result file.
         /// More info in the <see href="xref:a_files_merging#mergesequentially">MIDI files merging: MergeSequentially</see> article.
         /// </summary>
         /// <param name="midiFiles">MIDI files to merge.</param>
@@ -135,14 +135,14 @@ namespace Melanchall.DryWetMidi.Tools
         }
 
         /// <summary>
-        /// Merges the specified MIDI files "simultaneously" so they are placed "one below other" in the result file.
+        /// Merges the specified MIDI files "simultaneously" so they are placed "one below another" in the result file.
         /// More info in the <see href="xref:a_files_merging#mergesimultaneously">MIDI files merging: MergeSimultaneously</see> article.
         /// </summary>
         /// <param name="midiFiles">MIDI files to merge.</param>
         /// <param name="settings">Settings that control how <paramref name="midiFiles"/> should be merged.</param>
         /// <remarks>
         /// The method has a limitation: it can process only the files which have the same tempo maps, i.e.
-        /// the same changes of tempo and time signature,and the same time divisions. You can disable the
+        /// the same changes of tempo and time signature, and the same time divisions. You can disable the
         /// exception throwing by setting <see cref="SimultaneousMergingSettings.IgnoreDifferentTempoMaps"/> of
         /// the <paramref name="settings"/> to <c>true</c>, but proper structure (in terms of correct playing for example)
         /// of the result MIDI file is not guaranteed in this case.

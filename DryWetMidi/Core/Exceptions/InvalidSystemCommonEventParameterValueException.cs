@@ -33,7 +33,7 @@ namespace Melanchall.DryWetMidi.Core
         public MidiEventType EventType { get; }
 
         /// <summary>
-        /// Gets the name of MIDI Time Code event's component which value is invalid.
+        /// Gets the name of the MIDI Time Code event's component whose value is invalid.
         /// </summary>
         public string ComponentName { get; }
 

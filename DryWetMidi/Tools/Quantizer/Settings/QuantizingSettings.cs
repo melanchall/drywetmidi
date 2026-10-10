@@ -56,8 +56,8 @@ namespace Melanchall.DryWetMidi.Tools
         /// Gets or sets the level of quantization from 0.0 (no quantization) to 1.0 (full quantization).
         /// </summary>
         /// <remarks>
-        /// This setting specifies how close an object should be moved to nearest grid time. For example,
-        /// 0.5 will lead to an object will be moved half the distance between its time and the nearest
+        /// This setting specifies how close an object should be moved to the nearest grid time. For example,
+        /// 0.5 will lead to an object being moved half the distance between its time and the nearest
         /// grid time.
         /// </remarks>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="value"/> is out of valid range.</exception>
@@ -111,13 +111,13 @@ namespace Melanchall.DryWetMidi.Tools
         }
 
         /// <summary>
-        /// Gets or sets policy according to which a quantizer should act in case of an object is going
-        /// to be moved beyond zero. The default value is <see cref="QuantizingBeyondZeroPolicy.FixAtZero"/>.
+        /// Gets or sets the policy according to which a quantizer should act when an object is about to be
+        /// moved beyond zero. The default value is <see cref="QuantizingBeyondZeroPolicy.FixAtZero"/>.
         /// </summary>
         /// <remarks>
         /// When the start time of an object is not fixed, there is a chance that the object's end time
-        /// will be quantized in a such way that the start time will be negative due to the object is
-        /// moved to the left. Negative time is invalid so this policy provides options to prevent this
+        /// will be quantized in such a way that the start time will be negative because the object is
+        /// moved to the left. Negative time is invalid, so this policy provides options to prevent this
         /// situation.
         /// </remarks>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="value"/> specified an invalid value.</exception>
@@ -133,13 +133,13 @@ namespace Melanchall.DryWetMidi.Tools
         }
 
         /// <summary>
-        /// Gets or sets policy according to which a quantizer should act in case of object's side
-        /// is going to be moved beyond an opposite one that is fixed. The default value is
+        /// Gets or sets the policy according to which a quantizer should act when an object's side is
+        /// about to move beyond the fixed opposite side. The default value is
         /// <see cref="QuantizingBeyondFixedEndPolicy.CollapseAndFix"/>.
         /// </summary>
         /// <remarks>
         /// When one end of an object is fixed, there is a chance that the object's opposite end
-        /// will be quantized in a such way that the object will be reversed resulting to negative length.
+        /// will be quantized in such a way that the object will be reversed, resulting in a negative length.
         /// This policy provides options to prevent this situation.
         /// </remarks>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="value"/> specified an invalid value.</exception>

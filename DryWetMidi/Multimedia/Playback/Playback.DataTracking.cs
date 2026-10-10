@@ -310,7 +310,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         /// <summary>
         /// Gets or sets a value indicating whether program must be tracked or not. If <c>true</c>, any jump
-        /// in time will force playback send <see cref="ProgramChangeEvent"/> corresponding to the program at new time,
+        /// in time will force playback to send the <see cref="ProgramChangeEvent"/> corresponding to the program at the new time,
         /// if needed. The default value is <c>true</c>. More info in the
         /// <see href="xref:a_playback_datatrack#midi-parameters-values-tracking">Data tracking: MIDI parameters values tracking</see>
         /// article.
@@ -332,7 +332,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         /// <summary>
         /// Gets or sets a value indicating whether pitch value must be tracked or not. If <c>true</c>, any jump
-        /// in time will force playback send <see cref="PitchBendEvent"/> corresponding to the pitch value at new time,
+        /// in time will force playback to send the <see cref="PitchBendEvent"/> corresponding to the pitch value at the new time,
         /// if needed. The default value is <c>true</c>. More info in the
         /// <see href="xref:a_playback_datatrack#midi-parameters-values-tracking">Data tracking: MIDI parameters values tracking</see>
         /// article.
@@ -354,7 +354,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         /// <summary>
         /// Gets or sets a value indicating whether controller values must be tracked or not. If <c>true</c>, any jump
-        /// in time will force playback send <see cref="ControlChangeEvent"/> corresponding to the controller value at new time,
+        /// in time will force playback to send the <see cref="ControlChangeEvent"/> corresponding to the controller value at the new time,
         /// if needed. The default value is <c>true</c>. More info in the
         /// <see href="xref:a_playback_datatrack#midi-parameters-values-tracking">Data tracking: MIDI parameters values tracking</see>
         /// article.

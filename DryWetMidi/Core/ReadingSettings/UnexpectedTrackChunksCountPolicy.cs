@@ -1,13 +1,13 @@
 ﻿namespace Melanchall.DryWetMidi.Core
 {
     /// <summary>
-    /// Specifies how reading engine should react on unexpected track chunks count. The default is
+    /// Specifies how the reading engine should react to an unexpected number of track chunks. The default is
     /// <see cref="Ignore"/>.
     /// </summary>
     public enum UnexpectedTrackChunksCountPolicy
     {
         /// <summary>
-        /// Ignore unexpected track chunks count.
+        /// Ignore an unexpected number of track chunks.
         /// </summary>
         Ignore = 0,
 

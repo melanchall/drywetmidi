@@ -33,7 +33,7 @@ namespace Melanchall.DryWetMidi.Core
         public MidiEventType EventType { get; }
 
         /// <summary>
-        /// Gets the name of event's property which value is invalid.
+        /// Gets the name of the event's property whose value is invalid.
         /// </summary>
         public string PropertyName { get; }
 

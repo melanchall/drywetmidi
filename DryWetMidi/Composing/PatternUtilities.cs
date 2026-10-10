@@ -111,7 +111,7 @@ namespace Melanchall.DryWetMidi.Composing
 
         /// <summary>
         /// Creates a new <see cref="Pattern"/> by transforming chords in the specified pattern using predicate
-        /// to select chords to transform..
+        /// to select chords to transform.
         /// </summary>
         /// <param name="pattern">Pattern to transform notes of.</param>
         /// <param name="chordSelection">Predicate to select chords to transform.</param>
@@ -144,7 +144,7 @@ namespace Melanchall.DryWetMidi.Composing
         }
 
         /// <summary>
-        /// Splits a pattern into subpatterns in points where the specified anchor inserted.
+        /// Splits a pattern into subpatterns at points where the specified anchor is inserted.
         /// </summary>
         /// <param name="pattern">Pattern to split.</param>
         /// <param name="anchor">Anchor to split <paramref name="pattern"/> at.</param>
@@ -175,7 +175,7 @@ namespace Melanchall.DryWetMidi.Composing
         }
 
         /// <summary>
-        /// Splits a pattern into subpatterns in points where anchors inserted.
+        /// Splits a pattern into subpatterns at points where anchors are inserted.
         /// </summary>
         /// <param name="pattern">Pattern to split.</param>
         /// <param name="removeEmptyPatterns">A value indicating whether empty patterns should be
@@ -194,7 +194,7 @@ namespace Melanchall.DryWetMidi.Composing
         }
 
         /// <summary>
-        /// Splits a pattern into subpatterns in points where the specified marker inserted.
+        /// Splits a pattern into subpatterns at points where the specified marker is inserted.
         /// </summary>
         /// <param name="pattern">Pattern to split.</param>
         /// <param name="marker">Marker to split <paramref name="pattern"/> at.</param>
@@ -228,7 +228,7 @@ namespace Melanchall.DryWetMidi.Composing
         }
 
         /// <summary>
-        /// Splits a pattern into subpatterns in points where markers inserted.
+        /// Splits a pattern into subpatterns at points where markers are inserted.
         /// </summary>
         /// <param name="pattern">Pattern to split.</param>
         /// <param name="removeEmptyPatterns">A value indicating whether empty patterns should be
@@ -267,7 +267,7 @@ namespace Melanchall.DryWetMidi.Composing
         }
 
         /// <summary>
-        /// Combines the specified patterns into single one starting all them at the same time (i.e. stacking patterns).
+        /// Combines the specified patterns into a single one, starting all of them at the same time (i.e. stacking patterns).
         /// </summary>
         /// <param name="patterns">Patterns to combine.</param>
         /// <returns>Pattern that made up from <paramref name="patterns"/> arranged into stack.</returns>

@@ -28,7 +28,7 @@ namespace Melanchall.DryWetMidi.Core
         #region Properties
 
         /// <summary>
-        /// Gets the ID of a chunk caused this exception.
+        /// Gets the ID of a chunk that caused this exception.
         /// </summary>
         public string ChunkId { get; }
 

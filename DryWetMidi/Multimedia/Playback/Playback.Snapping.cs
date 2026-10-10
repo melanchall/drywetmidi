@@ -20,7 +20,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         /// <summary>
         /// Gets or sets a value indicating whether playback snapping is enabled or not. The property
-        /// lets turn on or off all snap points at once.
+        /// lets you turn on or off all snap points at once.
         /// </summary>
         public bool IsSnappingEnabled { get; set; } = true;
 
@@ -152,7 +152,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         /// <summary>
         /// Creates a new <see cref="SnapPointsGroup"/> that holds the specified predicate to select MIDI events
-        /// which times will be used as snap points. For example, to get snap points at the markers points, you
+        /// whose times will be used as snap points. For example, to get snap points at marker points, you
         /// can use this predicate: <c>e => e.EventType == MidiEventType.Marker</c>.
         /// </summary>
         /// <remarks>

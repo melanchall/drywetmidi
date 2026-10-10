@@ -9,7 +9,7 @@ Here you'll find information about how to create good issues on the DryWetMIDI s
 > [!WARNING]
 > If you make no effort to get your issue clear, I will make no effort to help you.
 
-Things to pay attention for are:
+Things to pay attention to are:
 
 1. Learn .NET (C#/VB.NET) before asking questions.
 2. If possible, provide MIDI files you have a problem with or create sample ones to reproduce the error or show what you want to do.
@@ -22,7 +22,7 @@ Things to pay attention for are:
     * on GitHub use [Markdown](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax);
     * on emails use formatting provided by your mail client.
 9. Use the English language.
-10. Provide a short title and put all required info at the description.
+10. Provide a short title and put all required info in the description.
 
 Examples of good issues:
 

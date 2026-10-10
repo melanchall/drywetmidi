@@ -17,7 +17,7 @@
         Ignore = 0,
 
         /// <summary>
-        /// Abort reading and throw an <see cref="MissedEndOfTrackEventException"/>.
+        /// Abort reading and throw a <see cref="MissedEndOfTrackEventException"/>.
         /// </summary>
         Abort
     }

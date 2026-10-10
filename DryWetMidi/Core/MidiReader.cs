@@ -268,7 +268,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <returns>A 16-bit signed integer read from the underlying stream.</returns>
         /// <exception cref="ObjectDisposedException">Method was called after the reader was disposed.</exception>
         /// <exception cref="IOException">An I/O error occurred on the underlying stream.</exception>
-        /// <exception cref="NotEnoughBytesException">Not enough bytes in the stream to read a INT16.</exception>
+        /// <exception cref="NotEnoughBytesException">Not enough bytes in the stream to read an INT16.</exception>
         public short ReadInt16()
         {
             const int int16Size = sizeof(short);
@@ -298,7 +298,7 @@ namespace Melanchall.DryWetMidi.Core
 
         /// <summary>
         /// Reads a 32-bit signed integer presented in compressed format called variable-length quantity (VLQ)
-        /// to the underlying stream.
+        /// from the underlying stream.
         /// </summary>
         /// <remarks>
         /// Numbers in VLQ format are represented 7 bits per byte, most significant bits first.
@@ -315,7 +315,7 @@ namespace Melanchall.DryWetMidi.Core
 
         /// <summary>
         /// Reads a 64-bit signed integer presented in compressed format called variable-length quantity (VLQ)
-        /// to the underlying stream.
+        /// from the underlying stream.
         /// </summary>
         /// <remarks>
         /// Numbers in VLQ format are represented 7 bits per byte, most significant bits first.

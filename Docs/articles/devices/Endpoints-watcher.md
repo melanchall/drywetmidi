@@ -95,7 +95,7 @@ namespace DwmExamples
 }
 ```
 
-The program will be crashed with:
+The program will crash with:
 
 ```text
 Removing endpoint...

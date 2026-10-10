@@ -14,47 +14,47 @@
 DryWetMIDI is the .NET library to work with MIDI data and MIDI devices. It allows:
 
 * Read, write and create [Standard MIDI Files (SMF)](https://midi.org/standard-midi-files-specification). It is also possible to:  
-  * read [RMID](https://www.loc.gov/preservation/digital/formats/fdd/fdd000120.shtml) files where SMF wrapped to RIFF chunk;
-  * easily catch specific error when reading or writing a MIDI file since all possible errors in a file are presented as separate exception classes;
+  * read [RMID](https://www.loc.gov/preservation/digital/formats/fdd/fdd000120.shtml) files, where an SMF file is wrapped in a RIFF chunk;
+  * easily catch a specific error when reading or writing a MIDI file, since all possible errors in a file are presented as separate exception classes;
   * finely adjust the process of reading and writing (it allows, for example, to read corrupted files and repair them, or build MIDI file validators);
   * implement [custom meta events](https://melanchall.github.io/drywetmidi/articles/custom-data-structures/Custom-meta-events.html) and [custom chunks](https://melanchall.github.io/drywetmidi/articles/custom-data-structures/Custom-chunks.html) that can be written to and read from MIDI files.
-* [Send](https://melanchall.github.io/drywetmidi/articles/devices/Output-device.html) MIDI events to/[receive](https://melanchall.github.io/drywetmidi/articles/devices/Input-device.html) them from MIDI devices.
+* [Send](https://melanchall.github.io/drywetmidi/articles/devices/Output-device.html) MIDI events to MIDI devices and [receive](https://melanchall.github.io/drywetmidi/articles/devices/Input-device.html) them from MIDI devices.
 * [Play](https://melanchall.github.io/drywetmidi/articles/playback/Overview.html) MIDI data and [record](https://melanchall.github.io/drywetmidi/articles/recording/Overview.html) it.
 * Manage MIDI data either with low-level objects, like a MIDI event, or high-level ones, like a note, using different time and length representations (read the **High-level data managing** section of the [library docs](https://melanchall.github.io/drywetmidi)).
 * Build musical compositions (see [Pattern](https://melanchall.github.io/drywetmidi/articles/composing/Pattern.html) page of the library docs) and use music theory API (see [Music Theory - Overview](https://melanchall.github.io/drywetmidi/articles/music-theory/Overview.html) article).
 * Perform complex tasks like quantizing, notes splitting or converting MIDI file to CSV representation (see [Tools](https://melanchall.github.io/drywetmidi/articles/tools/Overview.html) page of the library docs).
 
-Please see [Getting started](#getting-started) section below for quick jump into the library. Or you can dive into the [full documentation](https://melanchall.github.io/drywetmidi).
+Please see the [Getting Started](#getting-started) section below for a quick introduction to the library. Or you can dive into the [full documentation](https://melanchall.github.io/drywetmidi).
 
 > [!WARNING]
 > If you want to create an issue or a discussion, read this article first – [Support](https://melanchall.github.io/drywetmidi/articles/dev/Support.html).
 
 ## Projects using DryWetMIDI
 
-Here the list of noticeable projects that use the library:
+Here is the list of notable projects that use the library:
 
 * [Playtonik](https://5of12.co.uk/#playtonik)  
-  Playtonik is an app designed and developed by [5of12](https://5of12.co.uk). It uses physics-based interactions, immersive spatial audio and dynamic haptic feedback for a fun, relaxing experience. For the fidgeters, Playtonik comes with a selection of built in sounds and an on screen keyboard. Scale filters help keep you in tune, so you can focus on having fun! For the musicians, MIDI support lets you connect your favourite instrument. Playtonik can work as a note source or as a chaotic MIDI delay, great for adding texture to your sound.
+  Playtonik is an app designed and developed by [5of12](https://5of12.co.uk). It uses physics-based interactions, immersive spatial audio and dynamic haptic feedback for a fun, relaxing experience. For the fidgeters, Playtonik comes with a selection of built-in sounds and an on-screen keyboard. Scale filters help keep you in tune, so you can focus on having fun! For the musicians, MIDI support lets you connect your favourite instrument. Playtonik can work as a note source or as a chaotic MIDI delay, great for adding texture to your sound.
 * [EMU – Sound to Light Controller](https://www.enttec.com/product/dmx-lighting-control-software/emu-sound-to-light-controller)  
   EMU (DMXIS’s next generation) is a state-of-the-art, intuitive sound-to-light controller designed for professional live musicians and DJs. Easy to use software, EMU allows you to run automated or responsive DMX light shows, leaving you to focus on your show!
 * [Musical Bits](https://musicalbits.de)  
-  Musical Bits creates software that helps you creating music. Our software uses latest technology, including AI, to model all layers of creativity of a human composer. These layers are implemented as reusable and combinable software components. Musical Bits software is available as co-pilot for producers and composers under the name KLANGMACHT and helps you create, drumsounds, beats, guitars, background choirs, lyrics and more. We even create and distribute full virtual bands, albums and songs. For example, check out the Frostbite Orckings.
+  Musical Bits creates software that helps you create music. Our software uses the latest technology, including AI, to model all layers of creativity of a human composer. These layers are implemented as reusable and combinable software components. Musical Bits software is available as a co-pilot for producers and composers under the name KLANGMACHT and helps you create drum sounds, beats, guitars, background choirs, lyrics and more. We even create and distribute full virtual bands, albums and songs. For example, check out the Frostbite Orckings.
 * [CoyoteMIDI](https://coyotemidi.com)  
   CoyoteMIDI extends the functionality of your MIDI devices to include keyboard and mouse input, including complex key combinations and multi-step macros.
 * [Clone Hero](https://clonehero.net)  
-  Free rhythm game, which can be played with any 5 or 6 button guitar controller, game controllers, or just your standard computer keyboard. The game is a clone of Guitar Hero.
+  Clone Hero is a free rhythm game that can be played with any 5- or 6-button guitar controller, game controllers, or a standard computer keyboard. The game is a clone of Guitar Hero.
 * [Electrophonics](https://kaiclavier.itch.io/electrophonics)  
   A collection of virtual musical instruments that features real MIDI output.
 * [Rustissimo](https://store.steampowered.com/app/1222580/Rustissimo)  
-  Using Rustissimo you can create a concert with your friends and play instruments with synchronization.
+  Using Rustissimo, you can create a concert with your friends and play instruments with synchronization.
 
 If you find that DryWetMIDI has been useful for your project, please put a link to the library in your project's _About_ section or something like that.
 
 ## Getting Started
 
-Let's see small examples of what you can do with the library. Full docs available [here](https://melanchall.github.io/drywetmidi).
+Let's see a few small examples of what you can do with the library. The full documentation is available [here](https://melanchall.github.io/drywetmidi).
 
-Simple task: [read a MIDI file](https://melanchall.github.io/drywetmidi/articles/file-reading-writing/MIDI-file-reading.html), then [collect all notes](https://melanchall.github.io/drywetmidi/articles/high-level-managing/Getting-objects.html) from it and print their times and lengths in the [metric](https://melanchall.github.io/drywetmidi/articles/high-level-managing/Time-and-length.html) (hours, minutes, second, ...) format:
+Simple task: [read a MIDI file](https://melanchall.github.io/drywetmidi/articles/file-reading-writing/MIDI-file-reading.html), then [collect all notes](https://melanchall.github.io/drywetmidi/articles/high-level-managing/Getting-objects.html) from it and print their times and lengths in the [metric](https://melanchall.github.io/drywetmidi/articles/high-level-managing/Time-and-length.html) (hours, minutes, seconds, ...) format:
 
 ```csharp
 var midiFile = MidiFile.Read("MyFile.mid");
@@ -68,7 +68,7 @@ foreach (var note in midiFile.GetNotes())
 }
 ```
 
-Or maybe you want to [record data](https://melanchall.github.io/drywetmidi/articles/recording/Overview.html) from a [MIDI device](https://melanchall.github.io/drywetmidi/articles/devices/Overview.html), then [quantize](https://melanchall.github.io/drywetmidi/articles/tools/Quantizer.html) (see all [tools](https://melanchall.github.io/drywetmidi/articles/tools/Overview.html)) recorded events by the grid with step of 1/8, and [play](https://melanchall.github.io/drywetmidi/articles/playback/Overview.html) the data via the default Windows synth:
+Or maybe you want to [record data](https://melanchall.github.io/drywetmidi/articles/recording/Overview.html) from a [MIDI device](https://melanchall.github.io/drywetmidi/articles/devices/Overview.html), then [quantize](https://melanchall.github.io/drywetmidi/articles/tools/Quantizer.html) (see all [tools](https://melanchall.github.io/drywetmidi/articles/tools/Overview.html)) recorded events by the grid with a step of 1/8, and [play](https://melanchall.github.io/drywetmidi/articles/playback/Overview.html) the data via the default Windows synth:
 
 ```csharp
 var inputDevice = InputDevice.GetByName("MyMidiKeyboard");
@@ -133,9 +133,9 @@ var midiFile = pattern.ToFile(TempoMap.Create(Tempo.FromBeatsPerMinute(240)));
 midiFile.Write("DrumPattern.mid");
 ```
 
-Slightly more crazy example:
+A slightly crazier example:
 
-1. create 100 [notes](https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Interaction.Note.html) prepended with text [events](https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Interaction.TimedEvent.html) containing note numbers (each note starts at the [beginning of a new bar](https://melanchall.github.io/drywetmidi/articles/high-level-managing/Time-and-length.html#bars-beats-and-ticks) and has length of [1.5 beats](https://melanchall.github.io/drywetmidi/articles/high-level-managing/Time-and-length.html#bars-beats-and-fraction));
+1. create 100 [notes](https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Interaction.Note.html), each preceded by a text [event](https://melanchall.github.io/drywetmidi/api/Melanchall.DryWetMidi.Interaction.TimedEvent.html) containing its note number (each note starts at the [beginning of a new bar](https://melanchall.github.io/drywetmidi/articles/high-level-managing/Time-and-length.html#bars-beats-and-ticks) and has a length of [1.5 beats](https://melanchall.github.io/drywetmidi/articles/high-level-managing/Time-and-length.html#bars-beats-and-fraction));
 2. [split](https://melanchall.github.io/drywetmidi/articles/tools/Splitter.html) all created objects into four parts;
 3. [repeat](https://melanchall.github.io/drywetmidi/articles/tools/Repeater.html) (see all [tools](https://melanchall.github.io/drywetmidi/articles/tools/Overview.html)) the resulting objects nine times, starting each part at the beginning of the nearest bar after the previous part;
 4. [write](https://melanchall.github.io/drywetmidi/articles/file-reading-writing/MIDI-file-writing.html) the resulting objects to a MIDI file.
@@ -173,14 +173,14 @@ var midiFile = objects.ToFile();
 midiFile.Write("ManyObjects.mid");
 ```
 
-If you are a user of macOS, you can use API to manage [virtual MIDI devices](https://melanchall.github.io/drywetmidi/articles/devices/Virtual-device.html) and to watch [devices plugging/unplugging](https://melanchall.github.io/drywetmidi/articles/devices/Devices-watcher.html):
+If you are a user of macOS, you can use the API to manage [virtual MIDI devices](https://melanchall.github.io/drywetmidi/articles/devices/Virtual-device.html) and to watch [devices being plugged in and unplugged](https://melanchall.github.io/drywetmidi/articles/devices/Devices-watcher.html):
 
 ```csharp
 DevicesWatcher.Instance.DeviceAdded += OnDeviceAdded;
 DevicesWatcher.Instance.DeviceRemoved += OnDeviceRemoved;
  
 // Virtual device creation will cause DevicesWatcher.Instance.DeviceAdded
-// will be fired since one input device and one output device
+// to be fired since one input device and one output device
 // will be created
 var virtualDevice = VirtualDevice.Create("My Virtual Device");
  

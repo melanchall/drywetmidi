@@ -9,7 +9,7 @@ This article describes how to integrate DryWetMIDI in a Unity project. You have 
 * import the [DryWetMIDI asset](https://assetstore.unity.com/packages/tools/audio/drywetmidi-222171) (or [DryWetMIDI.Nativeless](https://assetstore.unity.com/packages/tools/audio/drywetmidi-nativeless-228998) one) from the Unity Asset Store;
 * install the library manually.
 
-There are also ways to import a NuGet package via 3d party tools (for example, [NuGetForUnity](https://github.com/GlitchEnzo/NuGetForUnity)).
+There are also ways to import a NuGet package via 3rd-party tools (for example, [NuGetForUnity](https://github.com/GlitchEnzo/NuGetForUnity)).
 
 ## Unity asset
 

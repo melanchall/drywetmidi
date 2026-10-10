@@ -4,7 +4,7 @@ uid: a_getting_objects
 
 # Getting objects
 
-This article describes ways to get different objects (like [timed events](xref:Melanchall.DryWetMidi.Interaction.TimedEvent) or [notes](xref:Melanchall.DryWetMidi.Interaction.Note)) from MIDI files, track chunks and collections of another objects.
+This article describes ways to get different objects (like [timed events](xref:Melanchall.DryWetMidi.Interaction.TimedEvent) or [notes](xref:Melanchall.DryWetMidi.Interaction.Note)) from MIDI files, track chunks, and collections of other objects.
 
 ## GetTimedEvents
 
@@ -122,7 +122,7 @@ If we set `NoteStartDetectionPolicy` to [NoteStartDetectionPolicy.FirstNoteOn](x
 
 ![NoteStartDetectionPolicy-FirstNoteOn](images/Getting-objects-NoteStartDetectionPolicy-FirstNoteOn.png)
 
-So every _Note Off_ event will be combined with the **first** free _Note On_ event into a note (events are processed one by one consecutively). But if set `NoteStartDetectionPolicy` to [NoteStartDetectionPolicy.LastNoteOn](xref:Melanchall.DryWetMidi.Interaction.NoteStartDetectionPolicy.LastNoteOn), we'll get another picture:
+So every _Note Off_ event will be combined with the **first** free _Note On_ event into a note (events are processed one by one consecutively). But if you set `NoteStartDetectionPolicy` to [NoteStartDetectionPolicy.LastNoteOn](xref:Melanchall.DryWetMidi.Interaction.NoteStartDetectionPolicy.LastNoteOn), we'll get another picture:
 
 ![NoteStartDetectionPolicy-LastNoteOn](images/Getting-objects-NoteStartDetectionPolicy-LastNoteOn.png)
 
@@ -130,7 +130,7 @@ So _Note Off_ events will be combined with the **last** free _Note On_ event int
 
 ## GetChords
 
-There is the [ChordsManagingUtilities](xref:Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities) class which provides useful methods `GetChords` to get notes from a MIDI file or track chunk. For example, you can get chords a MIDI file contains with this code:
+There is the [ChordsManagingUtilities](xref:Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities) class which provides useful methods `GetChords` to get chords from a MIDI file or track chunk. For example, you can get chords a MIDI file contains with this code:
 
 ```csharp
 using System;

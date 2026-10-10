@@ -45,7 +45,7 @@
         /// <returns>A string that represents the current object.</returns>
         public override string ToString()
         {
-            return $"File header token (file format = {FileFormat}, time division = {TimeDivision}, tracks number = {TracksNumber})";
+            return $"File header token (file format = {FileFormat}, time division = {TimeDivision}, number of tracks = {TracksNumber})";
         }
 
         #endregion

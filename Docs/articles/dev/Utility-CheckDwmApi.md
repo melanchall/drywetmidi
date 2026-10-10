@@ -20,7 +20,7 @@ Clicking on the highlighted button you'll see the list of published utilities. Y
 
 Note that downloaded archive can contain another one archive inside. So after downloading, you may need to extract the outer archive first to get to the inner one which contains the actual utility executable. It's because of how Azure DevOps publishes build artifacts, sorry for the inconvenience.
 
-If you unsure what your CPU architecture is, you can execute a command in your command line shell:
+If you're unsure what your CPU architecture is, you can execute a command in your command line shell:
 
 * **Windows**:  
   in cmd:

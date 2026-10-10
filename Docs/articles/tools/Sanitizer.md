@@ -66,7 +66,7 @@ midiFile.Sanitize(new SanitizingSettings
 
 [RemoveDuplicatedNotes](xref:Melanchall.DryWetMidi.Tools.SanitizingSettings.RemoveDuplicatedNotes) property of the [SanitizingSettings](xref:Melanchall.DryWetMidi.Tools.SanitizingSettings) determines whether duplicated notes should be removed or not. The default value is `true`.
 
-Notes are considered duplicated when they are meet all the following conditions:
+Notes are considered duplicated when they meet all the following conditions:
 
 * same note number;
 * same channel;
@@ -96,7 +96,7 @@ midiFile.Sanitize();
 
 ### OrphanedNoteOnEventsPolicy
 
-In some MIDI files you can encounter [Note On](xref:Melanchall.DryWetMidi.Core.NoteOnEvent) events without corresponding [Note Off](xref:Melanchall.DryWetMidi.Core.NoteOffEvent) ones. For example, here we're creating a file with the first event is an orphaned _Note On_ one:
+In some MIDI files you can encounter [Note On](xref:Melanchall.DryWetMidi.Core.NoteOnEvent) events without corresponding [Note Off](xref:Melanchall.DryWetMidi.Core.NoteOffEvent) ones. For example, here we're creating a file where the first event is an orphaned _Note On_ event:
 
 ```csharp
 var midiFile = new MidiFile(
@@ -113,7 +113,7 @@ Following image shows how [OrphanedNoteOnEventsPolicy.Remove](xref:Melanchall.Dr
 
 ![SanitizingSettings.OrphanedNoteOnEventsPolicy.Remove](images/Sanitizer/OrphanedNoteOnEvents_Remove.png)
 
-But what if such orphaned Note On events are just a result of corresponding Note Off ones were lost for some reason? You'll probably want to restore notes. In this case you can use [OrphanedNoteOnEventsPolicy.CompleteNote](xref:Melanchall.DryWetMidi.Tools.OrphanedNoteOnEventsPolicy.CompleteNote) option. It will add a _Note Off_ event for each orphaned _Note On_ one. The length of the note is controlled by the [NoteMaxLengthForOrphanedNoteOnEvent](xref:Melanchall.DryWetMidi.Tools.SanitizingSettings.NoteMaxLengthForOrphanedNoteOnEvent) property. Please see the image below which describes the process:
+But what if such orphaned Note On events are just a result of the corresponding Note Off events being lost for some reason? You'll probably want to restore notes. In this case, you can use the [OrphanedNoteOnEventsPolicy.CompleteNote](xref:Melanchall.DryWetMidi.Tools.OrphanedNoteOnEventsPolicy.CompleteNote) option. It will add a _Note Off_ event for each orphaned _Note On_ event. The length of the note is controlled by the [NoteMaxLengthForOrphanedNoteOnEvent](xref:Melanchall.DryWetMidi.Tools.SanitizingSettings.NoteMaxLengthForOrphanedNoteOnEvent) property. Please see the image below, which describes the process:
 
 ![SanitizingSettings.OrphanedNoteOnEventsPolicy.CompleteNote](images/Sanitizer/OrphanedNoteOnEvents_CompleteNote.png)
 
@@ -159,13 +159,13 @@ var midiFile = new MidiFile(
 
 ![SanitizingSettings.RemoveDuplicatedSetTempoEvents](images/Sanitizer/RemoveDuplicatedSetTempoEvents.png)
 
-So _Set Tempo_ events are considered duplicated when they are have the same microseconds per quarter note value.
+So _Set Tempo_ events are considered duplicated when they have the same microseconds per quarter note value.
 
 ### RemoveDuplicatedTimeSignatureEvents
 
 [RemoveDuplicatedTimeSignatureEvents](xref:Melanchall.DryWetMidi.Tools.SanitizingSettings.RemoveDuplicatedTimeSignatureEvents) does the same actions as the [RemoveDuplicatedSetTempoEvents](#removeduplicatedsettempoevents) one but for duplicated [Time Signature](xref:Melanchall.DryWetMidi.Core.TimeSignatureEvent) events.
 
-_Time Signature_ events are considered duplicated when they are meet all the following conditions:
+_Time Signature_ events are considered duplicated when they meet all the following conditions:
 
 * same numerator;
 * same denominator;
@@ -176,7 +176,7 @@ _Time Signature_ events are considered duplicated when they are meet all the fol
 
 [RemoveDuplicatedPitchBendEvents](xref:Melanchall.DryWetMidi.Tools.SanitizingSettings.RemoveDuplicatedPitchBendEvents) does the same actions as the [RemoveDuplicatedSetTempoEvents](#removeduplicatedsettempoevents) or [RemoveDuplicatedTimeSignatureEvents](#removeduplicatedtimesignatureevents) one but for duplicated [Pitch Bend](xref:Melanchall.DryWetMidi.Core.PitchBendEvent) events.
 
-_Pitch Bend_ events are considered duplicated when they are meet all the following conditions:
+_Pitch Bend_ events are considered duplicated when they meet all the following conditions:
 
 * same pitch value;
 * same channel.
@@ -191,7 +191,7 @@ _Sequence/Track Name_ events are considered duplicated when they have the same t
 
 [RemoveDuplicatedControlChangeEvents](xref:Melanchall.DryWetMidi.Tools.SanitizingSettings.RemoveDuplicatedControlChangeEvents) does the same actions as the [RemoveDuplicatedSetTempoEvents](#removeduplicatedsettempoevents) or [RemoveDuplicatedTimeSignatureEvents](#removeduplicatedtimesignatureevents) one but for duplicated [Control Change](xref:Melanchall.DryWetMidi.Core.ControlChangeEvent) events.
 
-_Control Change_ events are considered duplicated when they are meet all the following conditions:
+_Control Change_ events are considered duplicated when they meet all the following conditions:
 
 * same control number;
 * same control value;

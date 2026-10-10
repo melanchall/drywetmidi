@@ -6,7 +6,7 @@ uid: a_csv_serializer
 
 With the [CsvSerializer](xref:Melanchall.DryWetMidi.Tools.CsvSerializer) you can either serialize objects to CSV or deserialize them back from CSV.
 
-In this article the comma (`,`) used as a values delimiter. You can change it with the `Delimiter` property of the [CsvSerializationSettings](xref:Melanchall.DryWetMidi.Tools.CsvSerializationSettings) (for serialization) and [CsvDeserializationSettings](xref:Melanchall.DryWetMidi.Tools.CsvDeserializationSettings) (for deserialization).
+In this article, the comma (`,`) is used as a delimiter between values. You can change it with the `Delimiter` property of the [CsvSerializationSettings](xref:Melanchall.DryWetMidi.Tools.CsvSerializationSettings) (for serialization) and [CsvDeserializationSettings](xref:Melanchall.DryWetMidi.Tools.CsvDeserializationSettings) (for deserialization).
 
 ## Example
 
@@ -115,7 +115,7 @@ As for the `Time`, it holds the time of a [TimedEvent](xref:Melanchall.DryWetMid
 
 where **Modifiers** are:
 
-* **BytesArray** – `Data` will be serialized as `"B1 B2 B3 ..."` where format of the string controlled by the `BytesArrayFormat` and `BytesArrayDelimiter` properties of the [CsvSerializationSettings](xref:Melanchall.DryWetMidi.Tools.CsvSerializationSettings) and [CsvDeserializationSettings](xref:Melanchall.DryWetMidi.Tools.CsvDeserializationSettings);
+* **BytesArray** – `Data` will be serialized as `"B1 B2 B3 ..."` where the format of the string is controlled by the `BytesArrayFormat` and `BytesArrayDelimiter` properties of the [CsvSerializationSettings](xref:Melanchall.DryWetMidi.Tools.CsvSerializationSettings) and [CsvDeserializationSettings](xref:Melanchall.DryWetMidi.Tools.CsvDeserializationSettings);
 * **Note** – `Note` property is serialized as either the note number or letter (_C4_, for example) depending on the `NoteFormat` property of the [CsvSerializationSettings](xref:Melanchall.DryWetMidi.Tools.CsvSerializationSettings) and [CsvDeserializationSettings](xref:Melanchall.DryWetMidi.Tools.CsvDeserializationSettings).
 
 By the way, when you're deserializing CSV data, you can set [TimeType](xref:Melanchall.DryWetMidi.Tools.CsvDeserializationSettings.TimeType), [LengthType](xref:Melanchall.DryWetMidi.Tools.CsvDeserializationSettings.LengthType) and [NoteFormat](xref:Melanchall.DryWetMidi.Tools.CsvDeserializationSettings.NoteFormat) properties of the [CsvDeserializationSettings](xref:Melanchall.DryWetMidi.Tools.CsvDeserializationSettings) to `null` to let the library detect formats automatically (which is the default behavior). Of course, you can tell the engine exact formats to simplify its work.

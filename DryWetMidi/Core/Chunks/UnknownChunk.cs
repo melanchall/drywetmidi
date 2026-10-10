@@ -8,8 +8,8 @@ namespace Melanchall.DryWetMidi.Core
     /// </summary>
     /// <remarks>
     /// <para>
-    /// Structure of MIDI file chunks allows custom chunks be implemented and written to a MIDI file.
-    /// Chunks DryWetMIDI doesn't know about will be read as an instances of the <see cref="UnknownChunk"/>.
+    /// The structure of MIDI file chunks allows custom chunks to be implemented and written to a MIDI file.
+    /// Chunks DryWetMIDI doesn't know about will be read as instances of the <see cref="UnknownChunk"/>.
     /// </para>
     /// <para>
     /// See <see href="https://midi.org/standard-midi-files-specification"/> for detailed MIDI file specification.
@@ -54,7 +54,7 @@ namespace Melanchall.DryWetMidi.Core
         }
 
         /// <summary>
-        /// Reads content of a <see cref="UnknownChunk"/>.
+        /// Reads content of an <see cref="UnknownChunk"/>.
         /// </summary>
         /// <remarks>
         /// Content of an <see cref="UnknownChunk"/> is array of bytes.
@@ -94,7 +94,7 @@ namespace Melanchall.DryWetMidi.Core
         }
 
         /// <summary>
-        /// Writes content of a <see cref="UnknownChunk"/>.
+        /// Writes content of an <see cref="UnknownChunk"/>.
         /// </summary>
         /// <remarks>
         /// Content of an <see cref="UnknownChunk"/> is array of bytes.

@@ -196,7 +196,7 @@ Examples:
 * `1h4MS` – 1 hour 4 milliseconds  
 * `2M3s` – 2 minutes 3 seconds  
 * `2 m 4 Ms` – 2 minutes 4 milliseconds  
-* `3 s 4 mS` – 2 seconds 4 milliseconds
+* `3 s 4 mS` – 3 seconds 4 milliseconds
 
 ### Bars, beats and ticks
 

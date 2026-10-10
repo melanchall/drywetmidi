@@ -689,7 +689,7 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// </summary>
         /// <param name="name">The name of a scale.</param>
         /// <returns>Intervals sequence for the scale with the name <paramref name="name"/>; or <c>null</c> if
-        /// there is no a scale with this name.</returns>
+        /// there is no scale with this name.</returns>
         /// <exception cref="ArgumentException"><paramref name="name"/> is <c>null</c> or contains white-spaces only.</exception>
         public static ICollection<Interval>? GetByName(string name)
         {

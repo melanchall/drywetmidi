@@ -4,7 +4,7 @@ uid: a_mt_chord_progression
 
 # Chord progression
 
-[ChordProgression](xref:Melanchall.DryWetMidi.MusicTheory.ChordProgression) represents a set of [chords](Chord.md) which represents musical chord progression. Some examples of usage:
+[ChordProgression](xref:Melanchall.DryWetMidi.MusicTheory.ChordProgression) represents a set of [chords](Chord.md) that form a musical chord progression. Some examples of usage:
 
 ```csharp
 // Get I-II-IV chord progression for C Major scale

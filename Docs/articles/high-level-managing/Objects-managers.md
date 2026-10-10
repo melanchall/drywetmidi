@@ -25,7 +25,7 @@ using (var manager = new TimedObjectsManager(trackChunk.Events, ObjectType.Note 
 }
 ```
 
-All changes made with a manager will not be saved until `SaveChanges` or `Dispose` method will be called. So the recommended practice to work with managers is
+All changes made with a manager will not be saved until the `SaveChanges` or `Dispose` method is called. So the recommended practice to work with managers is
 
 ```csharp
 using (var notesManager = trackChunk.ManageNotes())
@@ -34,7 +34,7 @@ using (var notesManager = trackChunk.ManageNotes())
 }
 ```
 
-or if managing is happen in different parts of  a program
+or if managing happens in different parts of a program
 
 ```csharp
 var notesManager = new TimedObjectsManager<Note>(trackChunk.Events);
@@ -70,4 +70,4 @@ var notesManager = new TimedObjectsManager<Note>(trackChunk.Events);
 timedEventsManager.SaveChanges();
 ```
 
-will cause changes made with the `notesManager` will be lost because `SaveChanges` (or `Dispose` in first code snippet) of `timedEventsManager` executed after `SaveChanges` of `notesManager`, and thus rewrites underlying events collection. You need to save changes made with a previous manager before managing objects with the next one.
+will cause changes made with the `notesManager` to be lost because `SaveChanges` (or `Dispose` in the first code snippet) of `timedEventsManager` is executed after `SaveChanges` of `notesManager`, and thus rewrites the underlying events collection. You need to save changes made with a previous manager before managing objects with the next one.

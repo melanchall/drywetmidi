@@ -19,8 +19,8 @@ namespace Melanchall.DryWetMidi.Composing
     /// // Build the composition
     /// var pattern = new PatternBuilder()
     /// 
-    ///     // The length of all main theme's notes within four first bars is
-    ///     // triplet eight so set it which will free us from necessity to specify
+    ///     // The length of all notes in the main theme within the first four bars is
+    ///     // an eighth-note triplet, so we don't need to specify
     ///     // the length of each note explicitly
     ///     .SetNoteLength(MusicalTimeSpan.Eighth.Triplet())
     /// 
@@ -76,7 +76,7 @@ namespace Melanchall.DryWetMidi.Composing
     ///     .Chord(bassChord, Octave.Get(2).CSharp) // C#2 (C#2, C#3)
     ///     .Chord(bassChord, Octave.Get(1).B)      // B1  (B1, B2)
     /// 
-    ///     // Remaining four chords has half length
+    ///     // The remaining four chords have half the length
     ///     .SetNoteLength(MusicalTimeSpan.Half)
     /// 
     ///     .Chord(bassChord, Octave.Get(1).A)      // A1  (A1, A2)

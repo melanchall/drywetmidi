@@ -14,7 +14,7 @@ namespace Melanchall.DryWetMidi.Core
     /// <para>An instance of <see cref="MidiFile"/> can be obtained via one of <c>Read</c>
     /// (<see cref="Read(string, ReadingSettings)"/> or <see cref="Read(Stream, ReadingSettings)"/>)
     /// static methods or via constructor which allows to create a MIDI file from scratch.</para>
-    /// <para>Content of MIDI file available via <see cref="Chunks"/> property which contains instances of
+    /// <para>Content of a MIDI file is available via the <see cref="Chunks"/> property, which contains instances of
     /// following chunk classes (derived from <see cref="MidiChunk"/>):</para>
     /// <list type="bullet">
     /// <item>
@@ -101,8 +101,8 @@ namespace Melanchall.DryWetMidi.Core
         /// </summary>
         /// <remarks>
         /// <para>Time division specifies the meaning of the delta-times of MIDI events within <see cref="TrackChunk"/>.
-        /// There are two types of the time division: ticks per quarter note and SMPTE. The first type represented by
-        /// <see cref="TicksPerQuarterNoteTimeDivision"/> class and the second one represented by
+        /// There are two types of the time division: ticks per quarter note and SMPTE. The first type is represented by
+        /// the <see cref="TicksPerQuarterNoteTimeDivision"/> class and the second one is represented by
         /// <see cref="SmpteTimeDivision"/> class.</para>
         /// </remarks>
         public TimeDivision? TimeDivision { get; set; } = new TicksPerQuarterNoteTimeDivision();
@@ -280,7 +280,7 @@ namespace Melanchall.DryWetMidi.Core
         /// </summary>
         /// <param name="filePath">Full path of the file to write to.</param>
         /// <param name="overwriteFile">If <c>true</c> and file specified by <paramref name="filePath"/> already
-        /// exists it will be overwritten; if <c>false</c> and the file exists exception will be thrown.</param>
+        /// exists it will be overwritten; if <c>false</c> and the file exists, an exception will be thrown.</param>
         /// <param name="format">Format of a MIDI file.</param>
         /// <param name="settings">Settings according to which the file must be written. Specify <c>null</c> to use
         /// default settings.</param>
@@ -330,7 +330,7 @@ namespace Melanchall.DryWetMidi.Core
         /// </summary>
         /// <param name="filePath">Full path of the file to write to.</param>
         /// <param name="overwriteFile">If <c>true</c> and file specified by <paramref name="filePath"/> already
-        /// exists it will be overwritten; if <c>false</c> and the file exists exception will be thrown.</param>
+        /// exists it will be overwritten; if <c>false</c> and the file exists, an exception will be thrown.</param>
         /// <param name="format">Format of a MIDI file (default value is <see cref="MidiFileFormat.MultiTrack"/>).</param>
         /// <param name="settings">Settings according to which the file must be written. Specify <c>null</c>
         /// (default value) to use default settings.</param>

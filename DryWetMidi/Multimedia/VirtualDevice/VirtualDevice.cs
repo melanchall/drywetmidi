@@ -159,7 +159,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// Note that if you try to get <see cref="Multimedia.InputEndpoint"/> or <see cref="Multimedia.OutputEndpoint"/>
         /// with <paramref name="name"/> (for example, via <see cref="InputEndpoint.GetByName(string)"/>)
         /// immediately after a virtual device is created, it may not be available yet. So just poll
-        /// endpoints for a couple of seconds until they become available. At now, such behavior may be observed on
+        /// endpoints for a couple of seconds until they become available. Currently, such behavior may be observed on
         /// modern Windows 11 with Windows MIDI Services. But it's recommended to not think endpoints can be
         /// queried immediately.
         /// </para>

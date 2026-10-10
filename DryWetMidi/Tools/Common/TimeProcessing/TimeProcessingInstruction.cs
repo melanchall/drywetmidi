@@ -4,7 +4,7 @@ using Melanchall.DryWetMidi.Common;
 namespace Melanchall.DryWetMidi.Tools
 {
     /// <summary>
-    /// Holds the new time that will be set to an object is being processed and action
+    /// Holds the new time that will be set to an object being processed and the action
     /// indicating whether quantization should be cancelled or not.
     /// </summary>
     public sealed class TimeProcessingInstruction
@@ -25,7 +25,7 @@ namespace Melanchall.DryWetMidi.Tools
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TimeProcessingInstruction"/> with the
-        /// specified time. This time will be set to an object is being processed.
+        /// specified time. This time will be set to an object being processed.
         /// </summary>
         /// <param name="time">The new time of an object.</param>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="time"/> is negative.</exception>

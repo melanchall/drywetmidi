@@ -36,7 +36,7 @@ using (var tokensReader = MidiFile.ReadLazy("test.mid"))
 
 With this approach each call of [ReadToken](xref:Melanchall.DryWetMidi.Core.MidiTokensReader.ReadToken) method will read next portion of data from a MIDI file (in fact, the internal reader in DryWetMIDI uses the buffer of `4096` bytes by default, the size of this buffer can be adjusted via [BufferSize](xref:Melanchall.DryWetMidi.Core.ReaderSettings.BufferSize) property of [ReadingSettings.ReaderSettings](xref:Melanchall.DryWetMidi.Core.ReadingSettings.ReaderSettings)). So, the memory consumption will be almost always constant (despite a MIDI file size) and low. But of course, there's the price – slower reading and much more difficult implementation of some logic and algorithms needed for your application. Also, many high level tools provided by DryWetMIDI will be unavailable.
 
-Some useful methods can be found in the [MidiTokensReaderUtilities](xref:Melanchall.DryWetMidi.Core.MidiTokensReaderUtilities) class. Following example shows how you can calculate count of all _A#_ notes for each track chunk ([EnumerateObjects](xref:Melanchall.DryWetMidi.Interaction.GetObjectsUtilities.EnumerateObjects*) method also used):
+Some useful methods can be found in the [MidiTokensReaderUtilities](xref:Melanchall.DryWetMidi.Core.MidiTokensReaderUtilities) class. The following example shows how you can calculate the count of all _A#_ notes for each track chunk (the [EnumerateObjects](xref:Melanchall.DryWetMidi.Interaction.GetObjectsUtilities.EnumerateObjects*) method is also used):
 
 ```csharp
 bool IsTrackChunkHeaderToken(MidiToken token) =>
@@ -78,7 +78,7 @@ using (var tokensReader = MidiFile.ReadLazy("test.mid"))
 }
 ```
 
-In comparison, standard approach takes much less lines of code (but takes much more memory of course):
+In comparison, the standard approach takes far fewer lines of code (but takes much more memory, of course):
 
 ```csharp
 var midiFile = MidiFile.Read("test.mid");
@@ -96,9 +96,9 @@ foreach (var trackChunk in midiFile.GetTrackChunks())
 
 ## Writing
 
-The same applied to the process of writing a MIDI file. [MidiFile.Write](xref:Melanchall.DryWetMidi.Core.MidiFile.Write*) requires an instance of the [MidiFile](xref:Melanchall.DryWetMidi.Core.MidiFile) obviously which can occupy a lot of memory for big files.
+The same applies to the process of writing a MIDI file. [MidiFile.Write](xref:Melanchall.DryWetMidi.Core.MidiFile.Write*) requires an instance of the [MidiFile](xref:Melanchall.DryWetMidi.Core.MidiFile), which can obviously occupy a lot of memory for big files.
 
-Here an example of how to write MIDI data in a lazy way using [MidiTokensWriter](xref:Melanchall.DryWetMidi.Core.MidiTokensWriter):
+Here is an example of how to write MIDI data in a lazy way using [MidiTokensWriter](xref:Melanchall.DryWetMidi.Core.MidiTokensWriter):
 
 ```csharp
 using (var tokensWriter = MidiFile.WriteLazy("test.mid", true))

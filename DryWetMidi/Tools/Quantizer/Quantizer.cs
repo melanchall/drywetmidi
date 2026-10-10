@@ -70,7 +70,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="grid">Grid to quantize <paramref name="obj"/> by.</param>
         /// <param name="target">Target time (start or end) to update.</param>
         /// <param name="tempoMap">Tempo map used to quantize <paramref name="obj"/>.</param>
-        /// <param name="settings">Settings according to which quantization performed.</param>
+        /// <param name="settings">Settings according to which quantization is performed.</param>
         /// <returns>An object indicating whether the new time should be set to the object
         /// or not. Also returned object contains that new time.</returns>
         protected virtual TimeProcessingInstruction OnObjectQuantizing(
@@ -97,7 +97,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="time">New time for <paramref name="obj"/>.</param>
         /// <param name="target">Target time (start or end) to update.</param>
         /// <param name="tempoMap">Tempo map used to quantize <paramref name="obj"/>.</param>
-        /// <param name="settings">Settings according to which quantization performed.</param>
+        /// <param name="settings">Settings according to which quantization is performed.</param>
         /// <returns>An object indicating whether the new time should be set to the object
         /// or not. Also returned object contains that new time.</returns>
         protected virtual TimeProcessingInstruction OnObjectRandomizing(

@@ -25,7 +25,7 @@ namespace Melanchall.DryWetMidi.Composing
         #region Properties
 
         /// <summary>
-        /// Get the note is being processed by the piano roll engine.
+        /// Gets the note that is being processed by the piano roll engine.
         /// </summary>
         public MusicTheory.Note Note { get; }
 

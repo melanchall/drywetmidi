@@ -28,7 +28,7 @@ where
 
 * **OctaveNumber** is the number of an octave. A number must be between `-1` and `9`.
 
-Examples of valid interval strings:
+Examples of valid octave strings:
 
 `-1`  
 `8`  

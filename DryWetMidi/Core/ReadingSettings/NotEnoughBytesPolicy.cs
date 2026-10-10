@@ -8,7 +8,7 @@
     public enum NotEnoughBytesPolicy
     {
         /// <summary>
-        /// Abort reading and throw an <see cref="NotEnoughBytesException"/>.
+        /// Abort reading and throw a <see cref="NotEnoughBytesException"/>.
         /// </summary>
         Abort = 0,
 

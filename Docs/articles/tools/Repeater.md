@@ -26,7 +26,7 @@ Also the [RepeatingSettings](xref:Melanchall.DryWetMidi.Tools.RepeatingSettings)
 
 ![Round shift up](images/Repeater/RoundingUp.png)
 
-Here the data doesn't reach bar line time, but we want to repeat the objects by aligning to bars lines. Obviously we can't use the [ShiftPolicy.ShiftByMaxTime](xref:Melanchall.DryWetMidi.Tools.ShiftPolicy.ShiftByMaxTime) option here. But we can't use [ShiftPolicy.ShiftByFixedValue](xref:Melanchall.DryWetMidi.Tools.ShiftPolicy.ShiftByFixedValue) too because we don't know the length of data in the general case. We just want to repeat the objects and be sure the start of the objects group is always on a bar line. So we can write this code:
+Here the data doesn't reach bar line time, but we want to repeat the objects by aligning to bar lines. Obviously, we can't use the [ShiftPolicy.ShiftByMaxTime](xref:Melanchall.DryWetMidi.Tools.ShiftPolicy.ShiftByMaxTime) option here. But we can't use the [ShiftPolicy.ShiftByFixedValue](xref:Melanchall.DryWetMidi.Tools.ShiftPolicy.ShiftByFixedValue) option either because we don't know the length of data in the general case. We just want to repeat the objects and be sure the start of the objects group is always on a bar line. So we can write this code:
 
 ```csharp
 var newFile = midiFile.Repeat(2, new RepeatingSettings
@@ -37,7 +37,7 @@ var newFile = midiFile.Repeat(2, new RepeatingSettings
 });
 ```
 
-We tell the tool here to round calculated shift value up using the step of `1` bar. By default [ShiftRoundingPolicy](xref:Melanchall.DryWetMidi.Tools.RepeatingSettings.ShiftRoundingPolicy) property is set to [TimeSpanRoundingPolicy.NoRounding](xref:Melanchall.DryWetMidi.Interaction.TimeSpanRoundingPolicy.NoRounding) but you can also set it [TimeSpanRoundingPolicy.RoundDown](xref:Melanchall.DryWetMidi.Interaction.TimeSpanRoundingPolicy.RoundDown) along with [TimeSpanRoundingPolicy.RoundUp](xref:Melanchall.DryWetMidi.Interaction.TimeSpanRoundingPolicy.RoundUp) shown above. Please see documentation on [TimeSpanRoundingPolicy](xref:Melanchall.DryWetMidi.Interaction.TimeSpanRoundingPolicy) to learn more about rounding.
+We tell the tool here to round the calculated shift value up using the step of `1` bar. By default, the [ShiftRoundingPolicy](xref:Melanchall.DryWetMidi.Tools.RepeatingSettings.ShiftRoundingPolicy) property is set to [TimeSpanRoundingPolicy.NoRounding](xref:Melanchall.DryWetMidi.Interaction.TimeSpanRoundingPolicy.NoRounding), but you can also set it to [TimeSpanRoundingPolicy.RoundDown](xref:Melanchall.DryWetMidi.Interaction.TimeSpanRoundingPolicy.RoundDown) or [TimeSpanRoundingPolicy.RoundUp](xref:Melanchall.DryWetMidi.Interaction.TimeSpanRoundingPolicy.RoundUp), as shown above. Please see the documentation on [TimeSpanRoundingPolicy](xref:Melanchall.DryWetMidi.Interaction.TimeSpanRoundingPolicy) to learn more about rounding.
 
 ## Custom repeater
 

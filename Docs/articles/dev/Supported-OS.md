@@ -14,7 +14,7 @@ Can be used on any platform .NET supports. You can find the list of the supporte
 
 ## Multimedia API
 
-Can be used currently on Windows and macOS only. Here the list of the key classes:
+Can be used currently on Windows and macOS only. Here is the list of the key classes:
 
 * [InputEndpoint](xref:Melanchall.DryWetMidi.Multimedia.InputEndpoint);
 * [OutputEndpoint](xref:Melanchall.DryWetMidi.Multimedia.OutputEndpoint);

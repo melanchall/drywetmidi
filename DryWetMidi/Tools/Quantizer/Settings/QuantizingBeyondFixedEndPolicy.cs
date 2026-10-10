@@ -1,8 +1,8 @@
 ﻿namespace Melanchall.DryWetMidi.Tools
 {
     /// <summary>
-    /// Policy which defines how a quantizer should act in case of object's side
-    /// is going to be moved beyond an opposite one that is fixed. The default value is
+    /// Policy that defines how a quantizer should act when an object's side is about to move
+    /// beyond the fixed opposite side. The default value is
     /// <see cref="CollapseAndFix"/>.
     /// </summary>
     public enum QuantizingBeyondFixedEndPolicy

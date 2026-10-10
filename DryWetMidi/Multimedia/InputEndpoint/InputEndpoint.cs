@@ -41,7 +41,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         public event EventHandler<MidiEventReceivedEventArgs>? EventReceived;
 
         /// <summary>
-        /// Occurs when MIDI time code received, i.e. all MIDI events to complete MIDI time code are received.
+        /// Occurs when MIDI time code is received, i.e. when all events needed to complete the MIDI time code have been received.
         /// </summary>
         /// <remarks>
         /// This event will be raised only if <see cref="RaiseMidiTimeCodeReceived"/> is set to <c>true</c>.
@@ -141,7 +141,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <para>
         /// Some MIDI endpoints and MIDI subsystems of operating systems can split a system exclusive
         /// event into several parts on sending the event. If <see cref="WaitForCompleteSysExEvent"/> is
-        /// set to <c>true</c> (default value), DryWetMIDI will wait until last part received, then the library
+        /// set to <c>true</c> (default value), DryWetMIDI will wait until the last part is received, then the library
         /// will combine all event's parts into single MIDI event and fire the <see cref="EventReceived"/> event.
         /// </para>
         /// <para>
@@ -785,10 +785,6 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <summary>
         /// Determines if two <see cref="InputEndpoint"/> objects are equal.
         /// </summary>
-        /// <remarks>
-        /// On Windows the operator will just compare objects references. "True" equality check available
-        /// on macOS only.
-        /// </remarks>
         /// <param name="inputEndpoint1">The first <see cref="InputEndpoint"/> to compare.</param>
         /// <param name="inputEndpoint2">The second <see cref="InputEndpoint"/> to compare.</param>
         /// <returns><c>true</c> if the endpoints are equal, <c>false</c> otherwise.</returns>
@@ -806,10 +802,6 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <summary>
         /// Determines if two <see cref="InputEndpoint"/> objects are not equal.
         /// </summary>
-        /// <remarks>
-        /// On Windows the operator will just compare objects references. "True" inequality check available
-        /// on macOS only.
-        /// </remarks>
         /// <param name="inputEndpoint1">The first <see cref="InputEndpoint"/> to compare.</param>
         /// <param name="inputEndpoint2">The second <see cref="InputEndpoint"/> to compare.</param>
         /// <returns><c>false</c> if the endpoints are equal, <c>true</c> otherwise.</returns>
@@ -825,10 +817,6 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <summary>
         /// Determines whether the specified object is equal to the current object.
         /// </summary>
-        /// <remarks>
-        /// On Windows the method will just compare objects references. "True" equality check available
-        /// on macOS only.
-        /// </remarks>
         /// <param name="obj">The object to compare with the current object.</param>
         /// <returns><c>true</c> if the specified object is equal to the current object; otherwise, <c>false</c>.</returns>
         public override bool Equals(object? obj)

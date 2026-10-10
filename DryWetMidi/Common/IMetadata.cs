@@ -6,7 +6,7 @@
     public interface IMetadata
     {
         /// <summary>
-        /// Gets or sets a metadata associated with the current object.
+        /// Gets or sets the metadata associated with the current object.
         /// </summary>
         object? Metadata { get; set; }
     }

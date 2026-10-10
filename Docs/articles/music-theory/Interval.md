@@ -4,7 +4,7 @@ uid: a_mt_interval
 
 # Interval
 
-[Interval](xref:Melanchall.DryWetMidi.MusicTheory.Interval) holds a number of half steps and is used, for example, to transpose notes or describing chords when working with [PatternBuilder](xref:Melanchall.DryWetMidi.Composing.PatternBuilder). Some examples of usage:
+[Interval](xref:Melanchall.DryWetMidi.MusicTheory.Interval) holds a number of half steps and is used, for example, to transpose notes or to describe chords when working with [PatternBuilder](xref:Melanchall.DryWetMidi.Composing.PatternBuilder). Some examples of usage:
 
 ```csharp
 // Get A4 note

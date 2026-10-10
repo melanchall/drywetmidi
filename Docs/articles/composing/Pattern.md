@@ -47,8 +47,8 @@ var bassChord = new[] { Interval.Twelve };
 // Build the composition
 var pattern = new PatternBuilder()
      
-    // The length of all main theme's notes within four first bars is
-    // triplet eight so set it which will free us from necessity to specify
+    // The length of all notes in the main theme within the first four bars is
+    // an eighth-note triplet, so we don't need to specify
     // the length of each note explicitly
 
     .SetNoteLength(MusicalTimeSpan.Eighth.Triplet())
@@ -116,7 +116,7 @@ var pattern = new PatternBuilder()
     .Chord(bassChord, Octave.Get(2).CSharp) // C#2 (C#2, C#3)
     .Chord(bassChord, Octave.Get(1).B)      // B1  (B1, B2)
     
-    // Remaining four chords has half length
+    // The remaining four chords have half length
 
     .SetNoteLength(MusicalTimeSpan.Half)
     
@@ -158,7 +158,7 @@ Each line starts with a note. Think about the line as a piano roll lane in your 
 
 `'|'` symbol means a single-cell note, i.e. the note's length is equal to a cell's length. So each note in the example will be an 8th one. By the way, you can alter this symbol with the [SingleCellNoteSymbol](xref:Melanchall.DryWetMidi.Composing.PianoRollSettings.SingleCellNoteSymbol) property of the [PianoRollSettings](xref:Melanchall.DryWetMidi.Composing.PianoRollSettings) passed to the [PianoRoll](xref:Melanchall.DryWetMidi.Composing.PatternBuilder.PianoRoll*) method.
 
-Hyphen (`'-'`) means nothing except a step of a cell's length. We will call it as **fill symbol**.
+Hyphen (`'-'`) means nothing except a step of a cell's length. We will call it a **fill symbol**.
 
 > [!WARNING]
 > Spaces will be cut from the piano roll string before processing. So it's required to use a fill symbol to specify an empty space (rest) to get correct results. For example, this pattern:
@@ -308,7 +308,7 @@ And here the file – [pianoroll-custom.mid](files/pianoroll-custom.mid). But wh
 
 * `'*'` – ghost note (played with half of the current velocity);
 * `'║'` – double note (two notes, each with length of half of the single-cell note);
-* `'!'` – flam (ghost thirthy-second note right before main beat).
+* `'!'` – flam (ghost thirty-second note right before main beat).
 
 We've used [PianoRollAction.CreateSingleCell](xref:Melanchall.DryWetMidi.Composing.PianoRollAction.CreateSingleCell*) method here to specify single-cell actions. But you can also define multi-cell ones – [PianoRollAction.CreateMultiCell](xref:Melanchall.DryWetMidi.Composing.PianoRollAction.CreateMultiCell*) method is what we need for this purpose. For example, if we want to be able to put quiet notes:
 

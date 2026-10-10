@@ -8,7 +8,7 @@ namespace Melanchall.DryWetMidi.Core
     /// <remarks>
     /// This message is most often sent by pressing down on the key after it "bottoms out".
     /// This message is different from polyphonic after-touch. Use this message to send the
-    /// single greatest pressure value (of all the current depressed keys).
+    /// single greatest pressure value (of all the currently depressed keys).
     /// </remarks>
     public sealed class ChannelAftertouchEvent : ChannelEvent
     {

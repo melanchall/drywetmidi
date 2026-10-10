@@ -33,7 +33,7 @@ If an input endpoint is listening for events, it will fire the [`EventReceived`]
 > }
 > ```
 > 
-> the `OnEventReceived` method will not be probably called at all since the program leaves the `using` block before any event is received, and thus the endpoint instance will be destroyed and not functioning of course.
+> the `OnEventReceived` method will probably not be called at all since the program leaves the `using` block before any event is received, and thus the endpoint instance will be destroyed and will no longer function.
 
 Small example (console app) that shows receiving MIDI data:
 
@@ -73,7 +73,7 @@ namespace InputEndpointExample
 
 `InputEndpoint` has the [`MidiTimeCodeReceived`](xref:Melanchall.DryWetMidi.Multimedia.InputEndpoint.MidiTimeCodeReceived) event which, by default, will be fired only when **all** MIDI Time Code components (separate [`MidiTimeCodeEvent`](xref:Melanchall.DryWetMidi.Core.MidiTimeCodeEvent) events) are received forming _hours:minutes:seconds:frames_ timestamp. You can turn this behavior off by setting [`RaiseMidiTimeCodeReceived`](xref:Melanchall.DryWetMidi.Multimedia.InputEndpoint.RaiseMidiTimeCodeReceived) to `false`.
 
-If an invalid [channel](xref:Melanchall.DryWetMidi.Core.ChannelEvent), [system common](xref:Melanchall.DryWetMidi.Core.SystemCommonEvent) or [system real-time](xref:Melanchall.DryWetMidi.Core.SystemRealTimeEvent) or system exclusive event received, [`ErrorOccurred`](xref:Melanchall.DryWetMidi.Multimedia.MidiEndpoint.ErrorOccurred) event will be fired with the `Data` property of the exception filled with information about the error.
+If an invalid [channel](xref:Melanchall.DryWetMidi.Core.ChannelEvent), [system common](xref:Melanchall.DryWetMidi.Core.SystemCommonEvent), [system real-time](xref:Melanchall.DryWetMidi.Core.SystemRealTimeEvent), or system exclusive event is received, the [`ErrorOccurred`](xref:Melanchall.DryWetMidi.Multimedia.MidiEndpoint.ErrorOccurred) event will be fired with the `Data` property of the exception filled with information about the error.
 
 ## Custom input endpoint
 

@@ -4,7 +4,7 @@ uid: a_playback_commonproblems
 
 # Common problems
 
-## Playback doesn't produce sound or events logs
+## Playback doesn't produce sound or event logs
 
 Make sure an instance of [Playback](xref:Melanchall.DryWetMidi.Multimedia.Playback) class is held by class field, global variable or something else that can live longer than the method where you instantiate `Playback`. In this case
 

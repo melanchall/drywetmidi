@@ -231,7 +231,7 @@ namespace Melanchall.DryWetMidi.Interaction
         }
 
         /// <summary>
-        /// Divides the current time span by the specified <see cref="MusicalTimeSpan"/> returning ration
+        /// Divides the current time span by the specified <see cref="MusicalTimeSpan"/>, returning the ratio
         /// between them.
         /// </summary>
         /// <param name="timeSpan"><see cref="MusicalTimeSpan"/> to divide the current time span by.</param>
@@ -684,7 +684,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// Shrinks the current time span by dividing its length by the specified divisor.
         /// </summary>
         /// <param name="divisor">Divisor to shrink the time span by.</param>
-        /// <returns>Time span that is the current time span shrinked by the <paramref name="divisor"/>.</returns>
+        /// <returns>Time span that is the current time span shrunk by the <paramref name="divisor"/>.</returns>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="divisor"/> is zero or negative.</exception>
         public ITimeSpan Divide(double divisor)
         {

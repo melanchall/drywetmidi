@@ -78,7 +78,7 @@ First call of the `SendEvent` method can take some time for allocating resources
 
 ## Custom output endpoint
 
-You can create your own output endpoint implementation and use it in your app. For example, let's create super simple endpoint that just outputs MIDI events to console:
+You can create your own output endpoint implementation and use it in your app. For example, let's create a super simple endpoint that just outputs MIDI events to the console:
 
 ```csharp
 private sealed class ConsoleOutputEndpoint : IOutputEndpoint

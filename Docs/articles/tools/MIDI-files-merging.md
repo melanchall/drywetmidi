@@ -23,9 +23,9 @@ Here we're merging three files each of two track chunks. So as you can see, even
 midiFiles.MergeSequentially();
 ```
 
-There is one important note about how merging works. Obviously files can have different time divisions. In short, a MIDI tick (single unit of time) can have different length in milliseconds. Just placing files one after another and using time division of the first file, for example, we'll ruine timings of MIDI events of the files being merged.
+There is one important note about how merging works. Obviously files can have different time divisions. In short, a MIDI tick (single unit of time) can have different length in milliseconds. Just placing files one after another and using time division of the first file, for example, will ruin the timings of MIDI events in the files being merged.
 
-To preserve correct timings of all MIDI events of all input files in the result one [MergeSequentially](xref:Melanchall.DryWetMidi.Tools.Merger.MergeSequentially*) does following steps:
+To preserve correct timings of all MIDI events from all input files in the result, the [MergeSequentially](xref:Melanchall.DryWetMidi.Tools.Merger.MergeSequentially*) method performs the following steps:
 
 1. calculates new time division as the least common multiple of TPQNs ([ticks per quarter note](xref:Melanchall.DryWetMidi.Core.TicksPerQuarterNoteTimeDivision)) of the input files;
 2. for each input file calculates a scale factor every delta-time in the file should be multiplied by;

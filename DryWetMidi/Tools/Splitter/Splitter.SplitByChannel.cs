@@ -19,7 +19,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// All channel events (<see cref="ChannelEvent"/>) will be grouped by channel and then events for each
         /// channel will be placed to separate files. So each new file will contain channel events for single channel.
         /// If <see cref="SplitFileByChannelSettings.CopyNonChannelEventsToEachFile"/> of <paramref name="settings"/>
-        /// set to <c>true</c> (default value), each new file will also contain all non-channel events from the original file.
+        /// is set to <c>true</c> (default value), each new file will also contain all non-channel events from the original file.
         /// If an input file doesn't contain channel events, result file will be just a copy of the input one.
         /// </remarks>
         /// <param name="settings">Settings according to which MIDI file should be split.</param>

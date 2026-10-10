@@ -2,7 +2,7 @@
 {
     /// <summary>
     /// Specifies how reading engine should react on new track chunk if already read chunks
-    /// count greater or equals the one declared at the file header. The default is <see cref="Read"/>.
+    /// count is greater than or equal to the one declared in the file header. The default is <see cref="Read"/>.
     /// </summary>
     public enum ExtraTrackChunkPolicy : byte
     {

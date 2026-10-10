@@ -7,7 +7,7 @@ using System.ComponentModel;
 namespace Melanchall.DryWetMidi.Tools
 {
     /// <summary>
-    /// Privides settings that control the process of CSV serialization.
+    /// Provides settings that control the process of CSV serialization.
     /// </summary>
     /// <seealso cref="CsvSerializer"/>
     public sealed class CsvSerializationSettings
