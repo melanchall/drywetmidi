@@ -163,27 +163,30 @@ namespace Melanchall.DryWetMidi.Tests.Core
 
         private static byte[] GetFileWithHugeEvent(params byte[] statusAndType)
         {
-            using (var ms = new MemoryStream())
+            var fileHeader = new byte[]
             {
-                ms.Write(new byte[]
-                {
-                    0x4D, 0x54, 0x68, 0x64, // Header chunk ID (MThd)
-                    0, 0, 0, 6,             // Header chunk size
-                    0, 0,                   // File format
-                    0, 1,                   // Tracks count
-                    0, 96                   // Time division
-                }, 0, 14);
-                ms.Write(new byte[]
-                {
-                    0x4D, 0x54, 0x72, 0x6B, // Track chunk ID (MTrk)
-                    0, 0, 0, 20             // Track chunk size
-                }, 0, 8);
-                ms.WriteByte(0);            // Delta-time
-                ms.Write(statusAndType, 0, statusAndType.Length);                // Status byte (and meta event type)
-                ms.Write(HugeVlq, 0, HugeVlq.Length);                            // Declared size of event data
-                ms.Write(new byte[] { 1, 2, 3 }, 0, 3);                          // Actual event data (3 bytes)
-                return ms.ToArray();
-            }
+                0x4D, 0x54, 0x68, 0x64, // Header chunk ID (MThd)
+                0, 0, 0, 6,             // Header chunk size
+                0, 0,                   // File format
+                0, 1,                   // Tracks count
+                0, 96                   // Time division
+            };
+
+            var trackHeader = new byte[]
+            {
+                0x4D, 0x54, 0x72, 0x6B, // Track chunk ID (MTrk)
+                0, 0, 0, 20,            // Track chunk size
+                0                       // Delta-time
+            };
+
+            var actualEventData = new byte[] { 1, 2, 3 };
+
+            return fileHeader
+                .Concat(trackHeader)
+                .Concat(statusAndType)  // Status byte (and meta event type)
+                .Concat(HugeVlq)        // Declared size of event data
+                .Concat(actualEventData)
+                .ToArray();
         }
 
         #endregion
