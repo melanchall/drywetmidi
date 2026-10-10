@@ -3,7 +3,7 @@
 namespace Melanchall.DryWetMidi.Common
 {
     /// <summary>
-    /// The exception that is thrown when an error occurs in the native MIDI API.
+    /// The exception that is thrown when an error occurs while using the native MIDI API.
     /// </summary>
     public sealed class NativeApiException : MidiException
     {

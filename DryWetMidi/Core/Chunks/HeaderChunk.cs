@@ -65,7 +65,7 @@ namespace Melanchall.DryWetMidi.Core
 
         public override string ToString()
         {
-            return $"Header chunk (file format = {FileFormat}, time division = {TimeDivision}, tracks number = {TracksNumber})";
+            return $"Header chunk (file format = {FileFormat}, time division = {TimeDivision}, number of tracks = {TracksNumber})";
         }
 
         /// <summary>

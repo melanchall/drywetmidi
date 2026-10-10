@@ -452,10 +452,6 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <summary>
         /// Determines if two <see cref="OutputEndpoint"/> objects are equal.
         /// </summary>
-        /// <remarks>
-        /// On Windows, the operator compares object references only. A true equality check is available
-        /// only on macOS.
-        /// </remarks>
         /// <param name="outputEndpoint1">The first <see cref="OutputEndpoint"/> to compare.</param>
         /// <param name="outputEndpoint2">The second <see cref="OutputEndpoint"/> to compare.</param>
         /// <returns><c>true</c> if the endpoints are equal, <c>false</c> otherwise.</returns>
@@ -473,10 +469,6 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <summary>
         /// Determines if two <see cref="OutputEndpoint"/> objects are not equal.
         /// </summary>
-        /// <remarks>
-        /// On Windows, the operator compares object references only. A true inequality check is available
-        /// only on macOS.
-        /// </remarks>
         /// <param name="outputEndpoint1">The first <see cref="OutputEndpoint"/> to compare.</param>
         /// <param name="outputEndpoint2">The second <see cref="OutputEndpoint"/> to compare.</param>
         /// <returns><c>false</c> if the endpoints are equal, <c>true</c> otherwise.</returns>
@@ -492,10 +484,6 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <summary>
         /// Determines whether the specified object is equal to the current object.
         /// </summary>
-        /// <remarks>
-        /// On Windows, the method compares object references only. A true equality check is available
-        /// only on macOS.
-        /// </remarks>
         /// <param name="obj">The object to compare with the current object.</param>
         /// <returns><c>true</c> if the specified object is equal to the current object; otherwise, <c>false</c>.</returns>
         public override bool Equals(object? obj)

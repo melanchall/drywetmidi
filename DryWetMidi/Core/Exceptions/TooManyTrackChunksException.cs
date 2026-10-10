@@ -22,7 +22,7 @@ namespace Melanchall.DryWetMidi.Core
         #region Properties
 
         /// <summary>
-        /// Gets the actual track chunks count.
+        /// Gets the actual number of track chunks.
         /// </summary>
         public int TrackChunksCount { get; }
 

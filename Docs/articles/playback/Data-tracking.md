@@ -7,7 +7,7 @@ uid: a_playback_datatrack
 [Playback](xref:Melanchall.DryWetMidi.Multimedia.Playback) provides a way to track some MIDI data to correctly handle jumps in time and get properly sounding data. There are two main groups of data to track:
 
 * [notes](#notes-tracking)
-* [MIDI parameters](#midi-parameters-values-tracking) (pitch bend, program, control value)
+* [MIDI parameters](#midi-parameters-values-tracking) (program, pitch bend, control value, channel aftertouch, note aftertouch)
 
 ## Notes tracking
 
@@ -65,12 +65,14 @@ Program tracking works in opposite direction too of course:
 
 We have program `B` active at the current time. But when we jump to a new time (before `B` but after `A`), `A` event will be played.
 
-`Playback` can currently track three MIDI parameters:
+`Playback` can currently track five MIDI parameters:
 
 * [program](xref:Melanchall.DryWetMidi.Core.ProgramChangeEvent);
 * [pitch bend](xref:Melanchall.DryWetMidi.Core.PitchBendEvent);
-* [control value](xref:Melanchall.DryWetMidi.Core.ControlChangeEvent).
+* [control value](xref:Melanchall.DryWetMidi.Core.ControlChangeEvent);
+* [channel aftertouch](xref:Melanchall.DryWetMidi.Core.ChannelAftertouchEvent);
+* [note aftertouch](xref:Melanchall.DryWetMidi.Core.NoteAftertouchEvent).
 
-We have discussed program tracking above. But tracking the remaining two parameters is absolutely the same. To track pitch bend value there is [TrackPitchValue](xref:Melanchall.DryWetMidi.Multimedia.Playback.TrackPitchValue) property. To track control value there is [TrackControlValue](xref:Melanchall.DryWetMidi.Multimedia.Playback.TrackControlValue) property.
+We have discussed program tracking above. Tracking the other parameters works similarly. Use the [TrackPitchValue](xref:Melanchall.DryWetMidi.Multimedia.Playback.TrackPitchValue) property to track pitch bend values, [TrackControlValue](xref:Melanchall.DryWetMidi.Multimedia.Playback.TrackControlValue) to track control values, [TrackChannelAftertouch](xref:Melanchall.DryWetMidi.Multimedia.Playback.TrackChannelAftertouch) to track channel aftertouch, and [TrackNoteAftertouch](xref:Melanchall.DryWetMidi.Multimedia.Playback.TrackNoteAftertouch) to track note aftertouch.
 
-Of course, all these parameters are tracked separately for each MIDI channel, and each control value is tracked separately for each control number.
+Program, pitch bend, and channel aftertouch are tracked separately for each MIDI channel. Control values are tracked separately for each MIDI channel and control number, and note aftertouch values are tracked separately for each MIDI channel and note number.
