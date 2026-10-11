@@ -165,12 +165,19 @@ namespace Melanchall.DryWetMidi.Core
             if (estimateMemory && isCustomChunk)
                 reader.ThrowIfMemoryLimitExceeded(Math.Min(size, reader.Length - reader.Position), settings);
 
+            // Chunk object with its initial state (e.g. empty events collection) and slot in the file's chunks collection
+            var initialSize = 0L;
+            if (estimateMemory)
+            {
+                initialSize = MemorySizeEstimator.EstimateDeep(this);
+                reader.AddEstimatedMemory(initialSize + MemorySizeEstimator.ReferenceSlotSize, settings);
+            }
+
             ReadContent(reader, settings, size);
 
-            if (estimateMemory)
-                reader.AddEstimatedMemory(
-                    isCustomChunk ? MemorySizeEstimator.EstimateDeep(this) : MemorySizeEstimator.EstimateShallow(this),
-                    settings);
+            // Everything a custom chunk has allocated while reading
+            if (estimateMemory && isCustomChunk)
+                reader.AddEstimatedMemory(Math.Max(0, MemorySizeEstimator.EstimateDeep(this) - initialSize), settings);
 
             var bytesReadCount = reader.Position - readerPosition;
             if (settings.InvalidChunkSizePolicy == InvalidChunkSizePolicy.Abort && bytesReadCount != size)
