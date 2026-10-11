@@ -46,6 +46,13 @@ namespace Melanchall.DryWetMidi.Core
 
         internal ushort? _originalFormat;
 
+        /// <summary>
+        /// Estimated size in bytes of the file in memory as calculated while reading. It is set only if
+        /// <see cref="ReadingSettings.MaxMemorySize"/> was specified (use <c>long.MaxValue</c> to get the value without
+        /// any limit); otherwise it is <c>0</c>.
+        /// </summary>
+        internal long EstimatedMemorySize { get; private set; }
+
         #endregion
 
         #region Constructor
@@ -531,6 +538,9 @@ namespace Melanchall.DryWetMidi.Core
                             reader.AddEstimatedMemory(
                                 MemorySizeEstimator.EstimateReferencesArray(file.Chunks.Capacity) - MemorySizeEstimator.EstimateReferencesArray(chunksCapacity),
                                 settings);
+
+                        if (settings.MaxMemorySize != null)
+                            file.EstimatedMemorySize = reader.EstimatedMemorySize;
                     }
 
                     if (expectedTrackChunksCount != null && actualTrackChunksCount != expectedTrackChunksCount)

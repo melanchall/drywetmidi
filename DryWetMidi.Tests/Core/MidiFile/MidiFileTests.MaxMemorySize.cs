@@ -298,6 +298,18 @@ namespace Melanchall.DryWetMidi.Tests.Core
             ClassicAssert.AreEqual(2000, file.GetEvents().Count());
         }
 
+        [Test]
+        public void Read_MaxMemorySize_EstimatedMemorySizeIsSet()
+        {
+            var bytes = GetFileBytes(new TrackChunk(CreateNotes(1000)));
+
+            var file = MidiFile.Read(new MemoryStream(bytes), new ReadingSettings { MaxMemorySize = long.MaxValue });
+            ClassicAssert.Greater(file.EstimatedMemorySize, 2000 * 32);
+
+            file = MidiFile.Read(new MemoryStream(bytes));
+            ClassicAssert.AreEqual(0, file.EstimatedMemorySize);
+        }
+
         private static IEnumerable<MidiEvent> CreateNotes(int count)
         {
             for (var i = 0; i < count; i++)
