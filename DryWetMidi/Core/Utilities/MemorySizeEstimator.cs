@@ -67,6 +67,7 @@ namespace Melanchall.DryWetMidi.Core
         private const int StringHeaderSize = 22;
         private const int MaxDepth = 64;
 
+
         #endregion
 
         #region Fields
@@ -261,9 +262,49 @@ namespace Melanchall.DryWetMidi.Core
                     fieldsToWalk.Add(field);
             }
 
-            return new TypeLayout(
-                type.IsValueType ? size : Math.Max(ObjectHeaderSize + PointerSize, Align(ObjectHeaderSize + size)),
-                fieldsToWalk.ToArray());
+            if (type.IsValueType)
+                return new TypeLayout(size, fieldsToWalk.ToArray());
+
+            var estimatedSize = Math.Max(ObjectHeaderSize + PointerSize, Align(ObjectHeaderSize + size));
+            return new TypeLayout(MeasureInstanceSize(type) ?? estimatedSize, fieldsToWalk.ToArray());
+        }
+
+        /// <summary>
+        /// Measures the real size of an instance of the type since the layout of fields depends on the runtime
+        /// (for example, .NET 5 and .NET 6 pad fields of each class in an inheritance chain).
+        /// </summary>
+        [UnconditionalSuppressMessage("Trimming", "IL2067", Justification = "Used only to measure size; the estimate is calculated from fields if the instance cannot be created.")]
+        private static long? MeasureInstanceSize(Type type)
+        {
+#if NET5_0_OR_GREATER
+            if (type.IsAbstract || type.IsArray || type.IsInterface || type.ContainsGenericParameters)
+                return null;
+
+            try
+            {
+                // First instance initializes the type (static constructor, JIT), so it is not measured
+                RuntimeHelpers.GetUninitializedObject(type);
+
+                var result = long.MaxValue;
+                for (var i = 0; i < 3; i++)
+                {
+                    var before = GC.GetAllocatedBytesForCurrentThread();
+                    var instance = RuntimeHelpers.GetUninitializedObject(type);
+                    var after = GC.GetAllocatedBytesForCurrentThread();
+                    GC.KeepAlive(instance);
+
+                    result = Math.Min(result, after - before);
+                }
+
+                return result >= ObjectHeaderSize + PointerSize ? result : (long?)null;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+#else
+            return null;
+#endif
         }
 
         private static long GetValueTypeSize(Type type)

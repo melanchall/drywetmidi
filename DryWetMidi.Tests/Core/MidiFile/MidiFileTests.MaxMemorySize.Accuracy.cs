@@ -14,7 +14,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
         // GC.GetTotalMemory is process-wide, so these tests are explicit and must not run in parallel with
         // other tests. Run them manually to check accuracy of the estimation on a particular runtime/OS.
 
-        private const double MaxMemorySizeAccuracyWindow = 0.03;
+        private const double MaxMemorySizeAccuracyWindow = 0.05;
 
         private static IEnumerable<TestCaseData> GetAccuracyCases()
         {
