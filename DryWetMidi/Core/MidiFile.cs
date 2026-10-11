@@ -524,7 +524,13 @@ namespace Melanchall.DryWetMidi.Core
 
                         // Add chunk to chunks collection of the file
 
+                        var chunksCapacity = file.Chunks.Capacity;
                         file.Chunks.Add(chunk);
+
+                        if (settings.MaxMemorySize != null && file.Chunks.Capacity != chunksCapacity)
+                            reader.AddEstimatedMemory(
+                                MemorySizeEstimator.EstimateReferencesArray(file.Chunks.Capacity) - MemorySizeEstimator.EstimateReferencesArray(chunksCapacity),
+                                settings);
                     }
 
                     if (expectedTrackChunksCount != null && actualTrackChunksCount != expectedTrackChunksCount)

@@ -165,12 +165,12 @@ namespace Melanchall.DryWetMidi.Core
             if (estimateMemory && isCustomChunk)
                 reader.ThrowIfMemoryLimitExceeded(Math.Min(size, reader.Length - reader.Position), settings);
 
-            // Chunk object with its initial state (e.g. empty events collection) and slot in the file's chunks collection
+            // Chunk object with its initial state (e.g. empty events collection). Header chunk is not stored in the file
             var initialSize = 0L;
-            if (estimateMemory)
+            if (estimateMemory && !(this is HeaderChunk))
             {
                 initialSize = MemorySizeEstimator.EstimateDeep(this);
-                reader.AddEstimatedMemory(initialSize + MemorySizeEstimator.ReferenceSlotSize, settings);
+                reader.AddEstimatedMemory(initialSize, settings);
             }
 
             ReadContent(reader, settings, size);

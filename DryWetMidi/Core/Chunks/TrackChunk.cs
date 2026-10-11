@@ -103,6 +103,8 @@ namespace Melanchall.DryWetMidi.Core
             var endOfTrackPresented = false;
 
             byte? currentChannelEventStatusByte = null;
+            var estimateMemory = settings.MaxMemorySize != null;
+            var eventsCapacity = Events.Capacity;
 
             //
 
@@ -112,20 +114,37 @@ namespace Melanchall.DryWetMidi.Core
                 if (midiEvent == null)
                     continue;
 
-                if (settings.MaxMemorySize != null)
-                    reader.AddEstimatedMemory(MemorySizeEstimator.EstimateDeep(midiEvent) + MemorySizeEstimator.ReferenceSlotSize, settings);
-
                 if (midiEvent is EndOfTrackEvent)
                 {
                     endOfTrackPresented = true;
 
                     if (settings.EndOfTrackStoringPolicy == EndOfTrackStoringPolicy.Store)
+                    {
                         Events.Add(midiEvent);
+
+                        if (estimateMemory)
+                            reader.AddEstimatedMemory(
+                                MemorySizeEstimator.EstimateEvent(midiEvent) +
+                                MemorySizeEstimator.EstimateReferencesArray(Events.Capacity) - MemorySizeEstimator.EstimateReferencesArray(eventsCapacity),
+                                settings);
+                    }
 
                     break;
                 }
 
+                if (estimateMemory)
+                    reader.AddEstimatedMemory(MemorySizeEstimator.EstimateEvent(midiEvent), settings);
+
                 Events.AddInternal(midiEvent);
+
+                if (estimateMemory && Events.Capacity != eventsCapacity)
+                {
+                    // Backing array of the events list has been grown
+                    reader.AddEstimatedMemory(
+                        MemorySizeEstimator.EstimateReferencesArray(Events.Capacity) - MemorySizeEstimator.EstimateReferencesArray(eventsCapacity),
+                        settings);
+                    eventsCapacity = Events.Capacity;
+                }
             }
 
             //

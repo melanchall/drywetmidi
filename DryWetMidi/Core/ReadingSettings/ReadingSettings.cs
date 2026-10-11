@@ -343,9 +343,19 @@ namespace Melanchall.DryWetMidi.Core
         /// <see cref="MidiFileTooLargeException"/> is thrown. The default is <c>null</c> which means no limit.
         /// </summary>
         /// <remarks>
-        /// <para>The size is an approximation calculated from the objects (events, chunks) created during reading,
-        /// so it can be much greater than the size of the data in the input stream. Applies to
-        /// <see cref="MidiFile.Read(System.IO.Stream, ReadingSettings)"/> and its overloads.</para>
+        /// <para>The size is calculated from the objects (chunks, events, strings, arrays, backing arrays of
+        /// collections) created during reading, so it can be much greater than the size of the data in the input
+        /// stream. Applies to <see cref="MidiFile.Read(System.IO.Stream, ReadingSettings)"/> and its overloads.</para>
+        /// <para>Accuracy: on 64-bit .NET the estimated size of a file is within ±3% of the memory actually
+        /// occupied by the <see cref="MidiFile"/> for built-in chunks and events (measured values are between
+        /// -0.3% and +2.2%). The result may be different on other runtimes and on 32-bit platforms. Memory used
+        /// by the reading process itself (buffers, temporary objects) is not counted. Chunks and events of custom
+        /// types are measured by inspecting their fields, so the estimate is accurate as long as the objects
+        /// they reference are not shared with other objects.</para>
+        /// <para>Performance: tracking the size makes reading slower. For built-in events the overhead is
+        /// small, about 5-10% of reading time (1-15% on the files used for measurement). For custom events
+        /// and chunks it can be significantly higher since their size is calculated via reflection. Leave
+        /// the property <c>null</c> if the limit is not needed.</para>
         /// </remarks>
         public long? MaxMemorySize { get; set; }
 

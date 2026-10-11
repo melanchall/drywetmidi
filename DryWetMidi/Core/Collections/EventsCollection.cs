@@ -281,6 +281,8 @@ namespace Melanchall.DryWetMidi.Core
             IsInitialState = false;
         }
 
+        internal int Capacity => _events.Capacity;
+
         internal void AddInternal(MidiEvent midiEvent)
         {
             _events.Add(midiEvent);

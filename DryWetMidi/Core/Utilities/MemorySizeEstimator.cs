@@ -27,6 +27,29 @@ namespace Melanchall.DryWetMidi.Core
             public FieldInfo[] FieldsToWalk { get; }
         }
 
+        private enum EventKind
+        {
+            Simple,
+            Text,
+            SysEx,
+            SequencerSpecific,
+            UnknownMeta,
+            Custom
+        }
+
+        private sealed class EventTypeInfo
+        {
+            public EventTypeInfo(EventKind kind, long size)
+            {
+                Kind = kind;
+                Size = size;
+            }
+
+            public EventKind Kind { get; }
+
+            public long Size { get; }
+        }
+
         private sealed class ReferenceComparer : IEqualityComparer<object>
         {
             public new bool Equals(object? x, object? y) => ReferenceEquals(x, y);
@@ -44,14 +67,12 @@ namespace Melanchall.DryWetMidi.Core
         private const int StringHeaderSize = 22;
         private const int MaxDepth = 64;
 
-        // Size of a slot in a collection (list, array) referencing an object
-        internal const int ReferenceSlotSize = PointerSize;
-
         #endregion
 
         #region Fields
 
         private static readonly ConcurrentDictionary<Type, TypeLayout> _layouts = new ConcurrentDictionary<Type, TypeLayout>();
+        private static readonly ConcurrentDictionary<Type, EventTypeInfo> _eventTypeInfos = new ConcurrentDictionary<Type, EventTypeInfo>();
         private static readonly ConcurrentDictionary<Type, long> _valueTypeSizes = new ConcurrentDictionary<Type, long>();
 
         #endregion
@@ -72,20 +93,86 @@ namespace Melanchall.DryWetMidi.Core
         internal static long EstimateDeep(object obj)
         {
             var layout = GetLayout(obj.GetType());
-            if (layout.FieldsToWalk.Length == 0)
+            if (layout.FieldsToWalk.Length == 0 && !(obj is string) && !(obj is Array))
                 return layout.Size;
 
             return Walk(obj, new HashSet<object>(new ReferenceComparer()), 0);
         }
 
+        /// <summary>
+        /// Estimates size of the MIDI event including its payload. Built-in events are handled without reflection
+        /// since only a few of them reference other objects.
+        /// </summary>
+        internal static long EstimateEvent(MidiEvent midiEvent)
+        {
+            var info = _eventTypeInfos.GetOrAdd(midiEvent.GetType(), CreateEventTypeInfo);
+
+            switch (info.Kind)
+            {
+                case EventKind.Simple:
+                    return info.Size;
+                case EventKind.Text:
+                    return info.Size + EstimateString(((BaseTextEvent)midiEvent).Text?.Length ?? 0);
+                case EventKind.SysEx:
+                    return info.Size + EstimateArray(typeof(byte), ((SysExEvent)midiEvent).Data?.Length ?? 0);
+                case EventKind.SequencerSpecific:
+                    return info.Size + EstimateArray(typeof(byte), ((SequencerSpecificEvent)midiEvent).Data?.Length ?? 0);
+                case EventKind.UnknownMeta:
+                    return info.Size + EstimateArray(typeof(byte), ((UnknownMetaEvent)midiEvent).Data?.Length ?? 0);
+                default:
+                    return EstimateDeep(midiEvent);
+            }
+        }
+
+        private static EventTypeInfo CreateEventTypeInfo(Type type)
+        {
+            var size = GetLayout(type).Size;
+
+            if (type.Assembly != typeof(MidiEvent).Assembly)
+                return new EventTypeInfo(EventKind.Custom, size);
+
+            if (type == typeof(SmpteOffsetEvent))
+                return new EventTypeInfo(EventKind.Simple, size + GetLayout(typeof(SmpteData)).Size);
+
+            if (typeof(BaseTextEvent).IsAssignableFrom(type))
+                return new EventTypeInfo(EventKind.Text, size);
+
+            if (typeof(SysExEvent).IsAssignableFrom(type))
+                return new EventTypeInfo(EventKind.SysEx, size);
+
+            if (type == typeof(SequencerSpecificEvent))
+                return new EventTypeInfo(EventKind.SequencerSpecific, size);
+
+            if (type == typeof(UnknownMetaEvent))
+                return new EventTypeInfo(EventKind.UnknownMeta, size);
+
+            return new EventTypeInfo(EventKind.Simple, size);
+        }
+
+        /// <summary>
+        /// Estimates size of the array of references (backing array of a list) with the specified capacity.
+        /// </summary>
+        internal static long EstimateReferencesArray(int capacity)
+        {
+            return EstimateArray(typeof(object), capacity);
+        }
+
         internal static long EstimateArray(Type elementType, long length)
         {
+            // Empty arrays are shared (Array.Empty, empty arrays of collections)
+            if (length == 0)
+                return 0;
+
             var elementSize = elementType.IsValueType ? GetValueTypeSize(elementType) : PointerSize;
             return Align(ArrayHeaderSize + elementSize * length);
         }
 
         internal static long EstimateString(int length)
         {
+            // Empty string is shared
+            if (length == 0)
+                return 0;
+
             return Align(StringHeaderSize + 2L * length);
         }
 
@@ -95,7 +182,7 @@ namespace Melanchall.DryWetMidi.Core
                 return 0;
 
             if (obj is string str)
-                return EstimateString(str.Length);
+                return ReferenceEquals(string.IsInterned(str), str) ? 0 : EstimateString(str.Length);
 
             var type = obj.GetType();
 

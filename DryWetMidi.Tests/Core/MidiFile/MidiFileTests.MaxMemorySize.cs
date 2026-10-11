@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -249,19 +249,45 @@ namespace Melanchall.DryWetMidi.Tests.Core
         }
 
         [Test]
-        public void Read_MaxMemorySize_EstimateIsCloseToRealMemoryUsage()
+        public void Read_MaxMemorySize_EmptyTrackChunks_AreNotOverestimated()
         {
-            var bytes = GetFileBytes(new TrackChunk(CreateNotes(100000)));
-            var estimate = GetMinimalMemoryLimit(bytes);
+            Assume.That(IntPtr.Size, Is.EqualTo(8), "Sizes are pinned for 64-bit.");
 
-            var before = GC.GetTotalMemory(true);
-            var file = MidiFile.Read(new MemoryStream(bytes));
-            var after = GC.GetTotalMemory(true);
-            GC.KeepAlive(file);
+            const int count = 10000;
+            var bytes = GetFileBytes(Enumerable.Range(0, count).Select(_ => (MidiChunk)new TrackChunk()).ToArray(), null);
 
-            var actual = after - before;
-            ClassicAssert.Greater(estimate, actual * 0.5, $"Estimate ({estimate}) is too small compared to actual ({actual}).");
-            ClassicAssert.Less(estimate, actual * 2, $"Estimate ({estimate}) is too big compared to actual ({actual}).");
+            // Chunk (32), events collection (40), list (32) and slot in the chunks list (8..16) per track chunk
+            var perChunk = (double)GetMinimalMemoryLimit(bytes) / count;
+            ClassicAssert.That(perChunk, Is.InRange(104.0, 128.0));
+        }
+
+        [Test]
+        public void Read_MaxMemorySize_EventsEstimatedWithoutReflection_MatchDeepEstimation()
+        {
+            foreach (var midiEvent in GetEventsForMaxMemorySize())
+            {
+                // Strings of literals are interned and shared so they are not a part of the event's size
+                var e = midiEvent is BaseTextEvent textEvent
+                    ? (MidiEvent)Activator.CreateInstance(midiEvent.GetType())!
+                    : midiEvent;
+                if (e is BaseTextEvent baseTextEvent)
+                    baseTextEvent.Text = new string('a', 10);
+
+                ClassicAssert.AreEqual(
+                    MemorySizeEstimator.EstimateDeep(e),
+                    MemorySizeEstimator.EstimateEvent(e),
+                    $"Fast estimation differs from the deep one for {e.GetType().Name}.");
+            }
+        }
+
+        [Test]
+        public void Read_MaxMemorySize_SharedObjectsAreNotCounted()
+        {
+
+            ClassicAssert.AreEqual(0, MemorySizeEstimator.EstimateString(0));
+            ClassicAssert.AreEqual(0, MemorySizeEstimator.EstimateArray(typeof(byte), 0));
+            ClassicAssert.AreEqual(0, MemorySizeEstimator.EstimateDeep(string.Empty));
+            ClassicAssert.AreEqual(0, MemorySizeEstimator.EstimateDeep("MTrk"));
         }
 
         [Test]
