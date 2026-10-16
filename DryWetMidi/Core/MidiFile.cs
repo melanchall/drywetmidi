@@ -51,7 +51,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <see cref="ReadingSettings.MaxMemorySize"/> was specified (use <c>long.MaxValue</c> to get the value without
         /// any limit); otherwise it is <c>0</c>.
         /// </summary>
-        internal long EstimatedMemorySize { get; private set; }
+        public long EstimatedMemorySize { get; private set; }
 
         #endregion
 
