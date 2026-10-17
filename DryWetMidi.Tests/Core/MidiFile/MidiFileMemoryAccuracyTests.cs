@@ -76,7 +76,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
         [MethodImpl(MethodImplOptions.NoInlining)]
         private static long MeasureReading(byte[] bytes)
         {
-            _heldFile = ReadFile(bytes);
+            var weakFile = ReadAndHold(bytes);
 
             // Temporary objects of the reading are collected, so only the file graph is left
             CollectGarbage();
@@ -86,12 +86,19 @@ namespace Melanchall.DryWetMidi.Tests.Core
             CollectGarbage();
             var withoutFile = GC.GetTotalMemory(true);
 
+            ClassicAssert.IsFalse(weakFile.IsAlive, "The file must be collected to measure its size.");
+
             return withFile - withoutFile;
         }
 
+        // No reference to the file is left in the frame of the caller, so it can't be kept alive
+        // by an untracked local or a register (as in unoptimized code or on some platforms)
         [MethodImpl(MethodImplOptions.NoInlining)]
-        private static MidiFile ReadFile(byte[] bytes) =>
-            MidiFile.Read(new MemoryStream(bytes));
+        private static WeakReference ReadAndHold(byte[] bytes)
+        {
+            _heldFile = MidiFile.Read(new MemoryStream(bytes));
+            return new WeakReference(_heldFile);
+        }
 
         private static void CollectGarbage()
         {
