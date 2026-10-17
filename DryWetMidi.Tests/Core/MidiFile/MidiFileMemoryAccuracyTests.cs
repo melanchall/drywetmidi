@@ -16,6 +16,8 @@ namespace Melanchall.DryWetMidi.Tests.Core
     public sealed class MidiFileMemoryAccuracyTests
     {
 
+        private static MidiFile? _heldFile;
+
         private const double MaxMemorySizeAccuracyWindow = 0.05;
 
         private static IEnumerable<TestCaseData> GetAccuracyCases()
@@ -74,16 +76,30 @@ namespace Melanchall.DryWetMidi.Tests.Core
         [MethodImpl(MethodImplOptions.NoInlining)]
         private static long MeasureReading(byte[] bytes)
         {
-            GC.Collect();
-            GC.WaitForPendingFinalizers();
+            _heldFile = ReadFile(bytes);
 
-            var before = GC.GetTotalMemory(true);
-            var holder = new object[1];
-            holder[0] = MidiFile.Read(new MemoryStream(bytes));
-            var after = GC.GetTotalMemory(true);
-            GC.KeepAlive(holder);
+            // Temporary objects of the reading are collected, so only the file graph is left
+            CollectGarbage();
+            var withFile = GC.GetTotalMemory(true);
 
-            return after - before;
+            _heldFile = null;
+            CollectGarbage();
+            var withoutFile = GC.GetTotalMemory(true);
+
+            return withFile - withoutFile;
+        }
+
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        private static MidiFile ReadFile(byte[] bytes) =>
+            MidiFile.Read(new MemoryStream(bytes));
+
+        private static void CollectGarbage()
+        {
+            for (var i = 0; i < 3; i++)
+            {
+                GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced, true, true);
+                GC.WaitForPendingFinalizers();
+            }
         }
     }
 }
