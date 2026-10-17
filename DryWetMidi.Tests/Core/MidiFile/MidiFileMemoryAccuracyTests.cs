@@ -68,9 +68,69 @@ namespace Melanchall.DryWetMidi.Tests.Core
             var actual = actuals.OrderBy(a => a).ElementAt(actuals.Count / 2);
             var ratio = (double)estimate / actual;
 
+            TestContext.Out.WriteLine($"Repeats (B/item): {string.Join(", ", actuals.Select(a => ((double)a / itemsCount).ToString("F1")))}");
             TestContext.Out.WriteLine($"Estimated: {(double)estimate / itemsCount:F1} B/item, actual: {(double)actual / itemsCount:F1} B/item, ratio: {ratio:F3}");
 
             ClassicAssert.That(ratio, Is.InRange(1 - MaxMemorySizeAccuracyWindow, 1 + MaxMemorySizeAccuracyWindow));
+        }
+
+        [Test]
+        public void MeasurementCalibration()
+        {
+            const int count = 50000;
+
+            var instanceSize = MeasureInstanceSize();
+            var expected = (long)count * (instanceSize + IntPtr.Size);
+
+            var actuals = new List<long>();
+            for (var i = 0; i < 5; i++)
+            {
+                var weak = BuildAndHold(count);
+                CollectGarbage();
+                var withGraph = GC.GetTotalMemory(true);
+                _heldGraph = null;
+                CollectGarbage();
+                var withoutGraph = GC.GetTotalMemory(true);
+                ClassicAssert.IsFalse(weak.IsAlive);
+                actuals.Add(withGraph - withoutGraph);
+            }
+
+            var actual = actuals.OrderBy(a => a).ElementAt(actuals.Count / 2);
+            TestContext.Out.WriteLine($"Calibration: instance {instanceSize} B, expected {(double)expected / count:F1} B/item, actual {(double)actual / count:F1} B/item");
+
+            ClassicAssert.That((double)expected / actual, Is.InRange(1 - MaxMemorySizeAccuracyWindow, 1 + MaxMemorySizeAccuracyWindow));
+        }
+
+        private sealed class CalibrationObject
+        {
+            public long A;
+            public long B;
+        }
+
+        private static List<CalibrationObject>? _heldGraph;
+
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        private static long MeasureInstanceSize()
+        {
+            new CalibrationObject();
+            var before = GC.GetAllocatedBytesForCurrentThread();
+            var o = new CalibrationObject();
+            var size = GC.GetAllocatedBytesForCurrentThread() - before;
+            GC.KeepAlive(o);
+            return size;
+        }
+
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        private static WeakReference BuildAndHold(int count)
+        {
+            var list = new List<CalibrationObject>(count);
+            for (var i = 0; i < count; i++)
+            {
+                list.Add(new CalibrationObject());
+            }
+
+            _heldGraph = list;
+            return new WeakReference(list);
         }
 
         [MethodImpl(MethodImplOptions.NoInlining)]
