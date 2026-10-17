@@ -46,8 +46,6 @@ namespace Melanchall.DryWetMidi.Core
 
         internal ushort? _originalFormat;
 
-        internal long EstimatedMemorySize { get; private set; }
-
         #endregion
 
         #region Constructor

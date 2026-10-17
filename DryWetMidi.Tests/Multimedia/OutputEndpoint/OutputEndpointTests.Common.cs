@@ -295,6 +295,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 #endif
 
+        [TimingCritical]
         [Test]
         public void DisableEnableOutputEndpoint()
         {
