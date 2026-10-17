@@ -337,6 +337,29 @@ namespace Melanchall.DryWetMidi.Core
         /// </remarks>
         public EventTypesCollection? CustomMetaEventTypes { get; set; }
 
+        /// <summary>
+        /// Gets or sets the maximum estimated size in bytes that a <see cref="MidiFile"/> being read is
+        /// allowed to occupy in memory. If the estimate exceeds the value while reading,
+        /// <see cref="MidiFileTooLargeException"/> is thrown. The default is <c>null</c> which means no limit.
+        /// </summary>
+        /// <remarks>
+        /// <para>The size is calculated from the objects (chunks, events, strings, arrays, backing arrays of
+        /// collections) created during reading, so it can be much greater than the size of the data in the input
+        /// stream. Applies to <see cref="MidiFile.Read(System.IO.Stream, ReadingSettings)"/> and its overloads.</para>
+        /// <para>Accuracy: the estimated size of a file is within ±5% of the memory actually occupied by
+        /// the <see cref="MidiFile"/> for built-in chunks and events (verified on 64-bit .NET 5 to .NET 10, where
+        /// measured values are between -2% and +2.2%). Memory used by the reading process itself (buffers,
+        /// temporary objects) is not counted. Chunks and events of custom types are measured by inspecting
+        /// their fields, so the estimate is accurate as long as the objects they reference are not shared
+        /// with other objects.</para>
+        /// <para>Performance: tracking the size makes reading slower. For built-in events with a small
+        /// payload the overhead is about 5-10% of reading time (1-15% on the files used for measurement);
+        /// for events with larger payloads it can reach tens of percent. Custom meta events and custom
+        /// chunks are measured via reflection and reading them can be several times slower. Leave
+        /// the property <c>null</c> if the limit is not needed.</para>
+        /// </remarks>
+        public long? MaxMemorySize { get; set; }
+
         // TODO: check setting null
         /// <summary>
         /// Gets or sets an <see cref="Encoding"/> that will be used to read the text of a

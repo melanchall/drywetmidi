@@ -46,6 +46,13 @@ namespace Melanchall.DryWetMidi.Core
 
         internal ushort? _originalFormat;
 
+        /// <summary>
+        /// Estimated size in bytes of the file in memory as calculated while reading. It is set only if
+        /// <see cref="ReadingSettings.MaxMemorySize"/> was specified (use <c>long.MaxValue</c> to get the value without
+        /// any limit); otherwise it is <c>0</c>.
+        /// </summary>
+        public long EstimatedMemorySize { get; private set; }
+
         #endregion
 
         #region Constructor
@@ -451,6 +458,7 @@ namespace Melanchall.DryWetMidi.Core
         /// is <c>null</c> in case of <see cref="ReaderSettings.BufferingPolicy"/> set to
         /// <see cref="BufferingPolicy.UseCustomBuffer"/>.</exception>
         /// <exception cref="VlqNumberOverflowException">A variable-length quantity (VLQ) number in the file is too large.</exception>
+        /// <exception cref="MidiFileTooLargeException">Estimated size of the file in memory exceeds <see cref="ReadingSettings.MaxMemorySize"/>.</exception>
         public static MidiFile Read(Stream stream, ReadingSettings? settings = null)
         {
             ThrowIfArgument.IsNull(nameof(stream), stream);
@@ -481,6 +489,15 @@ namespace Melanchall.DryWetMidi.Core
                     if (reader.EndReached)
                         throw new ArgumentException("Stream is already read.", nameof(stream));
 
+                    // Account fixed objects of the file
+
+                    if (settings.MaxMemorySize != null)
+                        reader.AddEstimatedMemory(
+                            MemorySizeEstimator.EstimateShallow(file) +
+                            MemorySizeEstimator.EstimateShallow(file.Chunks) +
+                            MemorySizeEstimator.EstimateShallow(new List<MidiChunk>()),
+                            settings);
+
                     // Read RIFF header
 
                     MidiFileReadingUtilities.ReadRmidPreamble(reader, out var smfEndPosition);
@@ -510,6 +527,9 @@ namespace Melanchall.DryWetMidi.Core
                                 expectedTrackChunksCount = headerChunk.TracksNumber;
                                 file.TimeDivision = headerChunk.TimeDivision;
                                 file._originalFormat = headerChunk.FileFormat;
+
+                                if (settings.MaxMemorySize != null && file.TimeDivision != null)
+                                    reader.AddEstimatedMemory(MemorySizeEstimator.EstimateShallow(file.TimeDivision), settings);
                             }
 
                             headerChunkIsRead = true;
@@ -523,7 +543,16 @@ namespace Melanchall.DryWetMidi.Core
 
                         // Add chunk to chunks collection of the file
 
+                        var chunksCapacity = file.Chunks.Capacity;
                         file.Chunks.Add(chunk);
+
+                        if (settings.MaxMemorySize != null && file.Chunks.Capacity != chunksCapacity)
+                            reader.AddEstimatedMemory(
+                                MemorySizeEstimator.EstimateReferencesArray(file.Chunks.Capacity) - MemorySizeEstimator.EstimateReferencesArray(chunksCapacity),
+                                settings);
+
+                        if (settings.MaxMemorySize != null)
+                            file.EstimatedMemorySize = reader.EstimatedMemorySize;
                     }
 
                     if (expectedTrackChunksCount != null && actualTrackChunksCount != expectedTrackChunksCount)
