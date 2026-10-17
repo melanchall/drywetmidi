@@ -46,12 +46,7 @@ namespace Melanchall.DryWetMidi.Core
 
         internal ushort? _originalFormat;
 
-        /// <summary>
-        /// Estimated size in bytes of the file in memory as calculated while reading. It is set only if
-        /// <see cref="ReadingSettings.MaxMemorySize"/> was specified (use <c>long.MaxValue</c> to get the value without
-        /// any limit); otherwise it is <c>0</c>.
-        /// </summary>
-        public long EstimatedMemorySize { get; private set; }
+        internal long EstimatedMemorySize { get; private set; }
 
         #endregion
 
@@ -231,6 +226,7 @@ namespace Melanchall.DryWetMidi.Core
         /// is <c>null</c> in case of <see cref="ReaderSettings.BufferingPolicy"/> set to
         /// <see cref="BufferingPolicy.UseCustomBuffer"/>.</exception>
         /// <exception cref="VlqNumberOverflowException">A variable-length quantity (VLQ) number in the file is too large.</exception>
+        /// <exception cref="MidiFileTooLargeException">Estimated size of the file in memory exceeds <see cref="ReadingSettings.MaxMemorySize"/>.</exception>
         public static MidiFile Read(string filePath, ReadingSettings? settings = null)
         {
             ThrowIfArgument.IsNullOrWhiteSpaceString(nameof(filePath), filePath, "File path");

@@ -7,9 +7,6 @@ using System.Runtime.CompilerServices;
 
 namespace Melanchall.DryWetMidi.Core
 {
-    /// <summary>
-    /// Estimates size of managed objects in memory (64-bit layout) by inspecting their instance fields.
-    /// </summary>
     internal static class MemorySizeEstimator
     {
         #region Nested classes
@@ -80,17 +77,11 @@ namespace Melanchall.DryWetMidi.Core
 
         #region Methods
 
-        /// <summary>
-        /// Estimates size of the object itself without objects it references.
-        /// </summary>
         internal static long EstimateShallow(object obj)
         {
             return GetLayout(obj.GetType()).Size;
         }
 
-        /// <summary>
-        /// Estimates size of the object including all objects reachable from it (strings, arrays, nested objects).
-        /// </summary>
         internal static long EstimateDeep(object obj)
         {
             var layout = GetLayout(obj.GetType());
@@ -100,10 +91,6 @@ namespace Melanchall.DryWetMidi.Core
             return Walk(obj, new HashSet<object>(new ReferenceComparer()), 0);
         }
 
-        /// <summary>
-        /// Estimates size of the MIDI event including its payload. Built-in events are handled without reflection
-        /// since only a few of them reference other objects.
-        /// </summary>
         internal static long EstimateEvent(MidiEvent midiEvent)
         {
             var info = _eventTypeInfos.GetOrAdd(midiEvent.GetType(), CreateEventTypeInfo);
@@ -150,9 +137,6 @@ namespace Melanchall.DryWetMidi.Core
             return new EventTypeInfo(EventKind.Simple, size);
         }
 
-        /// <summary>
-        /// Estimates size of the array of references (backing array of a list) with the specified capacity.
-        /// </summary>
         internal static long EstimateReferencesArray(int capacity)
         {
             return EstimateArray(typeof(object), capacity);
@@ -269,10 +253,6 @@ namespace Melanchall.DryWetMidi.Core
             return new TypeLayout(MeasureInstanceSize(type) ?? estimatedSize, fieldsToWalk.ToArray());
         }
 
-        /// <summary>
-        /// Measures the real size of an instance of the type since the layout of fields depends on the runtime
-        /// (for example, .NET 5 and .NET 6 pad fields of each class in an inheritance chain).
-        /// </summary>
         [UnconditionalSuppressMessage("Trimming", "IL2067", Justification = "Used only to measure size; the estimate is calculated from fields if the instance cannot be created.")]
         private static long? MeasureInstanceSize(Type type)
         {

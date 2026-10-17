@@ -9,10 +9,12 @@ using NUnit.Framework.Legacy;
 
 namespace Melanchall.DryWetMidi.Tests.Core
 {
-    public sealed partial class MidiFileTests
+    // GC.GetTotalMemory is process-wide, so this fixture is non-parallelizable: NUnit runs it alone,
+    // without other tests affecting the measurements.
+    [TestFixture]
+    [NonParallelizable]
+    public sealed class MidiFileMemoryAccuracyTests
     {
-        // GC.GetTotalMemory is process-wide, so these tests are explicit and must not run in parallel with
-        // other tests. Run them manually to check accuracy of the estimation on a particular runtime/OS.
 
         private const double MaxMemorySizeAccuracyWindow = 0.05;
 
@@ -20,7 +22,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
         {
             const int count = 50000;
 
-            foreach (var midiEvent in GetEventsForMaxMemorySize())
+            foreach (var midiEvent in MidiFileTests.GetEventsForMaxMemorySize())
             {
                 var e = midiEvent;
                 yield return new TestCaseData(
@@ -47,15 +49,13 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 10000).SetName("TrackChunk_Empty");
         }
 
-        [Explicit("Measures real memory, must not be run in parallel with other tests.")]
-        [NonParallelizable]
         [TestCaseSource(nameof(GetAccuracyCases))]
         public void Read_MaxMemorySize_AccuracyOfEstimation(Func<MidiChunk[]> createChunks, int itemsCount)
         {
             Assume.That(IntPtr.Size, Is.EqualTo(8), "Accuracy window is defined for 64-bit.");
 
-            var bytes = GetFileBytes(createChunks(), null);
-            var estimate = GetMinimalMemoryLimit(bytes);
+            var bytes = MidiFileTests.GetFileBytes(createChunks(), null);
+            var estimate = MidiFileTests.GetMinimalMemoryLimit(bytes);
 
             var actuals = new List<long>();
             for (var i = 0; i < 5; i++)

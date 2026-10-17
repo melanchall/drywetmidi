@@ -88,7 +88,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
 
         #region Test methods
 
-        private static IEnumerable<MidiEvent> GetEventsForMaxMemorySize()
+        internal static IEnumerable<MidiEvent> GetEventsForMaxMemorySize()
         {
             yield return new NoteOnEvent((SevenBitNumber)60, (SevenBitNumber)100);
             yield return new NoteOffEvent((SevenBitNumber)60, (SevenBitNumber)0);
@@ -325,7 +325,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
         private static byte[] GetFileBytes(MidiChunk chunk, WritingSettings writingSettings) =>
             GetFileBytes(new[] { chunk }, writingSettings);
 
-        private static byte[] GetFileBytes(MidiChunk[] chunks, WritingSettings? writingSettings)
+        internal static byte[] GetFileBytes(MidiChunk[] chunks, WritingSettings? writingSettings)
         {
             using (var stream = new MemoryStream())
             {
@@ -334,7 +334,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
             }
         }
 
-        private static long GetMinimalMemoryLimit(byte[] bytes, ReadingSettings? settings = null)
+        internal static long GetMinimalMemoryLimit(byte[] bytes, ReadingSettings? settings = null)
         {
             long low = 0;
             long high = 1L << 40;

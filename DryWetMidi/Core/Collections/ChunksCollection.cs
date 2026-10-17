@@ -56,6 +56,8 @@ namespace Melanchall.DryWetMidi.Core
         /// </summary>
         public bool IsReadOnly { get; } = false;
 
+        internal int Capacity => _chunks.Capacity;
+
         #endregion
 
         #region Methods
@@ -70,8 +72,6 @@ namespace Melanchall.DryWetMidi.Core
         /// <see cref="MidiFile.Write(string, bool, MidiFileFormat, WritingSettings)"/>.
         /// </remarks>
         /// <exception cref="ArgumentNullException"><paramref name="chunk"/> is <c>null</c>.</exception>
-        internal int Capacity => _chunks.Capacity;
-
         public void Add(MidiChunk chunk)
         {
             ThrowIfArgument.IsNull(nameof(chunk), chunk);
