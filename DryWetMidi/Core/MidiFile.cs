@@ -489,6 +489,15 @@ namespace Melanchall.DryWetMidi.Core
                     if (reader.EndReached)
                         throw new ArgumentException("Stream is already read.", nameof(stream));
 
+                    // Account fixed objects of the file
+
+                    if (settings.MaxMemorySize != null)
+                        reader.AddEstimatedMemory(
+                            MemorySizeEstimator.EstimateShallow(file) +
+                            MemorySizeEstimator.EstimateShallow(file.Chunks) +
+                            MemorySizeEstimator.EstimateShallow(new List<MidiChunk>()),
+                            settings);
+
                     // Read RIFF header
 
                     MidiFileReadingUtilities.ReadRmidPreamble(reader, out var smfEndPosition);
@@ -518,6 +527,9 @@ namespace Melanchall.DryWetMidi.Core
                                 expectedTrackChunksCount = headerChunk.TracksNumber;
                                 file.TimeDivision = headerChunk.TimeDivision;
                                 file._originalFormat = headerChunk.FileFormat;
+
+                                if (settings.MaxMemorySize != null && file.TimeDivision != null)
+                                    reader.AddEstimatedMemory(MemorySizeEstimator.EstimateShallow(file.TimeDivision), settings);
                             }
 
                             headerChunkIsRead = true;
