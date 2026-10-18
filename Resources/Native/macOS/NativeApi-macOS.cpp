@@ -610,6 +610,7 @@ struct SessionHandle
     std::atomic<bool> sessionClosed;
     OSStatus clientCreationStatus;
     std::atomic<bool> deleteOnThreadExit;
+    std::mutex runLoopLock;
     InputEndpointCallback inputEndpointCallback;
     OutputEndpointCallback outputEndpointCallback;
 
@@ -856,10 +857,13 @@ void* ThreadProc(void* data)
     sessionHandle->inputEndpointCallback = nullptr;
     sessionHandle->outputEndpointCallback = nullptr;
 
-    if (sessionHandle->runLoopRef != nullptr)
     {
-        CFRelease(sessionHandle->runLoopRef);
-        sessionHandle->runLoopRef = nullptr;
+        std::lock_guard<std::mutex> lock(sessionHandle->runLoopLock);
+        if (sessionHandle->runLoopRef != nullptr)
+        {
+            CFRelease(sessionHandle->runLoopRef);
+            sessionHandle->runLoopRef = nullptr;
+        }
     }
 
     if (sessionHandle->deleteOnThreadExit.load())
@@ -947,8 +951,11 @@ API_EXPORT SESSION_CLOSERESULT CloseSession(SessionHandle* sessionHandle)
     if (sessionHandle->sessionClosed.exchange(true) == true)
         return SESSION_CLOSERESULT_OK;
 
-    if (sessionHandle->runLoopRef != nullptr)
-        CFRunLoopStop(sessionHandle->runLoopRef);
+    {
+        std::lock_guard<std::mutex> lock(sessionHandle->runLoopLock);
+        if (sessionHandle->runLoopRef != nullptr)
+            CFRunLoopStop(sessionHandle->runLoopRef);
+    }
 
     if (pthread_equal(pthread_self(), sessionHandle->thread) != 0)
     {
