@@ -343,6 +343,7 @@ struct EndpointInfoBase
 
     bool idCached = false;
     int id = 0;
+    bool deviceInfoCached = false;
 };
 
 void FreeParentDeviceInfoStrings(EndpointInfoBase* info)
@@ -457,7 +458,13 @@ API_EXPORT DEVICE_GETDEVICEINFORESULT GetDeviceInformation(
 {
     *errorCode = 0;
 
-    if (deviceInfo->deviceId != nullptr)
+    *id = nullptr;
+    *name = nullptr;
+    *manufacturer = nullptr;
+    *model = nullptr;
+    *driverVersion = nullptr;
+
+    if (deviceInfo->deviceInfoCached)
     {
         *id = deviceInfo->deviceId;
         *name = deviceInfo->deviceName;
@@ -496,18 +503,18 @@ API_EXPORT DEVICE_GETDEVICEINFORESULT GetDeviceInformation(
 
     char* buffer = new char[16];
     snprintf(buffer, 16, "%d", rawId);
-    *id = buffer;
-    deviceInfo->deviceId = *id;
+    const char* idValue = buffer;
 
     // Name
 
-    auto getNameResult = GetStringPropertyValue(device, kMIDIPropertyDisplayName, name, errorCode);
+    const char* nameValue = nullptr;
+    auto getNameResult = GetStringPropertyValue(device, kMIDIPropertyDisplayName, &nameValue, errorCode);
     if (getNameResult != GETSTRINGPROPERTYRESULT_OK)
     {
-        getNameResult = GetStringPropertyValue(device, kMIDIPropertyName, name, errorCode);
+        getNameResult = GetStringPropertyValue(device, kMIDIPropertyName, &nameValue, errorCode);
         if (getNameResult != GETSTRINGPROPERTYRESULT_OK)
         {
-            *errorCode = getNameResult;
+            delete[] buffer;
 
             switch (getNameResult)
             {
@@ -518,60 +525,62 @@ API_EXPORT DEVICE_GETDEVICEINFORESULT GetDeviceInformation(
         }
     }
 
-    deviceInfo->deviceName = *name;
+    const char* manufacturerValue = nullptr;
 
     // Manufacturer
 
-    if (deviceInfo->deviceManufacturer == nullptr)
+    auto getManufacturerResult = GetStringPropertyValue(device, kMIDIPropertyManufacturer, &manufacturerValue, errorCode);
+    if (getManufacturerResult != GETSTRINGPROPERTYRESULT_OK)
     {
-        auto getManufacturerResult = GetStringPropertyValue(device, kMIDIPropertyManufacturer, manufacturer, errorCode);
-        if (getManufacturerResult != GETSTRINGPROPERTYRESULT_OK)
-        {
-            char buffer[256];
-            snprintf(buffer, sizeof(buffer), "Failed to get device manufacturer (%d)", getManufacturerResult);
-            configuration->activityCallback(buffer);
-        }
-        else
-            deviceInfo->deviceManufacturer = *manufacturer;
+        char activityBuffer[256];
+        snprintf(activityBuffer, sizeof(activityBuffer), "Failed to get device manufacturer (%d)", getManufacturerResult);
+        configuration->activityCallback(activityBuffer);
     }
+
+    const char* modelValue = nullptr;
 
     // Model
 
-    if (deviceInfo->deviceModel == nullptr)
+    auto getModelResult = GetStringPropertyValue(device, kMIDIPropertyModel, &modelValue, errorCode);
+    if (getModelResult != GETSTRINGPROPERTYRESULT_OK)
     {
-        auto getModelResult = GetStringPropertyValue(device, kMIDIPropertyModel, model, errorCode);
-        if (getModelResult != GETSTRINGPROPERTYRESULT_OK)
-        {
-            char buffer[256];
-            snprintf(buffer, sizeof(buffer), "Failed to get device model (%d)", getModelResult);
-            configuration->activityCallback(buffer);
-        }
-        else
-            deviceInfo->deviceModel = *model;
+        char activityBuffer[256];
+        snprintf(activityBuffer, sizeof(activityBuffer), "Failed to get device model (%d)", getModelResult);
+        configuration->activityCallback(activityBuffer);
     }
+
+    const char* driverVersionValue = nullptr;
 
     // Driver version
 
-    if (deviceInfo->deviceDriverVersion == nullptr)
+    int rawDriverVersion = 0;
+    auto getDriverVersionResult = MIDIObjectGetIntegerProperty(device, kMIDIPropertyDriverVersion, &rawDriverVersion);
+    if (getDriverVersionResult != noErr)
     {
-        int rawDriverVersion = 0;
-        auto getDriverVersionResult = MIDIObjectGetIntegerProperty(device, kMIDIPropertyDriverVersion, &rawDriverVersion);
-        if (getDriverVersionResult != noErr)
-        {
-            char buffer[256];
-            snprintf(buffer, sizeof(buffer), "Failed to get device driver version (%d)", getDriverVersionResult);
-            configuration->activityCallback(buffer);
-        }
-        else
-        {
-            char* buffer = new char[16];
-            snprintf(buffer, 16, "%d", rawDriverVersion);
-            *driverVersion = buffer;
-            deviceInfo->deviceDriverVersion = *driverVersion;
-        }
+        char activityBuffer[256];
+        snprintf(activityBuffer, sizeof(activityBuffer), "Failed to get device driver version (%d)", getDriverVersionResult);
+        configuration->activityCallback(activityBuffer);
+    }
+    else
+    {
+        char* driverVersionBuffer = new char[16];
+        snprintf(driverVersionBuffer, 16, "%d", rawDriverVersion);
+        driverVersionValue = driverVersionBuffer;
     }
 
-    //
+    deviceInfo->deviceId = idValue;
+    deviceInfo->deviceName = nameValue;
+    deviceInfo->deviceManufacturer = manufacturerValue;
+    deviceInfo->deviceModel = modelValue;
+    deviceInfo->deviceDriverVersion = driverVersionValue;
+    deviceInfo->deviceInfoCached = true;
+
+    *id = idValue;
+    *name = nameValue;
+    *manufacturer = manufacturerValue;
+    *model = modelValue;
+    *driverVersion = driverVersionValue;
+    *errorCode = 0;
 
     return DEVICE_GETDEVICEINFORESULT_OK;
 }
@@ -598,7 +607,6 @@ struct SessionHandle
     pthread_t thread;
     std::atomic<bool> clientCreated;
     std::atomic<bool> sessionClosed;
-    std::atomic<bool> threadExited;
     OSStatus clientCreationStatus;
     std::atomic<bool> deleteOnThreadExit;
     InputEndpointCallback inputEndpointCallback;
@@ -827,7 +835,6 @@ void* ThreadProc(void* data)
         sessionHandle->runLoopRef = nullptr;
         sessionHandle->clientCreationStatus = kMIDIUnknownError;
         sessionHandle->clientCreated.store(true);
-        sessionHandle->threadExited.store(true);
         return nullptr;
     }
 
@@ -845,13 +852,14 @@ void* ThreadProc(void* data)
         sessionHandle->clientRef = 0;
     }
 
+    sessionHandle->inputEndpointCallback = nullptr;
+    sessionHandle->outputEndpointCallback = nullptr;
+
     if (sessionHandle->runLoopRef != nullptr)
     {
         CFRelease(sessionHandle->runLoopRef);
         sessionHandle->runLoopRef = nullptr;
     }
-
-    sessionHandle->threadExited.store(true);
 
     if (sessionHandle->deleteOnThreadExit.load())
         delete sessionHandle;
@@ -871,7 +879,6 @@ API_EXPORT SESSION_OPENRESULT OpenSession_Mac(const char* name, Configuration* c
     sessionHandle->outputEndpointCallback = outputEndpointCallback;
     sessionHandle->clientCreated.store(false);
     sessionHandle->sessionClosed.store(false);
-    sessionHandle->threadExited.store(false);
     sessionHandle->deleteOnThreadExit.store(false);
 
     int pthreadCreateResult;
@@ -939,15 +946,13 @@ API_EXPORT SESSION_CLOSERESULT CloseSession(SessionHandle* sessionHandle)
     if (sessionHandle->sessionClosed.exchange(true) == true)
         return SESSION_CLOSERESULT_OK;
 
-    sessionHandle->inputEndpointCallback = nullptr;
-    sessionHandle->outputEndpointCallback = nullptr;
-
     if (sessionHandle->runLoopRef != nullptr)
         CFRunLoopStop(sessionHandle->runLoopRef);
 
     if (pthread_equal(pthread_self(), sessionHandle->thread) != 0)
     {
         sessionHandle->deleteOnThreadExit.store(true);
+        pthread_detach(sessionHandle->thread);
         return SESSION_CLOSERESULT_OK;
     }
 
@@ -1395,7 +1400,11 @@ API_EXPORT OUT_SENDSHORTRESULT SendShortEventToOutputEndpoint(void* handle, Sess
     MIDIPacket* packet = MIDIPacketListInit(packetList);
 
     MIDITimeStamp currentTime = mach_absolute_time();
-    MIDIPacketListAdd(packetList, static_cast<ByteCount>(bufferVec.size()), packet, currentTime, dataSize, &data[0]);
+    if (MIDIPacketListAdd(packetList, static_cast<ByteCount>(bufferVec.size()), packet, currentTime, dataSize, &data[0]) == nullptr)
+    {
+        *errorCode = kMIDIUnknownError;
+        return OUT_SENDSHORTRESULT_UNKNOWNERROR;
+    }
 
     OSStatus result = MIDISend(outputEndpointHandle->portRef, outputEndpointHandle->info->endpointRef, packetList);
     if (result != noErr)
@@ -1424,6 +1433,12 @@ API_EXPORT OUT_SENDSYSEXRESULT SendSysExEventToOutputEndpoint_Mac(void* handle, 
 {
     *errorCode = 0;
 
+    if (data == nullptr || dataSize == 0)
+    {
+        *errorCode = kMIDIUnknownError;
+        return OUT_SENDSYSEXRESULT_UNKNOWNERROR;
+    }
+
     OutputEndpointHandle* outputEndpointHandle = static_cast<OutputEndpointHandle*>(handle);
 
     std::vector<Byte> bufferVec(static_cast<size_t>(dataSize) + sizeof(MIDIPacketList));
@@ -1431,7 +1446,11 @@ API_EXPORT OUT_SENDSYSEXRESULT SendSysExEventToOutputEndpoint_Mac(void* handle, 
     MIDIPacket* packet = MIDIPacketListInit(packetList);
 
     MIDITimeStamp currentTime = mach_absolute_time();
-    MIDIPacketListAdd(packetList, static_cast<ByteCount>(bufferVec.size()), packet, currentTime, dataSize, &data[0]);
+    if (MIDIPacketListAdd(packetList, static_cast<ByteCount>(bufferVec.size()), packet, currentTime, dataSize, data) == nullptr)
+    {
+        *errorCode = kMIDIUnknownError;
+        return OUT_SENDSYSEXRESULT_UNKNOWNERROR;
+    }
 
     OSStatus result = MIDISend(outputEndpointHandle->portRef, outputEndpointHandle->info->endpointRef, packetList);
     if (result != noErr)
@@ -1464,6 +1483,10 @@ struct VirtualDeviceInfo
 {
     InputEndpointInfo* inputEndpointInfo = nullptr;
     OutputEndpointInfo* outputEndpointInfo = nullptr;
+    MIDIEndpointRef inputEndpointRef = 0;
+    MIDIEndpointRef outputEndpointRef = 0;
+    bool inputEndpointDisposed = false;
+    bool outputEndpointDisposed = false;
     const char* name;
     bool isMuted = false;
 };
@@ -1511,6 +1534,7 @@ API_EXPORT VIRTUAL_OPENRESULT OpenVirtualDevice_Mac(
     InputEndpointInfo* inputEndpointInfo = new InputEndpointInfo();
     inputEndpointInfo->endpointRef = sourceRef;
     virtualDeviceInfo->inputEndpointInfo = inputEndpointInfo;
+    virtualDeviceInfo->inputEndpointRef = sourceRef;
 
     CFStringRef nameRef2 = CFStringCreateWithCString(nullptr, name, kCFStringEncodingUTF8);
     if (!nameRef2)
@@ -1547,6 +1571,7 @@ API_EXPORT VIRTUAL_OPENRESULT OpenVirtualDevice_Mac(
     OutputEndpointInfo* outputEndpointInfo = new OutputEndpointInfo();
     outputEndpointInfo->endpointRef = destinationRef;
     virtualDeviceInfo->outputEndpointInfo = outputEndpointInfo;
+    virtualDeviceInfo->outputEndpointRef = destinationRef;
 
     *info = virtualDeviceInfo;
 
@@ -1557,36 +1582,42 @@ API_EXPORT VIRTUAL_CLOSERESULT CloseVirtualDevice(VirtualDeviceInfo* info, int* 
 {
     *errorCode = 0;
 
-    OSStatus status = MIDIEndpointDispose(info->inputEndpointInfo->endpointRef);
-    if (status != noErr)
+    if (!info->inputEndpointDisposed)
     {
-        *errorCode = status;
-
-        delete info;
-
-        switch (status)
+        OSStatus status = MIDIEndpointDispose(info->inputEndpointRef);
+        if (status != noErr)
         {
-        case kMIDIUnknownEndpoint: return VIRTUAL_CLOSERESULT_DISPOSESOURCE_UNKNOWNENDPOINT;
-        case kMIDINotPermitted: return VIRTUAL_CLOSERESULT_DISPOSESOURCE_NOTPERMITTED;
+            *errorCode = status;
+
+            switch (status)
+            {
+            case kMIDIUnknownEndpoint: return VIRTUAL_CLOSERESULT_DISPOSESOURCE_UNKNOWNENDPOINT;
+            case kMIDINotPermitted: return VIRTUAL_CLOSERESULT_DISPOSESOURCE_NOTPERMITTED;
+            }
+
+            return VIRTUAL_CLOSERESULT_DISPOSESOURCE_UNKNOWNERROR;
         }
 
-        return VIRTUAL_CLOSERESULT_DISPOSESOURCE_UNKNOWNERROR;
+        info->inputEndpointDisposed = true;
     }
 
-    status = MIDIEndpointDispose(info->outputEndpointInfo->endpointRef);
-    if (status != noErr)
+    if (!info->outputEndpointDisposed)
     {
-        *errorCode = status;
-
-        delete info;
-
-        switch (status)
+        OSStatus status = MIDIEndpointDispose(info->outputEndpointRef);
+        if (status != noErr)
         {
-        case kMIDIUnknownEndpoint: return VIRTUAL_CLOSERESULT_DISPOSEDESTINATION_UNKNOWNENDPOINT;
-        case kMIDINotPermitted: return VIRTUAL_CLOSERESULT_DISPOSEDESTINATION_NOTPERMITTED;
+            *errorCode = status;
+
+            switch (status)
+            {
+            case kMIDIUnknownEndpoint: return VIRTUAL_CLOSERESULT_DISPOSEDESTINATION_UNKNOWNENDPOINT;
+            case kMIDINotPermitted: return VIRTUAL_CLOSERESULT_DISPOSEDESTINATION_NOTPERMITTED;
+            }
+
+            return VIRTUAL_CLOSERESULT_DISPOSEDESTINATION_UNKNOWNERROR;
         }
 
-        return VIRTUAL_CLOSERESULT_DISPOSEDESTINATION_UNKNOWNERROR;
+        info->outputEndpointDisposed = true;
     }
 
     delete info;
@@ -1602,7 +1633,7 @@ API_EXPORT VIRTUAL_SENDBACKRESULT SendDataBackFromVirtualDevice(const MIDIPacket
     if (virtualDeviceInfo->isMuted)
         return VIRTUAL_SENDBACKRESULT_OK;
 
-    OSStatus status = MIDIReceived(virtualDeviceInfo->inputEndpointInfo->endpointRef, pktlist);
+    OSStatus status = MIDIReceived(virtualDeviceInfo->inputEndpointRef, pktlist);
     if (status != noErr)
     {
         *errorCode = status;
