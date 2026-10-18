@@ -1434,7 +1434,7 @@ API_EXPORT OUT_SENDSHORTRESULT SendShortEventToOutputEndpoint(void* handle, Sess
     return OUT_SENDSHORTRESULT_OK;
 }
 
-API_EXPORT OUT_SENDSYSEXRESULT SendSysExEventToOutputEndpoint_Mac(void* handle, Byte* data, ByteCount dataSize, int* errorCode)
+API_EXPORT OUT_SENDSYSEXRESULT SendSysExEventToOutputEndpoint_Mac(void* handle, Byte* data, uint32_t dataSize, int* errorCode)
 {
     *errorCode = 0;
 
@@ -1448,7 +1448,7 @@ API_EXPORT OUT_SENDSYSEXRESULT SendSysExEventToOutputEndpoint_Mac(void* handle, 
 
     MIDIPacket* packet = nullptr;
     const ByteCount maxPacketDataSize = static_cast<ByteCount>(sizeof(packet->data));
-    const ByteCount packetsCount = (dataSize - 1) / maxPacketDataSize + 1;
+    const uint32_t packetsCount = (dataSize - 1) / maxPacketDataSize + 1;
     std::vector<Byte> bufferVec(
         static_cast<size_t>(dataSize) +
         sizeof(MIDIPacketList) +
@@ -1457,7 +1457,7 @@ API_EXPORT OUT_SENDSYSEXRESULT SendSysExEventToOutputEndpoint_Mac(void* handle, 
     packet = MIDIPacketListInit(packetList);
 
     MIDITimeStamp currentTime = mach_absolute_time();
-    ByteCount offset = 0;
+    uint32_t offset = 0;
     while (offset < dataSize)
     {
         const ByteCount packetDataSize = std::min(maxPacketDataSize, dataSize - offset);

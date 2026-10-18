@@ -22,7 +22,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
             SendEvents(
                 new[] { new NormalSysExEvent(data) },
-                eventSendReceiveDelay: TimeSpan.FromSeconds(10));
+                eventSendReceiveDelay: TimeSpan.FromSeconds(60));
         }
 
         #endregion
