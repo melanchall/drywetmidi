@@ -4,6 +4,7 @@
 #include <mach/mach_time.h>
 #include <mach/mach.h>
 #include <atomic>
+#include <algorithm>
 #include <vector>
 #include <new>
 #include <cstdint>
@@ -1441,15 +1442,35 @@ API_EXPORT OUT_SENDSYSEXRESULT SendSysExEventToOutputEndpoint_Mac(void* handle, 
 
     OutputEndpointHandle* outputEndpointHandle = static_cast<OutputEndpointHandle*>(handle);
 
-    std::vector<Byte> bufferVec(static_cast<size_t>(dataSize) + sizeof(MIDIPacketList));
+    MIDIPacket* packet = nullptr;
+    const ByteCount maxPacketDataSize = static_cast<ByteCount>(sizeof(packet->data));
+    const ByteCount packetsCount = (dataSize - 1) / maxPacketDataSize + 1;
+    std::vector<Byte> bufferVec(
+        static_cast<size_t>(dataSize) +
+        sizeof(MIDIPacketList) +
+        static_cast<size_t>(packetsCount) * 16);
     MIDIPacketList* packetList = reinterpret_cast<MIDIPacketList*>(bufferVec.data());
-    MIDIPacket* packet = MIDIPacketListInit(packetList);
+    packet = MIDIPacketListInit(packetList);
 
     MIDITimeStamp currentTime = mach_absolute_time();
-    if (MIDIPacketListAdd(packetList, static_cast<ByteCount>(bufferVec.size()), packet, currentTime, dataSize, data) == nullptr)
+    ByteCount offset = 0;
+    while (offset < dataSize)
     {
-        *errorCode = kMIDIUnknownError;
-        return OUT_SENDSYSEXRESULT_UNKNOWNERROR;
+        const ByteCount packetDataSize = std::min(maxPacketDataSize, dataSize - offset);
+        packet = MIDIPacketListAdd(
+            packetList,
+            static_cast<ByteCount>(bufferVec.size()),
+            packet,
+            currentTime,
+            packetDataSize,
+            data + offset);
+        if (packet == nullptr)
+        {
+            *errorCode = kMIDIUnknownError;
+            return OUT_SENDSYSEXRESULT_UNKNOWNERROR;
+        }
+
+        offset += packetDataSize;
     }
 
     OSStatus result = MIDISend(outputEndpointHandle->portRef, outputEndpointHandle->info->endpointRef, packetList);
