@@ -49,6 +49,47 @@ namespace Melanchall.DryWetMidi.Tests.Core
             Measure("Obj[1000000] filled", 24 + 1000000L * (8 + 32), () => Fill(1000000));
         }
 
+        [Test]
+        public void ReproRealMemory()
+        {
+            const int count = 1000000;
+            var o = TestContext.Out;
+            o.WriteLine($"Runtime: {RuntimeInformation.FrameworkDescription}, OS: {RuntimeInformation.OSDescription}, arch: {RuntimeInformation.ProcessArchitecture}");
+
+            for (var run = 0; run < 3; run++)
+            {
+                CollectGarbage();
+                var proc = System.Diagnostics.Process.GetCurrentProcess();
+                proc.Refresh();
+                var totalBefore = GC.GetTotalMemory(true);
+                var heapBefore = GC.GetGCMemoryInfo(GCKind.Any).HeapSizeBytes;
+                var committedBefore = GC.GetGCMemoryInfo(GCKind.Any).TotalCommittedBytes;
+                var allocatedBefore = GC.GetTotalAllocatedBytes(true);
+                var wsBefore = proc.WorkingSet64;
+
+                Hold(() => Fill(count));
+
+                CollectGarbage();
+                proc.Refresh();
+                var info = GC.GetGCMemoryInfo(GCKind.Any);
+                var totalWith = GC.GetTotalMemory(true);
+                var allocatedWith = GC.GetTotalAllocatedBytes(true);
+                var wsWith = proc.WorkingSet64;
+                var heapWith = info.HeapSizeBytes;
+                var committedWith = info.TotalCommittedBytes;
+                var fragmented = info.FragmentedBytes;
+
+                o.WriteLine($"run {run}: per object B -> GetTotalMemory delta {(totalWith - totalBefore) / (double)count:F1}, " +
+                            $"GetTotalAllocatedBytes delta {(allocatedWith - allocatedBefore) / (double)count:F1}, " +
+                            $"HeapSizeBytes delta {(heapWith - heapBefore) / (double)count:F1}, " +
+                            $"TotalCommittedBytes delta {(committedWith - committedBefore) / (double)count:F1}, " +
+                            $"WorkingSet delta {(wsWith - wsBefore) / (double)count:F1}, " +
+                            $"FragmentedBytes {fragmented}");
+
+                _held = null;
+            }
+        }
+
         private static Obj[] Fill(int count)
         {
             var array = new Obj[count];
