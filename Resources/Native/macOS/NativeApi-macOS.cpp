@@ -13,6 +13,7 @@
 #include <thread>
 #include <unordered_map>
 #include <mutex>
+#include <limits>
 
 #include "../Common/NativeApi-Constants.h"
 
@@ -1444,38 +1445,29 @@ API_EXPORT OUT_SENDSYSEXRESULT SendSysExEventToOutputEndpoint_Mac(void* handle, 
         return OUT_SENDSYSEXRESULT_UNKNOWNERROR;
     }
 
+    if (dataSize > std::numeric_limits<UInt16>::max())
+    {
+        *errorCode = kMIDIUnknownError;
+        return OUT_SENDSYSEXRESULT_UNKNOWNERROR;
+    }
+
     OutputEndpointHandle* outputEndpointHandle = static_cast<OutputEndpointHandle*>(handle);
 
-    MIDIPacket* packet = nullptr;
-    const ByteCount maxPacketDataSize = static_cast<ByteCount>(sizeof(packet->data));
-    const uint32_t packetsCount = (dataSize - 1) / maxPacketDataSize + 1;
-    std::vector<Byte> bufferVec(
-        static_cast<size_t>(dataSize) +
-        sizeof(MIDIPacketList) +
-        static_cast<size_t>(packetsCount) * 16);
+    std::vector<Byte> bufferVec(static_cast<size_t>(dataSize) + sizeof(MIDIPacketList));
     MIDIPacketList* packetList = reinterpret_cast<MIDIPacketList*>(bufferVec.data());
-    packet = MIDIPacketListInit(packetList);
+    MIDIPacket* packet = MIDIPacketListInit(packetList);
 
     MIDITimeStamp currentTime = mach_absolute_time();
-    ByteCount offset = 0;
-    const ByteCount nativeDataSize = static_cast<ByteCount>(dataSize);
-    while (offset < nativeDataSize)
+    if (MIDIPacketListAdd(
+        packetList,
+        static_cast<ByteCount>(bufferVec.size()),
+        packet,
+        currentTime,
+        static_cast<ByteCount>(dataSize),
+        data) == nullptr)
     {
-        const ByteCount packetDataSize = std::min(maxPacketDataSize, nativeDataSize - offset);
-        packet = MIDIPacketListAdd(
-            packetList,
-            static_cast<ByteCount>(bufferVec.size()),
-            packet,
-            currentTime,
-            packetDataSize,
-            data + offset);
-        if (packet == nullptr)
-        {
-            *errorCode = kMIDIUnknownError;
-            return OUT_SENDSYSEXRESULT_UNKNOWNERROR;
-        }
-
-        offset += packetDataSize;
+        *errorCode = kMIDIUnknownError;
+        return OUT_SENDSYSEXRESULT_UNKNOWNERROR;
     }
 
     OSStatus result = MIDISend(outputEndpointHandle->portRef, outputEndpointHandle->info->endpointRef, packetList);
