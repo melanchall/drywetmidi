@@ -8,7 +8,6 @@ namespace Melanchall.DryWetMidi.Tests.Core
 {
     [TestFixture]
     [NonParallelizable]
-    [Explicit("Diagnostic repro for GC.GetTotalMemory behavior; prints numbers, never fails")]
     public sealed class GcMeasurementReproTests
     {
         private sealed class Obj
