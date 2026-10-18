@@ -155,6 +155,8 @@ namespace Melanchall.DryWetMidi.Core
             }
         }
 
+        internal long EstimatedMemorySize { get; private set; }
+
         #endregion
 
         #region Methods
