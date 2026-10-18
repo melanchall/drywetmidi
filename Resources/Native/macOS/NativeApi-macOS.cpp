@@ -1457,10 +1457,11 @@ API_EXPORT OUT_SENDSYSEXRESULT SendSysExEventToOutputEndpoint_Mac(void* handle, 
     packet = MIDIPacketListInit(packetList);
 
     MIDITimeStamp currentTime = mach_absolute_time();
-    uint32_t offset = 0;
-    while (offset < dataSize)
+    ByteCount offset = 0;
+    const ByteCount nativeDataSize = static_cast<ByteCount>(dataSize);
+    while (offset < nativeDataSize)
     {
-        const ByteCount packetDataSize = std::min(maxPacketDataSize, dataSize - offset);
+        const ByteCount packetDataSize = std::min(maxPacketDataSize, nativeDataSize - offset);
         packet = MIDIPacketListAdd(
             packetList,
             static_cast<ByteCount>(bufferVec.size()),
