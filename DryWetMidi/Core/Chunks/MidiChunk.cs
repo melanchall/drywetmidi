@@ -158,7 +158,26 @@ namespace Melanchall.DryWetMidi.Core
         {
             var size = ReadSize(reader, out var readerPosition);
 
+            var estimateMemory = settings.MaxMemorySize != null;
+            var isCustomChunk = !(this is HeaderChunk || this is TrackChunk || this is UnknownChunk);
+
+            // Custom chunks can allocate memory in an arbitrary way, so at least the declared size is expected
+            if (estimateMemory && isCustomChunk)
+                reader.ThrowIfMemoryLimitExceeded(Math.Min(size, reader.Length - reader.Position), settings);
+
+            // Chunk object with its initial state (e.g. empty events collection). Header chunk is not stored in the file
+            var initialSize = 0L;
+            if (estimateMemory && !(this is HeaderChunk))
+            {
+                initialSize = MemorySizeEstimator.EstimateDeep(this);
+                reader.AddEstimatedMemory(initialSize, settings);
+            }
+
             ReadContent(reader, settings, size);
+
+            // Everything a custom chunk has allocated while reading
+            if (estimateMemory && isCustomChunk)
+                reader.AddEstimatedMemory(Math.Max(0, MemorySizeEstimator.EstimateDeep(this) - initialSize), settings);
 
             var bytesReadCount = reader.Position - readerPosition;
             if (settings.InvalidChunkSizePolicy == InvalidChunkSizePolicy.Abort && bytesReadCount != size)

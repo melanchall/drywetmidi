@@ -71,7 +71,7 @@ namespace Melanchall.DryWetMidi.Core
                 switch (settings.ZeroLengthDataPolicy)
                 {
                     case ZeroLengthDataPolicy.ReadAsEmptyObject:
-                        Data = new byte[0];
+                        Data = Array.Empty<byte>();
                         break;
                     case ZeroLengthDataPolicy.ReadAsNull:
                         Data = null;

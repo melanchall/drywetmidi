@@ -56,6 +56,8 @@ namespace Melanchall.DryWetMidi.Core
         /// </summary>
         public bool IsReadOnly { get; } = false;
 
+        internal int Capacity => _chunks.Capacity;
+
         #endregion
 
         #region Methods
