@@ -600,6 +600,7 @@ struct SessionHandle
     std::atomic<bool> sessionClosed;
     std::atomic<bool> threadExited;
     OSStatus clientCreationStatus;
+    std::atomic<bool> deleteOnThreadExit;
     InputEndpointCallback inputEndpointCallback;
     OutputEndpointCallback outputEndpointCallback;
 
@@ -826,6 +827,7 @@ void* ThreadProc(void* data)
         sessionHandle->runLoopRef = nullptr;
         sessionHandle->clientCreationStatus = kMIDIUnknownError;
         sessionHandle->clientCreated.store(true);
+        sessionHandle->threadExited.store(true);
         return nullptr;
     }
 
@@ -834,7 +836,14 @@ void* ThreadProc(void* data)
 
     sessionHandle->clientCreated.store(true);
 
-    CFRunLoopRun();
+    if (sessionHandle->clientCreationStatus == noErr)
+        CFRunLoopRun();
+
+    if (sessionHandle->clientRef != 0)
+    {
+        MIDIClientDispose(sessionHandle->clientRef);
+        sessionHandle->clientRef = 0;
+    }
 
     if (sessionHandle->runLoopRef != nullptr)
     {
@@ -843,6 +852,9 @@ void* ThreadProc(void* data)
     }
 
     sessionHandle->threadExited.store(true);
+
+    if (sessionHandle->deleteOnThreadExit.load())
+        delete sessionHandle;
 
     return nullptr;
 }
@@ -860,6 +872,7 @@ API_EXPORT SESSION_OPENRESULT OpenSession_Mac(const char* name, Configuration* c
     sessionHandle->clientCreated.store(false);
     sessionHandle->sessionClosed.store(false);
     sessionHandle->threadExited.store(false);
+    sessionHandle->deleteOnThreadExit.store(false);
 
     int pthreadCreateResult;
     if ((pthreadCreateResult = pthread_create(&sessionHandle->thread, nullptr, ThreadProc, sessionHandle)) != 0)
@@ -869,29 +882,15 @@ API_EXPORT SESSION_OPENRESULT OpenSession_Mac(const char* name, Configuration* c
         return SESSION_OPENRESULT_THREADSTARTERROR;
     }
 
-    auto startTime = std::chrono::steady_clock::now();
-    const auto timeoutMs = 5000;
-
     while (sessionHandle->clientCreated.load() == false)
-    {
         std::this_thread::sleep_for(std::chrono::milliseconds(1));
-
-        auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(
-            std::chrono::steady_clock::now() - startTime
-        ).count();
-
-        if (elapsed >= timeoutMs)
-        {
-            pthread_cancel(sessionHandle->thread);
-            return SESSION_OPENRESULT_CLIENTCREATIONTIMEOUT;
-        }
-    }
 
     if (sessionHandle->clientCreationStatus != noErr)
     {
         OSStatus clientCreationStatus = sessionHandle->clientCreationStatus;
         *errorCode = clientCreationStatus;
 
+        pthread_join(sessionHandle->thread, nullptr);
         delete sessionHandle;
 
         switch (clientCreationStatus)
@@ -937,7 +936,7 @@ API_EXPORT SESSION_OPENRESULT OpenSession_Mac(const char* name, Configuration* c
 
 API_EXPORT SESSION_CLOSERESULT CloseSession(SessionHandle* sessionHandle)
 {
-    if (sessionHandle->sessionClosed.exchange(true) == true || sessionHandle->runLoopRef == nullptr)
+    if (sessionHandle->sessionClosed.exchange(true) == true)
         return SESSION_CLOSERESULT_OK;
 
     sessionHandle->inputEndpointCallback = nullptr;
@@ -946,23 +945,15 @@ API_EXPORT SESSION_CLOSERESULT CloseSession(SessionHandle* sessionHandle)
     if (sessionHandle->runLoopRef != nullptr)
         CFRunLoopStop(sessionHandle->runLoopRef);
 
-    const int maxWaitMs = 500;
-    const int pollIntervalMs = 10;
-    int waitedMs = 0;
-
-    while (sessionHandle->threadExited.load() == false && waitedMs < maxWaitMs)
+    if (pthread_equal(pthread_self(), sessionHandle->thread) != 0)
     {
-        struct timespec ts = { 0, pollIntervalMs * 1000000 };
-        nanosleep(&ts, nullptr);
-        waitedMs += pollIntervalMs;
+        sessionHandle->deleteOnThreadExit.store(true);
+        return SESSION_CLOSERESULT_OK;
     }
 
-    SESSION_CLOSERESULT result = sessionHandle->threadExited.load() == true
-        ? SESSION_CLOSERESULT_OK
-        : SESSION_CLOSERESULT_THREADEXITTIMEOUT;
-
+    pthread_join(sessionHandle->thread, nullptr);
     delete sessionHandle;
-    return result;
+    return SESSION_CLOSERESULT_OK;
 }
 
 uint64_t ConvertMachTimeToNanoseconds(uint64_t machTime)
