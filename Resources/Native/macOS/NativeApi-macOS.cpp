@@ -609,7 +609,7 @@ struct SessionHandle
     std::atomic<bool> clientCreated;
     std::atomic<bool> sessionClosed;
     OSStatus clientCreationStatus;
-    std::atomic<bool> deleteOnThreadExit;
+    SessionHandle* nextRetainedSession = nullptr;
     std::mutex runLoopLock;
     InputEndpointCallback inputEndpointCallback;
     OutputEndpointCallback outputEndpointCallback;
@@ -617,6 +617,17 @@ struct SessionHandle
     std::mutex idsLock;
     std::unordered_map<MIDIEndpointRef, int> ids;
 };
+
+SessionHandle* retainedSessionHandles = nullptr;
+std::mutex retainedSessionHandlesLock;
+
+void RetainSessionHandle(SessionHandle* sessionHandle)
+{
+    // CoreMIDI retains the notification refcon until process termination.
+    std::lock_guard<std::mutex> lock(retainedSessionHandlesLock);
+    sessionHandle->nextRetainedSession = retainedSessionHandles;
+    retainedSessionHandles = sessionHandle;
+}
 
 void HandleSource(MIDIEndpointRef source, SessionHandle* sessionHandle, SESSION_CALLBACKOPERATION operation)
 {
@@ -848,15 +859,6 @@ void* ThreadProc(void* data)
     if (sessionHandle->clientCreationStatus == noErr)
         CFRunLoopRun();
 
-    if (sessionHandle->clientRef != 0)
-    {
-        MIDIClientDispose(sessionHandle->clientRef);
-        sessionHandle->clientRef = 0;
-    }
-
-    sessionHandle->inputEndpointCallback = nullptr;
-    sessionHandle->outputEndpointCallback = nullptr;
-
     {
         std::lock_guard<std::mutex> lock(sessionHandle->runLoopLock);
         if (sessionHandle->runLoopRef != nullptr)
@@ -865,9 +867,6 @@ void* ThreadProc(void* data)
             sessionHandle->runLoopRef = nullptr;
         }
     }
-
-    if (sessionHandle->deleteOnThreadExit.load())
-        delete sessionHandle;
 
     return nullptr;
 }
@@ -884,8 +883,6 @@ API_EXPORT SESSION_OPENRESULT OpenSession_Mac(const char* name, Configuration* c
     sessionHandle->outputEndpointCallback = outputEndpointCallback;
     sessionHandle->clientCreated.store(false);
     sessionHandle->sessionClosed.store(false);
-    sessionHandle->deleteOnThreadExit.store(false);
-
     int pthreadCreateResult;
     if ((pthreadCreateResult = pthread_create(&sessionHandle->thread, nullptr, ThreadProc, sessionHandle)) != 0)
     {
@@ -959,13 +956,13 @@ API_EXPORT SESSION_CLOSERESULT CloseSession(SessionHandle* sessionHandle)
 
     if (pthread_equal(pthread_self(), sessionHandle->thread) != 0)
     {
-        sessionHandle->deleteOnThreadExit.store(true);
+        RetainSessionHandle(sessionHandle);
         pthread_detach(sessionHandle->thread);
         return SESSION_CLOSERESULT_OK;
     }
 
     pthread_join(sessionHandle->thread, nullptr);
-    delete sessionHandle;
+    RetainSessionHandle(sessionHandle);
     return SESSION_CLOSERESULT_OK;
 }
 

@@ -456,7 +456,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         private void SendEvents(
             MidiEvent[] midiEvents,
             Action<ICollection<TimestampedEvent>> checkAction = null,
-            Action<InputEndpoint> setupInputEndpoint = null)
+            Action<InputEndpoint> setupInputEndpoint = null,
+            TimeSpan? eventSendReceiveDelay = null)
         {
             var deviceName = MidiEndpoints.A;
             var stopwatch = new Stopwatch();
@@ -499,7 +500,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     outputEndpoint.PrepareForEventsSending();
                     stopwatch.Start();
 
-                    var timeout = SendReceiveUtilities.MaximumEventSendReceiveDelay;
+                    var timeout = eventSendReceiveDelay ?? SendReceiveUtilities.MaximumEventSendReceiveDelay;
 
                     foreach (var midiEvent in midiEvents)
                     {

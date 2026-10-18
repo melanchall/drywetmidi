@@ -1,6 +1,7 @@
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Tests.Attributes;
 using NUnit.Framework;
+using System;
 using System.Linq;
 
 namespace Melanchall.DryWetMidi.Tests.Multimedia
@@ -19,7 +20,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 .Concat(new byte[] { 0xF7 })
                 .ToArray();
 
-            SendEvents(new[] { new NormalSysExEvent(data) });
+            SendEvents(
+                new[] { new NormalSysExEvent(data) },
+                eventSendReceiveDelay: TimeSpan.FromSeconds(10));
         }
 
         #endregion
