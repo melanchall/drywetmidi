@@ -1501,8 +1501,6 @@ struct VirtualDeviceInfo
 {
     InputEndpointInfo* inputEndpointInfo = nullptr;
     OutputEndpointInfo* outputEndpointInfo = nullptr;
-    MIDIEndpointRef inputEndpointRef = 0;
-    MIDIEndpointRef outputEndpointRef = 0;
     bool inputEndpointDisposed = false;
     bool outputEndpointDisposed = false;
     const char* name;
@@ -1552,7 +1550,6 @@ API_EXPORT VIRTUAL_OPENRESULT OpenVirtualDevice_Mac(
     InputEndpointInfo* inputEndpointInfo = new InputEndpointInfo();
     inputEndpointInfo->endpointRef = sourceRef;
     virtualDeviceInfo->inputEndpointInfo = inputEndpointInfo;
-    virtualDeviceInfo->inputEndpointRef = sourceRef;
 
     CFStringRef nameRef2 = CFStringCreateWithCString(nullptr, name, kCFStringEncodingUTF8);
     if (!nameRef2)
@@ -1589,7 +1586,6 @@ API_EXPORT VIRTUAL_OPENRESULT OpenVirtualDevice_Mac(
     OutputEndpointInfo* outputEndpointInfo = new OutputEndpointInfo();
     outputEndpointInfo->endpointRef = destinationRef;
     virtualDeviceInfo->outputEndpointInfo = outputEndpointInfo;
-    virtualDeviceInfo->outputEndpointRef = destinationRef;
 
     *info = virtualDeviceInfo;
 
@@ -1602,7 +1598,7 @@ API_EXPORT VIRTUAL_CLOSERESULT CloseVirtualDevice(VirtualDeviceInfo* info, int* 
 
     if (!info->inputEndpointDisposed)
     {
-        OSStatus status = MIDIEndpointDispose(info->inputEndpointRef);
+        OSStatus status = MIDIEndpointDispose(info->inputEndpointInfo->endpointRef);
         if (status != noErr)
         {
             *errorCode = status;
@@ -1621,7 +1617,7 @@ API_EXPORT VIRTUAL_CLOSERESULT CloseVirtualDevice(VirtualDeviceInfo* info, int* 
 
     if (!info->outputEndpointDisposed)
     {
-        OSStatus status = MIDIEndpointDispose(info->outputEndpointRef);
+        OSStatus status = MIDIEndpointDispose(info->outputEndpointInfo->endpointRef);
         if (status != noErr)
         {
             *errorCode = status;
@@ -1651,7 +1647,7 @@ API_EXPORT VIRTUAL_SENDBACKRESULT SendDataBackFromVirtualDevice(const MIDIPacket
     if (virtualDeviceInfo->isMuted)
         return VIRTUAL_SENDBACKRESULT_OK;
 
-    OSStatus status = MIDIReceived(virtualDeviceInfo->inputEndpointRef, pktlist);
+    OSStatus status = MIDIReceived(virtualDeviceInfo->inputEndpointInfo->endpointRef, pktlist);
     if (status != noErr)
     {
         *errorCode = status;
