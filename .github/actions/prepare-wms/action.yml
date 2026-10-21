@@ -16,7 +16,7 @@ inputs:
 runs:
   using: 'composite'
   steps:
-    - name: Install basic loopback transport
+    - name: Install transports
       if: runner.os == 'Windows' && matrix.os == 'windows-11-arm'
       shell: pwsh
       run: |
@@ -27,7 +27,7 @@ runs:
       shell: pwsh
       run: |
         & "${{ github.workspace }}/Resources/Scripts/Install WMS tool.ps1" -workingDirectory "$($env:RUNNER_TEMP)" -installerUrl "${{ inputs.wms_tools_installer_url }}"
-        "C:\Program Files\Windows MIDI Services\Tools\Console" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+        "C:\Program Files\Windows MIDI Services\Tools" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
 
     - name: Check WMS
       if: runner.os == 'Windows' && matrix.os == 'windows-11-arm'
