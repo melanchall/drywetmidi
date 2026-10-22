@@ -30,7 +30,8 @@ namespace Melanchall.DryWetMidi.Multimedia
             OUT_GETALLINFORESULT_UNKNOWNWMSERROR = 5,
 
             OUT_GETALLINFORESULT_UNKNOWNERROR = 1000,
-            OUT_GETALLINFORESULT_UNKNOWNERRORONGETINFO = 1001
+            OUT_GETALLINFORESULT_UNKNOWNERRORONGETINFO = 1001,
+            OUT_GETALLINFORESULT_ENDPOINTNOTFOUND = 6
         }
 
         public enum OUT_OPENRESULT
@@ -94,7 +95,8 @@ namespace Melanchall.DryWetMidi.Multimedia
             OUT_SENDSHORTRESULT_WRONGTHREAD = 107,
             [NativeApi.NativeErrorType(NativeApi.NativeErrorType.NotPermitted)]
             OUT_SENDSHORTRESULT_NOTPERMITTED = 108,
-            OUT_SENDSHORTRESULT_UNKNOWNERROR = 109
+            OUT_SENDSHORTRESULT_UNKNOWNERROR = 109,
+            OUT_SENDSHORTRESULT_PACKETLISTADDFAILED = 110
         }
 
         public enum OUT_SENDSYSEXRESULT
@@ -121,7 +123,10 @@ namespace Melanchall.DryWetMidi.Multimedia
             OUT_SENDSYSEXRESULT_WRONGTHREAD = 107,
             [NativeApi.NativeErrorType(NativeApi.NativeErrorType.NotPermitted)]
             OUT_SENDSYSEXRESULT_NOTPERMITTED = 108,
-            OUT_SENDSYSEXRESULT_UNKNOWNERROR = 109
+            OUT_SENDSYSEXRESULT_UNKNOWNERROR = 109,
+            OUT_SENDSYSEXRESULT_INVALIDDATA = 110,
+            OUT_SENDSYSEXRESULT_DATATOOLARGE = 111,
+            OUT_SENDSYSEXRESULT_PACKETLISTADDFAILED = 112
         }
 
         public enum OUT_GETSYSEXDATARESULT

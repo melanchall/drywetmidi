@@ -1005,7 +1005,7 @@ IN_GETINFORESULT GetInputEndpointInfo(int deviceIndex, InputEndpointInfo** info,
     if (endpointRef == 0)
     {
         delete inputEndpointInfo;
-        return IN_GETINFORESULT_UNKNOWNERROR;
+        return IN_GETINFORESULT_ENDPOINTNOTFOUND;
     }
 
     inputEndpointInfo->endpointRef = endpointRef;
@@ -1036,7 +1036,9 @@ API_EXPORT IN_GETALLINFORESULT GetInputEndpointsInfo(Configuration* configuratio
 
             delete[] result;
 
-            return IN_GETALLINFORESULT_UNKNOWNERRORONGETINFO;
+            return getInputEndpointInfoResult == IN_GETINFORESULT_ENDPOINTNOTFOUND
+                ? IN_GETALLINFORESULT_ENDPOINTNOTFOUND
+                : IN_GETALLINFORESULT_UNKNOWNERRORONGETINFO;
         }
 
         result[i] = inputEndpointInfo;
@@ -1243,7 +1245,7 @@ OUT_GETINFORESULT GetOutputEndpointInfo(int deviceIndex, OutputEndpointInfo** in
     if (endpointRef == 0)
     {
         delete outputEndpointInfo;
-        return OUT_GETINFORESULT_UNKNOWNERROR;
+        return OUT_GETINFORESULT_ENDPOINTNOTFOUND;
     }
 
     outputEndpointInfo->endpointRef = endpointRef;
@@ -1274,7 +1276,9 @@ API_EXPORT OUT_GETALLINFORESULT GetOutputEndpointsInfo_Mac(Configuration* config
 
             delete[] result;
 
-            return OUT_GETALLINFORESULT_UNKNOWNERRORONGETINFO;
+            return getOutputEndpointInfoResult == OUT_GETINFORESULT_ENDPOINTNOTFOUND
+                ? OUT_GETALLINFORESULT_ENDPOINTNOTFOUND
+                : OUT_GETALLINFORESULT_UNKNOWNERRORONGETINFO;
         }
 
         result[i] = outputEndpointInfo;
@@ -1409,7 +1413,7 @@ API_EXPORT OUT_SENDSHORTRESULT SendShortEventToOutputEndpoint(void* handle, Sess
     if (MIDIPacketListAdd(packetList, static_cast<ByteCount>(bufferVec.size()), packet, currentTime, dataSize, &data[0]) == nullptr)
     {
         *errorCode = kMIDIUnknownError;
-        return OUT_SENDSHORTRESULT_UNKNOWNERROR;
+        return OUT_SENDSHORTRESULT_PACKETLISTADDFAILED;
     }
 
     OSStatus result = MIDISend(outputEndpointHandle->portRef, outputEndpointHandle->info->endpointRef, packetList);
@@ -1441,14 +1445,12 @@ API_EXPORT OUT_SENDSYSEXRESULT SendSysExEventToOutputEndpoint_Mac(void* handle, 
 
     if (data == nullptr || dataSize == 0)
     {
-        *errorCode = kMIDIUnknownError;
-        return OUT_SENDSYSEXRESULT_UNKNOWNERROR;
+        return OUT_SENDSYSEXRESULT_INVALIDDATA;
     }
 
     if (dataSize > std::numeric_limits<UInt16>::max())
     {
-        *errorCode = kMIDIUnknownError;
-        return OUT_SENDSYSEXRESULT_UNKNOWNERROR;
+        return OUT_SENDSYSEXRESULT_DATATOOLARGE;
     }
 
     OutputEndpointHandle* outputEndpointHandle = static_cast<OutputEndpointHandle*>(handle);
@@ -1467,7 +1469,7 @@ API_EXPORT OUT_SENDSYSEXRESULT SendSysExEventToOutputEndpoint_Mac(void* handle, 
         data) == nullptr)
     {
         *errorCode = kMIDIUnknownError;
-        return OUT_SENDSYSEXRESULT_UNKNOWNERROR;
+        return OUT_SENDSYSEXRESULT_PACKETLISTADDFAILED;
     }
 
     OSStatus result = MIDISend(outputEndpointHandle->portRef, outputEndpointHandle->info->endpointRef, packetList);

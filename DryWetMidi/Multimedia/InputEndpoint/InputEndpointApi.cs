@@ -31,6 +31,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
             IN_GETALLINFORESULT_UNKNOWNERROR = 1000,
             IN_GETALLINFORESULT_UNKNOWNERRORONGETINFO = 1001,
+            IN_GETALLINFORESULT_ENDPOINTNOTFOUND = 6,
         }
 
         public enum IN_OPENRESULT
