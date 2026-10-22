@@ -611,7 +611,7 @@ struct SessionHandle
     std::atomic<bool> workerThreadStarted{false};
     std::atomic<bool> workerThreadExited{false};
     std::atomic<bool> runLoopStarted{false};
-    std::atomic<SInt32> runLoopExitReason{-1};
+    std::atomic<bool> runLoopReturned{false};
     std::atomic<bool> clientCreated;
     std::atomic<bool> sessionClosed;
     OSStatus clientCreationStatus;
@@ -870,7 +870,8 @@ void* ThreadProc(void* data)
     if (sessionHandle->clientCreationStatus == noErr)
     {
         sessionHandle->runLoopStarted.store(true);
-        sessionHandle->runLoopExitReason.store(CFRunLoopRun());
+        CFRunLoopRun();
+        sessionHandle->runLoopReturned.store(true);
     }
 
     {
@@ -989,11 +990,9 @@ API_EXPORT uint32_t IsSessionWorkerThreadRunning_Mac(SessionHandle* sessionHandl
 
 API_EXPORT uint32_t GetSessionWorkerDiagnostics_Mac(
     SessionHandle* sessionHandle,
-    int32_t* clientCreationStatus,
-    int32_t* runLoopExitReason)
+    int32_t* clientCreationStatus)
 {
     *clientCreationStatus = sessionHandle->clientCreationStatus;
-    *runLoopExitReason = sessionHandle->runLoopExitReason.load();
 
     uint32_t state = 0;
     if (sessionHandle->workerThreadStarted.load())
@@ -1008,6 +1007,8 @@ API_EXPORT uint32_t GetSessionWorkerDiagnostics_Mac(
         state |= 16;
     if (sessionHandle->sessionClosed.load())
         state |= 32;
+    if (sessionHandle->runLoopReturned.load())
+        state |= 64;
 
     return state;
 }

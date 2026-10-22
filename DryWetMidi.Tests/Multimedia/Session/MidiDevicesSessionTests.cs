@@ -72,13 +72,12 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 {
                     var workerState = MidiDevicesSessionApi.Api_GetSessionWorkerDiagnostics_Mac(
                         sessionHandle,
-                        out var clientCreationStatus,
-                        out var runLoopExitReason);
+                        out var clientCreationStatus);
 
                     ClassicAssert.Fail(
                         $"Session worker thread did not appear after opening the session. " +
                         $"Worker state: {workerState}; client creation status: {clientCreationStatus}; " +
-                        $"run-loop exit reason: {runLoopExitReason}.");
+                        $"run loop returned: {workerState.HasFlag(MidiDevicesSessionApi.SESSION_WORKERSTATE_MAC.SESSION_WORKERSTATE_MAC_RUNLOOPRETURNED)}.");
                 }
 
                 ClassicAssert.AreEqual(
