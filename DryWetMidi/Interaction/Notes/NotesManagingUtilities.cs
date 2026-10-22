@@ -344,7 +344,7 @@ namespace Melanchall.DryWetMidi.Interaction
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
 
-            var eventsCollections = trackChunks.Select(c => c.Events).ToArray();
+            var eventsCollections = trackChunks.Select(InteractionAsyncUtilities.GetEvents).ToArray();
 
             switch (eventsCollections.Length)
             {
@@ -660,7 +660,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
             return trackChunks
                 .Where(c => c != null)
-                .Select(c => c.Events)
+                .Select(InteractionAsyncUtilities.GetEvents)
                 .ProcessNotesInternal(action, match, settings, timedEventDetectionSettings, hint);
         }
 

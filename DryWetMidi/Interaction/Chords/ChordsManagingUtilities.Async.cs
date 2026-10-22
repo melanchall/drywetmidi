@@ -26,13 +26,25 @@ namespace Melanchall.DryWetMidi.Interaction
         public static Task<ICollection<Chord>> GetChordsAsync(this MidiFile file, ChordDetectionSettings? settings = null, NoteDetectionSettings? noteDetectionSettings = null, TimedEventDetectionSettings? timedEventDetectionSettings = null, IProgress<AsyncOperationProgress>? progress = null, CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(() => file.GetChords(settings, noteDetectionSettings, timedEventDetectionSettings), cancellationToken, progress);
 
-        /// <summary>Asynchronously groups notes into chords when the result is enumerated.</summary>
+        /// <summary>
+        /// Asynchronously enumerates chords grouped from notes. Detection starts on enumeration;
+        /// a bounded handoff prevents the worker from advancing ahead of the consumer.
+        /// Disposing the asynchronous enumerator stops the worker and disposes its enumerator.
+        /// </summary>
         public static IAsyncEnumerable<Chord> GetChordsAsync(this IEnumerable<Note> notes, ChordDetectionSettings? settings = null, NoteDetectionSettings? noteDetectionSettings = null, TimedEventDetectionSettings? timedEventDetectionSettings = null, IProgress<AsyncOperationProgress>? progress = null, CancellationToken cancellationToken = default) =>
             InteractionAsyncUtilities.EnumerateAsync(() => notes.GetChords(settings, noteDetectionSettings, timedEventDetectionSettings), progress, cancellationToken);
 
         /// <summary>Asynchronously detects chords from an asynchronous MIDI event source.</summary>
         public static Task<ICollection<Chord>> GetChordsAsync(this IAsyncEnumerable<MidiEvent> midiEvents, ChordDetectionSettings? settings = null, NoteDetectionSettings? noteDetectionSettings = null, TimedEventDetectionSettings? timedEventDetectionSettings = null, IProgress<AsyncOperationProgress>? progress = null, CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(async () => (await InteractionAsyncUtilities.CollectAsync(midiEvents, cancellationToken).ConfigureAwait(false)).GetChords(settings, noteDetectionSettings, timedEventDetectionSettings), cancellationToken, progress);
+
+        /// <summary>Asynchronously detects chords from an asynchronous track source.</summary>
+        public static Task<ICollection<Chord>> GetChordsAsync(this IAsyncEnumerable<TrackChunk> trackChunks, ChordDetectionSettings? settings = null, NoteDetectionSettings? noteDetectionSettings = null, TimedEventDetectionSettings? timedEventDetectionSettings = null, IProgress<AsyncOperationProgress>? progress = null, CancellationToken cancellationToken = default) =>
+            AsyncOperation.Run(async () => (await InteractionAsyncUtilities.CollectAsync(trackChunks, cancellationToken).ConfigureAwait(false)).GetChords(settings, noteDetectionSettings, timedEventDetectionSettings), cancellationToken, progress);
+
+        /// <summary>Asynchronously groups notes from an asynchronous source into chords.</summary>
+        public static Task<ICollection<Chord>> GetChordsAsync(this IAsyncEnumerable<Note> notes, ChordDetectionSettings? settings = null, NoteDetectionSettings? noteDetectionSettings = null, TimedEventDetectionSettings? timedEventDetectionSettings = null, IProgress<AsyncOperationProgress>? progress = null, CancellationToken cancellationToken = default) =>
+            AsyncOperation.Run(async () => (ICollection<Chord>)(await InteractionAsyncUtilities.CollectAsync(notes, cancellationToken).ConfigureAwait(false)).GetChords(settings, noteDetectionSettings, timedEventDetectionSettings).ToArray(), cancellationToken, progress);
 
         /// <summary>Asynchronously creates a chords manager.</summary>
         public static Task<TimedObjectsManager<Chord>> ManageChordsAsync(this EventsCollection eventsCollection, ChordDetectionSettings? settings = null, NoteDetectionSettings? noteDetectionSettings = null, TimedEventDetectionSettings? timedEventDetectionSettings = null, TimedObjectsComparer? comparer = null, IProgress<AsyncOperationProgress>? progress = null, CancellationToken cancellationToken = default) =>

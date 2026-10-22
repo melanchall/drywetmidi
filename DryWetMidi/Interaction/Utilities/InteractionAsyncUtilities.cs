@@ -11,6 +11,54 @@ namespace Melanchall.DryWetMidi.Interaction
 {
     internal static class InteractionAsyncUtilities
     {
+        internal static EventsCollection GetEvents(TrackChunk trackChunk)
+        {
+            AsyncOperation.Checkpoint();
+            return trackChunk.Events;
+        }
+
+        internal static IEnumerable<T> CheckpointItems<T>(IEnumerable<T> source)
+        {
+            foreach (var item in source)
+            {
+                AsyncOperation.Checkpoint();
+                yield return item;
+            }
+        }
+
+        internal static List<(MidiEvent Event, long DeltaTime)> PrepareReplacement(
+            IEnumerable<TimedEvent> timedEvents,
+            bool removeMarked = false,
+            bool smfOnly = false)
+        {
+            var replacement = new List<(MidiEvent, long)>();
+            var time = 0L;
+            foreach (var timedEvent in timedEvents)
+            {
+                AsyncOperation.Checkpoint();
+                var midiEvent = timedEvent.Event;
+                if ((removeMarked && midiEvent.MustBeRemoved) ||
+                    (smfOnly && !(midiEvent is ChannelEvent || midiEvent is MetaEvent || midiEvent is SysExEvent)))
+                    continue;
+                replacement.Add((midiEvent, timedEvent.Time - time));
+                time = timedEvent.Time;
+            }
+            return replacement;
+        }
+
+        internal static void CommitReplacement(
+            EventsCollection eventsCollection,
+            IEnumerable<(MidiEvent Event, long DeltaTime)> replacement)
+        {
+            // All cancellation checks belong to preparation, before the destructive rewrite.
+            eventsCollection.Clear();
+            foreach (var item in replacement)
+            {
+                item.Event.DeltaTime = item.DeltaTime;
+                eventsCollection.AddInternal(item.Event);
+            }
+        }
+
         internal static IEnumerable<EventsCollection> Collections(EventsCollection eventsCollection)
         {
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
@@ -26,7 +74,7 @@ namespace Melanchall.DryWetMidi.Interaction
         internal static IEnumerable<EventsCollection> Collections(IEnumerable<TrackChunk> trackChunks)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
-            return trackChunks.Select(t => t.Events);
+            return CheckpointItems(trackChunks).Where(t => t != null).Select(GetEvents);
         }
 
         internal static IEnumerable<EventsCollection> Collections(MidiFile file)

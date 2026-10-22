@@ -29,9 +29,10 @@ namespace Melanchall.DryWetMidi.Core
         #region Fields
 
         private readonly Stream _stream;
-        private readonly MidiWriter _writer;
+        private MidiWriter _writer;
         private readonly WritingSettings _settings;
         private readonly bool _disposeStream;
+        private readonly long _streamStartPosition;
 
         private State _state = State.FileHeader;
 
@@ -50,7 +51,6 @@ namespace Melanchall.DryWetMidi.Core
 
         private bool _disposed;
         private int _operation;
-        private readonly AsyncIoStream _transport;
         private int _callbackThread;
         private readonly AsyncLocal<CallbackScope?> _callbackScope = new AsyncLocal<CallbackScope?>();
         private int _callbackWrite;
@@ -70,13 +70,15 @@ namespace Melanchall.DryWetMidi.Core
             WritingSettings? settings,
             bool disposeStream,
             MidiFileFormat format,
-            TimeDivision timeDivision)
+            TimeDivision timeDivision,
+            bool deferInitialization = false)
         {
-            _stream = _transport = stream as AsyncIoStream ?? new AsyncIoStream(stream);
+            _stream = stream;
             if (!_stream.CanWrite)
                 throw new ArgumentException("Stream doesn't support writing.", nameof(stream));
             if (!_stream.CanSeek)
                 throw new ArgumentException("Stream doesn't support seeking.", nameof(stream));
+            _streamStartPosition = _stream.Position;
 
             _settings = settings ?? new WritingSettings();
 
@@ -86,7 +88,8 @@ namespace Melanchall.DryWetMidi.Core
             _writer = new MidiWriter(_stream, _settings.WriterSettings);
             _disposeStream = disposeStream;
 
-            WriteFileHeader(format, timeDivision);
+            if (!deferInitialization)
+                WriteFileHeader(format, timeDivision);
         }
 
         #endregion
@@ -195,7 +198,7 @@ namespace Melanchall.DryWetMidi.Core
         /// </exception>
         public void WriteEvent(MidiEvent midiEvent)
         {
-            if (_callbackThread == Environment.CurrentManagedThreadId || _callbackScope.Value?.Active == true)
+            if (_callbackThread == Environment.CurrentManagedThreadId)
             {
                 WriteCallbackEvent(midiEvent);
                 return;
@@ -273,12 +276,19 @@ namespace Melanchall.DryWetMidi.Core
         public Task WriteEventAsync(MidiEvent midiEvent, CancellationToken cancellationToken = default)
         {
             if (_callbackScope.Value?.Active == true)
-                return Task.Run(() =>
-                {
-                    cancellationToken.ThrowIfCancellationRequested();
-                    WriteCallbackEvent(midiEvent);
-                }, cancellationToken);
+                return WriteCallbackEventAsync(midiEvent, cancellationToken);
             return ExecuteAsync(() => WriteEventCore(midiEvent), cancellationToken);
+        }
+
+        private async Task WriteCallbackEventAsync(MidiEvent midiEvent, CancellationToken cancellationToken)
+        {
+            if (Interlocked.CompareExchange(ref _callbackWrite, 1, 0) != 0)
+                throw new InvalidOperationException("Another callback write is already in progress.");
+            try
+            {
+                await EncodeAsync(() => WriteEventCore(midiEvent), cancellationToken).ConfigureAwait(false);
+            }
+            finally { Volatile.Write(ref _callbackWrite, 0); }
         }
 
         private void WriteCallbackEvent(MidiEvent midiEvent)
@@ -296,8 +306,22 @@ namespace Melanchall.DryWetMidi.Core
         /// <param name="chunk">The chunk to write.</param>
         /// <param name="cancellationToken">Token used to cancel writing.</param>
         /// <returns>A task representing writing.</returns>
-        public Task WriteChunkAsync(MidiChunk chunk, CancellationToken cancellationToken = default) =>
-            ExecuteAsync(() => WriteChunkCore(chunk), cancellationToken);
+        public async Task WriteChunkAsync(MidiChunk chunk, CancellationToken cancellationToken = default)
+        {
+            EnterOperation();
+            try
+            {
+                ThrowIfArgument.IsNull(nameof(chunk), chunk);
+                if (_state != State.Chunk)
+                    throw new InvalidOperationException("Another chunk is being written, end it first.");
+                if (chunk is TrackChunk && _tracksNumber == ushort.MaxValue)
+                    throw new TooManyTrackChunksException((int)_tracksNumber + 1);
+                await chunk.WriteAsync(_writer, _settings, cancellationToken).ConfigureAwait(false);
+                if (chunk is TrackChunk)
+                    _tracksNumber++;
+            }
+            finally { Volatile.Write(ref _operation, 0); }
+        }
 
         private void EnterOperation()
         {
@@ -317,49 +341,48 @@ namespace Melanchall.DryWetMidi.Core
         private async Task ExecuteAsync(Action action, CancellationToken cancellationToken)
         {
             EnterOperation();
-            try { await _transport.RunAsync(action, cancellationToken).ConfigureAwait(false); }
+            try { await EncodeAsync(action, cancellationToken).ConfigureAwait(false); }
             finally { Volatile.Write(ref _operation, 0); }
         }
 
+        private Task EncodeAsync(Action action, CancellationToken cancellationToken)
+        {
+            var writer = _writer;
+            return writer.WriteEncodedAsync(codec =>
+            {
+                _writer = codec;
+                try { action(); }
+                finally { _writer = writer; }
+            }, cancellationToken);
+        }
+
+        internal Task InitializeAsync(MidiFileFormat format, TimeDivision timeDivision, CancellationToken cancellationToken) =>
+            ExecuteAsync(() => WriteFileHeader(format, timeDivision), cancellationToken);
+
         private async Task ExecuteTrackAsync(Action action, CancellationToken cancellationToken,
-            bool alwaysEnd = false, bool disposing = false)
+            bool alwaysEnd = false)
         {
             EnterOperation();
             try
             {
-                await _transport.RunAsyncOperation(async () =>
+                cancellationToken.ThrowIfCancellationRequested();
+                if ((alwaysEnd || _state == State.Event) && BeforeEndTrackChunkAsync != null)
                 {
+                    var scope = new CallbackScope();
+                    _callbackScope.Value = scope;
                     try
                     {
-                        if ((alwaysEnd || _state == State.Event) && BeforeEndTrackChunkAsync != null)
-                        {
-                            var scope = new CallbackScope();
-                            _callbackScope.Value = scope;
-                            try
-                            {
-                                await BeforeEndTrackChunkAsync(cancellationToken).ConfigureAwait(false);
-                            }
-                            finally
-                            {
-                                scope.Active = false;
-                                _callbackScope.Value = null;
-                            }
-                            _suppressEndCallback = true;
-                        }
-                        try { await Task.Run(action, cancellationToken).ConfigureAwait(false); }
-                        finally { _suppressEndCallback = false; }
+                        await BeforeEndTrackChunkAsync(cancellationToken).ConfigureAwait(false);
                     }
-                    catch
+                    finally
                     {
-                        if (disposing && !_disposed)
-                        {
-                            _disposed = true;
-                            if (_disposeStream)
-                                await Task.Run(_stream.Dispose).ConfigureAwait(false);
-                        }
-                        throw;
+                        scope.Active = false;
+                        _callbackScope.Value = null;
                     }
-                }, cancellationToken).ConfigureAwait(false);
+                    _suppressEndCallback = true;
+                }
+                try { await EncodeAsync(action, cancellationToken).ConfigureAwait(false); }
+                finally { _suppressEndCallback = false; }
             }
             finally { Volatile.Write(ref _operation, 0); }
         }
@@ -385,8 +408,6 @@ namespace Melanchall.DryWetMidi.Core
 
             foreach (var positionToChunkSize in _positionsToChunkSizes)
             {
-                if (_transport.IsAsync)
-                    _stream.Flush();
                 _stream.Position = positionToChunkSize.Key;
 
                 buffer[0] = (byte)((positionToChunkSize.Value >> 24) & 0xFF);
@@ -431,8 +452,48 @@ namespace Melanchall.DryWetMidi.Core
         /// <returns>A task representing finalization.</returns>
         public async ValueTask DisposeAsync()
         {
-            if (!_disposed)
-                await ExecuteTrackAsync(() => Dispose(true), CancellationToken.None, disposing: true).ConfigureAwait(false);
+            if (_disposed)
+                return;
+            EnterOperation();
+            try
+            {
+                try
+                {
+                    if (_state == State.Event)
+                    {
+                        if (BeforeEndTrackChunkAsync != null)
+                        {
+                            var scope = new CallbackScope();
+                            _callbackScope.Value = scope;
+                            try { await BeforeEndTrackChunkAsync(CancellationToken.None).ConfigureAwait(false); }
+                            finally { scope.Active = false; _callbackScope.Value = null; }
+                            _suppressEndCallback = true;
+                        }
+                        try { await EncodeAsync(EndTrackChunkCore, CancellationToken.None).ConfigureAwait(false); }
+                        finally { _suppressEndCallback = false; }
+                    }
+                    await _writer.DisposeAsync().ConfigureAwait(false);
+                    _stream.Position = _streamStartPosition + _tracksNumberPosition;
+                    var tracks = new[] { (byte)(_tracksNumber >> 8), (byte)_tracksNumber };
+                    await _stream.WriteAsync(tracks, 0, tracks.Length).ConfigureAwait(false);
+                    foreach (var patch in _positionsToChunkSizes)
+                    {
+                        await _stream.FlushAsync().ConfigureAwait(false);
+                        _stream.Position = _streamStartPosition + patch.Key;
+                        var size = patch.Value;
+                        var bytes = new[] { (byte)(size >> 24), (byte)(size >> 16), (byte)(size >> 8), (byte)size };
+                        await _stream.WriteAsync(bytes, 0, bytes.Length).ConfigureAwait(false);
+                    }
+                    await _stream.FlushAsync().ConfigureAwait(false);
+                }
+                finally
+                {
+                    _disposed = true;
+                    if (_disposeStream)
+                        await _stream.DisposeAsync().ConfigureAwait(false);
+                }
+            }
+            finally { Volatile.Write(ref _operation, 0); }
         }
 
         private void Dispose(bool disposing)

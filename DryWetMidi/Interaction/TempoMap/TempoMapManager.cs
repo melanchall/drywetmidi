@@ -382,11 +382,14 @@ namespace Melanchall.DryWetMidi.Interaction
             firstEventsCollection.Add(TempoMap.TempoLine.Select(GetSetTempoTimedEvent));
             firstEventsCollection.Add(TempoMap.TimeSignatureLine.Select(GetTimeSignatureTimedEvent));
 
-            foreach (var timedEventsManager in _timedEventsManagers)
+            var replacements = _timedEventsManagers.Select(manager =>
             {
                 AsyncOperation.Checkpoint();
-                timedEventsManager.SaveChanges();
-            }
+                return (Manager: manager, Events: manager.PrepareChanges());
+            }).ToArray();
+            AsyncOperation.Checkpoint();
+            foreach (var replacement in replacements)
+                replacement.Manager.CommitChanges(replacement.Events);
         }
 
         private IEnumerable<TimedEvent> GetTimedEvents(Func<TimedEvent, bool> predicate)

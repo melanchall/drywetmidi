@@ -25,7 +25,9 @@ Quantizing, splitting, merging, resizing, repeating, and sanitizing are CPU-boun
 Their asynchronous APIs offload computation to the thread pool for responsiveness,
 not faster execution. Prefer synchronous methods for small inputs and bound the
 number of concurrent operations in services. Lazy processing may still require
-preprocessing or buffers before producing a result.
+preprocessing or buffers before producing a result. CPU-bound asynchronous sequences
+advance their underlying iterator in bounded batches, so they can compute ahead of
+the consumer without retaining a worker thread while the consumer is idle.
 
 Cancellation is cooperative. In-place transformations may leave completed changes,
 and a lazy sequence may already have yielded results when cancellation or an error

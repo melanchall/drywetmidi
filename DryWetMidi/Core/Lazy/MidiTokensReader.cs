@@ -12,7 +12,7 @@ namespace Melanchall.DryWetMidi.Core
     /// <see href="xref:a_file_lazy_reading_writing">Lazy reading/writing</see> article to learn more.
     /// </summary>
     /// <seealso cref="MidiTokensWriter"/>
-    public sealed class MidiTokensReader : IDisposable, IAsyncDisposable
+    public sealed partial class MidiTokensReader : IDisposable, IAsyncDisposable
     {
         #region Enums
 
@@ -83,15 +83,14 @@ namespace Melanchall.DryWetMidi.Core
 
         private bool _disposed;
         private int _operation;
-        private readonly AsyncIoStream _transport;
 
         #endregion
 
         #region Constructor
 
-        internal MidiTokensReader(Stream stream, ReadingSettings? settings, bool disposeStream)
+        internal MidiTokensReader(Stream stream, ReadingSettings? settings, bool disposeStream, bool deferInitialization = false)
         {
-            _stream = _transport = stream as AsyncIoStream ?? new AsyncIoStream(stream);
+            _stream = stream;
             if (!_stream.CanRead)
                 throw new ArgumentException("Stream doesn't support reading.", nameof(stream));
 
@@ -100,8 +99,8 @@ namespace Melanchall.DryWetMidi.Core
             if (_settings.ReaderSettings == null)
                 _settings.ReaderSettings = new ReaderSettings();
 
-            _reader = new MidiReader(_stream, _settings.ReaderSettings);
-            if (_reader.EndReached)
+            _reader = new MidiReader(_stream, _settings.ReaderSettings, deferInitialization);
+            if (!deferInitialization && _reader.EndReached)
                 throw new ArgumentException("Stream is already read.", nameof(stream));
 
             _disposeStream = disposeStream;
@@ -173,7 +172,7 @@ namespace Melanchall.DryWetMidi.Core
             EnterOperation();
             try
             {
-                return await _transport.RunAsync(ReadTokenCore, cancellationToken).ConfigureAwait(false);
+                return await ReadTokenCoreAsync(cancellationToken).ConfigureAwait(false);
             }
             finally
             {
@@ -354,7 +353,13 @@ namespace Melanchall.DryWetMidi.Core
             EnterOperation();
             try
             {
-                await _transport.RunAsync(() => Dispose(true), CancellationToken.None).ConfigureAwait(false);
+                try
+                {
+                    _reader.Dispose();
+                    if (_disposeStream)
+                        await _stream.DisposeAsync().ConfigureAwait(false);
+                }
+                finally { _disposed = true; }
             }
             finally { Volatile.Write(ref _operation, 0); }
         }

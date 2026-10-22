@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using System.Runtime.ExceptionServices;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -54,6 +55,7 @@ namespace Melanchall.DryWetMidi.Tools
             [EnumeratorCancellation] CancellationToken cancellationToken)
         {
             IEnumerator<T>? enumerator = null;
+            ExceptionDispatchInfo? deferredError = null;
             bool completed = false;
             bool finished = false;
             var enumerationProgress = progress == null ? null : new EnumerationProgress(progress);
@@ -65,15 +67,23 @@ namespace Melanchall.DryWetMidi.Tools
                     {
                         enumerator ??= source().GetEnumerator();
                         var items = new List<T>(BatchSize);
-                        while (items.Count < BatchSize)
+                        try
                         {
-                            AsyncOperation.Checkpoint();
-                            if (!enumerator.MoveNext())
+                            while (items.Count < BatchSize)
                             {
-                                completed = true;
-                                break;
+                                AsyncOperation.Checkpoint();
+                                if (!enumerator.MoveNext())
+                                {
+                                    completed = true;
+                                    break;
+                                }
+                                items.Add(enumerator.Current);
                             }
-                            items.Add(enumerator.Current);
+                        }
+                        catch (Exception exception) when (!(exception is OperationCanceledException))
+                        {
+                            deferredError = ExceptionDispatchInfo.Capture(exception);
+                            completed = true;
                         }
                         return items;
                     }, cancellationToken, enumerationProgress).ConfigureAwait(false);
@@ -83,6 +93,7 @@ namespace Melanchall.DryWetMidi.Tools
                         cancellationToken.ThrowIfCancellationRequested();
                         yield return item;
                     }
+                    deferredError?.Throw();
                 }
                 finished = true;
             }

@@ -123,7 +123,7 @@ namespace Melanchall.DryWetMidi.Interaction
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
 
-            var eventsCollections = trackChunks.Where(c => c != null).Select(c => c.Events).ToArray();
+            var eventsCollections = trackChunks.Where(c => c != null).Select(InteractionAsyncUtilities.GetEvents).ToArray();
             var result = new List<TimedEvent>();
 
             foreach (var timedEvent in eventsCollections.GetTimedEventsLazy(settings))
@@ -387,7 +387,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
             return trackChunks
                 .Where(c => c != null)
-                .Select(c => c.Events)
+                .Select(InteractionAsyncUtilities.GetEvents)
                 .ProcessTimedEventsInternal(action, match, settings, hint);
         }
 
@@ -642,7 +642,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
             // TODO: rework
 
-            var eventsCollections = trackChunks.Where(c => c != null).Select(c => c.Events).ToArray();
+            var eventsCollections = trackChunks.Where(c => c != null).Select(InteractionAsyncUtilities.GetEvents).ToArray();
             var eventsCount = eventsCollections.Sum(c => c.Count);
 
             var eventsCollectionsCount = eventsCollections.Length;
@@ -810,7 +810,7 @@ namespace Melanchall.DryWetMidi.Interaction
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
 
-            var eventsCollections = trackChunks.Where(c => c != null).Select(c => c.Events).ToArray();
+            var eventsCollections = trackChunks.Where(c => c != null).Select(InteractionAsyncUtilities.GetEvents).ToArray();
             return new SortedLazyCollection<TimedEvent>(eventsCollections.GetTimedEventsLazy(settings, cloneEvent));
         }
 
@@ -845,22 +845,11 @@ namespace Melanchall.DryWetMidi.Interaction
             if (timedEvents == null)
                 return;
 
-            var time = 0L;
-
-            eventsCollection.Clear();
-
-            foreach (var timedEvent in timedEvents.OrderBy(e => e.Time))
-            {
-                AsyncOperation.Checkpoint();
-                if (timedEvent.Event.MustBeRemoved)
-                    continue;
-
-                var midiEvent = timedEvent.Event;
-                midiEvent.DeltaTime = timedEvent.Time - time;
-
-                eventsCollection.AddInternal(midiEvent);
-                time = timedEvent.Time;
-            }
+            var replacement = InteractionAsyncUtilities.PrepareReplacement(
+                timedEvents.OrderBy(e => e.Time),
+                removeMarked: true);
+            AsyncOperation.Checkpoint();
+            InteractionAsyncUtilities.CommitReplacement(eventsCollection, replacement);
         }
 
         private static IEnumerable<TimedEvent> GetSortedTimedEventsLazy(

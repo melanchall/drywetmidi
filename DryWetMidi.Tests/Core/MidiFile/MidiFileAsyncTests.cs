@@ -180,6 +180,209 @@ namespace Melanchall.DryWetMidi.Tests.Core
         }
 
         [Test]
+        public async Task CustomChunk_UsesInMemoryCodec_WithAbsolutePositions()
+        {
+            var file = new MidiFile(new CustomChunk { Value = 42 });
+            using var output = new AsyncOnlyStream();
+            await file.WriteAsync(output);
+            using var input = new AsyncOnlyStream(output.ToArray(), false, 2);
+            var actual = await MidiFile.ReadAsync(input, new ReadingSettings
+            {
+                CustomChunkTypes = new ChunkTypesCollection { { typeof(CustomChunk), "Cstm" } }
+            });
+            var chunk = (CustomChunk)actual.Chunks[0];
+            Assert.That(chunk.Value, Is.EqualTo(42));
+            Assert.That(chunk.ContentPosition, Is.EqualTo(22));
+        }
+
+        [Test]
+        public async Task ExistingValidCorpus_AsyncReadAndWriteMatchSynchronous()
+        {
+            foreach (var path in TestFilesProvider.GetValidFilesPaths())
+            {
+                var expected = MidiFile.Read(path);
+                var actual = await MidiFile.ReadAsync(path);
+                Assert.That(MidiFile.Equals(expected, actual, out var message), Is.True, path + ": " + message);
+                using var synchronous = new MemoryStream();
+                using var asynchronous = new MemoryStream();
+                expected.Write(synchronous);
+                await expected.WriteAsync(asynchronous);
+                Assert.That(asynchronous.ToArray(), Is.EqualTo(synchronous.ToArray()), path);
+            }
+        }
+
+        [TestCase(false)]
+        [TestCase(true)]
+        public async Task ExistingInvalidCorpus_AsyncReadMatchesSynchronousPolicies(bool ignoreTruncatedData)
+        {
+            foreach (var path in Directory.GetFiles(TestFilesProvider.GetInvalidFilesDirectory(""), "*.mid", SearchOption.AllDirectories))
+            {
+                var bytes = File.ReadAllBytes(path);
+                MidiFile expected = null;
+                Exception expectedError = null;
+                var settings = new ReadingSettings
+                {
+                    NotEnoughBytesPolicy = ignoreTruncatedData ? NotEnoughBytesPolicy.Ignore : NotEnoughBytesPolicy.Abort
+                };
+                try { expected = MidiFile.Read(new MemoryStream(bytes), settings); }
+                catch (Exception error) { expectedError = error; }
+                MidiFile actual = null;
+                Exception actualError = null;
+                try { actual = await MidiFile.ReadAsync(new MemoryStream(bytes), settings); }
+                catch (Exception error) { actualError = error; }
+                Assert.That(actualError?.GetType(), Is.EqualTo(expectedError?.GetType()), path + ": " + actualError);
+                if (expectedError == null)
+                    Assert.That(MidiFile.Equals(expected, actual, out var message), Is.True, path + ": " + message);
+            }
+        }
+
+        [Test]
+        public async Task ReadAsync_EstimatedMemoryMatchesSynchronous()
+        {
+            var file = new MidiFile(new TrackChunk(
+                new TextEvent("payload"),
+                new NormalSysExEvent { Data = new byte[10000] },
+                new NoteOnEvent { Velocity = (SevenBitNumber)100 }),
+                new UnknownChunk("Test") { Data = new byte[300] });
+            using var bytes = new MemoryStream();
+            file.Write(bytes);
+            var settings = new ReadingSettings { MaxMemorySize = long.MaxValue };
+            var expected = MidiFile.Read(new MemoryStream(bytes.ToArray()), settings);
+            var actual = await MidiFile.ReadAsync(new MemoryStream(bytes.ToArray()), settings);
+            Assert.That(actual.EstimatedMemorySize, Is.EqualTo(expected.EstimatedMemorySize));
+        }
+
+        [TestCase(BufferingPolicy.BufferAllData)]
+        [TestCase(BufferingPolicy.DontUseBuffering)]
+        [TestCase(BufferingPolicy.UseCustomBuffer)]
+        [TestCase(BufferingPolicy.UseFixedSizeBuffer)]
+        public async Task ReadAsync_PreservesReaderBufferingPolicy(BufferingPolicy policy)
+        {
+            using var bytes = new MemoryStream();
+            CreateFile().Write(bytes);
+            using var input = new AsyncOnlyStream(bytes.ToArray(), true, 2);
+            var file = await MidiFile.ReadAsync(input, new ReadingSettings
+            {
+                ReaderSettings = new ReaderSettings { BufferingPolicy = policy, BufferSize = 3, Buffer = new byte[5] }
+            });
+            Assert.That(MidiFile.Equals(CreateFile(), file), Is.True);
+        }
+
+        [Test]
+        public async Task LazyWriter_HeaderPatchesRespectInitialPosition_AndCompleteTrackChunks()
+        {
+            using var output = new MemoryStream();
+            output.Write(new byte[] { 1, 2, 3 }, 0, 3);
+            await using (var writer = await MidiFile.WriteLazyAsync(output))
+            {
+                await writer.WriteChunkAsync(new TrackChunk(new NoteOffEvent()));
+                await writer.StartTrackChunkAsync();
+                await writer.WriteEventAsync(new NoteOffEvent());
+            }
+            var bytes = output.ToArray();
+            Assert.That(bytes[0], Is.EqualTo(1));
+            Assert.That(bytes[1], Is.EqualTo(2));
+            Assert.That(bytes[2], Is.EqualTo(3));
+            using var input = new MemoryStream(bytes, 3, bytes.Length - 3, false);
+            var file = await MidiFile.ReadAsync(input);
+            Assert.That(file.Chunks.Count, Is.EqualTo(2));
+        }
+
+        [Test]
+        public async Task LazyPipelines_CanMixSynchronousAndAsynchronousOperations()
+        {
+            using var bytes = new MemoryStream();
+            var writer = MidiFile.WriteLazy(bytes);
+            writer.StartTrackChunk();
+            await writer.WriteEventAsync(new NoteOffEvent());
+            writer.EndTrackChunk();
+            await writer.DisposeAsync();
+            bytes.Position = 0;
+            using var reader = MidiFile.ReadLazy(bytes);
+            Assert.That(reader.ReadToken(), Is.TypeOf<ChunkHeaderToken>());
+            Assert.That(await reader.ReadTokenAsync(), Is.TypeOf<FileHeaderToken>());
+            Assert.That(reader.ReadToken(), Is.TypeOf<ChunkHeaderToken>());
+            Assert.That(await reader.ReadTokenAsync(), Is.TypeOf<MidiEventToken>());
+        }
+
+        [Test]
+        public async Task NonSeekableMalformedLength_BuffersOnlyAvailablePayload()
+        {
+            using var bytes = new MemoryStream();
+            new MidiFile(new UnknownChunk("Test") { Data = new byte[] { 1, 2, 3 } }).Write(bytes);
+            var data = bytes.ToArray();
+            for (var i = 18; i < 22; i++)
+                data[i] = 0xFF;
+            using var input = new AsyncOnlyStream(data, false, 2);
+            var file = await MidiFile.ReadAsync(input, new ReadingSettings
+            {
+                NotEnoughBytesPolicy = NotEnoughBytesPolicy.Ignore,
+                InvalidChunkSizePolicy = InvalidChunkSizePolicy.Ignore
+            });
+            Assert.That(((UnknownChunk)file.Chunks[0]).Data, Is.EqualTo(new byte[] { 1, 2, 3 }));
+        }
+
+        [Test]
+        public async Task BulkIo_ReportsActualBytes_AndSuccessfulCompletion()
+        {
+            var writing = new ProgressRecorder();
+            using var output = new AsyncOnlyStream();
+            await CreateFile().WriteAsync(output, progress: writing);
+            var bytes = output.ToArray();
+            var written = writing.Reports[writing.Reports.Count - 1];
+            Assert.That(written.ProcessedItems, Is.EqualTo(bytes.Length));
+            Assert.That(written.Phase, Is.EqualTo("Writing"));
+            Assert.That(written.IsCompleted, Is.True);
+
+            var reading = new ProgressRecorder();
+            using var input = new AsyncOnlyStream(bytes, false, 2);
+            await MidiFile.ReadAsync(input, progress: reading);
+            var read = reading.Reports[reading.Reports.Count - 1];
+            Assert.That(read.ProcessedItems, Is.EqualTo(bytes.Length));
+            Assert.That(read.Phase, Is.EqualTo("Reading"));
+            Assert.That(read.IsCompleted, Is.True);
+        }
+
+        [Test]
+        public async Task ReadProgress_IsThrottled_AndReportsDuringIo()
+        {
+            using var bytes = new MemoryStream();
+            new MidiFile(new UnknownChunk("Test") { Data = new byte[262144] }).Write(bytes);
+            var progress = new ProgressRecorder();
+            using var input = new AsyncOnlyStream(bytes.ToArray(), false, 4096) { ReadDelayMilliseconds = 5 };
+            await MidiFile.ReadAsync(input, progress: progress);
+            Assert.That(progress.Reports.Count, Is.GreaterThan(1));
+            Assert.That(progress.Reports.Count, Is.LessThan(input.AsyncReads));
+            Assert.That(progress.Reports[progress.Reports.Count - 1].ProcessedItems, Is.EqualTo(bytes.Length));
+            long previous = 0;
+            foreach (var report in progress.Reports)
+            {
+                Assert.That(report.ProcessedItems, Is.GreaterThanOrEqualTo(previous));
+                previous = report.ProcessedItems;
+            }
+        }
+
+        [Test]
+        public void BulkIo_FailureOrCancellation_DoesNotReportCompletion()
+        {
+            var progress = new ProgressRecorder();
+            using var input = new AsyncOnlyStream(new byte[] { 1, 2, 3 });
+            Assert.ThrowsAsync<NotEnoughBytesException>(async () => await MidiFile.ReadAsync(input, progress: progress));
+            using var cancellation = new CancellationTokenSource();
+            cancellation.Cancel();
+            using var output = new AsyncOnlyStream();
+            Assert.CatchAsync<OperationCanceledException>(async () =>
+                await CreateFile().WriteAsync(output, progress: progress, cancellationToken: cancellation.Token));
+            Assert.That(progress.Reports.TrueForAll(report => !report.IsCompleted), Is.True);
+        }
+
+        private sealed class ProgressRecorder : IProgress<AsyncOperationProgress>
+        {
+            internal readonly List<AsyncOperationProgress> Reports = new List<AsyncOperationProgress>();
+            public void Report(AsyncOperationProgress value) => Reports.Add(value);
+        }
+
+        [Test]
         public async Task LazyWriter_RejectsOverlappingOperations()
         {
             using var output = new AsyncOnlyStream();
@@ -258,6 +461,21 @@ namespace Melanchall.DryWetMidi.Tests.Core
             protected override void WriteContent(MidiWriter writer, WritingSettings settings) => writer.WriteByte(Value);
         }
 
+        private sealed class CustomChunk : MidiChunk
+        {
+            public CustomChunk() : base("Cstm") { }
+            public byte Value { get; set; }
+            public long ContentPosition { get; private set; }
+            public override MidiChunk Clone() => new CustomChunk { Value = Value };
+            protected override uint GetContentSize(WritingSettings settings) => 1;
+            protected override void ReadContent(MidiReader reader, ReadingSettings settings, uint size)
+            {
+                ContentPosition = reader.Position;
+                Value = reader.ReadByte();
+            }
+            protected override void WriteContent(MidiWriter writer, WritingSettings settings) => writer.WriteByte(Value);
+        }
+
         private sealed class AsyncOnlyStream : Stream
         {
             private readonly MemoryStream _inner;
@@ -275,6 +493,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
             internal int AsyncWrites { get; private set; }
             internal int BytesRead { get; private set; }
             internal int MaxWrite { get; private set; }
+            internal int ReadDelayMilliseconds { get; set; }
             internal bool IsDisposed { get; private set; }
             internal TaskCompletionSource<bool> ReadGate { get; set; }
             internal TaskCompletionSource<bool> WriteGate { get; set; }
@@ -304,6 +523,8 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 ReadStarted.TrySetResult(true);
                 if (ReadGate != null)
                     await ReadGate.Task.WaitAsync(cancellationToken);
+                if (ReadDelayMilliseconds > 0)
+                    await Task.Delay(ReadDelayMilliseconds, cancellationToken);
                 await Task.Yield();
                 var read = _inner.Read(buffer, offset, Math.Min(count, _maxRead));
                 BytesRead += read;

@@ -41,6 +41,10 @@ namespace Melanchall.DryWetMidi.Interaction
         public static Task<ICollection<ITimedObject>> GetObjectsAsync(this IAsyncEnumerable<ITimedObject?> timedObjects, ObjectType objectType, ObjectDetectionSettings? settings = null, IProgress<AsyncOperationProgress>? progress = null, CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(async () => (await InteractionAsyncUtilities.CollectAsync(timedObjects, cancellationToken).ConfigureAwait(false)).GetObjects(objectType, settings), cancellationToken, progress);
 
+        /// <summary>Asynchronously detects objects from an asynchronous track source.</summary>
+        public static Task<ICollection<ITimedObject>> GetObjectsAsync(this IAsyncEnumerable<TrackChunk?> trackChunks, ObjectType objectType, ObjectDetectionSettings? settings = null, IProgress<AsyncOperationProgress>? progress = null, CancellationToken cancellationToken = default) =>
+            AsyncOperation.Run(async () => (await InteractionAsyncUtilities.CollectAsync(trackChunks, cancellationToken).ConfigureAwait(false)).GetObjects(objectType, settings), cancellationToken, progress);
+
         /// <summary>
         /// Lazily detects objects on a worker and yields them asynchronously, without materializing
         /// the result. Disposing the enumerator cancels detection and disposes the source enumerator.

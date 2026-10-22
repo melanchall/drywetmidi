@@ -116,8 +116,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
             return trackChunks
                 .OfType<TrackChunk>()
-                .Select((trackChunk, trackChunkIndex) => trackChunk
-                    .Events
+                .Select((trackChunk, trackChunkIndex) => InteractionAsyncUtilities.GetEvents(trackChunk)
                     .GetTimedEventsLazy(settings?.TimedEventDetectionSettings, trackChunkIndex)
                     .GetObjectsFromTimedEvents(objectType, settings))
                 .MergeSortedObjectsCollections()

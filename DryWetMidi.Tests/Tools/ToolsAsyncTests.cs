@@ -401,6 +401,38 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             Assert.That(progress.Reports.Select(report => report.ProcessedItems), Is.Ordered);
         }
 
+        [TestCase(1)]
+        [TestCase(63)]
+        [TestCase(64)]
+        [TestCase(65)]
+        public async Task Splitter_BatchedEnumeration_PreservesValidPrefixBeforeFault(int validItems)
+        {
+            bool disposed = false;
+            var failure = new InvalidOperationException("Deferred source failure.");
+            IEnumerable<ITimedObject> Source()
+            {
+                try
+                {
+                    for (int i = 0; i < validItems; i++)
+                        yield return new TimedEvent(new TextEvent(i.ToString()), i);
+                    throw failure;
+                }
+                finally { disposed = true; }
+            }
+            var progress = new InlineProgress();
+            var result = Source().SplitObjectsByStepAsync((MidiTimeSpan)10, TempoMap.Default, progress: progress);
+            await using var enumerator = result.GetAsyncEnumerator();
+            for (int i = 0; i < validItems; i++)
+            {
+                Assert.That(await enumerator.MoveNextAsync(), Is.True);
+                Assert.That(((TextEvent)((TimedEvent)enumerator.Current).Event).Text, Is.EqualTo(i.ToString()));
+            }
+            var exception = Assert.ThrowsAsync<InvalidOperationException>(async () => await enumerator.MoveNextAsync());
+            Assert.That(exception, Is.SameAs(failure));
+            Assert.That(disposed, Is.True);
+            Assert.That(progress.Reports.Any(report => report.IsCompleted), Is.False);
+        }
+
         [Test]
         public async Task Splitter_AllLazyFamilies_MatchSync()
         {

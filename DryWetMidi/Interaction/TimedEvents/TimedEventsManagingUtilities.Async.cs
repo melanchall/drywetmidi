@@ -30,6 +30,10 @@ namespace Melanchall.DryWetMidi.Interaction
         public static Task<ICollection<TimedEvent>> GetTimedEventsAsync(this IAsyncEnumerable<MidiEvent> midiEvents, TimedEventDetectionSettings? settings = null, IProgress<AsyncOperationProgress>? progress = null, CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(async () => (ICollection<TimedEvent>)(await InteractionAsyncUtilities.CollectAsync(midiEvents, cancellationToken).ConfigureAwait(false)).GetTimedEventsLazy(settings, 0).ToArray(), cancellationToken, progress);
 
+        /// <summary>Asynchronously detects timed events from an asynchronous track source.</summary>
+        public static Task<ICollection<TimedEvent>> GetTimedEventsAsync(this IAsyncEnumerable<TrackChunk> trackChunks, TimedEventDetectionSettings? settings = null, IProgress<AsyncOperationProgress>? progress = null, CancellationToken cancellationToken = default) =>
+            AsyncOperation.Run(async () => (await InteractionAsyncUtilities.CollectAsync(trackChunks, cancellationToken).ConfigureAwait(false)).GetTimedEvents(settings), cancellationToken, progress);
+
         /// <summary>Asynchronously creates a timed events manager.</summary>
         public static Task<TimedObjectsManager<TimedEvent>> ManageTimedEventsAsync(this EventsCollection eventsCollection, TimedEventDetectionSettings? settings = null, TimedObjectsComparer? comparer = null, IProgress<AsyncOperationProgress>? progress = null, CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(() => eventsCollection.ManageTimedEvents(settings, comparer), cancellationToken, progress);

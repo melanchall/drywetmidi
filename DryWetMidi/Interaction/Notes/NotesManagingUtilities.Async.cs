@@ -30,6 +30,10 @@ namespace Melanchall.DryWetMidi.Interaction
         public static Task<ICollection<Note>> GetNotesAsync(this IAsyncEnumerable<MidiEvent> midiEvents, NoteDetectionSettings? settings = null, TimedEventDetectionSettings? timedEventDetectionSettings = null, IProgress<AsyncOperationProgress>? progress = null, CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(async () => (await InteractionAsyncUtilities.CollectAsync(midiEvents, cancellationToken).ConfigureAwait(false)).GetNotes(settings, timedEventDetectionSettings), cancellationToken, progress);
 
+        /// <summary>Asynchronously detects notes from an asynchronous track source.</summary>
+        public static Task<ICollection<Note>> GetNotesAsync(this IAsyncEnumerable<TrackChunk> trackChunks, NoteDetectionSettings? settings = null, TimedEventDetectionSettings? timedEventDetectionSettings = null, IProgress<AsyncOperationProgress>? progress = null, CancellationToken cancellationToken = default) =>
+            AsyncOperation.Run(async () => (await InteractionAsyncUtilities.CollectAsync(trackChunks, cancellationToken).ConfigureAwait(false)).GetNotes(settings, timedEventDetectionSettings), cancellationToken, progress);
+
         /// <summary>Asynchronously creates a notes manager.</summary>
         public static Task<TimedObjectsManager<Note>> ManageNotesAsync(this EventsCollection eventsCollection, NoteDetectionSettings? settings = null, TimedEventDetectionSettings? timedEventDetectionSettings = null, TimedObjectsComparer? comparer = null, IProgress<AsyncOperationProgress>? progress = null, CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(() => eventsCollection.ManageNotes(settings, timedEventDetectionSettings, comparer), cancellationToken, progress);

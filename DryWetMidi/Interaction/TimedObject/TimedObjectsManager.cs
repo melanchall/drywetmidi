@@ -1,6 +1,7 @@
 ﻿using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
@@ -154,11 +155,25 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </remarks>
         public void SaveChanges()
         {
-            _eventsCollection.Clear();
-            _eventsCollection.AddObjects(
+            var replacement = PrepareChanges();
+            AsyncOperation.Checkpoint();
+            CommitChanges(replacement);
+        }
+
+        internal List<(MidiEvent Event, long DeltaTime)> PrepareChanges()
+        {
+            return InteractionAsyncUtilities.PrepareReplacement(
                 _backgroundObjects
                     .Concat(Objects.OfType<ITimedObject>())
-                    .OrderBy(obj => obj, _comparer));
+                    .OrderBy(obj => obj, _comparer)
+                    .GetObjects(ObjectType.TimedEvent)
+                    .Cast<TimedEvent>(),
+                smfOnly: true);
+        }
+
+        internal void CommitChanges(IEnumerable<(MidiEvent Event, long DeltaTime)> replacement)
+        {
+            InteractionAsyncUtilities.CommitReplacement(_eventsCollection, replacement);
         }
 
         private ObjectType GetObjectType()
@@ -194,6 +209,7 @@ namespace Melanchall.DryWetMidi.Interaction
             ObjectDetectionSettings? objectDetectionSettings,
             TimedObjectsComparer? comparer)
         {
+            AsyncOperation.Checkpoint();
             _eventsCollection = eventsCollection;
             _comparer = comparer ?? new TimedObjectsComparer();
             _backgroundObjects = new TimedObjectsCollection<ITimedObject>(Enumerable.Empty<ITimedObject>(), _comparer);

@@ -60,7 +60,7 @@ namespace Melanchall.DryWetMidi.Interaction
         {
             return timedObjects is ISortedCollection
                 ? timedObjects
-                : timedObjects.OrderBy(o => o.Time);
+                : InteractionAsyncUtilities.CheckpointItems(timedObjects).OrderBy(o => o.Time);
         }
 
         private static IEnumerable<ITimedObject> EnumerateObjectsAndRests(
