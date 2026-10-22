@@ -606,12 +606,14 @@ struct SessionHandle
     Configuration* configuration;
     MIDIClientRef clientRef;
     CFRunLoopRef runLoopRef;
+    CFRunLoopSourceRef runLoopSource = nullptr;
     pthread_t thread;
     std::atomic<bool> workerThreadRunning{false};
     std::atomic<bool> workerThreadStarted{false};
     std::atomic<bool> workerThreadExited{false};
     std::atomic<bool> runLoopStarted{false};
     std::atomic<bool> runLoopReturned{false};
+    std::atomic<bool> runLoopSourceCreated{false};
     std::atomic<bool> clientCreated;
     std::atomic<bool> sessionClosed;
     OSStatus clientCreationStatus;
@@ -626,6 +628,28 @@ struct SessionHandle
 
 SessionHandle* retainedSessionHandles = nullptr;
 std::mutex retainedSessionHandlesLock;
+
+void KeepRunLoopAlive(void*)
+{
+}
+
+void ReleaseSessionRunLoop(SessionHandle* sessionHandle)
+{
+    std::lock_guard<std::mutex> lock(sessionHandle->runLoopLock);
+    if (sessionHandle->runLoopRef != nullptr && sessionHandle->runLoopSource != nullptr)
+    {
+        CFRunLoopRemoveSource(sessionHandle->runLoopRef, sessionHandle->runLoopSource, kCFRunLoopDefaultMode);
+        CFRunLoopSourceInvalidate(sessionHandle->runLoopSource);
+        CFRelease(sessionHandle->runLoopSource);
+        sessionHandle->runLoopSource = nullptr;
+    }
+
+    if (sessionHandle->runLoopRef != nullptr)
+    {
+        CFRelease(sessionHandle->runLoopRef);
+        sessionHandle->runLoopRef = nullptr;
+    }
+}
 
 void RetainSessionHandle(SessionHandle* sessionHandle)
 {
@@ -853,14 +877,30 @@ void* ThreadProc(void* data)
     CFStringRef nameRef = CFStringCreateWithCString(kCFAllocatorDefault, sessionHandle->name, kCFStringEncodingUTF8);
     if (!nameRef)
     {
-        CFRelease(sessionHandle->runLoopRef);
-        sessionHandle->runLoopRef = nullptr;
         sessionHandle->clientCreationStatus = kMIDIUnknownError;
         sessionHandle->clientCreated.store(true);
+        ReleaseSessionRunLoop(sessionHandle);
         sessionHandle->workerThreadExited.store(true);
         sessionHandle->workerThreadRunning.store(false);
         return nullptr;
     }
+
+    CFRunLoopSourceContext runLoopSourceContext{};
+    runLoopSourceContext.perform = KeepRunLoopAlive;
+    sessionHandle->runLoopSource = CFRunLoopSourceCreate(kCFAllocatorDefault, 0, &runLoopSourceContext);
+    if (sessionHandle->runLoopSource == nullptr)
+    {
+        CFRelease(nameRef);
+        sessionHandle->clientCreationStatus = kMIDIUnknownError;
+        sessionHandle->clientCreated.store(true);
+        ReleaseSessionRunLoop(sessionHandle);
+        sessionHandle->workerThreadExited.store(true);
+        sessionHandle->workerThreadRunning.store(false);
+        return nullptr;
+    }
+
+    sessionHandle->runLoopSourceCreated.store(true);
+    CFRunLoopAddSource(sessionHandle->runLoopRef, sessionHandle->runLoopSource, kCFRunLoopDefaultMode);
 
     sessionHandle->clientCreationStatus = MIDIClientCreate(nameRef, NotifyProc, data, &sessionHandle->clientRef);
     CFRelease(nameRef);
@@ -874,14 +914,7 @@ void* ThreadProc(void* data)
         sessionHandle->runLoopReturned.store(true);
     }
 
-    {
-        std::lock_guard<std::mutex> lock(sessionHandle->runLoopLock);
-        if (sessionHandle->runLoopRef != nullptr)
-        {
-            CFRelease(sessionHandle->runLoopRef);
-            sessionHandle->runLoopRef = nullptr;
-        }
-    }
+    ReleaseSessionRunLoop(sessionHandle);
 
     sessionHandle->workerThreadExited.store(true);
     sessionHandle->workerThreadRunning.store(false);
@@ -968,7 +1001,10 @@ API_EXPORT SESSION_CLOSERESULT CloseSession(SessionHandle* sessionHandle)
     {
         std::lock_guard<std::mutex> lock(sessionHandle->runLoopLock);
         if (sessionHandle->runLoopRef != nullptr)
+        {
             CFRunLoopStop(sessionHandle->runLoopRef);
+            CFRunLoopWakeUp(sessionHandle->runLoopRef);
+        }
     }
 
     if (pthread_equal(pthread_self(), sessionHandle->thread) != 0)
@@ -1009,6 +1045,8 @@ API_EXPORT uint32_t GetSessionWorkerDiagnostics_Mac(
         state |= 32;
     if (sessionHandle->runLoopReturned.load())
         state |= 64;
+    if (sessionHandle->runLoopSourceCreated.load())
+        state |= 128;
 
     return state;
 }

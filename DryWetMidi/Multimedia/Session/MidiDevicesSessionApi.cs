@@ -59,6 +59,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             SESSION_WORKERSTATE_MAC_EXITED = 16,
             SESSION_WORKERSTATE_MAC_SESSIONCLOSED = 32,
             SESSION_WORKERSTATE_MAC_RUNLOOPRETURNED = 64,
+            SESSION_WORKERSTATE_MAC_RUNLOOPSOURCECREATED = 128,
         }
 
         #endregion
