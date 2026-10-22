@@ -28,10 +28,10 @@ namespace Melanchall.DryWetMidi.Multimedia
             [NativeApi.NativeErrorType(NativeApi.NativeErrorType.NoMemory)]
             IN_GETALLINFORESULT_NOMEMORY = 4,
             IN_GETALLINFORESULT_UNKNOWNWMSERROR = 5,
+            IN_GETALLINFORESULT_ENDPOINTNOTFOUND = 100,
 
             IN_GETALLINFORESULT_UNKNOWNERROR = 1000,
             IN_GETALLINFORESULT_UNKNOWNERRORONGETINFO = 1001,
-            IN_GETALLINFORESULT_ENDPOINTNOTFOUND = 6,
         }
 
         public enum IN_OPENRESULT

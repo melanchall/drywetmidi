@@ -1,10 +1,12 @@
 ﻿using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Configuration;
 using Melanchall.DryWetMidi.Multimedia;
+using Melanchall.DryWetMidi.Tests.Attributes;
 using Melanchall.DryWetMidi.Tests.Utilities;
 using NUnit.Framework;
 using NUnit.Framework.Legacy;
 using System;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
 namespace Melanchall.DryWetMidi.Tests.Multimedia
@@ -54,6 +56,35 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 MidiDevicesSessionApi.SESSION_CLOSERESULT.SESSION_CLOSERESULT_OK,
                 result,
                 "Session was not closed successfully.");
+        }
+
+        [Test]
+        [MacOnly]
+        public void CheckMidiDevicesSession_RepeatedCloseStopsWorkerThread()
+        {
+            for (var i = 0; i < 5; i++)
+            {
+                var sessionHandle = CreateSessionHandle(InputEndpointCallback, OutputEndpointCallback, 0);
+                var workerThreadId = MidiDevicesSessionApi.Api_GetSessionWorkerThreadId_Mac(sessionHandle);
+
+                ClassicAssert.AreNotEqual(0UL, workerThreadId, "Session worker thread ID was not retrieved.");
+                ClassicAssert.IsTrue(
+                    WaitOperations.Wait(() => IsProcessThreadRunning(workerThreadId), TimeSpan.FromSeconds(5)),
+                    "Session worker thread did not appear after opening the session.");
+
+                ClassicAssert.AreEqual(
+                    MidiDevicesSessionApi.SESSION_CLOSERESULT.SESSION_CLOSERESULT_OK,
+                    MidiDevicesSessionApi.Api_CloseSession(sessionHandle),
+                    "Session was not closed successfully.");
+                ClassicAssert.IsTrue(
+                    WaitOperations.Wait(() => !IsProcessThreadRunning(workerThreadId), TimeSpan.FromSeconds(5)),
+                    "Session worker thread remained after closing the session.");
+
+                ClassicAssert.AreEqual(
+                    MidiDevicesSessionApi.SESSION_CLOSERESULT.SESSION_CLOSERESULT_OK,
+                    MidiDevicesSessionApi.Api_CloseSession(sessionHandle),
+                    "Closing the session a second time did not succeed.");
+            }
         }
 
         [Test]
@@ -260,6 +291,20 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
         private static void NativeApiActivityCallback(IntPtr record)
         {
+        }
+
+        private static bool IsProcessThreadRunning(ulong threadId)
+        {
+            using (var process = Process.GetCurrentProcess())
+            {
+                foreach (ProcessThread processThread in process.Threads)
+                {
+                    if (unchecked((uint)processThread.Id) == unchecked((uint)threadId))
+                        return true;
+                }
+            }
+
+            return false;
         }
 
         #endregion

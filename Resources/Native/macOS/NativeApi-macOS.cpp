@@ -967,6 +967,13 @@ API_EXPORT SESSION_CLOSERESULT CloseSession(SessionHandle* sessionHandle)
     return SESSION_CLOSERESULT_OK;
 }
 
+API_EXPORT uint64_t GetSessionWorkerThreadId_Mac(SessionHandle* sessionHandle)
+{
+    uint64_t threadId = 0;
+    pthread_threadid_np(sessionHandle->thread, &threadId);
+    return threadId;
+}
+
 uint64_t ConvertMachTimeToNanoseconds(uint64_t machTime)
 {
     static const mach_timebase_info_data_t timebase = []()
