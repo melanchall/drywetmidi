@@ -6,7 +6,6 @@ using Melanchall.DryWetMidi.Tests.Utilities;
 using NUnit.Framework;
 using NUnit.Framework.Legacy;
 using System;
-using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
 namespace Melanchall.DryWetMidi.Tests.Multimedia
@@ -65,11 +64,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             for (var i = 0; i < 5; i++)
             {
                 var sessionHandle = CreateSessionHandle(InputEndpointCallback, OutputEndpointCallback, 0);
-                var workerThreadId = MidiDevicesSessionApi.Api_GetSessionWorkerThreadId_Mac(sessionHandle);
 
-                ClassicAssert.AreNotEqual(0UL, workerThreadId, "Session worker thread ID was not retrieved.");
                 ClassicAssert.IsTrue(
-                    WaitOperations.Wait(() => IsProcessThreadRunning(workerThreadId), TimeSpan.FromSeconds(5)),
+                    WaitOperations.Wait(() => MidiDevicesSessionApi.Api_IsSessionWorkerThreadRunning_Mac(sessionHandle), TimeSpan.FromSeconds(5)),
                     "Session worker thread did not appear after opening the session.");
 
                 ClassicAssert.AreEqual(
@@ -77,7 +74,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     MidiDevicesSessionApi.Api_CloseSession(sessionHandle),
                     "Session was not closed successfully.");
                 ClassicAssert.IsTrue(
-                    WaitOperations.Wait(() => !IsProcessThreadRunning(workerThreadId), TimeSpan.FromSeconds(5)),
+                    WaitOperations.Wait(() => !MidiDevicesSessionApi.Api_IsSessionWorkerThreadRunning_Mac(sessionHandle), TimeSpan.FromSeconds(5)),
                     "Session worker thread remained after closing the session.");
 
                 ClassicAssert.AreEqual(
@@ -291,20 +288,6 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
         private static void NativeApiActivityCallback(IntPtr record)
         {
-        }
-
-        private static bool IsProcessThreadRunning(ulong threadId)
-        {
-            using (var process = Process.GetCurrentProcess())
-            {
-                foreach (ProcessThread processThread in process.Threads)
-                {
-                    if (unchecked((uint)processThread.Id) == unchecked((uint)threadId))
-                        return true;
-                }
-            }
-
-            return false;
         }
 
         #endregion

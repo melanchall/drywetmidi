@@ -84,7 +84,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         [LibraryImport(NativeApi.LibraryName)]
         [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-        private static partial ulong GetSessionWorkerThreadId_Mac(IntPtr handle);
+        private static partial uint IsSessionWorkerThreadRunning_Mac(IntPtr handle);
 #else
         [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Unicode)]
         private static extern SESSION_OPENRESULT OpenSession_Win(
@@ -102,7 +102,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         private static extern SESSION_CLOSERESULT CloseSession(IntPtr handle);
 
         [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
-        private static extern ulong GetSessionWorkerThreadId_Mac(IntPtr handle);
+        private static extern uint IsSessionWorkerThreadRunning_Mac(IntPtr handle);
 #endif
 
         #endregion
@@ -157,10 +157,10 @@ namespace Melanchall.DryWetMidi.Multimedia
                 CloseSession(handle));
         }
 
-        public static ulong Api_GetSessionWorkerThreadId_Mac(IntPtr handle)
+        public static bool Api_IsSessionWorkerThreadRunning_Mac(IntPtr handle)
         {
             return MidiOperationsExecutor.Instance.ExecuteOperation(() =>
-                GetSessionWorkerThreadId_Mac(handle));
+                IsSessionWorkerThreadRunning_Mac(handle) != 0);
         }
 
         #endregion
