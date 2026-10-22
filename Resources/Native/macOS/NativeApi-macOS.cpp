@@ -607,7 +607,7 @@ struct SessionHandle
     MIDIClientRef clientRef;
     CFRunLoopRef runLoopRef;
     pthread_t thread;
-    std::atomic<uint64_t> workerThreadId{0};
+    std::atomic<bool> workerThreadRunning{false};
     std::atomic<bool> clientCreated;
     std::atomic<bool> sessionClosed;
     OSStatus clientCreationStatus;
@@ -841,9 +841,7 @@ void NotifyProc(const MIDINotification* message, void* refCon)
 void* ThreadProc(void* data)
 {
     SessionHandle* sessionHandle = static_cast<SessionHandle*>(data);
-    uint64_t workerThreadId = 0;
-    if (pthread_threadid_np(pthread_self(), &workerThreadId) == 0)
-        sessionHandle->workerThreadId.store(workerThreadId);
+    sessionHandle->workerThreadRunning.store(true);
 
     sessionHandle->runLoopRef = (CFRunLoopRef)CFRetain(CFRunLoopGetCurrent());
 
@@ -854,6 +852,7 @@ void* ThreadProc(void* data)
         sessionHandle->runLoopRef = nullptr;
         sessionHandle->clientCreationStatus = kMIDIUnknownError;
         sessionHandle->clientCreated.store(true);
+        sessionHandle->workerThreadRunning.store(false);
         return nullptr;
     }
 
@@ -874,6 +873,7 @@ void* ThreadProc(void* data)
         }
     }
 
+    sessionHandle->workerThreadRunning.store(false);
     return nullptr;
 }
 
@@ -974,31 +974,7 @@ API_EXPORT SESSION_CLOSERESULT CloseSession(SessionHandle* sessionHandle)
 
 API_EXPORT uint32_t IsSessionWorkerThreadRunning_Mac(SessionHandle* sessionHandle)
 {
-    const uint64_t workerThreadId = sessionHandle->workerThreadId.load();
-    if (workerThreadId == 0)
-        return 0;
-
-    thread_act_array_t threads = nullptr;
-    mach_msg_type_number_t threadCount = 0;
-    if (task_threads(mach_task_self(), &threads, &threadCount) != KERN_SUCCESS)
-        return 0;
-
-    bool workerThreadRunning = false;
-    for (mach_msg_type_number_t i = 0; i < threadCount; ++i)
-    {
-        thread_identifier_info_data_t threadInfo{};
-        mach_msg_type_number_t threadInfoCount = THREAD_IDENTIFIER_INFO_COUNT;
-        if (thread_info(threads[i], THREAD_IDENTIFIER_INFO, reinterpret_cast<thread_info_t>(&threadInfo), &threadInfoCount) == KERN_SUCCESS &&
-            threadInfo.thread_id == workerThreadId)
-        {
-            workerThreadRunning = true;
-        }
-
-        mach_port_deallocate(mach_task_self(), threads[i]);
-    }
-
-    vm_deallocate(mach_task_self(), reinterpret_cast<vm_address_t>(threads), threadCount * sizeof(thread_t));
-    return workerThreadRunning ? 1 : 0;
+    return sessionHandle->workerThreadRunning.load() ? 1 : 0;
 }
 
 uint64_t ConvertMachTimeToNanoseconds(uint64_t machTime)
