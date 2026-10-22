@@ -60,6 +60,7 @@ namespace Melanchall.DryWetMidi.Core
                     0x20 => 1,
                     0x51 => 3,
                     0x54 => 5,
+                    0x58 => 2,
                     0x59 => 2,
                     _ => 0
                 };

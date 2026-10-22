@@ -323,6 +323,32 @@ namespace Melanchall.DryWetMidi.Tests.Core
         }
 
         [Test]
+        public async Task UndersizedTimeSignature_PreservesSynchronousFraming()
+        {
+            var data = new byte[]
+            {
+                0x4D, 0x54, 0x68, 0x64, 0, 0, 0, 6, 0, 1, 0, 1, 0, 96,
+                0x4D, 0x54, 0x72, 0x6B, 0, 0, 0, 10,
+                0, 0xFF, 0x58, 1, 4, 2, 0, 0xFF, 0x2F, 0
+            };
+            using var synchronousInput = new MemoryStream(data);
+            var expected = MidiFile.Read(synchronousInput);
+            using var asynchronousInput = new AsyncOnlyStream(data, false, 2);
+            var actual = await MidiFile.ReadAsync(asynchronousInput);
+            Assert.That(actual.GetTrackChunks().Single().Events.OfType<TimeSignatureEvent>().Single().Denominator,
+                Is.EqualTo(expected.GetTrackChunks().Single().Events.OfType<TimeSignatureEvent>().Single().Denominator));
+            using var lazyInput = new AsyncOnlyStream(data, false, 2);
+            await using var reader = await MidiFile.ReadLazyAsync(lazyInput);
+            var timeSignatures = 0;
+            while (await reader.ReadTokenAsync() is MidiToken token)
+            {
+                if (token is MidiEventToken eventToken && eventToken.Event is TimeSignatureEvent)
+                    timeSignatures++;
+            }
+            Assert.That(timeSignatures, Is.EqualTo(1));
+        }
+
+        [Test]
         public async Task BulkIo_ReportsActualBytes_AndSuccessfulCompletion()
         {
             var writing = new ProgressRecorder();
