@@ -204,6 +204,7 @@ namespace Melanchall.DryWetMidi.Tools
 
             for (int i = 0; i < _timedEventsHolders.Length; i++)
             {
+                AsyncOperation.Checkpoint();
                 var timedEventsHolder = _timedEventsHolders[i];
 
                 var eventsToCopyToNextPart = timedEventsHolder.EventsToCopyToNextPart;
@@ -219,6 +220,7 @@ namespace Melanchall.DryWetMidi.Tools
                 {
                     do
                     {
+                        AsyncOperation.Checkpoint();
                         var timedEvent = timedEventsHolder.GetCurrentEvent();
                         if (timedEvent == null)
                             break;
@@ -306,6 +308,7 @@ namespace Melanchall.DryWetMidi.Tools
 
             foreach (var timedEvent in takenTimedEvents)
             {
+                AsyncOperation.Checkpoint();
                 UpdateEventsToCopyToNextPart(eventsToCopyToNextPart, timedEvent);
             }
 

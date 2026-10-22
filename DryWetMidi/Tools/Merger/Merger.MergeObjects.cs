@@ -129,6 +129,7 @@ namespace Melanchall.DryWetMidi.Tools
 
             foreach (var trackChunk in trackChunks.OfType<TrackChunk>())
             {
+                AsyncOperation.Checkpoint();
                 trackChunk.MergeObjects(objectType, tempoMap, settings, objectDetectionSettings);
             }
         }
@@ -202,6 +203,7 @@ namespace Melanchall.DryWetMidi.Tools
 
             foreach (var obj in preparedObjects)
             {
+                AsyncOperation.Checkpoint();
                 var lengthedObject = obj as ILengthedObject;
                 if (lengthedObject == null || settings.Filter?.Invoke(obj) == false)
                 {
@@ -252,6 +254,7 @@ namespace Melanchall.DryWetMidi.Tools
 
             foreach (var objectDescriptor in objectsDescriptors)
             {
+                AsyncOperation.Checkpoint();
                 yield return objectDescriptor.GetObject(settings);
             }
         }

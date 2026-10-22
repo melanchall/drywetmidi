@@ -24,7 +24,7 @@ namespace Melanchall.DryWetMidi.Interaction
     /// the <c>using</c> block.
     /// </para>
     /// </remarks>
-    public sealed class TimedObjectsManager : TimedObjectsManager<ITimedObject>
+    public sealed partial class TimedObjectsManager : TimedObjectsManager<ITimedObject>
     {
         #region Constructor
 
@@ -76,7 +76,7 @@ namespace Melanchall.DryWetMidi.Interaction
     /// <seealso cref="TimedEventsManagingUtilities"/>
     /// <seealso cref="NotesManagingUtilities"/>
     /// <seealso cref="ChordsManagingUtilities"/>
-    public class TimedObjectsManager<TObject> : IDisposable
+    public partial class TimedObjectsManager<TObject> : IDisposable
         where TObject : ITimedObject
     {
         #region Fields
@@ -203,6 +203,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
             foreach (var obj in allObjects)
             {
+                AsyncOperation.Checkpoint();
                 if (objectType.HasFlag(GetObjectType(obj)))
                     objects.Add((TObject)obj);
                 else

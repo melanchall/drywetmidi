@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Melanchall.DryWetMidi.Core
 {
@@ -11,7 +13,7 @@ namespace Melanchall.DryWetMidi.Core
     /// <see href="xref:a_file_lazy_reading_writing">Lazy reading/writing</see> article to learn more.
     /// </summary>
     /// <seealso cref="MidiTokensReader"/>
-    public sealed class MidiTokensWriter : IDisposable
+    public sealed class MidiTokensWriter : IDisposable, IAsyncDisposable
     {
         #region Enums
 
@@ -47,6 +49,16 @@ namespace Melanchall.DryWetMidi.Core
         private ushort _tracksNumber;
 
         private bool _disposed;
+        private int _operation;
+        private readonly AsyncIoStream _transport;
+        private int _callbackThread;
+        private readonly AsyncLocal<CallbackScope?> _callbackScope = new AsyncLocal<CallbackScope?>();
+        private int _callbackWrite;
+
+        private sealed class CallbackScope
+        {
+            internal bool Active = true;
+        }
 
         #endregion
 
@@ -59,7 +71,7 @@ namespace Melanchall.DryWetMidi.Core
             MidiFileFormat format,
             TimeDivision timeDivision)
         {
-            _stream = stream;
+            _stream = _transport = stream as AsyncIoStream ?? new AsyncIoStream(stream);
             if (!_stream.CanWrite)
                 throw new ArgumentException("Stream doesn't support writing.", nameof(stream));
             if (!_stream.CanSeek)
@@ -70,7 +82,7 @@ namespace Melanchall.DryWetMidi.Core
             if (_settings.WriterSettings == null)
                 _settings.WriterSettings = new WriterSettings();
 
-            _writer = new MidiWriter(stream, _settings.WriterSettings);
+            _writer = new MidiWriter(_stream, _settings.WriterSettings);
             _disposeStream = disposeStream;
 
             WriteFileHeader(format, timeDivision);
@@ -83,6 +95,8 @@ namespace Melanchall.DryWetMidi.Core
         internal long CurrentTime { get; private set; }
 
         internal Action? BeforeEndTrackChunk { get; set; }
+
+        internal Func<CancellationToken, ValueTask>? BeforeEndTrackChunkAsync { get; set; }
 
         #endregion
 
@@ -99,8 +113,13 @@ namespace Melanchall.DryWetMidi.Core
         /// <exception cref="IOException">An I/O error occurred while writing the file.</exception>
         public void StartTrackChunk()
         {
+            Execute(StartTrackChunkCore);
+        }
+
+        private void StartTrackChunkCore()
+        {
             if (_state == State.Event)
-                EndTrackChunk();
+                EndTrackChunkCore();
 
             _trackChunkPosition = _writer.Length;
             MidiChunk.WriteHeader(TrackChunk.Id, 0, _writer, _settings);
@@ -123,7 +142,33 @@ namespace Melanchall.DryWetMidi.Core
         /// <exception cref="IOException">An I/O error occurred while writing the file.</exception>
         public void EndTrackChunk()
         {
-            BeforeEndTrackChunk?.Invoke();
+            Execute(EndTrackChunkCore);
+        }
+
+        private void EndTrackChunkCore()
+        {
+            _callbackThread = Environment.CurrentManagedThreadId;
+            try
+            {
+                if (_transport.IsAsync && BeforeEndTrackChunkAsync != null)
+                {
+                    var scope = new CallbackScope();
+                    _callbackScope.Value = scope;
+                    try
+                    {
+                        BeforeEndTrackChunkAsync(_transport.CancellationToken).AsTask()
+                            .ConfigureAwait(false).GetAwaiter().GetResult();
+                    }
+                    finally
+                    {
+                        scope.Active = false;
+                        _callbackScope.Value = null;
+                    }
+                }
+                else
+                    BeforeEndTrackChunk?.Invoke();
+            }
+            finally { _callbackThread = 0; }
 
             var endOfTrackEvent = new EndOfTrackEvent
             {
@@ -164,6 +209,16 @@ namespace Melanchall.DryWetMidi.Core
         /// </exception>
         public void WriteEvent(MidiEvent midiEvent)
         {
+            if (_callbackThread == Environment.CurrentManagedThreadId || _callbackScope.Value?.Active == true)
+            {
+                WriteCallbackEvent(midiEvent);
+                return;
+            }
+            Execute(() => WriteEventCore(midiEvent));
+        }
+
+        private void WriteEventCore(MidiEvent midiEvent)
+        {
             ThrowIfArgument.IsNull(nameof(midiEvent), midiEvent);
 
             if (_state != State.Event)
@@ -199,12 +254,82 @@ namespace Melanchall.DryWetMidi.Core
         /// <exception cref="InvalidOperationException">Another chunk is being written, end it first.</exception>
         public void WriteChunk(MidiChunk chunk)
         {
+            Execute(() => WriteChunkCore(chunk));
+        }
+
+        private void WriteChunkCore(MidiChunk chunk)
+        {
             ThrowIfArgument.IsNull(nameof(chunk), chunk);
 
             if (_state != State.Chunk)
                 throw new InvalidOperationException("Another chunk is being written, end it first.");
 
             chunk.Write(_writer, _settings);
+        }
+
+        /// <summary>Starts a track chunk using asynchronous transport writes.</summary>
+        /// <param name="cancellationToken">Token used to cancel writing.</param>
+        /// <returns>A task representing writing.</returns>
+        public Task StartTrackChunkAsync(CancellationToken cancellationToken = default) =>
+            ExecuteAsync(StartTrackChunkCore, cancellationToken);
+
+        /// <summary>Ends a track chunk using asynchronous transport writes.</summary>
+        /// <param name="cancellationToken">Token used to cancel writing.</param>
+        /// <returns>A task representing writing.</returns>
+        public Task EndTrackChunkAsync(CancellationToken cancellationToken = default) =>
+            ExecuteAsync(EndTrackChunkCore, cancellationToken);
+
+        /// <summary>Writes an event using asynchronous transport writes.</summary>
+        /// <param name="midiEvent">The event to write.</param>
+        /// <param name="cancellationToken">Token used to cancel writing.</param>
+        /// <returns>A task representing writing.</returns>
+        /// <remarks>Operations must not overlap. Dispose the writer after a failed or canceled write.</remarks>
+        public Task WriteEventAsync(MidiEvent midiEvent, CancellationToken cancellationToken = default)
+        {
+            if (_callbackScope.Value?.Active == true)
+                return Task.Run(() =>
+                {
+                    cancellationToken.ThrowIfCancellationRequested();
+                    WriteCallbackEvent(midiEvent);
+                }, cancellationToken);
+            return ExecuteAsync(() => WriteEventCore(midiEvent), cancellationToken);
+        }
+
+        private void WriteCallbackEvent(MidiEvent midiEvent)
+        {
+            if (Interlocked.CompareExchange(ref _callbackWrite, 1, 0) != 0)
+                throw new InvalidOperationException("Another callback write is already in progress.");
+            try { WriteEventCore(midiEvent); }
+            finally { Volatile.Write(ref _callbackWrite, 0); }
+        }
+
+        /// <summary>Writes a chunk using asynchronous transport writes.</summary>
+        /// <param name="chunk">The chunk to write.</param>
+        /// <param name="cancellationToken">Token used to cancel writing.</param>
+        /// <returns>A task representing writing.</returns>
+        public Task WriteChunkAsync(MidiChunk chunk, CancellationToken cancellationToken = default) =>
+            ExecuteAsync(() => WriteChunkCore(chunk), cancellationToken);
+
+        private void EnterOperation()
+        {
+            if (_disposed)
+                throw new ObjectDisposedException(nameof(MidiTokensWriter));
+            if (Interlocked.CompareExchange(ref _operation, 1, 0) != 0)
+                throw new InvalidOperationException("Another writer operation is already in progress.");
+        }
+
+        private void Execute(Action action)
+        {
+            EnterOperation();
+            try { action(); }
+            finally { Volatile.Write(ref _operation, 0); }
+        }
+
+        private async Task ExecuteAsync(Action action, CancellationToken cancellationToken)
+        {
+            EnterOperation();
+            try { await _transport.RunAsync(action, cancellationToken).ConfigureAwait(false); }
+            finally { Volatile.Write(ref _operation, 0); }
         }
 
         private void WriteFileHeader(MidiFileFormat format, TimeDivision timeDivision)
@@ -228,6 +353,8 @@ namespace Melanchall.DryWetMidi.Core
 
             foreach (var positionToChunkSize in _positionsToChunkSizes)
             {
+                if (_transport.IsAsync)
+                    _stream.Flush();
                 _stream.Position = positionToChunkSize.Key;
 
                 buffer[0] = (byte)((positionToChunkSize.Value >> 24) & 0xFF);
@@ -263,7 +390,17 @@ namespace Melanchall.DryWetMidi.Core
         /// </summary>
         public void Dispose()
         {
-            Dispose(true);
+            if (!_disposed)
+                Execute(() => Dispose(true));
+        }
+
+        /// <summary>Finishes an open track, patches chunk sizes and track count, flushes
+        /// asynchronously, and disposes the stream if the writer owns it.</summary>
+        /// <returns>A task representing finalization.</returns>
+        public async ValueTask DisposeAsync()
+        {
+            if (!_disposed)
+                await ExecuteAsync(() => Dispose(true), CancellationToken.None).ConfigureAwait(false);
         }
 
         private void Dispose(bool disposing)
@@ -273,16 +410,22 @@ namespace Melanchall.DryWetMidi.Core
 
             if (disposing)
             {
-                if (_state == State.Event)
-                    EndTrackChunk();
+                try
+                {
+                    if (_state == State.Event)
+                        EndTrackChunkCore();
 
-                _writer.Dispose();
+                    _writer.Dispose();
 
-                UpdateTracksNumber();
-                UpdateChunkSizes();
-
-                if (_disposeStream)
-                    _stream.Dispose();
+                    UpdateTracksNumber();
+                    UpdateChunkSizes();
+                }
+                finally
+                {
+                    _disposed = true;
+                    if (_disposeStream)
+                        _stream.Dispose();
+                }
             }
 
             _disposed = true;

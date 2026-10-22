@@ -9,7 +9,7 @@ namespace Melanchall.DryWetMidi.Interaction
     /// <summary>
     /// Extension methods for chords managing.
     /// </summary>
-    public static class ChordsManagingUtilities
+    public static partial class ChordsManagingUtilities
     {
         #region Nested classes
 
@@ -1043,6 +1043,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
             foreach (var note in notes)
             {
+                AsyncOperation.Checkpoint();
                 var channel = (byte)note.Channel;
                 var chordNotes = notesByChannel[channel];
                 if (chordNotes == null)
@@ -1063,6 +1064,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
             foreach (var chordNotes in notesByChannel)
             {
+                AsyncOperation.Checkpoint();
                 if (chordNotes != null)
                     AddChord(chordNotes);
             }
@@ -1109,6 +1111,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
             foreach (var eventsCollection in eventsCollections)
             {
+                AsyncOperation.Checkpoint();
                 var matchedCount = 0;
 
                 var timeOrLengthChanged = false;
@@ -1121,6 +1124,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
                 foreach (var chord in chords)
                 {
+                    AsyncOperation.Checkpoint();
                     if (!match(chord))
                         continue;
 
@@ -1204,6 +1208,7 @@ namespace Melanchall.DryWetMidi.Interaction
         {
             for (var chordDescriptorNode = startChordDescriptorNode; chordDescriptorNode != null;)
             {
+                AsyncOperation.Checkpoint();
                 var chordDescriptor = chordDescriptorNode.Value;
                 if (getSealedOnly && !chordDescriptor.IsSealed)
                     break;
@@ -1275,6 +1280,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
             foreach (var timedObject in notesAndTimedEvents)
             {
+                AsyncOperation.Checkpoint();
                 if (chordsAllowed)
                 {
                     var chord = timedObject as Chord;

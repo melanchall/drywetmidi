@@ -82,7 +82,8 @@ namespace Melanchall.DryWetMidi.Core
             _stream = stream;
             Length = _stream.Length;
 
-            _useBuffering = _settings.BufferingPolicy != BufferingPolicy.DontUseBuffering && !_isStreamWrapped && !(_stream is MemoryStream);
+            _useBuffering = _settings.BufferingPolicy != BufferingPolicy.DontUseBuffering && !_isStreamWrapped &&
+                !(_stream is MemoryStream) && !(_stream is AsyncIoStream { IsMemoryStream: true });
             if (_useBuffering)
                 PrepareBuffer();
         }

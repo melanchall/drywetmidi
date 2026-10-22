@@ -11,7 +11,7 @@ namespace Melanchall.DryWetMidi.Tools
     /// Provides a way to sanitize a MIDI file applying different options. More info in the
     /// <see href="xref:a_sanitizer">Sanitizer</see> article.
     /// </summary>
-    public static class Sanitizer
+    public static partial class Sanitizer
     {
         #region Constants
 
@@ -81,6 +81,7 @@ namespace Melanchall.DryWetMidi.Tools
 
             foreach (var timedObjectAt in notesAndTimedEvents)
             {
+                AsyncOperation.Checkpoint();
                 var obj = timedObjectAt.Object;
 
                 var note = obj as Note;
@@ -137,6 +138,7 @@ namespace Melanchall.DryWetMidi.Tools
 
             foreach (var noteOffEventsGroup in noteOffEvents)
             {
+                AsyncOperation.Checkpoint();
                 var events = trackChunks[noteOffEventsGroup.Key].Events;
                 var lastTime = 0L;
                 var noteOffEventsProcessed = false;
@@ -146,6 +148,7 @@ namespace Melanchall.DryWetMidi.Tools
 
                 for (var i = 0; i < events.Count; i++)
                 {
+                    AsyncOperation.Checkpoint();
                     var noteOffTimedEvent = noteOffEventsEnumerator.Current.NoteOffTimedEvent;
 
                     if (lastTime + events[i].DeltaTime >= noteOffTimedEvent.Time)
@@ -204,6 +207,7 @@ namespace Melanchall.DryWetMidi.Tools
 
             foreach (var trackChunk in nonEmptyTrackChunks)
             {
+                AsyncOperation.Checkpoint();
                 trackChunk.Events.First().DeltaTime -= minStartTime;
             }
         }

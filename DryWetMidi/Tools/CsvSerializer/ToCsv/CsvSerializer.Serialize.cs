@@ -72,6 +72,7 @@ namespace Melanchall.DryWetMidi.Tools
 
                 foreach (var chunk in midiFile.Chunks)
                 {
+                    AsyncOperation.Checkpoint();
                     WriteChunk(chunk, writer, settings, tempoMap, objectType, objectDetectionSettings, chunkIndex++);
                 }
             }
@@ -176,6 +177,7 @@ namespace Melanchall.DryWetMidi.Tools
             {
                 foreach (var midiChunk in midiChunks.OfType<MidiChunk>())
                 {
+                    AsyncOperation.Checkpoint();
                     WriteChunk(midiChunk, writer, settings, tempoMap, objectType, objectDetectionSettings, chunkIndex++);
                 }
             }
@@ -516,6 +518,7 @@ namespace Melanchall.DryWetMidi.Tools
 
             foreach (var obj in timedObjects.OfType<ITimedObject>())
             {
+                AsyncOperation.Checkpoint();
                 WriteObject(obj, writer, settings, tempoMap, chunkIndex, chunkId, objectIndex++);
             }
         }
@@ -640,6 +643,7 @@ namespace Melanchall.DryWetMidi.Tools
         {
             foreach (var note in chord.Notes)
             {
+                AsyncOperation.Checkpoint();
                 WriteNote(note, writer, settings, tempoMap, chunkIndex, chunkId, objectIndex);
             }
         }

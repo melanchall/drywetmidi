@@ -9,7 +9,7 @@ namespace Melanchall.DryWetMidi.Interaction
     /// <summary>
     /// Extension methods for managing tempo map. More info in the <see href="xref:a_tempo_map">Tempo map</see> article.
     /// </summary>
-    public static class TempoMapManagingUtilities
+    public static partial class TempoMapManagingUtilities
     {
         #region Methods
 
@@ -152,12 +152,14 @@ namespace Melanchall.DryWetMidi.Interaction
 
             while (true)
             {
+                AsyncOperation.Checkpoint();
                 var eventsCollectionIndex = 0;
                 var minTime = long.MaxValue;
                 var endReached = true;
 
                 for (var j = 0; j < eventsCollectionsCount; j++)
                 {
+                    AsyncOperation.Checkpoint();
                     var index = eventsCollectionIndices[j];
                     if (index > eventsCollectionMaxIndices[j])
                         continue;

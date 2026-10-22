@@ -1,6 +1,8 @@
 ﻿using Melanchall.DryWetMidi.Common;
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+using System.Threading;
 
 namespace Melanchall.DryWetMidi.Core
 {
@@ -11,6 +13,24 @@ namespace Melanchall.DryWetMidi.Core
     public static class MidiTokensReaderUtilities
     {
         #region Methods
+
+        /// <summary>Lazily enumerates MIDI tokens using asynchronous stream I/O.</summary>
+        /// <param name="reader">Reader to enumerate. The caller retains ownership.</param>
+        /// <param name="cancellationToken">Token used to cancel enumeration.</param>
+        /// <returns>An asynchronous sequence of tokens.</returns>
+        public static async IAsyncEnumerable<MidiToken> EnumerateTokensAsync(this MidiTokensReader reader,
+            [EnumeratorCancellation] CancellationToken cancellationToken = default)
+        {
+            ThrowIfArgument.IsNull(nameof(reader), reader);
+            while (true)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                var token = await reader.ReadTokenAsync(cancellationToken).ConfigureAwait(false);
+                if (token == null)
+                    yield break;
+                yield return token;
+            }
+        }
 
         /// <summary>
         /// Returns all MIDI tokens read with the specified <see cref="MidiTokensReader"/>

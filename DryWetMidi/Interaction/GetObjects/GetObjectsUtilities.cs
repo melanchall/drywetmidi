@@ -10,7 +10,7 @@ namespace Melanchall.DryWetMidi.Interaction
     /// Provides utilities to extract objects of different types at once. More info in the
     /// <see href="xref:a_getting_objects#getobjects">Getting objects: GetObjects</see> article.
     /// </summary>
-    public static class GetObjectsUtilities
+    public static partial class GetObjectsUtilities
     {
         #region Methods
 
@@ -166,6 +166,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
             foreach (var timedObject in timedObjects)
             {
+                AsyncOperation.Checkpoint();
                 var processed =
                     TryProcessTimedEvent(timedObject as TimedEvent, processedTimedObjects) ||
                     TryProcessNote(timedObject as Note, processedTimedObjects, getNotes, getChords) ||
@@ -216,6 +217,7 @@ namespace Melanchall.DryWetMidi.Interaction
             {
                 foreach (var note in chord.Notes)
                 {
+                    AsyncOperation.Checkpoint();
                     processedTimedObjects.Add(note.TimedNoteOnEvent);
                     processedTimedObjects.Add(note.TimedNoteOffEvent);
                 }
@@ -234,6 +236,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
             foreach (var timedObject in processedTimedObjects.EnumerateObjectsFromSortedTimedObjects(objectType, settings, notesDeconstructed))
             {
+                AsyncOperation.Checkpoint();
                 result.Add(timedObject);
             }
 
@@ -293,6 +296,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
             foreach (var timedObject in timedObjects)
             {
+                AsyncOperation.Checkpoint();
                 var processed = false;
 
                 if (getChords)

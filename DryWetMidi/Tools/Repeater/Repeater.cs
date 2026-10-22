@@ -11,7 +11,7 @@ namespace Melanchall.DryWetMidi.Tools
     /// Provides a way to repeat MIDI data using different options. More info in the
     /// <see href="xref:a_repeater">Repeater</see> article.
     /// </summary>
-    public class Repeater
+    public partial class Repeater
     {
         #region Methods
 
@@ -194,6 +194,7 @@ namespace Melanchall.DryWetMidi.Tools
 
             foreach (var obj in context.PartObjects)
             {
+                AsyncOperation.Checkpoint();
                 obj.Time += (context.PartIndex + 1) * context.Shift;
             }
         }
@@ -221,6 +222,7 @@ namespace Melanchall.DryWetMidi.Tools
 
             for (var i = 1; i <= repeatsNumber; i++)
             {
+                AsyncOperation.Checkpoint();
                 var part = GetPart(source, shift, i - 1, tempoMap, settings);
                 result.AddRange(part);
             }
@@ -237,6 +239,7 @@ namespace Melanchall.DryWetMidi.Tools
 
             foreach (var timedEvent in sourceObjects.OfType<TimedEvent>())
             {
+                AsyncOperation.Checkpoint();
                 if (firstSetTempoEvent != null && firstTimeSignatureEvent != null)
                     break;
 

@@ -9,7 +9,7 @@ namespace Melanchall.DryWetMidi.Interaction
     /// <summary>
     /// Extension methods for managing MIDI events by their absolute time.
     /// </summary>
-    public static class TimedEventsManagingUtilities
+    public static partial class TimedEventsManagingUtilities
     {
         #region Methods
 
@@ -79,6 +79,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
             foreach (var timedEvent in eventsCollection.GetTimedEventsLazy(settings, 0))
             {
+                AsyncOperation.Checkpoint();
                 result.Add(timedEvent);
             }
 
@@ -127,6 +128,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
             foreach (var timedEvent in eventsCollections.GetTimedEventsLazy(settings))
             {
+                AsyncOperation.Checkpoint();
                 result.Add(timedEvent);
             }
 
@@ -518,6 +520,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
             for (var i = 0; i < eventsCount; i++)
             {
+                AsyncOperation.Checkpoint();
                 var midiEvent = eventsCollection.GetByIndexInternal(i);
                 time += midiEvent.DeltaTime;
 
@@ -605,6 +608,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
             foreach (var trackChunk in trackChunks)
             {
+                AsyncOperation.Checkpoint();
                 result += trackChunk.RemoveTimedEvents();
             }
 
@@ -659,6 +663,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
             for (var i = 0; i < eventsCount; i++)
             {
+                AsyncOperation.Checkpoint();
                 var eventsCollectionIndex = 0;
                 var minTime = long.MaxValue;
 
@@ -765,6 +770,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
             foreach (var eventsCollection in eventsCollectionsIn)
             {
+                AsyncOperation.Checkpoint();
                 var matchedCount = 0;
 
                 var timesChanged = false;
@@ -772,6 +778,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
                 foreach (var timedEvent in timedEvents)
                 {
+                    AsyncOperation.Checkpoint();
                     if (!match(timedEvent))
                         continue;
 
@@ -844,6 +851,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
             foreach (var timedEvent in timedEvents.OrderBy(e => e.Time))
             {
+                AsyncOperation.Checkpoint();
                 if (timedEvent.Event.MustBeRemoved)
                     continue;
 
@@ -878,6 +886,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
             foreach (var midiEvent in events)
             {
+                AsyncOperation.Checkpoint();
                 if (midiEvent == null)
                     continue;
 

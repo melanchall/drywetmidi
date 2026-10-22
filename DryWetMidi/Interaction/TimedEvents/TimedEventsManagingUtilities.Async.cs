@@ -1,0 +1,150 @@
+using Melanchall.DryWetMidi.Common;
+using Melanchall.DryWetMidi.Core;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace Melanchall.DryWetMidi.Interaction
+{
+    public static partial class TimedEventsManagingUtilities
+    {
+        /// <summary>Asynchronously detects timed events in an events collection.</summary>
+        public static Task<ICollection<TimedEvent>> GetTimedEventsAsync(this EventsCollection eventsCollection, TimedEventDetectionSettings? settings = null, IProgress<AsyncOperationProgress>? progress = null, CancellationToken cancellationToken = default) =>
+            AsyncOperation.Run(() => eventsCollection.GetTimedEvents(settings), cancellationToken, progress);
+
+        /// <summary>Asynchronously detects timed events in a track.</summary>
+        public static Task<ICollection<TimedEvent>> GetTimedEventsAsync(this TrackChunk trackChunk, TimedEventDetectionSettings? settings = null, IProgress<AsyncOperationProgress>? progress = null, CancellationToken cancellationToken = default) =>
+            AsyncOperation.Run(() => trackChunk.GetTimedEvents(settings), cancellationToken, progress);
+
+        /// <summary>Asynchronously detects timed events in tracks.</summary>
+        public static Task<ICollection<TimedEvent>> GetTimedEventsAsync(this IEnumerable<TrackChunk> trackChunks, TimedEventDetectionSettings? settings = null, IProgress<AsyncOperationProgress>? progress = null, CancellationToken cancellationToken = default) =>
+            AsyncOperation.Run(() => trackChunks.GetTimedEvents(settings), cancellationToken, progress);
+
+        /// <summary>Asynchronously detects timed events in a MIDI file.</summary>
+        public static Task<ICollection<TimedEvent>> GetTimedEventsAsync(this MidiFile file, TimedEventDetectionSettings? settings = null, IProgress<AsyncOperationProgress>? progress = null, CancellationToken cancellationToken = default) =>
+            AsyncOperation.Run(() => file.GetTimedEvents(settings), cancellationToken, progress);
+
+        /// <summary>Asynchronously detects timed events from an asynchronous MIDI event source.</summary>
+        public static Task<ICollection<TimedEvent>> GetTimedEventsAsync(this IAsyncEnumerable<MidiEvent> midiEvents, TimedEventDetectionSettings? settings = null, IProgress<AsyncOperationProgress>? progress = null, CancellationToken cancellationToken = default) =>
+            AsyncOperation.Run(async () => (ICollection<TimedEvent>)(await InteractionAsyncUtilities.CollectAsync(midiEvents, cancellationToken).ConfigureAwait(false)).GetTimedEventsLazy(settings, 0).ToArray(), cancellationToken, progress);
+
+        /// <summary>Asynchronously creates a timed events manager.</summary>
+        public static Task<TimedObjectsManager<TimedEvent>> ManageTimedEventsAsync(this EventsCollection eventsCollection, TimedEventDetectionSettings? settings = null, TimedObjectsComparer? comparer = null, IProgress<AsyncOperationProgress>? progress = null, CancellationToken cancellationToken = default) =>
+            AsyncOperation.Run(() => eventsCollection.ManageTimedEvents(settings, comparer), cancellationToken, progress);
+
+        /// <summary>Asynchronously creates a timed events manager for a track.</summary>
+        public static Task<TimedObjectsManager<TimedEvent>> ManageTimedEventsAsync(this TrackChunk trackChunk, TimedEventDetectionSettings? settings = null, TimedObjectsComparer? comparer = null, IProgress<AsyncOperationProgress>? progress = null, CancellationToken cancellationToken = default) =>
+            AsyncOperation.Run(() => trackChunk.ManageTimedEvents(settings, comparer), cancellationToken, progress);
+
+        /// <summary>Asynchronously processes timed events.</summary>
+        public static Task<int> ProcessTimedEventsAsync(this EventsCollection eventsCollection, Action<TimedEvent> action, TimedEventDetectionSettings? settings = null, TimedEventProcessingHint hint = TimedEventProcessingHint.Default, IProgress<AsyncOperationProgress>? progress = null, CancellationToken cancellationToken = default) =>
+            AsyncOperation.Run(() => eventsCollection.ProcessTimedEvents(action, settings, hint), cancellationToken, progress);
+
+        /// <summary>Asynchronously processes matching timed events.</summary>
+        public static Task<int> ProcessTimedEventsAsync(this EventsCollection eventsCollection, Action<TimedEvent> action, Predicate<TimedEvent> match, TimedEventDetectionSettings? settings = null, TimedEventProcessingHint hint = TimedEventProcessingHint.Default, IProgress<AsyncOperationProgress>? progress = null, CancellationToken cancellationToken = default) =>
+            AsyncOperation.Run(() => eventsCollection.ProcessTimedEvents(action, match, settings, hint), cancellationToken, progress);
+
+        /// <summary>Asynchronously processes timed events in a track.</summary>
+        public static Task<int> ProcessTimedEventsAsync(this TrackChunk trackChunk, Action<TimedEvent> action, TimedEventDetectionSettings? settings = null, TimedEventProcessingHint hint = TimedEventProcessingHint.Default, IProgress<AsyncOperationProgress>? progress = null, CancellationToken cancellationToken = default) =>
+            AsyncOperation.Run(() => trackChunk.ProcessTimedEvents(action, settings, hint), cancellationToken, progress);
+
+        /// <summary>Asynchronously processes matching timed events in a track.</summary>
+        public static Task<int> ProcessTimedEventsAsync(this TrackChunk trackChunk, Action<TimedEvent> action, Predicate<TimedEvent> match, TimedEventDetectionSettings? settings = null, TimedEventProcessingHint hint = TimedEventProcessingHint.Default, IProgress<AsyncOperationProgress>? progress = null, CancellationToken cancellationToken = default) =>
+            AsyncOperation.Run(() => trackChunk.ProcessTimedEvents(action, match, settings, hint), cancellationToken, progress);
+
+        /// <summary>Asynchronously processes timed events in tracks.</summary>
+        public static Task<int> ProcessTimedEventsAsync(this IEnumerable<TrackChunk> trackChunks, Action<TimedEvent> action, TimedEventDetectionSettings? settings = null, TimedEventProcessingHint hint = TimedEventProcessingHint.Default, IProgress<AsyncOperationProgress>? progress = null, CancellationToken cancellationToken = default) =>
+            AsyncOperation.Run(() => trackChunks.ProcessTimedEvents(action, settings, hint), cancellationToken, progress);
+
+        /// <summary>Asynchronously processes matching timed events in tracks.</summary>
+        public static Task<int> ProcessTimedEventsAsync(this IEnumerable<TrackChunk> trackChunks, Action<TimedEvent> action, Predicate<TimedEvent> match, TimedEventDetectionSettings? settings = null, TimedEventProcessingHint hint = TimedEventProcessingHint.Default, IProgress<AsyncOperationProgress>? progress = null, CancellationToken cancellationToken = default) =>
+            AsyncOperation.Run(() => trackChunks.ProcessTimedEvents(action, match, settings, hint), cancellationToken, progress);
+
+        /// <summary>Asynchronously processes timed events in a MIDI file.</summary>
+        public static Task<int> ProcessTimedEventsAsync(this MidiFile file, Action<TimedEvent> action, TimedEventDetectionSettings? settings = null, TimedEventProcessingHint hint = TimedEventProcessingHint.Default, IProgress<AsyncOperationProgress>? progress = null, CancellationToken cancellationToken = default) =>
+            AsyncOperation.Run(() => file.ProcessTimedEvents(action, settings, hint), cancellationToken, progress);
+
+        /// <summary>Asynchronously processes matching timed events in a MIDI file.</summary>
+        public static Task<int> ProcessTimedEventsAsync(this MidiFile file, Action<TimedEvent> action, Predicate<TimedEvent> match, TimedEventDetectionSettings? settings = null, TimedEventProcessingHint hint = TimedEventProcessingHint.Default, IProgress<AsyncOperationProgress>? progress = null, CancellationToken cancellationToken = default) =>
+            AsyncOperation.Run(() => file.ProcessTimedEvents(action, match, settings, hint), cancellationToken, progress);
+
+        /// <summary>Sequentially awaits an asynchronous action for matching timed events.</summary>
+        public static Task<int> ProcessTimedEventsAsync(this EventsCollection eventsCollection, Func<TimedEvent, CancellationToken, ValueTask> action, Predicate<TimedEvent>? match = null, TimedEventDetectionSettings? settings = null, TimedEventProcessingHint hint = TimedEventProcessingHint.Default, IProgress<AsyncOperationProgress>? progress = null, CancellationToken cancellationToken = default) =>
+            AsyncOperation.Run(() => ProcessTimedEventsAwaitedAsync(InteractionAsyncUtilities.Collections(eventsCollection), action, match, settings, hint, cancellationToken), cancellationToken, progress);
+
+        /// <summary>Sequentially awaits an asynchronous action for matching timed events in a track.</summary>
+        public static Task<int> ProcessTimedEventsAsync(this TrackChunk trackChunk, Func<TimedEvent, CancellationToken, ValueTask> action, Predicate<TimedEvent>? match = null, TimedEventDetectionSettings? settings = null, TimedEventProcessingHint hint = TimedEventProcessingHint.Default, IProgress<AsyncOperationProgress>? progress = null, CancellationToken cancellationToken = default) =>
+            AsyncOperation.Run(() => ProcessTimedEventsAwaitedAsync(InteractionAsyncUtilities.Collections(trackChunk), action, match, settings, hint, cancellationToken), cancellationToken, progress);
+
+        /// <summary>Sequentially awaits an asynchronous action for matching timed events in tracks.</summary>
+        public static Task<int> ProcessTimedEventsAsync(this IEnumerable<TrackChunk> trackChunks, Func<TimedEvent, CancellationToken, ValueTask> action, Predicate<TimedEvent>? match = null, TimedEventDetectionSettings? settings = null, TimedEventProcessingHint hint = TimedEventProcessingHint.Default, IProgress<AsyncOperationProgress>? progress = null, CancellationToken cancellationToken = default) =>
+            AsyncOperation.Run(() => ProcessTimedEventsAwaitedAsync(InteractionAsyncUtilities.Collections(trackChunks), action, match, settings, hint, cancellationToken), cancellationToken, progress);
+
+        /// <summary>Sequentially awaits an asynchronous action for matching timed events in a MIDI file.</summary>
+        public static Task<int> ProcessTimedEventsAsync(this MidiFile file, Func<TimedEvent, CancellationToken, ValueTask> action, Predicate<TimedEvent>? match = null, TimedEventDetectionSettings? settings = null, TimedEventProcessingHint hint = TimedEventProcessingHint.Default, IProgress<AsyncOperationProgress>? progress = null, CancellationToken cancellationToken = default) =>
+            AsyncOperation.Run(() => ProcessTimedEventsAwaitedAsync(InteractionAsyncUtilities.Collections(file), action, match, settings, hint, cancellationToken), cancellationToken, progress);
+
+        /// <summary>Asynchronously removes all timed events.</summary>
+        public static Task<int> RemoveTimedEventsAsync(this EventsCollection eventsCollection, IProgress<AsyncOperationProgress>? progress = null, CancellationToken cancellationToken = default) =>
+            AsyncOperation.Run(() => eventsCollection.RemoveTimedEvents(), cancellationToken, progress);
+
+        /// <summary>Asynchronously removes matching timed events.</summary>
+        public static Task<int> RemoveTimedEventsAsync(this EventsCollection eventsCollection, Predicate<TimedEvent> match, TimedEventDetectionSettings? settings = null, IProgress<AsyncOperationProgress>? progress = null, CancellationToken cancellationToken = default) =>
+            AsyncOperation.Run(() => eventsCollection.RemoveTimedEvents(match, settings), cancellationToken, progress);
+
+        /// <summary>Asynchronously removes all timed events from a track.</summary>
+        public static Task<int> RemoveTimedEventsAsync(this TrackChunk trackChunk, IProgress<AsyncOperationProgress>? progress = null, CancellationToken cancellationToken = default) =>
+            AsyncOperation.Run(() => trackChunk.RemoveTimedEvents(), cancellationToken, progress);
+
+        /// <summary>Asynchronously removes matching timed events from a track.</summary>
+        public static Task<int> RemoveTimedEventsAsync(this TrackChunk trackChunk, Predicate<TimedEvent> match, TimedEventDetectionSettings? settings = null, IProgress<AsyncOperationProgress>? progress = null, CancellationToken cancellationToken = default) =>
+            AsyncOperation.Run(() => trackChunk.RemoveTimedEvents(match, settings), cancellationToken, progress);
+
+        /// <summary>Asynchronously removes all timed events from tracks.</summary>
+        public static Task<int> RemoveTimedEventsAsync(this IEnumerable<TrackChunk> trackChunks, IProgress<AsyncOperationProgress>? progress = null, CancellationToken cancellationToken = default) =>
+            AsyncOperation.Run(() => trackChunks.RemoveTimedEvents(), cancellationToken, progress);
+
+        /// <summary>Asynchronously removes matching timed events from tracks.</summary>
+        public static Task<int> RemoveTimedEventsAsync(this IEnumerable<TrackChunk> trackChunks, Predicate<TimedEvent> match, TimedEventDetectionSettings? settings = null, IProgress<AsyncOperationProgress>? progress = null, CancellationToken cancellationToken = default) =>
+            AsyncOperation.Run(() => trackChunks.RemoveTimedEvents(match, settings), cancellationToken, progress);
+
+        /// <summary>Asynchronously removes all timed events from a MIDI file.</summary>
+        public static Task<int> RemoveTimedEventsAsync(this MidiFile file, IProgress<AsyncOperationProgress>? progress = null, CancellationToken cancellationToken = default) =>
+            AsyncOperation.Run(() => file.RemoveTimedEvents(), cancellationToken, progress);
+
+        /// <summary>Asynchronously removes matching timed events from a MIDI file.</summary>
+        public static Task<int> RemoveTimedEventsAsync(this MidiFile file, Predicate<TimedEvent> match, TimedEventDetectionSettings? settings = null, IProgress<AsyncOperationProgress>? progress = null, CancellationToken cancellationToken = default) =>
+            AsyncOperation.Run(() => file.RemoveTimedEvents(match, settings), cancellationToken, progress);
+
+        private static async Task<int> ProcessTimedEventsAwaitedAsync(IEnumerable<EventsCollection> eventsCollections, Func<TimedEvent, CancellationToken, ValueTask> action, Predicate<TimedEvent>? match, TimedEventDetectionSettings? settings, TimedEventProcessingHint hint, CancellationToken cancellationToken)
+        {
+            ThrowIfArgument.IsNull(nameof(action), action);
+            var count = 0;
+            var index = 0;
+            foreach (var eventsCollection in eventsCollections)
+            {
+                AsyncOperation.Checkpoint();
+                var timedEvents = eventsCollection.GetTimedEventsLazy(settings, index++, false).ToArray();
+                var changed = false;
+                foreach (var timedEvent in timedEvents)
+                {
+                    AsyncOperation.Checkpoint();
+                    if (match != null && !match(timedEvent))
+                        continue;
+                    var time = timedEvent.Time;
+                    var deltaTime = timedEvent.Event.DeltaTime;
+                    await action(timedEvent, cancellationToken).ConfigureAwait(false);
+                    timedEvent.Event.DeltaTime = deltaTime;
+                    cancellationToken.ThrowIfCancellationRequested();
+                    changed |= time != timedEvent.Time;
+                    count++;
+                }
+                if (changed && hint.HasFlag(TimedEventProcessingHint.TimeCanBeChanged))
+                    eventsCollection.SortAndUpdateEvents(timedEvents);
+            }
+            return count;
+        }
+    }
+}

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Melanchall.DryWetMidi.Core
 {
@@ -10,7 +12,7 @@ namespace Melanchall.DryWetMidi.Core
     /// <see href="xref:a_file_lazy_reading_writing">Lazy reading/writing</see> article to learn more.
     /// </summary>
     /// <seealso cref="MidiTokensWriter"/>
-    public sealed class MidiTokensReader : IDisposable
+    public sealed class MidiTokensReader : IDisposable, IAsyncDisposable
     {
         #region Enums
 
@@ -80,6 +82,8 @@ namespace Melanchall.DryWetMidi.Core
         private byte? _currentChannelEventStatusByte;
 
         private bool _disposed;
+        private int _operation;
+        private readonly AsyncIoStream _transport;
 
         #endregion
 
@@ -87,7 +91,7 @@ namespace Melanchall.DryWetMidi.Core
 
         internal MidiTokensReader(Stream stream, ReadingSettings? settings, bool disposeStream)
         {
-            _stream = stream;
+            _stream = _transport = stream as AsyncIoStream ?? new AsyncIoStream(stream);
             if (!_stream.CanRead)
                 throw new ArgumentException("Stream doesn't support reading.", nameof(stream));
 
@@ -96,7 +100,7 @@ namespace Melanchall.DryWetMidi.Core
             if (_settings.ReaderSettings == null)
                 _settings.ReaderSettings = new ReaderSettings();
 
-            _reader = new MidiReader(stream, _settings.ReaderSettings);
+            _reader = new MidiReader(_stream, _settings.ReaderSettings);
             if (_reader.EndReached)
                 throw new ArgumentException("Stream is already read.", nameof(stream));
 
@@ -147,6 +151,45 @@ namespace Melanchall.DryWetMidi.Core
         /// <see cref="BufferingPolicy.UseCustomBuffer"/>.</exception>
         /// <exception cref="VlqNumberOverflowException">A variable-length quantity (VLQ) number in the file is too large.</exception>
         public MidiToken? ReadToken()
+        {
+            EnterOperation();
+            try
+            {
+                return ReadTokenCore();
+            }
+            finally
+            {
+                Volatile.Write(ref _operation, 0);
+            }
+        }
+
+        /// <summary>Reads the next token using asynchronous transport I/O.</summary>
+        /// <param name="cancellationToken">Token used to cancel reading.</param>
+        /// <returns>The next token, or <c>null</c> at the end.</returns>
+        /// <remarks>Operations on one reader must not overlap. After a failed or canceled
+        /// read the reader should be disposed; partial codec state cannot be rolled back.</remarks>
+        public async Task<MidiToken?> ReadTokenAsync(CancellationToken cancellationToken = default)
+        {
+            EnterOperation();
+            try
+            {
+                return await _transport.RunAsync(ReadTokenCore, cancellationToken).ConfigureAwait(false);
+            }
+            finally
+            {
+                Volatile.Write(ref _operation, 0);
+            }
+        }
+
+        private void EnterOperation()
+        {
+            if (_disposed)
+                throw new ObjectDisposedException(nameof(MidiTokensReader));
+            if (Interlocked.CompareExchange(ref _operation, 1, 0) != 0)
+                throw new InvalidOperationException("Another reader operation is already in progress.");
+        }
+
+        private MidiToken? ReadTokenCore()
         {
             Instruction? instruction = null;
 
@@ -295,7 +338,25 @@ namespace Melanchall.DryWetMidi.Core
         /// </summary>
         public void Dispose()
         {
-            Dispose(true);
+            if (_disposed)
+                return;
+            EnterOperation();
+            try { Dispose(true); }
+            finally { Volatile.Write(ref _operation, 0); }
+        }
+
+        /// <summary>Releases the reader and asynchronously disposes an owned stream.</summary>
+        /// <returns>A task representing disposal.</returns>
+        public async ValueTask DisposeAsync()
+        {
+            if (_disposed)
+                return;
+            EnterOperation();
+            try
+            {
+                await _transport.RunAsync(() => Dispose(true), CancellationToken.None).ConfigureAwait(false);
+            }
+            finally { Volatile.Write(ref _operation, 0); }
         }
 
         private void Dispose(bool disposing)

@@ -11,7 +11,7 @@ namespace Melanchall.DryWetMidi.Interaction
     /// Provides a way to manage tempo map of a MIDI file. More info in the <see href="xref:a_tempo_map">Tempo map</see> article.
     /// </summary>
     /// <seealso cref="Interaction.TempoMap"/>
-    public sealed class TempoMapManager : IDisposable
+    public sealed partial class TempoMapManager : IDisposable
     {
         #region Fields
 
@@ -374,6 +374,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
             foreach (var events in _timedEventsManagers.Select(m => m.Objects))
             {
+                AsyncOperation.Checkpoint();
                 events.RemoveAll(IsTempoMapEvent);
             }
 
@@ -383,6 +384,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
             foreach (var timedEventsManager in _timedEventsManagers)
             {
+                AsyncOperation.Checkpoint();
                 timedEventsManager.SaveChanges();
             }
         }
@@ -396,6 +398,7 @@ namespace Melanchall.DryWetMidi.Interaction
         {
             foreach (var timedEvent in GetTimedEvents(IsTimeSignatureEvent))
             {
+                AsyncOperation.Checkpoint();
                 var timeSignatureEvent = timedEvent.Event as TimeSignatureEvent;
                 if (timeSignatureEvent == null)
                     continue;
@@ -412,6 +415,7 @@ namespace Melanchall.DryWetMidi.Interaction
         {
             foreach (var timedEvent in GetTimedEvents(IsTempoEvent))
             {
+                AsyncOperation.Checkpoint();
                 var setTempoEvent = timedEvent.Event as SetTempoEvent;
                 if (setTempoEvent == null)
                     continue;

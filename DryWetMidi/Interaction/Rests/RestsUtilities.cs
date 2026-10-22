@@ -8,7 +8,7 @@ namespace Melanchall.DryWetMidi.Interaction
     /// <summary>
     /// Provides methods to get rests between different objects.
     /// </summary>
-    public static class RestsUtilities
+    public static partial class RestsUtilities
     {
         #region Methods
 
@@ -112,6 +112,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
             foreach (var obj in objects)
             {
+                AsyncOperation.Checkpoint();
                 var key = keySelector?.Invoke(obj);
                 if (key == null)
                     continue;
