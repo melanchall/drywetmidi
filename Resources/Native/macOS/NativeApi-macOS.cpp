@@ -608,6 +608,10 @@ struct SessionHandle
     CFRunLoopRef runLoopRef;
     pthread_t thread;
     std::atomic<bool> workerThreadRunning{false};
+    std::atomic<bool> workerThreadStarted{false};
+    std::atomic<bool> workerThreadExited{false};
+    std::atomic<bool> runLoopStarted{false};
+    std::atomic<SInt32> runLoopExitReason{-1};
     std::atomic<bool> clientCreated;
     std::atomic<bool> sessionClosed;
     OSStatus clientCreationStatus;
@@ -841,6 +845,7 @@ void NotifyProc(const MIDINotification* message, void* refCon)
 void* ThreadProc(void* data)
 {
     SessionHandle* sessionHandle = static_cast<SessionHandle*>(data);
+    sessionHandle->workerThreadStarted.store(true);
     sessionHandle->workerThreadRunning.store(true);
 
     sessionHandle->runLoopRef = (CFRunLoopRef)CFRetain(CFRunLoopGetCurrent());
@@ -852,6 +857,7 @@ void* ThreadProc(void* data)
         sessionHandle->runLoopRef = nullptr;
         sessionHandle->clientCreationStatus = kMIDIUnknownError;
         sessionHandle->clientCreated.store(true);
+        sessionHandle->workerThreadExited.store(true);
         sessionHandle->workerThreadRunning.store(false);
         return nullptr;
     }
@@ -862,7 +868,10 @@ void* ThreadProc(void* data)
     sessionHandle->clientCreated.store(true);
 
     if (sessionHandle->clientCreationStatus == noErr)
-        CFRunLoopRun();
+    {
+        sessionHandle->runLoopStarted.store(true);
+        sessionHandle->runLoopExitReason.store(CFRunLoopRun());
+    }
 
     {
         std::lock_guard<std::mutex> lock(sessionHandle->runLoopLock);
@@ -873,6 +882,7 @@ void* ThreadProc(void* data)
         }
     }
 
+    sessionHandle->workerThreadExited.store(true);
     sessionHandle->workerThreadRunning.store(false);
     return nullptr;
 }
@@ -975,6 +985,31 @@ API_EXPORT SESSION_CLOSERESULT CloseSession(SessionHandle* sessionHandle)
 API_EXPORT uint32_t IsSessionWorkerThreadRunning_Mac(SessionHandle* sessionHandle)
 {
     return sessionHandle->workerThreadRunning.load() ? 1 : 0;
+}
+
+API_EXPORT uint32_t GetSessionWorkerDiagnostics_Mac(
+    SessionHandle* sessionHandle,
+    int32_t* clientCreationStatus,
+    int32_t* runLoopExitReason)
+{
+    *clientCreationStatus = sessionHandle->clientCreationStatus;
+    *runLoopExitReason = sessionHandle->runLoopExitReason.load();
+
+    uint32_t state = 0;
+    if (sessionHandle->workerThreadStarted.load())
+        state |= 1;
+    if (sessionHandle->workerThreadRunning.load())
+        state |= 2;
+    if (sessionHandle->clientCreated.load())
+        state |= 4;
+    if (sessionHandle->runLoopStarted.load())
+        state |= 8;
+    if (sessionHandle->workerThreadExited.load())
+        state |= 16;
+    if (sessionHandle->sessionClosed.load())
+        state |= 32;
+
+    return state;
 }
 
 uint64_t ConvertMachTimeToNanoseconds(uint64_t machTime)

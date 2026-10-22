@@ -65,9 +65,21 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             {
                 var sessionHandle = CreateSessionHandle(InputEndpointCallback, OutputEndpointCallback, 0);
 
-                ClassicAssert.IsTrue(
-                    WaitOperations.Wait(() => MidiDevicesSessionApi.Api_IsSessionWorkerThreadRunning_Mac(sessionHandle), TimeSpan.FromSeconds(5)),
-                    "Session worker thread did not appear after opening the session.");
+                var workerStarted = WaitOperations.Wait(
+                    () => MidiDevicesSessionApi.Api_IsSessionWorkerThreadRunning_Mac(sessionHandle),
+                    TimeSpan.FromSeconds(5));
+                if (!workerStarted)
+                {
+                    var workerState = MidiDevicesSessionApi.Api_GetSessionWorkerDiagnostics_Mac(
+                        sessionHandle,
+                        out var clientCreationStatus,
+                        out var runLoopExitReason);
+
+                    ClassicAssert.Fail(
+                        $"Session worker thread did not appear after opening the session. " +
+                        $"Worker state: {workerState}; client creation status: {clientCreationStatus}; " +
+                        $"run-loop exit reason: {runLoopExitReason}.");
+                }
 
                 ClassicAssert.AreEqual(
                     MidiDevicesSessionApi.SESSION_CLOSERESULT.SESSION_CLOSERESULT_OK,
