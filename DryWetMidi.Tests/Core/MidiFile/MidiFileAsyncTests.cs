@@ -1,4 +1,5 @@
 using Melanchall.DryWetMidi.Core;
+using Melanchall.DryWetMidi.Common;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -12,21 +13,24 @@ namespace Melanchall.DryWetMidi.Tests.Core
     public sealed class MidiFileAsyncTests
     {
         private static MidiFile CreateFile() => new MidiFile(new TrackChunk(
-            new NoteOnEvent(),
-            new NoteOffEvent { DeltaTime = 100 }));
+            new NoteOnEvent { Velocity = (SevenBitNumber)100 },
+            new NoteOffEvent { DeltaTime = 100 }))
+        {
+            _originalFormat = (ushort)MidiFileFormat.MultiTrack
+        };
 
         [TestCase(false)]
         [TestCase(true)]
         public async Task RoundTrip_AsyncOnlyTransport(bool nonSeekable)
         {
             var expected = CreateFile();
-            using var output = new AsyncOnlyStream();
+            using var output = new AsyncOnlyStream(seekable: !nonSeekable);
             await expected.WriteAsync(output);
             Assert.That(output.AsyncWrites, Is.GreaterThan(0));
             Assert.That(output.IsDisposed, Is.False);
             using var input = new AsyncOnlyStream(output.ToArray(), !nonSeekable, 3);
             var actual = await MidiFile.ReadAsync(input);
-            Assert.That(MidiFile.Equals(expected, actual), Is.True);
+            Assert.That(MidiFile.Equals(expected, actual, out var message), Is.True, message);
             Assert.That(input.AsyncReads, Is.GreaterThan(0));
             Assert.That(input.IsDisposed, Is.False);
         }
@@ -143,7 +147,11 @@ namespace Melanchall.DryWetMidi.Tests.Core
             {
                 var writer = await MidiFile.WriteLazyAsync(path);
                 await writer.StartTrackChunkAsync();
-                writer.BeforeEndTrackChunk = () => throw new InvalidOperationException("Codec failure.");
+                writer.BeforeEndTrackChunkAsync = async cancellationToken =>
+                {
+                    await Task.Yield();
+                    throw new InvalidOperationException("Codec failure.");
+                };
                 Assert.ThrowsAsync<InvalidOperationException>(async () => await writer.DisposeAsync());
                 await writer.DisposeAsync();
                 using var exclusive = new FileStream(path, FileMode.Open, FileAccess.ReadWrite, FileShare.None);
@@ -190,6 +198,56 @@ namespace Melanchall.DryWetMidi.Tests.Core
             await writer.DisposeAsync();
         }
 
+        [TestCase(0)]
+        [TestCase(1)]
+        [TestCase(2)]
+        public async Task LazyWriter_AsyncFinalizationCallback_CanEmitDeferredEvent(int operation)
+        {
+            using var output = new AsyncOnlyStream();
+            var writer = await MidiFile.WriteLazyAsync(output, new WritingSettings
+            {
+                WriterSettings = new WriterSettings { UseBuffering = false }
+            });
+            await writer.StartTrackChunkAsync();
+            writer.BeforeEndTrackChunk = () => throw new AssertionException("Synchronous callback selected.");
+            writer.BeforeEndTrackChunkAsync = async cancellationToken =>
+            {
+                await Task.Yield();
+                await writer.WriteEventAsync(new NoteOffEvent { DeltaTime = 20 }, cancellationToken);
+            };
+            if (operation == 0)
+                await writer.EndTrackChunkAsync();
+            else if (operation == 1)
+                await writer.StartTrackChunkAsync();
+            else
+                await writer.DisposeAsync();
+            writer.BeforeEndTrackChunk = null;
+            writer.BeforeEndTrackChunkAsync = null;
+            await writer.DisposeAsync();
+            using var input = new AsyncOnlyStream(output.ToArray());
+            var file = await MidiFile.ReadAsync(input);
+            var events = ((TrackChunk)file.Chunks[0]).Events;
+            Assert.That(events.Count, Is.EqualTo(1));
+            Assert.That(events[0], Is.TypeOf<NoteOffEvent>());
+            Assert.That(events[0].DeltaTime, Is.EqualTo(20));
+        }
+
+        [Test]
+        public async Task LazyReader_DoesNotReadWholeInput_AndWritesUseBoundedPackets()
+        {
+            var file = new MidiFile(new UnknownChunk("Test") { Data = new byte[200000] });
+            using var output = new AsyncOnlyStream();
+            await file.WriteAsync(output, settings: new WritingSettings
+            {
+                WriterSettings = new WriterSettings { UseBuffering = false }
+            });
+            Assert.That(output.MaxWrite, Is.LessThanOrEqualTo(65536));
+            using var input = new AsyncOnlyStream(output.ToArray(), false);
+            await using var reader = await MidiFile.ReadLazyAsync(input);
+            Assert.That(await reader.ReadTokenAsync(), Is.TypeOf<ChunkHeaderToken>());
+            Assert.That(input.BytesRead, Is.LessThan(100));
+        }
+
         private sealed class CustomEvent : MetaEvent
         {
             public byte Value { get; set; }
@@ -215,6 +273,8 @@ namespace Melanchall.DryWetMidi.Tests.Core
 
             internal int AsyncReads { get; private set; }
             internal int AsyncWrites { get; private set; }
+            internal int BytesRead { get; private set; }
+            internal int MaxWrite { get; private set; }
             internal bool IsDisposed { get; private set; }
             internal TaskCompletionSource<bool> ReadGate { get; set; }
             internal TaskCompletionSource<bool> WriteGate { get; set; }
@@ -245,12 +305,15 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 if (ReadGate != null)
                     await ReadGate.Task.WaitAsync(cancellationToken);
                 await Task.Yield();
-                return _inner.Read(buffer, offset, Math.Min(count, _maxRead));
+                var read = _inner.Read(buffer, offset, Math.Min(count, _maxRead));
+                BytesRead += read;
+                return read;
             }
             public override async Task WriteAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken)
             {
                 cancellationToken.ThrowIfCancellationRequested();
                 AsyncWrites++;
+                MaxWrite = Math.Max(MaxWrite, count);
                 WriteStarted.TrySetResult(true);
                 if (WriteGate != null)
                     await WriteGate.Task.WaitAsync(cancellationToken);

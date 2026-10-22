@@ -197,7 +197,11 @@ namespace Melanchall.DryWetMidi.Tools
 
             var objectsMergerFactory = settings.ObjectsMergerFactory ?? (obj => new ObjectsMerger(obj));
 
-            var preparedObjects = objects.OfType<ITimedObject>();
+            var preparedObjects = objects.OfType<ITimedObject>().Select(obj =>
+            {
+                AsyncOperation.Checkpoint();
+                return obj;
+            });
             if (prepareForEnumeration)
                 preparedObjects = preparedObjects.OrderBy(n => n.Time);
 
@@ -237,6 +241,7 @@ namespace Melanchall.DryWetMidi.Tools
                     {
                         for (var n = node; n != null;)
                         {
+                            AsyncOperation.Checkpoint();
                             if (!n.Value.IsCompleted)
                                 break;
 

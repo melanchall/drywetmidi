@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Melanchall.DryWetMidi.Tools
 {
@@ -10,7 +12,9 @@ namespace Melanchall.DryWetMidi.Tools
     {
         #region Fields
 
-        private readonly StreamWriter _streamWriter;
+        private readonly StreamWriter? _streamWriter;
+        private readonly List<string>? _records;
+        private readonly Encoding _asyncEncoding = new UTF8Encoding(false, true);
         private readonly string _delimiterString;
         private readonly Func<byte, string> _byteFormatter;
         private readonly string _bytesArrayDelimiter;
@@ -29,13 +33,36 @@ namespace Melanchall.DryWetMidi.Tools
             _bytesArrayDelimiter = settings.BytesArrayDelimiter.ToString();
         }
 
+        internal CsvWriter(CsvSerializationSettings settings)
+        {
+            _records = new List<string>();
+            _delimiterString = settings.Delimiter.ToString();
+            _byteFormatter = GetByteFormatter(settings.BytesArrayFormat);
+            _bytesArrayDelimiter = settings.BytesArrayDelimiter.ToString();
+        }
+
         #endregion
 
         #region Methods
 
         public void WriteRecord(IEnumerable<object> values)
         {
-            _streamWriter.WriteLine(string.Join(_delimiterString, values.Select(ProcessValue)));
+            var record = string.Join(_delimiterString, values.Select(ProcessValue));
+            if (_streamWriter != null)
+                _streamWriter.WriteLine(record);
+            else
+                _records!.Add(record);
+        }
+
+        internal async Task DrainAsync(Stream stream, CancellationToken cancellationToken)
+        {
+            foreach (var record in _records!)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                var bytes = _asyncEncoding.GetBytes(record + Environment.NewLine);
+                await stream.WriteAsync(bytes, 0, bytes.Length, cancellationToken).ConfigureAwait(false);
+            }
+            _records.Clear();
         }
 
         public void WriteRecord(params object[] values)
@@ -95,7 +122,7 @@ namespace Melanchall.DryWetMidi.Tools
                 return;
 
             if (disposing)
-                _streamWriter.Dispose();
+                _streamWriter?.Dispose();
 
             _disposed = true;
         }

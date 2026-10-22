@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -25,6 +26,8 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             internal bool FailWrite;
             internal bool BlockRead;
             internal bool BlockWrite;
+            internal Action OnWrite;
+            internal bool Disposed;
 
             internal AsyncOnlyStream(byte[] bytes = null) => _storage = bytes == null ? new MemoryStream() : new MemoryStream(bytes);
             internal byte[] ToArray() => _storage.ToArray();
@@ -53,6 +56,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             {
                 Writes++;
                 await Task.Yield();
+                OnWrite?.Invoke();
                 if (BlockWrite) await Task.Delay(Timeout.Infinite, cancellationToken);
                 cancellationToken.ThrowIfCancellationRequested();
                 if (FailWrite) throw new IOException("Write failure.");
@@ -64,6 +68,13 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 Flushes++;
                 cancellationToken.ThrowIfCancellationRequested();
                 return Task.CompletedTask;
+            }
+
+            protected override void Dispose(bool disposing)
+            {
+                Disposed = true;
+                if (disposing) _storage.Dispose();
+                base.Dispose(disposing);
             }
         }
 
@@ -136,7 +147,8 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                     break;
             }
             Assert.That(input.Reads, Is.GreaterThan(1));
-            Assert.That(input.CanRead, Is.True);
+            Assert.That(input.Disposed, Is.False);
+            Assert.That(output.Disposed, Is.False);
         }
 
         [TestCase(0)]
@@ -176,6 +188,24 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         }
 
         [Test]
+        public void Csv_InvalidOrCanceledPathWrite_DoesNotCreateFile()
+        {
+            var path = Path.Combine(TestContext.CurrentContext.WorkDirectory, "tools-async-" + Guid.NewGuid() + ".csv");
+            try
+            {
+                Assert.ThrowsAsync<ArgumentNullException>(() => ((MidiFile)null).SerializeToCsvAsync(path, true));
+                Assert.That(File.Exists(path), Is.False);
+                Assert.ThrowsAsync<ArgumentNullException>(() => CreateFile().GetTrackChunks().First().SerializeToCsvAsync(path, true, null));
+                Assert.That(File.Exists(path), Is.False);
+                using var cancellation = new CancellationTokenSource();
+                cancellation.Cancel();
+                Assert.CatchAsync<OperationCanceledException>(() => CreateFile().SerializeToCsvAsync(path, true, cancellationToken: cancellation.Token));
+                Assert.That(File.Exists(path), Is.False);
+            }
+            finally { if (File.Exists(path)) File.Delete(path); }
+        }
+
+        [Test]
         public async Task Csv_LargeInput_IsIncremental()
         {
             var file = new MidiFile(new TrackChunk(Enumerable.Range(0, 3000).Select(i => new TextEvent("line\n\"quoted\",é" + i) { DeltaTime = i % 2 })));
@@ -185,6 +215,102 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             using var input = new AsyncOnlyStream(output.ToArray());
             var restored = await CsvSerializer.DeserializeFileFromCsvAsync(input);
             Assert.That(restored.GetTrackChunks().First().Events.Count, Is.EqualTo(3000));
+        }
+
+        [Test]
+        public async Task Csv_Serialization_DoesNotStageWholeInput()
+        {
+            int visited = 0;
+            int visitedAtFirstWrite = -1;
+            IEnumerable<ITimedObject> Source()
+            {
+                for (int i = 0; i < 10000; i++)
+                {
+                    Interlocked.Increment(ref visited);
+                    yield return new TimedEvent(new TextEvent("a buffered CSV record"), i);
+                }
+            }
+            using var output = new AsyncOnlyStream
+            {
+                OnWrite = () =>
+                {
+                    if (visitedAtFirstWrite == -1)
+                        visitedAtFirstWrite = Volatile.Read(ref visited);
+                }
+            };
+            await Source().SerializeToCsvAsync(output, TempoMap.Default);
+            Assert.That(visited, Is.EqualTo(10000));
+            Assert.That(visitedAtFirstWrite, Is.InRange(1, 9999));
+        }
+
+        [Test]
+        public void Csv_CodecErrors_PropagateWithoutDeadlock()
+        {
+            using var input = new AsyncOnlyStream(System.Text.Encoding.UTF8.GetBytes("not a valid CSV MIDI file\n" + new string('x', 20000)));
+            Assert.ThrowsAsync<CsvException>(async () =>
+                await CsvSerializer.DeserializeFileFromCsvAsync(input).WaitAsync(TimeSpan.FromSeconds(10)));
+
+            IEnumerable<ITimedObject> Source()
+            {
+                yield return new TimedEvent(new TextEvent("first"));
+                throw new InvalidOperationException("Source failure.");
+            }
+            using var output = new AsyncOnlyStream();
+            Assert.ThrowsAsync<InvalidOperationException>(async () =>
+                await Source().SerializeToCsvAsync(output, TempoMap.Default).WaitAsync(TimeSpan.FromSeconds(10)));
+        }
+
+        [Test]
+        public async Task Csv_Progress_CompletesAfterFlush()
+        {
+            using var output = new AsyncOnlyStream();
+            var progress = new InlineProgress();
+            await CreateFile().SerializeToCsvAsync(output, progress: progress);
+            Assert.That(progress.Reports.Last().IsCompleted, Is.True);
+            Assert.That(progress.Reports.Last().ProcessedItems, Is.GreaterThan(0));
+            Assert.That(output.Flushes, Is.EqualTo(1));
+        }
+
+        [Test]
+        public async Task Csv_MultiRecordObjects_AndFormatting_MatchSync()
+        {
+            var objects = new ITimedObject[]
+            {
+                new Chord(new[]
+                {
+                    new Note((SevenBitNumber)60, 100, 10),
+                    new Note((SevenBitNumber)64, 80, 10)
+                }),
+                new PitchBendSensitivityParameter { Time = 30 },
+                new TimedEvent(new NormalSysExEvent(new byte[] { 0, 1, 127 }), 40),
+                new TimedEvent(new TextEvent("unicode é 🎼\n\"quoted\";value"), 50)
+            };
+            var settings = new CsvSerializationSettings
+            {
+                Delimiter = ';',
+                BytesArrayFormat = CsvBytesArrayFormat.Hexadecimal,
+                NoteFormat = CsvNoteFormat.Letter,
+                TimeType = TimeSpanType.Metric,
+                LengthType = TimeSpanType.Metric
+            };
+            using var expected = new MemoryStream();
+            objects.SerializeToCsv(expected, TempoMap.Default, settings);
+            using var actual = new AsyncOnlyStream();
+            await objects.SerializeToCsvAsync(actual, TempoMap.Default, settings);
+            Assert.That(actual.ToArray(), Is.EqualTo(expected.ToArray()));
+            using var input = new AsyncOnlyStream(actual.ToArray());
+            var readSettings = new CsvDeserializationSettings
+            {
+                Delimiter = ';',
+                BytesArrayFormat = CsvBytesArrayFormat.Hexadecimal,
+                NoteFormat = CsvNoteFormat.Letter,
+                TimeType = TimeSpanType.Metric,
+                LengthType = TimeSpanType.Metric
+            };
+            expected.Position = 0;
+            var expectedObjects = CsvSerializer.DeserializeObjectsFromCsv(expected, TempoMap.Default, readSettings);
+            var actualObjects = await CsvSerializer.DeserializeObjectsFromCsvAsync(input, TempoMap.Default, readSettings);
+            Assert.That(actualObjects.Select(obj => (obj.GetType(), obj.Time)), Is.EqualTo(expectedObjects.Select(obj => (obj.GetType(), obj.Time))));
         }
 
         [TestCase(true)]
@@ -213,7 +339,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         }
 
         [Test]
-        public async Task Splitter_LazyEnumeration_DoesNotReadAhead_AndDisposes()
+        public async Task Splitter_LazyEnumeration_HasBoundedReadAhead_AndDisposes()
         {
             int visited = 0;
             bool disposed = false;
@@ -234,23 +360,45 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             await foreach (var obj in result)
             {
                 Assert.That(((Note)obj).Length, Is.EqualTo(10));
-                Assert.That(visited, Is.EqualTo(1));
+                Assert.That(visited, Is.InRange(1, 64));
                 break;
             }
             Assert.That(disposed, Is.True);
-            Assert.That(visited, Is.EqualTo(1));
+            Assert.That(visited, Is.InRange(1, 64));
         }
 
         [Test]
         public async Task Splitter_EnumeratorCancellation_IsObserved()
         {
             using var cancellation = new CancellationTokenSource();
-            var result = new ITimedObject[] { new Note((SevenBitNumber)60, 100) }
-                .SplitObjectsByStepAsync((MidiTimeSpan)10, TempoMap.Default);
+            bool disposed = false;
+            IEnumerable<ITimedObject> Source()
+            {
+                try
+                {
+                    while (true)
+                        yield return new Note((SevenBitNumber)60, 100);
+                }
+                finally { disposed = true; }
+            }
+            var result = Source().SplitObjectsByStepAsync((MidiTimeSpan)10, TempoMap.Default);
             await using var enumerator = result.GetAsyncEnumerator(cancellation.Token);
             Assert.That(await enumerator.MoveNextAsync(), Is.True);
             cancellation.Cancel();
             Assert.CatchAsync<OperationCanceledException>(async () => await enumerator.MoveNextAsync());
+            Assert.That(disposed, Is.True);
+        }
+
+        [Test]
+        public async Task Splitter_BatchedEnumeration_ReportsOneCompletion()
+        {
+            var progress = new InlineProgress();
+            var objects = Enumerable.Range(0, 200).Select(i => (ITimedObject)new Note((SevenBitNumber)60, 0, i));
+            var result = await Collect(objects.SplitObjectsByStepAsync((MidiTimeSpan)10, TempoMap.Default, progress: progress));
+            Assert.That(result.Count, Is.EqualTo(200));
+            Assert.That(progress.Reports.Count(report => report.IsCompleted), Is.EqualTo(1));
+            Assert.That(progress.Reports.Last().ProcessedItems, Is.GreaterThanOrEqualTo(200));
+            Assert.That(progress.Reports.Select(report => report.ProcessedItems), Is.Ordered);
         }
 
         [Test]
@@ -319,6 +467,31 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         }
 
         [Test]
+        public void Merger_Cancellation_StopsPreparationBeforeFirstResult()
+        {
+            using var cancellation = new CancellationTokenSource();
+            int visited = 0;
+            bool disposed = false;
+            IEnumerable<ITimedObject> Source()
+            {
+                try
+                {
+                    while (true)
+                    {
+                        if (++visited == 4)
+                            cancellation.Cancel();
+                        yield return new Note((SevenBitNumber)60, 100, visited);
+                    }
+                }
+                finally { disposed = true; }
+            }
+            Assert.CatchAsync<OperationCanceledException>(async () =>
+                await Collect(Source().MergeObjectsAsync(TempoMap.Default, cancellationToken: cancellation.Token)));
+            Assert.That(visited, Is.EqualTo(4));
+            Assert.That(disposed, Is.True);
+        }
+
+        [Test]
         public void Cpu_PreCanceledOperations_DoNotMutate()
         {
             var file = CreateFile();
@@ -329,6 +502,79 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             Assert.CatchAsync<OperationCanceledException>(() => file.RepeatAsync(2, cancellationToken: cancellation.Token));
             Assert.CatchAsync<OperationCanceledException>(() => file.SanitizeAsync(cancellationToken: cancellation.Token));
             Assert.That(file.GetNotes().First().Length, Is.EqualTo(originalLength));
+        }
+
+        [Test]
+        public void AsyncApis_CoverEverySynchronousOverload()
+        {
+            var types = new[]
+            {
+                typeof(CsvSerializer), typeof(Splitter), typeof(Merger), typeof(Quantizer),
+                typeof(QuantizerUtilities), typeof(Repeater), typeof(RepeaterUtilities),
+                typeof(Resizer), typeof(Sanitizer)
+            };
+            foreach (var type in types)
+            {
+                var methods = type.GetMethods(BindingFlags.Public | BindingFlags.Static | BindingFlags.Instance | BindingFlags.DeclaredOnly);
+                foreach (var sync in methods.Where(m => !m.Name.EndsWith("Async", StringComparison.Ordinal)))
+                {
+                    var parameters = sync.GetParameters();
+                    var asyncMethod = methods.SingleOrDefault(m =>
+                        m.Name == sync.Name + "Async" &&
+                        m.GetParameters().Length == parameters.Length + 2 &&
+                        m.GetParameters().Take(parameters.Length).Select(p => p.ParameterType).SequenceEqual(parameters.Select(p => p.ParameterType)));
+                    Assert.That(asyncMethod, Is.Not.Null, type.Name + "." + sync);
+                    Assert.That(asyncMethod.GetParameters()[parameters.Length].ParameterType, Is.EqualTo(typeof(IProgress<AsyncOperationProgress>)));
+                    Assert.That(asyncMethod.GetParameters().Last().ParameterType, Is.EqualTo(typeof(CancellationToken)));
+                    Assert.That(asyncMethod.GetParameters().Last().IsOptional, Is.True);
+                }
+            }
+        }
+
+        [Test]
+        public async Task Splitter_MutatingOverloads_MatchSync(
+            [Values(0, 1, 2)] int target,
+            [Values(0, 1, 2, 3, 4)] int operation)
+        {
+            var actual = CreateFile();
+            var expected = CreateFile();
+            var grid = new SteppedGrid((MidiTimeSpan)40);
+            var track = actual.GetTrackChunks().First();
+            var tracks = actual.GetTrackChunks();
+            switch (operation)
+            {
+                case 0:
+                    expected.SplitObjectsByStep(ObjectType.Note, (MidiTimeSpan)40);
+                    if (target == 0) await actual.SplitObjectsByStepAsync(ObjectType.Note, (MidiTimeSpan)40);
+                    else if (target == 1) await track.SplitObjectsByStepAsync(ObjectType.Note, (MidiTimeSpan)40, TempoMap.Default);
+                    else await tracks.SplitObjectsByStepAsync(ObjectType.Note, (MidiTimeSpan)40, TempoMap.Default);
+                    break;
+                case 1:
+                    expected.SplitObjectsByGrid(ObjectType.Note, grid);
+                    if (target == 0) await actual.SplitObjectsByGridAsync(ObjectType.Note, grid);
+                    else if (target == 1) await track.SplitObjectsByGridAsync(ObjectType.Note, grid, TempoMap.Default);
+                    else await tracks.SplitObjectsByGridAsync(ObjectType.Note, grid, TempoMap.Default);
+                    break;
+                case 2:
+                    expected.SplitObjectsByPartsNumber(ObjectType.Note, 3, TimeSpanType.Midi);
+                    if (target == 0) await actual.SplitObjectsByPartsNumberAsync(ObjectType.Note, 3, TimeSpanType.Midi);
+                    else if (target == 1) await track.SplitObjectsByPartsNumberAsync(ObjectType.Note, 3, TimeSpanType.Midi, TempoMap.Default);
+                    else await tracks.SplitObjectsByPartsNumberAsync(ObjectType.Note, 3, TimeSpanType.Midi, TempoMap.Default);
+                    break;
+                case 3:
+                    expected.SplitObjectsAtDistance(ObjectType.Note, (MidiTimeSpan)40, LengthedObjectTarget.Start);
+                    if (target == 0) await actual.SplitObjectsAtDistanceAsync(ObjectType.Note, (MidiTimeSpan)40, LengthedObjectTarget.Start);
+                    else if (target == 1) await track.SplitObjectsAtDistanceAsync(ObjectType.Note, (MidiTimeSpan)40, LengthedObjectTarget.Start, TempoMap.Default);
+                    else await tracks.SplitObjectsAtDistanceAsync(ObjectType.Note, (MidiTimeSpan)40, LengthedObjectTarget.Start, TempoMap.Default);
+                    break;
+                default:
+                    expected.SplitObjectsAtDistance(ObjectType.Note, 0.4, TimeSpanType.Midi, LengthedObjectTarget.Start);
+                    if (target == 0) await actual.SplitObjectsAtDistanceAsync(ObjectType.Note, 0.4, TimeSpanType.Midi, LengthedObjectTarget.Start);
+                    else if (target == 1) await track.SplitObjectsAtDistanceAsync(ObjectType.Note, 0.4, TimeSpanType.Midi, LengthedObjectTarget.Start, TempoMap.Default);
+                    else await tracks.SplitObjectsAtDistanceAsync(ObjectType.Note, 0.4, TimeSpanType.Midi, LengthedObjectTarget.Start, TempoMap.Default);
+                    break;
+            }
+            Assert.That(actual.GetNotes().Select(n => (n.Time, n.Length)), Is.EqualTo(expected.GetNotes().Select(n => (n.Time, n.Length))));
         }
 
         private static MidiFile CreateFile() => new MidiFile(new TrackChunk(

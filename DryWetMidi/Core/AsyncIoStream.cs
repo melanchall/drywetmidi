@@ -22,7 +22,6 @@ namespace Melanchall.DryWetMidi.Core
 
         internal bool IsMemoryStream => _stream is MemoryStream;
         internal bool IsAsync => _async;
-        internal CancellationToken CancellationToken => _cancellationToken;
 
         internal async Task<T> RunAsync<T>(Func<T> action, CancellationToken cancellationToken)
         {
@@ -43,6 +42,22 @@ namespace Melanchall.DryWetMidi.Core
         internal Task RunAsync(Action action, CancellationToken cancellationToken)
         {
             return RunAsync(() => { action(); return true; }, cancellationToken);
+        }
+
+        internal async Task RunAsyncOperation(Func<Task> action, CancellationToken cancellationToken)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            _cancellationToken = cancellationToken;
+            _async = true;
+            try
+            {
+                await action().ConfigureAwait(false);
+            }
+            finally
+            {
+                _async = false;
+                _cancellationToken = default;
+            }
         }
 
         public override bool CanRead => _stream.CanRead;

@@ -42,20 +42,36 @@ namespace Melanchall.DryWetMidi.Interaction
         public static Task<int> ProcessObjectsAsync(this MidiFile file, ObjectType objectType, Action<ITimedObject> action, Predicate<ITimedObject> match, ObjectDetectionSettings? settings = null, ObjectProcessingHint hint = ObjectProcessingHint.Default, IProgress<AsyncOperationProgress>? progress = null, CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(() => file.ProcessObjects(objectType, action, match, settings, hint), cancellationToken, progress);
 
+        /// <summary>Sequentially awaits an asynchronous action for each object.</summary>
+        public static Task<int> ProcessObjectsAsync(this EventsCollection eventsCollection, ObjectType objectType, Func<ITimedObject, CancellationToken, ValueTask> action, ObjectDetectionSettings? settings = null, ObjectProcessingHint hint = ObjectProcessingHint.Default, IProgress<AsyncOperationProgress>? progress = null, CancellationToken cancellationToken = default) =>
+            eventsCollection.ProcessObjectsAsync(objectType, action, null, settings, hint, progress, cancellationToken);
+
+        /// <summary>Sequentially awaits an asynchronous action for each object in a track.</summary>
+        public static Task<int> ProcessObjectsAsync(this TrackChunk trackChunk, ObjectType objectType, Func<ITimedObject, CancellationToken, ValueTask> action, ObjectDetectionSettings? settings = null, ObjectProcessingHint hint = ObjectProcessingHint.Default, IProgress<AsyncOperationProgress>? progress = null, CancellationToken cancellationToken = default) =>
+            trackChunk.ProcessObjectsAsync(objectType, action, null, settings, hint, progress, cancellationToken);
+
+        /// <summary>Sequentially awaits an asynchronous action for each object in tracks.</summary>
+        public static Task<int> ProcessObjectsAsync(this IEnumerable<TrackChunk> trackChunks, ObjectType objectType, Func<ITimedObject, CancellationToken, ValueTask> action, ObjectDetectionSettings? settings = null, ObjectProcessingHint hint = ObjectProcessingHint.Default, IProgress<AsyncOperationProgress>? progress = null, CancellationToken cancellationToken = default) =>
+            trackChunks.ProcessObjectsAsync(objectType, action, null, settings, hint, progress, cancellationToken);
+
+        /// <summary>Sequentially awaits an asynchronous action for each object in a MIDI file.</summary>
+        public static Task<int> ProcessObjectsAsync(this MidiFile file, ObjectType objectType, Func<ITimedObject, CancellationToken, ValueTask> action, ObjectDetectionSettings? settings = null, ObjectProcessingHint hint = ObjectProcessingHint.Default, IProgress<AsyncOperationProgress>? progress = null, CancellationToken cancellationToken = default) =>
+            file.ProcessObjectsAsync(objectType, action, null, settings, hint, progress, cancellationToken);
+
         /// <summary>Sequentially awaits an asynchronous action for matching objects.</summary>
-        public static Task<int> ProcessObjectsAsync(this EventsCollection eventsCollection, ObjectType objectType, Func<ITimedObject, CancellationToken, ValueTask> action, Predicate<ITimedObject>? match = null, ObjectDetectionSettings? settings = null, ObjectProcessingHint hint = ObjectProcessingHint.Default, IProgress<AsyncOperationProgress>? progress = null, CancellationToken cancellationToken = default) =>
+        public static Task<int> ProcessObjectsAsync(this EventsCollection eventsCollection, ObjectType objectType, Func<ITimedObject, CancellationToken, ValueTask> action, Predicate<ITimedObject>? match, ObjectDetectionSettings? settings = null, ObjectProcessingHint hint = ObjectProcessingHint.Default, IProgress<AsyncOperationProgress>? progress = null, CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(() => ProcessObjectsAwaitedAsync(InteractionAsyncUtilities.Collections(eventsCollection), objectType, action, match, settings, hint, cancellationToken), cancellationToken, progress);
 
         /// <summary>Sequentially awaits an asynchronous action for matching objects in a track.</summary>
-        public static Task<int> ProcessObjectsAsync(this TrackChunk trackChunk, ObjectType objectType, Func<ITimedObject, CancellationToken, ValueTask> action, Predicate<ITimedObject>? match = null, ObjectDetectionSettings? settings = null, ObjectProcessingHint hint = ObjectProcessingHint.Default, IProgress<AsyncOperationProgress>? progress = null, CancellationToken cancellationToken = default) =>
+        public static Task<int> ProcessObjectsAsync(this TrackChunk trackChunk, ObjectType objectType, Func<ITimedObject, CancellationToken, ValueTask> action, Predicate<ITimedObject>? match, ObjectDetectionSettings? settings = null, ObjectProcessingHint hint = ObjectProcessingHint.Default, IProgress<AsyncOperationProgress>? progress = null, CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(() => ProcessObjectsAwaitedAsync(InteractionAsyncUtilities.Collections(trackChunk), objectType, action, match, settings, hint, cancellationToken), cancellationToken, progress);
 
         /// <summary>Sequentially awaits an asynchronous action for matching objects in tracks.</summary>
-        public static Task<int> ProcessObjectsAsync(this IEnumerable<TrackChunk> trackChunks, ObjectType objectType, Func<ITimedObject, CancellationToken, ValueTask> action, Predicate<ITimedObject>? match = null, ObjectDetectionSettings? settings = null, ObjectProcessingHint hint = ObjectProcessingHint.Default, IProgress<AsyncOperationProgress>? progress = null, CancellationToken cancellationToken = default) =>
+        public static Task<int> ProcessObjectsAsync(this IEnumerable<TrackChunk> trackChunks, ObjectType objectType, Func<ITimedObject, CancellationToken, ValueTask> action, Predicate<ITimedObject>? match, ObjectDetectionSettings? settings = null, ObjectProcessingHint hint = ObjectProcessingHint.Default, IProgress<AsyncOperationProgress>? progress = null, CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(() => ProcessObjectsAwaitedAsync(InteractionAsyncUtilities.Collections(trackChunks), objectType, action, match, settings, hint, cancellationToken), cancellationToken, progress);
 
         /// <summary>Sequentially awaits an asynchronous action for matching objects in a MIDI file.</summary>
-        public static Task<int> ProcessObjectsAsync(this MidiFile file, ObjectType objectType, Func<ITimedObject, CancellationToken, ValueTask> action, Predicate<ITimedObject>? match = null, ObjectDetectionSettings? settings = null, ObjectProcessingHint hint = ObjectProcessingHint.Default, IProgress<AsyncOperationProgress>? progress = null, CancellationToken cancellationToken = default) =>
+        public static Task<int> ProcessObjectsAsync(this MidiFile file, ObjectType objectType, Func<ITimedObject, CancellationToken, ValueTask> action, Predicate<ITimedObject>? match, ObjectDetectionSettings? settings = null, ObjectProcessingHint hint = ObjectProcessingHint.Default, IProgress<AsyncOperationProgress>? progress = null, CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(() => ProcessObjectsAwaitedAsync(InteractionAsyncUtilities.Collections(file), objectType, action, match, settings, hint, cancellationToken), cancellationToken, progress);
 
         /// <summary>Asynchronously removes objects.</summary>

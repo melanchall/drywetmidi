@@ -99,6 +99,22 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
+        public async Task DisposeAsync_RejectsSubsequentWrites()
+        {
+            using var stream = new MemoryStream();
+            var tokens = MidiFile.WriteLazy(stream);
+            await tokens.StartTrackChunkAsync();
+            var writer = new TimedObjectsWriter(tokens);
+            await writer.DisposeAsync();
+
+            Assert.Throws<ObjectDisposedException>(() => writer.WriteObject(new Note((SevenBitNumber)60)));
+            Assert.Throws<ObjectDisposedException>(() => writer.WriteObjects(Array.Empty<ITimedObject>()));
+            Assert.ThrowsAsync<ObjectDisposedException>(async () =>
+                await writer.WriteObjectAsync(new Note((SevenBitNumber)60)));
+            await tokens.DisposeAsync();
+        }
+
+        [Test]
         public async Task WriteObjectsAsync_RejectsOverlappingOperations()
         {
             using var stream = new MemoryStream();
@@ -117,9 +133,10 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
             var pending = writer.WriteObjectsAsync(Produce());
             await started.Task;
-            Assert.Throws<InvalidOperationException>(() => writer.WriteObject(new Note()));
+            Assert.Throws<InvalidOperationException>(() => writer.WriteObject(new Note((SevenBitNumber)60)));
+            Assert.Throws<InvalidOperationException>(() => tokens.EndTrackChunk());
             Assert.ThrowsAsync<InvalidOperationException>(async () =>
-                await writer.WriteObjectAsync(new Note()));
+                await writer.WriteObjectAsync(new Note((SevenBitNumber)60)));
             release.SetResult(true);
             await pending;
             await writer.DisposeAsync();

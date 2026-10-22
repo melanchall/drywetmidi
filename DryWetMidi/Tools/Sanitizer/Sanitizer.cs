@@ -174,6 +174,7 @@ namespace Melanchall.DryWetMidi.Tools
 
                 do
                 {
+                    AsyncOperation.Checkpoint();
                     var noteOffTimedEvent = noteOffEventsEnumerator.Current.NoteOffTimedEvent;
                     var noteOffEvent = noteOffTimedEvent.Event;
                     noteOffEvent.DeltaTime = noteOffTimedEvent.Time - lastTime;

@@ -70,20 +70,36 @@ namespace Melanchall.DryWetMidi.Interaction
         public static Task<int> ProcessNotesAsync(this MidiFile file, Action<Note> action, Predicate<Note> match, NoteDetectionSettings? settings = null, TimedEventDetectionSettings? timedEventDetectionSettings = null, NoteProcessingHint hint = NoteProcessingHint.Default, IProgress<AsyncOperationProgress>? progress = null, CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(() => file.ProcessNotes(action, match, settings, timedEventDetectionSettings, hint), cancellationToken, progress);
 
+        /// <summary>Sequentially awaits an asynchronous action for each note.</summary>
+        public static Task<int> ProcessNotesAsync(this EventsCollection eventsCollection, Func<Note, CancellationToken, ValueTask> action, NoteDetectionSettings? settings = null, TimedEventDetectionSettings? timedEventDetectionSettings = null, NoteProcessingHint hint = NoteProcessingHint.Default, IProgress<AsyncOperationProgress>? progress = null, CancellationToken cancellationToken = default) =>
+            eventsCollection.ProcessNotesAsync(action, null, settings, timedEventDetectionSettings, hint, progress, cancellationToken);
+
+        /// <summary>Sequentially awaits an asynchronous action for each note in a track.</summary>
+        public static Task<int> ProcessNotesAsync(this TrackChunk trackChunk, Func<Note, CancellationToken, ValueTask> action, NoteDetectionSettings? settings = null, TimedEventDetectionSettings? timedEventDetectionSettings = null, NoteProcessingHint hint = NoteProcessingHint.Default, IProgress<AsyncOperationProgress>? progress = null, CancellationToken cancellationToken = default) =>
+            trackChunk.ProcessNotesAsync(action, null, settings, timedEventDetectionSettings, hint, progress, cancellationToken);
+
+        /// <summary>Sequentially awaits an asynchronous action for each note in tracks.</summary>
+        public static Task<int> ProcessNotesAsync(this IEnumerable<TrackChunk> trackChunks, Func<Note, CancellationToken, ValueTask> action, NoteDetectionSettings? settings = null, TimedEventDetectionSettings? timedEventDetectionSettings = null, NoteProcessingHint hint = NoteProcessingHint.Default, IProgress<AsyncOperationProgress>? progress = null, CancellationToken cancellationToken = default) =>
+            trackChunks.ProcessNotesAsync(action, null, settings, timedEventDetectionSettings, hint, progress, cancellationToken);
+
+        /// <summary>Sequentially awaits an asynchronous action for each note in a MIDI file.</summary>
+        public static Task<int> ProcessNotesAsync(this MidiFile file, Func<Note, CancellationToken, ValueTask> action, NoteDetectionSettings? settings = null, TimedEventDetectionSettings? timedEventDetectionSettings = null, NoteProcessingHint hint = NoteProcessingHint.Default, IProgress<AsyncOperationProgress>? progress = null, CancellationToken cancellationToken = default) =>
+            file.ProcessNotesAsync(action, null, settings, timedEventDetectionSettings, hint, progress, cancellationToken);
+
         /// <summary>Sequentially awaits an asynchronous action for matching notes.</summary>
-        public static Task<int> ProcessNotesAsync(this EventsCollection eventsCollection, Func<Note, CancellationToken, ValueTask> action, Predicate<Note>? match = null, NoteDetectionSettings? settings = null, TimedEventDetectionSettings? timedEventDetectionSettings = null, NoteProcessingHint hint = NoteProcessingHint.Default, IProgress<AsyncOperationProgress>? progress = null, CancellationToken cancellationToken = default) =>
+        public static Task<int> ProcessNotesAsync(this EventsCollection eventsCollection, Func<Note, CancellationToken, ValueTask> action, Predicate<Note>? match, NoteDetectionSettings? settings = null, TimedEventDetectionSettings? timedEventDetectionSettings = null, NoteProcessingHint hint = NoteProcessingHint.Default, IProgress<AsyncOperationProgress>? progress = null, CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(() => ProcessNotesAwaitedAsync(InteractionAsyncUtilities.Collections(eventsCollection), action, match, settings, timedEventDetectionSettings, hint, cancellationToken), cancellationToken, progress);
 
         /// <summary>Sequentially awaits an asynchronous action for matching notes in a track.</summary>
-        public static Task<int> ProcessNotesAsync(this TrackChunk trackChunk, Func<Note, CancellationToken, ValueTask> action, Predicate<Note>? match = null, NoteDetectionSettings? settings = null, TimedEventDetectionSettings? timedEventDetectionSettings = null, NoteProcessingHint hint = NoteProcessingHint.Default, IProgress<AsyncOperationProgress>? progress = null, CancellationToken cancellationToken = default) =>
+        public static Task<int> ProcessNotesAsync(this TrackChunk trackChunk, Func<Note, CancellationToken, ValueTask> action, Predicate<Note>? match, NoteDetectionSettings? settings = null, TimedEventDetectionSettings? timedEventDetectionSettings = null, NoteProcessingHint hint = NoteProcessingHint.Default, IProgress<AsyncOperationProgress>? progress = null, CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(() => ProcessNotesAwaitedAsync(InteractionAsyncUtilities.Collections(trackChunk), action, match, settings, timedEventDetectionSettings, hint, cancellationToken), cancellationToken, progress);
 
         /// <summary>Sequentially awaits an asynchronous action for matching notes in tracks.</summary>
-        public static Task<int> ProcessNotesAsync(this IEnumerable<TrackChunk> trackChunks, Func<Note, CancellationToken, ValueTask> action, Predicate<Note>? match = null, NoteDetectionSettings? settings = null, TimedEventDetectionSettings? timedEventDetectionSettings = null, NoteProcessingHint hint = NoteProcessingHint.Default, IProgress<AsyncOperationProgress>? progress = null, CancellationToken cancellationToken = default) =>
+        public static Task<int> ProcessNotesAsync(this IEnumerable<TrackChunk> trackChunks, Func<Note, CancellationToken, ValueTask> action, Predicate<Note>? match, NoteDetectionSettings? settings = null, TimedEventDetectionSettings? timedEventDetectionSettings = null, NoteProcessingHint hint = NoteProcessingHint.Default, IProgress<AsyncOperationProgress>? progress = null, CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(() => ProcessNotesAwaitedAsync(InteractionAsyncUtilities.Collections(trackChunks), action, match, settings, timedEventDetectionSettings, hint, cancellationToken), cancellationToken, progress);
 
         /// <summary>Sequentially awaits an asynchronous action for matching notes in a MIDI file.</summary>
-        public static Task<int> ProcessNotesAsync(this MidiFile file, Func<Note, CancellationToken, ValueTask> action, Predicate<Note>? match = null, NoteDetectionSettings? settings = null, TimedEventDetectionSettings? timedEventDetectionSettings = null, NoteProcessingHint hint = NoteProcessingHint.Default, IProgress<AsyncOperationProgress>? progress = null, CancellationToken cancellationToken = default) =>
+        public static Task<int> ProcessNotesAsync(this MidiFile file, Func<Note, CancellationToken, ValueTask> action, Predicate<Note>? match, NoteDetectionSettings? settings = null, TimedEventDetectionSettings? timedEventDetectionSettings = null, NoteProcessingHint hint = NoteProcessingHint.Default, IProgress<AsyncOperationProgress>? progress = null, CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(() => ProcessNotesAwaitedAsync(InteractionAsyncUtilities.Collections(file), action, match, settings, timedEventDetectionSettings, hint, cancellationToken), cancellationToken, progress);
 
         /// <summary>Asynchronously removes notes.</summary>

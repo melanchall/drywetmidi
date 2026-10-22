@@ -508,7 +508,11 @@ namespace Melanchall.DryWetMidi.Tools
             CsvReader csvReader,
             bool readChunkId)
         {
-            var record = csvReader.ReadRecord();
+            return ParseRecord(csvReader.ReadRecord(), readChunkId);
+        }
+
+        private static Record? ParseRecord(CsvRecord? record, bool readChunkId)
+        {
             if (record == null)
                 return null;
 

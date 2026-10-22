@@ -1,8 +1,8 @@
 using Melanchall.DryWetMidi.Common;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
-using System.Runtime.ExceptionServices;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -10,59 +10,88 @@ namespace Melanchall.DryWetMidi.Tools
 {
     internal static class ToolsAsyncEnumerable
     {
-        // A single worker advances the synchronous iterator only when the consumer asks for an item.
+        private const int BatchSize = 64;
+
+        private sealed class EnumerationProgress : IProgress<AsyncOperationProgress>
+        {
+            private readonly IProgress<AsyncOperationProgress> _progress;
+            private long _processed;
+            private long _batchProcessed;
+            private long _lastReport;
+            private readonly Stopwatch _stopwatch = Stopwatch.StartNew();
+
+            internal EnumerationProgress(IProgress<AsyncOperationProgress> progress) => _progress = progress;
+
+            public void Report(AsyncOperationProgress value)
+            {
+                _batchProcessed = value.ProcessedItems;
+                if (!value.IsCompleted)
+                {
+                    _lastReport = _stopwatch.ElapsedMilliseconds;
+                    _progress.Report(new AsyncOperationProgress(_processed + _batchProcessed));
+                }
+            }
+
+            internal void EndBatch()
+            {
+                _processed += _batchProcessed;
+                _batchProcessed = 0;
+                var elapsed = _stopwatch.ElapsedMilliseconds;
+                if (elapsed - _lastReport >= 100)
+                {
+                    _lastReport = elapsed;
+                    _progress.Report(new AsyncOperationProgress(_processed));
+                }
+            }
+
+            internal void Complete() => _progress.Report(new AsyncOperationProgress(_processed, true));
+        }
+
+        // Advance a persistent iterator in bounded batches without retaining a worker between requests.
         internal static async IAsyncEnumerable<T> Enumerate<T>(
             Func<IEnumerable<T>> source,
             IProgress<AsyncOperationProgress>? progress,
             [EnumeratorCancellation] CancellationToken cancellationToken)
         {
-            using var lifetime = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
-            using var requested = new SemaphoreSlim(0);
-            using var available = new SemaphoreSlim(0);
-            T current = default!;
-            bool hasValue = false;
-            ExceptionDispatchInfo? error = null;
-            var worker = AsyncOperation.Run(() =>
-            {
-                try
-                {
-                    using var enumerator = source().GetEnumerator();
-                    while (true)
-                    {
-                        requested.Wait(lifetime.Token);
-                        AsyncOperation.Checkpoint();
-                        hasValue = enumerator.MoveNext();
-                        if (hasValue)
-                            current = enumerator.Current;
-                        available.Release();
-                        if (!hasValue)
-                            break;
-                    }
-                }
-                catch (Exception exception)
-                {
-                    error = ExceptionDispatchInfo.Capture(exception);
-                    available.Release();
-                }
-            }, lifetime.Token, progress);
-
+            IEnumerator<T>? enumerator = null;
+            bool completed = false;
+            bool finished = false;
+            var enumerationProgress = progress == null ? null : new EnumerationProgress(progress);
             try
             {
-                while (true)
+                while (!completed)
                 {
-                    requested.Release();
-                    await available.WaitAsync(cancellationToken).ConfigureAwait(false);
-                    error?.Throw();
-                    if (!hasValue)
-                        yield break;
-                    yield return current;
+                    var batch = await AsyncOperation.Run(() =>
+                    {
+                        enumerator ??= source().GetEnumerator();
+                        var items = new List<T>(BatchSize);
+                        while (items.Count < BatchSize)
+                        {
+                            AsyncOperation.Checkpoint();
+                            if (!enumerator.MoveNext())
+                            {
+                                completed = true;
+                                break;
+                            }
+                            items.Add(enumerator.Current);
+                        }
+                        return items;
+                    }, cancellationToken, enumerationProgress).ConfigureAwait(false);
+                    enumerationProgress?.EndBatch();
+                    foreach (var item in batch)
+                    {
+                        cancellationToken.ThrowIfCancellationRequested();
+                        yield return item;
+                    }
                 }
+                finished = true;
             }
             finally
             {
-                lifetime.Cancel();
-                try { await worker.ConfigureAwait(false); }
-                catch (OperationCanceledException) when (lifetime.IsCancellationRequested) { }
+                if (enumerator != null)
+                    await AsyncOperation.Run(() => enumerator.Dispose(), CancellationToken.None).ConfigureAwait(false);
+                if (finished)
+                    enumerationProgress?.Complete();
             }
         }
     }

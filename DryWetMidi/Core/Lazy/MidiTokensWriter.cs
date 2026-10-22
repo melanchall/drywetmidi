@@ -54,6 +54,7 @@ namespace Melanchall.DryWetMidi.Core
         private int _callbackThread;
         private readonly AsyncLocal<CallbackScope?> _callbackScope = new AsyncLocal<CallbackScope?>();
         private int _callbackWrite;
+        private bool _suppressEndCallback;
 
         private sealed class CallbackScope
         {
@@ -150,22 +151,7 @@ namespace Melanchall.DryWetMidi.Core
             _callbackThread = Environment.CurrentManagedThreadId;
             try
             {
-                if (_transport.IsAsync && BeforeEndTrackChunkAsync != null)
-                {
-                    var scope = new CallbackScope();
-                    _callbackScope.Value = scope;
-                    try
-                    {
-                        BeforeEndTrackChunkAsync(_transport.CancellationToken).AsTask()
-                            .ConfigureAwait(false).GetAwaiter().GetResult();
-                    }
-                    finally
-                    {
-                        scope.Active = false;
-                        _callbackScope.Value = null;
-                    }
-                }
-                else
+                if (!_suppressEndCallback)
                     BeforeEndTrackChunk?.Invoke();
             }
             finally { _callbackThread = 0; }
@@ -271,13 +257,13 @@ namespace Melanchall.DryWetMidi.Core
         /// <param name="cancellationToken">Token used to cancel writing.</param>
         /// <returns>A task representing writing.</returns>
         public Task StartTrackChunkAsync(CancellationToken cancellationToken = default) =>
-            ExecuteAsync(StartTrackChunkCore, cancellationToken);
+            ExecuteTrackAsync(StartTrackChunkCore, cancellationToken);
 
         /// <summary>Ends a track chunk using asynchronous transport writes.</summary>
         /// <param name="cancellationToken">Token used to cancel writing.</param>
         /// <returns>A task representing writing.</returns>
         public Task EndTrackChunkAsync(CancellationToken cancellationToken = default) =>
-            ExecuteAsync(EndTrackChunkCore, cancellationToken);
+            ExecuteTrackAsync(EndTrackChunkCore, cancellationToken, alwaysEnd: true);
 
         /// <summary>Writes an event using asynchronous transport writes.</summary>
         /// <param name="midiEvent">The event to write.</param>
@@ -297,6 +283,9 @@ namespace Melanchall.DryWetMidi.Core
 
         private void WriteCallbackEvent(MidiEvent midiEvent)
         {
+            if (_disposed || (_callbackThread != Environment.CurrentManagedThreadId &&
+                _callbackScope.Value?.Active != true))
+                throw new InvalidOperationException("The track finalization callback has already completed.");
             if (Interlocked.CompareExchange(ref _callbackWrite, 1, 0) != 0)
                 throw new InvalidOperationException("Another callback write is already in progress.");
             try { WriteEventCore(midiEvent); }
@@ -329,6 +318,49 @@ namespace Melanchall.DryWetMidi.Core
         {
             EnterOperation();
             try { await _transport.RunAsync(action, cancellationToken).ConfigureAwait(false); }
+            finally { Volatile.Write(ref _operation, 0); }
+        }
+
+        private async Task ExecuteTrackAsync(Action action, CancellationToken cancellationToken,
+            bool alwaysEnd = false, bool disposing = false)
+        {
+            EnterOperation();
+            try
+            {
+                await _transport.RunAsyncOperation(async () =>
+                {
+                    try
+                    {
+                        if ((alwaysEnd || _state == State.Event) && BeforeEndTrackChunkAsync != null)
+                        {
+                            var scope = new CallbackScope();
+                            _callbackScope.Value = scope;
+                            try
+                            {
+                                await BeforeEndTrackChunkAsync(cancellationToken).ConfigureAwait(false);
+                            }
+                            finally
+                            {
+                                scope.Active = false;
+                                _callbackScope.Value = null;
+                            }
+                            _suppressEndCallback = true;
+                        }
+                        try { await Task.Run(action, cancellationToken).ConfigureAwait(false); }
+                        finally { _suppressEndCallback = false; }
+                    }
+                    catch
+                    {
+                        if (disposing && !_disposed)
+                        {
+                            _disposed = true;
+                            if (_disposeStream)
+                                await Task.Run(_stream.Dispose).ConfigureAwait(false);
+                        }
+                        throw;
+                    }
+                }, cancellationToken).ConfigureAwait(false);
+            }
             finally { Volatile.Write(ref _operation, 0); }
         }
 
@@ -400,7 +432,7 @@ namespace Melanchall.DryWetMidi.Core
         public async ValueTask DisposeAsync()
         {
             if (!_disposed)
-                await ExecuteAsync(() => Dispose(true), CancellationToken.None).ConfigureAwait(false);
+                await ExecuteTrackAsync(() => Dispose(true), CancellationToken.None, disposing: true).ConfigureAwait(false);
         }
 
         private void Dispose(bool disposing)

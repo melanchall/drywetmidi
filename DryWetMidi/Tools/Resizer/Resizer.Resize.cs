@@ -67,7 +67,11 @@ namespace Melanchall.DryWetMidi.Tools
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
             ThrowIfArgument.IsNegative(nameof(ratio), ratio, "Ratio is negative.");
 
-            trackChunk.ProcessTimedEvents(timedEvent => timedEvent.Time = MathUtilities.RoundToLong(timedEvent.Time * ratio));
+            trackChunk.ProcessTimedEvents(timedEvent =>
+            {
+                AsyncOperation.Checkpoint();
+                timedEvent.Time = MathUtilities.RoundToLong(timedEvent.Time * ratio);
+            });
         }
 
         /// <summary>

@@ -82,6 +82,7 @@ namespace Melanchall.DryWetMidi.Tools
 
                         foreach (var note in notes)
                         {
+                            AsyncOperation.Checkpoint();
                             if (note.EndTime <= times[0])
                                 continue;
 
@@ -126,6 +127,7 @@ namespace Melanchall.DryWetMidi.Tools
                            endPartTrackChunksEnumerator.MoveNext() &&
                            notesToSplitDescriptorsEnumerator.MoveNext())
                     {
+                        AsyncOperation.Checkpoint();
                         var newTrackChunk = new TrackChunk();
                         var eventsCollection = newTrackChunk.Events;
                         eventsCollection.AddRange(startPartTrackChunksEnumerator.Current.Events);
