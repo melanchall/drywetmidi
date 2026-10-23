@@ -765,14 +765,9 @@ namespace Melanchall.DryWetMidi.Interaction
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
             ThrowIfArgument.IsNull(nameof(match), match);
 
+            var eventsToRemove = new HashSet<MidiEvent>();
             var chordsToRemoveCount = eventsCollection.ProcessChords(
-                c =>
-                {
-                    foreach (var note in c.Notes)
-                    {
-                        note.TimedNoteOnEvent.Event.MustBeRemoved = note.TimedNoteOffEvent.Event.MustBeRemoved = true;
-                    }
-                },
+                c => InteractionAsyncUtilities.CollectEventsForRemoval(c, eventsToRemove),
                 match,
                 settings,
                 noteDetectionSettings,
@@ -782,7 +777,7 @@ namespace Melanchall.DryWetMidi.Interaction
             if (chordsToRemoveCount == 0)
                 return 0;
 
-            eventsCollection.RemoveTimedEvents(e => e.Event.MustBeRemoved);
+            eventsCollection.RemoveTimedEvents(e => eventsToRemove.Contains(e.Event));
             return chordsToRemoveCount;
         }
 
@@ -905,14 +900,9 @@ namespace Melanchall.DryWetMidi.Interaction
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
             ThrowIfArgument.IsNull(nameof(match), match);
 
+            var eventsToRemove = new HashSet<MidiEvent>();
             var chordsToRemoveCount = trackChunks.ProcessChords(
-                c =>
-                {
-                    foreach (var note in c.Notes)
-                    {
-                        note.TimedNoteOnEvent.Event.MustBeRemoved = note.TimedNoteOffEvent.Event.MustBeRemoved = true;
-                    }
-                },
+                c => InteractionAsyncUtilities.CollectEventsForRemoval(c, eventsToRemove),
                 match,
                 settings,
                 noteDetectionSettings,
@@ -922,7 +912,7 @@ namespace Melanchall.DryWetMidi.Interaction
             if (chordsToRemoveCount == 0)
                 return 0;
 
-            trackChunks.RemoveTimedEvents(e => e.Event.MustBeRemoved);
+            trackChunks.RemoveTimedEvents(e => eventsToRemove.Contains(e.Event));
             return chordsToRemoveCount;
         }
 

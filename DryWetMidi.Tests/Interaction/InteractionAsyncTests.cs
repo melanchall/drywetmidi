@@ -232,6 +232,80 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             MidiAsserts.AreEqual(expected, track.GetTimedEvents(), "Canceled manager save must preserve committed contents");
         }
 
+        [TestCase(false)]
+        [TestCase(true)]
+        public void RemoveTimedEvents_CancellationPreservesEvents(bool multipleTracks)
+        {
+            var track = new TrackChunk(
+                new TextEvent("a") { DeltaTime = 10 },
+                new TextEvent("b") { DeltaTime = 20 },
+                new TextEvent("c") { DeltaTime = 30 });
+            var other = new TrackChunk(new TextEvent("other") { DeltaTime = 100 });
+            var tracks = new[] { track, other };
+            var originals = tracks.Select(t => t.Events.ToArray()).ToArray();
+            var deltas = originals.Select(events => events.Select(e => e.DeltaTime).ToArray()).ToArray();
+            using var cancellation = new CancellationTokenSource();
+            bool Match(TimedEvent ev)
+            {
+                if (((TextEvent)ev.Event).Text == "b")
+                    cancellation.Cancel();
+                return ((TextEvent)ev.Event).Text == "a";
+            }
+
+            Assert.CatchAsync<OperationCanceledException>(async () =>
+            {
+                if (multipleTracks)
+                    await tracks.RemoveTimedEventsAsync(Match, cancellationToken: cancellation.Token);
+                else
+                    await track.Events.RemoveTimedEventsAsync(Match, cancellationToken: cancellation.Token);
+            });
+            for (var i = 0; i < tracks.Length; i++)
+            {
+                Assert.That(tracks[i].Events.ToArray(), Is.EqualTo(originals[i]));
+                Assert.That(tracks[i].Events.Select(e => e.DeltaTime), Is.EqualTo(deltas[i]));
+            }
+        }
+
+        [TestCase(ObjectType.Note, false)]
+        [TestCase(ObjectType.Note, true)]
+        [TestCase(ObjectType.Chord, false)]
+        [TestCase(ObjectType.Chord, true)]
+        [TestCase(ObjectType.Note | ObjectType.TimedEvent, false)]
+        [TestCase(ObjectType.Note | ObjectType.TimedEvent, true)]
+        public void RemoveObjects_CancellationDoesNotLeaveRemovalFlags(ObjectType type, bool multipleTracks)
+        {
+            var track = new TrackChunk();
+            track.Events.AddObjects(new[]
+            {
+                new Note((SevenBitNumber)60, 10, 0),
+                new Note((SevenBitNumber)62, 10, 100),
+                new Note((SevenBitNumber)64, 10, 200)
+            });
+            var tracks = new[] { track, new TrackChunk() };
+            var originalEvents = track.Events.ToArray();
+            var deltas = originalEvents.Select(e => e.DeltaTime).ToArray();
+            using var cancellation = new CancellationTokenSource();
+            bool Match(ITimedObject obj)
+            {
+                if (obj.Time == 100)
+                    cancellation.Cancel();
+                return obj.Time == 0;
+            }
+
+            Assert.CatchAsync<OperationCanceledException>(async () =>
+            {
+                if (multipleTracks)
+                    await tracks.RemoveObjectsAsync(type, Match, cancellationToken: cancellation.Token);
+                else
+                    await track.Events.RemoveObjectsAsync(type, Match, cancellationToken: cancellation.Token);
+            });
+            Assert.That(track.Events.ToArray(), Is.EqualTo(originalEvents));
+            Assert.That(track.Events.Select(e => e.DeltaTime), Is.EqualTo(deltas));
+            Assert.That(track.Events.All(e => !e.MustBeRemoved), Is.True);
+            track.ProcessNotes(n => n.Time += 1);
+            Assert.That(track.GetNotes().Count, Is.EqualTo(3));
+        }
+
         [Test]
         public async Task RemoveOperations_MatchSynchronousCountsAndEvents()
         {

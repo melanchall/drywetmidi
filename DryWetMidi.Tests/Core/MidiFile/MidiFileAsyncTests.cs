@@ -125,6 +125,32 @@ namespace Melanchall.DryWetMidi.Tests.Core
             Assert.That(header.TracksNumber, Is.EqualTo(2));
         }
 
+        [TestCase(false)]
+        [TestCase(true)]
+        public async Task ReadAsync_TextCallback_UsesRetainedMemoryLimit(bool discardText)
+        {
+            using var bytes = new MemoryStream();
+            new MidiFile(new TrackChunk(new TextEvent(new string('A', 100000)))).Write(bytes);
+            var settings = new ReadingSettings
+            {
+                MaxMemorySize = 10000,
+                DecodeTextCallback = (data, _) => discardText ? string.Empty : new string('A', data.Length)
+            };
+            bytes.Position = 0;
+            using var input = new AsyncOnlyStream(bytes.ToArray(), false, 997);
+            if (discardText)
+            {
+                var expected = MidiFile.Read(bytes, settings);
+                var actual = await MidiFile.ReadAsync(input, settings);
+                Assert.That(MidiFile.Equals(expected, actual, out var message), Is.True, message);
+            }
+            else
+            {
+                Assert.Throws<MidiFileTooLargeException>(() => MidiFile.Read(bytes, settings));
+                Assert.ThrowsAsync<MidiFileTooLargeException>(async () => await MidiFile.ReadAsync(input, settings));
+            }
+        }
+
         [Test]
         public void ReadAsync_PreservesMemoryLimit()
         {

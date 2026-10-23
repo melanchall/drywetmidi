@@ -26,6 +26,27 @@ namespace Melanchall.DryWetMidi.Interaction
             }
         }
 
+        internal static void CollectEventsForRemoval(ITimedObject obj, ISet<MidiEvent> events)
+        {
+            switch (obj)
+            {
+                case TimedEvent timedEvent:
+                    events.Add(timedEvent.Event);
+                    break;
+                case Note note:
+                    events.Add(note.TimedNoteOnEvent.Event);
+                    events.Add(note.TimedNoteOffEvent.Event);
+                    break;
+                case Chord chord:
+                    foreach (var chordNote in chord.Notes)
+                    {
+                        AsyncOperation.Checkpoint();
+                        CollectEventsForRemoval(chordNote, events);
+                    }
+                    break;
+            }
+        }
+
         internal static List<(MidiEvent Event, long DeltaTime)> PrepareReplacement(
             IEnumerable<TimedEvent> timedEvents,
             bool removeMarked = false,

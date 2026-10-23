@@ -55,7 +55,7 @@ namespace Melanchall.DryWetMidi.Tools
 
             var times = GetGridTimes(objects, filter, grid, tempoMap);
 
-            foreach (var obj in objects.OfType<ITimedObject>().Where(filter))
+            foreach (var obj in InteractionAsyncUtilities.CheckpointItems(objects).OfType<ITimedObject>().Where(filter))
             {
                 AsyncOperation.Checkpoint();
                 QuantizeObject(obj, grid, times, tempoMap, settings);
@@ -314,7 +314,7 @@ namespace Melanchall.DryWetMidi.Tools
             IGrid grid,
             TempoMap tempoMap)
         {
-            var lastTime = objects
+            var lastTime = InteractionAsyncUtilities.CheckpointItems(objects)
                 .OfType<ITimedObject>()
                 .Where(filter)
                 .Select(obj =>

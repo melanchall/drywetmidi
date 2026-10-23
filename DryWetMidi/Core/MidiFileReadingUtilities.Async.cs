@@ -69,8 +69,6 @@ namespace Melanchall.DryWetMidi.Core
                     _ => size
                 };
                 payloadEnd = reader.Position + Math.Max(size, contentSize);
-                if (contentSize == size)
-                    reader.ThrowIfMemoryLimitExceeded(Math.Min(size, Math.Max(0, reader.Length - reader.Position)), settings);
                 await reader.CopyBytesAsync(frame, contentSize, cancellationToken).ConfigureAwait(false);
             }
             else
