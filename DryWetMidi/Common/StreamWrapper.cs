@@ -80,6 +80,7 @@ namespace Melanchall.DryWetMidi.Common
             var count = await ReadAsync(_peekBuffer, 0, 1, cancellationToken).ConfigureAwait(false);
             if (count == 0)
                 return true;
+
             Position--;
             return false;
         }
@@ -91,28 +92,40 @@ namespace Melanchall.DryWetMidi.Common
                 Position = position;
                 return;
             }
+
             while (_position < position)
             {
-                var count = await ReadAsync(_skipBytesBuffer, 0,
-                    (int)Math.Min(position - _position, _skipBytesBuffer.Length), cancellationToken).ConfigureAwait(false);
+                var count = await ReadAsync(
+                    _skipBytesBuffer,
+                    0,
+                    (int)Math.Min(position - _position, _skipBytesBuffer.Length),
+                    cancellationToken).ConfigureAwait(false);
+
                 if (count == 0)
                     break;
             }
         }
 
+        /// <inheritdoc/>
         public override async Task<int> ReadAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
+
             var buffered = _buffer.MovePositionForward(count);
             Buffer.BlockCopy(buffered, 0, buffer, offset, buffered.Length);
             var read = count == buffered.Length ? 0 :
                 await _stream.ReadAsync(buffer, offset + buffered.Length, count - buffered.Length, cancellationToken).ConfigureAwait(false);
+
             for (var i = 0; i < read; i++)
+            {
                 _buffer.Add(buffer[offset + buffered.Length + i]);
+            }
+
             var total = buffered.Length + read;
             _position += total;
             if (count > 0 && total == 0)
                 _position = long.MaxValue;
+
             AsyncBytesRead?.Invoke(read);
             return total;
         }

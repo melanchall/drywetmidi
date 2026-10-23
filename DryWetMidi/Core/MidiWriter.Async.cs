@@ -12,12 +12,14 @@ namespace Melanchall.DryWetMidi.Core
         internal async Task WriteEncodedAsync(Action<MidiWriter> encode, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
+
             using var memory = new MemoryStream();
             using (var codec = new MidiWriter(memory, new WriterSettings { UseBuffering = false }))
             {
                 codec._length = _length;
                 encode(codec);
             }
+
             await WritePayloadAsync(memory.GetBuffer(), checked((int)memory.Length), cancellationToken).ConfigureAwait(false);
         }
 
@@ -29,6 +31,7 @@ namespace Melanchall.DryWetMidi.Core
         private async Task WritePayloadAsync(byte[] data, int count, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
+
             if (!_useBuffering)
                 await WriteTransportAsync(data, count, cancellationToken).ConfigureAwait(false);
             else
@@ -43,6 +46,7 @@ namespace Melanchall.DryWetMidi.Core
                         await FlushBufferAsync(cancellationToken).ConfigureAwait(false);
                 }
             }
+
             _length += count;
         }
 
@@ -61,22 +65,31 @@ namespace Melanchall.DryWetMidi.Core
         {
             if (_bufferPosition == 0)
                 return;
+
             await WriteTransportAsync(_buffer!, _bufferPosition, cancellationToken).ConfigureAwait(false);
             _bufferPosition = 0;
         }
 
-        /// <summary>Asynchronously flushes buffered MIDI bytes without closing the underlying stream.</summary>
+        /// <summary>
+        /// Asynchronously flushes buffered MIDI bytes without closing the underlying stream.
+        /// </summary>
         /// <returns>A task representing disposal.</returns>
+        /// <exception cref="IOException">An I/O error occurred while flushing the stream.</exception>
+        /// <exception cref="ObjectDisposedException">The underlying stream has been disposed.</exception>
         public async ValueTask DisposeAsync()
         {
             if (_disposed)
                 return;
+
             try
             {
                 await FlushBufferAsync(CancellationToken.None).ConfigureAwait(false);
                 await _stream.FlushAsync(CancellationToken.None).ConfigureAwait(false);
             }
-            finally { _disposed = true; }
+            finally
+            {
+                _disposed = true;
+            }
         }
     }
 }

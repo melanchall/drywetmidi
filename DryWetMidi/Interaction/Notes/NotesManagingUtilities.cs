@@ -1170,6 +1170,7 @@ namespace Melanchall.DryWetMidi.Interaction
                 });
 
             var notes = new Note[result.Count];
+
             for (var i = 0; i < result.Count; i++)
             {
                 AsyncOperation.Checkpoint();

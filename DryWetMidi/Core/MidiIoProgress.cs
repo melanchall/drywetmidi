@@ -24,6 +24,7 @@ namespace Melanchall.DryWetMidi.Core
             var elapsed = _stopwatch.ElapsedMilliseconds;
             if (elapsed - _lastReport < 100)
                 return;
+
             _lastReport = elapsed;
             _progress.Report(new AsyncOperationProgress(_processed, phase: _phase));
         }

@@ -17,7 +17,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         public void TakePart_FromStart_EmptyFile()
         {
             var midiFile = new MidiFile();
-            var result = midiFile.TakePart(MusicalTimeSpan.Eighth);
+            var result = TakePart(midiFile, MusicalTimeSpan.Eighth);
 
             ClassicAssert.IsTrue(result.IsEmpty(), "Empty file part taking produced non-empty result.");
         }
@@ -45,7 +45,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 PreserveTimes = false
             };
 
-            var result = midiFile.TakePart(partLength, settings);
+            var result = TakePart(midiFile, partLength, settings);
 
             CompareTimedEvents(
                 result.GetTimedEvents(),
@@ -80,7 +80,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 PreserveTimes = true
             };
 
-            var result = midiFile.TakePart(partLength, settings);
+            var result = TakePart(midiFile, partLength, settings);
 
             CompareTimedEvents(
                 result.GetTimedEvents(),
@@ -112,7 +112,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 PreserveTimes = false
             };
 
-            var result = midiFile.TakePart(partLength, settings);
+            var result = TakePart(midiFile, partLength, settings);
 
             CompareTimedEvents(
                 result.GetTimedEvents(),
@@ -142,7 +142,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 PreserveTimes = false
             };
 
-            var result = midiFile.TakePart(partLength, settings);
+            var result = TakePart(midiFile, partLength, settings);
 
             CompareTimedEvents(
                 result.GetTimedEvents(),
@@ -175,7 +175,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 PreserveTrackChunks = preserveTrackChunks
             };
 
-            var result = midiFile.TakePart(partLength, settings);
+            var result = TakePart(midiFile, partLength, settings);
             ClassicAssert.AreEqual(preserveTrackChunks ? 2 : 1, result.GetTrackChunks().Count(), "Track chunks count of resulting file is invalid.");
 
             CompareTimedEvents(

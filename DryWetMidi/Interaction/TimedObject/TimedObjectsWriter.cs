@@ -60,8 +60,10 @@ namespace Melanchall.DryWetMidi.Interaction
         public void WriteObject(ITimedObject timedObject)
         {
             EnsureNoAsyncOperation();
+
             if (_disposed)
                 throw new ObjectDisposedException(nameof(TimedObjectsWriter));
+
             ThrowIfArgument.IsNull(nameof(timedObject), timedObject);
 
             var time = timedObject.Time;
@@ -96,8 +98,10 @@ namespace Melanchall.DryWetMidi.Interaction
         public void WriteObjects(IEnumerable<ITimedObject?> timedObjects)
         {
             EnsureNoAsyncOperation();
+
             if (_disposed)
                 throw new ObjectDisposedException(nameof(TimedObjectsWriter));
+
             ThrowIfArgument.IsNull(nameof(timedObjects), timedObjects);
 
             foreach (var obj in timedObjects.OfType<ITimedObject>())

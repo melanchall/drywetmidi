@@ -17,12 +17,14 @@ namespace Melanchall.DryWetMidi.Core
         private async Task<MidiToken?> ReadTokenCoreAsync(CancellationToken cancellationToken)
         {
             var start = _reader.Position;
+
             while (true)
             {
                 cancellationToken.ThrowIfCancellationRequested();
                 if (await _reader.EndReachedAsync(cancellationToken).ConfigureAwait(false) ||
                     (_smfEndPosition != null && _reader.Position >= _smfEndPosition))
                     return null;
+
                 MidiToken? token = null;
                 try
                 {
@@ -38,8 +40,10 @@ namespace Melanchall.DryWetMidi.Core
                             {
                                 if (_settings.NotEnoughBytesPolicy == NotEnoughBytesPolicy.Abort)
                                     throw new NotEnoughBytesException("Not enough bytes to read a chunk ID.", 4, id.Length);
+
                                 return null;
                             }
+
                             _chunkId = SmfConstants.DefaultTextEncoding.GetString(id);
                             _chunkSize = await _reader.ReadDwordAsync(cancellationToken).ConfigureAwait(false);
                             _endReaderPosition = _reader.Position + _chunkSize;
@@ -62,7 +66,10 @@ namespace Melanchall.DryWetMidi.Core
                                 if (_chunkId == TrackChunk.Id)
                                 {
                                     var result = await MidiFileReadingUtilities.ReadEventAsync(
-                                        _reader, _settings, _currentChannelEventStatusByte, cancellationToken).ConfigureAwait(false);
+                                        _reader,
+                                        _settings,
+                                        _currentChannelEventStatusByte,
+                                        cancellationToken).ConfigureAwait(false);
                                     _currentChannelEventStatusByte = result.Status;
                                     if (result.Event != null)
                                         token = new MidiEventToken(result.Event);
@@ -75,11 +82,13 @@ namespace Melanchall.DryWetMidi.Core
                                     token = new BytesPacketToken(await _reader.ReadBytesAsync(size, cancellationToken).ConfigureAwait(false));
                                 }
                             }
+
                             if (token == null)
                             {
                                 GoToNextState();
                                 continue;
                             }
+
                             break;
                         default:
                             throw new InvalidOperationException($"Unexpected state: {_state}");
@@ -95,8 +104,10 @@ namespace Melanchall.DryWetMidi.Core
                     ReactOnNotEnoughBytes(_settings.NotEnoughBytesPolicy, exception);
                     return null;
                 }
+
                 token.Position = start;
                 token.Length = _reader.Position - start;
+
                 return token;
             }
         }

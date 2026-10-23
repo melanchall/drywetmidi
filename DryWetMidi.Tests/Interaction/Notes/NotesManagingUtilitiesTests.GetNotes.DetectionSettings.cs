@@ -750,6 +750,17 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             Action<ICollection<Note>> additionalChecks = null,
             TimedEventDetectionSettings timedEventDetectionSettings = null)
         {
+            if (containerType == ContainerType.EventsCollection || containerType == ContainerType.TrackChunk)
+            {
+                CheckGetNotesAsync(
+                    containerType,
+                    new[] { midiEvents },
+                    expectedNotes,
+                    settings,
+                    timedEventDetectionSettings,
+                    additionalChecks);
+            }
+
             switch (containerType)
             {
                 case ContainerType.EventsCollection:
@@ -810,6 +821,14 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             Action<ICollection<Note>> additionalChecks = null,
             TimedEventDetectionSettings timedEventDetectionSettings = null)
         {
+            CheckGetNotesAsync(
+                wrapToFile ? ContainerType.File : ContainerType.TrackChunks,
+                midiEvents,
+                expectedNotes,
+                settings,
+                timedEventDetectionSettings,
+                additionalChecks);
+
             ICollection<Note> notes;
 
             var trackChunks = midiEvents.Select(e => new TrackChunk(e)).ToArray();

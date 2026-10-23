@@ -216,14 +216,17 @@ namespace Melanchall.DryWetMidi.Core
             cancellationToken.ThrowIfCancellationRequested();
             if (this is TrackChunk track)
             {
-                await writer.WriteEncodedAsync(codec => WriteHeader(ChunkId, track.GetContentSize(settings, cancellationToken), codec, settings),
+                await writer.WriteEncodedAsync(
+                    codec => WriteHeader(ChunkId, track.GetContentSize(settings, cancellationToken), codec, settings),
                     cancellationToken).ConfigureAwait(false);
                 await track.WriteContentAsync(writer, settings, cancellationToken).ConfigureAwait(false);
             }
             else if (this is UnknownChunk unknown)
             {
-                await writer.WriteEncodedAsync(codec => WriteHeader(ChunkId, GetContentSize(settings), codec, settings),
+                await writer.WriteEncodedAsync(
+                    codec => WriteHeader(ChunkId, GetContentSize(settings), codec, settings),
                     cancellationToken).ConfigureAwait(false);
+
                 if (unknown.Data != null)
                     await writer.WriteDataAsync(unknown.Data, cancellationToken).ConfigureAwait(false);
             }

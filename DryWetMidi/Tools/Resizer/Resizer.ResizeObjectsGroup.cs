@@ -63,6 +63,7 @@ namespace Melanchall.DryWetMidi.Tools
             foreach (var obj in notNullObjects)
             {
                 AsyncOperation.Checkpoint();
+
                 var time = obj.Time;
                 var endTime = time + ((obj as ILengthedObject)?.Length ?? 0);
 
@@ -150,6 +151,7 @@ namespace Melanchall.DryWetMidi.Tools
             foreach (var obj in objects)
             {
                 AsyncOperation.Checkpoint();
+
                 var lengthedObject = obj as ILengthedObject;
 
                 var length = lengthedObject?.LengthAs(distanceCalculationType, tempoMap);
@@ -174,6 +176,7 @@ namespace Melanchall.DryWetMidi.Tools
             foreach (var obj in objects)
             {
                 AsyncOperation.Checkpoint();
+
                 var lengthedObject = obj as ILengthedObject;
                 if (lengthedObject == null)
                     continue;

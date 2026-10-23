@@ -1,8 +1,12 @@
 ﻿using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
+using Melanchall.DryWetMidi.Tests.Utilities;
 using NUnit.Framework;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
 
 namespace Melanchall.DryWetMidi.Tests.Interaction
 {
@@ -63,6 +67,71 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
                 return customNote.EventsCollectionIndex == EventsCollectionIndex;
             }
+        }
+
+        #endregion
+
+        #region Private methods
+
+        private void CheckGetNotesAsync(
+            ContainerType containerType,
+            IEnumerable<IEnumerable<MidiEvent>> midiEvents,
+            IEnumerable<Note> expectedNotes,
+            NoteDetectionSettings settings = null,
+            TimedEventDetectionSettings timedEventDetectionSettings = null,
+            Action<ICollection<Note>> additionalChecks = null)
+        {
+            TrackChunk[] CreateTracks() =>
+                midiEvents.Select(events => new TrackChunk(events.Select(e => e.Clone()))).ToArray();
+
+            ICollection<Note> notes;
+            var tracks = CreateTracks();
+
+            switch (containerType)
+            {
+                case ContainerType.EventsCollection:
+                    notes = tracks[0].Events.GetNotesAsync(settings, timedEventDetectionSettings, cancellationToken: CancellationToken.None).Result;
+                    break;
+                case ContainerType.TrackChunk:
+                    notes = tracks[0].GetNotesAsync(settings, timedEventDetectionSettings, cancellationToken: CancellationToken.None).Result;
+                    break;
+                case ContainerType.TrackChunks:
+                    notes = tracks.GetNotesAsync(settings, timedEventDetectionSettings, cancellationToken: CancellationToken.None).Result;
+                    break;
+                default:
+                    notes = new MidiFile(tracks).GetNotesAsync(settings, timedEventDetectionSettings, cancellationToken: CancellationToken.None).Result;
+                    break;
+            }
+
+            MidiAsserts.AreEqual(expectedNotes, notes, "Async notes are invalid.");
+            additionalChecks?.Invoke(notes);
+
+            var objectSettings = new ObjectDetectionSettings
+            {
+                NoteDetectionSettings = settings,
+                TimedEventDetectionSettings = timedEventDetectionSettings
+            };
+            tracks = CreateTracks();
+            ICollection<ITimedObject> objects;
+
+            switch (containerType)
+            {
+                case ContainerType.EventsCollection:
+                    objects = tracks[0].Events.GetObjectsAsync(ObjectType.Note, objectSettings, cancellationToken: CancellationToken.None).Result;
+                    break;
+                case ContainerType.TrackChunk:
+                    objects = tracks[0].GetObjectsAsync(ObjectType.Note, objectSettings, cancellationToken: CancellationToken.None).Result;
+                    break;
+                case ContainerType.TrackChunks:
+                    objects = tracks.GetObjectsAsync(ObjectType.Note, objectSettings, cancellationToken: CancellationToken.None).Result;
+                    break;
+                default:
+                    objects = new MidiFile(tracks).GetObjectsAsync(ObjectType.Note, objectSettings, cancellationToken: CancellationToken.None).Result;
+                    break;
+            }
+
+            MidiAsserts.AreEqual(expectedNotes, objects, "Async notes from GetObjects are invalid.");
+            additionalChecks?.Invoke(objects.Cast<Note>().ToArray());
         }
 
         #endregion

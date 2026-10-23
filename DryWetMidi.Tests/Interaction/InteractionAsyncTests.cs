@@ -374,8 +374,12 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                         yield return ev;
                     }
                 }
-                finally { disposed = true; }
+                finally
+                {
+                    disposed = true;
+                }
             }
+
             Assert.That((await Produce().GetNotesAsync()).Count, Is.EqualTo(3));
             Assert.That(disposed, Is.True);
             Assert.That((await Produce().GetChordsAsync()).Count, Is.EqualTo(2));
@@ -410,8 +414,12 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     yield return new TextEvent();
                     throw new InvalidOperationException("producer");
                 }
-                finally { disposed = true; }
+                finally
+                {
+                    disposed = true;
+                }
             }
+
             Assert.ThrowsAsync<InvalidOperationException>(async () => await Produce().GetNotesAsync());
             Assert.That(disposed, Is.True);
         }
@@ -427,6 +435,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 {
                     if (++visited == 100)
                         cancellation.Cancel();
+
                     yield return new TextEvent();
                 }
             }
@@ -445,6 +454,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 {
                     if (++visited == 100)
                         cancellation.Cancel();
+
                     yield return new TrackChunk();
                 }
             }
@@ -463,6 +473,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 {
                     if (++visited == 100)
                         cancellation.Cancel();
+
                     yield return new Note((SevenBitNumber)60, 1, 100000 - visited);
                 }
             }
@@ -499,12 +510,20 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                         yield return new TextEvent();
                     }
                 }
-                finally { disposed = true; }
+                finally
+                {
+                    disposed = true;
+                }
             }
+
             var objects = Produce().EnumerateObjectsAsync(ObjectType.TimedEvent);
             Assert.That(visited, Is.Zero);
+
             await foreach (var obj in objects)
+            {
                 break;
+            }
+
             Assert.That(visited, Is.EqualTo(1));
             Assert.That(disposed, Is.True);
         }
@@ -519,11 +538,18 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 try
                 {
                     started = true;
+
                     foreach (var note in CreateTrack().GetNotes())
+                    {
                         yield return note;
+                    }
                 }
-                finally { disposed = true; }
+                finally
+                {
+                    disposed = true;
+                }
             }
+
             IAsyncEnumerable<Chord> chords = Produce().GetChordsAsync();
             Assert.That(started, Is.False);
             var result = await CollectAsync(chords);
@@ -538,8 +564,12 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             var track = CreateTrack();
             var type = ObjectType.Chord | ObjectType.Note | ObjectType.TimedEvent;
             var result = new List<ITimedObject>();
+
             await foreach (var obj in track.Events.EnumerateObjectsAsync(type))
+            {
                 result.Add(obj);
+            }
+
             MidiAsserts.AreEqual(track.Events.EnumerateObjects(type), result, "Lazy objects");
         }
 
@@ -553,7 +583,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             }
             Assert.ThrowsAsync<InvalidOperationException>(async () =>
             {
-                await foreach (var obj in Produce().EnumerateObjectsAsync(ObjectType.TimedEvent)) { }
+                await foreach (var obj in Produce().EnumerateObjectsAsync(ObjectType.TimedEvent))
+                {
+                }
             });
         }
 
@@ -567,7 +599,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             Assert.That(called, Is.False);
             Assert.That(async () =>
             {
-                await foreach (var obj in CreateTrack().Events.EnumerateObjectsAsync(ObjectType.Note, cancellationToken: cancellation.Token)) { }
+                await foreach (var obj in CreateTrack().Events.EnumerateObjectsAsync(ObjectType.Note, cancellationToken: cancellation.Token))
+                {
+                }
             }, Throws.InstanceOf<OperationCanceledException>());
         }
 
@@ -662,7 +696,13 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             return track;
         }
 
-        private static async IAsyncEnumerable<T> AsAsync<T>(IEnumerable<T> items)
+        internal static MidiEvent[] CloneEvents(IEnumerable<MidiEvent> events) =>
+            events.Select(e => e?.Clone()).ToArray();
+
+        internal static ICollection<MidiEvent>[] CloneEvents(IEnumerable<IEnumerable<MidiEvent>> events) =>
+            events.Select(collection => (ICollection<MidiEvent>)CloneEvents(collection)).ToArray();
+
+        internal static async IAsyncEnumerable<T> AsAsync<T>(IEnumerable<T> items)
         {
             foreach (var item in items)
             {
@@ -671,33 +711,52 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             }
         }
 
-        private static async Task<List<T>> CollectAsync<T>(IAsyncEnumerable<T> source)
+        internal static async Task<List<T>> CollectAsync<T>(IAsyncEnumerable<T> source)
         {
             var result = new List<T>();
+
             await foreach (var item in source)
+            {
                 result.Add(item);
+            }
+
             return result;
         }
 
-        private static Task<int> ProcessSynchronouslyAsync(IEnumerable<TrackChunk> tracks, string kind, Action<ITimedObject> action, CancellationToken cancellationToken)
+        private static Task<int> ProcessSynchronouslyAsync(
+            IEnumerable<TrackChunk> tracks,
+            string kind,
+            Action<ITimedObject> action,
+            CancellationToken cancellationToken)
         {
             switch (kind)
             {
-                case "Notes": return tracks.ProcessNotesAsync(action, cancellationToken: cancellationToken);
-                case "Chords": return tracks.ProcessChordsAsync(action, cancellationToken: cancellationToken);
-                case "TimedEvents": return tracks.ProcessTimedEventsAsync(action, cancellationToken: cancellationToken);
-                default: return tracks.ProcessObjectsAsync(ObjectType.Note | ObjectType.Chord | ObjectType.TimedEvent, action, cancellationToken: cancellationToken);
+                case "Notes":
+                    return tracks.ProcessNotesAsync(action, cancellationToken: cancellationToken);
+                case "Chords":
+                    return tracks.ProcessChordsAsync(action, cancellationToken: cancellationToken);
+                case "TimedEvents":
+                    return tracks.ProcessTimedEventsAsync(action, cancellationToken: cancellationToken);
+                default:
+                    return tracks.ProcessObjectsAsync(ObjectType.Note | ObjectType.Chord | ObjectType.TimedEvent, action, cancellationToken: cancellationToken);
             }
         }
 
-        private static Task<int> ProcessAwaitedAsync(IEnumerable<TrackChunk> tracks, string kind, Func<ITimedObject, CancellationToken, ValueTask> action)
+        private static Task<int> ProcessAwaitedAsync(
+            IEnumerable<TrackChunk> tracks,
+            string kind,
+            Func<ITimedObject, CancellationToken, ValueTask> action)
         {
             switch (kind)
             {
-                case "Notes": return tracks.ProcessNotesAsync(action);
-                case "Chords": return tracks.ProcessChordsAsync(action);
-                case "TimedEvents": return tracks.ProcessTimedEventsAsync(action);
-                default: return tracks.ProcessObjectsAsync(ObjectType.Note | ObjectType.Chord | ObjectType.TimedEvent, action);
+                case "Notes":
+                    return tracks.ProcessNotesAsync(action);
+                case "Chords":
+                    return tracks.ProcessChordsAsync(action);
+                case "TimedEvents":
+                    return tracks.ProcessTimedEventsAsync(action);
+                default:
+                    return tracks.ProcessObjectsAsync(ObjectType.Note | ObjectType.Chord | ObjectType.TimedEvent, action);
             }
         }
     }

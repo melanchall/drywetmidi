@@ -24,12 +24,16 @@ namespace Melanchall.DryWetMidi.Tests.Common
         public async Task Run_ReportsCompletion()
         {
             var progress = new Progress();
-            var result = await AsyncOperation.Run(() =>
-            {
-                AsyncOperation.Checkpoint();
-                AsyncOperation.Checkpoint();
-                return 42;
-            }, CancellationToken.None, progress);
+            var result = await AsyncOperation.Run(
+                () =>
+                {
+                    AsyncOperation.Checkpoint();
+                    AsyncOperation.Checkpoint();
+
+                    return 42;
+                },
+                CancellationToken.None,
+                progress);
 
             Assert.That(result, Is.EqualTo(42));
             Assert.That(progress.Reports.Count, Is.EqualTo(1));
@@ -45,7 +49,13 @@ namespace Melanchall.DryWetMidi.Tests.Common
             var invoked = false;
 
             Assert.ThrowsAsync<TaskCanceledException>(async () =>
-                await AsyncOperation.Run(() => { invoked = true; }, source.Token));
+                await AsyncOperation.Run(
+                    () =>
+                    {
+                        invoked = true;
+                    },
+                    source.Token));
+
             Assert.That(invoked, Is.False);
         }
 
@@ -56,11 +66,15 @@ namespace Melanchall.DryWetMidi.Tests.Common
             var progress = new Progress();
 
             Assert.ThrowsAsync<OperationCanceledException>(async () =>
-                await AsyncOperation.Run(() =>
-                {
-                    source.Cancel();
-                    AsyncOperation.Checkpoint();
-                }, source.Token, progress));
+                await AsyncOperation.Run(
+                    () =>
+                    {
+                        source.Cancel();
+                        AsyncOperation.Checkpoint();
+                    },
+                    source.Token,
+                    progress));
+
             Assert.That(progress.Reports, Is.Empty);
         }
 
@@ -79,13 +93,17 @@ namespace Melanchall.DryWetMidi.Tests.Common
         public async Task Run_AsyncDelegate_ReportsAfterAwaitedWork()
         {
             var progress = new Progress();
-            var result = await AsyncOperation.Run(async () =>
-            {
-                await Task.Yield();
-                AsyncOperation.Checkpoint();
-                Assert.That(progress.Reports, Is.Empty);
-                return 42;
-            }, CancellationToken.None, progress);
+            var result = await AsyncOperation.Run(
+                async () =>
+                {
+                    await Task.Yield();
+                    AsyncOperation.Checkpoint();
+                    Assert.That(progress.Reports, Is.Empty);
+
+                    return 42;
+                },
+                CancellationToken.None,
+                progress);
 
             Assert.That(result, Is.EqualTo(42));
             Assert.That(progress.Reports.Count, Is.EqualTo(1));

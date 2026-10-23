@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
 using Melanchall.DryWetMidi.Tests.Utilities;
@@ -40,6 +41,13 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 .ToList();
 
             MidiAsserts.AreEqual(outputObjects, actualObjects, true, 0, "Objects are invalid.");
+
+            var asyncObjects = inputObjects
+                .Select(obj => obj?.Clone())
+                .GetObjectsAsync(objectType, settings, cancellationToken: CancellationToken.None)
+                .Result;
+
+            MidiAsserts.AreEqual(outputObjects, asyncObjects, true, 0, "Async objects are invalid.");
         }
 
         private void EnumerateObjects(
@@ -53,6 +61,13 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 .ToArray();
 
             MidiAsserts.AreEqual(outputObjects, actualObjects, false, 0, "Objects are invalid.");
+
+            var asyncObjects = InteractionAsyncTests.CollectAsync(inputEvents
+                .Select(e => e?.Clone())
+                .EnumerateObjectsAsync(objectType, settings, cancellationToken: CancellationToken.None))
+                .Result;
+
+            MidiAsserts.AreEqual(outputObjects, asyncObjects, false, 0, "Async enumerated objects are invalid.");
         }
 
         #endregion

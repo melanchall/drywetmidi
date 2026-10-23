@@ -70,6 +70,7 @@ namespace Melanchall.DryWetMidi.Tools
             trackChunk.ProcessTimedEvents(timedEvent =>
             {
                 AsyncOperation.Checkpoint();
+
                 timedEvent.Time = MathUtilities.RoundToLong(timedEvent.Time * ratio);
             });
         }
@@ -129,6 +130,7 @@ namespace Melanchall.DryWetMidi.Tools
             foreach (var trackChunk in trackChunks.OfType<TrackChunk>())
             {
                 AsyncOperation.Checkpoint();
+
                 trackChunk.Resize(ratio);
             }
         }

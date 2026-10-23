@@ -48,6 +48,7 @@ namespace Melanchall.DryWetMidi.Tools
         public void WriteRecord(IEnumerable<object> values)
         {
             var record = string.Join(_delimiterString, values.Select(ProcessValue));
+
             if (_streamWriter != null)
                 _streamWriter.WriteLine(record);
             else
@@ -62,6 +63,7 @@ namespace Melanchall.DryWetMidi.Tools
                 var bytes = _asyncEncoding.GetBytes(record + Environment.NewLine);
                 await stream.WriteAsync(bytes, 0, bytes.Length, cancellationToken).ConfigureAwait(false);
             }
+
             _records.Clear();
         }
 

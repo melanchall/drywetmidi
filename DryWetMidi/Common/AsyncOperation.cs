@@ -29,11 +29,15 @@ namespace Melanchall.DryWetMidi.Common
             CancellationToken cancellationToken,
             IProgress<AsyncOperationProgress>? progress = null)
         {
-            return Run(() =>
-            {
-                action();
-                return true;
-            }, cancellationToken, progress);
+            return Run(
+                () =>
+                {
+                    action();
+
+                    return true;
+                },
+                cancellationToken,
+                progress);
         }
 
         internal static Task<T> Run<T>(
@@ -41,24 +45,29 @@ namespace Melanchall.DryWetMidi.Common
             CancellationToken cancellationToken,
             IProgress<AsyncOperationProgress>? progress = null)
         {
-            return Task.Run(() =>
-            {
-                var previous = Current.Value;
-                var context = new Context(cancellationToken, progress);
-                Current.Value = context;
-                try
+            return Task.Run(
+                () =>
                 {
-                    cancellationToken.ThrowIfCancellationRequested();
-                    var result = action();
-                    cancellationToken.ThrowIfCancellationRequested();
-                    progress?.Report(new AsyncOperationProgress(context.Processed, true));
-                    return result;
-                }
-                finally
-                {
-                    Current.Value = previous;
-                }
-            }, cancellationToken);
+                    var previous = Current.Value;
+                    var context = new Context(cancellationToken, progress);
+                    Current.Value = context;
+                    try
+                    {
+                        cancellationToken.ThrowIfCancellationRequested();
+
+                        var result = action();
+
+                        cancellationToken.ThrowIfCancellationRequested();
+                        progress?.Report(new AsyncOperationProgress(context.Processed, true));
+
+                        return result;
+                    }
+                    finally
+                    {
+                        Current.Value = previous;
+                    }
+                },
+                cancellationToken);
         }
 
         internal static Task<T> Run<T>(
@@ -66,24 +75,29 @@ namespace Melanchall.DryWetMidi.Common
             CancellationToken cancellationToken,
             IProgress<AsyncOperationProgress>? progress = null)
         {
-            return Task.Run(async () =>
-            {
-                var previous = Current.Value;
-                var context = new Context(cancellationToken, progress);
-                Current.Value = context;
-                try
+            return Task.Run(
+                async () =>
                 {
-                    cancellationToken.ThrowIfCancellationRequested();
-                    var result = await action().ConfigureAwait(false);
-                    cancellationToken.ThrowIfCancellationRequested();
-                    progress?.Report(new AsyncOperationProgress(context.Processed, true));
-                    return result;
-                }
-                finally
-                {
-                    Current.Value = previous;
-                }
-            }, cancellationToken);
+                    var previous = Current.Value;
+                    var context = new Context(cancellationToken, progress);
+                    Current.Value = context;
+                    try
+                    {
+                        cancellationToken.ThrowIfCancellationRequested();
+
+                        var result = await action().ConfigureAwait(false);
+
+                        cancellationToken.ThrowIfCancellationRequested();
+                        progress?.Report(new AsyncOperationProgress(context.Processed, true));
+
+                        return result;
+                    }
+                    finally
+                    {
+                        Current.Value = previous;
+                    }
+                },
+                cancellationToken);
         }
 
         internal static void Checkpoint(long? processed = null)

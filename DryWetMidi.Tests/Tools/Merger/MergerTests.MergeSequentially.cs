@@ -2406,7 +2406,21 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             MidiFile expectedMidiFile)
         {
             var clonedMidiFiles = midiFiles.Select(f => f.Clone()).ToArray();
-            var resultMidiFile = midiFiles.MergeSequentially(settings);
+            MidiFile resultMidiFile;
+
+            try
+            {
+                resultMidiFile = midiFiles.MergeSequentially(settings);
+            }
+            catch (Exception exception)
+            {
+                ToolsAsyncTests.AssertAsyncException(
+                    () => clonedMidiFiles.Select(f => f.Clone()).MergeSequentiallyAsync(
+                        settings,
+                        cancellationToken: System.Threading.CancellationToken.None).Wait(),
+                    exception.GetType());
+                throw;
+            }
             
             MidiAsserts.AreEqual(expectedMidiFile, resultMidiFile, false, "Invalid file after processing.");
             MidiAsserts.AreEqual(clonedMidiFiles, midiFiles, false, "Original files are modified after processing.");
@@ -2415,6 +2429,16 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
             CheckDurationAsSum(clonedMidiFiles, resultMidiFile, TimeSpanType.Musical, settings);
             CheckDurationAsSum(clonedMidiFiles, resultMidiFile, TimeSpanType.Metric, settings);
+
+            var asyncSources = midiFiles.Select(f => f.Clone()).ToArray();
+            var asyncResult = asyncSources.MergeSequentiallyAsync(
+                settings,
+                cancellationToken: System.Threading.CancellationToken.None).Result;
+            MidiAsserts.AreEqual(expectedMidiFile, asyncResult, false, "Invalid asynchronously merged file.");
+            MidiAsserts.AreEqual(clonedMidiFiles, asyncSources, false, "Asynchronous merge modified original files.");
+            CheckEventsAreCloned(asyncSources, asyncResult);
+            CheckDurationAsSum(asyncSources, asyncResult, TimeSpanType.Musical, settings);
+            CheckDurationAsSum(asyncSources, asyncResult, TimeSpanType.Metric, settings);
         }
 
         private static void CheckEventsAreCloned(

@@ -65,13 +65,36 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             IEnumerable<TObject> expectedObjects,
             IEnumerable<TimedEvent> expectedEvents,
             ObjectDetectionSettings settings = null,
-            Comparison<MidiEvent> sameTimeEventComparison = null)
+            Comparison<MidiEvent> sameTimeEventComparison = null,
+            bool useAsync = false)
             where TObject : ITimedObject
         {
-            using (var manager = new TimedObjectsManager<TObject>(
-                eventsCollection,
-                settings,
-                sameTimeEventComparison != null ? new TimedObjectsComparerOnSameEventTime(sameTimeEventComparison) : null))
+            if (!useAsync)
+            {
+                var asyncEvents = new EventsCollection();
+                asyncEvents.AddRange(eventsCollection.Select(e => e.Clone()));
+
+                CheckObjectsManager_Generic(
+                    asyncEvents,
+                    manageObjects,
+                    expectedObjects,
+                    expectedEvents,
+                    settings,
+                    sameTimeEventComparison,
+                    useAsync: true);
+            }
+
+            var comparer = sameTimeEventComparison != null
+                ? new TimedObjectsComparerOnSameEventTime(sameTimeEventComparison)
+                : null;
+
+            using (var manager = useAsync
+                ? TimedObjectsManager<TObject>.CreateAsync(
+                    eventsCollection,
+                    settings,
+                    comparer,
+                    cancellationToken: System.Threading.CancellationToken.None).Result
+                : new TimedObjectsManager<TObject>(eventsCollection, settings, comparer))
             {
                 manageObjects(manager.Objects);
                 MidiAsserts.AreEqual(
@@ -80,6 +103,17 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     false,
                     0,
                     "Invalid objects on enumerating.");
+
+                if (useAsync)
+                {
+                    manager.SaveChangesAsync(cancellationToken: System.Threading.CancellationToken.None).Wait();
+                    MidiAsserts.AreEqual(
+                        expectedEvents,
+                        eventsCollection.GetTimedEvents(),
+                        false,
+                        0,
+                        "Invalid events immediately after async save.");
+                }
             }
 
             MidiAsserts.AreEqual(
@@ -97,9 +131,35 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             IEnumerable<ITimedObject> expectedObjects,
             IEnumerable<TimedEvent> expectedEvents,
             ObjectDetectionSettings settings = null,
-            Comparison<MidiEvent> sameTimeEventComparison = null)
+            Comparison<MidiEvent> sameTimeEventComparison = null,
+            bool useAsync = false)
         {
-            using (var manager = new TimedObjectsManager(eventsCollection, objectType, settings, new TimedObjectsComparerOnSameEventTime(sameTimeEventComparison)))
+            if (!useAsync)
+            {
+                var asyncEvents = new EventsCollection();
+                asyncEvents.AddRange(eventsCollection.Select(e => e.Clone()));
+
+                CheckObjectsManager(
+                    asyncEvents,
+                    objectType,
+                    manageObjects,
+                    expectedObjects,
+                    expectedEvents,
+                    settings,
+                    sameTimeEventComparison,
+                    useAsync: true);
+            }
+
+            var comparer = new TimedObjectsComparerOnSameEventTime(sameTimeEventComparison);
+
+            using (var manager = useAsync
+                ? TimedObjectsManager.CreateAsync(
+                    eventsCollection,
+                    objectType,
+                    settings,
+                    comparer,
+                    cancellationToken: System.Threading.CancellationToken.None).Result
+                : new TimedObjectsManager(eventsCollection, objectType, settings, comparer))
             {
                 manageObjects(manager.Objects);
                 MidiAsserts.AreEqual(
@@ -108,6 +168,17 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     false,
                     0,
                     "Invalid objects on enumerating.");
+
+                if (useAsync)
+                {
+                    manager.SaveChangesAsync(cancellationToken: System.Threading.CancellationToken.None).Wait();
+                    MidiAsserts.AreEqual(
+                        expectedEvents,
+                        eventsCollection.GetTimedEvents(),
+                        false,
+                        0,
+                        "Invalid events immediately after async save.");
+                }
             }
 
             MidiAsserts.AreEqual(

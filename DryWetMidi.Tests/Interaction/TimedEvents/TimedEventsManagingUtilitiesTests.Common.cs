@@ -1,6 +1,10 @@
 ﻿using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
+using Melanchall.DryWetMidi.Tests.Utilities;
 using NUnit.Framework;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
 
 namespace Melanchall.DryWetMidi.Tests.Interaction
 {
@@ -42,6 +46,35 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             public override bool Equals(object obj) =>
                 base.Equals(obj) &&
                 (obj as CustomTimedEvent2).EventIndex == EventIndex;
+        }
+
+        #endregion
+
+        #region Private methods
+
+        private void CheckGetTimedEventsAsync(
+            IEnumerable<TrackChunk> tracks,
+            IEnumerable<ITimedObject> expectedTimedEvents,
+            TimedEventDetectionSettings settings)
+        {
+            TrackChunk[] CreateTracks() => tracks.Select(track => (TrackChunk)track.Clone()).ToArray();
+
+            var asyncTracks = CreateTracks();
+            var timedEvents = asyncTracks.GetTimedEventsAsync(settings, cancellationToken: CancellationToken.None).Result;
+            MidiAsserts.AreEqual(expectedTimedEvents, timedEvents, false, 0, "Async tracks timed events are invalid.");
+            Assert.That(timedEvents.Any(ev => asyncTracks.SelectMany(track => track.Events).Any(e => ReferenceEquals(e, ev.Event))), Is.False);
+
+            var asyncFile = new MidiFile(CreateTracks());
+            timedEvents = asyncFile.GetTimedEventsAsync(settings, cancellationToken: CancellationToken.None).Result;
+            MidiAsserts.AreEqual(expectedTimedEvents, timedEvents, false, 0, "Async file timed events are invalid.");
+            Assert.That(timedEvents.Any(ev => asyncFile.GetTrackChunks().SelectMany(track => track.Events).Any(e => ReferenceEquals(e, ev.Event))), Is.False);
+
+            var objects = CreateTracks().GetObjectsAsync(
+                ObjectType.TimedEvent,
+                new ObjectDetectionSettings { TimedEventDetectionSettings = settings },
+                cancellationToken: CancellationToken.None).Result;
+
+            MidiAsserts.AreEqual(expectedTimedEvents, objects, false, 0, "Async timed events from GetObjects are invalid.");
         }
 
         #endregion

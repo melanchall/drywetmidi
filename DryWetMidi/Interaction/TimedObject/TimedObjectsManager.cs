@@ -157,6 +157,7 @@ namespace Melanchall.DryWetMidi.Interaction
         {
             var replacement = PrepareChanges();
             AsyncOperation.Checkpoint();
+
             CommitChanges(replacement);
         }
 

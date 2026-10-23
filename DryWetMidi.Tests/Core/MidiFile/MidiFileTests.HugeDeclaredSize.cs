@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Linq;
 using Melanchall.DryWetMidi.Core;
@@ -76,7 +77,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
             {
                 File.WriteAllBytes(path, GetFileWithHugeEvent(EventStatusBytes.Global.Meta, EventStatusBytes.Meta.Text));
                 Assert.Throws<NotEnoughBytesException>(() =>
-                    MidiFile.Read(path, new ReadingSettings { NotEnoughBytesPolicy = NotEnoughBytesPolicy.Abort }),
+                    MidiFileTestUtilities.ReadWithAsyncChecks(path, new ReadingSettings { NotEnoughBytesPolicy = NotEnoughBytesPolicy.Abort }),
                     "Exception not thrown.");
             }
             finally
@@ -100,6 +101,16 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 var events = read.GetTrackChunks().Single().Events;
                 ClassicAssert.AreEqual("Name", ((SequenceTrackNameEvent)events[0]).Text, "Track name is invalid.");
                 CollectionAssert.AreEqual(new byte[] { 1, 2, 3, 0xF7 }, ((NormalSysExEvent)events[1]).Data, "SysEx data is invalid.");
+
+                using (var asyncStream = new MemoryStream(ms.ToArray()))
+                {
+                    var asyncFile = MidiFile.ReadAsync(
+                        asyncStream,
+                        new ReadingSettings { NotEnoughBytesPolicy = NotEnoughBytesPolicy.Abort },
+                        cancellationToken: System.Threading.CancellationToken.None).Result;
+
+                    ClassicAssert.IsTrue(MidiFile.Equals(read, asyncFile), "Async valid event reading differs.");
+                }
             }
         }
 
@@ -140,6 +151,16 @@ namespace Melanchall.DryWetMidi.Tests.Core
             var settings = new ReadingSettings { UnknownChunkIdPolicy = UnknownChunkIdPolicy.Skip };
             var file = MidiFile.Read(new MemoryStream(bytes), settings);
             ClassicAssert.AreEqual(0, file.Chunks.Count, "Unknown chunk is not skipped.");
+
+            using (var stream = new MemoryStream(bytes))
+            {
+                file = MidiFile.ReadAsync(
+                    stream,
+                    settings,
+                    cancellationToken: System.Threading.CancellationToken.None).Result;
+
+                ClassicAssert.AreEqual(0, file.Chunks.Count, "Unknown chunk is not skipped asynchronously.");
+            }
         }
 
         #endregion
@@ -157,7 +178,37 @@ namespace Melanchall.DryWetMidi.Tests.Core
 
             using (var stream = nonSeekable ? (Stream)new NonSeekableMemoryStream(bytes) : new MemoryStream(bytes))
             {
-                return MidiFile.Read(stream, settings);
+                MidiFile expected;
+                try
+                {
+                    expected = MidiFile.Read(stream, settings);
+                }
+                catch (Exception exception)
+                {
+                    using (var asyncStream = nonSeekable ? (Stream)new NonSeekableMemoryStream(bytes) : new MemoryStream(bytes))
+                    {
+                        var aggregate = Assert.Throws<AggregateException>(() => MidiFile.ReadAsync(
+                            asyncStream,
+                            settings,
+                            cancellationToken: System.Threading.CancellationToken.None).Wait());
+
+                        ClassicAssert.AreEqual(exception.GetType(), aggregate!.InnerException!.GetType());
+                    }
+
+                    throw;
+                }
+
+                using (var asyncStream = nonSeekable ? (Stream)new NonSeekableMemoryStream(bytes) : new MemoryStream(bytes))
+                {
+                    var actual = MidiFile.ReadAsync(
+                        asyncStream,
+                        settings,
+                        cancellationToken: System.Threading.CancellationToken.None).Result;
+
+                    ClassicAssert.IsTrue(MidiFile.Equals(expected, actual), "Async huge declared size reading differs.");
+                }
+
+                return expected;
             }
         }
 

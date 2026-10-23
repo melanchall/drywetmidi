@@ -171,6 +171,7 @@ namespace Melanchall.DryWetMidi.Tools
             var maxTime = timedObjects.Select(obj =>
             {
                 AsyncOperation.Checkpoint();
+
                 return (obj?.Time ?? 0) + ((obj as ILengthedObject)?.Length ?? 0);
             }).DefaultIfEmpty(0).Max();
             var shift = CalculateShift(maxTime, tempoMap, settings);
@@ -199,6 +200,7 @@ namespace Melanchall.DryWetMidi.Tools
             foreach (var obj in context.PartObjects)
             {
                 AsyncOperation.Checkpoint();
+
                 obj.Time += (context.PartIndex + 1) * context.Shift;
             }
         }
@@ -227,6 +229,7 @@ namespace Melanchall.DryWetMidi.Tools
             for (var i = 1; i <= repeatsNumber; i++)
             {
                 AsyncOperation.Checkpoint();
+
                 var part = GetPart(source, shift, i - 1, tempoMap, settings);
                 result.AddRange(part);
             }
@@ -244,6 +247,7 @@ namespace Melanchall.DryWetMidi.Tools
             foreach (var timedEvent in sourceObjects.OfType<TimedEvent>())
             {
                 AsyncOperation.Checkpoint();
+
                 if (firstSetTempoEvent != null && firstTimeSignatureEvent != null)
                     break;
 
@@ -301,6 +305,7 @@ namespace Melanchall.DryWetMidi.Tools
         private static ITimedObject CloneObject(ITimedObject obj)
         {
             AsyncOperation.Checkpoint();
+
             return obj.Clone();
         }
 

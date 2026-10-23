@@ -367,11 +367,28 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             ChordDetectionSettings chordDetectionSettings = null,
             NoteDetectionSettings noteDetectionSettings = null,
             TimedEventDetectionSettings timedEventDetectionSettings = null,
-            TimedObjectsComparer timedObjectsComparer = null)
+            TimedObjectsComparer timedObjectsComparer = null,
+            bool useAsync = false)
         {
-            var trackChunk = new TrackChunk(midiEvents);
+            if (!useAsync)
+            {
+                ManageChords(
+                    midiEvents.Select(e => e.Clone()).ToArray(),
+                    expectedChords,
+                    expectedMidiEventsAfterManaging,
+                    manage,
+                    chordDetectionSettings,
+                    noteDetectionSettings,
+                    timedEventDetectionSettings,
+                    timedObjectsComparer,
+                    useAsync: true);
+            }
+
+            var trackChunk = new TrackChunk(midiEvents.Select(e => e.Clone()));
             ManageChords(
-                () => trackChunk.ManageChords(chordDetectionSettings, noteDetectionSettings, timedEventDetectionSettings, timedObjectsComparer),
+                () => useAsync
+                    ? trackChunk.ManageChordsAsync(chordDetectionSettings, noteDetectionSettings, timedEventDetectionSettings, timedObjectsComparer, cancellationToken: System.Threading.CancellationToken.None).Result
+                    : trackChunk.ManageChords(chordDetectionSettings, noteDetectionSettings, timedEventDetectionSettings, timedObjectsComparer),
                 "track chunk",
                 midiEvents,
                 expectedChords,
@@ -381,11 +398,14 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 chordDetectionSettings,
                 noteDetectionSettings,
                 timedEventDetectionSettings,
-                timedObjectsComparer);
+                timedObjectsComparer,
+                useAsync);
 
-            var eventsCollection = new TrackChunk(midiEvents).Events;
+            var eventsCollection = new TrackChunk(midiEvents.Select(e => e.Clone())).Events;
             ManageChords(
-                () => eventsCollection.ManageChords(chordDetectionSettings, noteDetectionSettings, timedEventDetectionSettings, timedObjectsComparer),
+                () => useAsync
+                    ? eventsCollection.ManageChordsAsync(chordDetectionSettings, noteDetectionSettings, timedEventDetectionSettings, timedObjectsComparer, cancellationToken: System.Threading.CancellationToken.None).Result
+                    : eventsCollection.ManageChords(chordDetectionSettings, noteDetectionSettings, timedEventDetectionSettings, timedObjectsComparer),
                 "events collection",
                 midiEvents,
                 expectedChords,
@@ -395,7 +415,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 chordDetectionSettings,
                 noteDetectionSettings,
                 timedEventDetectionSettings,
-                timedObjectsComparer);
+                timedObjectsComparer,
+                useAsync);
         }
 
         private void ManageChords(
@@ -409,7 +430,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             ChordDetectionSettings chordDetectionSettings = null,
             NoteDetectionSettings noteDetectionSettings = null,
             TimedEventDetectionSettings timedEventDetectionSettings = null,
-            TimedObjectsComparer timedObjectsComparer = null)
+            TimedObjectsComparer timedObjectsComparer = null,
+            bool useAsync = false)
         {
             using (var objectsManager = getChordsManager())
             {
@@ -417,6 +439,16 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 MidiAsserts.AreEqual(expectedChords, chords, $"Invalid chords ({sourceLabel}).");
 
                 manage?.Invoke(chords);
+
+                if (useAsync)
+                {
+                    objectsManager.SaveChangesAsync(cancellationToken: System.Threading.CancellationToken.None).Wait();
+                    MidiAsserts.AreEqual(
+                        expectedMidiEventsAfterManaging,
+                        getMidiEventsAfterManaging(),
+                        true,
+                        $"Invalid events immediately after async save ({sourceLabel}).");
+                }
             }
 
             MidiAsserts.AreEqual(

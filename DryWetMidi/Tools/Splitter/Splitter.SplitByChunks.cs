@@ -32,6 +32,7 @@ namespace Melanchall.DryWetMidi.Tools
             foreach (var midiChunk in midiFile.Chunks.Where(c => settings.Filter?.Invoke(c) != false))
             {
                 AsyncOperation.Checkpoint();
+
                 var newFile = new MidiFile(midiChunk.Clone())
                 {
                     TimeDivision = midiFile.TimeDivision?.Clone()

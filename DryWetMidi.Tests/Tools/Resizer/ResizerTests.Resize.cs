@@ -326,6 +326,25 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 },
             });
 
+        [TestCase(-1.0)]
+        [TestCase(-0.5)]
+        public void Resize_NegativeRatio(double ratio)
+        {
+            Assert.Throws<System.ArgumentOutOfRangeException>(() => new TrackChunk().Resize(ratio));
+            Assert.Throws<System.ArgumentOutOfRangeException>(() => new[] { new TrackChunk() }.Resize(ratio));
+            Assert.Throws<System.ArgumentOutOfRangeException>(() => new MidiFile().Resize(ratio));
+
+            ToolsAsyncTests.AssertAsyncException(
+                () => new TrackChunk().ResizeAsync(ratio, cancellationToken: System.Threading.CancellationToken.None).Wait(),
+                typeof(System.ArgumentOutOfRangeException));
+            ToolsAsyncTests.AssertAsyncException(
+                () => new[] { new TrackChunk() }.ResizeAsync(ratio, cancellationToken: System.Threading.CancellationToken.None).Wait(),
+                typeof(System.ArgumentOutOfRangeException));
+            ToolsAsyncTests.AssertAsyncException(
+                () => new MidiFile().ResizeAsync(ratio, cancellationToken: System.Threading.CancellationToken.None).Wait(),
+                typeof(System.ArgumentOutOfRangeException));
+        }
+
         #endregion
 
         #region Private methods
@@ -355,6 +374,18 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             var midiFile = new MidiFile(new TrackChunk(midiEvents.Select(e => e.Clone())));
             midiFile.Resize(length);
             MidiAsserts.AreEqual(new MidiFile(expectedTrackChunk), midiFile, false, "Invalid MIDI file.");
+
+            trackChunk = new TrackChunk(midiEvents.Select(e => e.Clone()));
+            trackChunk.ResizeAsync(length, tempoMap, cancellationToken: System.Threading.CancellationToken.None).Wait();
+            MidiAsserts.AreEqual(expectedTrackChunk, trackChunk, true, "Invalid asynchronous track chunk.");
+
+            trackChunks = new[] { new TrackChunk(midiEvents.Select(e => e.Clone())) };
+            trackChunks.ResizeAsync(length, tempoMap, cancellationToken: System.Threading.CancellationToken.None).Wait();
+            MidiAsserts.AreEqual(new[] { expectedTrackChunk }, trackChunks, true, "Invalid asynchronous track chunks.");
+
+            midiFile = new MidiFile(new TrackChunk(midiEvents.Select(e => e.Clone())));
+            midiFile.ResizeAsync(length, cancellationToken: System.Threading.CancellationToken.None).Wait();
+            MidiAsserts.AreEqual(new MidiFile(expectedTrackChunk), midiFile, false, "Invalid asynchronous MIDI file.");
         }
 
         private void Resize_ByRatio_EventsCollection(
@@ -381,6 +412,18 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             var midiFile = new MidiFile(new TrackChunk(midiEvents.Select(e => e.Clone())));
             midiFile.Resize(ratio);
             MidiAsserts.AreEqual(new MidiFile(expectedTrackChunk), midiFile, false, "Invalid MIDI file.");
+
+            trackChunk = new TrackChunk(midiEvents.Select(e => e.Clone()));
+            trackChunk.ResizeAsync(ratio, cancellationToken: System.Threading.CancellationToken.None).Wait();
+            MidiAsserts.AreEqual(expectedTrackChunk, trackChunk, true, "Invalid asynchronous track chunk.");
+
+            trackChunks = new[] { new TrackChunk(midiEvents.Select(e => e.Clone())) };
+            trackChunks.ResizeAsync(ratio, cancellationToken: System.Threading.CancellationToken.None).Wait();
+            MidiAsserts.AreEqual(new[] { expectedTrackChunk }, trackChunks, true, "Invalid asynchronous track chunks.");
+
+            midiFile = new MidiFile(new TrackChunk(midiEvents.Select(e => e.Clone())));
+            midiFile.ResizeAsync(ratio, cancellationToken: System.Threading.CancellationToken.None).Wait();
+            MidiAsserts.AreEqual(new MidiFile(expectedTrackChunk), midiFile, false, "Invalid asynchronous MIDI file.");
         }
 
         private void Resize_ToLength_EventsCollections(
@@ -402,6 +445,14 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             var midiFile = new MidiFile(midiEvents.Select(e => new TrackChunk(e.Select(ee => ee.Clone()))).ToArray());
             midiFile.Resize(length);
             MidiAsserts.AreEqual(new MidiFile(expectedTrackChunks), midiFile, false, "Invalid MIDI file.");
+
+            trackChunks = midiEvents.Select(e => new TrackChunk(e.Select(ee => ee.Clone()))).ToArray();
+            trackChunks.ResizeAsync(length, tempoMap, cancellationToken: System.Threading.CancellationToken.None).Wait();
+            MidiAsserts.AreEqual(expectedTrackChunks, trackChunks, true, "Invalid asynchronous track chunks.");
+
+            midiFile = new MidiFile(midiEvents.Select(e => new TrackChunk(e.Select(ee => ee.Clone()))).ToArray());
+            midiFile.ResizeAsync(length, cancellationToken: System.Threading.CancellationToken.None).Wait();
+            MidiAsserts.AreEqual(new MidiFile(expectedTrackChunks), midiFile, false, "Invalid asynchronous MIDI file.");
         }
 
         private void Resize_ByRatio_EventsCollections(
@@ -422,6 +473,14 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             var midiFile = new MidiFile(midiEvents.Select(e => new TrackChunk(e.Select(ee => ee.Clone()))).ToArray());
             midiFile.Resize(ratio);
             MidiAsserts.AreEqual(new MidiFile(expectedTrackChunks), midiFile, false, "Invalid MIDI file.");
+
+            trackChunks = midiEvents.Select(e => new TrackChunk(e.Select(ee => ee.Clone()))).ToArray();
+            trackChunks.ResizeAsync(ratio, cancellationToken: System.Threading.CancellationToken.None).Wait();
+            MidiAsserts.AreEqual(expectedTrackChunks, trackChunks, true, "Invalid asynchronous track chunks.");
+
+            midiFile = new MidiFile(midiEvents.Select(e => new TrackChunk(e.Select(ee => ee.Clone()))).ToArray());
+            midiFile.ResizeAsync(ratio, cancellationToken: System.Threading.CancellationToken.None).Wait();
+            MidiAsserts.AreEqual(new MidiFile(expectedTrackChunks), midiFile, false, "Invalid asynchronous MIDI file.");
         }
 
         #endregion

@@ -73,6 +73,23 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 writer.WriteByte(C);
             }
 
+            public override bool Equals(object obj) => obj is CustomMetaEvent customEvent &&
+                customEvent.A == A &&
+                customEvent.B == B &&
+                customEvent.C == C;
+
+            public override int GetHashCode()
+            {
+                unchecked
+                {
+                    var result = 17;
+                    result = result * 23 + A.GetHashCode();
+                    result = result * 23 + (B?.GetHashCode() ?? 0);
+                    result = result * 23 + C.GetHashCode();
+                    return result;
+                }
+            }
+
             #endregion
         }
 

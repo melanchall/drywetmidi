@@ -43,6 +43,7 @@ namespace Melanchall.DryWetMidi.Interaction
                         AsyncOperation.Checkpoint();
                         CollectEventsForRemoval(chordNote, events);
                     }
+
                     break;
             }
         }
@@ -54,6 +55,7 @@ namespace Melanchall.DryWetMidi.Interaction
         {
             var replacement = new List<(MidiEvent, long)>();
             var time = 0L;
+
             foreach (var timedEvent in timedEvents)
             {
                 AsyncOperation.Checkpoint();
@@ -61,9 +63,11 @@ namespace Melanchall.DryWetMidi.Interaction
                 if ((removeMarked && midiEvent.MustBeRemoved) ||
                     (smfOnly && !(midiEvent is ChannelEvent || midiEvent is MetaEvent || midiEvent is SysExEvent)))
                     continue;
+
                 replacement.Add((midiEvent, timedEvent.Time - time));
                 time = timedEvent.Time;
             }
+
             return replacement;
         }
 
@@ -73,6 +77,7 @@ namespace Melanchall.DryWetMidi.Interaction
         {
             // All cancellation checks belong to preparation, before the destructive rewrite.
             eventsCollection.Clear();
+
             foreach (var item in replacement)
             {
                 item.Event.DeltaTime = item.DeltaTime;
@@ -104,15 +109,20 @@ namespace Melanchall.DryWetMidi.Interaction
             return Collections(file.GetTrackChunks());
         }
 
-        internal static async Task<List<T>> CollectAsync<T>(IAsyncEnumerable<T> source, CancellationToken cancellationToken)
+        internal static async Task<List<T>> CollectAsync<T>(
+            IAsyncEnumerable<T> source,
+            CancellationToken cancellationToken)
         {
             ThrowIfArgument.IsNull(nameof(source), source);
+
             var result = new List<T>();
+
             await foreach (var item in source.WithCancellation(cancellationToken).ConfigureAwait(false))
             {
                 AsyncOperation.Checkpoint();
                 result.Add(item);
             }
+
             return result;
         }
 
@@ -137,6 +147,7 @@ namespace Melanchall.DryWetMidi.Interaction
                         ready.Release();
                         await consumed.WaitAsync(lifetime.Token).ConfigureAwait(false);
                     }
+
                     return true;
                 }
                 finally
@@ -145,6 +156,7 @@ namespace Melanchall.DryWetMidi.Interaction
                     ready.Release();
                 }
             }, lifetime.Token, progress);
+
             try
             {
                 while (true)
@@ -155,6 +167,7 @@ namespace Melanchall.DryWetMidi.Interaction
                         await producer.ConfigureAwait(false);
                         yield break;
                     }
+
                     cancellationToken.ThrowIfCancellationRequested();
                     yield return current;
                     consumed.Release();
@@ -163,8 +176,14 @@ namespace Melanchall.DryWetMidi.Interaction
             finally
             {
                 lifetime.Cancel();
-                try { await producer.ConfigureAwait(false); }
-                catch (OperationCanceledException) when (lifetime.IsCancellationRequested) { }
+
+                try
+                {
+                    await producer.ConfigureAwait(false);
+                }
+                catch (OperationCanceledException) when (lifetime.IsCancellationRequested)
+                {
+                }
             }
         }
     }

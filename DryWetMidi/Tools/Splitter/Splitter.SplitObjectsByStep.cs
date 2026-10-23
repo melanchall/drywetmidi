@@ -111,6 +111,7 @@ namespace Melanchall.DryWetMidi.Tools
             foreach (var trackChunk in trackChunks.OfType<TrackChunk>())
             {
                 AsyncOperation.Checkpoint();
+
                 trackChunk.SplitObjectsByStep(objectType, step, tempoMap, objectDetectionSettings, filter);
             }
         }
@@ -205,6 +206,7 @@ namespace Melanchall.DryWetMidi.Tools
             foreach (var obj in objects)
             {
                 AsyncOperation.Checkpoint();
+
                 if (obj == null)
                 {
                     yield return null;
@@ -233,6 +235,7 @@ namespace Melanchall.DryWetMidi.Tools
                 while (time < endTime && tail != null)
                 {
                     AsyncOperation.Checkpoint();
+
                     var convertedStep = LengthConverter.ConvertFrom(step, time, tempoMap);
                     if (convertedStep == 0)
                         throw new InvalidOperationException("Step is too small.");

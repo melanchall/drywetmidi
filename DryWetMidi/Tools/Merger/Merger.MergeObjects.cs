@@ -130,6 +130,7 @@ namespace Melanchall.DryWetMidi.Tools
             foreach (var trackChunk in trackChunks.OfType<TrackChunk>())
             {
                 AsyncOperation.Checkpoint();
+
                 trackChunk.MergeObjects(objectType, tempoMap, settings, objectDetectionSettings);
             }
         }
@@ -200,14 +201,17 @@ namespace Melanchall.DryWetMidi.Tools
             var preparedObjects = objects.OfType<ITimedObject>().Select(obj =>
             {
                 AsyncOperation.Checkpoint();
+
                 return obj;
             });
+
             if (prepareForEnumeration)
                 preparedObjects = preparedObjects.OrderBy(n => n.Time);
 
             foreach (var obj in preparedObjects)
             {
                 AsyncOperation.Checkpoint();
+
                 var lengthedObject = obj as ILengthedObject;
                 if (lengthedObject == null || settings.Filter?.Invoke(obj) == false)
                 {
@@ -242,6 +246,7 @@ namespace Melanchall.DryWetMidi.Tools
                         for (var n = node; n != null;)
                         {
                             AsyncOperation.Checkpoint();
+
                             if (!n.Value.IsCompleted)
                                 break;
 
@@ -260,6 +265,7 @@ namespace Melanchall.DryWetMidi.Tools
             foreach (var objectDescriptor in objectsDescriptors)
             {
                 AsyncOperation.Checkpoint();
+
                 yield return objectDescriptor.GetObject(settings);
             }
         }

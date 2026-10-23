@@ -353,6 +353,7 @@ namespace Melanchall.DryWetMidi.Tools
             while ((record = ReadRecord(reader, readChunkId)) != null)
             {
                 AsyncOperation.Checkpoint();
+
                 var lineNumber = record.CsvRecord.LineNumber;
 
                 var recordType = GetRecordType(record.RecordType, lineNumber, settings.UnknownRecordPolicy);
@@ -411,6 +412,7 @@ namespace Melanchall.DryWetMidi.Tools
             while ((record = ReadRecord(reader, readChunkId)) != null)
             {
                 AsyncOperation.Checkpoint();
+
                 var lineNumber = record.CsvRecord.LineNumber;
 
                 var recordType = GetRecordType(record.RecordType, lineNumber, settings.UnknownRecordPolicy);
@@ -511,7 +513,9 @@ namespace Melanchall.DryWetMidi.Tools
             return ParseRecord(csvReader.ReadRecord(), readChunkId);
         }
 
-        private static Record? ParseRecord(CsvRecord? record, bool readChunkId)
+        private static Record? ParseRecord(
+            CsvRecord? record,
+            bool readChunkId)
         {
             if (record == null)
                 return null;
@@ -735,6 +739,7 @@ namespace Melanchall.DryWetMidi.Tools
                 foreach (var csvEvent in setTempoEvents)
                 {
                     AsyncOperation.Checkpoint();
+
                     var setTempoEvent = (SetTempoEvent)csvEvent.Event;
                     tempoMapManager.SetTempo(
                         csvEvent.Time,
@@ -749,6 +754,7 @@ namespace Melanchall.DryWetMidi.Tools
                 foreach (var csvEvent in timeSignatureEvents)
                 {
                     AsyncOperation.Checkpoint();
+
                     var timeSignatureEvent = (TimeSignatureEvent)csvEvent.Event;
                     tempoMapManager.SetTimeSignature(
                         csvEvent.Time,

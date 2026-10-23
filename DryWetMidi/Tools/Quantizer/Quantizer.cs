@@ -58,6 +58,7 @@ namespace Melanchall.DryWetMidi.Tools
             foreach (var obj in InteractionAsyncUtilities.CheckpointItems(objects).OfType<ITimedObject>().Where(filter))
             {
                 AsyncOperation.Checkpoint();
+
                 QuantizeObject(obj, grid, times, tempoMap, settings);
             }
         }
@@ -320,6 +321,7 @@ namespace Melanchall.DryWetMidi.Tools
                 .Select(obj =>
                 {
                     AsyncOperation.Checkpoint();
+
                     var lengthedObject = obj as ILengthedObject;
                     return lengthedObject != null
                         ? lengthedObject.EndTime
@@ -344,6 +346,7 @@ namespace Melanchall.DryWetMidi.Tools
                 while ((timesAvailable = enumerator.MoveNext()) && enumerator.Current < lastTime)
                 {
                     AsyncOperation.Checkpoint();
+
                     yield return enumerator.Current;
                 }
 
@@ -388,6 +391,7 @@ namespace Melanchall.DryWetMidi.Tools
             foreach (var currentGridTime in candidateTimes)
             {
                 AsyncOperation.Checkpoint();
+
                 var distance = Math.Abs(time - currentGridTime);
                 var convertedDistance = LengthConverter.ConvertTo(distance, distanceCalculationType, Math.Min(time, currentGridTime), tempoMap);
                 if (convertedDistance.CompareTo(convertedDistanceToGridTime) >= 0)

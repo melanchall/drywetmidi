@@ -784,12 +784,34 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             MidiFile expectedMidiFile)
         {
             var clonedMidiFiles = midiFiles.Select(f => f.Clone()).ToArray();
-            var resultMidiFile = midiFiles.MergeSimultaneously(settings);
+            MidiFile resultMidiFile;
+
+            try
+            {
+                resultMidiFile = midiFiles.MergeSimultaneously(settings);
+            }
+            catch (Exception exception)
+            {
+                ToolsAsyncTests.AssertAsyncException(
+                    () => clonedMidiFiles.Select(f => f.Clone()).MergeSimultaneouslyAsync(
+                        settings,
+                        cancellationToken: System.Threading.CancellationToken.None).Wait(),
+                    exception.GetType());
+                throw;
+            }
 
             MidiAsserts.AreEqual(expectedMidiFile, resultMidiFile, false, "Invalid file after processing.");
             MidiAsserts.AreEqual(clonedMidiFiles, midiFiles, false, "Original files are modified after processing.");
 
             CheckEventsAreCloned(clonedMidiFiles, resultMidiFile);
+
+            var asyncSources = midiFiles.Select(f => f.Clone()).ToArray();
+            var asyncResult = asyncSources.MergeSimultaneouslyAsync(
+                settings,
+                cancellationToken: System.Threading.CancellationToken.None).Result;
+            MidiAsserts.AreEqual(expectedMidiFile, asyncResult, false, "Invalid asynchronously merged file.");
+            MidiAsserts.AreEqual(clonedMidiFiles, asyncSources, false, "Asynchronous merge modified original files.");
+            CheckEventsAreCloned(asyncSources, asyncResult);
         }
 
         #endregion

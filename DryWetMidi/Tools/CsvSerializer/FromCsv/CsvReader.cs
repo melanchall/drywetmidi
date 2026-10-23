@@ -61,23 +61,32 @@ namespace Melanchall.DryWetMidi.Tools
         internal async Task<CsvRecord?> ReadRecordAsync(CancellationToken cancellationToken)
         {
             string? line;
-            do { line = await GetNextLineAsync(cancellationToken).ConfigureAwait(false); }
+            do
+            {
+                line = await GetNextLineAsync(cancellationToken).ConfigureAwait(false);
+            }
             while (line != null && line.AsSpan().Trim().IsEmpty);
+
             var lineNumber = _currentLineNumber - 1;
+
             if (line == null)
                 return null;
+
             _recordValuesBuilder.Clear();
             StringBuilder? recordBuilder = null;
+
             while (!SplitValues(line, _delimiter, _recordValuesBuilder))
             {
                 recordBuilder ??= new StringBuilder(line);
                 var nextLine = await GetNextLineAsync(cancellationToken).ConfigureAwait(false);
                 if (nextLine == null)
                     break;
+
                 recordBuilder.Append(nextLine);
                 line = recordBuilder.ToString();
                 _recordValuesBuilder.Clear();
             }
+
             return new CsvRecord(lineNumber, _currentLineNumber - lineNumber, _recordValuesBuilder.ToArray());
         }
 
@@ -85,26 +94,37 @@ namespace Melanchall.DryWetMidi.Tools
         {
             _currentLineNumber++;
             StringBuilder? builder = null;
+
             while (true)
             {
                 cancellationToken.ThrowIfCancellationRequested();
+
                 if (_indexInBuffer >= _bufferLength)
                 {
                     _bufferLength = await _streamReader.ReadAsync(_buffer.AsMemory(), cancellationToken).ConfigureAwait(false);
                     _indexInBuffer = 0;
                 }
+
                 if (_bufferLength == 0)
                     return builder?.Length > 0 ? builder.ToString() : null;
+
                 var start = _indexInBuffer;
-                while (_indexInBuffer < _bufferLength && _buffer[_indexInBuffer++] != '\n') { }
+
+                while (_indexInBuffer < _bufferLength && _buffer[_indexInBuffer++] != '\n')
+                {
+                }
+
                 var count = _indexInBuffer - start;
+
                 if (_buffer[_indexInBuffer - 1] == '\n')
                 {
                     if (builder == null)
                         return new string(_buffer, start, count);
+
                     builder.Append(_buffer, start, count);
                     return builder.ToString();
                 }
+
                 builder ??= new StringBuilder();
                 builder.Append(_buffer, start, count);
             }

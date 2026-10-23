@@ -47,6 +47,7 @@ namespace Melanchall.DryWetMidi.Tools
             foreach (var timedEvent in timedEvents)
             {
                 AsyncOperation.Checkpoint();
+
                 var channelEvent = timedEvent.Event as ChannelEvent;
                 if (channelEvent != null)
                 {
@@ -75,6 +76,7 @@ namespace Melanchall.DryWetMidi.Tools
             foreach (var channel in FourBitNumber.Values.Where(c => channelsUsed[c]))
             {
                 AsyncOperation.Checkpoint();
+
                 var newFile = timedEventsByChannel[channel].ToFile();
                 newFile.TimeDivision = midiFile.TimeDivision?.Clone();
 

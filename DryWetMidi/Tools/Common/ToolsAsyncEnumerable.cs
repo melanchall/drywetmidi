@@ -26,6 +26,7 @@ namespace Melanchall.DryWetMidi.Tools
             public void Report(AsyncOperationProgress value)
             {
                 _batchProcessed = value.ProcessedItems;
+
                 if (!value.IsCompleted)
                 {
                     _lastReport = _stopwatch.ElapsedMilliseconds;
@@ -38,6 +39,7 @@ namespace Melanchall.DryWetMidi.Tools
                 _processed += _batchProcessed;
                 _batchProcessed = 0;
                 var elapsed = _stopwatch.ElapsedMilliseconds;
+
                 if (elapsed - _lastReport >= 100)
                 {
                     _lastReport = elapsed;
@@ -59,6 +61,7 @@ namespace Melanchall.DryWetMidi.Tools
             bool completed = false;
             bool finished = false;
             var enumerationProgress = progress == null ? null : new EnumerationProgress(progress);
+
             try
             {
                 while (!completed)
@@ -67,16 +70,19 @@ namespace Melanchall.DryWetMidi.Tools
                     {
                         enumerator ??= source().GetEnumerator();
                         var items = new List<T>(BatchSize);
+
                         try
                         {
                             while (items.Count < BatchSize)
                             {
                                 AsyncOperation.Checkpoint();
+
                                 if (!enumerator.MoveNext())
                                 {
                                     completed = true;
                                     break;
                                 }
+
                                 items.Add(enumerator.Current);
                             }
                         }
@@ -85,22 +91,29 @@ namespace Melanchall.DryWetMidi.Tools
                             deferredError = ExceptionDispatchInfo.Capture(exception);
                             completed = true;
                         }
+
                         return items;
-                    }, cancellationToken, enumerationProgress).ConfigureAwait(false);
+                    },
+                    cancellationToken,
+                    enumerationProgress).ConfigureAwait(false);
                     enumerationProgress?.EndBatch();
+
                     foreach (var item in batch)
                     {
                         cancellationToken.ThrowIfCancellationRequested();
                         yield return item;
                     }
+
                     deferredError?.Throw();
                 }
+
                 finished = true;
             }
             finally
             {
                 if (enumerator != null)
                     await AsyncOperation.Run(() => enumerator.Dispose(), CancellationToken.None).ConfigureAwait(false);
+
                 if (finished)
                     enumerationProgress?.Complete();
             }

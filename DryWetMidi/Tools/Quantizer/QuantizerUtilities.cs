@@ -201,6 +201,7 @@ namespace Melanchall.DryWetMidi.Tools
             foreach (var trackChunk in trackChunks.OfType<TrackChunk>())
             {
                 AsyncOperation.Checkpoint();
+
                 trackChunk.QuantizeObjects(quantizer, objectType, grid, tempoMap, quantizerSettings, objectDetectionSettings);
             }
         }

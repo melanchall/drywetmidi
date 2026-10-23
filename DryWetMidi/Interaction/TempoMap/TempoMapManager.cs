@@ -387,9 +387,13 @@ namespace Melanchall.DryWetMidi.Interaction
                 AsyncOperation.Checkpoint();
                 return (Manager: manager, Events: manager.PrepareChanges());
             }).ToArray();
+
             AsyncOperation.Checkpoint();
+
             foreach (var replacement in replacements)
+            {
                 replacement.Manager.CommitChanges(replacement.Events);
+            }
         }
 
         private IEnumerable<TimedEvent> GetTimedEvents(Func<TimedEvent, bool> predicate)

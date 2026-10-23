@@ -17,7 +17,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         public void TakePart_InMiddle_EmptyFile()
         {
             var midiFile = new MidiFile();
-            var result = midiFile.TakePart(new MetricTimeSpan(0, 0, 1), MusicalTimeSpan.Eighth);
+            var result = TakePart(midiFile, new MetricTimeSpan(0, 0, 1), MusicalTimeSpan.Eighth);
 
             ClassicAssert.IsTrue(result.IsEmpty(), "Empty file part taking produced non-empty result.");
         }
@@ -46,7 +46,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 PreserveTimes = false
             };
 
-            var result = midiFile.TakePart(partStart, partLength, settings);
+            var result = TakePart(midiFile, partStart, partLength, settings);
 
             CompareTimedEvents(
                 result.GetTimedEvents(),
@@ -83,7 +83,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 PreserveTimes = true
             };
 
-            var result = midiFile.TakePart(partStart, partLength, settings);
+            var result = TakePart(midiFile, partStart, partLength, settings);
 
             CompareTimedEvents(
                 result.GetTimedEvents(),
@@ -118,7 +118,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 PreserveTimes = false
             };
 
-            var result = midiFile.TakePart(partStart, partLength, settings);
+            var result = TakePart(midiFile, partStart, partLength, settings);
 
             CompareTimedEvents(
                 result.GetTimedEvents(),
@@ -153,7 +153,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 PreserveTimes = false
             };
 
-            var result = midiFile.TakePart(partStart, partLength, settings);
+            var result = TakePart(midiFile, partStart, partLength, settings);
 
             CompareTimedEvents(
                 result.GetTimedEvents(),

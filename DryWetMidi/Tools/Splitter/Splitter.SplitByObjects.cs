@@ -44,6 +44,7 @@ namespace Melanchall.DryWetMidi.Tools
             foreach (var obj in objects)
             {
                 AsyncOperation.Checkpoint();
+
                 if (settings.Filter?.Invoke(obj) == false)
                     continue;
 

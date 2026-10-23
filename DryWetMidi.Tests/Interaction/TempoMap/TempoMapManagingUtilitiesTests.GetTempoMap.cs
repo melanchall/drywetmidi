@@ -36,6 +36,18 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var midiFile = new MidiFile(new TrackChunk(new SetTempoEvent(10) { DeltaTime = 2 }, new SetTempoEvent(20) { DeltaTime = 2 }, new SetTempoEvent(10) { DeltaTime = 2 }));
             var tempoMap = midiFile.GetTempoMap();
+
+            MidiAsserts.AreEqual(
+                tempoMap,
+                midiFile.GetTempoMapAsync(cancellationToken: System.Threading.CancellationToken.None).Result,
+                "Async default tempo map is invalid.");
+
+            MidiAsserts.AreEqual(
+                tempoMap,
+                midiFile.GetTrackChunks().GetTempoMapAsync(
+                    midiFile.TimeDivision,
+                    cancellationToken: System.Threading.CancellationToken.None).Result,
+                "Async default tracks tempo map is invalid.");
             CollectionAssert.AreEqual(
                 new[]
                 {
@@ -557,6 +569,18 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             var tempoMap = midiFile.GetTempoMap();
             MidiAsserts.AreEqual(expectedTempoMap, tempoMap, $"{message} Invalid tempo map.");
 
+            MidiAsserts.AreEqual(
+                expectedTempoMap,
+                midiFile.GetTempoMapAsync(cancellationToken: System.Threading.CancellationToken.None).Result,
+                $"{message} Invalid async tempo map.");
+
+            MidiAsserts.AreEqual(
+                expectedTempoMap,
+                midiFile.GetTrackChunks().GetTempoMapAsync(
+                    midiFile.TimeDivision,
+                    cancellationToken: System.Threading.CancellationToken.None).Result,
+                $"{message} Invalid async tracks tempo map.");
+
             var readMidiFile = MidiFileTestUtilities.Read(
                 midiFile,
                 writingSettings,
@@ -565,6 +589,11 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
             var tempoMapAfterReading = readMidiFile.GetTempoMap();
             MidiAsserts.AreEqual(expectedTempoMap, tempoMapAfterReading, $"{message} Invalid tempo map after reading.");
+
+            MidiAsserts.AreEqual(
+                expectedTempoMap,
+                readMidiFile.GetTempoMapAsync(cancellationToken: System.Threading.CancellationToken.None).Result,
+                $"{message} Invalid async tempo map after reading.");
         }
 
         private static TempoMap CreateTempoMap(

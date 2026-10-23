@@ -123,7 +123,10 @@ namespace Melanchall.DryWetMidi.Interaction
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
 
-            var eventsCollections = InteractionAsyncUtilities.CheckpointItems(trackChunks).Where(c => c != null).Select(InteractionAsyncUtilities.GetEvents).ToArray();
+            var eventsCollections = InteractionAsyncUtilities.CheckpointItems(trackChunks)
+                .Where(c => c != null)
+                .Select(InteractionAsyncUtilities.GetEvents)
+                .ToArray();
             var result = new List<TimedEvent>();
 
             foreach (var timedEvent in eventsCollections.GetTimedEventsLazy(settings))
@@ -542,6 +545,7 @@ namespace Melanchall.DryWetMidi.Interaction
             }
 
             AsyncOperation.Checkpoint();
+
             if (removedEventsCount > 0)
                 InteractionAsyncUtilities.CommitReplacement(eventsCollection, replacement);
 
@@ -643,7 +647,10 @@ namespace Melanchall.DryWetMidi.Interaction
 
             // TODO: rework
 
-            var eventsCollections = InteractionAsyncUtilities.CheckpointItems(trackChunks).Where(c => c != null).Select(InteractionAsyncUtilities.GetEvents).ToArray();
+            var eventsCollections = InteractionAsyncUtilities.CheckpointItems(trackChunks)
+                .Where(c => c != null)
+                .Select(InteractionAsyncUtilities.GetEvents)
+                .ToArray();
             var eventsCount = eventsCollections.Sum(c => c.Count);
 
             var eventsCollectionsCount = eventsCollections.Length;
@@ -707,6 +714,7 @@ namespace Melanchall.DryWetMidi.Interaction
             }
 
             AsyncOperation.Checkpoint();
+
             for (var i = 0; i < eventsCollectionsCount; i++)
             {
                 var removedEventsCount = removedEventsCounts[i];
@@ -814,7 +822,11 @@ namespace Melanchall.DryWetMidi.Interaction
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
 
-            var eventsCollections = InteractionAsyncUtilities.CheckpointItems(trackChunks).Where(c => c != null).Select(InteractionAsyncUtilities.GetEvents).ToArray();
+            var eventsCollections = InteractionAsyncUtilities.CheckpointItems(trackChunks)
+                .Where(c => c != null)
+                .Select(InteractionAsyncUtilities.GetEvents)
+                .ToArray();
+
             return new SortedLazyCollection<TimedEvent>(eventsCollections.GetTimedEventsLazy(settings, cloneEvent));
         }
 
@@ -852,7 +864,9 @@ namespace Melanchall.DryWetMidi.Interaction
             var replacement = InteractionAsyncUtilities.PrepareReplacement(
                 timedEvents.OrderBy(e => e.Time),
                 removeMarked: true);
+
             AsyncOperation.Checkpoint();
+
             InteractionAsyncUtilities.CommitReplacement(eventsCollection, replacement);
         }
 

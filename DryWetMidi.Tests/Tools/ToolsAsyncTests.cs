@@ -35,32 +35,54 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             public override bool CanSeek => false;
             public override bool CanWrite => true;
             public override long Length => throw new NotSupportedException();
-            public override long Position { get => throw new NotSupportedException(); set => throw new NotSupportedException(); }
+            public override long Position
+            {
+                get => throw new NotSupportedException();
+                set => throw new NotSupportedException();
+            }
             public override void Flush() => throw new InvalidOperationException("Synchronous flush.");
             public override int Read(byte[] buffer, int offset, int count) => throw new InvalidOperationException("Synchronous read.");
             public override void Write(byte[] buffer, int offset, int count) => throw new InvalidOperationException("Synchronous write.");
             public override long Seek(long offset, SeekOrigin origin) => throw new NotSupportedException();
             public override void SetLength(long value) => throw new NotSupportedException();
 
-            public override async Task<int> ReadAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken)
+            public override async Task<int> ReadAsync(
+                byte[] buffer,
+                int offset,
+                int count,
+                CancellationToken cancellationToken)
             {
                 Reads++;
                 await Task.Yield();
-                if (BlockRead) await Task.Delay(Timeout.Infinite, cancellationToken);
+                if (BlockRead)
+                    await Task.Delay(Timeout.Infinite, cancellationToken).ConfigureAwait(false);
+
                 cancellationToken.ThrowIfCancellationRequested();
-                if (FailRead) throw new IOException("Read failure.");
-                return await _storage.ReadAsync(buffer, offset, Math.Min(count, 17), cancellationToken);
+
+                if (FailRead)
+                    throw new IOException("Read failure.");
+
+                return await _storage.ReadAsync(buffer, offset, Math.Min(count, 17), cancellationToken).ConfigureAwait(false);
             }
 
-            public override async Task WriteAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken)
+            public override async Task WriteAsync(
+                byte[] buffer,
+                int offset,
+                int count,
+                CancellationToken cancellationToken)
             {
                 Writes++;
                 await Task.Yield();
                 OnWrite?.Invoke();
-                if (BlockWrite) await Task.Delay(Timeout.Infinite, cancellationToken);
+                if (BlockWrite)
+                    await Task.Delay(Timeout.Infinite, cancellationToken).ConfigureAwait(false);
+
                 cancellationToken.ThrowIfCancellationRequested();
-                if (FailWrite) throw new IOException("Write failure.");
-                await _storage.WriteAsync(buffer, offset, count, cancellationToken);
+
+                if (FailWrite)
+                    throw new IOException("Write failure.");
+
+                await _storage.WriteAsync(buffer, offset, count, cancellationToken).ConfigureAwait(false);
             }
 
             public override Task FlushAsync(CancellationToken cancellationToken)
@@ -73,7 +95,9 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             protected override void Dispose(bool disposing)
             {
                 Disposed = true;
-                if (disposing) _storage.Dispose();
+                if (disposing)
+                    _storage.Dispose();
+
                 base.Dispose(disposing);
             }
         }
@@ -111,8 +135,10 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                     visited[pass - 1]++;
                     if (pass == canceledPass && nullItems)
                         cancellation.Cancel();
+
                     yield return pass == canceledPass && nullItems ? null : new Note((SevenBitNumber)60);
                 }
+
             }
             var settings = new QuantizingSettings
             {
@@ -120,14 +146,19 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 {
                     if (pass != canceledPass)
                         return true;
+
                     cancellation.Cancel();
                     return false;
                 }
             };
 
             Assert.CatchAsync<OperationCanceledException>(async () =>
-                await new Quantizer().QuantizeAsync(Objects(), new SteppedGrid(new MidiTimeSpan(10)),
-                    TempoMap.Default, settings, cancellationToken: cancellation.Token));
+                await new Quantizer().QuantizeAsync(
+                    Objects(),
+                    new SteppedGrid(new MidiTimeSpan(10)),
+                    TempoMap.Default,
+                    settings,
+                    cancellationToken: cancellation.Token));
             Assert.That(visited[canceledPass - 1], Is.LessThanOrEqualTo(2));
         }
 
@@ -160,6 +191,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                     await track.GetObjects(ObjectType.Note | ObjectType.TimedEvent).SerializeToCsvAsync(output, TempoMap.Default);
                     break;
             }
+
             Assert.That(output.ToArray(), Is.EqualTo(expected.ToArray()));
             Assert.That(output.Writes, Is.GreaterThan(0));
             Assert.That(output.Flushes, Is.EqualTo(1));
@@ -183,6 +215,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                     Assert.That(objects.OfType<Note>().Count(), Is.EqualTo(track.GetNotes().Count));
                     break;
             }
+
             Assert.That(input.Reads, Is.GreaterThan(1));
             Assert.That(input.Disposed, Is.False);
             Assert.That(output.Disposed, Is.False);
@@ -221,7 +254,11 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 Assert.ThrowsAsync<IOException>(() => file.SerializeToCsvAsync(path, false));
                 await file.SerializeToCsvAsync(path, true);
             }
-            finally { if (File.Exists(path)) File.Delete(path); }
+            finally
+            {
+                if (File.Exists(path))
+                    File.Delete(path);
+            }
         }
 
         [Test]
@@ -239,7 +276,11 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 Assert.CatchAsync<OperationCanceledException>(() => CreateFile().SerializeToCsvAsync(path, true, cancellationToken: cancellation.Token));
                 Assert.That(File.Exists(path), Is.False);
             }
-            finally { if (File.Exists(path)) File.Delete(path); }
+            finally
+            {
+                if (File.Exists(path))
+                    File.Delete(path);
+            }
         }
 
         [Test]
@@ -357,8 +398,10 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             using var stream = new AsyncOnlyStream { FailRead = !writing, FailWrite = writing };
             Assert.ThrowsAsync<IOException>(async () =>
             {
-                if (writing) await CreateFile().SerializeToCsvAsync(stream).WaitAsync(TimeSpan.FromSeconds(10));
-                else await CsvSerializer.DeserializeFileFromCsvAsync(stream).WaitAsync(TimeSpan.FromSeconds(10));
+                if (writing)
+                    await CreateFile().SerializeToCsvAsync(stream).WaitAsync(TimeSpan.FromSeconds(10));
+                else
+                    await CsvSerializer.DeserializeFileFromCsvAsync(stream).WaitAsync(TimeSpan.FromSeconds(10));
             });
         }
 
@@ -370,8 +413,10 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             using var stream = new AsyncOnlyStream { BlockRead = !writing, BlockWrite = writing };
             Assert.CatchAsync<OperationCanceledException>(async () =>
             {
-                if (writing) await CreateFile().SerializeToCsvAsync(stream, cancellationToken: cancellation.Token).WaitAsync(TimeSpan.FromSeconds(10));
-                else await CsvSerializer.DeserializeFileFromCsvAsync(stream, cancellationToken: cancellation.Token).WaitAsync(TimeSpan.FromSeconds(10));
+                if (writing)
+                    await CreateFile().SerializeToCsvAsync(stream, cancellationToken: cancellation.Token).WaitAsync(TimeSpan.FromSeconds(10));
+                else
+                    await CsvSerializer.DeserializeFileFromCsvAsync(stream, cancellationToken: cancellation.Token).WaitAsync(TimeSpan.FromSeconds(10));
             });
         }
 
@@ -390,16 +435,22 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                         yield return new Note((SevenBitNumber)60, 100);
                     }
                 }
-                finally { disposed = true; }
+                finally
+                {
+                    disposed = true;
+                }
             }
+
             var result = Source().SplitObjectsByStepAsync((MidiTimeSpan)10, TempoMap.Default);
             Assert.That(visited, Is.Zero);
+
             await foreach (var obj in result)
             {
                 Assert.That(((Note)obj).Length, Is.EqualTo(10));
                 Assert.That(visited, Is.InRange(1, 64));
                 break;
             }
+
             Assert.That(disposed, Is.True);
             Assert.That(visited, Is.InRange(1, 64));
         }
@@ -414,12 +465,19 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 try
                 {
                     while (true)
+                    {
                         yield return new Note((SevenBitNumber)60, 100);
+                    }
                 }
-                finally { disposed = true; }
+                finally
+                {
+                    disposed = true;
+                }
             }
+
             var result = Source().SplitObjectsByStepAsync((MidiTimeSpan)10, TempoMap.Default);
-            await using var enumerator = result.GetAsyncEnumerator(cancellation.Token);
+            var enumerator = result.GetAsyncEnumerator(cancellation.Token);
+            await using var enumeratorDisposal = enumerator.ConfigureAwait(false);
             Assert.That(await enumerator.MoveNextAsync(), Is.True);
             cancellation.Cancel();
             Assert.CatchAsync<OperationCanceledException>(async () => await enumerator.MoveNextAsync());
@@ -451,19 +509,29 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 try
                 {
                     for (int i = 0; i < validItems; i++)
+                    {
                         yield return new TimedEvent(new TextEvent(i.ToString()), i);
+                    }
+
                     throw failure;
                 }
-                finally { disposed = true; }
+                finally
+                {
+                    disposed = true;
+                }
             }
+
             var progress = new InlineProgress();
             var result = Source().SplitObjectsByStepAsync((MidiTimeSpan)10, TempoMap.Default, progress: progress);
-            await using var enumerator = result.GetAsyncEnumerator();
+            var enumerator = result.GetAsyncEnumerator();
+            await using var enumeratorDisposal = enumerator.ConfigureAwait(false);
+
             for (int i = 0; i < validItems; i++)
             {
                 Assert.That(await enumerator.MoveNextAsync(), Is.True);
                 Assert.That(((TextEvent)((TimedEvent)enumerator.Current).Event).Text, Is.EqualTo(i.ToString()));
             }
+
             var exception = Assert.ThrowsAsync<InvalidOperationException>(async () => await enumerator.MoveNextAsync());
             Assert.That(exception, Is.SameAs(failure));
             Assert.That(disposed, Is.True);
@@ -526,7 +594,9 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             int calls = 0;
             Predicate<ITimedObject> filter = obj =>
             {
-                if (++calls == 4) cancellation.Cancel();
+                if (++calls == 4)
+                    cancellation.Cancel();
+
                 return true;
             };
             Assert.CatchAsync<OperationCanceledException>(async () =>
@@ -549,11 +619,16 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                     {
                         if (++visited == 4)
                             cancellation.Cancel();
+
                         yield return new Note((SevenBitNumber)60, 100, visited);
                     }
                 }
-                finally { disposed = true; }
+                finally
+                {
+                    disposed = true;
+                }
             }
+
             Assert.CatchAsync<OperationCanceledException>(async () =>
                 await Collect(Source().MergeObjectsAsync(TempoMap.Default, cancellationToken: cancellation.Token)));
             Assert.That(visited, Is.EqualTo(4));
@@ -582,9 +657,11 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 typeof(QuantizerUtilities), typeof(Repeater), typeof(RepeaterUtilities),
                 typeof(Resizer), typeof(Sanitizer)
             };
+
             foreach (var type in types)
             {
                 var methods = type.GetMethods(BindingFlags.Public | BindingFlags.Static | BindingFlags.Instance | BindingFlags.DeclaredOnly);
+
                 foreach (var sync in methods.Where(m => !m.Name.EndsWith("Async", StringComparison.Ordinal)))
                 {
                     var parameters = sync.GetParameters();
@@ -614,33 +691,53 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             {
                 case 0:
                     expected.SplitObjectsByStep(ObjectType.Note, (MidiTimeSpan)40);
-                    if (target == 0) await actual.SplitObjectsByStepAsync(ObjectType.Note, (MidiTimeSpan)40);
-                    else if (target == 1) await track.SplitObjectsByStepAsync(ObjectType.Note, (MidiTimeSpan)40, TempoMap.Default);
-                    else await tracks.SplitObjectsByStepAsync(ObjectType.Note, (MidiTimeSpan)40, TempoMap.Default);
+                    if (target == 0)
+                        await actual.SplitObjectsByStepAsync(ObjectType.Note, (MidiTimeSpan)40);
+                    else if (target == 1)
+                        await track.SplitObjectsByStepAsync(ObjectType.Note, (MidiTimeSpan)40, TempoMap.Default);
+                    else
+                        await tracks.SplitObjectsByStepAsync(ObjectType.Note, (MidiTimeSpan)40, TempoMap.Default);
+
                     break;
                 case 1:
                     expected.SplitObjectsByGrid(ObjectType.Note, grid);
-                    if (target == 0) await actual.SplitObjectsByGridAsync(ObjectType.Note, grid);
-                    else if (target == 1) await track.SplitObjectsByGridAsync(ObjectType.Note, grid, TempoMap.Default);
-                    else await tracks.SplitObjectsByGridAsync(ObjectType.Note, grid, TempoMap.Default);
+                    if (target == 0)
+                        await actual.SplitObjectsByGridAsync(ObjectType.Note, grid);
+                    else if (target == 1)
+                        await track.SplitObjectsByGridAsync(ObjectType.Note, grid, TempoMap.Default);
+                    else
+                        await tracks.SplitObjectsByGridAsync(ObjectType.Note, grid, TempoMap.Default);
+
                     break;
                 case 2:
                     expected.SplitObjectsByPartsNumber(ObjectType.Note, 3, TimeSpanType.Midi);
-                    if (target == 0) await actual.SplitObjectsByPartsNumberAsync(ObjectType.Note, 3, TimeSpanType.Midi);
-                    else if (target == 1) await track.SplitObjectsByPartsNumberAsync(ObjectType.Note, 3, TimeSpanType.Midi, TempoMap.Default);
-                    else await tracks.SplitObjectsByPartsNumberAsync(ObjectType.Note, 3, TimeSpanType.Midi, TempoMap.Default);
+                    if (target == 0)
+                        await actual.SplitObjectsByPartsNumberAsync(ObjectType.Note, 3, TimeSpanType.Midi);
+                    else if (target == 1)
+                        await track.SplitObjectsByPartsNumberAsync(ObjectType.Note, 3, TimeSpanType.Midi, TempoMap.Default);
+                    else
+                        await tracks.SplitObjectsByPartsNumberAsync(ObjectType.Note, 3, TimeSpanType.Midi, TempoMap.Default);
+
                     break;
                 case 3:
                     expected.SplitObjectsAtDistance(ObjectType.Note, (MidiTimeSpan)40, LengthedObjectTarget.Start);
-                    if (target == 0) await actual.SplitObjectsAtDistanceAsync(ObjectType.Note, (MidiTimeSpan)40, LengthedObjectTarget.Start);
-                    else if (target == 1) await track.SplitObjectsAtDistanceAsync(ObjectType.Note, (MidiTimeSpan)40, LengthedObjectTarget.Start, TempoMap.Default);
-                    else await tracks.SplitObjectsAtDistanceAsync(ObjectType.Note, (MidiTimeSpan)40, LengthedObjectTarget.Start, TempoMap.Default);
+                    if (target == 0)
+                        await actual.SplitObjectsAtDistanceAsync(ObjectType.Note, (MidiTimeSpan)40, LengthedObjectTarget.Start);
+                    else if (target == 1)
+                        await track.SplitObjectsAtDistanceAsync(ObjectType.Note, (MidiTimeSpan)40, LengthedObjectTarget.Start, TempoMap.Default);
+                    else
+                        await tracks.SplitObjectsAtDistanceAsync(ObjectType.Note, (MidiTimeSpan)40, LengthedObjectTarget.Start, TempoMap.Default);
+
                     break;
                 default:
                     expected.SplitObjectsAtDistance(ObjectType.Note, 0.4, TimeSpanType.Midi, LengthedObjectTarget.Start);
-                    if (target == 0) await actual.SplitObjectsAtDistanceAsync(ObjectType.Note, 0.4, TimeSpanType.Midi, LengthedObjectTarget.Start);
-                    else if (target == 1) await track.SplitObjectsAtDistanceAsync(ObjectType.Note, 0.4, TimeSpanType.Midi, LengthedObjectTarget.Start, TempoMap.Default);
-                    else await tracks.SplitObjectsAtDistanceAsync(ObjectType.Note, 0.4, TimeSpanType.Midi, LengthedObjectTarget.Start, TempoMap.Default);
+                    if (target == 0)
+                        await actual.SplitObjectsAtDistanceAsync(ObjectType.Note, 0.4, TimeSpanType.Midi, LengthedObjectTarget.Start);
+                    else if (target == 1)
+                        await track.SplitObjectsAtDistanceAsync(ObjectType.Note, 0.4, TimeSpanType.Midi, LengthedObjectTarget.Start, TempoMap.Default);
+                    else
+                        await tracks.SplitObjectsAtDistanceAsync(ObjectType.Note, 0.4, TimeSpanType.Midi, LengthedObjectTarget.Start, TempoMap.Default);
+
                     break;
             }
             Assert.That(actual.GetNotes().Select(n => (n.Time, n.Length)), Is.EqualTo(expected.GetNotes().Select(n => (n.Time, n.Length))));
@@ -653,10 +750,21 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             new NoteOnEvent((SevenBitNumber)62, (SevenBitNumber)90) { DeltaTime = 20 },
             new NoteOffEvent((SevenBitNumber)62, (SevenBitNumber)64) { DeltaTime = 100 }));
 
-        private static async Task<List<T>> Collect<T>(IAsyncEnumerable<T> source)
+        internal static void AssertAsyncException(Action action, Type exceptionType)
+        {
+            var aggregate = Assert.Throws<AggregateException>(() => action());
+            Assert.That(aggregate.InnerException, Is.TypeOf(exceptionType));
+        }
+
+        internal static async Task<List<T>> Collect<T>(IAsyncEnumerable<T> source)
         {
             var result = new List<T>();
-            await foreach (var item in source) result.Add(item);
+
+            await foreach (var item in source.ConfigureAwait(false))
+            {
+                result.Add(item);
+            }
+
             return result;
         }
     }
