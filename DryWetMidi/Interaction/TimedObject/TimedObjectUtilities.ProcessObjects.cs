@@ -363,7 +363,7 @@ namespace Melanchall.DryWetMidi.Interaction
                     return trackChunks.ProcessChords(action, match, settings?.ChordDetectionSettings, settings?.NoteDetectionSettings, settings?.TimedEventDetectionSettings, hint.ToChordProcessingHint());
             }
 
-            return trackChunks
+            return InteractionAsyncUtilities.CheckpointItems(trackChunks)
                 .Where(c => c != null)
                 .Select(c => c.Events)
                 .ProcessObjectsInternal(objectType, action, match, settings, hint);

@@ -63,6 +63,26 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
+        public void Getters_CancelBeforeFilteringNullTracks()
+        {
+            using var cancellation = new CancellationTokenSource();
+            var visited = 0;
+            IEnumerable<TrackChunk> Tracks()
+            {
+                cancellation.Cancel();
+                for (var i = 0; i < 1000; i++)
+                {
+                    visited++;
+                    yield return null;
+                }
+            }
+
+            Assert.CatchAsync<OperationCanceledException>(async () =>
+                await Tracks().GetTimedEventsAsync(cancellationToken: cancellation.Token));
+            Assert.That(visited, Is.EqualTo(1));
+        }
+
+        [Test]
         public async Task ProcessNotes_AwaitsSequentiallyAndPersistsTiming()
         {
             var track = CreateTrack();

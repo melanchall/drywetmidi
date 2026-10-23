@@ -37,6 +37,72 @@ namespace Melanchall.DryWetMidi.Tests.Core
         }
 
         [Test]
+        public async Task LazyReaders_ContinueAfterSkippedEvent()
+        {
+            var bytes = Convert.FromHexString("4D546864000000060000000100604D54726B0000000A00F100903C4000FF2F00");
+            var settings = new ReadingSettings { UnknownChannelEventPolicy = UnknownChannelEventPolicy.SkipStatusByte };
+            using var input = new MemoryStream(bytes);
+            using var synchronous = MidiFile.ReadLazy(input, settings);
+            var expected = synchronous.EnumerateTokens().OfType<MidiEventToken>().Select(t => t.Event.EventType).ToArray();
+            Assert.That(expected, Is.EqualTo(new[] { MidiEventType.NoteOn, MidiEventType.EndOfTrack }));
+
+            using var transport = new AsyncOnlyStream(bytes, false, 1);
+            await using var asynchronous = await MidiFile.ReadLazyAsync(transport, settings);
+            var actual = new List<MidiEventType>();
+            await foreach (var token in asynchronous.EnumerateTokensAsync())
+                if (token is MidiEventToken midiEvent)
+                    actual.Add(midiEvent.Event.EventType);
+            Assert.That(actual, Is.EqualTo(expected));
+        }
+
+        [TestCase(0x2F)]
+        [TestCase(0x51)]
+        [TestCase(0x58)]
+        public async Task ReadAsync_FixedMetaPadding_DoesNotCountAsRetainedMemory(int metaType)
+        {
+            const int size = 100000;
+            using var bytes = new MemoryStream();
+            using (var writer = new MidiWriter(bytes, new WriterSettings { UseBuffering = false }))
+            {
+                writer.WriteString("MThd");
+                writer.WriteDword(6);
+                writer.WriteWord(0);
+                writer.WriteWord(1);
+                writer.WriteWord(96);
+                writer.WriteString("MTrk");
+                writer.WriteDword(size + 6 + (metaType == 0x2F ? 0u : 4u));
+                writer.WriteByte(0);
+                writer.WriteByte(0xFF);
+                writer.WriteByte((byte)metaType);
+                writer.WriteVlqNumber(size);
+                var content = new byte[size];
+                if (metaType == 0x51)
+                {
+                    content[0] = 7;
+                    content[1] = 0xA1;
+                    content[2] = 0x20;
+                }
+                else if (metaType == 0x58)
+                {
+                    content[0] = 4;
+                    content[1] = 2;
+                    content[2] = 24;
+                    content[3] = 8;
+                }
+                writer.WriteBytes(content);
+                if (metaType != 0x2F)
+                    writer.WriteBytes(new byte[] { 0, 0xFF, 0x2F, 0 });
+            }
+
+            var settings = new ReadingSettings { MaxMemorySize = 10000 };
+            bytes.Position = 0;
+            var expected = MidiFile.Read(bytes, settings);
+            using var input = new AsyncOnlyStream(bytes.ToArray(), false, 997);
+            var actual = await MidiFile.ReadAsync(input, settings);
+            Assert.That(MidiFile.Equals(expected, actual, out var message), Is.True, message);
+        }
+
+        [Test]
         public async Task Lazy_AsyncOnlyTransport_FinalizesHeaders()
         {
             using var output = new AsyncOnlyStream();

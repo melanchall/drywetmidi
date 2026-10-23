@@ -298,6 +298,7 @@ namespace Melanchall.DryWetMidi.Core
                             var midiEvent = TrackChunk.ReadEvent(_reader, _settings, ref _currentChannelEventStatusByte);
                             if (midiEvent != null)
                                 return Instruction.ReturnToken(new MidiEventToken(midiEvent));
+                            return Instruction.Read;
                         }
                     }
                     break;

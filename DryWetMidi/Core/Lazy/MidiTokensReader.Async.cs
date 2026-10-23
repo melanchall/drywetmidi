@@ -66,6 +66,8 @@ namespace Melanchall.DryWetMidi.Core
                                     _currentChannelEventStatusByte = result.Status;
                                     if (result.Event != null)
                                         token = new MidiEventToken(result.Event);
+                                    else
+                                        continue;
                                 }
                                 else
                                 {

@@ -31,6 +31,7 @@ namespace Melanchall.DryWetMidi.Core
             frame.WriteByte(status);
             var effectiveStatus = status;
             var firstDataByte = false;
+            long? payloadEnd = null;
             if (status < 0x80)
             {
                 if (runningStatus == null)
@@ -55,18 +56,22 @@ namespace Melanchall.DryWetMidi.Core
                     frame.WriteByte(metaType.Value);
                 }
                 var size = await ReadVlqAsync(reader, frame, 5, int.MaxValue >> 7, cancellationToken).ConfigureAwait(false);
-                var minimum = metaType switch
+                var contentSize = metaType switch
                 {
+                    0x00 => size >= 2 ? 2 : 0,
                     0x20 => 1,
+                    0x21 => size >= 1 ? 1 : 0,
+                    0x2F => 0,
                     0x51 => 3,
                     0x54 => 5,
-                    0x58 => 2,
+                    0x58 => size >= 4 ? 4 : 2,
                     0x59 => 2,
-                    _ => 0
+                    _ => size
                 };
-                size = Math.Max(size, minimum);
-                reader.ThrowIfMemoryLimitExceeded(Math.Min(size, Math.Max(0, reader.Length - reader.Position)), settings);
-                await reader.CopyBytesAsync(frame, size, cancellationToken).ConfigureAwait(false);
+                payloadEnd = reader.Position + Math.Max(size, contentSize);
+                if (contentSize == size)
+                    reader.ThrowIfMemoryLimitExceeded(Math.Min(size, Math.Max(0, reader.Length - reader.Position)), settings);
+                await reader.CopyBytesAsync(frame, contentSize, cancellationToken).ConfigureAwait(false);
             }
             else
             {
@@ -99,6 +104,8 @@ namespace Melanchall.DryWetMidi.Core
             using var codec = new MidiReader(frame.GetBuffer(), 0, checked((int)frame.Length), settings.ReaderSettings, position);
             codec.AddEstimatedMemory(reader.EstimatedMemorySize, settings);
             var midiEvent = TrackChunk.ReadEvent(codec, settings, ref runningStatus);
+            if (payloadEnd != null && reader.Position < payloadEnd)
+                await reader.SetPositionAsync(Math.Min(payloadEnd.Value, reader.Length), cancellationToken).ConfigureAwait(false);
             return (midiEvent, runningStatus);
         }
 

@@ -114,7 +114,7 @@ namespace Melanchall.DryWetMidi.Interaction
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
 
-            return trackChunks
+            return InteractionAsyncUtilities.CheckpointItems(trackChunks)
                 .OfType<TrackChunk>()
                 .Select((trackChunk, trackChunkIndex) => InteractionAsyncUtilities.GetEvents(trackChunk)
                     .GetTimedEventsLazy(settings?.TimedEventDetectionSettings, trackChunkIndex)

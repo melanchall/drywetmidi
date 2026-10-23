@@ -597,7 +597,7 @@ namespace Melanchall.DryWetMidi.Interaction
             ThrowIfArgument.IsNull(nameof(action), action);
             ThrowIfArgument.IsNull(nameof(match), match);
 
-            return trackChunks
+            return InteractionAsyncUtilities.CheckpointItems(trackChunks)
                 .Where(c => c != null)
                 .Select(InteractionAsyncUtilities.GetEvents)
                 .ProcessChordsInternal(
