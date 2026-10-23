@@ -10,7 +10,7 @@ namespace Melanchall.DryWetMidi.Tools
     /// Performs quantization of objects. The process can be adjusted in many ways by <see cref="QuantizingSettings"/>.
     /// More info in the <see href="xref:a_quantizer">Quantizer</see> article.
     /// </summary>
-    public class Quantizer
+    public partial class Quantizer
     {
         #region Constants
 
@@ -55,8 +55,10 @@ namespace Melanchall.DryWetMidi.Tools
 
             var times = GetGridTimes(objects, filter, grid, tempoMap);
 
-            foreach (var obj in objects.OfType<ITimedObject>().Where(filter))
+            foreach (var obj in InteractionAsyncUtilities.CheckpointItems(objects).OfType<ITimedObject>().Where(filter))
             {
+                AsyncOperation.Checkpoint();
+
                 QuantizeObject(obj, grid, times, tempoMap, settings);
             }
         }
@@ -313,11 +315,13 @@ namespace Melanchall.DryWetMidi.Tools
             IGrid grid,
             TempoMap tempoMap)
         {
-            var lastTime = objects
+            var lastTime = InteractionAsyncUtilities.CheckpointItems(objects)
                 .OfType<ITimedObject>()
                 .Where(filter)
                 .Select(obj =>
                 {
+                    AsyncOperation.Checkpoint();
+
                     var lengthedObject = obj as ILengthedObject;
                     return lengthedObject != null
                         ? lengthedObject.EndTime
@@ -340,7 +344,11 @@ namespace Melanchall.DryWetMidi.Tools
                 var timesAvailable = true;
 
                 while ((timesAvailable = enumerator.MoveNext()) && enumerator.Current < lastTime)
+                {
+                    AsyncOperation.Checkpoint();
+
                     yield return enumerator.Current;
+                }
 
                 if (timesAvailable)
                     yield return enumerator.Current;
@@ -382,6 +390,8 @@ namespace Melanchall.DryWetMidi.Tools
 
             foreach (var currentGridTime in candidateTimes)
             {
+                AsyncOperation.Checkpoint();
+
                 var distance = Math.Abs(time - currentGridTime);
                 var convertedDistance = LengthConverter.ConvertTo(distance, distanceCalculationType, Math.Min(time, currentGridTime), tempoMap);
                 if (convertedDistance.CompareTo(convertedDistanceToGridTime) >= 0)

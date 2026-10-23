@@ -544,6 +544,34 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             ClassicAssert.Throws<ArgumentOutOfRangeException>(
                 () => repeater.Repeat(new MidiFile(), repeatsNumber),
                 "No desired exception on file.");
+
+            ToolsAsyncTests.AssertAsyncException(
+                () => repeater.RepeatAsync(
+                    Array.Empty<ITimedObject>(),
+                    repeatsNumber,
+                    TempoMap.Default,
+                    cancellationToken: System.Threading.CancellationToken.None).Wait(),
+                typeof(ArgumentOutOfRangeException));
+            ToolsAsyncTests.AssertAsyncException(
+                () => repeater.RepeatAsync(
+                    new TrackChunk(),
+                    repeatsNumber,
+                    TempoMap.Default,
+                    cancellationToken: System.Threading.CancellationToken.None).Wait(),
+                typeof(ArgumentOutOfRangeException));
+            ToolsAsyncTests.AssertAsyncException(
+                () => repeater.RepeatAsync(
+                    new[] { new TrackChunk() },
+                    repeatsNumber,
+                    TempoMap.Default,
+                    cancellationToken: System.Threading.CancellationToken.None).Wait(),
+                typeof(ArgumentOutOfRangeException));
+            ToolsAsyncTests.AssertAsyncException(
+                () => repeater.RepeatAsync(
+                    new MidiFile(),
+                    repeatsNumber,
+                    cancellationToken: System.Threading.CancellationToken.None).Wait(),
+                typeof(ArgumentOutOfRangeException));
         }
 
         [Test]
@@ -566,6 +594,34 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             ClassicAssert.Throws<ArgumentNullException>(
                 () => repeater.Repeat(default(MidiFile), 1),
                 "No desired exception on file.");
+
+            ToolsAsyncTests.AssertAsyncException(
+                () => repeater.RepeatAsync(
+                    default(IEnumerable<ITimedObject>),
+                    1,
+                    TempoMap.Default,
+                    cancellationToken: System.Threading.CancellationToken.None).Wait(),
+                typeof(ArgumentNullException));
+            ToolsAsyncTests.AssertAsyncException(
+                () => repeater.RepeatAsync(
+                    default(TrackChunk),
+                    1,
+                    TempoMap.Default,
+                    cancellationToken: System.Threading.CancellationToken.None).Wait(),
+                typeof(ArgumentNullException));
+            ToolsAsyncTests.AssertAsyncException(
+                () => repeater.RepeatAsync(
+                    default(IEnumerable<TrackChunk>),
+                    1,
+                    TempoMap.Default,
+                    cancellationToken: System.Threading.CancellationToken.None).Wait(),
+                typeof(ArgumentNullException));
+            ToolsAsyncTests.AssertAsyncException(
+                () => repeater.RepeatAsync(
+                    default(MidiFile),
+                    1,
+                    cancellationToken: System.Threading.CancellationToken.None).Wait(),
+                typeof(ArgumentNullException));
         }
 
         [Test]
@@ -584,6 +640,28 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             ClassicAssert.Throws<ArgumentNullException>(
                 () => repeater.Repeat(new[] { new TrackChunk() }, 1, null),
                 "No desired exception on track chunks.");
+
+            ToolsAsyncTests.AssertAsyncException(
+                () => repeater.RepeatAsync(
+                    Array.Empty<ITimedObject>(),
+                    1,
+                    null,
+                    cancellationToken: System.Threading.CancellationToken.None).Wait(),
+                typeof(ArgumentNullException));
+            ToolsAsyncTests.AssertAsyncException(
+                () => repeater.RepeatAsync(
+                    new TrackChunk(),
+                    1,
+                    null,
+                    cancellationToken: System.Threading.CancellationToken.None).Wait(),
+                typeof(ArgumentNullException));
+            ToolsAsyncTests.AssertAsyncException(
+                () => repeater.RepeatAsync(
+                    new[] { new TrackChunk() },
+                    1,
+                    null,
+                    cancellationToken: System.Threading.CancellationToken.None).Wait(),
+                typeof(ArgumentNullException));
         }
 
         #endregion
@@ -617,6 +695,8 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         {
             inputObjects = inputObjects.OrderBy(obj => obj?.Time ?? 0).ToArray();
             expectedObjects = expectedObjects.OrderBy(obj => obj.Time).ToArray();
+            var asyncSource = inputObjects.Select(obj => obj?.Clone()).ToArray();
+            var asyncExpected = expectedObjects.Select(obj => obj.Clone()).ToArray();
 
             //
 
@@ -648,6 +728,42 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             var actualFile = inputFile.Repeat(repeatsNumber, settings);
             MidiAsserts.AreEqual(expectedObjects.ToFile(), actualFile, true, "Invalid result file.");
             ClassicAssert.AreNotSame(inputFile, actualFile, "Result file refers to the input one.");
+
+            var asyncObjects = asyncSource.Select(obj => obj?.Clone()).ToArray();
+            actualObjects = asyncObjects.RepeatAsync(
+                repeatsNumber,
+                tempoMap,
+                settings,
+                cancellationToken: System.Threading.CancellationToken.None).Result.OrderBy(obj => obj.Time).ToArray();
+            MidiAsserts.AreEqual(asyncExpected, actualObjects, "Invalid asynchronous result objects.");
+            ClassicAssert.IsFalse(asyncObjects.Any(obj => actualObjects.Contains(obj)), "Asynchronous result refers to input objects.");
+            ClassicAssert.AreEqual(actualObjects.Length, actualObjects.Distinct().Count(), "Asynchronous objects are not unique.");
+
+            inputTrackChunk = asyncSource.Select(obj => obj?.Clone()).ToTrackChunk();
+            actualTrackChunk = inputTrackChunk.RepeatAsync(
+                repeatsNumber,
+                tempoMap,
+                settings,
+                cancellationToken: System.Threading.CancellationToken.None).Result;
+            MidiAsserts.AreEqual(asyncExpected.Select(obj => obj.Clone()).ToTrackChunk(), actualTrackChunk, true, "Invalid asynchronous track chunk.");
+            ClassicAssert.AreNotSame(inputTrackChunk, actualTrackChunk);
+
+            inputTrackChunks = new[] { asyncSource.Select(obj => obj?.Clone()).ToTrackChunk() };
+            actualTrackChunks = inputTrackChunks.RepeatAsync(
+                repeatsNumber,
+                tempoMap,
+                settings,
+                cancellationToken: System.Threading.CancellationToken.None).Result;
+            MidiAsserts.AreEqual(new[] { asyncExpected.Select(obj => obj.Clone()).ToTrackChunk() }, actualTrackChunks, true, "Invalid asynchronous track chunks.");
+            ClassicAssert.AreNotSame(inputTrackChunks.First(), actualTrackChunks.First());
+
+            inputFile = asyncSource.Select(obj => obj?.Clone()).ToFile();
+            actualFile = inputFile.RepeatAsync(
+                repeatsNumber,
+                settings,
+                cancellationToken: System.Threading.CancellationToken.None).Result;
+            MidiAsserts.AreEqual(asyncExpected.Select(obj => obj.Clone()).ToFile(), actualFile, true, "Invalid asynchronous file.");
+            ClassicAssert.AreNotSame(inputFile, actualFile);
         }
 
         private static object[] GetRoundUpStepData_ShiftByMaxTime(

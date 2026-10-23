@@ -9,7 +9,7 @@ namespace Melanchall.DryWetMidi.Interaction
     /// <summary>
     /// Extension methods for notes managing.
     /// </summary>
-    public static class NotesManagingUtilities
+    public static partial class NotesManagingUtilities
     {
         #region Nested classes
 
@@ -344,7 +344,7 @@ namespace Melanchall.DryWetMidi.Interaction
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
 
-            var eventsCollections = trackChunks.Select(c => c.Events).ToArray();
+            var eventsCollections = trackChunks.Select(InteractionAsyncUtilities.GetEvents).ToArray();
 
             switch (eventsCollections.Length)
             {
@@ -658,9 +658,9 @@ namespace Melanchall.DryWetMidi.Interaction
             ThrowIfArgument.IsNull(nameof(action), action);
             ThrowIfArgument.IsNull(nameof(match), match);
 
-            return trackChunks
+            return InteractionAsyncUtilities.CheckpointItems(trackChunks)
                 .Where(c => c != null)
-                .Select(c => c.Events)
+                .Select(InteractionAsyncUtilities.GetEvents)
                 .ProcessNotesInternal(action, match, settings, timedEventDetectionSettings, hint);
         }
 
@@ -808,8 +808,9 @@ namespace Melanchall.DryWetMidi.Interaction
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
             ThrowIfArgument.IsNull(nameof(match), match);
 
+            var eventsToRemove = new HashSet<MidiEvent>();
             var notesToRemoveCount = eventsCollection.ProcessNotes(
-                n => n.TimedNoteOnEvent.Event.MustBeRemoved = n.TimedNoteOffEvent.Event.MustBeRemoved = true,
+                n => InteractionAsyncUtilities.CollectEventsForRemoval(n, eventsToRemove),
                 match,
                 settings,
                 timedEventDetectionSettings,
@@ -818,7 +819,7 @@ namespace Melanchall.DryWetMidi.Interaction
             if (notesToRemoveCount == 0)
                 return 0;
 
-            eventsCollection.RemoveTimedEvents(e => e.Event.MustBeRemoved);
+            eventsCollection.RemoveTimedEvents(e => eventsToRemove.Contains(e.Event));
             return notesToRemoveCount;
         }
 
@@ -929,8 +930,9 @@ namespace Melanchall.DryWetMidi.Interaction
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
             ThrowIfArgument.IsNull(nameof(match), match);
 
+            var eventsToRemove = new HashSet<MidiEvent>();
             var notesToRemoveCount = trackChunks.ProcessNotes(
-                n => n.TimedNoteOnEvent.Event.MustBeRemoved = n.TimedNoteOffEvent.Event.MustBeRemoved = true,
+                n => InteractionAsyncUtilities.CollectEventsForRemoval(n, eventsToRemove),
                 match,
                 settings,
                 timedEventDetectionSettings,
@@ -939,7 +941,7 @@ namespace Melanchall.DryWetMidi.Interaction
             if (notesToRemoveCount == 0)
                 return 0;
 
-            trackChunks.RemoveTimedEvents(e => e.Event.MustBeRemoved);
+            trackChunks.RemoveTimedEvents(e => eventsToRemove.Contains(e.Event));
             return notesToRemoveCount;
         }
 
@@ -1026,6 +1028,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
             foreach (var eventsCollection in eventsCollections)
             {
+                AsyncOperation.Checkpoint();
                 var matchedCount = 0;
 
                 var timeOrLengthChanged = false;
@@ -1035,6 +1038,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
                 foreach (var note in notes)
                 {
+                    AsyncOperation.Checkpoint();
                     if (!match(note))
                         continue;
 
@@ -1081,6 +1085,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
             foreach (var timedEvent in timedEvents)
             {
+                AsyncOperation.Checkpoint();
                 var eventType = timedEvent.Event.EventType;
 
                 if (eventType == MidiEventType.NoteOn)
@@ -1165,8 +1170,12 @@ namespace Melanchall.DryWetMidi.Interaction
                 });
 
             var notes = new Note[result.Count];
+
             for (var i = 0; i < result.Count; i++)
+            {
+                AsyncOperation.Checkpoint();
                 notes[i] = result[i].Note;
+            }
 
             return new SortedImmutableCollection<Note>(notes);
         }
@@ -1218,6 +1227,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
             foreach (var timedObject in timedObjects)
             {
+                AsyncOperation.Checkpoint();
                 if (completeObjectsAllowed && !(timedObject is TimedEvent))
                 {
                     if (headDescriptorIndex == nextDescriptorIndex)
@@ -1301,6 +1311,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
                                 while (holder.Count > 0)
                                 {
+                                    AsyncOperation.Checkpoint();
                                     var candidateDescriptorIndex = holder.GetNext();
                                     if (candidateDescriptorIndex >= headDescriptorIndex)
                                     {
@@ -1335,6 +1346,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
                             for (; headDescriptorIndex < nextDescriptorIndex; headDescriptorIndex++)
                             {
+                                AsyncOperation.Checkpoint();
                                 var completedDescriptor = objectsDescriptors[headDescriptorIndex - firstDescriptorIndex];
                                 if (!completedDescriptor.IsCompleted)
                                     break;
@@ -1361,6 +1373,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
             for (; headDescriptorIndex < nextDescriptorIndex; headDescriptorIndex++)
             {
+                AsyncOperation.Checkpoint();
                 yield return objectsDescriptors[headDescriptorIndex - firstDescriptorIndex].GetObject(constructor);
             }
         }

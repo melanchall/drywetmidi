@@ -580,8 +580,21 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             Predicate<TimedEvent> match,
             ICollection<MidiEvent> expectedMidiEvents,
             int expectedRemovedCount,
-            TimedEventDetectionSettings settings = null)
+            TimedEventDetectionSettings settings = null,
+            bool useAsync = false)
         {
+            if (!useAsync && (containerType == ContainerType.EventsCollection || containerType == ContainerType.TrackChunk))
+            {
+                RemoveTimedEvents_EventsCollection_WithPredicate(
+                    containerType,
+                    midiEvents.Select(e => e.Clone()).ToArray(),
+                    match,
+                    expectedMidiEvents,
+                    expectedRemovedCount,
+                    settings,
+                    useAsync: true);
+            }
+
             var eventsCollection = new EventsCollection();
             eventsCollection.AddRange(midiEvents);
 
@@ -591,7 +604,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     {
                         ClassicAssert.AreEqual(
                             expectedRemovedCount,
-                            eventsCollection.RemoveTimedEvents(match, settings),
+                            useAsync
+                                ? eventsCollection.RemoveTimedEventsAsync(match, settings, cancellationToken: System.Threading.CancellationToken.None).Result
+                                : eventsCollection.RemoveTimedEvents(match, settings),
                             "Invalid count of removed timed events.");
 
                         var expectedEventsCollection = new EventsCollection();
@@ -608,7 +623,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
                         ClassicAssert.AreEqual(
                             expectedRemovedCount,
-                            trackChunk.RemoveTimedEvents(match, settings),
+                            useAsync
+                                ? trackChunk.RemoveTimedEventsAsync(match, settings, cancellationToken: System.Threading.CancellationToken.None).Result
+                                : trackChunk.RemoveTimedEvents(match, settings),
                             "Invalid count of removed timed events.");
 
                         var expectedTrackChunk = new TrackChunk(expectedMidiEvents);
@@ -635,8 +652,17 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
         private void RemoveTimedEvents_EventsCollection_WithoutPredicate(
             ContainerType containerType,
-            ICollection<MidiEvent> midiEvents)
+            ICollection<MidiEvent> midiEvents,
+            bool useAsync = false)
         {
+            if (!useAsync && (containerType == ContainerType.EventsCollection || containerType == ContainerType.TrackChunk))
+            {
+                RemoveTimedEvents_EventsCollection_WithoutPredicate(
+                    containerType,
+                    midiEvents.Select(e => e.Clone()).ToArray(),
+                    useAsync: true);
+            }
+
             var eventsCollection = new EventsCollection();
             eventsCollection.AddRange(midiEvents);
 
@@ -646,7 +672,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     {
                         ClassicAssert.AreEqual(
                             midiEvents.Count,
-                            eventsCollection.RemoveTimedEvents(),
+                            useAsync
+                                ? eventsCollection.RemoveTimedEventsAsync(cancellationToken: System.Threading.CancellationToken.None).Result
+                                : eventsCollection.RemoveTimedEvents(),
                             "Invalid count of removed timed events.");
 
                         var expectedEventsCollection = new EventsCollection();
@@ -662,7 +690,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
                         ClassicAssert.AreEqual(
                             midiEvents.Count,
-                            trackChunk.RemoveTimedEvents(),
+                            useAsync
+                                ? trackChunk.RemoveTimedEventsAsync(cancellationToken: System.Threading.CancellationToken.None).Result
+                                : trackChunk.RemoveTimedEvents(),
                             "Invalid count of removed timed events.");
 
                         var expectedTrackChunk = new TrackChunk();
@@ -689,8 +719,21 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             Predicate<TimedEvent> match,
             ICollection<ICollection<MidiEvent>> expectedMidiEvents,
             int expectedRemovedCount,
-            TimedEventDetectionSettings settings = null)
+            TimedEventDetectionSettings settings = null,
+            bool useAsync = false)
         {
+            if (!useAsync)
+            {
+                RemoveTimedEvents_TrackChunks_WithPredicate(
+                    wrapToFile,
+                    midiEvents.Select(events => (ICollection<MidiEvent>)events.Select(e => e.Clone()).ToArray()).ToArray(),
+                    match,
+                    expectedMidiEvents,
+                    expectedRemovedCount,
+                    settings,
+                    useAsync: true);
+            }
+
             var trackChunks = midiEvents.Select(e => new TrackChunk(e)).ToList();
 
             if (wrapToFile)
@@ -699,7 +742,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
                 ClassicAssert.AreEqual(
                     expectedRemovedCount,
-                    midiFile.RemoveTimedEvents(match, settings),
+                    useAsync
+                        ? midiFile.RemoveTimedEventsAsync(match, settings, cancellationToken: System.Threading.CancellationToken.None).Result
+                        : midiFile.RemoveTimedEvents(match, settings),
                     "Invalid count of removed timed events.");
 
                 MidiAsserts.AreEqual(new MidiFile(expectedMidiEvents.Select(e => new TrackChunk(e))), midiFile, false, "Events are invalid.");
@@ -711,7 +756,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             {
                 ClassicAssert.AreEqual(
                     expectedRemovedCount,
-                    trackChunks.RemoveTimedEvents(match, settings),
+                    useAsync
+                        ? trackChunks.RemoveTimedEventsAsync(match, settings, cancellationToken: System.Threading.CancellationToken.None).Result
+                        : trackChunks.RemoveTimedEvents(match, settings),
                     "Invalid count of removed timed events.");
 
                 MidiAsserts.AreEqual(expectedMidiEvents.Select(e => new TrackChunk(e)), trackChunks, true, "Events are invalid.");
@@ -723,8 +770,17 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
         private void RemoveTimedEvents_TrackChunks_WithoutPredicate(
             bool wrapToFile,
-            ICollection<ICollection<MidiEvent>> midiEvents)
+            ICollection<ICollection<MidiEvent>> midiEvents,
+            bool useAsync = false)
         {
+            if (!useAsync)
+            {
+                RemoveTimedEvents_TrackChunks_WithoutPredicate(
+                    wrapToFile,
+                    midiEvents.Select(events => (ICollection<MidiEvent>)events.Select(e => e.Clone()).ToArray()).ToArray(),
+                    useAsync: true);
+            }
+
             var trackChunks = midiEvents.Select(e => new TrackChunk(e)).ToList();
 
             if (wrapToFile)
@@ -733,7 +789,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
                 ClassicAssert.AreEqual(
                     midiEvents.Sum(e => e.Count),
-                    midiFile.RemoveTimedEvents(),
+                    useAsync
+                        ? midiFile.RemoveTimedEventsAsync(cancellationToken: System.Threading.CancellationToken.None).Result
+                        : midiFile.RemoveTimedEvents(),
                     "Invalid count of removed timed events.");
 
                 MidiAsserts.AreEqual(new MidiFile(midiEvents.Select(e => new TrackChunk())), midiFile, false, "Events are invalid.");
@@ -745,7 +803,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             {
                 ClassicAssert.AreEqual(
                     midiEvents.Sum(e => e.Count),
-                    trackChunks.RemoveTimedEvents(),
+                    useAsync
+                        ? trackChunks.RemoveTimedEventsAsync(cancellationToken: System.Threading.CancellationToken.None).Result
+                        : trackChunks.RemoveTimedEvents(),
                     "Invalid count of removed timed events.");
 
                 MidiAsserts.AreEqual(midiEvents.Select(e => new TrackChunk()), trackChunks, true, "Events are invalid.");

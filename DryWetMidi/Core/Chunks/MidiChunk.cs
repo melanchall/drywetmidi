@@ -1,6 +1,8 @@
 ﻿using Melanchall.DryWetMidi.Common;
 using System;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Melanchall.DryWetMidi.Core
 {
@@ -207,6 +209,29 @@ namespace Melanchall.DryWetMidi.Core
             var size = GetContentSize(settings);
             WriteHeader(ChunkId, size, writer, settings);
             WriteContent(writer, settings);
+        }
+
+        internal async Task WriteAsync(MidiWriter writer, WritingSettings settings, CancellationToken cancellationToken)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            if (this is TrackChunk track)
+            {
+                await writer.WriteEncodedAsync(
+                    codec => WriteHeader(ChunkId, track.GetContentSize(settings, cancellationToken), codec, settings),
+                    cancellationToken).ConfigureAwait(false);
+                await track.WriteContentAsync(writer, settings, cancellationToken).ConfigureAwait(false);
+            }
+            else if (this is UnknownChunk unknown)
+            {
+                await writer.WriteEncodedAsync(
+                    codec => WriteHeader(ChunkId, GetContentSize(settings), codec, settings),
+                    cancellationToken).ConfigureAwait(false);
+
+                if (unknown.Data != null)
+                    await writer.WriteDataAsync(unknown.Data, cancellationToken).ConfigureAwait(false);
+            }
+            else
+                await writer.WriteEncodedAsync(codec => Write(codec, settings), cancellationToken).ConfigureAwait(false);
         }
 
         internal static uint ReadSize(MidiReader reader, out long readerPosition)

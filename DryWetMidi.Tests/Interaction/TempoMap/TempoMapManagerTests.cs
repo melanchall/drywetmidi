@@ -40,7 +40,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
         [Test]
         [Description("Replace a tempo map with the default one.")]
-        public void ReplaceTempoMap_ByDefault()
+        public void ReplaceTempoMap_ByDefault([Values] bool useAsync)
         {
             using (var tempoMapManager = new TempoMapManager())
             {
@@ -53,7 +53,10 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 ClassicAssert.IsTrue(tempoMap.GetTempoChanges().Any(), "There are no tempo changes initially.");
                 ClassicAssert.IsTrue(tempoMap.GetTimeSignatureChanges().Any(), "There are no time signature changes initially");
 
-                tempoMapManager.ReplaceTempoMap(TempoMap.Default);
+                if (useAsync)
+                    tempoMapManager.ReplaceTempoMapAsync(TempoMap.Default, cancellationToken: System.Threading.CancellationToken.None).Wait();
+                else
+                    tempoMapManager.ReplaceTempoMap(TempoMap.Default);
 
                 ClassicAssert.AreEqual
                     (TicksPerQuarterNoteTimeDivision.DefaultTicksPerQuarterNote,

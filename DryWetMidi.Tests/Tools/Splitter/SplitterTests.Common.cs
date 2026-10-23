@@ -66,6 +66,64 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
         #region Private methods
 
+        private static MidiFile TakePart(
+            MidiFile midiFile,
+            ITimeSpan partLength,
+            SliceMidiFileSettings settings = null)
+        {
+            var asyncResult = midiFile.Clone().TakePartAsync(
+                partLength,
+                settings,
+                cancellationToken: System.Threading.CancellationToken.None).Result;
+            var result = midiFile.TakePart(partLength, settings);
+            MidiAsserts.AreEqual(result, asyncResult, false, "Invalid asynchronously taken part.");
+            return result;
+        }
+
+        private static MidiFile TakePart(
+            MidiFile midiFile,
+            ITimeSpan partStart,
+            ITimeSpan partLength,
+            SliceMidiFileSettings settings = null)
+        {
+            var asyncResult = midiFile.Clone().TakePartAsync(
+                partStart,
+                partLength,
+                settings,
+                cancellationToken: System.Threading.CancellationToken.None).Result;
+            var result = midiFile.TakePart(partStart, partLength, settings);
+            MidiAsserts.AreEqual(result, asyncResult, false, "Invalid asynchronously taken part.");
+            return result;
+        }
+
+        private static MidiFile SkipPart(
+            MidiFile midiFile,
+            ITimeSpan partLength,
+            SliceMidiFileSettings settings = null)
+        {
+            var asyncResult = midiFile.Clone().SkipPartAsync(
+                partLength,
+                settings,
+                cancellationToken: System.Threading.CancellationToken.None).Result;
+            var result = midiFile.SkipPart(partLength, settings);
+            MidiAsserts.AreEqual(result, asyncResult, false, "Invalid asynchronously skipped part.");
+            return result;
+        }
+
+        private static List<MidiFile> SplitByGrid(
+            MidiFile midiFile,
+            IGrid grid,
+            SliceMidiFileSettings settings = null)
+        {
+            var asyncResult = ToolsAsyncTests.Collect(midiFile.Clone().SplitByGridAsync(
+                grid,
+                settings,
+                cancellationToken: System.Threading.CancellationToken.None)).Result;
+            var result = midiFile.SplitByGrid(grid, settings).ToList();
+            MidiAsserts.AreEqual(result, asyncResult, false, "Invalid asynchronously split files.");
+            return result;
+        }
+
         private static void CompareTimedEvents(
             IEnumerable<TimedEvent> actualTimedEvents,
             IEnumerable<TimedEvent> expectedTimedEvents,
@@ -88,7 +146,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             var trackChunks = inputTimedEvents.Select(e => e.ToTrackChunk());
             var midiFile = new MidiFile(trackChunks);
 
-            var newFiles = midiFile.SplitByGrid(grid, settings).ToList();
+            var newFiles = SplitByGrid(midiFile, grid, settings);
             ClassicAssert.AreEqual(outputTimedEvents.Length, newFiles.Count, "New files count is invalid.");
 
             for (var i = 0; i < outputTimedEvents.Length; i++)
@@ -146,6 +204,11 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 .ToArray();
 
             var actualObjects = Splitter.SplitObjectsByGrid(inputObjects.OfType<ILengthedObject>(), new SteppedGrid(gridStart, gridSteps), tempoMap).ToArray();
+            var asyncObjects = ToolsAsyncTests.Collect(inputObjects.Select(obj => obj?.Clone()).SplitObjectsByGridAsync(
+                new SteppedGrid(gridStart, gridSteps),
+                tempoMap,
+                cancellationToken: System.Threading.CancellationToken.None)).Result;
+            MidiAsserts.AreEqual(expectedObjects.OfType<ITimedObject>(), asyncObjects.OfType<ITimedObject>(), true, 0, "Invalid asynchronously split objects.");
 
             MidiAsserts.AreEqual(
                 expectedObjects.OfType<ITimedObject>(),
@@ -196,6 +259,12 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             var actualObjects = Splitter
                 .SplitObjectsByGrid(inputObjects.OfType<ILengthedObject>(), new SteppedGrid(gridStart, gridSteps), tempoMap)
                 .ToArray();
+
+            var asyncObjects = ToolsAsyncTests.Collect(inputObjects.Select(obj => obj?.Clone()).SplitObjectsByGridAsync(
+                new SteppedGrid(gridStart, gridSteps),
+                tempoMap,
+                cancellationToken: System.Threading.CancellationToken.None)).Result;
+            MidiAsserts.AreEqual(expectedObjects.OfType<ITimedObject>(), asyncObjects.OfType<ITimedObject>(), true, 0, "Invalid asynchronously split objects.");
 
             MidiAsserts.AreEqual(
                 expectedObjects.OfType<ITimedObject>(),

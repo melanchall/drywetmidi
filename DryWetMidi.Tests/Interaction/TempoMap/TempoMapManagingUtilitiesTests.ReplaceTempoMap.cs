@@ -473,8 +473,12 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         private void ReplaceTempoMap(
             ICollection<ICollection<MidiEvent>> events,
             TempoMap tempoMap,
-            ICollection<ICollection<MidiEvent>> expectedEvents)
+            ICollection<ICollection<MidiEvent>> expectedEvents,
+            bool useAsync = false)
         {
+            if (!useAsync)
+                ReplaceTempoMap(events, tempoMap, expectedEvents, useAsync: true);
+
             var expectedTrackChunks = expectedEvents
                 .Select(e => new TrackChunk(e))
                 .ToArray();
@@ -489,7 +493,11 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     return result;
                 })
                 .ToArray();
-            eventsCollections.ReplaceTempoMap(tempoMap);
+            if (useAsync)
+                eventsCollections.ReplaceTempoMapAsync(tempoMap, cancellationToken: System.Threading.CancellationToken.None).Wait();
+            else
+                eventsCollections.ReplaceTempoMap(tempoMap);
+
             MidiAsserts.AreEqual(
                 expectedTrackChunks,
                 eventsCollections.Select(e => new TrackChunk(e)),
@@ -501,7 +509,11 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             var trackChunks = events
                 .Select(e => new TrackChunk(e.Select(ee => ee.Clone())))
                 .ToArray();
-            trackChunks.ReplaceTempoMap(tempoMap);
+            if (useAsync)
+                trackChunks.ReplaceTempoMapAsync(tempoMap, cancellationToken: System.Threading.CancellationToken.None).Wait();
+            else
+                trackChunks.ReplaceTempoMap(tempoMap);
+
             MidiAsserts.AreEqual(
                 expectedTrackChunks,
                 trackChunks,
@@ -512,7 +524,11 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
             var midiFile = new MidiFile(events
                 .Select(e => new TrackChunk(e.Select(ee => ee.Clone()))));
-            midiFile.ReplaceTempoMap(tempoMap);
+            if (useAsync)
+                midiFile.ReplaceTempoMapAsync(tempoMap, cancellationToken: System.Threading.CancellationToken.None).Wait();
+            else
+                midiFile.ReplaceTempoMap(tempoMap);
+
             MidiAsserts.AreEqual(
                 new MidiFile(expectedTrackChunks),
                 midiFile,
@@ -525,6 +541,15 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             TempoMap tempoMap,
             MidiFile expectedFile)
         {
+            var asyncFile = new MidiFile(midiFile.Chunks.Select(chunk =>
+                chunk is CustomChunk ? new CustomChunk() : chunk.Clone()))
+            {
+                TimeDivision = midiFile.TimeDivision
+            };
+
+            asyncFile.ReplaceTempoMapAsync(tempoMap, cancellationToken: System.Threading.CancellationToken.None).Wait();
+            MidiAsserts.AreEqual(expectedFile, asyncFile, false, "Invalid async file.");
+
             midiFile.ReplaceTempoMap(tempoMap);
             MidiAsserts.AreEqual(expectedFile, midiFile, false, "Invalid file.");
         }

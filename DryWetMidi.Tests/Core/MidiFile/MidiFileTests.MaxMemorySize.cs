@@ -215,6 +215,16 @@ namespace Melanchall.DryWetMidi.Tests.Core
 
             var file = MidiFile.Read(new MemoryStream(bytes), new ReadingSettings { CustomChunkTypes = chunkTypes, MaxMemorySize = minimalLimit });
             ClassicAssert.AreEqual(1000, file.Chunks.OfType<PayloadCustomChunk>().Single().Values!.Length);
+
+            using (var stream = new MemoryStream(bytes))
+            {
+                file = MidiFile.ReadAsync(
+                    stream,
+                    new ReadingSettings { CustomChunkTypes = chunkTypes, MaxMemorySize = minimalLimit },
+                    cancellationToken: System.Threading.CancellationToken.None).Result;
+
+                ClassicAssert.AreEqual(1000, file.Chunks.OfType<PayloadCustomChunk>().Single().Values!.Length);
+            }
         }
 
         [Test]
@@ -296,6 +306,16 @@ namespace Melanchall.DryWetMidi.Tests.Core
             var bytes = GetFileBytes(new TrackChunk(CreateNotes(1000)));
             var file = MidiFile.Read(new MemoryStream(bytes), new ReadingSettings { MaxMemorySize = null });
             ClassicAssert.AreEqual(2000, file.GetEvents().Count());
+
+            using (var stream = new MemoryStream(bytes))
+            {
+                file = MidiFile.ReadAsync(
+                    stream,
+                    new ReadingSettings { MaxMemorySize = null },
+                    cancellationToken: System.Threading.CancellationToken.None).Result;
+
+                ClassicAssert.AreEqual(2000, file.GetEvents().Count());
+            }
         }
 
         [Test]
@@ -306,8 +326,27 @@ namespace Melanchall.DryWetMidi.Tests.Core
             var file = MidiFile.Read(new MemoryStream(bytes), new ReadingSettings { MaxMemorySize = long.MaxValue });
             ClassicAssert.Greater(file.EstimatedMemorySize, 2000 * 32);
 
+            using (var stream = new MemoryStream(bytes))
+            {
+                var asyncFile = MidiFile.ReadAsync(
+                    stream,
+                    new ReadingSettings { MaxMemorySize = long.MaxValue },
+                    cancellationToken: System.Threading.CancellationToken.None).Result;
+
+                ClassicAssert.AreEqual(file.EstimatedMemorySize, asyncFile.EstimatedMemorySize);
+            }
+
             file = MidiFile.Read(new MemoryStream(bytes));
             ClassicAssert.AreEqual(0, file.EstimatedMemorySize);
+
+            using (var stream = new MemoryStream(bytes))
+            {
+                file = MidiFile.ReadAsync(
+                    stream,
+                    cancellationToken: System.Threading.CancellationToken.None).Result;
+
+                ClassicAssert.AreEqual(0, file.EstimatedMemorySize);
+            }
         }
 
         private static IEnumerable<MidiEvent> CreateNotes(int count)
@@ -353,15 +392,39 @@ namespace Melanchall.DryWetMidi.Tests.Core
 
         private static bool TryRead(byte[] bytes, long limit, ReadingSettings? settings)
         {
+            bool expected;
+
             try
             {
                 MidiFile.Read(new MemoryStream(bytes), CreateSettings(limit, settings));
-                return true;
+                expected = true;
             }
             catch (MidiFileTooLargeException)
             {
-                return false;
+                expected = false;
             }
+
+            using (var stream = new MemoryStream(bytes))
+            {
+                if (expected)
+                {
+                    MidiFile.ReadAsync(
+                        stream,
+                        CreateSettings(limit, settings),
+                        cancellationToken: System.Threading.CancellationToken.None).Wait();
+                }
+                else
+                {
+                    var aggregate = Assert.Throws<AggregateException>(() => MidiFile.ReadAsync(
+                        stream,
+                        CreateSettings(limit, settings),
+                        cancellationToken: System.Threading.CancellationToken.None).Wait());
+
+                    ClassicAssert.IsInstanceOf<MidiFileTooLargeException>(aggregate!.InnerException);
+                }
+            }
+
+            return expected;
         }
 
         private static void AssertThrowsTooLarge(byte[] bytes, long limit, ReadingSettings? settings = null)
@@ -370,6 +433,19 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 () => MidiFile.Read(new MemoryStream(bytes), CreateSettings(limit, settings)));
             ClassicAssert.AreEqual(limit, ex!.MaxSize);
             ClassicAssert.Greater(ex.EstimatedSize, limit);
+
+            using (var stream = new MemoryStream(bytes))
+            {
+                var aggregate = Assert.Throws<AggregateException>(() => MidiFile.ReadAsync(
+                    stream,
+                    CreateSettings(limit, settings),
+                    cancellationToken: System.Threading.CancellationToken.None).Wait());
+                var asyncException = aggregate!.InnerException as MidiFileTooLargeException;
+
+                ClassicAssert.IsNotNull(asyncException);
+                ClassicAssert.AreEqual(limit, asyncException!.MaxSize);
+                ClassicAssert.Greater(asyncException.EstimatedSize, limit);
+            }
         }
 
         private static ReadingSettings CreateSettings(long limit, ReadingSettings? settings)

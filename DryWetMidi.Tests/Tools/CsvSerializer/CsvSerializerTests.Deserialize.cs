@@ -21,9 +21,13 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         [TestCaseSource(nameof(EventsDataForDeserialization))]
         public void Deserialize_Event(MidiEvent midiEvent, string expectedCsv, CsvDeserializationSettings settings) => CheckDeserialize(
             csvLines: new[] { $"0,\"{midiEvent.EventType}\",0{(string.IsNullOrEmpty(expectedCsv) ? string.Empty : $",{expectedCsv}")}" },
-            check: stream =>
+            check: (stream, filePath, useAsync) =>
             {
-                var objects = CsvSerializer.DeserializeObjectsFromCsv(stream, TempoMap.Default, settings).ToArray();
+                var objects = (!useAsync
+                    ? CsvSerializer.DeserializeObjectsFromCsv(stream, TempoMap.Default, settings)
+                    : filePath == null
+                        ? CsvSerializer.DeserializeObjectsFromCsvAsync(stream, TempoMap.Default, settings, cancellationToken: System.Threading.CancellationToken.None).Result
+                        : CsvSerializer.DeserializeObjectsFromCsvAsync(filePath, TempoMap.Default, settings, cancellationToken: System.Threading.CancellationToken.None).Result).ToArray();
                 ClassicAssert.AreEqual(1, objects.Length, "More than one object read.");
 
                 var timedEvent = (TimedEvent)objects.Single();
@@ -979,9 +983,22 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         {
             CheckDeserialize(
                 csvLines,
-                stream =>
+                (stream, filePath, useAsync) =>
                 {
-                    var exception = Assert.Throws<TException>(() => CsvSerializer.DeserializeObjectsFromCsv(stream, TempoMap.Default, settings));
+                    TException exception;
+
+                    if (useAsync)
+                    {
+                        var aggregate = Assert.Throws<AggregateException>(() =>
+                            (filePath == null
+                                ? CsvSerializer.DeserializeObjectsFromCsvAsync(stream, TempoMap.Default, settings, cancellationToken: System.Threading.CancellationToken.None)
+                                : CsvSerializer.DeserializeObjectsFromCsvAsync(filePath, TempoMap.Default, settings, cancellationToken: System.Threading.CancellationToken.None)).Wait());
+                        Assert.That(aggregate.InnerException, Is.TypeOf<TException>());
+                        exception = (TException)aggregate.InnerException;
+                    }
+                    else
+                        exception = Assert.Throws<TException>(() => CsvSerializer.DeserializeObjectsFromCsv(stream, TempoMap.Default, settings));
+
                     Console.WriteLine(exception);
                     checkException(exception);
                 });
@@ -995,9 +1012,22 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         {
             CheckDeserialize(
                 csvLines,
-                stream =>
+                (stream, filePath, useAsync) =>
                 {
-                    var exception = Assert.Throws<TException>(() => CsvSerializer.DeserializeFileFromCsv(stream, settings));
+                    TException exception;
+
+                    if (useAsync)
+                    {
+                        var aggregate = Assert.Throws<AggregateException>(() =>
+                            (filePath == null
+                                ? CsvSerializer.DeserializeFileFromCsvAsync(stream, settings, cancellationToken: System.Threading.CancellationToken.None)
+                                : CsvSerializer.DeserializeFileFromCsvAsync(filePath, settings, cancellationToken: System.Threading.CancellationToken.None)).Wait());
+                        Assert.That(aggregate.InnerException, Is.TypeOf<TException>());
+                        exception = (TException)aggregate.InnerException;
+                    }
+                    else
+                        exception = Assert.Throws<TException>(() => CsvSerializer.DeserializeFileFromCsv(stream, settings));
+
                     Console.WriteLine(exception);
                     checkException(exception);
                 });
@@ -1010,9 +1040,13 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         {
             CheckDeserialize(
                 csvLines,
-                stream =>
+                (stream, filePath, useAsync) =>
                 {
-                    var actualObjects = CsvSerializer.DeserializeObjectsFromCsv(stream, TempoMap.Default, settings);
+                    var actualObjects = !useAsync
+                        ? CsvSerializer.DeserializeObjectsFromCsv(stream, TempoMap.Default, settings)
+                        : filePath == null
+                            ? CsvSerializer.DeserializeObjectsFromCsvAsync(stream, TempoMap.Default, settings, cancellationToken: System.Threading.CancellationToken.None).Result
+                            : CsvSerializer.DeserializeObjectsFromCsvAsync(filePath, TempoMap.Default, settings, cancellationToken: System.Threading.CancellationToken.None).Result;
                     MidiAsserts.AreEqual(expectedObjects, actualObjects, "Invalid objects.");
                 });
         }
@@ -1048,9 +1082,13 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         {
             CheckDeserialize(
                 csvLines,
-                stream =>
+                (stream, filePath, useAsync) =>
                 {
-                    var trackChunk = CsvSerializer.DeserializeChunkFromCsv(stream, TempoMap.Default, settings);
+                    var trackChunk = !useAsync
+                        ? CsvSerializer.DeserializeChunkFromCsv(stream, TempoMap.Default, settings)
+                        : filePath == null
+                            ? CsvSerializer.DeserializeChunkFromCsvAsync(stream, TempoMap.Default, settings, cancellationToken: System.Threading.CancellationToken.None).Result
+                            : CsvSerializer.DeserializeChunkFromCsvAsync(filePath, TempoMap.Default, settings, cancellationToken: System.Threading.CancellationToken.None).Result;
                     MidiAsserts.AreEqual(expectedTrackChunk, trackChunk, false, "Invalid file.");
                 });
         }
@@ -1062,9 +1100,13 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         {
             CheckDeserialize(
                 csvLines,
-                stream =>
+                (stream, filePath, useAsync) =>
                 {
-                    var midiFile = CsvSerializer.DeserializeFileFromCsv(stream, settings);
+                    var midiFile = !useAsync
+                        ? CsvSerializer.DeserializeFileFromCsv(stream, settings)
+                        : filePath == null
+                            ? CsvSerializer.DeserializeFileFromCsvAsync(stream, settings, cancellationToken: System.Threading.CancellationToken.None).Result
+                            : CsvSerializer.DeserializeFileFromCsvAsync(filePath, settings, cancellationToken: System.Threading.CancellationToken.None).Result;
                     MidiAsserts.AreEqual(expectedMidiFile, midiFile, false, "Invalid file.");
                 });
         }
@@ -1077,9 +1119,13 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         {
             CheckDeserialize(
                 csvLines,
-                stream =>
+                (stream, filePath, useAsync) =>
                 {
-                    var chunks = CsvSerializer.DeserializeChunksFromCsv(stream, tempoMap, settings);
+                    var chunks = !useAsync
+                        ? CsvSerializer.DeserializeChunksFromCsv(stream, tempoMap, settings)
+                        : filePath == null
+                            ? CsvSerializer.DeserializeChunksFromCsvAsync(stream, tempoMap, settings, cancellationToken: System.Threading.CancellationToken.None).Result
+                            : CsvSerializer.DeserializeChunksFromCsvAsync(filePath, tempoMap, settings, cancellationToken: System.Threading.CancellationToken.None).Result;
                     MidiAsserts.AreEqual(expectedChunks, chunks, true, "Invalid chunks.");
                 });
         }
@@ -1101,9 +1147,13 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
                 CheckDeserialize(
                     chunkCsvLines,
-                    stream =>
+                    (stream, filePath, useAsync) =>
                     {
-                        var chunk = CsvSerializer.DeserializeChunkFromCsv(stream, tempoMap, settings);
+                        var chunk = !useAsync
+                            ? CsvSerializer.DeserializeChunkFromCsv(stream, tempoMap, settings)
+                            : filePath == null
+                                ? CsvSerializer.DeserializeChunkFromCsvAsync(stream, tempoMap, settings, cancellationToken: System.Threading.CancellationToken.None).Result
+                                : CsvSerializer.DeserializeChunkFromCsvAsync(filePath, tempoMap, settings, cancellationToken: System.Threading.CancellationToken.None).Result;
                         MidiAsserts.AreEqual(expectedChunk, chunk, true, $"Invalid chunk {i}.");
                     });
 
@@ -1113,7 +1163,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
         private static void CheckDeserialize(
             string[] csvLines,
-            Action<Stream> check)
+            Action<Stream, string, bool> check)
         {
             using (var stream = new MemoryStream())
             using (var streamWriter = new StreamWriter(stream))
@@ -1126,7 +1176,22 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 streamWriter.Flush();
                 stream.Seek(0, SeekOrigin.Begin);
 
-                check(stream);
+                check(stream, null, false);
+
+                stream.Position = 0;
+                check(stream, null, true);
+
+                var filePath = FileOperations.GetTempFilePath();
+
+                try
+                {
+                    FileOperations.WriteAllBytesToFile(filePath, stream.ToArray());
+                    check(null, filePath, true);
+                }
+                finally
+                {
+                    FileOperations.DeleteFile(filePath);
+                }
             }
         }
 

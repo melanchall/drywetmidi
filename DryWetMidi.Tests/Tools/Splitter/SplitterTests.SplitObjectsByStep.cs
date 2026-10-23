@@ -394,7 +394,29 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             ITimeSpan step,
             IEnumerable<ILengthedObject> expectedObjects)
         {
-            var actualObjects = inputObjects.SplitObjectsByStep(step, TempoMap.Default).ToArray();
+            ITimedObject[] actualObjects;
+
+            try
+            {
+                actualObjects = inputObjects.SplitObjectsByStep(step, TempoMap.Default).ToArray();
+            }
+            catch (Exception exception)
+            {
+                ToolsAsyncTests.AssertAsyncException(
+                    () => ToolsAsyncTests.Collect(inputObjects.Select(obj => obj?.Clone()).SplitObjectsByStepAsync(
+                        step,
+                        TempoMap.Default,
+                        cancellationToken: System.Threading.CancellationToken.None)).Wait(),
+                    exception.GetType());
+                throw;
+            }
+
+            var asyncObjects = ToolsAsyncTests.Collect(inputObjects.Select(obj => obj?.Clone()).SplitObjectsByStepAsync(
+                step,
+                TempoMap.Default,
+                cancellationToken: System.Threading.CancellationToken.None)).Result;
+            MidiAsserts.AreEqual(expectedObjects, asyncObjects, true, 0, "Invalid asynchronous result objects.");
+
             MidiAsserts.AreEqual(
                 expectedObjects,
                 actualObjects,
@@ -411,6 +433,15 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             ObjectDetectionSettings settings = null)
         {
             var trackChunk = inputObjects.ToTrackChunk();
+            var asyncTrackChunk = (TrackChunk)trackChunk.Clone();
+            asyncTrackChunk.SplitObjectsByStepAsync(
+                objectType,
+                step,
+                TempoMap.Default,
+                settings,
+                cancellationToken: System.Threading.CancellationToken.None).Wait();
+            MidiAsserts.AreEqual(expectedEvents.ToTrackChunk(), asyncTrackChunk, true, "Invalid asynchronous track chunk.");
+
             trackChunk.SplitObjectsByStep(objectType, step, TempoMap.Default, settings);
             MidiAsserts.AreEqual(
                 expectedEvents.ToTrackChunk(),
@@ -419,6 +450,15 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 "Invalid result track chunk.");
 
             var trackChunks = new[] { inputObjects.ToTrackChunk() };
+            var asyncTrackChunks = trackChunks.Select(chunk => (TrackChunk)chunk.Clone()).ToArray();
+            asyncTrackChunks.SplitObjectsByStepAsync(
+                objectType,
+                step,
+                TempoMap.Default,
+                settings,
+                cancellationToken: System.Threading.CancellationToken.None).Wait();
+            MidiAsserts.AreEqual(new[] { expectedEvents.ToTrackChunk() }, asyncTrackChunks, true, "Invalid asynchronous track chunks.");
+
             trackChunks.SplitObjectsByStep(objectType, step, TempoMap.Default, settings);
             MidiAsserts.AreEqual(
                 new[] { expectedEvents.ToTrackChunk() },
@@ -427,6 +467,14 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 "Invalid result track chunks.");
 
             var midiFile = inputObjects.ToFile();
+            var asyncFile = midiFile.Clone();
+            asyncFile.SplitObjectsByStepAsync(
+                objectType,
+                step,
+                settings,
+                cancellationToken: System.Threading.CancellationToken.None).Wait();
+            MidiAsserts.AreEqual(expectedEvents.ToFile(), asyncFile, true, "Invalid asynchronous file.");
+
             midiFile.SplitObjectsByStep(objectType, step, settings);
             MidiAsserts.AreEqual(
                 expectedEvents.ToFile(),

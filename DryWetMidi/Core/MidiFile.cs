@@ -40,7 +40,7 @@ namespace Melanchall.DryWetMidi.Core
     /// <seealso cref="MidiChunk"/>
     /// <seealso cref="MidiEvent"/>
     /// <seealso cref="Interaction"/>
-    public sealed class MidiFile
+    public sealed partial class MidiFile
     {
         #region Fields
 

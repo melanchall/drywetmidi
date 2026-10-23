@@ -7,7 +7,7 @@ namespace Melanchall.DryWetMidi.Core
     /// <summary>
     /// Writer of the MIDI data types.
     /// </summary>
-    public sealed class MidiWriter : IDisposable
+    public sealed partial class MidiWriter : IDisposable, IAsyncDisposable
     {
         #region Fields
 

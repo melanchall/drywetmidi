@@ -195,15 +195,30 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             RepeatingSettings settings,
             ICollection<ICollection<ITimedObject>> expectedObjects)
         {
-            var inputTrackChunks = inputObjects.Select(obj => obj.ToTrackChunk()).ToArray();
+            var inputTrackChunks = inputObjects.Select(objects => objects.Select(obj => obj?.Clone()).ToTrackChunk()).ToArray();
             var actualTrackChunks = inputTrackChunks.Repeat(repeatsNumber, tempoMap, settings);
             MidiAsserts.AreEqual(expectedObjects.Select(obj => obj.ToTrackChunk()).ToArray(), actualTrackChunks, true, "Invalid result track chunks.");
 
             //
 
-            var inputFile = new MidiFile(inputObjects.Select(obj => obj.ToTrackChunk()));
+            var inputFile = new MidiFile(inputObjects.Select(objects => objects.Select(obj => obj?.Clone()).ToTrackChunk()));
             var actualFile = inputFile.Repeat(repeatsNumber, settings);
             MidiAsserts.AreEqual(new MidiFile(expectedObjects.Select(obj => obj.ToTrackChunk())), actualFile, true, "Invalid result file.");
+
+            inputTrackChunks = inputObjects.Select(objects => objects.Select(obj => obj?.Clone()).ToTrackChunk()).ToArray();
+            actualTrackChunks = inputTrackChunks.RepeatAsync(
+                repeatsNumber,
+                tempoMap,
+                settings,
+                cancellationToken: System.Threading.CancellationToken.None).Result;
+            MidiAsserts.AreEqual(expectedObjects.Select(obj => obj.ToTrackChunk()).ToArray(), actualTrackChunks, true, "Invalid asynchronous track chunks.");
+
+            inputFile = new MidiFile(inputObjects.Select(objects => objects.Select(obj => obj?.Clone()).ToTrackChunk()));
+            actualFile = inputFile.RepeatAsync(
+                repeatsNumber,
+                settings,
+                cancellationToken: System.Threading.CancellationToken.None).Result;
+            MidiAsserts.AreEqual(new MidiFile(expectedObjects.Select(obj => obj.ToTrackChunk())), actualFile, true, "Invalid asynchronous file.");
         }
 
         private void CheckRepeat_Custom<TRepeater>(
@@ -218,15 +233,34 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
             //
 
-            var inputTrackChunks = inputObjects.Select(obj => obj.ToTrackChunk()).ToArray();
+            var inputTrackChunks = inputObjects.Select(objects => objects.Select(obj => obj?.Clone()).ToTrackChunk()).ToArray();
             var actualTrackChunks = repeater.Repeat(inputTrackChunks, repeatsNumber, tempoMap, settings);
             MidiAsserts.AreEqual(expectedObjects.Select(obj => obj.ToTrackChunk()).ToArray(), actualTrackChunks, true, "Invalid result track chunks.");
 
             //
 
-            var inputFile = new MidiFile(inputObjects.Select(obj => obj.ToTrackChunk()));
+            var inputFile = new MidiFile(inputObjects.Select(objects => objects.Select(obj => obj?.Clone()).ToTrackChunk()));
             var actualFile = repeater.Repeat(inputFile, repeatsNumber, settings);
             MidiAsserts.AreEqual(new MidiFile(expectedObjects.Select(obj => obj.ToTrackChunk())), actualFile, true, "Invalid result file.");
+
+            repeater = new TRepeater();
+            inputTrackChunks = inputObjects.Select(objects => objects.Select(obj => obj?.Clone()).ToTrackChunk()).ToArray();
+            actualTrackChunks = repeater.RepeatAsync(
+                inputTrackChunks,
+                repeatsNumber,
+                tempoMap,
+                settings,
+                cancellationToken: System.Threading.CancellationToken.None).Result;
+            MidiAsserts.AreEqual(expectedObjects.Select(obj => obj.ToTrackChunk()).ToArray(), actualTrackChunks, true, "Invalid asynchronous custom track chunks.");
+
+            repeater = new TRepeater();
+            inputFile = new MidiFile(inputObjects.Select(objects => objects.Select(obj => obj?.Clone()).ToTrackChunk()));
+            actualFile = repeater.RepeatAsync(
+                inputFile,
+                repeatsNumber,
+                settings,
+                cancellationToken: System.Threading.CancellationToken.None).Result;
+            MidiAsserts.AreEqual(new MidiFile(expectedObjects.Select(obj => obj.ToTrackChunk())), actualFile, true, "Invalid asynchronous custom file.");
         }
 
         #endregion

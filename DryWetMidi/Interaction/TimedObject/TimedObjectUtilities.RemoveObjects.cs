@@ -79,9 +79,10 @@ namespace Melanchall.DryWetMidi.Interaction
                     return eventsCollection.RemoveChords(match, settings?.ChordDetectionSettings, settings?.NoteDetectionSettings, settings?.TimedEventDetectionSettings);
             }
 
+            var eventsToRemove = new HashSet<MidiEvent>();
             var objectsToRemoveCount = eventsCollection.ProcessObjects(
                 objectType,
-                SetObjectFlag,
+                obj => InteractionAsyncUtilities.CollectEventsForRemoval(obj, eventsToRemove),
                 match,
                 settings,
                 ObjectProcessingHint.None);
@@ -89,7 +90,7 @@ namespace Melanchall.DryWetMidi.Interaction
             if (objectsToRemoveCount == 0)
                 return 0;
 
-            eventsCollection.RemoveTimedEvents(e => e.Event.MustBeRemoved);
+            eventsCollection.RemoveTimedEvents(e => eventsToRemove.Contains(e.Event));
             return objectsToRemoveCount;
         }
 
@@ -236,9 +237,10 @@ namespace Melanchall.DryWetMidi.Interaction
                     return trackChunks.RemoveChords(match, settings?.ChordDetectionSettings, settings?.NoteDetectionSettings, settings?.TimedEventDetectionSettings);
             }
 
+            var eventsToRemove = new HashSet<MidiEvent>();
             var objectsToRemoveCount = trackChunks.ProcessObjects(
                 objectType,
-                SetObjectFlag,
+                obj => InteractionAsyncUtilities.CollectEventsForRemoval(obj, eventsToRemove),
                 match,
                 settings,
                 ObjectProcessingHint.None);
@@ -246,7 +248,7 @@ namespace Melanchall.DryWetMidi.Interaction
             if (objectsToRemoveCount == 0)
                 return 0;
 
-            trackChunks.RemoveTimedEvents(e => e.Event.MustBeRemoved);
+            trackChunks.RemoveTimedEvents(e => eventsToRemove.Contains(e.Event));
             return objectsToRemoveCount;
         }
 
@@ -321,33 +323,6 @@ namespace Melanchall.DryWetMidi.Interaction
             }
 
             return file.GetTrackChunks().RemoveObjects(objectType, match, settings);
-        }
-
-        private static void SetObjectFlag(ITimedObject obj)
-        {
-            var timedEvent = obj as TimedEvent;
-            if (timedEvent != null)
-            {
-                timedEvent.Event.MustBeRemoved = true;
-                return;
-            }
-
-            var note = obj as Note;
-            if (note != null)
-            {
-                note.TimedNoteOnEvent.Event.MustBeRemoved = note.TimedNoteOffEvent.Event.MustBeRemoved = true;
-                return;
-            }
-
-            var chord = obj as Chord;
-            if (chord != null)
-            {
-                foreach (var n in chord.Notes)
-                {
-                    n.TimedNoteOnEvent.Event.MustBeRemoved = n.TimedNoteOffEvent.Event.MustBeRemoved = true;
-                }
-                return;
-            }
         }
 
         #endregion

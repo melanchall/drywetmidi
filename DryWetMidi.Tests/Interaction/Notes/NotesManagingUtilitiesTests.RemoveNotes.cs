@@ -796,8 +796,22 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             ICollection<MidiEvent> midiEvents,
             Predicate<Note> match,
             ICollection<MidiEvent> expectedMidiEvents,
-            int expectedRemovedCount)
+            int expectedRemovedCount,
+            bool useAsync = false,
+            NoteDetectionSettings settings = null,
+            TimedEventDetectionSettings timedEventDetectionSettings = null)
         {
+            if (!useAsync && (containerType == ContainerType.EventsCollection || containerType == ContainerType.TrackChunk))
+            {
+                RemoveNotes_EventsCollection_WithPredicate(
+                    containerType,
+                    midiEvents.Select(e => e.Clone()).ToArray(),
+                    match,
+                    expectedMidiEvents,
+                    expectedRemovedCount,
+                    useAsync: true);
+            }
+
             var eventsCollection = new EventsCollection();
             eventsCollection.AddRange(midiEvents);
 
@@ -807,7 +821,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     {
                         ClassicAssert.AreEqual(
                             expectedRemovedCount,
-                            eventsCollection.RemoveNotes(match),
+                            useAsync
+                                ? eventsCollection.RemoveNotesAsync(match, settings, timedEventDetectionSettings, cancellationToken: System.Threading.CancellationToken.None).Result
+                                : eventsCollection.RemoveNotes(match),
                             "Invalid count of removed notes.");
 
                         var expectedEventsCollection = new EventsCollection();
@@ -824,7 +840,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
                         ClassicAssert.AreEqual(
                             expectedRemovedCount,
-                            trackChunk.RemoveNotes(match),
+                            useAsync
+                                ? trackChunk.RemoveNotesAsync(match, settings, timedEventDetectionSettings, cancellationToken: System.Threading.CancellationToken.None).Result
+                                : trackChunk.RemoveNotes(match),
                             "Invalid count of removed notes.");
 
                         var expectedTrackChunk = new TrackChunk(expectedMidiEvents);
@@ -851,12 +869,23 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         private void RemoveNotes_EventsCollection_WithoutPredicate(
             ContainerType containerType,
             ICollection<MidiEvent> midiEvents,
-            ICollection<MidiEvent> expectedMidiEvents)
+            ICollection<MidiEvent> expectedMidiEvents,
+            bool useAsync = false,
+            NoteDetectionSettings settings = null)
         {
+            if (!useAsync && (containerType == ContainerType.EventsCollection || containerType == ContainerType.TrackChunk))
+            {
+                RemoveNotes_EventsCollection_WithoutPredicate(
+                    containerType,
+                    midiEvents.Select(e => e.Clone()).ToArray(),
+                    expectedMidiEvents,
+                    useAsync: true);
+            }
+
             var eventsCollection = new EventsCollection();
             eventsCollection.AddRange(midiEvents);
 
-            var notesCount = eventsCollection.GetNotes().Count();
+            var notesCount = eventsCollection.GetNotes(settings).Count();
 
             switch (containerType)
             {
@@ -864,7 +893,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     {
                         ClassicAssert.AreEqual(
                             notesCount,
-                            eventsCollection.RemoveNotes(),
+                            useAsync
+                                ? eventsCollection.RemoveNotesAsync(settings, cancellationToken: System.Threading.CancellationToken.None).Result
+                                : eventsCollection.RemoveNotes(),
                             "Invalid count of removed notes.");
 
                         var expectedEventsCollection = new EventsCollection();
@@ -882,7 +913,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
                         ClassicAssert.AreEqual(
                             notesCount,
-                            trackChunk.RemoveNotes(),
+                            useAsync
+                                ? trackChunk.RemoveNotesAsync(settings, cancellationToken: System.Threading.CancellationToken.None).Result
+                                : trackChunk.RemoveNotes(),
                             "Invalid count of removed notes.");
 
                         var expectedTrackChunk = new TrackChunk(expectedMidiEvents);
@@ -909,8 +942,22 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             ICollection<ICollection<MidiEvent>> midiEvents,
             Predicate<Note> match,
             ICollection<ICollection<MidiEvent>> expectedMidiEvents,
-            int expectedRemovedCount)
+            int expectedRemovedCount,
+            bool useAsync = false,
+            NoteDetectionSettings settings = null,
+            TimedEventDetectionSettings timedEventDetectionSettings = null)
         {
+            if (!useAsync)
+            {
+                RemoveNotes_TrackChunks_WithPredicate(
+                    wrapToFile,
+                    midiEvents.Select(events => (ICollection<MidiEvent>)events.Select(e => e.Clone()).ToArray()).ToArray(),
+                    match,
+                    expectedMidiEvents,
+                    expectedRemovedCount,
+                    useAsync: true);
+            }
+
             var trackChunks = midiEvents.Select(e => new TrackChunk(e)).ToList();
 
             if (wrapToFile)
@@ -919,7 +966,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
                 ClassicAssert.AreEqual(
                     expectedRemovedCount,
-                    midiFile.RemoveNotes(match),
+                    useAsync
+                        ? midiFile.RemoveNotesAsync(match, settings, timedEventDetectionSettings, cancellationToken: System.Threading.CancellationToken.None).Result
+                        : midiFile.RemoveNotes(match),
                     "Invalid count of removed notes.");
 
                 MidiAsserts.AreEqual(new MidiFile(expectedMidiEvents.Select(e => new TrackChunk(e))), midiFile, false, "Events are invalid.");
@@ -931,7 +980,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             {
                 ClassicAssert.AreEqual(
                     expectedRemovedCount,
-                    trackChunks.RemoveNotes(match),
+                    useAsync
+                        ? trackChunks.RemoveNotesAsync(match, settings, timedEventDetectionSettings, cancellationToken: System.Threading.CancellationToken.None).Result
+                        : trackChunks.RemoveNotes(match),
                     "Invalid count of removed notes.");
 
                 MidiAsserts.AreEqual(expectedMidiEvents.Select(e => new TrackChunk(e)), trackChunks, true, "Events are invalid.");
@@ -944,10 +995,21 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         private void RemoveNotes_TrackChunks_WithoutPredicate(
             bool wrapToFile,
             ICollection<ICollection<MidiEvent>> midiEvents,
-            ICollection<ICollection<MidiEvent>> expectedMidiEvents)
+            ICollection<ICollection<MidiEvent>> expectedMidiEvents,
+            bool useAsync = false,
+            NoteDetectionSettings settings = null)
         {
+            if (!useAsync)
+            {
+                RemoveNotes_TrackChunks_WithoutPredicate(
+                    wrapToFile,
+                    midiEvents.Select(events => (ICollection<MidiEvent>)events.Select(e => e.Clone()).ToArray()).ToArray(),
+                    expectedMidiEvents,
+                    useAsync: true);
+            }
+
             var trackChunks = midiEvents.Select(e => new TrackChunk(e)).ToList();
-            var notesCount = trackChunks.GetNotes().Count();
+            var notesCount = trackChunks.GetNotes(settings).Count();
 
             if (wrapToFile)
             {
@@ -955,7 +1017,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
                 ClassicAssert.AreEqual(
                     notesCount,
-                    midiFile.RemoveNotes(),
+                    useAsync
+                        ? midiFile.RemoveNotesAsync(settings, cancellationToken: System.Threading.CancellationToken.None).Result
+                        : midiFile.RemoveNotes(),
                     "Invalid count of removed notes.");
 
                 MidiAsserts.AreEqual(new MidiFile(expectedMidiEvents.Select(e => new TrackChunk(e))), midiFile, false, "Events are invalid.");
@@ -967,7 +1031,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             {
                 ClassicAssert.AreEqual(
                     notesCount,
-                    trackChunks.RemoveNotes(),
+                    useAsync
+                        ? trackChunks.RemoveNotesAsync(settings, cancellationToken: System.Threading.CancellationToken.None).Result
+                        : trackChunks.RemoveNotes(),
                     "Invalid count of removed notes.");
 
                 MidiAsserts.AreEqual(expectedMidiEvents.Select(e => new TrackChunk(e)), trackChunks, true, "Events are invalid.");

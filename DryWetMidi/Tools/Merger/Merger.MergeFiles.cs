@@ -98,6 +98,8 @@ namespace Melanchall.DryWetMidi.Tools
 
             foreach (var midiFile in midiFiles)
             {
+                AsyncOperation.Checkpoint();
+
                 var tempoMap = midiFile.GetTempoMap();
                 var fileDuration = GetFileDuration(midiFile, tempoMap, settings.FileDurationRoundingStep);
 
@@ -194,6 +196,8 @@ namespace Melanchall.DryWetMidi.Tools
 
             foreach (var midiFile in midiFiles)
             {
+                AsyncOperation.Checkpoint();
+
                 var chunks = midiFile.Chunks.Select(c => c.Clone()).ToArray();
                 var deltaTimeFactor = GetDeltaTimeFactor(timeDivision!, midiFile.TimeDivision!);
 
@@ -286,6 +290,8 @@ namespace Melanchall.DryWetMidi.Tools
         {
             foreach (var midiEvent in trackChunk.Events)
             {
+                AsyncOperation.Checkpoint();
+
                 midiEvent.DeltaTime *= deltaTimeFactor;
             }
         }
@@ -335,6 +341,8 @@ namespace Melanchall.DryWetMidi.Tools
 
             for (var i = 0; i < chunksCount; i++)
             {
+                AsyncOperation.Checkpoint();
+
                 var chunk = midiFile.Chunks[i].Clone();
                 result[i] = new ChunkDescriptor(chunk);
 
@@ -350,6 +358,8 @@ namespace Melanchall.DryWetMidi.Tools
 
                 for (var j = 0; j < evensCount; j++)
                 {
+                    AsyncOperation.Checkpoint();
+
                     var midiEvent = events[j];
                     time += midiEvent.DeltaTime;
 

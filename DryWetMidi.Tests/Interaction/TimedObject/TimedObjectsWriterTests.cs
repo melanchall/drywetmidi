@@ -5,12 +5,64 @@ using Melanchall.DryWetMidi.Tests.Utilities;
 using NUnit.Framework;
 using NUnit.Framework.Legacy;
 using System;
+using System.Collections.Generic;
+using System.Threading;
 
 namespace Melanchall.DryWetMidi.Tests.Interaction
 {
     [TestFixture]
     public sealed class TimedObjectsWriterTests
     {
+        #region Nested classes
+
+        private sealed class ObjectsWriter : IDisposable
+        {
+            private readonly TimedObjectsWriter _writer;
+            private readonly int _asyncMode;
+
+            public ObjectsWriter(MidiTokensWriter tokensWriter, int asyncMode)
+            {
+                _writer = new TimedObjectsWriter(tokensWriter);
+                _asyncMode = asyncMode;
+            }
+
+            public void WriteObject(ITimedObject timedObject)
+            {
+                if (_asyncMode == 0)
+                    _writer.WriteObject(timedObject);
+                else
+                    _writer.WriteObjectAsync(timedObject, CancellationToken.None).AsTask().Wait();
+            }
+
+            public void WriteObjects(IEnumerable<ITimedObject> timedObjects)
+            {
+                switch (_asyncMode)
+                {
+                    case 0:
+                        _writer.WriteObjects(timedObjects);
+                        break;
+                    case 1:
+                        _writer.WriteObjectsAsync(timedObjects, cancellationToken: CancellationToken.None).Wait();
+                        break;
+                    default:
+                        _writer.WriteObjectsAsync(
+                            InteractionAsyncTests.AsAsync(timedObjects),
+                            cancellationToken: CancellationToken.None).Wait();
+                        break;
+                }
+            }
+
+            public void Dispose()
+            {
+                if (_asyncMode == 0)
+                    _writer.Dispose();
+                else
+                    _writer.DisposeAsync().AsTask().Wait();
+            }
+        }
+
+        #endregion
+
         #region Test methods
 
         [Test]
@@ -225,14 +277,26 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             });
 
         [Test]
-        public void WriteObject_WrongOrder() => ClassicAssert.Throws<InvalidOperationException>(() => WriteObjects(
-            writersActions: (tokensWriter, objectsWriter) =>
+        public void WriteObject_WrongOrder()
+        {
+            void Write(int asyncMode) => WriteObjects(
+                writersActions: (tokensWriter, objectsWriter) =>
+                {
+                    tokensWriter.StartTrackChunk();
+                    objectsWriter.WriteObject(new TimedEvent(new TextEvent("A"), 100));
+                    objectsWriter.WriteObject(new TimedEvent(new TextEvent("B"), 50));
+                },
+                expectedMidiFile: new MidiFile(),
+                asyncMode: asyncMode);
+
+            ClassicAssert.Throws<InvalidOperationException>(() => Write(0));
+
+            foreach (var asyncMode in new[] { 1, 2 })
             {
-                tokensWriter.StartTrackChunk();
-                objectsWriter.WriteObject(new TimedEvent(new TextEvent("A"), 100));
-                objectsWriter.WriteObject(new TimedEvent(new TextEvent("B"), 50));
-            },
-            expectedMidiFile: new MidiFile()));
+                var exception = ClassicAssert.Throws<AggregateException>(() => Write(asyncMode));
+                Assert.That(exception.InnerException, Is.TypeOf<InvalidOperationException>());
+            }
+        }
 
         [Test]
         public void WriteObject_MultipleTrackChunks() => WriteObjects(
@@ -266,20 +330,39 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         #region Private methods
 
         private void WriteObjects(
-            Action<MidiTokensWriter, TimedObjectsWriter> writersActions,
+            Action<MidiTokensWriter, ObjectsWriter> writersActions,
             MidiFile expectedMidiFile,
             WritingSettings settings = null,
             ReadingSettings readingSettings = null,
             MidiFileFormat format = MidiFileFormat.MultiTrack,
             TimeDivision timeDivision = null,
-            string message = null)
+            string message = null,
+            int? asyncMode = null)
         {
+            if (asyncMode == null)
+            {
+                foreach (var mode in new[] { 0, 1, 2 })
+                {
+                    WriteObjects(
+                        writersActions,
+                        expectedMidiFile,
+                        settings,
+                        readingSettings,
+                        format,
+                        timeDivision,
+                        message,
+                        mode);
+                }
+
+                return;
+            }
+
             var filePath = FileOperations.GetTempFilePath();
 
             try
             {
                 using (var tokensWriter = MidiFile.WriteLazy(filePath, true, format, settings, timeDivision))
-                using (var objectsWriter = new TimedObjectsWriter(tokensWriter))
+                using (var objectsWriter = new ObjectsWriter(tokensWriter, asyncMode.Value))
                 {
                     writersActions(tokensWriter, objectsWriter);
                 }

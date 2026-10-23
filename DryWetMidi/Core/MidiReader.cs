@@ -12,7 +12,7 @@ namespace Melanchall.DryWetMidi.Core
     /// <summary>
     /// Reader of the MIDI data types.
     /// </summary>
-    public sealed class MidiReader : IDisposable
+    public sealed partial class MidiReader : IDisposable
     {
         #region Constants
 
@@ -40,6 +40,7 @@ namespace Melanchall.DryWetMidi.Core
         private long _bufferStart = -1;
 
         private long _position;
+        private readonly long _positionBase;
 
         private bool _disposed;
 
@@ -67,6 +68,11 @@ namespace Melanchall.DryWetMidi.Core
         /// is <c>null</c> in case of <see cref="ReaderSettings.BufferingPolicy"/> set to
         /// <see cref="BufferingPolicy.UseCustomBuffer"/>.</exception>
         public MidiReader(Stream stream, ReaderSettings settings)
+            : this(stream, settings, false)
+        {
+        }
+
+        internal MidiReader(Stream stream, ReaderSettings settings, bool deferInitialization)
         {
             ThrowIfArgument.IsNull(nameof(stream), stream);
             ThrowIfArgument.IsNull(nameof(settings), settings);
@@ -83,11 +89,11 @@ namespace Melanchall.DryWetMidi.Core
             Length = _stream.Length;
 
             _useBuffering = _settings.BufferingPolicy != BufferingPolicy.DontUseBuffering && !_isStreamWrapped && !(_stream is MemoryStream);
-            if (_useBuffering)
+            if (_useBuffering && !(deferInitialization && settings.BufferingPolicy == BufferingPolicy.BufferAllData))
                 PrepareBuffer();
         }
 
-        internal MidiReader(byte[] bytes, int offset, int length, ReaderSettings settings)
+        internal MidiReader(byte[] bytes, int offset, int length, ReaderSettings settings, long positionBase = 0)
         {
             ThrowIfArgument.IsNull(nameof(bytes), bytes);
             ThrowIfArgument.IsEmptyCollection(nameof(bytes), bytes, "Bytes is empty array.");
@@ -96,6 +102,7 @@ namespace Melanchall.DryWetMidi.Core
             ThrowIfArgument.IsNull(nameof(settings), settings);
 
             _settings = settings;
+            _positionBase = positionBase;
 
             _stream = default!;
 
@@ -106,7 +113,7 @@ namespace Melanchall.DryWetMidi.Core
             _position = offset;
             _bufferPosition = offset;
 
-            Length = offset + length;
+            Length = positionBase + offset + length;
         }
 
         #endregion
@@ -120,15 +127,15 @@ namespace Melanchall.DryWetMidi.Core
         /// <exception cref="ObjectDisposedException">Property was called after the reader was disposed.</exception>
         public long Position
         {
-            get { return _useBuffering ? _position : _stream.Position; }
+            get { return _useBuffering ? _positionBase + _position : _stream.Position; }
             set
             {
                 if (_useBuffering)
-                    _bufferPosition += (int)(value - _position);
+                    _bufferPosition += (int)(value - _positionBase - _position);
                 else
                     _stream.Position = value;
 
-                _position = value;
+                _position = value - _positionBase;
             }
         }
 

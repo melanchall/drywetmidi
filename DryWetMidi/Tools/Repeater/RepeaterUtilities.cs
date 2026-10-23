@@ -10,7 +10,7 @@ namespace Melanchall.DryWetMidi.Tools
     /// Provides methods to repeat MIDI data using different options. More info in the
     /// <see href="xref:a_repeater">Repeater</see> article.
     /// </summary>
-    public static class RepeaterUtilities
+    public static partial class RepeaterUtilities
     {
         #region Methods
 

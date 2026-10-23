@@ -6,6 +6,34 @@ uid: a_getting_objects
 
 This article describes ways to get different objects (like [timed events](xref:Melanchall.DryWetMidi.Interaction.TimedEvent) or [notes](xref:Melanchall.DryWetMidi.Interaction.Note)) from MIDI files, track chunks, and collections of other objects.
 
+## Asynchronous operations
+
+Bulk extraction and processing have `Async` counterparts, including `GetNotesAsync`,
+`GetChordsAsync`, `GetTimedEventsAsync`, `GetObjectsAsync`, `GetRestsAsync`,
+`GetTempoMapAsync`, and collection-level duration analysis. These operations run
+CPU-bound work on the thread pool so an editor can remain responsive. They do not
+make detection faster, and synchronous methods are preferable for small inputs or
+when the caller already manages background execution.
+
+Pass a cancellation token to cancel substantial processing cooperatively. Optional
+`IProgress<AsyncOperationProgress>` notifications describe processed algorithm work
+items rather than a percentage or a guaranteed count of output notes. Notifications
+are throttled; the total is not discovered by enumerating the input a second time.
+
+Async processing callbacks are awaited sequentially. Use an asynchronous callback
+overload rather than passing an `async` lambda to a synchronous `Action` callback,
+which would become `async void`. Cancellation and callback exceptions do not roll
+back changes already made or external side effects.
+
+Asynchronous enumeration preserves musical ordering, but note/chord detection may
+need to buffer unmatched events or preprocess input. It is not a promise of constant
+memory for every detection policy. Dispose the asynchronous enumerator when stopping
+early.
+
+Async operations do not make mutable MIDI files, collections, detection settings,
+or managers thread-safe. Do not edit or process the same data concurrently. A manager
+commit still rebuilds its underlying collection; it is not a disk write.
+
 ## GetTimedEvents
 
 `TimedEvent` is the basic MIDI object we will describe here. It's just a MIDI event along with its absolute time within a MIDI file or track chunk. To get all timed events in a MIDI file, you can just call [GetTimedEvents](xref:Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.GetTimedEvents*) method:

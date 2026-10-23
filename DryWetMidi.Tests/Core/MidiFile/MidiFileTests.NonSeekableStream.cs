@@ -82,12 +82,21 @@ namespace Melanchall.DryWetMidi.Tests.Core
         {
             foreach (var filePath in TestFilesProvider.GetValidFilesPaths())
             {
-                var midiFile = MidiFile.Read(filePath);
+                var midiFile = MidiFileTestUtilities.ReadWithAsyncChecks(filePath);
 
                 var nonSeekableStream = new NonSeekableStream(filePath);
                 var midiFile2 = MidiFile.Read(nonSeekableStream);
 
                 MidiAsserts.AreEqual(midiFile, midiFile2, true, $"File '{filePath}' is invalid.");
+
+                using (var asyncStream = new NonSeekableStream(filePath))
+                {
+                    var asyncFile = MidiFile.ReadAsync(
+                        asyncStream,
+                        cancellationToken: System.Threading.CancellationToken.None).Result;
+
+                    MidiAsserts.AreEqual(midiFile, asyncFile, true, $"Async file '{filePath}' is invalid.");
+                }
             }
         }
 
@@ -139,6 +148,16 @@ namespace Melanchall.DryWetMidi.Tests.Core
             var midiFile2 = MidiFile.Read(nonSeekableStream, new ReadingSettings { ReaderSettings = readerSettings });
 
             MidiAsserts.AreEqual(midiFile, midiFile2, true, $"File is invalid.");
+
+            using (var asyncStream = new NonSeekableStream(filePath))
+            {
+                var asyncFile = MidiFile.ReadAsync(
+                    asyncStream,
+                    new ReadingSettings { ReaderSettings = readerSettings },
+                    cancellationToken: System.Threading.CancellationToken.None).Result;
+
+                MidiAsserts.AreEqual(midiFile, asyncFile, true, "Async file is invalid.");
+            }
         }
 
         #endregion

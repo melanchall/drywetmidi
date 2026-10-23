@@ -761,6 +761,13 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             ObjectsMergingSettings settings,
             ICollection<ITimedObject> expectedObjects)
         {
+            var asyncObjects = ToolsAsyncTests.Collect(
+                timedObjects.Select(obj => obj?.Clone()).MergeObjectsAsync(
+                    TempoMap.Default,
+                    settings,
+                    cancellationToken: System.Threading.CancellationToken.None)).Result;
+            MidiAsserts.AreEqual(expectedObjects, asyncObjects, "Invalid asynchronously merged objects.");
+
             var actualObjects = timedObjects.MergeObjects(TempoMap.Default, settings).ToArray();
             MidiAsserts.AreEqual(expectedObjects, actualObjects, "Invalid objects.");
         }
@@ -772,21 +779,47 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             ICollection<ITimedObject> expectedObjects,
             ObjectDetectionSettings objectDetectionSettings = null)
         {
-            var trackChunk = timedObjects.ToTrackChunk();
+            var trackChunk = timedObjects.Select(obj => obj?.Clone()).ToTrackChunk();
             trackChunk.MergeObjects(objectType, TempoMap.Default, settings, objectDetectionSettings);
             MidiAsserts.AreEqual(expectedObjects.ToTrackChunk(), trackChunk, false, "Invalid track chunk.");
 
             //
 
-            var trackChunks = new[] { timedObjects.ToTrackChunk() };
+            var trackChunks = new[] { timedObjects.Select(obj => obj?.Clone()).ToTrackChunk() };
             trackChunks.MergeObjects(objectType, TempoMap.Default, settings, objectDetectionSettings);
             MidiAsserts.AreEqual(new[] { expectedObjects.ToTrackChunk() }, trackChunks, false, "Invalid track chunks.");
 
             //
 
-            var midiFile = timedObjects.ToFile();
+            var midiFile = timedObjects.Select(obj => obj?.Clone()).ToFile();
             midiFile.MergeObjects(objectType, settings, objectDetectionSettings);
             MidiAsserts.AreEqual(expectedObjects.ToFile(), midiFile, false, "Invalid file.");
+
+            trackChunk = timedObjects.Select(obj => obj?.Clone()).ToTrackChunk();
+            trackChunk.MergeObjectsAsync(
+                objectType,
+                TempoMap.Default,
+                settings,
+                objectDetectionSettings,
+                cancellationToken: System.Threading.CancellationToken.None).Wait();
+            MidiAsserts.AreEqual(expectedObjects.ToTrackChunk(), trackChunk, false, "Invalid asynchronous track chunk.");
+
+            trackChunks = new[] { timedObjects.Select(obj => obj?.Clone()).ToTrackChunk() };
+            trackChunks.MergeObjectsAsync(
+                objectType,
+                TempoMap.Default,
+                settings,
+                objectDetectionSettings,
+                cancellationToken: System.Threading.CancellationToken.None).Wait();
+            MidiAsserts.AreEqual(new[] { expectedObjects.ToTrackChunk() }, trackChunks, false, "Invalid asynchronous track chunks.");
+
+            midiFile = timedObjects.Select(obj => obj?.Clone()).ToFile();
+            midiFile.MergeObjectsAsync(
+                objectType,
+                settings,
+                objectDetectionSettings,
+                cancellationToken: System.Threading.CancellationToken.None).Wait();
+            MidiAsserts.AreEqual(expectedObjects.ToFile(), midiFile, false, "Invalid asynchronous file.");
         }
 
         #endregion

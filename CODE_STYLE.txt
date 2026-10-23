@@ -1,0 +1,69 @@
+DryWetMIDI code style
+====================
+
+Use this reference for this PR and future contributions. Read the surrounding
+code before editing; preserve existing public API behavior and naming.
+
+Layout
+------
+Use four spaces for C# indentation and put opening braces on separate lines.
+Keep the existing namespace, using-directive, and region conventions.
+
+Separate logical steps with blank lines. In particular:
+  - Put a blank line after an if/else body before the next independent statement.
+  - Put blank lines before and after loops, except at a containing block boundary.
+  - Keep related declarations together, but separate setup, validation,
+    processing, and return/completion steps.
+  - Do not insert blank lines between an if body and its else, or between a try
+    body and its catch/finally.
+
+Always put loop bodies in braces, including single-statement bodies.
+Follow surrounding code for single-statement if bodies; braces are not required
+just because a loop's braces are required.
+
+Do not put catch bodies or multiple independent statements on the same line.
+Keep short expression-bodied members when they are genuinely easier to read.
+
+When a declaration or invocation is split into a multiline parameter/argument
+list, put each parameter/argument on its own line. Do not leave most parameters
+on one line with only the final parameter on the following line.
+
+Expand lambdas with several statements into readable multiline blocks.
+Avoid densely packed object initializers and chained operations.
+
+Async code
+----------
+Keep synchronous APIs compatible. Name asynchronous counterparts with Async.
+Use ConfigureAwait(false) for internal library awaits that do not require a
+caller synchronization context, including asynchronous disposal where applicable.
+It is not necessary to add an await solely to a method that returns a task.
+Do not remove ConfigureAwait(false) merely because a particular test uses no
+synchronization context.
+
+Keep cancellation cooperative. Check it while preparing a mutation, not halfway
+through a destructive commit. Async does not make mutable objects thread-safe.
+Do not refactor duplicated sync/async algorithms as part of a style-only change.
+
+XML documentation
+-----------------
+Use multiline summary comments, matching existing public APIs. Document
+parameters, return values, ownership, and relevant exception conditions.
+Reuse the corresponding synchronous API's documentation when appropriate, but
+also document async-specific cancellation, disposed-object, overlapping-operation,
+and state failures when the implementation can actually produce them.
+Use OperationCanceledException for cancellation contracts; do not promise the
+more specific TaskCanceledException for every canceled operation.
+Document actual exceptions rather than adding every exception to every method.
+
+Tests
+-----
+Keep existing synchronous assertions and dedicated asynchronous tests.
+For parity checks in existing synchronous tests, also exercise the asynchronous
+operation using CancellationToken.None and Result or Wait. Recreate mutable
+inputs and streams so both operations start from equivalent state.
+Remember that Result and Wait wrap task failures in AggregateException; preserve
+the original synchronous exception assertions.
+Prefer extending existing common assertion helpers so all their cases gain
+async coverage. Verify output, state changes, settings, and failure behavior,
+not just task completion. Do not add async calls for APIs without an async
+counterpart.

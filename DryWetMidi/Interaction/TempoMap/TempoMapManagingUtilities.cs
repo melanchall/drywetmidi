@@ -9,7 +9,7 @@ namespace Melanchall.DryWetMidi.Interaction
     /// <summary>
     /// Extension methods for managing tempo map. More info in the <see href="xref:a_tempo_map">Tempo map</see> article.
     /// </summary>
-    public static class TempoMapManagingUtilities
+    public static partial class TempoMapManagingUtilities
     {
         #region Methods
 
@@ -87,7 +87,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
             ThrowIfArgument.DoesntSatisfyCondition(nameof(trackChunks), trackChunks, c => c.Any(), "Failed to manage tempo map on an empty track chunks collection.");
 
-            return trackChunks.Select(c => c.Events).ManageTempoMap(timeDivision);
+            return trackChunks.Select(InteractionAsyncUtilities.GetEvents).ManageTempoMap(timeDivision);
         }
 
         /// <summary>
@@ -141,7 +141,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
             var result = new TempoMap(timeDivision);
 
-            var eventsCollections = trackChunks.Select(c => c.Events).Where(e => e.HasTempoMapEvents).ToArray();
+            var eventsCollections = trackChunks.Select(InteractionAsyncUtilities.GetEvents).Where(e => e.HasTempoMapEvents).ToArray();
             var eventsCollectionsCount = eventsCollections.Length;
             if (eventsCollectionsCount == 0)
                 return result;
@@ -152,12 +152,14 @@ namespace Melanchall.DryWetMidi.Interaction
 
             while (true)
             {
+                AsyncOperation.Checkpoint();
                 var eventsCollectionIndex = 0;
                 var minTime = long.MaxValue;
                 var endReached = true;
 
                 for (var j = 0; j < eventsCollectionsCount; j++)
                 {
+                    AsyncOperation.Checkpoint();
                     var index = eventsCollectionIndices[j];
                     if (index > eventsCollectionMaxIndices[j])
                         continue;
@@ -270,7 +272,7 @@ namespace Melanchall.DryWetMidi.Interaction
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
-            trackChunks.Select(c => c.Events).ReplaceTempoMap(tempoMap);
+            trackChunks.Select(InteractionAsyncUtilities.GetEvents).ReplaceTempoMap(tempoMap);
         }
 
         /// <summary>

@@ -352,6 +352,15 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 midiFile.Write(streamToWrite);
                 ClassicAssert.DoesNotThrow(() => { var l = streamToWrite.Length; });
             }
+
+            using (var streamToWrite = new MemoryStream())
+            {
+                midiFile.Clone().WriteAsync(
+                    streamToWrite,
+                    cancellationToken: System.Threading.CancellationToken.None).Wait();
+
+                ClassicAssert.DoesNotThrow(() => { var l = streamToWrite.Length; });
+            }
         }
 
         [Test]

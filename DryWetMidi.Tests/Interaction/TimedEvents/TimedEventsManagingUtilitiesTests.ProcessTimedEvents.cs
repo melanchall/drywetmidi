@@ -1629,15 +1629,32 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             ICollection<MidiEvent> expectedMidiEvents,
             int expectedProcessedCount,
             TimedEventDetectionSettings settings = null,
-            TimedEventProcessingHint hint = TimedEventProcessingHint.Default)
+            TimedEventProcessingHint hint = TimedEventProcessingHint.Default,
+            bool useAsync = false)
         {
+            if (!useAsync)
+            {
+                ProcessTimedEvents_EventsCollection_WithPredicate(
+                    wrapToTrackChunk,
+                    midiEvents.Select(e => e.Clone()).ToArray(),
+                    action,
+                    match,
+                    expectedMidiEvents,
+                    expectedProcessedCount,
+                    settings,
+                    hint,
+                    useAsync: true);
+            }
+
             if (wrapToTrackChunk)
             {
                 var trackChunk = new TrackChunk(midiEvents);
 
                 ClassicAssert.AreEqual(
                     expectedProcessedCount,
-                    trackChunk.ProcessTimedEvents(action, match, settings, hint),
+                    useAsync
+                        ? trackChunk.ProcessTimedEventsAsync(action, match, settings, hint, cancellationToken: System.Threading.CancellationToken.None).Result
+                        : trackChunk.ProcessTimedEvents(action, match, settings, hint),
                     "Invalid count of processed timed events.");
 
                 var expectedTrackChunk = new TrackChunk(expectedMidiEvents);
@@ -1653,7 +1670,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
                 ClassicAssert.AreEqual(
                     expectedProcessedCount,
-                    eventsCollection.ProcessTimedEvents(action, match, settings, hint),
+                    useAsync
+                        ? eventsCollection.ProcessTimedEventsAsync(action, match, settings, hint, cancellationToken: System.Threading.CancellationToken.None).Result
+                        : eventsCollection.ProcessTimedEvents(action, match, settings, hint),
                     "Invalid count of processed timed events.");
 
                 var expectedEventsCollection = new EventsCollection();
@@ -1671,15 +1690,30 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             Action<TimedEvent> action,
             ICollection<MidiEvent> expectedMidiEvents,
             TimedEventDetectionSettings settings = null,
-            TimedEventProcessingHint hint = TimedEventProcessingHint.Default)
+            TimedEventProcessingHint hint = TimedEventProcessingHint.Default,
+            bool useAsync = false)
         {
+            if (!useAsync)
+            {
+                ProcessTimedEvents_EventsCollection_WithoutPredicate(
+                    wrapToTrackChunk,
+                    midiEvents.Select(e => e.Clone()).ToArray(),
+                    action,
+                    expectedMidiEvents,
+                    settings,
+                    hint,
+                    useAsync: true);
+            }
+
             if (wrapToTrackChunk)
             {
                 var trackChunk = new TrackChunk(midiEvents);
 
                 ClassicAssert.AreEqual(
                     midiEvents.Count,
-                    trackChunk.ProcessTimedEvents(action, settings, hint),
+                    useAsync
+                        ? trackChunk.ProcessTimedEventsAsync(action, settings, hint, cancellationToken: System.Threading.CancellationToken.None).Result
+                        : trackChunk.ProcessTimedEvents(action, settings, hint),
                     "Invalid count of processed timed events.");
 
                 var expectedTrackChunk = new TrackChunk(expectedMidiEvents);
@@ -1695,7 +1729,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
                 ClassicAssert.AreEqual(
                     midiEvents.Count,
-                    eventsCollection.ProcessTimedEvents(action, settings, hint),
+                    useAsync
+                        ? eventsCollection.ProcessTimedEventsAsync(action, settings, hint, cancellationToken: System.Threading.CancellationToken.None).Result
+                        : eventsCollection.ProcessTimedEvents(action, settings, hint),
                     "Invalid count of processed timed events.");
 
                 var expectedEventsCollection = new EventsCollection();
@@ -1715,8 +1751,23 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             ICollection<ICollection<MidiEvent>> expectedMidiEvents,
             int expectedProcessedCount,
             TimedEventDetectionSettings settings = null,
-            TimedEventProcessingHint hint = TimedEventProcessingHint.Default)
+            TimedEventProcessingHint hint = TimedEventProcessingHint.Default,
+            bool useAsync = false)
         {
+            if (!useAsync)
+            {
+                ProcessTimedEvents_TrackChunks_WithPredicate(
+                    wrapToFile,
+                    midiEvents.Select(events => (ICollection<MidiEvent>)events.Select(e => e.Clone()).ToArray()).ToArray(),
+                    action,
+                    match,
+                    expectedMidiEvents,
+                    expectedProcessedCount,
+                    settings,
+                    hint,
+                    useAsync: true);
+            }
+
             var trackChunks = midiEvents.Select(e => new TrackChunk(e)).ToList();
 
             if (wrapToFile)
@@ -1725,7 +1776,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
                 ClassicAssert.AreEqual(
                     expectedProcessedCount,
-                    midiFile.ProcessTimedEvents(action, match, settings, hint),
+                    useAsync
+                        ? midiFile.ProcessTimedEventsAsync(action, match, settings, hint, cancellationToken: System.Threading.CancellationToken.None).Result
+                        : midiFile.ProcessTimedEvents(action, match, settings, hint),
                     "Invalid count of processed timed events.");
 
                 MidiAsserts.AreEqual(new MidiFile(expectedMidiEvents.Select(e => new TrackChunk(e))), midiFile, false, "Events are invalid.");
@@ -1737,7 +1790,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             {
                 ClassicAssert.AreEqual(
                     expectedProcessedCount,
-                    trackChunks.ProcessTimedEvents(action, match, settings, hint),
+                    useAsync
+                        ? trackChunks.ProcessTimedEventsAsync(action, match, settings, hint, cancellationToken: System.Threading.CancellationToken.None).Result
+                        : trackChunks.ProcessTimedEvents(action, match, settings, hint),
                     "Invalid count of processed timed events.");
 
                 MidiAsserts.AreEqual(expectedMidiEvents.Select(e => new TrackChunk(e)), trackChunks, true, "Events are invalid.");
@@ -1753,8 +1808,21 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             Action<TimedEvent> action,
             ICollection<ICollection<MidiEvent>> expectedMidiEvents,
             TimedEventDetectionSettings settings = null,
-            TimedEventProcessingHint hint = TimedEventProcessingHint.Default)
+            TimedEventProcessingHint hint = TimedEventProcessingHint.Default,
+            bool useAsync = false)
         {
+            if (!useAsync)
+            {
+                ProcessTimedEvents_TrackChunks_WithoutPredicate(
+                    wrapToFile,
+                    midiEvents.Select(events => (ICollection<MidiEvent>)events.Select(e => e.Clone()).ToArray()).ToArray(),
+                    action,
+                    expectedMidiEvents,
+                    settings,
+                    hint,
+                    useAsync: true);
+            }
+
             var trackChunks = midiEvents.Select(e => new TrackChunk(e)).ToList();
 
             if (wrapToFile)
@@ -1763,7 +1831,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
                 ClassicAssert.AreEqual(
                     midiEvents.Sum(e => e.Count),
-                    midiFile.ProcessTimedEvents(action, settings, hint),
+                    useAsync
+                        ? midiFile.ProcessTimedEventsAsync(action, settings, hint, cancellationToken: System.Threading.CancellationToken.None).Result
+                        : midiFile.ProcessTimedEvents(action, settings, hint),
                     "Invalid count of processed timed events.");
 
                 MidiAsserts.AreEqual(new MidiFile(expectedMidiEvents.Select(e => new TrackChunk(e))), midiFile, false, "Events are invalid.");
@@ -1775,7 +1845,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             {
                 ClassicAssert.AreEqual(
                     midiEvents.Sum(e => e.Count),
-                    trackChunks.ProcessTimedEvents(action, settings, hint),
+                    useAsync
+                        ? trackChunks.ProcessTimedEventsAsync(action, settings, hint, cancellationToken: System.Threading.CancellationToken.None).Result
+                        : trackChunks.ProcessTimedEvents(action, settings, hint),
                     "Invalid count of processed timed events.");
 
                 MidiAsserts.AreEqual(expectedMidiEvents.Select(e => new TrackChunk(e)), trackChunks, true, "Events are invalid.");

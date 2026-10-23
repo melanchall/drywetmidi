@@ -1798,6 +1798,15 @@ namespace Melanchall.DryWetMidi.Tests.Core
                     var readMidiFile = MidiFile.Read(streamToRead);
                     ClassicAssert.DoesNotThrow(() => { var l = streamToRead.Length; });
                 }
+
+                using (var streamToRead = new MemoryStream(streamToWrite.ToArray()))
+                {
+                    var readMidiFile = MidiFile.ReadAsync(
+                        streamToRead,
+                        cancellationToken: System.Threading.CancellationToken.None).Result;
+
+                    ClassicAssert.DoesNotThrow(() => { var l = streamToRead.Length; });
+                }
             }
         }
 
@@ -1884,8 +1893,8 @@ namespace Melanchall.DryWetMidi.Tests.Core
 
             foreach (var filePath in TestFilesProvider.GetValidFilesPaths())
             {
-                var expectedMidiFile = MidiFile.Read(filePath, noBufferingSettings);
-                var midiFile = MidiFile.Read(filePath, bufferAllDataSettings);
+                var expectedMidiFile = MidiFileTestUtilities.ReadWithAsyncChecks(filePath, noBufferingSettings);
+                var midiFile = MidiFileTestUtilities.ReadWithAsyncChecks(filePath, bufferAllDataSettings);
                 MidiAsserts.AreEqual(expectedMidiFile, midiFile, true, $"File '{filePath}' is invalid.");
             }
         }
@@ -1915,8 +1924,8 @@ namespace Melanchall.DryWetMidi.Tests.Core
 
             foreach (var filePath in TestFilesProvider.GetValidFilesPaths())
             {
-                var expectedMidiFile = MidiFile.Read(filePath, noBufferingSettings);
-                var midiFile = MidiFile.Read(filePath, fixedSizeBufferingSettings);
+                var expectedMidiFile = MidiFileTestUtilities.ReadWithAsyncChecks(filePath, noBufferingSettings);
+                var midiFile = MidiFileTestUtilities.ReadWithAsyncChecks(filePath, fixedSizeBufferingSettings);
                 MidiAsserts.AreEqual(expectedMidiFile, midiFile, true, $"File '{filePath}' is invalid.");
             }
         }
@@ -1950,8 +1959,8 @@ namespace Melanchall.DryWetMidi.Tests.Core
 
             foreach (var filePath in TestFilesProvider.GetValidFilesPaths())
             {
-                var expectedMidiFile = MidiFile.Read(filePath, noBufferingSettings);
-                var midiFile = MidiFile.Read(filePath, customBufferingSettings);
+                var expectedMidiFile = MidiFileTestUtilities.ReadWithAsyncChecks(filePath, noBufferingSettings);
+                var midiFile = MidiFileTestUtilities.ReadWithAsyncChecks(filePath, customBufferingSettings);
                 MidiAsserts.AreEqual(expectedMidiFile, midiFile, true, $"File '{filePath}' is invalid.");
 
                 if (checkData)
@@ -2011,7 +2020,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
             try
             {
                 FileOperations.WriteAllBytesToFile(filePath, bytes);
-                return MidiFile.Read(filePath, readingSettings);
+                return MidiFileTestUtilities.ReadWithAsyncChecks(filePath, readingSettings);
             }
             finally
             {
@@ -2042,6 +2051,20 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 });
 
                 MidiAsserts.AreEqual(midiFile, newMidiFile, false, "Invalid file.");
+
+                using (var asyncStream = new MemoryStream(stream.ToArray()))
+                {
+                    var asyncFile = MidiFile.ReadAsync(
+                        asyncStream,
+                        new ReadingSettings
+                        {
+                            StopReadingOnExpectedTrackChunksCountReached = true,
+                            SilentNoteOnPolicy = SilentNoteOnPolicy.NoteOn,
+                        },
+                        cancellationToken: System.Threading.CancellationToken.None).Result;
+
+                    MidiAsserts.AreEqual(midiFile, asyncFile, false, "Invalid async file.");
+                }
             }
         }
 
@@ -2072,6 +2095,25 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 }
 
                 MidiAsserts.AreEqual(midiFiles, newMidiFiles, false, "Invalid files.");
+
+                using (var asyncStream = new MemoryStream(stream.ToArray()))
+                {
+                    newMidiFiles.Clear();
+
+                    for (var i = 0; i < midiFiles.Count; i++)
+                    {
+                        newMidiFiles.Add(MidiFile.ReadAsync(
+                            asyncStream,
+                            new ReadingSettings
+                            {
+                                StopReadingOnExpectedTrackChunksCountReached = true,
+                                SilentNoteOnPolicy = SilentNoteOnPolicy.NoteOn,
+                            },
+                            cancellationToken: System.Threading.CancellationToken.None).Result);
+                    }
+
+                    MidiAsserts.AreEqual(midiFiles, newMidiFiles, false, "Invalid async files.");
+                }
             }
         }
 
@@ -2185,17 +2227,26 @@ namespace Melanchall.DryWetMidi.Tests.Core
 
                 //
 
-                var exception = ClassicAssert.Throws<TException>(() => MidiFile.Read(filePath, readingSettings), "Exception not thrown.");
+                var exception = ClassicAssert.Throws<TException>(() => MidiFileTestUtilities.ReadWithAsyncChecks(filePath, readingSettings), "Exception not thrown.");
                 checkException(exception);
 
                 var nonSeekableStream = new NonSeekableStream(filePath);
                 ClassicAssert.Throws<TException>(() => MidiFile.Read(nonSeekableStream, readingSettings), $"Exception not thrown for the file read from non-seekable stream.");
 
+                using (var asyncStream = new NonSeekableStream(filePath))
+                {
+                    var aggregate = ClassicAssert.Throws<AggregateException>(() =>
+                        MidiFile.ReadAsync(asyncStream, readingSettings, cancellationToken: System.Threading.CancellationToken.None).Wait());
+
+                    ClassicAssert.IsInstanceOf<TException>(aggregate.InnerException);
+                    checkException((TException)aggregate.InnerException);
+                }
+
                 readingSettings.ReaderSettings.BufferingPolicy = BufferingPolicy.BufferAllData;
-                ClassicAssert.Throws<TException>(() => MidiFile.Read(filePath, readingSettings), $"Exception not thrown for the file read with putting data in memory.");
+                ClassicAssert.Throws<TException>(() => MidiFileTestUtilities.ReadWithAsyncChecks(filePath, readingSettings), $"Exception not thrown for the file read with putting data in memory.");
 
                 readingSettings.ReaderSettings.BufferingPolicy = BufferingPolicy.UseFixedSizeBuffer;
-                ClassicAssert.Throws<TException>(() => MidiFile.Read(filePath, readingSettings), $"Exception not thrown for the file read with fixed size buffer.");
+                ClassicAssert.Throws<TException>(() => MidiFileTestUtilities.ReadWithAsyncChecks(filePath, readingSettings), $"Exception not thrown for the file read with fixed size buffer.");
 
                 readingSettings.ReaderSettings.BufferingPolicy = BufferingPolicy.DontUseBuffering;
             }
@@ -2235,18 +2286,28 @@ namespace Melanchall.DryWetMidi.Tests.Core
 
                 //
 
-                var newMidiFile = MidiFile.Read(filePath, readingSettings);
+                var newMidiFile = MidiFileTestUtilities.ReadWithAsyncChecks(filePath, readingSettings);
                 checkFile(newMidiFile);
 
                 var newMidiFileFromNonSeekableStream = MidiFile.Read(new NonSeekableStream(filePath), readingSettings);
                 MidiAsserts.AreEqual(newMidiFile, newMidiFileFromNonSeekableStream, true, "The file from non-seekable stream is invalid.");
 
+                using (var asyncStream = new NonSeekableStream(filePath))
+                {
+                    var asyncFile = MidiFile.ReadAsync(
+                        asyncStream,
+                        readingSettings,
+                        cancellationToken: System.Threading.CancellationToken.None).Result;
+
+                    MidiAsserts.AreEqual(newMidiFile, asyncFile, true, "Async non-seekable reading differs.");
+                }
+
                 readingSettings.ReaderSettings.BufferingPolicy = BufferingPolicy.BufferAllData;
-                var newMidiFileWithBufferAllData = MidiFile.Read(filePath, readingSettings);
+                var newMidiFileWithBufferAllData = MidiFileTestUtilities.ReadWithAsyncChecks(filePath, readingSettings);
                 MidiAsserts.AreEqual(newMidiFile, newMidiFileWithBufferAllData, true, "The file with buffer all data is invalid.");
 
                 readingSettings.ReaderSettings.BufferingPolicy = BufferingPolicy.UseFixedSizeBuffer;
-                var newMidiFileWithFixedSizeBuffer = MidiFile.Read(filePath, readingSettings);
+                var newMidiFileWithFixedSizeBuffer = MidiFileTestUtilities.ReadWithAsyncChecks(filePath, readingSettings);
                 MidiAsserts.AreEqual(newMidiFile, newMidiFileWithFixedSizeBuffer, true, "The file with fixed-size buffer is invalid.");
 
                 readingSettings.ReaderSettings.BufferingPolicy = BufferingPolicy.DontUseBuffering;

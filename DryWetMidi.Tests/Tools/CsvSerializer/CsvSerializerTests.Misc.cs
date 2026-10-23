@@ -169,6 +169,18 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                     var convertedFile = CsvSerializer.DeserializeFileFromCsv(outputFilePath, null);
 
                     MidiAsserts.AreEqual(midiFile, convertedFile, false, $"Conversion of '{filePath}' is invalid.");
+
+                    var asyncSource = midiFile.Clone();
+                    asyncSource.SerializeToCsvAsync(
+                        outputFilePath,
+                        true,
+                        null,
+                        cancellationToken: System.Threading.CancellationToken.None).Wait();
+                    var asyncConvertedFile = CsvSerializer.DeserializeFileFromCsvAsync(
+                        outputFilePath,
+                        null,
+                        cancellationToken: System.Threading.CancellationToken.None).Result;
+                    MidiAsserts.AreEqual(asyncSource, asyncConvertedFile, false, $"Asynchronous conversion of '{filePath}' is invalid.");
                 }
             }
             finally

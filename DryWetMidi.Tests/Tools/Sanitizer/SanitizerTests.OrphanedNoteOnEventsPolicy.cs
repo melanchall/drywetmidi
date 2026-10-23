@@ -531,7 +531,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
         [Test]
         public void Sanitize_OrphanedNoteOnEventsPolicy_CompleteNote_7() => Assert.Throws<InvalidOperationException>(
-            () => new MidiFile(
+            () => Sanitize(new MidiFile(
                 new ITimedObject[]
                 {
                     new TimedEvent(new NoteOnEvent() { Channel = (FourBitNumber)4 }, 100),
@@ -539,12 +539,13 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                     new TimedEvent(new NoteOnEvent() { Channel = (FourBitNumber)4 }, 300),
                     new TimedEvent(new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue) { Channel = (FourBitNumber)4 }, 400),
                     new TimedEvent(new NoteOnEvent() { Channel = (FourBitNumber)2 }, 500),
-                }.ToTrackChunk())
-                .Sanitize(new SanitizingSettings
+                }.ToTrackChunk()),
+                new SanitizingSettings
                 {
                     OrphanedNoteOnEventsPolicy = OrphanedNoteOnEventsPolicy.CompleteNote,
                     NoteMaxLengthForOrphanedNoteOnEvent = null,
-                }),
+                },
+                null),
             "No exception thrown.");
 
         [Test]

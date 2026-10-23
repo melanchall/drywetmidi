@@ -37,7 +37,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 }
             };
 
-            var newFiles = midiFile.SplitByGrid(grid, settings).ToList();
+            var newFiles = SplitByGrid(midiFile, grid, settings);
             ClassicAssert.AreEqual(3, newFiles.Count, "New files count is invalid.");
 
             CompareTimedEvents(
@@ -95,7 +95,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 }
             };
 
-            var newFiles = midiFile.SplitByGrid(grid, settings).ToList();
+            var newFiles = SplitByGrid(midiFile, grid, settings);
             ClassicAssert.AreEqual(3, newFiles.Count, "New files count is invalid.");
 
             CompareTimedEvents(
@@ -152,7 +152,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 }
             };
 
-            var newFiles = midiFile.SplitByGrid(grid, settings).ToList();
+            var newFiles = SplitByGrid(midiFile, grid, settings);
             ClassicAssert.AreEqual(3, newFiles.Count, "New files count is invalid.");
 
             CompareTimedEvents(
@@ -209,7 +209,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 }
             };
 
-            var newFiles = midiFile.SplitByGrid(grid, settings).ToList();
+            var newFiles = SplitByGrid(midiFile, grid, settings);
             ClassicAssert.AreEqual(3, newFiles.Count, "New files count is invalid.");
 
             CompareTimedEvents(
@@ -268,7 +268,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 }
             };
 
-            var newFiles = midiFile.SplitByGrid(grid, settings).ToList();
+            var newFiles = SplitByGrid(midiFile, grid, settings);
             ClassicAssert.AreEqual(3, newFiles.Count, "New files count is invalid.");
 
             CompareTimedEvents(
@@ -330,7 +330,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 }
             };
 
-            var newFiles = midiFile.SplitByGrid(grid, settings).ToList();
+            var newFiles = SplitByGrid(midiFile, grid, settings);
             ClassicAssert.AreEqual(3, newFiles.Count, "New files count is invalid.");
 
             CompareTimedEvents(
@@ -405,7 +405,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 }
             };
 
-            var newFiles = midiFile.SplitByGrid(grid, settings).ToList();
+            var newFiles = SplitByGrid(midiFile, grid, settings);
             ClassicAssert.AreEqual(4, newFiles.Count, "New files count is invalid.");
 
             //

@@ -106,6 +106,8 @@ namespace Melanchall.DryWetMidi.Tools
 
             foreach (var trackChunk in trackChunks.OfType<TrackChunk>())
             {
+                AsyncOperation.Checkpoint();
+
                 trackChunk.SplitObjectsByGrid(objectType, grid, tempoMap, objectDetectionSettings, filter);
             }
         }
@@ -204,6 +206,8 @@ namespace Melanchall.DryWetMidi.Tools
 
             foreach (var obj in objects)
             {
+                AsyncOperation.Checkpoint();
+
                 if (obj == null)
                 {
                     yield return null;
@@ -225,6 +229,8 @@ namespace Melanchall.DryWetMidi.Tools
 
                 foreach (var time in intersectedTimes)
                 {
+                    AsyncOperation.Checkpoint();
+
                     var parts = tail.Split(time);
                     yield return parts.LeftPart;
 

@@ -9,7 +9,7 @@ namespace Melanchall.DryWetMidi.Interaction
     /// <summary>
     /// Extension methods for chords managing.
     /// </summary>
-    public static class ChordsManagingUtilities
+    public static partial class ChordsManagingUtilities
     {
         #region Nested classes
 
@@ -229,7 +229,7 @@ namespace Melanchall.DryWetMidi.Interaction
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
 
-            var eventsCollections = trackChunks.Select(c => c.Events).ToArray();
+            var eventsCollections = trackChunks.Select(InteractionAsyncUtilities.GetEvents).ToArray();
 
             switch (eventsCollections.Length)
             {
@@ -597,9 +597,9 @@ namespace Melanchall.DryWetMidi.Interaction
             ThrowIfArgument.IsNull(nameof(action), action);
             ThrowIfArgument.IsNull(nameof(match), match);
 
-            return trackChunks
+            return InteractionAsyncUtilities.CheckpointItems(trackChunks)
                 .Where(c => c != null)
-                .Select(c => c.Events)
+                .Select(InteractionAsyncUtilities.GetEvents)
                 .ProcessChordsInternal(
                     action,
                     match,
@@ -765,14 +765,9 @@ namespace Melanchall.DryWetMidi.Interaction
             ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
             ThrowIfArgument.IsNull(nameof(match), match);
 
+            var eventsToRemove = new HashSet<MidiEvent>();
             var chordsToRemoveCount = eventsCollection.ProcessChords(
-                c =>
-                {
-                    foreach (var note in c.Notes)
-                    {
-                        note.TimedNoteOnEvent.Event.MustBeRemoved = note.TimedNoteOffEvent.Event.MustBeRemoved = true;
-                    }
-                },
+                c => InteractionAsyncUtilities.CollectEventsForRemoval(c, eventsToRemove),
                 match,
                 settings,
                 noteDetectionSettings,
@@ -782,7 +777,7 @@ namespace Melanchall.DryWetMidi.Interaction
             if (chordsToRemoveCount == 0)
                 return 0;
 
-            eventsCollection.RemoveTimedEvents(e => e.Event.MustBeRemoved);
+            eventsCollection.RemoveTimedEvents(e => eventsToRemove.Contains(e.Event));
             return chordsToRemoveCount;
         }
 
@@ -905,14 +900,9 @@ namespace Melanchall.DryWetMidi.Interaction
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
             ThrowIfArgument.IsNull(nameof(match), match);
 
+            var eventsToRemove = new HashSet<MidiEvent>();
             var chordsToRemoveCount = trackChunks.ProcessChords(
-                c =>
-                {
-                    foreach (var note in c.Notes)
-                    {
-                        note.TimedNoteOnEvent.Event.MustBeRemoved = note.TimedNoteOffEvent.Event.MustBeRemoved = true;
-                    }
-                },
+                c => InteractionAsyncUtilities.CollectEventsForRemoval(c, eventsToRemove),
                 match,
                 settings,
                 noteDetectionSettings,
@@ -922,7 +912,7 @@ namespace Melanchall.DryWetMidi.Interaction
             if (chordsToRemoveCount == 0)
                 return 0;
 
-            trackChunks.RemoveTimedEvents(e => e.Event.MustBeRemoved);
+            trackChunks.RemoveTimedEvents(e => eventsToRemove.Contains(e.Event));
             return chordsToRemoveCount;
         }
 
@@ -1043,6 +1033,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
             foreach (var note in notes)
             {
+                AsyncOperation.Checkpoint();
                 var channel = (byte)note.Channel;
                 var chordNotes = notesByChannel[channel];
                 if (chordNotes == null)
@@ -1063,6 +1054,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
             foreach (var chordNotes in notesByChannel)
             {
+                AsyncOperation.Checkpoint();
                 if (chordNotes != null)
                     AddChord(chordNotes);
             }
@@ -1109,6 +1101,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
             foreach (var eventsCollection in eventsCollections)
             {
+                AsyncOperation.Checkpoint();
                 var matchedCount = 0;
 
                 var timeOrLengthChanged = false;
@@ -1121,6 +1114,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
                 foreach (var chord in chords)
                 {
+                    AsyncOperation.Checkpoint();
                     if (!match(chord))
                         continue;
 
@@ -1204,6 +1198,7 @@ namespace Melanchall.DryWetMidi.Interaction
         {
             for (var chordDescriptorNode = startChordDescriptorNode; chordDescriptorNode != null;)
             {
+                AsyncOperation.Checkpoint();
                 var chordDescriptor = chordDescriptorNode.Value;
                 if (getSealedOnly && !chordDescriptor.IsSealed)
                     break;
@@ -1275,6 +1270,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
             foreach (var timedObject in notesAndTimedEvents)
             {
+                AsyncOperation.Checkpoint();
                 if (chordsAllowed)
                 {
                     var chord = timedObject as Chord;

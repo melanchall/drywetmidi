@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Melanchall.DryWetMidi.Core
 {
@@ -226,6 +228,71 @@ namespace Melanchall.DryWetMidi.Core
             return midiEvent;
         }
 
+        internal async Task WriteContentAsync(MidiWriter writer, WritingSettings settings, CancellationToken cancellationToken)
+        {
+            byte? runningStatus = null;
+            var skipTempo = true;
+            var skipKey = true;
+            var skipTime = true;
+            var additionalDelta = 0L;
+            var lastEnd = false;
+
+            foreach (var midiEvent in Events)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                IEventWriter? eventWriter = null;
+                MidiEvent? eventToWrite = null;
+                var writeStatus = true;
+                ProcessEvent(
+                    midiEvent,
+                    settings,
+                    (w, e, s) =>
+                    {
+                        eventWriter = w;
+                        eventToWrite = e;
+                        writeStatus = s;
+                    },
+                    ref lastEnd,
+                    ref additionalDelta,
+                    ref runningStatus,
+                    ref skipTempo,
+                    ref skipKey,
+                    ref skipTime);
+
+                if (eventToWrite != null && eventWriter != null)
+                {
+                    await writer.WriteEncodedAsync(
+                        codec =>
+                        {
+                            codec.WriteVlqNumber(eventToWrite.DeltaTime);
+                            eventWriter.Write(eventToWrite, codec, settings, writeStatus);
+                        },
+                        cancellationToken).ConfigureAwait(false);
+                }
+
+            }
+            var end = new EndOfTrackEvent { DeltaTime = lastEnd ? additionalDelta : 0 };
+            await writer.WriteEncodedAsync(
+                codec =>
+                {
+                    codec.WriteVlqNumber(end.DeltaTime);
+                    EventWriterFactory.GetWriter(end).Write(end, codec, settings, true);
+                },
+                cancellationToken).ConfigureAwait(false);
+        }
+
+        internal uint GetContentSize(WritingSettings settings, CancellationToken cancellationToken)
+        {
+            uint size = 0;
+            ProcessEvents(
+                settings,
+                (writer, midiEvent, writeStatus) =>
+                    size += (uint)(midiEvent.DeltaTime.GetVlqLength() + writer.CalculateSize(midiEvent, settings, writeStatus)),
+                cancellationToken);
+
+            return size;
+        }
+
         internal static void ProcessEvent(
             MidiEvent midiEvent,
             WritingSettings settings,
@@ -303,7 +370,10 @@ namespace Melanchall.DryWetMidi.Core
             eventHandler(eventWriter, eventToWrite, writeStatusByte);
         }
 
-        private void ProcessEvents(WritingSettings settings, Action<IEventWriter, MidiEvent, bool> eventHandler)
+        private void ProcessEvents(
+            WritingSettings settings,
+            Action<IEventWriter, MidiEvent, bool> eventHandler,
+            CancellationToken cancellationToken = default)
         {
             byte? runningStatus = null;
 
@@ -315,6 +385,7 @@ namespace Melanchall.DryWetMidi.Core
 
             foreach (var midiEvent in Events)
             {
+                cancellationToken.ThrowIfCancellationRequested();
                 ProcessEvent(
                     midiEvent,
                     settings,
