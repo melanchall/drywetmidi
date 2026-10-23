@@ -38,6 +38,7 @@ namespace Melanchall.DryWetMidi.Interaction
                     events.Add(note.TimedNoteOffEvent.Event);
                     break;
                 case Chord chord:
+
                     foreach (var chordNote in chord.Notes)
                     {
                         AsyncOperation.Checkpoint();

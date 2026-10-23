@@ -13,7 +13,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <summary>
         /// Asynchronously repeats a MIDI file, preserving custom processing hooks.
         /// </summary>
-        /// <inheritdoc cref="Repeat(MidiFile, int, RepeatingSettings)"/>
+        /// <inheritdoc cref="Repeat(MidiFile, int, RepeatingSettings)" path="/member/exception"/>
         /// <param name="midiFile">File to repeat.</param>
         /// <param name="repeatsNumber">Number of repeats to append.</param>
         /// <param name="settings">Repeating settings.</param>
@@ -32,7 +32,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <summary>
         /// Asynchronously repeats tracks, preserving custom processing hooks.
         /// </summary>
-        /// <inheritdoc cref="Repeat(IEnumerable{TrackChunk}, int, TempoMap, RepeatingSettings)"/>
+        /// <inheritdoc cref="Repeat(IEnumerable{TrackChunk}, int, TempoMap, RepeatingSettings)" path="/member/exception"/>
         /// <param name="trackChunks">Tracks to repeat.</param>
         /// <param name="repeatsNumber">Number of repeats to append.</param>
         /// <param name="tempoMap">Tempo map used for time and length calculations.</param>
@@ -53,7 +53,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <summary>
         /// Asynchronously repeats a track, preserving custom processing hooks.
         /// </summary>
-        /// <inheritdoc cref="Repeat(TrackChunk, int, TempoMap, RepeatingSettings)"/>
+        /// <inheritdoc cref="Repeat(TrackChunk, int, TempoMap, RepeatingSettings)" path="/member/exception"/>
         /// <param name="trackChunk">Track to repeat.</param>
         /// <param name="repeatsNumber">Number of repeats to append.</param>
         /// <param name="tempoMap">Tempo map used for time and length calculations.</param>
@@ -74,7 +74,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <summary>
         /// Asynchronously repeats objects, preserving custom processing hooks.
         /// </summary>
-        /// <inheritdoc cref="Repeat(IEnumerable{ITimedObject}, int, TempoMap, RepeatingSettings)"/>
+        /// <inheritdoc cref="Repeat(IEnumerable{ITimedObject}, int, TempoMap, RepeatingSettings)" path="/member/exception"/>
         /// <param name="timedObjects">Objects to repeat.</param>
         /// <param name="repeatsNumber">Number of repeats to append.</param>
         /// <param name="tempoMap">Tempo map used for time and length calculations.</param>
@@ -98,7 +98,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <summary>
         /// Asynchronously repeats a MIDI file.
         /// </summary>
-        /// <inheritdoc cref="Repeat(MidiFile, int, RepeatingSettings)"/>
+        /// <inheritdoc cref="Repeat(MidiFile, int, RepeatingSettings)" path="/member/exception"/>
         /// <param name="midiFile">File to repeat.</param>
         /// <param name="repeatsNumber">Number of repeats to append.</param>
         /// <param name="settings">Repeating settings.</param>
@@ -117,7 +117,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <summary>
         /// Asynchronously repeats a track.
         /// </summary>
-        /// <inheritdoc cref="Repeat(TrackChunk, int, TempoMap, RepeatingSettings)"/>
+        /// <inheritdoc cref="Repeat(TrackChunk, int, TempoMap, RepeatingSettings)" path="/member/exception"/>
         /// <param name="trackChunk">Track to repeat.</param>
         /// <param name="repeatsNumber">Number of repeats to append.</param>
         /// <param name="tempoMap">Tempo map used for time and length calculations.</param>
@@ -138,7 +138,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <summary>
         /// Asynchronously repeats tracks.
         /// </summary>
-        /// <inheritdoc cref="Repeat(IEnumerable{TrackChunk}, int, TempoMap, RepeatingSettings)"/>
+        /// <inheritdoc cref="Repeat(IEnumerable{TrackChunk}, int, TempoMap, RepeatingSettings)" path="/member/exception"/>
         /// <param name="trackChunks">Tracks to repeat.</param>
         /// <param name="repeatsNumber">Number of repeats to append.</param>
         /// <param name="tempoMap">Tempo map used for time and length calculations.</param>
@@ -159,7 +159,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <summary>
         /// Asynchronously repeats timed objects.
         /// </summary>
-        /// <inheritdoc cref="Repeat(IEnumerable{ITimedObject}, int, TempoMap, RepeatingSettings)"/>
+        /// <inheritdoc cref="Repeat(IEnumerable{ITimedObject}, int, TempoMap, RepeatingSettings)" path="/member/exception"/>
         /// <param name="timedObjects">Objects to repeat.</param>
         /// <param name="repeatsNumber">Number of repeats to append.</param>
         /// <param name="tempoMap">Tempo map used for time and length calculations.</param>

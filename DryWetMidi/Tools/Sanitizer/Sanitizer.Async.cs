@@ -11,7 +11,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <summary>
         /// Asynchronously sanitizes a MIDI file.
         /// </summary>
-        /// <inheritdoc cref="Sanitize(MidiFile, SanitizingSettings)"/>
+        /// <inheritdoc cref="Sanitize(MidiFile, SanitizingSettings)" path="/member/exception"/>
         /// <param name="midiFile">File to sanitize.</param>
         /// <param name="settings">Sanitizing settings.</param>
         /// <param name="progress">Optional progress receiver.</param>

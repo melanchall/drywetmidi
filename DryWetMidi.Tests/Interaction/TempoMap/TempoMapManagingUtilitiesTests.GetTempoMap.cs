@@ -549,6 +549,11 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var tempoMap = midiFile.GetTempoMap();
 
+            MidiAsserts.AreEqual(
+                tempoMap,
+                midiFile.GetTempoMapAsync(cancellationToken: System.Threading.CancellationToken.None).Result,
+                "Async default tempo map is invalid.");
+
             CollectionAssert.IsEmpty(tempoMap.GetTempoChanges(), "There are tempo changes.");
             ClassicAssert.AreEqual(Tempo.Default, tempoMap.GetTempoAtTime(new MidiTimeSpan()), "Tempo at the start is invalid.");
             ClassicAssert.AreEqual(Tempo.Default, tempoMap.GetTempoAtTime(new MidiTimeSpan(1000)), "Tempo at the middle is invalid.");
@@ -580,6 +585,26 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     midiFile.TimeDivision,
                     cancellationToken: System.Threading.CancellationToken.None).Result,
                 $"{message} Invalid async tracks tempo map.");
+
+            MidiAsserts.AreEqual(
+                expectedTempoMap,
+                InteractionAsyncTests.AsAsync(midiFile.GetTrackChunks())
+                    .GetTempoMapAsync(
+                        midiFile.TimeDivision,
+                        cancellationToken: System.Threading.CancellationToken.None).Result,
+                $"{message} Invalid async-source tempo map.");
+
+            if (midiFile.GetTrackChunks().Any())
+            {
+                using (var manager = TempoMapManager.CreateAsync(
+                    midiFile.TimeDivision,
+                    midiFile.GetTrackChunks().Select(track => ((TrackChunk)track.Clone()).Events),
+                    cancellationToken: System.Threading.CancellationToken.None).Result)
+                {
+                    MidiAsserts.AreEqual(expectedTempoMap, manager.TempoMap, $"{message} Invalid async manager tempo map.");
+                    manager.SaveChangesAsync(cancellationToken: System.Threading.CancellationToken.None).Wait();
+                }
+            }
 
             var readMidiFile = MidiFileTestUtilities.Read(
                 midiFile,

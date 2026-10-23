@@ -13,7 +13,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <summary>
         /// Asynchronously resizes a track using the specified length.
         /// </summary>
-        /// <inheritdoc cref="Resize(TrackChunk, ITimeSpan, TempoMap)"/>
+        /// <inheritdoc cref="Resize(TrackChunk, ITimeSpan, TempoMap)" path="/member/exception"/>
         /// <param name="trackChunk">Track to resize.</param>
         /// <param name="length">Desired length.</param>
         /// <param name="tempoMap">Tempo map used for time and length calculations.</param>
@@ -32,7 +32,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <summary>
         /// Asynchronously resizes a track using the specified ratio.
         /// </summary>
-        /// <inheritdoc cref="Resize(TrackChunk, double)"/>
+        /// <inheritdoc cref="Resize(TrackChunk, double)" path="/member/exception"/>
         /// <param name="trackChunk">Track to resize.</param>
         /// <param name="ratio">Ratio to multiply times and lengths by.</param>
         /// <param name="progress">Optional progress receiver.</param>
@@ -49,7 +49,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <summary>
         /// Asynchronously resizes tracks using the specified length.
         /// </summary>
-        /// <inheritdoc cref="Resize(IEnumerable{TrackChunk}, ITimeSpan, TempoMap)"/>
+        /// <inheritdoc cref="Resize(IEnumerable{TrackChunk}, ITimeSpan, TempoMap)" path="/member/exception"/>
         /// <param name="trackChunks">Tracks to resize.</param>
         /// <param name="length">Desired length.</param>
         /// <param name="tempoMap">Tempo map used for time and length calculations.</param>
@@ -68,7 +68,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <summary>
         /// Asynchronously resizes tracks using the specified ratio.
         /// </summary>
-        /// <inheritdoc cref="Resize(IEnumerable{TrackChunk}, double)"/>
+        /// <inheritdoc cref="Resize(IEnumerable{TrackChunk}, double)" path="/member/exception"/>
         /// <param name="trackChunks">Tracks to resize.</param>
         /// <param name="ratio">Ratio to multiply times and lengths by.</param>
         /// <param name="progress">Optional progress receiver.</param>
@@ -85,7 +85,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <summary>
         /// Asynchronously resizes a MIDI file using the specified length.
         /// </summary>
-        /// <inheritdoc cref="Resize(MidiFile, ITimeSpan)"/>
+        /// <inheritdoc cref="Resize(MidiFile, ITimeSpan)" path="/member/exception"/>
         /// <param name="midiFile">File to resize.</param>
         /// <param name="length">Desired length.</param>
         /// <param name="progress">Optional progress receiver.</param>
@@ -102,7 +102,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <summary>
         /// Asynchronously resizes a MIDI file using the specified ratio.
         /// </summary>
-        /// <inheritdoc cref="Resize(MidiFile, double)"/>
+        /// <inheritdoc cref="Resize(MidiFile, double)" path="/member/exception"/>
         /// <param name="midiFile">File to resize.</param>
         /// <param name="ratio">Ratio to multiply times and lengths by.</param>
         /// <param name="progress">Optional progress receiver.</param>
@@ -119,7 +119,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <summary>
         /// Asynchronously resizes a group of objects using the specified length.
         /// </summary>
-        /// <inheritdoc cref="ResizeObjectsGroup(IEnumerable{ITimedObject}, ITimeSpan, TempoMap, ObjectsGroupResizingSettings)"/>
+        /// <inheritdoc cref="ResizeObjectsGroup(IEnumerable{ITimedObject}, ITimeSpan, TempoMap, ObjectsGroupResizingSettings)" path="/member/exception"/>
         /// <param name="objects">Objects to resize as a group.</param>
         /// <param name="length">Desired group length.</param>
         /// <param name="tempoMap">Tempo map used for time and length calculations.</param>
@@ -140,7 +140,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <summary>
         /// Asynchronously resizes a group of objects using the specified ratio.
         /// </summary>
-        /// <inheritdoc cref="ResizeObjectsGroup(IEnumerable{ITimedObject}, double, TempoMap, ObjectsGroupResizingSettings)"/>
+        /// <inheritdoc cref="ResizeObjectsGroup(IEnumerable{ITimedObject}, double, TempoMap, ObjectsGroupResizingSettings)" path="/member/exception"/>
         /// <param name="objects">Objects to resize as a group.</param>
         /// <param name="ratio">Ratio to multiply group distances and lengths by.</param>
         /// <param name="tempoMap">Tempo map used for time and length calculations.</param>

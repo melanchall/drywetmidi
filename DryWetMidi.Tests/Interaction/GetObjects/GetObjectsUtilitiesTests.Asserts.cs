@@ -48,6 +48,11 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 .Result;
 
             MidiAsserts.AreEqual(outputObjects, asyncObjects, true, 0, "Async objects are invalid.");
+
+            asyncObjects = InteractionAsyncTests.AsAsync(inputObjects.Select(obj => obj?.Clone()))
+                .GetObjectsAsync(objectType, settings, cancellationToken: CancellationToken.None).Result;
+
+            MidiAsserts.AreEqual(outputObjects, asyncObjects, true, 0, "Objects from an async source are invalid.");
         }
 
         private void EnumerateObjects(
@@ -68,6 +73,11 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 .Result;
 
             MidiAsserts.AreEqual(outputObjects, asyncObjects, false, 0, "Async enumerated objects are invalid.");
+
+            var collectedObjects = InteractionAsyncTests.AsAsync(inputEvents.Select(e => e?.Clone()))
+                .GetObjectsAsync(objectType, settings, cancellationToken: CancellationToken.None).Result;
+
+            MidiAsserts.AreEqual(outputObjects, collectedObjects, false, 0, "Objects from an async event source are invalid.");
         }
 
         #endregion

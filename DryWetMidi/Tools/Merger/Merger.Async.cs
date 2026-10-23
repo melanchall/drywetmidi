@@ -13,7 +13,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <summary>
         /// Asynchronously merges MIDI files sequentially.
         /// </summary>
-        /// <inheritdoc cref="MergeSequentially(IEnumerable{MidiFile}, SequentialMergingSettings)"/>
+        /// <inheritdoc cref="MergeSequentially(IEnumerable{MidiFile}, SequentialMergingSettings)" path="/member/exception"/>
         /// <param name="midiFiles">Files to merge.</param>
         /// <param name="settings">Sequential merging settings.</param>
         /// <param name="progress">Optional progress receiver.</param>
@@ -30,7 +30,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <summary>
         /// Asynchronously merges MIDI files simultaneously.
         /// </summary>
-        /// <inheritdoc cref="MergeSimultaneously(IEnumerable{MidiFile}, SimultaneousMergingSettings)"/>
+        /// <inheritdoc cref="MergeSimultaneously(IEnumerable{MidiFile}, SimultaneousMergingSettings)" path="/member/exception"/>
         /// <param name="midiFiles">Files to merge.</param>
         /// <param name="settings">Simultaneous merging settings.</param>
         /// <param name="progress">Optional progress receiver.</param>
@@ -47,7 +47,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <summary>
         /// Asynchronously merges objects in a track.
         /// </summary>
-        /// <inheritdoc cref="MergeObjects(TrackChunk, ObjectType, TempoMap, ObjectsMergingSettings, ObjectDetectionSettings)"/>
+        /// <inheritdoc cref="MergeObjects(TrackChunk, ObjectType, TempoMap, ObjectsMergingSettings, ObjectDetectionSettings)" path="/member/exception"/>
         /// <param name="trackChunk">Track whose objects should be merged.</param>
         /// <param name="objectType">Types of objects to merge.</param>
         /// <param name="tempoMap">Tempo map used for time and length calculations.</param>
@@ -65,12 +65,15 @@ namespace Melanchall.DryWetMidi.Tools
             ObjectDetectionSettings? objectDetectionSettings = null,
             IProgress<AsyncOperationProgress>? progress = null,
             CancellationToken cancellationToken = default)
-            => AsyncOperation.Run(() => MergeObjects(trackChunk, objectType, tempoMap, settings, objectDetectionSettings), cancellationToken, progress);
+            => AsyncOperation.Run(
+                () => MergeObjects(trackChunk, objectType, tempoMap, settings, objectDetectionSettings),
+                cancellationToken,
+                progress);
 
         /// <summary>
         /// Asynchronously merges objects in tracks.
         /// </summary>
-        /// <inheritdoc cref="MergeObjects(IEnumerable{TrackChunk}, ObjectType, TempoMap, ObjectsMergingSettings, ObjectDetectionSettings)"/>
+        /// <inheritdoc cref="MergeObjects(IEnumerable{TrackChunk}, ObjectType, TempoMap, ObjectsMergingSettings, ObjectDetectionSettings)" path="/member/exception"/>
         /// <param name="trackChunks">Tracks whose objects should be merged.</param>
         /// <param name="objectType">Types of objects to merge.</param>
         /// <param name="tempoMap">Tempo map used for time and length calculations.</param>
@@ -88,12 +91,15 @@ namespace Melanchall.DryWetMidi.Tools
             ObjectDetectionSettings? objectDetectionSettings = null,
             IProgress<AsyncOperationProgress>? progress = null,
             CancellationToken cancellationToken = default)
-            => AsyncOperation.Run(() => MergeObjects(trackChunks, objectType, tempoMap, settings, objectDetectionSettings), cancellationToken, progress);
+            => AsyncOperation.Run(
+                () => MergeObjects(trackChunks, objectType, tempoMap, settings, objectDetectionSettings),
+                cancellationToken,
+                progress);
 
         /// <summary>
         /// Asynchronously merges objects in a MIDI file.
         /// </summary>
-        /// <inheritdoc cref="MergeObjects(MidiFile, ObjectType, ObjectsMergingSettings, ObjectDetectionSettings)"/>
+        /// <inheritdoc cref="MergeObjects(MidiFile, ObjectType, ObjectsMergingSettings, ObjectDetectionSettings)" path="/member/exception"/>
         /// <param name="midiFile">File whose objects should be merged.</param>
         /// <param name="objectType">Types of objects to merge.</param>
         /// <param name="settings">Object merging settings.</param>
@@ -114,7 +120,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <summary>
         /// Lazily merges objects asynchronously as the result is enumerated.
         /// </summary>
-        /// <inheritdoc cref="MergeObjects(IEnumerable{ITimedObject}, TempoMap, ObjectsMergingSettings)"/>
+        /// <inheritdoc cref="MergeObjects(IEnumerable{ITimedObject}, TempoMap, ObjectsMergingSettings)" path="/member/exception"/>
         /// <param name="objects">Objects to merge.</param>
         /// <param name="tempoMap">Tempo map used for time and length calculations.</param>
         /// <param name="settings">Object merging settings.</param>

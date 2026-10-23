@@ -13,7 +13,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <summary>
         /// Asynchronously takes the beginning of a MIDI file.
         /// </summary>
-        /// <inheritdoc cref="TakePart(MidiFile, ITimeSpan, SliceMidiFileSettings)"/>
+        /// <inheritdoc cref="TakePart(MidiFile, ITimeSpan, SliceMidiFileSettings)" path="/member/exception"/>
         /// <param name="midiFile">Source MIDI file.</param>
         /// <param name="partLength">Length of the part to take.</param>
         /// <param name="settings">Slicing settings.</param>
@@ -32,7 +32,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <summary>
         /// Asynchronously takes a part of a MIDI file.
         /// </summary>
-        /// <inheritdoc cref="TakePart(MidiFile, ITimeSpan, ITimeSpan, SliceMidiFileSettings)"/>
+        /// <inheritdoc cref="TakePart(MidiFile, ITimeSpan, ITimeSpan, SliceMidiFileSettings)" path="/member/exception"/>
         /// <param name="midiFile">Source MIDI file.</param>
         /// <param name="partStart">Start of the part to take.</param>
         /// <param name="partLength">Length of the part to take.</param>
@@ -53,7 +53,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <summary>
         /// Asynchronously skips the beginning of a MIDI file.
         /// </summary>
-        /// <inheritdoc cref="SkipPart(MidiFile, ITimeSpan, SliceMidiFileSettings)"/>
+        /// <inheritdoc cref="SkipPart(MidiFile, ITimeSpan, SliceMidiFileSettings)" path="/member/exception"/>
         /// <param name="midiFile">Source MIDI file.</param>
         /// <param name="partLength">Length of the beginning to skip.</param>
         /// <param name="settings">Slicing settings.</param>
@@ -72,7 +72,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <summary>
         /// Asynchronously cuts a part from a MIDI file.
         /// </summary>
-        /// <inheritdoc cref="CutPart(MidiFile, ITimeSpan, ITimeSpan, SliceMidiFileSettings)"/>
+        /// <inheritdoc cref="CutPart(MidiFile, ITimeSpan, ITimeSpan, SliceMidiFileSettings)" path="/member/exception"/>
         /// <param name="midiFile">Source MIDI file.</param>
         /// <param name="partStart">Start of the part to remove.</param>
         /// <param name="partLength">Length of the part to remove.</param>
@@ -93,7 +93,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <summary>
         /// Lazily splits a MIDI file by channels asynchronously.
         /// </summary>
-        /// <inheritdoc cref="SplitByChannel(MidiFile, SplitFileByChannelSettings)"/>
+        /// <inheritdoc cref="SplitByChannel(MidiFile, SplitFileByChannelSettings)" path="/member/exception"/>
         /// <param name="midiFile">Source MIDI file.</param>
         /// <param name="settings">Channel splitting settings.</param>
         /// <param name="progress">Optional progress receiver.</param>
@@ -110,7 +110,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <summary>
         /// Lazily splits a MIDI file by chunks asynchronously.
         /// </summary>
-        /// <inheritdoc cref="SplitByChunks(MidiFile, SplitFileByChunksSettings)"/>
+        /// <inheritdoc cref="SplitByChunks(MidiFile, SplitFileByChunksSettings)" path="/member/exception"/>
         /// <param name="midiFile">Source MIDI file.</param>
         /// <param name="settings">Chunk splitting settings.</param>
         /// <param name="progress">Optional progress receiver.</param>
@@ -127,7 +127,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <summary>
         /// Lazily splits a MIDI file by a grid asynchronously.
         /// </summary>
-        /// <inheritdoc cref="SplitByGrid(MidiFile, IGrid, SliceMidiFileSettings)"/>
+        /// <inheritdoc cref="SplitByGrid(MidiFile, IGrid, SliceMidiFileSettings)" path="/member/exception"/>
         /// <param name="midiFile">Source MIDI file.</param>
         /// <param name="grid">Grid defining the split positions.</param>
         /// <param name="settings">Slicing settings.</param>
@@ -146,7 +146,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <summary>
         /// Lazily splits a MIDI file by objects asynchronously.
         /// </summary>
-        /// <inheritdoc cref="SplitByObjects(MidiFile, ObjectType, SplitByObjectsSettings, ObjectDetectionSettings)"/>
+        /// <inheritdoc cref="SplitByObjects(MidiFile, ObjectType, SplitByObjectsSettings, ObjectDetectionSettings)" path="/member/exception"/>
         /// <param name="midiFile">Source MIDI file.</param>
         /// <param name="objectType">Types of objects used to split the file.</param>
         /// <param name="settings">Object splitting settings.</param>
@@ -162,12 +162,15 @@ namespace Melanchall.DryWetMidi.Tools
             ObjectDetectionSettings? objectDetectionSettings = null,
             IProgress<AsyncOperationProgress>? progress = null,
             CancellationToken cancellationToken = default)
-            => ToolsAsyncEnumerable.Enumerate(() => SplitByObjects(midiFile, objectType, settings, objectDetectionSettings), progress, cancellationToken);
+            => ToolsAsyncEnumerable.Enumerate(
+                () => SplitByObjects(midiFile, objectType, settings, objectDetectionSettings),
+                progress,
+                cancellationToken);
 
         /// <summary>
         /// Asynchronously splits objects in a track by a step.
         /// </summary>
-        /// <inheritdoc cref="SplitObjectsByStep(TrackChunk, ObjectType, ITimeSpan, TempoMap, ObjectDetectionSettings, Predicate{ITimedObject})"/>
+        /// <inheritdoc cref="SplitObjectsByStep(TrackChunk, ObjectType, ITimeSpan, TempoMap, ObjectDetectionSettings, Predicate{ITimedObject})" path="/member/exception"/>
         /// <param name="trackChunk">Track whose objects should be split.</param>
         /// <param name="objectType">Types of objects to split.</param>
         /// <param name="step">Length of each split part.</param>
@@ -188,12 +191,15 @@ namespace Melanchall.DryWetMidi.Tools
             Predicate<ITimedObject>? filter = null,
             IProgress<AsyncOperationProgress>? progress = null,
             CancellationToken cancellationToken = default)
-            => AsyncOperation.Run(() => SplitObjectsByStep(trackChunk, objectType, step, tempoMap, objectDetectionSettings, filter), cancellationToken, progress);
+            => AsyncOperation.Run(
+                () => SplitObjectsByStep(trackChunk, objectType, step, tempoMap, objectDetectionSettings, filter),
+                cancellationToken,
+                progress);
 
         /// <summary>
         /// Asynchronously splits objects in tracks by a step.
         /// </summary>
-        /// <inheritdoc cref="SplitObjectsByStep(IEnumerable{TrackChunk}, ObjectType, ITimeSpan, TempoMap, ObjectDetectionSettings, Predicate{ITimedObject})"/>
+        /// <inheritdoc cref="SplitObjectsByStep(IEnumerable{TrackChunk}, ObjectType, ITimeSpan, TempoMap, ObjectDetectionSettings, Predicate{ITimedObject})" path="/member/exception"/>
         /// <param name="trackChunks">Tracks whose objects should be split.</param>
         /// <param name="objectType">Types of objects to split.</param>
         /// <param name="step">Length of each split part.</param>
@@ -214,12 +220,15 @@ namespace Melanchall.DryWetMidi.Tools
             Predicate<ITimedObject>? filter = null,
             IProgress<AsyncOperationProgress>? progress = null,
             CancellationToken cancellationToken = default)
-            => AsyncOperation.Run(() => SplitObjectsByStep(trackChunks, objectType, step, tempoMap, objectDetectionSettings, filter), cancellationToken, progress);
+            => AsyncOperation.Run(
+                () => SplitObjectsByStep(trackChunks, objectType, step, tempoMap, objectDetectionSettings, filter),
+                cancellationToken,
+                progress);
 
         /// <summary>
         /// Asynchronously splits objects in a MIDI file by a step.
         /// </summary>
-        /// <inheritdoc cref="SplitObjectsByStep(MidiFile, ObjectType, ITimeSpan, ObjectDetectionSettings, Predicate{ITimedObject})"/>
+        /// <inheritdoc cref="SplitObjectsByStep(MidiFile, ObjectType, ITimeSpan, ObjectDetectionSettings, Predicate{ITimedObject})" path="/member/exception"/>
         /// <param name="midiFile">File whose objects should be split.</param>
         /// <param name="objectType">Types of objects to split.</param>
         /// <param name="step">Length of each split part.</param>
@@ -243,7 +252,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <summary>
         /// Lazily splits objects by a step asynchronously.
         /// </summary>
-        /// <inheritdoc cref="SplitObjectsByStep(IEnumerable{ITimedObject}, ITimeSpan, TempoMap, Predicate{ITimedObject})"/>
+        /// <inheritdoc cref="SplitObjectsByStep(IEnumerable{ITimedObject}, ITimeSpan, TempoMap, Predicate{ITimedObject})" path="/member/exception"/>
         /// <param name="objects">Objects to split.</param>
         /// <param name="step">Length of each split part.</param>
         /// <param name="tempoMap">Tempo map used for time and length calculations.</param>
@@ -265,7 +274,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <summary>
         /// Asynchronously splits objects in a track by a grid.
         /// </summary>
-        /// <inheritdoc cref="SplitObjectsByGrid(TrackChunk, ObjectType, IGrid, TempoMap, ObjectDetectionSettings, Predicate{ITimedObject})"/>
+        /// <inheritdoc cref="SplitObjectsByGrid(TrackChunk, ObjectType, IGrid, TempoMap, ObjectDetectionSettings, Predicate{ITimedObject})" path="/member/exception"/>
         /// <param name="trackChunk">Track whose objects should be split.</param>
         /// <param name="objectType">Types of objects to split.</param>
         /// <param name="grid">Grid defining the split positions.</param>
@@ -285,12 +294,15 @@ namespace Melanchall.DryWetMidi.Tools
             Predicate<ITimedObject>? filter = null,
             IProgress<AsyncOperationProgress>? progress = null,
             CancellationToken cancellationToken = default)
-            => AsyncOperation.Run(() => SplitObjectsByGrid(trackChunk, objectType, grid, tempoMap, objectDetectionSettings, filter), cancellationToken, progress);
+            => AsyncOperation.Run(
+                () => SplitObjectsByGrid(trackChunk, objectType, grid, tempoMap, objectDetectionSettings, filter),
+                cancellationToken,
+                progress);
 
         /// <summary>
         /// Asynchronously splits objects in tracks by a grid.
         /// </summary>
-        /// <inheritdoc cref="SplitObjectsByGrid(IEnumerable{TrackChunk}, ObjectType, IGrid, TempoMap, ObjectDetectionSettings, Predicate{ITimedObject})"/>
+        /// <inheritdoc cref="SplitObjectsByGrid(IEnumerable{TrackChunk}, ObjectType, IGrid, TempoMap, ObjectDetectionSettings, Predicate{ITimedObject})" path="/member/exception"/>
         /// <param name="trackChunks">Tracks whose objects should be split.</param>
         /// <param name="objectType">Types of objects to split.</param>
         /// <param name="grid">Grid defining the split positions.</param>
@@ -310,12 +322,15 @@ namespace Melanchall.DryWetMidi.Tools
             Predicate<ITimedObject>? filter = null,
             IProgress<AsyncOperationProgress>? progress = null,
             CancellationToken cancellationToken = default)
-            => AsyncOperation.Run(() => SplitObjectsByGrid(trackChunks, objectType, grid, tempoMap, objectDetectionSettings, filter), cancellationToken, progress);
+            => AsyncOperation.Run(
+                () => SplitObjectsByGrid(trackChunks, objectType, grid, tempoMap, objectDetectionSettings, filter),
+                cancellationToken,
+                progress);
 
         /// <summary>
         /// Asynchronously splits objects in a MIDI file by a grid.
         /// </summary>
-        /// <inheritdoc cref="SplitObjectsByGrid(MidiFile, ObjectType, IGrid, ObjectDetectionSettings, Predicate{ITimedObject})"/>
+        /// <inheritdoc cref="SplitObjectsByGrid(MidiFile, ObjectType, IGrid, ObjectDetectionSettings, Predicate{ITimedObject})" path="/member/exception"/>
         /// <param name="midiFile">File whose objects should be split.</param>
         /// <param name="objectType">Types of objects to split.</param>
         /// <param name="grid">Grid defining the split positions.</param>
@@ -338,7 +353,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <summary>
         /// Lazily splits objects by a grid asynchronously.
         /// </summary>
-        /// <inheritdoc cref="SplitObjectsByGrid(IEnumerable{ITimedObject}, IGrid, TempoMap, Predicate{ITimedObject})"/>
+        /// <inheritdoc cref="SplitObjectsByGrid(IEnumerable{ITimedObject}, IGrid, TempoMap, Predicate{ITimedObject})" path="/member/exception"/>
         /// <param name="objects">Objects to split.</param>
         /// <param name="grid">Grid defining the split positions.</param>
         /// <param name="tempoMap">Tempo map used for time and length calculations.</param>
@@ -359,7 +374,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <summary>
         /// Asynchronously splits objects in a track into a number of parts.
         /// </summary>
-        /// <inheritdoc cref="SplitObjectsByPartsNumber(TrackChunk, ObjectType, int, TimeSpanType, TempoMap, ObjectDetectionSettings, Predicate{ITimedObject})"/>
+        /// <inheritdoc cref="SplitObjectsByPartsNumber(TrackChunk, ObjectType, int, TimeSpanType, TempoMap, ObjectDetectionSettings, Predicate{ITimedObject})" path="/member/exception"/>
         /// <param name="trackChunk">Track whose objects should be split.</param>
         /// <param name="objectType">Types of objects to split.</param>
         /// <param name="partsNumber">Number of parts per object.</param>
@@ -381,12 +396,15 @@ namespace Melanchall.DryWetMidi.Tools
             Predicate<ITimedObject>? filter = null,
             IProgress<AsyncOperationProgress>? progress = null,
             CancellationToken cancellationToken = default)
-            => AsyncOperation.Run(() => SplitObjectsByPartsNumber(trackChunk, objectType, partsNumber, lengthType, tempoMap, objectDetectionSettings, filter), cancellationToken, progress);
+            => AsyncOperation.Run(
+                () => SplitObjectsByPartsNumber(trackChunk, objectType, partsNumber, lengthType, tempoMap, objectDetectionSettings, filter),
+                cancellationToken,
+                progress);
 
         /// <summary>
         /// Asynchronously splits objects in tracks into a number of parts.
         /// </summary>
-        /// <inheritdoc cref="SplitObjectsByPartsNumber(IEnumerable{TrackChunk}, ObjectType, int, TimeSpanType, TempoMap, ObjectDetectionSettings, Predicate{ITimedObject})"/>
+        /// <inheritdoc cref="SplitObjectsByPartsNumber(IEnumerable{TrackChunk}, ObjectType, int, TimeSpanType, TempoMap, ObjectDetectionSettings, Predicate{ITimedObject})" path="/member/exception"/>
         /// <param name="trackChunks">Tracks whose objects should be split.</param>
         /// <param name="objectType">Types of objects to split.</param>
         /// <param name="partsNumber">Number of parts per object.</param>
@@ -408,12 +426,15 @@ namespace Melanchall.DryWetMidi.Tools
             Predicate<ITimedObject>? filter = null,
             IProgress<AsyncOperationProgress>? progress = null,
             CancellationToken cancellationToken = default)
-            => AsyncOperation.Run(() => SplitObjectsByPartsNumber(trackChunks, objectType, partsNumber, lengthType, tempoMap, objectDetectionSettings, filter), cancellationToken, progress);
+            => AsyncOperation.Run(
+                () => SplitObjectsByPartsNumber(trackChunks, objectType, partsNumber, lengthType, tempoMap, objectDetectionSettings, filter),
+                cancellationToken,
+                progress);
 
         /// <summary>
         /// Asynchronously splits objects in a MIDI file into a number of parts.
         /// </summary>
-        /// <inheritdoc cref="SplitObjectsByPartsNumber(MidiFile, ObjectType, int, TimeSpanType, ObjectDetectionSettings, Predicate{ITimedObject})"/>
+        /// <inheritdoc cref="SplitObjectsByPartsNumber(MidiFile, ObjectType, int, TimeSpanType, ObjectDetectionSettings, Predicate{ITimedObject})" path="/member/exception"/>
         /// <param name="midiFile">File whose objects should be split.</param>
         /// <param name="objectType">Types of objects to split.</param>
         /// <param name="partsNumber">Number of parts per object.</param>
@@ -433,12 +454,15 @@ namespace Melanchall.DryWetMidi.Tools
             Predicate<ITimedObject>? filter = null,
             IProgress<AsyncOperationProgress>? progress = null,
             CancellationToken cancellationToken = default)
-            => AsyncOperation.Run(() => SplitObjectsByPartsNumber(midiFile, objectType, partsNumber, lengthType, objectDetectionSettings, filter), cancellationToken, progress);
+            => AsyncOperation.Run(
+                () => SplitObjectsByPartsNumber(midiFile, objectType, partsNumber, lengthType, objectDetectionSettings, filter),
+                cancellationToken,
+                progress);
 
         /// <summary>
         /// Lazily splits objects into a number of parts asynchronously.
         /// </summary>
-        /// <inheritdoc cref="SplitObjectsByPartsNumber(IEnumerable{ITimedObject}, int, TimeSpanType, TempoMap, Predicate{ITimedObject})"/>
+        /// <inheritdoc cref="SplitObjectsByPartsNumber(IEnumerable{ITimedObject}, int, TimeSpanType, TempoMap, Predicate{ITimedObject})" path="/member/exception"/>
         /// <param name="objects">Objects to split.</param>
         /// <param name="partsNumber">Number of parts per object.</param>
         /// <param name="lengthType">Time span type used to divide object lengths.</param>
@@ -456,12 +480,15 @@ namespace Melanchall.DryWetMidi.Tools
             Predicate<ITimedObject>? filter = null,
             IProgress<AsyncOperationProgress>? progress = null,
             CancellationToken cancellationToken = default)
-            => ToolsAsyncEnumerable.Enumerate(() => SplitObjectsByPartsNumber(objects, partsNumber, lengthType, tempoMap, filter), progress, cancellationToken);
+            => ToolsAsyncEnumerable.Enumerate(
+                () => SplitObjectsByPartsNumber(objects, partsNumber, lengthType, tempoMap, filter),
+                progress,
+                cancellationToken);
 
         /// <summary>
         /// Asynchronously splits objects in a track at a distance.
         /// </summary>
-        /// <inheritdoc cref="SplitObjectsAtDistance(TrackChunk, ObjectType, ITimeSpan, LengthedObjectTarget, TempoMap, ObjectDetectionSettings, Predicate{ITimedObject})"/>
+        /// <inheritdoc cref="SplitObjectsAtDistance(TrackChunk, ObjectType, ITimeSpan, LengthedObjectTarget, TempoMap, ObjectDetectionSettings, Predicate{ITimedObject})" path="/member/exception"/>
         /// <param name="trackChunk">Track whose objects should be split.</param>
         /// <param name="objectType">Types of objects to split.</param>
         /// <param name="distance">Distance from the selected object end to the split position.</param>
@@ -483,12 +510,15 @@ namespace Melanchall.DryWetMidi.Tools
             Predicate<ITimedObject>? filter = null,
             IProgress<AsyncOperationProgress>? progress = null,
             CancellationToken cancellationToken = default)
-            => AsyncOperation.Run(() => SplitObjectsAtDistance(trackChunk, objectType, distance, from, tempoMap, objectDetectionSettings, filter), cancellationToken, progress);
+            => AsyncOperation.Run(
+                () => SplitObjectsAtDistance(trackChunk, objectType, distance, from, tempoMap, objectDetectionSettings, filter),
+                cancellationToken,
+                progress);
 
         /// <summary>
         /// Asynchronously splits objects in tracks at a distance.
         /// </summary>
-        /// <inheritdoc cref="SplitObjectsAtDistance(IEnumerable{TrackChunk}, ObjectType, ITimeSpan, LengthedObjectTarget, TempoMap, ObjectDetectionSettings, Predicate{ITimedObject})"/>
+        /// <inheritdoc cref="SplitObjectsAtDistance(IEnumerable{TrackChunk}, ObjectType, ITimeSpan, LengthedObjectTarget, TempoMap, ObjectDetectionSettings, Predicate{ITimedObject})" path="/member/exception"/>
         /// <param name="trackChunks">Tracks whose objects should be split.</param>
         /// <param name="objectType">Types of objects to split.</param>
         /// <param name="distance">Distance from the selected object end to the split position.</param>
@@ -510,12 +540,15 @@ namespace Melanchall.DryWetMidi.Tools
             Predicate<ITimedObject>? filter = null,
             IProgress<AsyncOperationProgress>? progress = null,
             CancellationToken cancellationToken = default)
-            => AsyncOperation.Run(() => SplitObjectsAtDistance(trackChunks, objectType, distance, from, tempoMap, objectDetectionSettings, filter), cancellationToken, progress);
+            => AsyncOperation.Run(
+                () => SplitObjectsAtDistance(trackChunks, objectType, distance, from, tempoMap, objectDetectionSettings, filter),
+                cancellationToken,
+                progress);
 
         /// <summary>
         /// Asynchronously splits objects in a MIDI file at a distance.
         /// </summary>
-        /// <inheritdoc cref="SplitObjectsAtDistance(MidiFile, ObjectType, ITimeSpan, LengthedObjectTarget, ObjectDetectionSettings, Predicate{ITimedObject})"/>
+        /// <inheritdoc cref="SplitObjectsAtDistance(MidiFile, ObjectType, ITimeSpan, LengthedObjectTarget, ObjectDetectionSettings, Predicate{ITimedObject})" path="/member/exception"/>
         /// <param name="midiFile">File whose objects should be split.</param>
         /// <param name="objectType">Types of objects to split.</param>
         /// <param name="distance">Distance from the selected object end to the split position.</param>
@@ -535,12 +568,15 @@ namespace Melanchall.DryWetMidi.Tools
             Predicate<ITimedObject>? filter = null,
             IProgress<AsyncOperationProgress>? progress = null,
             CancellationToken cancellationToken = default)
-            => AsyncOperation.Run(() => SplitObjectsAtDistance(midiFile, objectType, distance, from, objectDetectionSettings, filter), cancellationToken, progress);
+            => AsyncOperation.Run(
+                () => SplitObjectsAtDistance(midiFile, objectType, distance, from, objectDetectionSettings, filter),
+                cancellationToken,
+                progress);
 
         /// <summary>
         /// Lazily splits objects at a distance asynchronously.
         /// </summary>
-        /// <inheritdoc cref="SplitObjectsAtDistance(IEnumerable{ITimedObject}, ITimeSpan, LengthedObjectTarget, TempoMap, Predicate{ITimedObject})"/>
+        /// <inheritdoc cref="SplitObjectsAtDistance(IEnumerable{ITimedObject}, ITimeSpan, LengthedObjectTarget, TempoMap, Predicate{ITimedObject})" path="/member/exception"/>
         /// <param name="objects">Objects to split.</param>
         /// <param name="distance">Distance from the selected object end to the split position.</param>
         /// <param name="from">Object end from which the distance is measured.</param>
@@ -563,7 +599,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <summary>
         /// Asynchronously splits objects in a track at a relative distance.
         /// </summary>
-        /// <inheritdoc cref="SplitObjectsAtDistance(TrackChunk, ObjectType, double, TimeSpanType, LengthedObjectTarget, TempoMap, ObjectDetectionSettings, Predicate{ITimedObject})"/>
+        /// <inheritdoc cref="SplitObjectsAtDistance(TrackChunk, ObjectType, double, TimeSpanType, LengthedObjectTarget, TempoMap, ObjectDetectionSettings, Predicate{ITimedObject})" path="/member/exception"/>
         /// <param name="trackChunk">Track whose objects should be split.</param>
         /// <param name="objectType">Types of objects to split.</param>
         /// <param name="ratio">Fraction of the object length to measure from the selected end.</param>
@@ -587,12 +623,15 @@ namespace Melanchall.DryWetMidi.Tools
             Predicate<ITimedObject>? filter = null,
             IProgress<AsyncOperationProgress>? progress = null,
             CancellationToken cancellationToken = default)
-            => AsyncOperation.Run(() => SplitObjectsAtDistance(trackChunk, objectType, ratio, lengthType, from, tempoMap, objectDetectionSettings, filter), cancellationToken, progress);
+            => AsyncOperation.Run(
+                () => SplitObjectsAtDistance(trackChunk, objectType, ratio, lengthType, from, tempoMap, objectDetectionSettings, filter),
+                cancellationToken,
+                progress);
 
         /// <summary>
         /// Asynchronously splits objects in tracks at a relative distance.
         /// </summary>
-        /// <inheritdoc cref="SplitObjectsAtDistance(IEnumerable{TrackChunk}, ObjectType, double, TimeSpanType, LengthedObjectTarget, TempoMap, ObjectDetectionSettings, Predicate{ITimedObject})"/>
+        /// <inheritdoc cref="SplitObjectsAtDistance(IEnumerable{TrackChunk}, ObjectType, double, TimeSpanType, LengthedObjectTarget, TempoMap, ObjectDetectionSettings, Predicate{ITimedObject})" path="/member/exception"/>
         /// <param name="trackChunks">Tracks whose objects should be split.</param>
         /// <param name="objectType">Types of objects to split.</param>
         /// <param name="ratio">Fraction of the object length to measure from the selected end.</param>
@@ -616,12 +655,15 @@ namespace Melanchall.DryWetMidi.Tools
             Predicate<ITimedObject>? filter = null,
             IProgress<AsyncOperationProgress>? progress = null,
             CancellationToken cancellationToken = default)
-            => AsyncOperation.Run(() => SplitObjectsAtDistance(trackChunks, objectType, ratio, lengthType, from, tempoMap, objectDetectionSettings, filter), cancellationToken, progress);
+            => AsyncOperation.Run(
+                () => SplitObjectsAtDistance(trackChunks, objectType, ratio, lengthType, from, tempoMap, objectDetectionSettings, filter),
+                cancellationToken,
+                progress);
 
         /// <summary>
         /// Asynchronously splits objects in a MIDI file at a relative distance.
         /// </summary>
-        /// <inheritdoc cref="SplitObjectsAtDistance(MidiFile, ObjectType, double, TimeSpanType, LengthedObjectTarget, ObjectDetectionSettings, Predicate{ITimedObject})"/>
+        /// <inheritdoc cref="SplitObjectsAtDistance(MidiFile, ObjectType, double, TimeSpanType, LengthedObjectTarget, ObjectDetectionSettings, Predicate{ITimedObject})" path="/member/exception"/>
         /// <param name="midiFile">File whose objects should be split.</param>
         /// <param name="objectType">Types of objects to split.</param>
         /// <param name="ratio">Fraction of the object length to measure from the selected end.</param>
@@ -643,12 +685,15 @@ namespace Melanchall.DryWetMidi.Tools
             Predicate<ITimedObject>? filter = null,
             IProgress<AsyncOperationProgress>? progress = null,
             CancellationToken cancellationToken = default)
-            => AsyncOperation.Run(() => SplitObjectsAtDistance(midiFile, objectType, ratio, lengthType, from, objectDetectionSettings, filter), cancellationToken, progress);
+            => AsyncOperation.Run(
+                () => SplitObjectsAtDistance(midiFile, objectType, ratio, lengthType, from, objectDetectionSettings, filter),
+                cancellationToken,
+                progress);
 
         /// <summary>
         /// Lazily splits objects at a relative distance asynchronously.
         /// </summary>
-        /// <inheritdoc cref="SplitObjectsAtDistance(IEnumerable{ITimedObject}, double, TimeSpanType, LengthedObjectTarget, TempoMap, Predicate{ITimedObject})"/>
+        /// <inheritdoc cref="SplitObjectsAtDistance(IEnumerable{ITimedObject}, double, TimeSpanType, LengthedObjectTarget, TempoMap, Predicate{ITimedObject})" path="/member/exception"/>
         /// <param name="objects">Objects to split.</param>
         /// <param name="ratio">Fraction of the object length to measure from the selected end.</param>
         /// <param name="lengthType">Time span type used to measure object lengths.</param>
@@ -668,6 +713,9 @@ namespace Melanchall.DryWetMidi.Tools
             Predicate<ITimedObject>? filter = null,
             IProgress<AsyncOperationProgress>? progress = null,
             CancellationToken cancellationToken = default)
-            => ToolsAsyncEnumerable.Enumerate(() => SplitObjectsAtDistance(objects, ratio, lengthType, from, tempoMap, filter), progress, cancellationToken);
+            => ToolsAsyncEnumerable.Enumerate(
+                () => SplitObjectsAtDistance(objects, ratio, lengthType, from, tempoMap, filter),
+                progress,
+                cancellationToken);
     }
 }

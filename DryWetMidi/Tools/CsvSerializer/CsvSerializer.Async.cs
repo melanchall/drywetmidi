@@ -15,7 +15,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <summary>
         /// Serializes a MIDI file using asynchronous stream writes and flush. The stream remains open.
         /// </summary>
-        /// <inheritdoc cref="SerializeToCsv(MidiFile, Stream, CsvSerializationSettings, ObjectType, ObjectDetectionSettings)"/>
+        /// <inheritdoc cref="SerializeToCsv(MidiFile, Stream, CsvSerializationSettings, ObjectType, ObjectDetectionSettings)" path="/member/exception"/>
         /// <param name="midiFile">MIDI file to serialize.</param>
         /// <param name="stream">Writable stream, which remains open.</param>
         /// <param name="settings">CSV serialization settings.</param>
@@ -63,7 +63,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <summary>
         /// Serializes a MIDI file to a CSV file asynchronously.
         /// </summary>
-        /// <inheritdoc cref="SerializeToCsv(MidiFile, string, bool, CsvSerializationSettings, ObjectType, ObjectDetectionSettings)"/>
+        /// <inheritdoc cref="SerializeToCsv(MidiFile, string, bool, CsvSerializationSettings, ObjectType, ObjectDetectionSettings)" path="/member/exception"/>
         /// <param name="midiFile">MIDI file to serialize.</param>
         /// <param name="filePath">Destination file path.</param>
         /// <param name="overwriteFile">Whether an existing destination may be overwritten.</param>
@@ -105,7 +105,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <summary>
         /// Serializes MIDI chunks using asynchronous stream writes and flush. The stream remains open.
         /// </summary>
-        /// <inheritdoc cref="SerializeToCsv(IEnumerable{MidiChunk}, Stream, TempoMap, CsvSerializationSettings, ObjectType, ObjectDetectionSettings)"/>
+        /// <inheritdoc cref="SerializeToCsv(IEnumerable{MidiChunk}, Stream, TempoMap, CsvSerializationSettings, ObjectType, ObjectDetectionSettings)" path="/member/exception"/>
         /// <param name="midiChunks">Chunks to serialize.</param>
         /// <param name="stream">Writable stream, which remains open.</param>
         /// <param name="tempoMap">Tempo map used to convert times and lengths.</param>
@@ -153,7 +153,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <summary>
         /// Serializes MIDI chunks to a CSV file asynchronously.
         /// </summary>
-        /// <inheritdoc cref="SerializeToCsv(IEnumerable{MidiChunk}, string, bool, TempoMap, CsvSerializationSettings, ObjectType, ObjectDetectionSettings)"/>
+        /// <inheritdoc cref="SerializeToCsv(IEnumerable{MidiChunk}, string, bool, TempoMap, CsvSerializationSettings, ObjectType, ObjectDetectionSettings)" path="/member/exception"/>
         /// <param name="midiChunks">Chunks to serialize.</param>
         /// <param name="filePath">Destination file path.</param>
         /// <param name="overwriteFile">Whether an existing destination may be overwritten.</param>
@@ -198,7 +198,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <summary>
         /// Serializes a MIDI chunk using asynchronous stream writes and flush. The stream remains open.
         /// </summary>
-        /// <inheritdoc cref="SerializeToCsv(MidiChunk, Stream, TempoMap, CsvSerializationSettings, ObjectType, ObjectDetectionSettings)"/>
+        /// <inheritdoc cref="SerializeToCsv(MidiChunk, Stream, TempoMap, CsvSerializationSettings, ObjectType, ObjectDetectionSettings)" path="/member/exception"/>
         /// <param name="midiChunk">Chunk to serialize.</param>
         /// <param name="stream">Writable stream, which remains open.</param>
         /// <param name="tempoMap">Tempo map used to convert times and lengths.</param>
@@ -246,7 +246,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <summary>
         /// Serializes a MIDI chunk to a CSV file asynchronously.
         /// </summary>
-        /// <inheritdoc cref="SerializeToCsv(MidiChunk, string, bool, TempoMap, CsvSerializationSettings, ObjectType, ObjectDetectionSettings)"/>
+        /// <inheritdoc cref="SerializeToCsv(MidiChunk, string, bool, TempoMap, CsvSerializationSettings, ObjectType, ObjectDetectionSettings)" path="/member/exception"/>
         /// <param name="midiChunk">Chunk to serialize.</param>
         /// <param name="filePath">Destination file path.</param>
         /// <param name="overwriteFile">Whether an existing destination may be overwritten.</param>
@@ -291,7 +291,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <summary>
         /// Serializes objects using asynchronous stream writes and flush. The stream remains open.
         /// </summary>
-        /// <inheritdoc cref="SerializeToCsv(IEnumerable{ITimedObject}, Stream, TempoMap, CsvSerializationSettings)"/>
+        /// <inheritdoc cref="SerializeToCsv(IEnumerable{ITimedObject}, Stream, TempoMap, CsvSerializationSettings)" path="/member/exception"/>
         /// <param name="timedObjects">Objects to serialize.</param>
         /// <param name="stream">Writable stream, which remains open.</param>
         /// <param name="tempoMap">Tempo map used to convert times and lengths.</param>
@@ -334,7 +334,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <summary>
         /// Serializes objects to a CSV file asynchronously.
         /// </summary>
-        /// <inheritdoc cref="SerializeToCsv(IEnumerable{ITimedObject}, string, bool, TempoMap, CsvSerializationSettings)"/>
+        /// <inheritdoc cref="SerializeToCsv(IEnumerable{ITimedObject}, string, bool, TempoMap, CsvSerializationSettings)" path="/member/exception"/>
         /// <param name="timedObjects">Objects to serialize.</param>
         /// <param name="filePath">Destination file path.</param>
         /// <param name="overwriteFile">Whether an existing destination may be overwritten.</param>
@@ -373,7 +373,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <summary>
         /// Deserializes a MIDI file using asynchronous stream reads. The stream remains open.
         /// </summary>
-        /// <inheritdoc cref="DeserializeFileFromCsv(Stream, CsvDeserializationSettings)"/>
+        /// <inheritdoc cref="DeserializeFileFromCsv(Stream, CsvDeserializationSettings)" path="/member/exception"/>
         /// <param name="stream">Readable stream, which remains open.</param>
         /// <param name="settings">CSV deserialization settings.</param>
         /// <param name="progress">Optional progress receiver.</param>
@@ -414,7 +414,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <summary>
         /// Deserializes a MIDI file from CSV asynchronously.
         /// </summary>
-        /// <inheritdoc cref="DeserializeFileFromCsv(string, CsvDeserializationSettings)"/>
+        /// <inheritdoc cref="DeserializeFileFromCsv(string, CsvDeserializationSettings)" path="/member/exception"/>
         /// <param name="filePath">Source CSV file path.</param>
         /// <param name="settings">CSV deserialization settings.</param>
         /// <param name="progress">Optional progress receiver.</param>
@@ -440,7 +440,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <summary>
         /// Deserializes MIDI chunks using asynchronous stream reads. The stream remains open.
         /// </summary>
-        /// <inheritdoc cref="DeserializeChunksFromCsv(Stream, TempoMap, CsvDeserializationSettings)"/>
+        /// <inheritdoc cref="DeserializeChunksFromCsv(Stream, TempoMap, CsvDeserializationSettings)" path="/member/exception"/>
         /// <param name="stream">Readable stream, which remains open.</param>
         /// <param name="tempoMap">Tempo map used to convert times and lengths.</param>
         /// <param name="settings">CSV deserialization settings.</param>
@@ -475,7 +475,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <summary>
         /// Deserializes MIDI chunks from CSV asynchronously.
         /// </summary>
-        /// <inheritdoc cref="DeserializeChunksFromCsv(string, TempoMap, CsvDeserializationSettings)"/>
+        /// <inheritdoc cref="DeserializeChunksFromCsv(string, TempoMap, CsvDeserializationSettings)" path="/member/exception"/>
         /// <param name="filePath">Source CSV file path.</param>
         /// <param name="tempoMap">Tempo map used to convert times and lengths.</param>
         /// <param name="settings">CSV deserialization settings.</param>
@@ -502,7 +502,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <summary>
         /// Deserializes a MIDI chunk using asynchronous stream reads. The stream remains open.
         /// </summary>
-        /// <inheritdoc cref="DeserializeChunkFromCsv(Stream, TempoMap, CsvDeserializationSettings)"/>
+        /// <inheritdoc cref="DeserializeChunkFromCsv(Stream, TempoMap, CsvDeserializationSettings)" path="/member/exception"/>
         /// <param name="stream">Readable stream, which remains open.</param>
         /// <param name="tempoMap">Tempo map used to convert times and lengths.</param>
         /// <param name="settings">CSV deserialization settings.</param>
@@ -542,7 +542,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <summary>
         /// Deserializes a MIDI chunk from CSV asynchronously.
         /// </summary>
-        /// <inheritdoc cref="DeserializeChunkFromCsv(string, TempoMap, CsvDeserializationSettings)"/>
+        /// <inheritdoc cref="DeserializeChunkFromCsv(string, TempoMap, CsvDeserializationSettings)" path="/member/exception"/>
         /// <param name="filePath">Source CSV file path.</param>
         /// <param name="tempoMap">Tempo map used to convert times and lengths.</param>
         /// <param name="settings">CSV deserialization settings.</param>
@@ -569,7 +569,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <summary>
         /// Deserializes objects using asynchronous stream reads. The stream remains open.
         /// </summary>
-        /// <inheritdoc cref="DeserializeObjectsFromCsv(Stream, TempoMap, CsvDeserializationSettings)"/>
+        /// <inheritdoc cref="DeserializeObjectsFromCsv(Stream, TempoMap, CsvDeserializationSettings)" path="/member/exception"/>
         /// <param name="stream">Readable stream, which remains open.</param>
         /// <param name="tempoMap">Tempo map used to convert times and lengths.</param>
         /// <param name="settings">CSV deserialization settings.</param>
@@ -617,7 +617,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <summary>
         /// Deserializes objects from CSV asynchronously.
         /// </summary>
-        /// <inheritdoc cref="DeserializeObjectsFromCsv(string, TempoMap, CsvDeserializationSettings)"/>
+        /// <inheritdoc cref="DeserializeObjectsFromCsv(string, TempoMap, CsvDeserializationSettings)" path="/member/exception"/>
         /// <param name="filePath">Source CSV file path.</param>
         /// <param name="tempoMap">Tempo map used to convert times and lengths.</param>
         /// <param name="settings">CSV deserialization settings.</param>

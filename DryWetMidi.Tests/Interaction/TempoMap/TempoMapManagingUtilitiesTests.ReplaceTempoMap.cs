@@ -541,7 +541,12 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             TempoMap tempoMap,
             MidiFile expectedFile)
         {
-            var asyncFile = midiFile.Clone();
+            var asyncFile = new MidiFile(midiFile.Chunks.Select(chunk =>
+                chunk is CustomChunk ? new CustomChunk() : chunk.Clone()))
+            {
+                TimeDivision = midiFile.TimeDivision
+            };
+
             asyncFile.ReplaceTempoMapAsync(tempoMap, cancellationToken: System.Threading.CancellationToken.None).Wait();
             MidiAsserts.AreEqual(expectedFile, asyncFile, false, "Invalid async file.");
 

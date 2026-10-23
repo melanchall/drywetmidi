@@ -290,6 +290,17 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 : (ITimeSpan)asyncTracks.GetDurationAsync<MetricTimeSpan>(tempoMap, cancellationToken: CancellationToken.None).Result;
 
             TimeSpanTestUtilities.AreEqual(expectedDuration, genericDuration, "Generic async tracks duration is invalid.");
+
+            duration = InteractionAsyncTests.AsAsync(asyncTracks)
+                .GetDurationAsync(durationType, tempoMap, cancellationToken: CancellationToken.None).Result;
+
+            TimeSpanTestUtilities.AreEqual(expectedDuration, duration, "Async-source tracks duration is invalid.");
+
+            genericDuration = expectedDuration is MidiTimeSpan
+                ? InteractionAsyncTests.AsAsync(asyncTracks).GetDurationAsync<MidiTimeSpan>(tempoMap, cancellationToken: CancellationToken.None).Result
+                : (ITimeSpan)InteractionAsyncTests.AsAsync(asyncTracks).GetDurationAsync<MetricTimeSpan>(tempoMap, cancellationToken: CancellationToken.None).Result;
+
+            TimeSpanTestUtilities.AreEqual(expectedDuration, genericDuration, "Generic async-source tracks duration is invalid.");
         }
 
         #endregion

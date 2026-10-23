@@ -13,7 +13,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <summary>
         /// Asynchronously quantizes objects, preserving custom quantizer hooks.
         /// </summary>
-        /// <inheritdoc cref="Quantize(IEnumerable{ITimedObject}, IGrid, TempoMap, QuantizingSettings)"/>
+        /// <inheritdoc cref="Quantize(IEnumerable{ITimedObject}, IGrid, TempoMap, QuantizingSettings)" path="/member/exception"/>
         /// <param name="objects">Objects to quantize.</param>
         /// <param name="grid">Grid to quantize to.</param>
         /// <param name="tempoMap">Tempo map used for time and length calculations.</param>
@@ -38,7 +38,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <summary>
         /// Asynchronously quantizes objects in a track.
         /// </summary>
-        /// <inheritdoc cref="QuantizeObjects(TrackChunk, ObjectType, IGrid, TempoMap, QuantizingSettings, ObjectDetectionSettings)"/>
+        /// <inheritdoc cref="QuantizeObjects(TrackChunk, ObjectType, IGrid, TempoMap, QuantizingSettings, ObjectDetectionSettings)" path="/member/exception"/>
         /// <param name="trackChunk">Track whose objects should be quantized.</param>
         /// <param name="objectType">Types of objects to quantize.</param>
         /// <param name="grid">Grid to quantize to.</param>
@@ -59,12 +59,15 @@ namespace Melanchall.DryWetMidi.Tools
             ObjectDetectionSettings? objectDetectionSettings = null,
             IProgress<AsyncOperationProgress>? progress = null,
             CancellationToken cancellationToken = default)
-            => AsyncOperation.Run(() => QuantizeObjects(trackChunk, objectType, grid, tempoMap, quantizerSettings, objectDetectionSettings), cancellationToken, progress);
+            => AsyncOperation.Run(
+                () => QuantizeObjects(trackChunk, objectType, grid, tempoMap, quantizerSettings, objectDetectionSettings),
+                cancellationToken,
+                progress);
 
         /// <summary>
         /// Asynchronously quantizes objects in a track using a custom quantizer.
         /// </summary>
-        /// <inheritdoc cref="QuantizeObjects(TrackChunk, Quantizer, ObjectType, IGrid, TempoMap, QuantizingSettings, ObjectDetectionSettings)"/>
+        /// <inheritdoc cref="QuantizeObjects(TrackChunk, Quantizer, ObjectType, IGrid, TempoMap, QuantizingSettings, ObjectDetectionSettings)" path="/member/exception"/>
         /// <param name="trackChunk">Track whose objects should be quantized.</param>
         /// <param name="quantizer">Quantizer to use.</param>
         /// <param name="objectType">Types of objects to quantize.</param>
@@ -87,12 +90,15 @@ namespace Melanchall.DryWetMidi.Tools
             ObjectDetectionSettings? objectDetectionSettings = null,
             IProgress<AsyncOperationProgress>? progress = null,
             CancellationToken cancellationToken = default)
-            => AsyncOperation.Run(() => QuantizeObjects(trackChunk, quantizer, objectType, grid, tempoMap, quantizerSettings, objectDetectionSettings), cancellationToken, progress);
+            => AsyncOperation.Run(
+                () => QuantizeObjects(trackChunk, quantizer, objectType, grid, tempoMap, quantizerSettings, objectDetectionSettings),
+                cancellationToken,
+                progress);
 
         /// <summary>
         /// Asynchronously quantizes objects in tracks.
         /// </summary>
-        /// <inheritdoc cref="QuantizeObjects(IEnumerable{TrackChunk}, ObjectType, IGrid, TempoMap, QuantizingSettings, ObjectDetectionSettings)"/>
+        /// <inheritdoc cref="QuantizeObjects(IEnumerable{TrackChunk}, ObjectType, IGrid, TempoMap, QuantizingSettings, ObjectDetectionSettings)" path="/member/exception"/>
         /// <param name="trackChunks">Tracks whose objects should be quantized.</param>
         /// <param name="objectType">Types of objects to quantize.</param>
         /// <param name="grid">Grid to quantize to.</param>
@@ -113,12 +119,15 @@ namespace Melanchall.DryWetMidi.Tools
             ObjectDetectionSettings? objectDetectionSettings = null,
             IProgress<AsyncOperationProgress>? progress = null,
             CancellationToken cancellationToken = default)
-            => AsyncOperation.Run(() => QuantizeObjects(trackChunks, objectType, grid, tempoMap, quantizerSettings, objectDetectionSettings), cancellationToken, progress);
+            => AsyncOperation.Run(
+                () => QuantizeObjects(trackChunks, objectType, grid, tempoMap, quantizerSettings, objectDetectionSettings),
+                cancellationToken,
+                progress);
 
         /// <summary>
         /// Asynchronously quantizes objects in tracks using a custom quantizer.
         /// </summary>
-        /// <inheritdoc cref="QuantizeObjects(IEnumerable{TrackChunk}, Quantizer, ObjectType, IGrid, TempoMap, QuantizingSettings, ObjectDetectionSettings)"/>
+        /// <inheritdoc cref="QuantizeObjects(IEnumerable{TrackChunk}, Quantizer, ObjectType, IGrid, TempoMap, QuantizingSettings, ObjectDetectionSettings)" path="/member/exception"/>
         /// <param name="trackChunks">Tracks whose objects should be quantized.</param>
         /// <param name="quantizer">Quantizer to use.</param>
         /// <param name="objectType">Types of objects to quantize.</param>
@@ -141,12 +150,15 @@ namespace Melanchall.DryWetMidi.Tools
             ObjectDetectionSettings? objectDetectionSettings = null,
             IProgress<AsyncOperationProgress>? progress = null,
             CancellationToken cancellationToken = default)
-            => AsyncOperation.Run(() => QuantizeObjects(trackChunks, quantizer, objectType, grid, tempoMap, quantizerSettings, objectDetectionSettings), cancellationToken, progress);
+            => AsyncOperation.Run(
+                () => QuantizeObjects(trackChunks, quantizer, objectType, grid, tempoMap, quantizerSettings, objectDetectionSettings),
+                cancellationToken,
+                progress);
 
         /// <summary>
         /// Asynchronously quantizes objects in a MIDI file.
         /// </summary>
-        /// <inheritdoc cref="QuantizeObjects(MidiFile, ObjectType, IGrid, QuantizingSettings, ObjectDetectionSettings)"/>
+        /// <inheritdoc cref="QuantizeObjects(MidiFile, ObjectType, IGrid, QuantizingSettings, ObjectDetectionSettings)" path="/member/exception"/>
         /// <param name="midiFile">File whose objects should be quantized.</param>
         /// <param name="objectType">Types of objects to quantize.</param>
         /// <param name="grid">Grid to quantize to.</param>
@@ -165,12 +177,15 @@ namespace Melanchall.DryWetMidi.Tools
             ObjectDetectionSettings? objectDetectionSettings = null,
             IProgress<AsyncOperationProgress>? progress = null,
             CancellationToken cancellationToken = default)
-            => AsyncOperation.Run(() => QuantizeObjects(midiFile, objectType, grid, quantizerSettings, objectDetectionSettings), cancellationToken, progress);
+            => AsyncOperation.Run(
+                () => QuantizeObjects(midiFile, objectType, grid, quantizerSettings, objectDetectionSettings),
+                cancellationToken,
+                progress);
 
         /// <summary>
         /// Asynchronously quantizes objects in a MIDI file using a custom quantizer.
         /// </summary>
-        /// <inheritdoc cref="QuantizeObjects(MidiFile, Quantizer, ObjectType, IGrid, QuantizingSettings, ObjectDetectionSettings)"/>
+        /// <inheritdoc cref="QuantizeObjects(MidiFile, Quantizer, ObjectType, IGrid, QuantizingSettings, ObjectDetectionSettings)" path="/member/exception"/>
         /// <param name="midiFile">File whose objects should be quantized.</param>
         /// <param name="quantizer">Quantizer to use.</param>
         /// <param name="objectType">Types of objects to quantize.</param>
@@ -191,6 +206,9 @@ namespace Melanchall.DryWetMidi.Tools
             ObjectDetectionSettings? objectDetectionSettings = null,
             IProgress<AsyncOperationProgress>? progress = null,
             CancellationToken cancellationToken = default)
-            => AsyncOperation.Run(() => QuantizeObjects(midiFile, quantizer, objectType, grid, quantizerSettings, objectDetectionSettings), cancellationToken, progress);
+            => AsyncOperation.Run(
+                () => QuantizeObjects(midiFile, quantizer, objectType, grid, quantizerSettings, objectDetectionSettings),
+                cancellationToken,
+                progress);
     }
 }

@@ -75,6 +75,11 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 cancellationToken: CancellationToken.None).Result;
 
             MidiAsserts.AreEqual(expectedTimedEvents, objects, false, 0, "Async timed events from GetObjects are invalid.");
+
+            timedEvents = InteractionAsyncTests.AsAsync(CreateTracks())
+                .GetTimedEventsAsync(settings, cancellationToken: CancellationToken.None).Result;
+
+            MidiAsserts.AreEqual(expectedTimedEvents, timedEvents, false, 0, "Timed events from an async track source are invalid.");
         }
 
         #endregion

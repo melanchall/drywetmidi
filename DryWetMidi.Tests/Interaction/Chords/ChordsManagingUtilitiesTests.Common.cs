@@ -156,6 +156,21 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
             MidiAsserts.AreEqual(expectedChords, objects, "Async chords from GetObjects are invalid.");
             additionalChecks?.Invoke(objects.Cast<Chord>().ToArray());
+
+            chords = InteractionAsyncTests.AsAsync(CreateTracks())
+                .GetChordsAsync(settings, noteDetectionSettings, timedEventDetectionSettings, cancellationToken: CancellationToken.None).Result;
+
+            MidiAsserts.AreEqual(expectedChords, chords, "Chords from an async track source are invalid.");
+            additionalChecks?.Invoke(chords);
+
+            if (containerType == ContainerType.EventsCollection || containerType == ContainerType.TrackChunk)
+            {
+                chords = InteractionAsyncTests.AsAsync(CreateTracks()[0].Events)
+                    .GetChordsAsync(settings, noteDetectionSettings, timedEventDetectionSettings, cancellationToken: CancellationToken.None).Result;
+
+                MidiAsserts.AreEqual(expectedChords, chords, "Chords from an async event source are invalid.");
+                additionalChecks?.Invoke(chords);
+            }
         }
 
         #endregion

@@ -2151,6 +2151,11 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             CheckTimedEvents(
                 expectedTimedEvents,
                 asyncEvents.GetTimedEventsAsync(settings, cancellationToken: System.Threading.CancellationToken.None).Result.ToArray());
+
+            CheckTimedEvents(
+                expectedTimedEvents,
+                InteractionAsyncTests.AsAsync(InteractionAsyncTests.CloneEvents(midiEvents))
+                    .GetTimedEventsAsync(settings, cancellationToken: System.Threading.CancellationToken.None).Result.ToArray());
         }
 
         private void GetTimedEvents_TrackChunk(

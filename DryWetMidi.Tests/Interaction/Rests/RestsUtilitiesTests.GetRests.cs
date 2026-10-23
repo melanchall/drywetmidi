@@ -576,6 +576,13 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 .Result;
 
             MidiAsserts.AreEqual(expectedRests, asyncRests, true, 0, "Async rests are invalid.");
+
+            asyncRests = InteractionAsyncTests.AsAsync(inputObjects.Select(obj => obj.Clone()))
+                .GetRestsAsync(
+                    new RestDetectionSettings { KeySelector = keySelector },
+                    cancellationToken: System.Threading.CancellationToken.None).Result;
+
+            MidiAsserts.AreEqual(expectedRests, asyncRests, true, 0, "Rests from an async source are invalid.");
         }
 
         private void GetRests(
@@ -595,6 +602,11 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 .Result;
 
             MidiAsserts.AreEqual(expectedRests, asyncRests, true, 0, "Async rests are invalid.");
+
+            asyncRests = InteractionAsyncTests.AsAsync(inputObjects.Select(obj => obj.Clone()))
+                .GetRestsAsync(restDetectionSettings, cancellationToken: System.Threading.CancellationToken.None).Result;
+
+            MidiAsserts.AreEqual(expectedRests, asyncRests, true, 0, "Rests from an async source are invalid.");
         }
 
         #endregion

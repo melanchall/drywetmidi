@@ -32,6 +32,90 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
+        public void ArgumentErrors_MatchSynchronousOperations()
+        {
+            void CheckArgument(Action synchronous, Action asynchronous)
+            {
+                var expected = Assert.Throws<ArgumentNullException>(() => synchronous());
+                var aggregate = Assert.Throws<AggregateException>(() => asynchronous());
+                Assert.That(aggregate.InnerException, Is.TypeOf<ArgumentNullException>());
+                Assert.That(((ArgumentNullException)aggregate.InnerException).ParamName, Is.EqualTo(expected.ParamName));
+            }
+
+            var track = CreateTrack();
+
+            CheckArgument(
+                () => ((TrackChunk)null).GetNotes(),
+                () => ((TrackChunk)null).GetNotesAsync(cancellationToken: CancellationToken.None).Wait());
+            CheckArgument(
+                () => ((TrackChunk)null).GetChords(),
+                () => ((TrackChunk)null).GetChordsAsync(cancellationToken: CancellationToken.None).Wait());
+            CheckArgument(
+                () => ((EventsCollection)null).GetTimedEvents(),
+                () => ((EventsCollection)null).GetTimedEventsAsync(cancellationToken: CancellationToken.None).Wait());
+            CheckArgument(
+                () => ((MidiFile)null).GetObjects(ObjectType.Note),
+                () => ((MidiFile)null).GetObjectsAsync(ObjectType.Note, cancellationToken: CancellationToken.None).Wait());
+            CheckArgument(
+                () => ((IEnumerable<ITimedObject>)null).GetRests(),
+                () => ((IEnumerable<ITimedObject>)null).GetRestsAsync(cancellationToken: CancellationToken.None).Wait());
+            CheckArgument(
+                () => ((MidiFile)null).GetTempoMap(),
+                () => ((MidiFile)null).GetTempoMapAsync(cancellationToken: CancellationToken.None).Wait());
+            CheckArgument(
+                () => track.GetDuration<MidiTimeSpan>(null),
+                () => track.GetDurationAsync<MidiTimeSpan>(null, cancellationToken: CancellationToken.None).Wait());
+            CheckArgument(
+                () => track.ProcessNotes(null),
+                () => track.ProcessNotesAsync((Action<Note>)null, cancellationToken: CancellationToken.None).Wait());
+            CheckArgument(
+                () => track.ProcessChords(null),
+                () => track.ProcessChordsAsync((Action<Chord>)null, cancellationToken: CancellationToken.None).Wait());
+            CheckArgument(
+                () => track.ProcessTimedEvents(null),
+                () => track.ProcessTimedEventsAsync((Action<TimedEvent>)null, cancellationToken: CancellationToken.None).Wait());
+            CheckArgument(
+                () => track.ProcessObjects(ObjectType.Note, null),
+                () => track.ProcessObjectsAsync(ObjectType.Note, (Action<ITimedObject>)null, cancellationToken: CancellationToken.None).Wait());
+            CheckArgument(
+                () => track.RemoveNotes((Predicate<Note>)null),
+                () => track.RemoveNotesAsync((Predicate<Note>)null, cancellationToken: CancellationToken.None).Wait());
+            CheckArgument(
+                () => track.RemoveChords((Predicate<Chord>)null),
+                () => track.RemoveChordsAsync((Predicate<Chord>)null, cancellationToken: CancellationToken.None).Wait());
+            CheckArgument(
+                () => track.RemoveTimedEvents(null),
+                () => track.RemoveTimedEventsAsync((Predicate<TimedEvent>)null, cancellationToken: CancellationToken.None).Wait());
+            CheckArgument(
+                () => ((TrackChunk)null).RemoveObjects(ObjectType.Note),
+                () => ((TrackChunk)null).RemoveObjectsAsync(ObjectType.Note, cancellationToken: CancellationToken.None).Wait());
+            CheckArgument(
+                () => ((EventsCollection)null).ManageNotes(),
+                () => ((EventsCollection)null).ManageNotesAsync(cancellationToken: CancellationToken.None).Wait());
+            CheckArgument(
+                () => ((TrackChunk)null).ManageChords(),
+                () => ((TrackChunk)null).ManageChordsAsync(cancellationToken: CancellationToken.None).Wait());
+            CheckArgument(
+                () => ((TrackChunk)null).ManageTimedEvents(),
+                () => ((TrackChunk)null).ManageTimedEventsAsync(cancellationToken: CancellationToken.None).Wait());
+            CheckArgument(
+                () => new TimedObjectsManager<Note>(null),
+                () => TimedObjectsManager<Note>.CreateAsync(null, cancellationToken: CancellationToken.None).Wait());
+            CheckArgument(
+                () => new TempoMapManager(null, new[] { new EventsCollection() }),
+                () => TempoMapManager.CreateAsync(null, new[] { new EventsCollection() }, cancellationToken: CancellationToken.None).Wait());
+
+            Assert.Throws<InvalidOperationException>(() => new TimedObjectsManager<ITimedObject>(new EventsCollection()));
+
+            var unsupportedType = Assert.Throws<AggregateException>(() =>
+                TimedObjectsManager<ITimedObject>.CreateAsync(
+                    new EventsCollection(),
+                    cancellationToken: CancellationToken.None).Wait());
+
+            Assert.That(unsupportedType.InnerException, Is.TypeOf<InvalidOperationException>());
+        }
+
+        [Test]
         public async Task Getters_MatchSynchronousResults()
         {
             var track = CreateTrack();
@@ -70,6 +154,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             IEnumerable<TrackChunk> Tracks()
             {
                 cancellation.Cancel();
+
                 for (var i = 0; i < 1000; i++)
                 {
                     visited++;
@@ -188,9 +273,11 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             Action<ITimedObject> action = obj =>
             {
                 obj.Time += 10;
+
                 if (++count == total)
                     cancellation.Cancel();
             };
+
             Assert.That(async () => await ProcessSynchronouslyAsync(new[] { track }, kind, action, cancellation.Token),
                 Throws.InstanceOf<OperationCanceledException>());
             Assert.That(count, Is.EqualTo(total));
@@ -249,6 +336,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             {
                 if (((TextEvent)ev.Event).Text == "b")
                     cancellation.Cancel();
+
                 return ((TextEvent)ev.Event).Text == "a";
             }
 
@@ -259,6 +347,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 else
                     await track.Events.RemoveTimedEventsAsync(Match, cancellationToken: cancellation.Token);
             });
+
             for (var i = 0; i < tracks.Length; i++)
             {
                 Assert.That(tracks[i].Events.ToArray(), Is.EqualTo(originals[i]));
@@ -289,6 +378,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             {
                 if (obj.Time == 100)
                     cancellation.Cancel();
+
                 return obj.Time == 0;
             }
 
@@ -647,11 +737,13 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             const int notesCount = 8192;
             var events = new MidiEvent[notesCount * 2];
+
             for (var i = 0; i < notesCount; i++)
             {
                 events[2 * i] = new NoteOnEvent((SevenBitNumber)60, (SevenBitNumber)100) { DeltaTime = 1 };
                 events[2 * i + 1] = new NoteOffEvent((SevenBitNumber)60, SevenBitNumber.MinValue) { DeltaTime = 10 };
             }
+
             events.Take(2).GetNotes();
             await events.Take(2).GetNotesAsync();
 

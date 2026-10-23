@@ -132,6 +132,21 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
             MidiAsserts.AreEqual(expectedNotes, objects, "Async notes from GetObjects are invalid.");
             additionalChecks?.Invoke(objects.Cast<Note>().ToArray());
+
+            notes = InteractionAsyncTests.AsAsync(CreateTracks())
+                .GetNotesAsync(settings, timedEventDetectionSettings, cancellationToken: CancellationToken.None).Result;
+
+            MidiAsserts.AreEqual(expectedNotes, notes, "Notes from an async track source are invalid.");
+            additionalChecks?.Invoke(notes);
+
+            if (containerType == ContainerType.EventsCollection || containerType == ContainerType.TrackChunk)
+            {
+                notes = InteractionAsyncTests.AsAsync(CreateTracks()[0].Events)
+                    .GetNotesAsync(settings, timedEventDetectionSettings, cancellationToken: CancellationToken.None).Result;
+
+                MidiAsserts.AreEqual(expectedNotes, notes, "Notes from an async event source are invalid.");
+                additionalChecks?.Invoke(notes);
+            }
         }
 
         #endregion
