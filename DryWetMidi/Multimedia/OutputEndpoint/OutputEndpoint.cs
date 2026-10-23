@@ -389,7 +389,7 @@ namespace Melanchall.DryWetMidi.Multimedia
                 hasStartByte ? 0 : 1,
                 data.Length);
 
-            var result = OutputEndpointApi.Api_SendSysExEvent_Mac(Handle.OpenedEndpointHandle, buffer, (ushort)buffer.Length, out var errorCode);
+            var result = OutputEndpointApi.Api_SendSysExEvent_Mac(Handle.OpenedEndpointHandle, buffer, (uint)buffer.Length, out var errorCode);
             NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
         }
 

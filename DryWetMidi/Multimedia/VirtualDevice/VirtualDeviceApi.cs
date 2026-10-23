@@ -86,6 +86,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         {
             VIRTUAL_SENDBACKRESULT_OK = 0,
             VIRTUAL_SENDBACKRESULT_UNKNOWNERROR_TE = 1,
+
             VIRTUAL_SENDBACKRESULT_UNKNOWNENDPOINT = 101,
             VIRTUAL_SENDBACKRESULT_WRONGENDPOINT = 102,
             [NativeApi.NativeErrorType(NativeApi.NativeErrorType.NotPermitted)]

@@ -29,6 +29,8 @@ namespace Melanchall.DryWetMidi.Multimedia
             OUT_GETALLINFORESULT_NOMEMORY = 4,
             OUT_GETALLINFORESULT_UNKNOWNWMSERROR = 5,
 
+            OUT_GETALLINFORESULT_ENDPOINTNOTFOUND = 101,
+
             OUT_GETALLINFORESULT_UNKNOWNERROR = 1000,
             OUT_GETALLINFORESULT_UNKNOWNERRORONGETINFO = 1001
         }
@@ -94,7 +96,8 @@ namespace Melanchall.DryWetMidi.Multimedia
             OUT_SENDSHORTRESULT_WRONGTHREAD = 107,
             [NativeApi.NativeErrorType(NativeApi.NativeErrorType.NotPermitted)]
             OUT_SENDSHORTRESULT_NOTPERMITTED = 108,
-            OUT_SENDSHORTRESULT_UNKNOWNERROR = 109
+            OUT_SENDSHORTRESULT_UNKNOWNERROR = 109,
+            OUT_SENDSHORTRESULT_PACKETLISTADDFAILED = 110
         }
 
         public enum OUT_SENDSYSEXRESULT
@@ -112,6 +115,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             OUT_SENDSYSEXRESULT_INVALIDSTRUCTURE = 7,
             OUT_SENDSYSEXRESULT_SENDERROR = 8,
             OUT_SENDSYSEXRESULT_UNKNOWNWMSERROR = 9,
+
             OUT_SENDSYSEXRESULT_INVALIDCLIENT = 101,
             OUT_SENDSYSEXRESULT_INVALIDPORT = 102,
             OUT_SENDSYSEXRESULT_WRONGENDPOINT = 103,
@@ -121,7 +125,10 @@ namespace Melanchall.DryWetMidi.Multimedia
             OUT_SENDSYSEXRESULT_WRONGTHREAD = 107,
             [NativeApi.NativeErrorType(NativeApi.NativeErrorType.NotPermitted)]
             OUT_SENDSYSEXRESULT_NOTPERMITTED = 108,
-            OUT_SENDSYSEXRESULT_UNKNOWNERROR = 109
+            OUT_SENDSYSEXRESULT_UNKNOWNERROR = 109,
+            OUT_SENDSYSEXRESULT_INVALIDDATA = 110,
+            OUT_SENDSYSEXRESULT_DATATOOLARGE = 111,
+            OUT_SENDSYSEXRESULT_PACKETLISTADDFAILED = 112
         }
 
         public enum OUT_GETSYSEXDATARESULT
@@ -200,7 +207,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         [LibraryImport(NativeApi.LibraryName)]
         [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-        private static partial OUT_SENDSYSEXRESULT SendSysExEventToOutputEndpoint_Mac(IntPtr handle, byte[] data, ushort dataSize, out int errorCode);
+        private static partial OUT_SENDSYSEXRESULT SendSysExEventToOutputEndpoint_Mac(IntPtr handle, byte[] data, uint dataSize, out int errorCode);
 
         [LibraryImport(NativeApi.LibraryName)]
         [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
@@ -248,7 +255,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         private static extern OUT_SENDSHORTRESULT SendShortEventToOutputEndpoint(IntPtr handle, MidiDevicesSessionHandle sessionHandle, int message, out int errorCode);
 
         [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
-        private static extern OUT_SENDSYSEXRESULT SendSysExEventToOutputEndpoint_Mac(IntPtr handle, byte[] data, ushort dataSize, out int errorCode);
+        private static extern OUT_SENDSYSEXRESULT SendSysExEventToOutputEndpoint_Mac(IntPtr handle, byte[] data, uint dataSize, out int errorCode);
 
         [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
         private static extern OUT_SENDSYSEXRESULT SendSysExEventToOutputEndpoint_Win(IntPtr handle, MidiDevicesSessionHandle sessionHandle, IntPtr data, int size, out int errorCode);
@@ -357,7 +364,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             return result;
         }
 
-        public static OUT_SENDSYSEXRESULT Api_SendSysExEvent_Mac(IntPtr handle, byte[] data, ushort dataSize, out int errorCode)
+        public static OUT_SENDSYSEXRESULT Api_SendSysExEvent_Mac(IntPtr handle, byte[] data, uint dataSize, out int errorCode)
         {
             var errorCodeLocal = 0;
             
