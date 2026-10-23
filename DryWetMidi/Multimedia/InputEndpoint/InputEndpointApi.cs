@@ -99,6 +99,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         {
             IN_CONNECTRESULT_OK = 0,
             IN_CONNECTRESULT_INVALIDHANDLE = 1,
+
             IN_CONNECTRESULT_UNKNOWNERROR = 101,
             IN_CONNECTRESULT_INVALIDPORT = 102,
             IN_CONNECTRESULT_WRONGTHREAD = 103,
@@ -112,6 +113,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         {
             IN_DISCONNECTRESULT_OK = 0,
             IN_DISCONNECTRESULT_INVALIDHANDLE = 1,
+
             IN_DISCONNECTRESULT_UNKNOWNERROR = 101,
             IN_DISCONNECTRESULT_INVALIDPORT = 102,
             IN_DISCONNECTRESULT_WRONGTHREAD = 103,

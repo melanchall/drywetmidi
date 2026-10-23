@@ -28,6 +28,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             [NativeApi.NativeErrorType(NativeApi.NativeErrorType.NoMemory)]
             OUT_GETALLINFORESULT_NOMEMORY = 4,
             OUT_GETALLINFORESULT_UNKNOWNWMSERROR = 5,
+
             OUT_GETALLINFORESULT_ENDPOINTNOTFOUND = 100,
 
             OUT_GETALLINFORESULT_UNKNOWNERROR = 1000,
@@ -114,6 +115,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             OUT_SENDSYSEXRESULT_INVALIDSTRUCTURE = 7,
             OUT_SENDSYSEXRESULT_SENDERROR = 8,
             OUT_SENDSYSEXRESULT_UNKNOWNWMSERROR = 9,
+
             OUT_SENDSYSEXRESULT_INVALIDCLIENT = 101,
             OUT_SENDSYSEXRESULT_INVALIDPORT = 102,
             OUT_SENDSYSEXRESULT_WRONGENDPOINT = 103,
