@@ -114,7 +114,10 @@ namespace Melanchall.DryWetMidi.Tests
             }
         }
 
-        internal static MidiFile ReadWithAsyncChecks(string filePath, ReadingSettings settings = null)
+        internal static MidiFile ReadWithAsyncChecks(
+            string filePath,
+            ReadingSettings settings = null,
+            Action<MidiFile> checkAsyncFile = null)
         {
             MidiFile expected;
             try
@@ -124,14 +127,14 @@ namespace Melanchall.DryWetMidi.Tests
             catch (Exception exception)
             {
                 var aggregate = ClassicAssert.Throws<AggregateException>(() =>
-                    MidiFile.ReadAsync(filePath, settings, cancellationToken: CancellationToken.None).Wait());
+                    MidiFile.ReadAsync(filePath, settings, cancellationToken: CancellationToken.None).Wait(), "Async path reading did not throw.");
 
                 ClassicAssert.AreEqual(exception.GetType(), aggregate.InnerException.GetType(), "Async path exception differs.");
 
                 using (var stream = File.OpenRead(filePath))
                 {
                     aggregate = ClassicAssert.Throws<AggregateException>(() =>
-                        MidiFile.ReadAsync(stream, settings, cancellationToken: CancellationToken.None).Wait());
+                        MidiFile.ReadAsync(stream, settings, cancellationToken: CancellationToken.None).Wait(), "Async stream reading did not throw.");
 
                     ClassicAssert.AreEqual(exception.GetType(), aggregate.InnerException.GetType(), "Async stream exception differs.");
                 }
@@ -140,12 +143,16 @@ namespace Melanchall.DryWetMidi.Tests
             }
 
             var actual = MidiFile.ReadAsync(filePath, settings, cancellationToken: CancellationToken.None).Result;
+
             MidiAsserts.AreEqual(expected, actual, true, "Async path reading differs.");
+            checkAsyncFile?.Invoke(actual);
 
             using (var stream = File.OpenRead(filePath))
             {
                 actual = MidiFile.ReadAsync(stream, settings, cancellationToken: CancellationToken.None).Result;
+
                 MidiAsserts.AreEqual(expected, actual, true, "Async stream reading differs.");
+                checkAsyncFile?.Invoke(actual);
             }
 
             return expected;

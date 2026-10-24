@@ -10,366 +10,6 @@ namespace Melanchall.DryWetMidi.Interaction
 {
     public static partial class TimedObjectUtilities
     {
-        /// <inheritdoc cref="ProcessObjects(EventsCollection, ObjectType, Action{ITimedObject}, ObjectDetectionSettings, ObjectProcessingHint)" />
-        /// <summary>
-        /// Asynchronously processes objects.
-        /// </summary>
-        /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
-        public static Task<int> ProcessObjectsAsync(
-            this EventsCollection eventsCollection,
-            ObjectType objectType,
-            Action<ITimedObject> action,
-            ObjectDetectionSettings? settings = null,
-            ObjectProcessingHint hint = ObjectProcessingHint.Default,
-            IProgress<AsyncOperationProgress>? progress = null,
-            CancellationToken cancellationToken = default) =>
-            AsyncOperation.Run(() => eventsCollection.ProcessObjects(objectType, action, settings, hint), cancellationToken, progress);
-
-        /// <inheritdoc cref="ProcessObjects(EventsCollection, ObjectType, Action{ITimedObject}, Predicate{ITimedObject}, ObjectDetectionSettings, ObjectProcessingHint)" />
-        /// <summary>
-        /// Asynchronously processes matching objects.
-        /// </summary>
-        /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
-        public static Task<int> ProcessObjectsAsync(
-            this EventsCollection eventsCollection,
-            ObjectType objectType,
-            Action<ITimedObject> action,
-            Predicate<ITimedObject> match,
-            ObjectDetectionSettings? settings = null,
-            ObjectProcessingHint hint = ObjectProcessingHint.Default,
-            IProgress<AsyncOperationProgress>? progress = null,
-            CancellationToken cancellationToken = default) =>
-            AsyncOperation.Run(() => eventsCollection.ProcessObjects(objectType, action, match, settings, hint), cancellationToken, progress);
-
-        /// <inheritdoc cref="ProcessObjects(TrackChunk, ObjectType, Action{ITimedObject}, ObjectDetectionSettings, ObjectProcessingHint)" />
-        /// <summary>
-        /// Asynchronously processes objects in a track.
-        /// </summary>
-        /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
-        public static Task<int> ProcessObjectsAsync(
-            this TrackChunk trackChunk,
-            ObjectType objectType,
-            Action<ITimedObject> action,
-            ObjectDetectionSettings? settings = null,
-            ObjectProcessingHint hint = ObjectProcessingHint.Default,
-            IProgress<AsyncOperationProgress>? progress = null,
-            CancellationToken cancellationToken = default) =>
-            AsyncOperation.Run(() => trackChunk.ProcessObjects(objectType, action, settings, hint), cancellationToken, progress);
-
-        /// <inheritdoc cref="ProcessObjects(TrackChunk, ObjectType, Action{ITimedObject}, Predicate{ITimedObject}, ObjectDetectionSettings, ObjectProcessingHint)" />
-        /// <summary>
-        /// Asynchronously processes matching objects in a track.
-        /// </summary>
-        /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
-        public static Task<int> ProcessObjectsAsync(
-            this TrackChunk trackChunk,
-            ObjectType objectType,
-            Action<ITimedObject> action,
-            Predicate<ITimedObject> match,
-            ObjectDetectionSettings? settings = null,
-            ObjectProcessingHint hint = ObjectProcessingHint.Default,
-            IProgress<AsyncOperationProgress>? progress = null,
-            CancellationToken cancellationToken = default) =>
-            AsyncOperation.Run(() => trackChunk.ProcessObjects(objectType, action, match, settings, hint), cancellationToken, progress);
-
-        /// <inheritdoc cref="ProcessObjects(IEnumerable{TrackChunk}, ObjectType, Action{ITimedObject}, ObjectDetectionSettings, ObjectProcessingHint)" />
-        /// <summary>
-        /// Asynchronously processes objects in tracks.
-        /// </summary>
-        /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
-        public static Task<int> ProcessObjectsAsync(
-            this IEnumerable<TrackChunk> trackChunks,
-            ObjectType objectType,
-            Action<ITimedObject> action,
-            ObjectDetectionSettings? settings = null,
-            ObjectProcessingHint hint = ObjectProcessingHint.Default,
-            IProgress<AsyncOperationProgress>? progress = null,
-            CancellationToken cancellationToken = default) =>
-            AsyncOperation.Run(() => trackChunks.ProcessObjects(objectType, action, settings, hint), cancellationToken, progress);
-
-        /// <inheritdoc cref="ProcessObjects(IEnumerable{TrackChunk}, ObjectType, Action{ITimedObject}, Predicate{ITimedObject}, ObjectDetectionSettings, ObjectProcessingHint)" />
-        /// <summary>
-        /// Asynchronously processes matching objects in tracks.
-        /// </summary>
-        /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
-        public static Task<int> ProcessObjectsAsync(
-            this IEnumerable<TrackChunk> trackChunks,
-            ObjectType objectType,
-            Action<ITimedObject> action,
-            Predicate<ITimedObject> match,
-            ObjectDetectionSettings? settings = null,
-            ObjectProcessingHint hint = ObjectProcessingHint.Default,
-            IProgress<AsyncOperationProgress>? progress = null,
-            CancellationToken cancellationToken = default) =>
-            AsyncOperation.Run(() => trackChunks.ProcessObjects(objectType, action, match, settings, hint), cancellationToken, progress);
-
-        /// <inheritdoc cref="ProcessObjects(MidiFile, ObjectType, Action{ITimedObject}, ObjectDetectionSettings, ObjectProcessingHint)" />
-        /// <summary>
-        /// Asynchronously processes objects in a MIDI file.
-        /// </summary>
-        /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
-        public static Task<int> ProcessObjectsAsync(
-            this MidiFile file,
-            ObjectType objectType,
-            Action<ITimedObject> action,
-            ObjectDetectionSettings? settings = null,
-            ObjectProcessingHint hint = ObjectProcessingHint.Default,
-            IProgress<AsyncOperationProgress>? progress = null,
-            CancellationToken cancellationToken = default) =>
-            AsyncOperation.Run(() => file.ProcessObjects(objectType, action, settings, hint), cancellationToken, progress);
-
-        /// <inheritdoc cref="ProcessObjects(MidiFile, ObjectType, Action{ITimedObject}, Predicate{ITimedObject}, ObjectDetectionSettings, ObjectProcessingHint)" />
-        /// <summary>
-        /// Asynchronously processes matching objects in a MIDI file.
-        /// </summary>
-        /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
-        public static Task<int> ProcessObjectsAsync(
-            this MidiFile file,
-            ObjectType objectType,
-            Action<ITimedObject> action,
-            Predicate<ITimedObject> match,
-            ObjectDetectionSettings? settings = null,
-            ObjectProcessingHint hint = ObjectProcessingHint.Default,
-            IProgress<AsyncOperationProgress>? progress = null,
-            CancellationToken cancellationToken = default) =>
-            AsyncOperation.Run(() => file.ProcessObjects(objectType, action, match, settings, hint), cancellationToken, progress);
-
-        /// <inheritdoc cref="ProcessObjects(EventsCollection, ObjectType, Action{ITimedObject}, ObjectDetectionSettings, ObjectProcessingHint)" />
-        /// <summary>
-        /// Sequentially awaits an asynchronous action for each object.
-        /// </summary>
-        /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
-        public static Task<int> ProcessObjectsAsync(
-            this EventsCollection eventsCollection,
-            ObjectType objectType,
-            Func<ITimedObject, CancellationToken, ValueTask> action,
-            ObjectDetectionSettings? settings = null,
-            ObjectProcessingHint hint = ObjectProcessingHint.Default,
-            IProgress<AsyncOperationProgress>? progress = null,
-            CancellationToken cancellationToken = default) =>
-            eventsCollection.ProcessObjectsAsync(objectType, action, null, settings, hint, progress, cancellationToken);
-
-        /// <inheritdoc cref="ProcessObjects(TrackChunk, ObjectType, Action{ITimedObject}, ObjectDetectionSettings, ObjectProcessingHint)" />
-        /// <summary>
-        /// Sequentially awaits an asynchronous action for each object in a track.
-        /// </summary>
-        /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
-        public static Task<int> ProcessObjectsAsync(
-            this TrackChunk trackChunk,
-            ObjectType objectType,
-            Func<ITimedObject, CancellationToken, ValueTask> action,
-            ObjectDetectionSettings? settings = null,
-            ObjectProcessingHint hint = ObjectProcessingHint.Default,
-            IProgress<AsyncOperationProgress>? progress = null,
-            CancellationToken cancellationToken = default) =>
-            trackChunk.ProcessObjectsAsync(objectType, action, null, settings, hint, progress, cancellationToken);
-
-        /// <inheritdoc cref="ProcessObjects(IEnumerable{TrackChunk}, ObjectType, Action{ITimedObject}, ObjectDetectionSettings, ObjectProcessingHint)" />
-        /// <summary>
-        /// Sequentially awaits an asynchronous action for each object in tracks.
-        /// </summary>
-        /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
-        public static Task<int> ProcessObjectsAsync(
-            this IEnumerable<TrackChunk> trackChunks,
-            ObjectType objectType,
-            Func<ITimedObject, CancellationToken, ValueTask> action,
-            ObjectDetectionSettings? settings = null,
-            ObjectProcessingHint hint = ObjectProcessingHint.Default,
-            IProgress<AsyncOperationProgress>? progress = null,
-            CancellationToken cancellationToken = default) =>
-            trackChunks.ProcessObjectsAsync(objectType, action, null, settings, hint, progress, cancellationToken);
-
-        /// <inheritdoc cref="ProcessObjects(MidiFile, ObjectType, Action{ITimedObject}, ObjectDetectionSettings, ObjectProcessingHint)" />
-        /// <summary>
-        /// Sequentially awaits an asynchronous action for each object in a MIDI file.
-        /// </summary>
-        /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
-        public static Task<int> ProcessObjectsAsync(
-            this MidiFile file,
-            ObjectType objectType,
-            Func<ITimedObject, CancellationToken, ValueTask> action,
-            ObjectDetectionSettings? settings = null,
-            ObjectProcessingHint hint = ObjectProcessingHint.Default,
-            IProgress<AsyncOperationProgress>? progress = null,
-            CancellationToken cancellationToken = default) =>
-            file.ProcessObjectsAsync(objectType, action, null, settings, hint, progress, cancellationToken);
-
-        /// <inheritdoc cref="ProcessObjects(EventsCollection, ObjectType, Action{ITimedObject}, ObjectDetectionSettings, ObjectProcessingHint)" />
-        /// <summary>
-        /// Sequentially awaits an asynchronous action for matching objects.
-        /// A null match processes all objects.
-        /// </summary>
-        /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
-        public static Task<int> ProcessObjectsAsync(
-            this EventsCollection eventsCollection,
-            ObjectType objectType,
-            Func<ITimedObject, CancellationToken, ValueTask> action,
-            Predicate<ITimedObject>? match,
-            ObjectDetectionSettings? settings = null,
-            ObjectProcessingHint hint = ObjectProcessingHint.Default,
-            IProgress<AsyncOperationProgress>? progress = null,
-            CancellationToken cancellationToken = default) =>
-            AsyncOperation.Run(() => ProcessObjectsAwaitedAsync(InteractionAsyncUtilities.Collections(eventsCollection), objectType, action, match, settings, hint, cancellationToken), cancellationToken, progress);
-
-        /// <inheritdoc cref="ProcessObjects(TrackChunk, ObjectType, Action{ITimedObject}, ObjectDetectionSettings, ObjectProcessingHint)" />
-        /// <summary>
-        /// Sequentially awaits an asynchronous action for matching objects in a track.
-        /// A null match processes all objects.
-        /// </summary>
-        /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
-        public static Task<int> ProcessObjectsAsync(
-            this TrackChunk trackChunk,
-            ObjectType objectType,
-            Func<ITimedObject, CancellationToken, ValueTask> action,
-            Predicate<ITimedObject>? match,
-            ObjectDetectionSettings? settings = null,
-            ObjectProcessingHint hint = ObjectProcessingHint.Default,
-            IProgress<AsyncOperationProgress>? progress = null,
-            CancellationToken cancellationToken = default) =>
-            AsyncOperation.Run(() => ProcessObjectsAwaitedAsync(InteractionAsyncUtilities.Collections(trackChunk), objectType, action, match, settings, hint, cancellationToken), cancellationToken, progress);
-
-        /// <inheritdoc cref="ProcessObjects(IEnumerable{TrackChunk}, ObjectType, Action{ITimedObject}, ObjectDetectionSettings, ObjectProcessingHint)" />
-        /// <summary>
-        /// Sequentially awaits an asynchronous action for matching objects in tracks.
-        /// A null match processes all objects.
-        /// </summary>
-        /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
-        public static Task<int> ProcessObjectsAsync(
-            this IEnumerable<TrackChunk> trackChunks,
-            ObjectType objectType,
-            Func<ITimedObject, CancellationToken, ValueTask> action,
-            Predicate<ITimedObject>? match,
-            ObjectDetectionSettings? settings = null,
-            ObjectProcessingHint hint = ObjectProcessingHint.Default,
-            IProgress<AsyncOperationProgress>? progress = null,
-            CancellationToken cancellationToken = default) =>
-            AsyncOperation.Run(() => ProcessObjectsAwaitedAsync(InteractionAsyncUtilities.Collections(trackChunks), objectType, action, match, settings, hint, cancellationToken), cancellationToken, progress);
-
-        /// <inheritdoc cref="ProcessObjects(MidiFile, ObjectType, Action{ITimedObject}, ObjectDetectionSettings, ObjectProcessingHint)" />
-        /// <summary>
-        /// Sequentially awaits an asynchronous action for matching objects in a MIDI file.
-        /// A null match processes all objects.
-        /// </summary>
-        /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
-        public static Task<int> ProcessObjectsAsync(
-            this MidiFile file,
-            ObjectType objectType,
-            Func<ITimedObject, CancellationToken, ValueTask> action,
-            Predicate<ITimedObject>? match,
-            ObjectDetectionSettings? settings = null,
-            ObjectProcessingHint hint = ObjectProcessingHint.Default,
-            IProgress<AsyncOperationProgress>? progress = null,
-            CancellationToken cancellationToken = default) =>
-            AsyncOperation.Run(() => ProcessObjectsAwaitedAsync(InteractionAsyncUtilities.Collections(file), objectType, action, match, settings, hint, cancellationToken), cancellationToken, progress);
-
-        /// <inheritdoc cref="RemoveObjects(EventsCollection, ObjectType, ObjectDetectionSettings)" />
-        /// <summary>
-        /// Asynchronously removes objects.
-        /// </summary>
-        /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
-        public static Task<int> RemoveObjectsAsync(
-            this EventsCollection eventsCollection,
-            ObjectType objectType,
-            ObjectDetectionSettings? settings = null,
-            IProgress<AsyncOperationProgress>? progress = null,
-            CancellationToken cancellationToken = default) =>
-            AsyncOperation.Run(() => eventsCollection.RemoveObjects(objectType, settings), cancellationToken, progress);
-
-        /// <inheritdoc cref="RemoveObjects(EventsCollection, ObjectType, Predicate{ITimedObject}, ObjectDetectionSettings)" />
-        /// <summary>
-        /// Asynchronously removes matching objects.
-        /// </summary>
-        /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
-        public static Task<int> RemoveObjectsAsync(
-            this EventsCollection eventsCollection,
-            ObjectType objectType,
-            Predicate<ITimedObject> match,
-            ObjectDetectionSettings? settings = null,
-            IProgress<AsyncOperationProgress>? progress = null,
-            CancellationToken cancellationToken = default) =>
-            AsyncOperation.Run(() => eventsCollection.RemoveObjects(objectType, match, settings), cancellationToken, progress);
-
-        /// <inheritdoc cref="RemoveObjects(TrackChunk, ObjectType, ObjectDetectionSettings)" />
-        /// <summary>
-        /// Asynchronously removes objects from a track.
-        /// </summary>
-        /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
-        public static Task<int> RemoveObjectsAsync(
-            this TrackChunk trackChunk,
-            ObjectType objectType,
-            ObjectDetectionSettings? settings = null,
-            IProgress<AsyncOperationProgress>? progress = null,
-            CancellationToken cancellationToken = default) =>
-            AsyncOperation.Run(() => trackChunk.RemoveObjects(objectType, settings), cancellationToken, progress);
-
-        /// <inheritdoc cref="RemoveObjects(TrackChunk, ObjectType, Predicate{ITimedObject}, ObjectDetectionSettings)" />
-        /// <summary>
-        /// Asynchronously removes matching objects from a track.
-        /// </summary>
-        /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
-        public static Task<int> RemoveObjectsAsync(
-            this TrackChunk trackChunk,
-            ObjectType objectType,
-            Predicate<ITimedObject> match,
-            ObjectDetectionSettings? settings = null,
-            IProgress<AsyncOperationProgress>? progress = null,
-            CancellationToken cancellationToken = default) =>
-            AsyncOperation.Run(() => trackChunk.RemoveObjects(objectType, match, settings), cancellationToken, progress);
-
-        /// <inheritdoc cref="RemoveObjects(IEnumerable{TrackChunk}, ObjectType, ObjectDetectionSettings)" />
-        /// <summary>
-        /// Asynchronously removes objects from tracks.
-        /// </summary>
-        /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
-        public static Task<int> RemoveObjectsAsync(
-            this IEnumerable<TrackChunk> trackChunks,
-            ObjectType objectType,
-            ObjectDetectionSettings? settings = null,
-            IProgress<AsyncOperationProgress>? progress = null,
-            CancellationToken cancellationToken = default) =>
-            AsyncOperation.Run(() => trackChunks.RemoveObjects(objectType, settings), cancellationToken, progress);
-
-        /// <inheritdoc cref="RemoveObjects(IEnumerable{TrackChunk}, ObjectType, Predicate{ITimedObject}, ObjectDetectionSettings)" />
-        /// <summary>
-        /// Asynchronously removes matching objects from tracks.
-        /// </summary>
-        /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
-        public static Task<int> RemoveObjectsAsync(
-            this IEnumerable<TrackChunk> trackChunks,
-            ObjectType objectType,
-            Predicate<ITimedObject> match,
-            ObjectDetectionSettings? settings = null,
-            IProgress<AsyncOperationProgress>? progress = null,
-            CancellationToken cancellationToken = default) =>
-            AsyncOperation.Run(() => trackChunks.RemoveObjects(objectType, match, settings), cancellationToken, progress);
-
-        /// <inheritdoc cref="RemoveObjects(MidiFile, ObjectType, ObjectDetectionSettings)" />
-        /// <summary>
-        /// Asynchronously removes objects from a MIDI file.
-        /// </summary>
-        /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
-        public static Task<int> RemoveObjectsAsync(
-            this MidiFile file,
-            ObjectType objectType,
-            ObjectDetectionSettings? settings = null,
-            IProgress<AsyncOperationProgress>? progress = null,
-            CancellationToken cancellationToken = default) =>
-            AsyncOperation.Run(() => file.RemoveObjects(objectType, settings), cancellationToken, progress);
-
-        /// <inheritdoc cref="RemoveObjects(MidiFile, ObjectType, Predicate{ITimedObject}, ObjectDetectionSettings)" />
-        /// <summary>
-        /// Asynchronously removes matching objects from a MIDI file.
-        /// </summary>
-        /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
-        public static Task<int> RemoveObjectsAsync(
-            this MidiFile file,
-            ObjectType objectType,
-            Predicate<ITimedObject> match,
-            ObjectDetectionSettings? settings = null,
-            IProgress<AsyncOperationProgress>? progress = null,
-            CancellationToken cancellationToken = default) =>
-            AsyncOperation.Run(() => file.RemoveObjects(objectType, match, settings), cancellationToken, progress);
-
         internal sealed class AsyncProcessingContext
         {
             internal AsyncProcessingContext(
@@ -390,6 +30,486 @@ namespace Melanchall.DryWetMidi.Interaction
 
             internal bool HasChanges { get; set; }
         }
+
+        /// <inheritdoc cref="ProcessObjects(EventsCollection, ObjectType, Action{ITimedObject}, ObjectDetectionSettings, ObjectProcessingHint)" />
+        /// <summary>
+        /// Asynchronously processes objects.
+        /// </summary>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
+        /// <param name="cancellationToken">Token used to cancel the operation.</param>
+        /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
+        public static Task<int> ProcessObjectsAsync(
+            this EventsCollection eventsCollection,
+            ObjectType objectType,
+            Action<ITimedObject> action,
+            ObjectDetectionSettings? settings = null,
+            ObjectProcessingHint hint = ObjectProcessingHint.Default,
+            IProgress<AsyncOperationProgress>? progress = null,
+            CancellationToken cancellationToken = default) =>
+            AsyncOperation.Run(() => eventsCollection.ProcessObjects(objectType, action, settings, hint), cancellationToken, progress);
+
+        /// <inheritdoc cref="ProcessObjects(EventsCollection, ObjectType, Action{ITimedObject}, Predicate{ITimedObject}, ObjectDetectionSettings, ObjectProcessingHint)" />
+        /// <summary>
+        /// Asynchronously processes matching objects.
+        /// </summary>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
+        /// <param name="cancellationToken">Token used to cancel the operation.</param>
+        /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
+        public static Task<int> ProcessObjectsAsync(
+            this EventsCollection eventsCollection,
+            ObjectType objectType,
+            Action<ITimedObject> action,
+            Predicate<ITimedObject> match,
+            ObjectDetectionSettings? settings = null,
+            ObjectProcessingHint hint = ObjectProcessingHint.Default,
+            IProgress<AsyncOperationProgress>? progress = null,
+            CancellationToken cancellationToken = default) =>
+            AsyncOperation.Run(() => eventsCollection.ProcessObjects(objectType, action, match, settings, hint), cancellationToken, progress);
+
+        /// <inheritdoc cref="ProcessObjects(TrackChunk, ObjectType, Action{ITimedObject}, ObjectDetectionSettings, ObjectProcessingHint)" />
+        /// <summary>
+        /// Asynchronously processes objects in a track.
+        /// </summary>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
+        /// <param name="cancellationToken">Token used to cancel the operation.</param>
+        /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
+        public static Task<int> ProcessObjectsAsync(
+            this TrackChunk trackChunk,
+            ObjectType objectType,
+            Action<ITimedObject> action,
+            ObjectDetectionSettings? settings = null,
+            ObjectProcessingHint hint = ObjectProcessingHint.Default,
+            IProgress<AsyncOperationProgress>? progress = null,
+            CancellationToken cancellationToken = default) =>
+            AsyncOperation.Run(() => trackChunk.ProcessObjects(objectType, action, settings, hint), cancellationToken, progress);
+
+        /// <inheritdoc cref="ProcessObjects(TrackChunk, ObjectType, Action{ITimedObject}, Predicate{ITimedObject}, ObjectDetectionSettings, ObjectProcessingHint)" />
+        /// <summary>
+        /// Asynchronously processes matching objects in a track.
+        /// </summary>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
+        /// <param name="cancellationToken">Token used to cancel the operation.</param>
+        /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
+        public static Task<int> ProcessObjectsAsync(
+            this TrackChunk trackChunk,
+            ObjectType objectType,
+            Action<ITimedObject> action,
+            Predicate<ITimedObject> match,
+            ObjectDetectionSettings? settings = null,
+            ObjectProcessingHint hint = ObjectProcessingHint.Default,
+            IProgress<AsyncOperationProgress>? progress = null,
+            CancellationToken cancellationToken = default) =>
+            AsyncOperation.Run(() => trackChunk.ProcessObjects(objectType, action, match, settings, hint), cancellationToken, progress);
+
+        /// <inheritdoc cref="ProcessObjects(IEnumerable{TrackChunk}, ObjectType, Action{ITimedObject}, ObjectDetectionSettings, ObjectProcessingHint)" />
+        /// <summary>
+        /// Asynchronously processes objects in tracks.
+        /// </summary>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
+        /// <param name="cancellationToken">Token used to cancel the operation.</param>
+        /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
+        public static Task<int> ProcessObjectsAsync(
+            this IEnumerable<TrackChunk> trackChunks,
+            ObjectType objectType,
+            Action<ITimedObject> action,
+            ObjectDetectionSettings? settings = null,
+            ObjectProcessingHint hint = ObjectProcessingHint.Default,
+            IProgress<AsyncOperationProgress>? progress = null,
+            CancellationToken cancellationToken = default) =>
+            AsyncOperation.Run(() => trackChunks.ProcessObjects(objectType, action, settings, hint), cancellationToken, progress);
+
+        /// <inheritdoc cref="ProcessObjects(IEnumerable{TrackChunk}, ObjectType, Action{ITimedObject}, Predicate{ITimedObject}, ObjectDetectionSettings, ObjectProcessingHint)" />
+        /// <summary>
+        /// Asynchronously processes matching objects in tracks.
+        /// </summary>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
+        /// <param name="cancellationToken">Token used to cancel the operation.</param>
+        /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
+        public static Task<int> ProcessObjectsAsync(
+            this IEnumerable<TrackChunk> trackChunks,
+            ObjectType objectType,
+            Action<ITimedObject> action,
+            Predicate<ITimedObject> match,
+            ObjectDetectionSettings? settings = null,
+            ObjectProcessingHint hint = ObjectProcessingHint.Default,
+            IProgress<AsyncOperationProgress>? progress = null,
+            CancellationToken cancellationToken = default) =>
+            AsyncOperation.Run(() => trackChunks.ProcessObjects(objectType, action, match, settings, hint), cancellationToken, progress);
+
+        /// <inheritdoc cref="ProcessObjects(MidiFile, ObjectType, Action{ITimedObject}, ObjectDetectionSettings, ObjectProcessingHint)" />
+        /// <summary>
+        /// Asynchronously processes objects in a MIDI file.
+        /// </summary>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
+        /// <param name="cancellationToken">Token used to cancel the operation.</param>
+        /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
+        public static Task<int> ProcessObjectsAsync(
+            this MidiFile file,
+            ObjectType objectType,
+            Action<ITimedObject> action,
+            ObjectDetectionSettings? settings = null,
+            ObjectProcessingHint hint = ObjectProcessingHint.Default,
+            IProgress<AsyncOperationProgress>? progress = null,
+            CancellationToken cancellationToken = default) =>
+            AsyncOperation.Run(() => file.ProcessObjects(objectType, action, settings, hint), cancellationToken, progress);
+
+        /// <inheritdoc cref="ProcessObjects(MidiFile, ObjectType, Action{ITimedObject}, Predicate{ITimedObject}, ObjectDetectionSettings, ObjectProcessingHint)" />
+        /// <summary>
+        /// Asynchronously processes matching objects in a MIDI file.
+        /// </summary>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
+        /// <param name="cancellationToken">Token used to cancel the operation.</param>
+        /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
+        public static Task<int> ProcessObjectsAsync(
+            this MidiFile file,
+            ObjectType objectType,
+            Action<ITimedObject> action,
+            Predicate<ITimedObject> match,
+            ObjectDetectionSettings? settings = null,
+            ObjectProcessingHint hint = ObjectProcessingHint.Default,
+            IProgress<AsyncOperationProgress>? progress = null,
+            CancellationToken cancellationToken = default) =>
+            AsyncOperation.Run(() => file.ProcessObjects(objectType, action, match, settings, hint), cancellationToken, progress);
+
+        /// <inheritdoc cref="ProcessObjects(EventsCollection, ObjectType, Action{ITimedObject}, ObjectDetectionSettings, ObjectProcessingHint)" />
+        /// <summary>
+        /// Sequentially awaits an asynchronous action for each object.
+        /// </summary>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
+        /// <param name="cancellationToken">Token used to cancel the operation.</param>
+        /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
+        public static Task<int> ProcessObjectsAsync(
+            this EventsCollection eventsCollection,
+            ObjectType objectType,
+            Func<ITimedObject, CancellationToken, ValueTask> action,
+            ObjectDetectionSettings? settings = null,
+            ObjectProcessingHint hint = ObjectProcessingHint.Default,
+            IProgress<AsyncOperationProgress>? progress = null,
+            CancellationToken cancellationToken = default) =>
+            eventsCollection.ProcessObjectsAsync(objectType, action, null, settings, hint, progress, cancellationToken);
+
+        /// <inheritdoc cref="ProcessObjects(TrackChunk, ObjectType, Action{ITimedObject}, ObjectDetectionSettings, ObjectProcessingHint)" />
+        /// <summary>
+        /// Sequentially awaits an asynchronous action for each object in a track.
+        /// </summary>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
+        /// <param name="cancellationToken">Token used to cancel the operation.</param>
+        /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
+        public static Task<int> ProcessObjectsAsync(
+            this TrackChunk trackChunk,
+            ObjectType objectType,
+            Func<ITimedObject, CancellationToken, ValueTask> action,
+            ObjectDetectionSettings? settings = null,
+            ObjectProcessingHint hint = ObjectProcessingHint.Default,
+            IProgress<AsyncOperationProgress>? progress = null,
+            CancellationToken cancellationToken = default) =>
+            trackChunk.ProcessObjectsAsync(objectType, action, null, settings, hint, progress, cancellationToken);
+
+        /// <inheritdoc cref="ProcessObjects(IEnumerable{TrackChunk}, ObjectType, Action{ITimedObject}, ObjectDetectionSettings, ObjectProcessingHint)" />
+        /// <summary>
+        /// Sequentially awaits an asynchronous action for each object in tracks.
+        /// </summary>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
+        /// <param name="cancellationToken">Token used to cancel the operation.</param>
+        /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
+        public static Task<int> ProcessObjectsAsync(
+            this IEnumerable<TrackChunk> trackChunks,
+            ObjectType objectType,
+            Func<ITimedObject, CancellationToken, ValueTask> action,
+            ObjectDetectionSettings? settings = null,
+            ObjectProcessingHint hint = ObjectProcessingHint.Default,
+            IProgress<AsyncOperationProgress>? progress = null,
+            CancellationToken cancellationToken = default) =>
+            trackChunks.ProcessObjectsAsync(objectType, action, null, settings, hint, progress, cancellationToken);
+
+        /// <inheritdoc cref="ProcessObjects(MidiFile, ObjectType, Action{ITimedObject}, ObjectDetectionSettings, ObjectProcessingHint)" />
+        /// <summary>
+        /// Sequentially awaits an asynchronous action for each object in a MIDI file.
+        /// </summary>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
+        /// <param name="cancellationToken">Token used to cancel the operation.</param>
+        /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
+        public static Task<int> ProcessObjectsAsync(
+            this MidiFile file,
+            ObjectType objectType,
+            Func<ITimedObject, CancellationToken, ValueTask> action,
+            ObjectDetectionSettings? settings = null,
+            ObjectProcessingHint hint = ObjectProcessingHint.Default,
+            IProgress<AsyncOperationProgress>? progress = null,
+            CancellationToken cancellationToken = default) =>
+            file.ProcessObjectsAsync(objectType, action, null, settings, hint, progress, cancellationToken);
+
+        /// <inheritdoc cref="ProcessObjects(EventsCollection, ObjectType, Action{ITimedObject}, ObjectDetectionSettings, ObjectProcessingHint)" />
+        /// <summary>
+        /// Sequentially awaits an asynchronous action for matching objects.
+        /// A null match processes all objects.
+        /// </summary>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
+        /// <param name="cancellationToken">Token used to cancel the operation.</param>
+        /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
+        public static Task<int> ProcessObjectsAsync(
+            this EventsCollection eventsCollection,
+            ObjectType objectType,
+            Func<ITimedObject, CancellationToken, ValueTask> action,
+            Predicate<ITimedObject>? match,
+            ObjectDetectionSettings? settings = null,
+            ObjectProcessingHint hint = ObjectProcessingHint.Default,
+            IProgress<AsyncOperationProgress>? progress = null,
+            CancellationToken cancellationToken = default) =>
+            AsyncOperation.Run(() => ProcessObjectsAwaitedAsync(InteractionAsyncUtilities.Collections(eventsCollection), objectType, action, match, settings, hint, cancellationToken), cancellationToken, progress);
+
+        /// <inheritdoc cref="ProcessObjects(TrackChunk, ObjectType, Action{ITimedObject}, ObjectDetectionSettings, ObjectProcessingHint)" />
+        /// <summary>
+        /// Sequentially awaits an asynchronous action for matching objects in a track.
+        /// A null match processes all objects.
+        /// </summary>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
+        /// <param name="cancellationToken">Token used to cancel the operation.</param>
+        /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
+        public static Task<int> ProcessObjectsAsync(
+            this TrackChunk trackChunk,
+            ObjectType objectType,
+            Func<ITimedObject, CancellationToken, ValueTask> action,
+            Predicate<ITimedObject>? match,
+            ObjectDetectionSettings? settings = null,
+            ObjectProcessingHint hint = ObjectProcessingHint.Default,
+            IProgress<AsyncOperationProgress>? progress = null,
+            CancellationToken cancellationToken = default) =>
+            AsyncOperation.Run(() => ProcessObjectsAwaitedAsync(InteractionAsyncUtilities.Collections(trackChunk), objectType, action, match, settings, hint, cancellationToken), cancellationToken, progress);
+
+        /// <inheritdoc cref="ProcessObjects(IEnumerable{TrackChunk}, ObjectType, Action{ITimedObject}, ObjectDetectionSettings, ObjectProcessingHint)" />
+        /// <summary>
+        /// Sequentially awaits an asynchronous action for matching objects in tracks.
+        /// A null match processes all objects.
+        /// </summary>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
+        /// <param name="cancellationToken">Token used to cancel the operation.</param>
+        /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
+        public static Task<int> ProcessObjectsAsync(
+            this IEnumerable<TrackChunk> trackChunks,
+            ObjectType objectType,
+            Func<ITimedObject, CancellationToken, ValueTask> action,
+            Predicate<ITimedObject>? match,
+            ObjectDetectionSettings? settings = null,
+            ObjectProcessingHint hint = ObjectProcessingHint.Default,
+            IProgress<AsyncOperationProgress>? progress = null,
+            CancellationToken cancellationToken = default) =>
+            AsyncOperation.Run(() => ProcessObjectsAwaitedAsync(InteractionAsyncUtilities.Collections(trackChunks), objectType, action, match, settings, hint, cancellationToken), cancellationToken, progress);
+
+        /// <inheritdoc cref="ProcessObjects(MidiFile, ObjectType, Action{ITimedObject}, ObjectDetectionSettings, ObjectProcessingHint)" />
+        /// <summary>
+        /// Sequentially awaits an asynchronous action for matching objects in a MIDI file.
+        /// A null match processes all objects.
+        /// </summary>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
+        /// <param name="cancellationToken">Token used to cancel the operation.</param>
+        /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
+        public static Task<int> ProcessObjectsAsync(
+            this MidiFile file,
+            ObjectType objectType,
+            Func<ITimedObject, CancellationToken, ValueTask> action,
+            Predicate<ITimedObject>? match,
+            ObjectDetectionSettings? settings = null,
+            ObjectProcessingHint hint = ObjectProcessingHint.Default,
+            IProgress<AsyncOperationProgress>? progress = null,
+            CancellationToken cancellationToken = default) =>
+            AsyncOperation.Run(() => ProcessObjectsAwaitedAsync(InteractionAsyncUtilities.Collections(file), objectType, action, match, settings, hint, cancellationToken), cancellationToken, progress);
+
+        /// <inheritdoc cref="RemoveObjects(EventsCollection, ObjectType, ObjectDetectionSettings)" />
+        /// <summary>
+        /// Asynchronously removes objects.
+        /// </summary>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
+        /// <param name="cancellationToken">Token used to cancel the operation.</param>
+        /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
+        public static Task<int> RemoveObjectsAsync(
+            this EventsCollection eventsCollection,
+            ObjectType objectType,
+            ObjectDetectionSettings? settings = null,
+            IProgress<AsyncOperationProgress>? progress = null,
+            CancellationToken cancellationToken = default) =>
+            AsyncOperation.Run(() => eventsCollection.RemoveObjects(objectType, settings), cancellationToken, progress);
+
+        /// <inheritdoc cref="RemoveObjects(EventsCollection, ObjectType, Predicate{ITimedObject}, ObjectDetectionSettings)" />
+        /// <summary>
+        /// Asynchronously removes matching objects.
+        /// </summary>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
+        /// <param name="cancellationToken">Token used to cancel the operation.</param>
+        /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
+        public static Task<int> RemoveObjectsAsync(
+            this EventsCollection eventsCollection,
+            ObjectType objectType,
+            Predicate<ITimedObject> match,
+            ObjectDetectionSettings? settings = null,
+            IProgress<AsyncOperationProgress>? progress = null,
+            CancellationToken cancellationToken = default) =>
+            AsyncOperation.Run(() => eventsCollection.RemoveObjects(objectType, match, settings), cancellationToken, progress);
+
+        /// <inheritdoc cref="RemoveObjects(TrackChunk, ObjectType, ObjectDetectionSettings)" />
+        /// <summary>
+        /// Asynchronously removes objects from a track.
+        /// </summary>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
+        /// <param name="cancellationToken">Token used to cancel the operation.</param>
+        /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
+        public static Task<int> RemoveObjectsAsync(
+            this TrackChunk trackChunk,
+            ObjectType objectType,
+            ObjectDetectionSettings? settings = null,
+            IProgress<AsyncOperationProgress>? progress = null,
+            CancellationToken cancellationToken = default) =>
+            AsyncOperation.Run(() => trackChunk.RemoveObjects(objectType, settings), cancellationToken, progress);
+
+        /// <inheritdoc cref="RemoveObjects(TrackChunk, ObjectType, Predicate{ITimedObject}, ObjectDetectionSettings)" />
+        /// <summary>
+        /// Asynchronously removes matching objects from a track.
+        /// </summary>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
+        /// <param name="cancellationToken">Token used to cancel the operation.</param>
+        /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
+        public static Task<int> RemoveObjectsAsync(
+            this TrackChunk trackChunk,
+            ObjectType objectType,
+            Predicate<ITimedObject> match,
+            ObjectDetectionSettings? settings = null,
+            IProgress<AsyncOperationProgress>? progress = null,
+            CancellationToken cancellationToken = default) =>
+            AsyncOperation.Run(() => trackChunk.RemoveObjects(objectType, match, settings), cancellationToken, progress);
+
+        /// <inheritdoc cref="RemoveObjects(IEnumerable{TrackChunk}, ObjectType, ObjectDetectionSettings)" />
+        /// <summary>
+        /// Asynchronously removes objects from tracks.
+        /// </summary>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
+        /// <param name="cancellationToken">Token used to cancel the operation.</param>
+        /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
+        public static Task<int> RemoveObjectsAsync(
+            this IEnumerable<TrackChunk> trackChunks,
+            ObjectType objectType,
+            ObjectDetectionSettings? settings = null,
+            IProgress<AsyncOperationProgress>? progress = null,
+            CancellationToken cancellationToken = default) =>
+            AsyncOperation.Run(() => trackChunks.RemoveObjects(objectType, settings), cancellationToken, progress);
+
+        /// <inheritdoc cref="RemoveObjects(IEnumerable{TrackChunk}, ObjectType, Predicate{ITimedObject}, ObjectDetectionSettings)" />
+        /// <summary>
+        /// Asynchronously removes matching objects from tracks.
+        /// </summary>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
+        /// <param name="cancellationToken">Token used to cancel the operation.</param>
+        /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
+        public static Task<int> RemoveObjectsAsync(
+            this IEnumerable<TrackChunk> trackChunks,
+            ObjectType objectType,
+            Predicate<ITimedObject> match,
+            ObjectDetectionSettings? settings = null,
+            IProgress<AsyncOperationProgress>? progress = null,
+            CancellationToken cancellationToken = default) =>
+            AsyncOperation.Run(() => trackChunks.RemoveObjects(objectType, match, settings), cancellationToken, progress);
+
+        /// <inheritdoc cref="RemoveObjects(MidiFile, ObjectType, ObjectDetectionSettings)" />
+        /// <summary>
+        /// Asynchronously removes objects from a MIDI file.
+        /// </summary>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
+        /// <param name="cancellationToken">Token used to cancel the operation.</param>
+        /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
+        public static Task<int> RemoveObjectsAsync(
+            this MidiFile file,
+            ObjectType objectType,
+            ObjectDetectionSettings? settings = null,
+            IProgress<AsyncOperationProgress>? progress = null,
+            CancellationToken cancellationToken = default) =>
+            AsyncOperation.Run(() => file.RemoveObjects(objectType, settings), cancellationToken, progress);
+
+        /// <inheritdoc cref="RemoveObjects(MidiFile, ObjectType, Predicate{ITimedObject}, ObjectDetectionSettings)" />
+        /// <summary>
+        /// Asynchronously removes matching objects from a MIDI file.
+        /// </summary>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
+        /// <param name="cancellationToken">Token used to cancel the operation.</param>
+        /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
+        public static Task<int> RemoveObjectsAsync(
+            this MidiFile file,
+            ObjectType objectType,
+            Predicate<ITimedObject> match,
+            ObjectDetectionSettings? settings = null,
+            IProgress<AsyncOperationProgress>? progress = null,
+            CancellationToken cancellationToken = default) =>
+            AsyncOperation.Run(() => file.RemoveObjects(objectType, match, settings), cancellationToken, progress);
 
         private static async Task<int> ProcessObjectsAwaitedAsync(
             IEnumerable<EventsCollection> collections,

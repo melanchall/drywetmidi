@@ -14,6 +14,11 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <summary>
         /// Asynchronously detects timed events in an events collection.
         /// </summary>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
+        /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
         public static Task<ICollection<TimedEvent>> GetTimedEventsAsync(
             this EventsCollection eventsCollection,
@@ -26,6 +31,11 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <summary>
         /// Asynchronously detects timed events in a track.
         /// </summary>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
+        /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
         public static Task<ICollection<TimedEvent>> GetTimedEventsAsync(
             this TrackChunk trackChunk,
@@ -38,6 +48,11 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <summary>
         /// Asynchronously detects timed events in tracks.
         /// </summary>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
+        /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
         public static Task<ICollection<TimedEvent>> GetTimedEventsAsync(
             this IEnumerable<TrackChunk> trackChunks,
@@ -50,6 +65,11 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <summary>
         /// Asynchronously detects timed events in a MIDI file.
         /// </summary>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
+        /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
         public static Task<ICollection<TimedEvent>> GetTimedEventsAsync(
             this MidiFile file,
@@ -62,6 +82,11 @@ namespace Melanchall.DryWetMidi.Interaction
         /// Asynchronously detects timed events from an asynchronous MIDI event source.
         /// </summary>
         /// <exception cref="ArgumentNullException"><paramref name="midiEvents"/> is null.</exception>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
+        /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
         public static Task<ICollection<TimedEvent>> GetTimedEventsAsync(
             this IAsyncEnumerable<MidiEvent> midiEvents,
@@ -74,6 +99,11 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <summary>
         /// Asynchronously detects timed events from an asynchronous track source.
         /// </summary>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
+        /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
         public static Task<ICollection<TimedEvent>> GetTimedEventsAsync(
             this IAsyncEnumerable<TrackChunk> trackChunks,
@@ -86,6 +116,11 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <summary>
         /// Asynchronously creates a timed events manager.
         /// </summary>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
+        /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
         public static Task<TimedObjectsManager<TimedEvent>> ManageTimedEventsAsync(
             this EventsCollection eventsCollection,
@@ -99,6 +134,11 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <summary>
         /// Asynchronously creates a timed events manager for a track.
         /// </summary>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
+        /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
         public static Task<TimedObjectsManager<TimedEvent>> ManageTimedEventsAsync(
             this TrackChunk trackChunk,
@@ -112,6 +152,11 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <summary>
         /// Asynchronously processes timed events.
         /// </summary>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
+        /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
         public static Task<int> ProcessTimedEventsAsync(
             this EventsCollection eventsCollection,
@@ -126,6 +171,11 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <summary>
         /// Asynchronously processes matching timed events.
         /// </summary>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
+        /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
         public static Task<int> ProcessTimedEventsAsync(
             this EventsCollection eventsCollection,
@@ -141,6 +191,11 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <summary>
         /// Asynchronously processes timed events in a track.
         /// </summary>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
+        /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
         public static Task<int> ProcessTimedEventsAsync(
             this TrackChunk trackChunk,
@@ -155,6 +210,11 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <summary>
         /// Asynchronously processes matching timed events in a track.
         /// </summary>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
+        /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
         public static Task<int> ProcessTimedEventsAsync(
             this TrackChunk trackChunk,
@@ -170,6 +230,11 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <summary>
         /// Asynchronously processes timed events in tracks.
         /// </summary>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
+        /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
         public static Task<int> ProcessTimedEventsAsync(
             this IEnumerable<TrackChunk> trackChunks,
@@ -184,6 +249,11 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <summary>
         /// Asynchronously processes matching timed events in tracks.
         /// </summary>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
+        /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
         public static Task<int> ProcessTimedEventsAsync(
             this IEnumerable<TrackChunk> trackChunks,
@@ -199,6 +269,11 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <summary>
         /// Asynchronously processes timed events in a MIDI file.
         /// </summary>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
+        /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
         public static Task<int> ProcessTimedEventsAsync(
             this MidiFile file,
@@ -213,6 +288,11 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <summary>
         /// Asynchronously processes matching timed events in a MIDI file.
         /// </summary>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
+        /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
         public static Task<int> ProcessTimedEventsAsync(
             this MidiFile file,
@@ -228,6 +308,11 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <summary>
         /// Sequentially awaits an asynchronous action for each timed event.
         /// </summary>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
+        /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
         public static Task<int> ProcessTimedEventsAsync(
             this EventsCollection eventsCollection,
@@ -242,6 +327,11 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <summary>
         /// Sequentially awaits an asynchronous action for each timed event in a track.
         /// </summary>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
+        /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
         public static Task<int> ProcessTimedEventsAsync(
             this TrackChunk trackChunk,
@@ -256,6 +346,11 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <summary>
         /// Sequentially awaits an asynchronous action for each timed event in tracks.
         /// </summary>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
+        /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
         public static Task<int> ProcessTimedEventsAsync(
             this IEnumerable<TrackChunk> trackChunks,
@@ -270,6 +365,11 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <summary>
         /// Sequentially awaits an asynchronous action for each timed event in a MIDI file.
         /// </summary>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
+        /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
         public static Task<int> ProcessTimedEventsAsync(
             this MidiFile file,
@@ -285,6 +385,11 @@ namespace Melanchall.DryWetMidi.Interaction
         /// Sequentially awaits an asynchronous action for matching timed events.
         /// A null match processes all events.
         /// </summary>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
+        /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
         public static Task<int> ProcessTimedEventsAsync(
             this EventsCollection eventsCollection,
@@ -301,6 +406,11 @@ namespace Melanchall.DryWetMidi.Interaction
         /// Sequentially awaits an asynchronous action for matching timed events in a track.
         /// A null match processes all events.
         /// </summary>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
+        /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
         public static Task<int> ProcessTimedEventsAsync(
             this TrackChunk trackChunk,
@@ -317,6 +427,11 @@ namespace Melanchall.DryWetMidi.Interaction
         /// Sequentially awaits an asynchronous action for matching timed events in tracks.
         /// A null match processes all events.
         /// </summary>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
+        /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
         public static Task<int> ProcessTimedEventsAsync(
             this IEnumerable<TrackChunk> trackChunks,
@@ -333,6 +448,11 @@ namespace Melanchall.DryWetMidi.Interaction
         /// Sequentially awaits an asynchronous action for matching timed events in a MIDI file.
         /// A null match processes all events.
         /// </summary>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
+        /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
         public static Task<int> ProcessTimedEventsAsync(
             this MidiFile file,
@@ -348,6 +468,11 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <summary>
         /// Asynchronously removes all timed events.
         /// </summary>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
+        /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
         public static Task<int> RemoveTimedEventsAsync(
             this EventsCollection eventsCollection,
@@ -359,6 +484,11 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <summary>
         /// Asynchronously removes matching timed events.
         /// </summary>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
+        /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
         public static Task<int> RemoveTimedEventsAsync(
             this EventsCollection eventsCollection,
@@ -372,6 +502,11 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <summary>
         /// Asynchronously removes all timed events from a track.
         /// </summary>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
+        /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
         public static Task<int> RemoveTimedEventsAsync(
             this TrackChunk trackChunk,
@@ -383,6 +518,11 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <summary>
         /// Asynchronously removes matching timed events from a track.
         /// </summary>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
+        /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
         public static Task<int> RemoveTimedEventsAsync(
             this TrackChunk trackChunk,
@@ -396,6 +536,11 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <summary>
         /// Asynchronously removes all timed events from tracks.
         /// </summary>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
+        /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
         public static Task<int> RemoveTimedEventsAsync(
             this IEnumerable<TrackChunk> trackChunks,
@@ -407,6 +552,11 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <summary>
         /// Asynchronously removes matching timed events from tracks.
         /// </summary>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
+        /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
         public static Task<int> RemoveTimedEventsAsync(
             this IEnumerable<TrackChunk> trackChunks,
@@ -420,6 +570,11 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <summary>
         /// Asynchronously removes all timed events from a MIDI file.
         /// </summary>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
+        /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
         public static Task<int> RemoveTimedEventsAsync(
             this MidiFile file,
@@ -431,6 +586,11 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <summary>
         /// Asynchronously removes matching timed events from a MIDI file.
         /// </summary>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
+        /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
         public static Task<int> RemoveTimedEventsAsync(
             this MidiFile file,

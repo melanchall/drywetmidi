@@ -518,7 +518,9 @@ namespace Melanchall.DryWetMidi.Interaction
             var removedEventsCount = 0;
             var time = 0L;
             var latestTime = 0L;
-            var replacement = new List<(MidiEvent Event, long DeltaTime)>(eventsCount);
+            var replacement = AsyncOperation.IsActive
+                ? new List<(MidiEvent Event, long DeltaTime)>(eventsCount)
+                : null;
 
             var constructor = settings?.Constructor;
 
@@ -539,7 +541,14 @@ namespace Melanchall.DryWetMidi.Interaction
                     removedEventsCount++;
                 else
                 {
-                    replacement.Add((midiEvent, time - latestTime));
+                    if (replacement != null)
+                        replacement.Add((midiEvent, time - latestTime));
+                    else
+                    {
+                        midiEvent.DeltaTime = time - latestTime;
+                        eventsCollection.SetByIndexInternal(i - removedEventsCount, midiEvent);
+                    }
+
                     latestTime = time;
                 }
             }
@@ -547,7 +556,12 @@ namespace Melanchall.DryWetMidi.Interaction
             AsyncOperation.Checkpoint();
 
             if (removedEventsCount > 0)
-                InteractionAsyncUtilities.CommitReplacement(eventsCollection, replacement);
+            {
+                if (replacement != null)
+                    InteractionAsyncUtilities.CommitReplacement(eventsCollection, replacement);
+                else
+                    eventsCollection.RemoveRangeInternal(eventsCount - removedEventsCount, removedEventsCount);
+            }
 
             return removedEventsCount;
         }
@@ -666,9 +680,9 @@ namespace Melanchall.DryWetMidi.Interaction
             var eventsCollectionTimes = new long[eventsCollectionsCount];
             var eventsCollectionLatestTimes = new long[eventsCollectionsCount];
             var removedEventsCounts = new int[eventsCollectionsCount];
-            var replacements = eventsCollections
-                .Select(c => new List<(MidiEvent Event, long DeltaTime)>(c.Count))
-                .ToArray();
+            var replacements = AsyncOperation.IsActive
+                ? eventsCollections.Select(c => new List<(MidiEvent Event, long DeltaTime)>(c.Count)).ToArray()
+                : null;
 
             var constructor = settings?.Constructor;
 
@@ -705,7 +719,14 @@ namespace Melanchall.DryWetMidi.Interaction
                     removedEventsCounts[eventsCollectionIndex]++;
                 else
                 {
-                    replacements[eventsCollectionIndex].Add((midiEvent, minTime - eventsCollectionLatestTimes[eventsCollectionIndex]));
+                    if (replacements != null)
+                        replacements[eventsCollectionIndex].Add((midiEvent, minTime - eventsCollectionLatestTimes[eventsCollectionIndex]));
+                    else
+                    {
+                        midiEvent.DeltaTime = minTime - eventsCollectionLatestTimes[eventsCollectionIndex];
+                        eventsCollections[eventsCollectionIndex][eventsCollectionIndices[eventsCollectionIndex] - removedEventsCounts[eventsCollectionIndex]] = midiEvent;
+                    }
+
                     eventsCollectionLatestTimes[eventsCollectionIndex] = minTime;
                 }
 
@@ -719,7 +740,12 @@ namespace Melanchall.DryWetMidi.Interaction
             {
                 var removedEventsCount = removedEventsCounts[i];
                 if (removedEventsCount > 0)
-                    InteractionAsyncUtilities.CommitReplacement(eventsCollections[i], replacements[i]);
+                {
+                    if (replacements != null)
+                        InteractionAsyncUtilities.CommitReplacement(eventsCollections[i], replacements[i]);
+                    else
+                        eventsCollections[i].RemoveRangeInternal(eventsCollections[i].Count - removedEventsCount, removedEventsCount);
+                }
             }
 
             return removedEventsCounts.Sum();

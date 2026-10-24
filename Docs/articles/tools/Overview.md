@@ -16,23 +16,75 @@ DryWetMIDI provides some useful tools to solve complex tasks:
 
 ## Asynchronous tools
 
-All tool families provide `Async` counterparts for bulk operations. Splitter and
-merger operations that produce lazy sequences use asynchronous enumeration; operations
+All tool families provide asynchronous counterparts for bulk operations. For example,
+[Sanitizer.SanitizeAsync](xref:Melanchall.DryWetMidi.Tools.Sanitizer.SanitizeAsync*)
+cleans a file in place, and
+[Quantizer.QuantizeAsync](xref:Melanchall.DryWetMidi.Tools.Quantizer.QuantizeAsync*)
+quantizes objects. Splitter and merger operations that produce lazy sequences use asynchronous enumeration; operations
 that return one result or a materialized collection return a task. In-place operations
 return a task representing completion, not a new copy of their input.
 
 Quantizing, splitting, merging, resizing, repeating, and sanitizing are CPU-bound.
-Their asynchronous APIs offload computation to the thread pool for responsiveness,
-not faster execution. Prefer synchronous methods for small inputs and bound the
-number of concurrent operations in services. Lazy processing may still require
+Their asynchronous APIs move that work from the calling thread to a thread-pool
+worker. For example, an editor can keep drawing its window and responding to clicks
+while another thread quantizes a large file. The processor still has to perform the
+same calculations: this does not make quantization faster or automatically split one
+operation across multiple cores. Scheduling the work can even add a little overhead.
+
+Prefer synchronous methods for small inputs or when the caller already runs the
+work on a background thread. In a service, limit how many operations run at once
+so they do not compete for all available processor time. Lazy processing may still require
 preprocessing or buffers before producing a result. CPU-bound asynchronous sequences
 advance their underlying iterator in bounded batches, so they can compute ahead of
 the consumer without retaining a worker thread while the consumer is idle.
 
 Cancellation is cooperative. In-place transformations may leave completed changes,
 and a lazy sequence may already have yielded results when cancellation or an error
-occurs. Optional progress notifications count algorithm work items, are throttled,
+occurs. Optional progress notifications count algorithm work checkpoints, are throttled,
 and do not require pre-enumeration to determine a total.
+
+For example, request cancellation after a time limit. Catch cancellation separately
+from other failures, and remember that the file may already have been modified:
+
+```csharp
+using (var cancellation = new CancellationTokenSource())
+{
+    cancellation.CancelAfter(TimeSpan.FromSeconds(5));
+
+    try
+    {
+        await midiFile.SanitizeAsync(cancellationToken: cancellation.Token);
+    }
+    catch (OperationCanceledException)
+    {
+        Console.WriteLine("Stopped; some changes may already have been applied.");
+    }
+}
+```
+
+To report progress, pass an `IProgress<T>` receiver for
+[AsyncOperationProgress](xref:Melanchall.DryWetMidi.Common.AsyncOperationProgress).
+Display its phase and processed work count rather than treating the count as a
+percentage or as the number of notes in the output:
+
+```csharp
+var progress = new Progress<AsyncOperationProgress>(update =>
+{
+    Console.WriteLine($"{update.Phase}: {update.ProcessedItems} work checkpoints");
+
+    if (update.IsCompleted)
+    {
+        Console.WriteLine("Completed.");
+    }
+});
+
+await midiFile.SanitizeAsync(progress: progress);
+```
+
+These examples assume an existing
+[MidiFile](xref:Melanchall.DryWetMidi.Core.MidiFile) named `midiFile` and use the
+`System`, `System.Threading`, `Melanchall.DryWetMidi.Common`, and
+`Melanchall.DryWetMidi.Tools` namespaces.
 
 CSV import/export uses asynchronous transport I/O; formatting, object detection,
 and parsing still require CPU time. Caller-supplied streams remain caller-owned.

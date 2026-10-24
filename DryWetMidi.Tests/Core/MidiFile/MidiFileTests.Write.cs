@@ -350,7 +350,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
             using (var streamToWrite = new MemoryStream())
             {
                 midiFile.Write(streamToWrite);
-                ClassicAssert.DoesNotThrow(() => { var l = streamToWrite.Length; });
+                ClassicAssert.DoesNotThrow(() => { var l = streamToWrite.Length; }, "Synchronous writing disposed the caller-owned stream.");
             }
 
             using (var streamToWrite = new MemoryStream())
@@ -359,7 +359,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
                     streamToWrite,
                     cancellationToken: System.Threading.CancellationToken.None).Wait();
 
-                ClassicAssert.DoesNotThrow(() => { var l = streamToWrite.Length; });
+                ClassicAssert.DoesNotThrow(() => { var l = streamToWrite.Length; }, "Async writing disposed the caller-owned stream.");
             }
         }
 

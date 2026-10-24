@@ -4,28 +4,8 @@ uid: a_file_lazy_reading_writing
 
 # Lazy reading/writing
 
-## Asynchronous I/O
-
-`MidiFile.ReadAsync` and `WriteAsync` provide asynchronous file/stream I/O. Lazy
-readers and writers also expose asynchronous token and event operations, and
-`TimedObjectsWriter` accepts both ordinary and asynchronously produced object
-sequences. Object sequences must still be supplied in non-descending time order.
-
-Await asynchronous disposal of writers to emit deferred note-offs, flush remaining
-bytes, and finish MIDI headers. Disposing an object writer does not dispose its
-caller-supplied token writer: finish that writer separately. File-path operations
-own their file streams; stream overloads leave caller-supplied streams open.
-
-Asynchronous output does not remove lazy writing's seekability requirements.
-Track lengths and track counts must be patched during finalization. Cancellation
-or failure can leave partially written data; neither rollback nor atomic replacement
-is implied. Cancellation is cooperative and cannot interrupt arbitrary synchronous
-custom codec code.
-
-Do not overlap operations on the same reader or writer, including synchronous
-operations while asynchronous output is outstanding. Asynchrony does not make
-these stateful objects thread-safe. Parsing and custom codec work still use CPU time;
-asynchronous I/O is not a guarantee that all work runs off the calling thread.
+For asynchronous file I/O and token streaming, see
+[Async reading/writing](xref:a_file_async_reading_writing).
 
 ## Reading
 

@@ -11,6 +11,74 @@ namespace Melanchall.DryWetMidi.Interaction
 {
     internal static class InteractionAsyncUtilities
     {
+        internal sealed class RemovalScope : IDisposable
+        {
+            private static readonly AsyncLocal<RemovalScope?> Current = new AsyncLocal<RemovalScope?>();
+
+            private readonly RemovalScope? _previous;
+            private readonly List<MidiEvent> _markedEvents = new List<MidiEvent>();
+            private readonly HashSet<MidiEvent>? _selectedEvents;
+
+            public void Dispose()
+            {
+                // Cleanup must finish even after cancellation or a callback failure.
+                foreach (var midiEvent in _markedEvents)
+                {
+                    midiEvent.MustBeRemoved = false;
+                }
+
+                Current.Value = _previous;
+            }
+
+            internal RemovalScope()
+            {
+                _previous = Current.Value;
+                _selectedEvents = _previous != null ? new HashSet<MidiEvent>() : null;
+                Current.Value = this;
+            }
+
+            internal bool IsMarked(TimedEvent timedEvent)
+            {
+                return _selectedEvents != null
+                    ? _selectedEvents.Contains(timedEvent.Event)
+                    : timedEvent.Event.MustBeRemoved;
+            }
+
+            internal void Mark(ITimedObject obj)
+            {
+                switch (obj)
+                {
+                    case TimedEvent timedEvent:
+                        MarkEvent(timedEvent.Event);
+                        break;
+                    case Note note:
+                        MarkEvent(note.TimedNoteOnEvent.Event);
+                        MarkEvent(note.TimedNoteOffEvent.Event);
+                        break;
+                    case Chord chord:
+
+                        foreach (var chordNote in chord.Notes)
+                        {
+                            AsyncOperation.Checkpoint();
+                            Mark(chordNote);
+                        }
+
+                        break;
+                }
+            }
+
+            private void MarkEvent(MidiEvent midiEvent)
+            {
+                _selectedEvents?.Add(midiEvent);
+
+                if (midiEvent.MustBeRemoved)
+                    return;
+
+                _markedEvents.Add(midiEvent);
+                midiEvent.MustBeRemoved = true;
+            }
+        }
+
         internal static EventsCollection GetEvents(TrackChunk trackChunk)
         {
             AsyncOperation.Checkpoint();
@@ -19,34 +87,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
         internal static IEnumerable<T> CheckpointItems<T>(IEnumerable<T> source)
         {
-            foreach (var item in source)
-            {
-                AsyncOperation.Checkpoint();
-                yield return item;
-            }
-        }
-
-        internal static void CollectEventsForRemoval(ITimedObject obj, ISet<MidiEvent> events)
-        {
-            switch (obj)
-            {
-                case TimedEvent timedEvent:
-                    events.Add(timedEvent.Event);
-                    break;
-                case Note note:
-                    events.Add(note.TimedNoteOnEvent.Event);
-                    events.Add(note.TimedNoteOffEvent.Event);
-                    break;
-                case Chord chord:
-
-                    foreach (var chordNote in chord.Notes)
-                    {
-                        AsyncOperation.Checkpoint();
-                        CollectEventsForRemoval(chordNote, events);
-                    }
-
-                    break;
-            }
+            return AsyncOperation.IsActive ? EnumerateWithCheckpoints(source) : source;
         }
 
         internal static List<(MidiEvent Event, long DeltaTime)> PrepareReplacement(
@@ -185,6 +226,15 @@ namespace Melanchall.DryWetMidi.Interaction
                 catch (OperationCanceledException) when (lifetime.IsCancellationRequested)
                 {
                 }
+            }
+        }
+
+        private static IEnumerable<T> EnumerateWithCheckpoints<T>(IEnumerable<T> source)
+        {
+            foreach (var item in source)
+            {
+                AsyncOperation.Checkpoint();
+                yield return item;
             }
         }
     }

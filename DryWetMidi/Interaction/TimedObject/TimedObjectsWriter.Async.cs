@@ -41,7 +41,7 @@ namespace Melanchall.DryWetMidi.Interaction
             }
         }
 
-        /// <inheritdoc cref="WriteObject" />
+        /// <inheritdoc cref="WriteObject" path="/member/exception" />
         /// <summary>
         /// Writes an object using asynchronous output. Objects must be supplied in
         /// non-descending time order. Cancellation can leave partially written output.
@@ -70,7 +70,7 @@ namespace Melanchall.DryWetMidi.Interaction
             }
         }
 
-        /// <inheritdoc cref="WriteObjects" />
+        /// <inheritdoc cref="WriteObjects" path="/member/exception" />
         /// <summary>
         /// Writes a sequence in non-descending time order using asynchronous output.
         /// The supplied token writer remains owned by the caller.
@@ -116,7 +116,7 @@ namespace Melanchall.DryWetMidi.Interaction
             }
         }
 
-        /// <inheritdoc cref="WriteObjects" />
+        /// <inheritdoc cref="WriteObjects" path="/member/exception" />
         /// <summary>
         /// Writes asynchronously produced objects in non-descending time order.
         /// Cancellation or producer failure can leave partially written output.

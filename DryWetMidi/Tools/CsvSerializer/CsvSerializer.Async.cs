@@ -21,7 +21,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="settings">CSV serialization settings.</param>
         /// <param name="objectType">Types of objects to serialize from track chunks.</param>
         /// <param name="objectDetectionSettings">Settings used to detect objects.</param>
-        /// <param name="progress">Optional progress receiver.</param>
+        /// <param name="progress">
+        /// Optional throttled work-checkpoint progress for chunk/object processing, not bytes or CSV records.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
         /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <returns>A task representing serialization and stream flushing.</returns>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
@@ -70,7 +73,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="settings">CSV serialization settings.</param>
         /// <param name="objectType">Types of objects to serialize from track chunks.</param>
         /// <param name="objectDetectionSettings">Settings used to detect objects.</param>
-        /// <param name="progress">Optional progress receiver.</param>
+        /// <param name="progress">
+        /// Optional throttled work-checkpoint progress for chunk/object processing, not bytes or CSV records.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
         /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <returns>A task representing serialization and file closure.</returns>
         /// <exception cref="ArgumentException"><paramref name="filePath"/> is null, empty or invalid.</exception>
@@ -112,7 +118,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="settings">CSV serialization settings.</param>
         /// <param name="objectType">Types of objects to serialize from track chunks.</param>
         /// <param name="objectDetectionSettings">Settings used to detect objects.</param>
-        /// <param name="progress">Optional progress receiver.</param>
+        /// <param name="progress">
+        /// Optional throttled work-checkpoint progress for chunk/object processing, not bytes or CSV records.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
         /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <returns>A task representing serialization and stream flushing.</returns>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
@@ -161,7 +170,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="settings">CSV serialization settings.</param>
         /// <param name="objectType">Types of objects to serialize from track chunks.</param>
         /// <param name="objectDetectionSettings">Settings used to detect objects.</param>
-        /// <param name="progress">Optional progress receiver.</param>
+        /// <param name="progress">
+        /// Optional throttled work-checkpoint progress for chunk/object processing, not bytes or CSV records.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
         /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <returns>A task representing serialization and file closure.</returns>
         /// <exception cref="ArgumentException"><paramref name="filePath"/> is null, empty or invalid.</exception>
@@ -205,7 +217,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="settings">CSV serialization settings.</param>
         /// <param name="objectType">Types of objects to serialize from track chunks.</param>
         /// <param name="objectDetectionSettings">Settings used to detect objects.</param>
-        /// <param name="progress">Optional progress receiver.</param>
+        /// <param name="progress">
+        /// Optional throttled work-checkpoint progress for chunk/object processing, not bytes or CSV records.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
         /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <returns>A task representing serialization and stream flushing.</returns>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
@@ -254,7 +269,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="settings">CSV serialization settings.</param>
         /// <param name="objectType">Types of objects to serialize from track chunks.</param>
         /// <param name="objectDetectionSettings">Settings used to detect objects.</param>
-        /// <param name="progress">Optional progress receiver.</param>
+        /// <param name="progress">
+        /// Optional throttled work-checkpoint progress for chunk/object processing, not bytes or CSV records.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
         /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <returns>A task representing serialization and file closure.</returns>
         /// <exception cref="ArgumentException"><paramref name="filePath"/> is null, empty or invalid.</exception>
@@ -296,7 +314,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="stream">Writable stream, which remains open.</param>
         /// <param name="tempoMap">Tempo map used to convert times and lengths.</param>
         /// <param name="settings">CSV serialization settings.</param>
-        /// <param name="progress">Optional progress receiver.</param>
+        /// <param name="progress">
+        /// Optional throttled work-checkpoint progress for input and nested object processing, not bytes or CSV records.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
         /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <returns>A task representing serialization and stream flushing.</returns>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
@@ -340,7 +361,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="overwriteFile">Whether an existing destination may be overwritten.</param>
         /// <param name="tempoMap">Tempo map used to convert times and lengths.</param>
         /// <param name="settings">CSV serialization settings.</param>
-        /// <param name="progress">Optional progress receiver.</param>
+        /// <param name="progress">
+        /// Optional throttled work-checkpoint progress for input and nested object processing, not bytes or CSV records.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
         /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <returns>A task representing serialization and file closure.</returns>
         /// <exception cref="ArgumentException"><paramref name="filePath"/> is null, empty or invalid.</exception>
@@ -376,7 +400,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <inheritdoc cref="DeserializeFileFromCsv(Stream, CsvDeserializationSettings)" path="/member/exception"/>
         /// <param name="stream">Readable stream, which remains open.</param>
         /// <param name="settings">CSV deserialization settings.</param>
-        /// <param name="progress">Optional progress receiver.</param>
+        /// <param name="progress">
+        /// Optional throttled work-checkpoint progress for CSV records and object reconstruction, not bytes or lines.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
         /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <returns>A task returning the deserialized MIDI file.</returns>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
@@ -417,7 +444,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <inheritdoc cref="DeserializeFileFromCsv(string, CsvDeserializationSettings)" path="/member/exception"/>
         /// <param name="filePath">Source CSV file path.</param>
         /// <param name="settings">CSV deserialization settings.</param>
-        /// <param name="progress">Optional progress receiver.</param>
+        /// <param name="progress">
+        /// Optional throttled work-checkpoint progress for CSV records and object reconstruction, not bytes or lines.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
         /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <returns>A task returning the deserialized MIDI file after closing the source file.</returns>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
@@ -444,7 +474,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="stream">Readable stream, which remains open.</param>
         /// <param name="tempoMap">Tempo map used to convert times and lengths.</param>
         /// <param name="settings">CSV deserialization settings.</param>
-        /// <param name="progress">Optional progress receiver.</param>
+        /// <param name="progress">
+        /// Optional throttled work-checkpoint progress for CSV records and object reconstruction, not bytes or lines.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
         /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <returns>A task returning the deserialized chunks.</returns>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
@@ -479,7 +512,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="filePath">Source CSV file path.</param>
         /// <param name="tempoMap">Tempo map used to convert times and lengths.</param>
         /// <param name="settings">CSV deserialization settings.</param>
-        /// <param name="progress">Optional progress receiver.</param>
+        /// <param name="progress">
+        /// Optional throttled work-checkpoint progress for CSV records and object reconstruction, not bytes or lines.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
         /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <returns>A task returning the deserialized chunks after closing the source file.</returns>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
@@ -506,7 +542,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="stream">Readable stream, which remains open.</param>
         /// <param name="tempoMap">Tempo map used to convert times and lengths.</param>
         /// <param name="settings">CSV deserialization settings.</param>
-        /// <param name="progress">Optional progress receiver.</param>
+        /// <param name="progress">
+        /// Optional throttled work-checkpoint progress for CSV records and object reconstruction, not bytes or lines.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
         /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <returns>A task returning the deserialized chunk.</returns>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
@@ -546,7 +585,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="filePath">Source CSV file path.</param>
         /// <param name="tempoMap">Tempo map used to convert times and lengths.</param>
         /// <param name="settings">CSV deserialization settings.</param>
-        /// <param name="progress">Optional progress receiver.</param>
+        /// <param name="progress">
+        /// Optional throttled work-checkpoint progress for CSV records and object reconstruction, not bytes or lines.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
         /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <returns>A task returning the deserialized chunk after closing the source file.</returns>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
@@ -573,7 +615,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="stream">Readable stream, which remains open.</param>
         /// <param name="tempoMap">Tempo map used to convert times and lengths.</param>
         /// <param name="settings">CSV deserialization settings.</param>
-        /// <param name="progress">Optional progress receiver.</param>
+        /// <param name="progress">
+        /// Optional throttled work-checkpoint progress for CSV records and object reconstruction, not bytes or lines.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
         /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <returns>A task returning the deserialized objects.</returns>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
@@ -621,7 +666,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="filePath">Source CSV file path.</param>
         /// <param name="tempoMap">Tempo map used to convert times and lengths.</param>
         /// <param name="settings">CSV deserialization settings.</param>
-        /// <param name="progress">Optional progress receiver.</param>
+        /// <param name="progress">
+        /// Optional throttled work-checkpoint progress for CSV records and object reconstruction, not bytes or lines.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
         /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <returns>A task returning the deserialized objects after closing the source file.</returns>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>

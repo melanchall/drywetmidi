@@ -13,6 +13,11 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <summary>
         /// Asynchronously detects objects in MIDI events.
         /// </summary>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
+        /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
         public static Task<ICollection<ITimedObject>> GetObjectsAsync(
             this IEnumerable<MidiEvent?> midiEvents,
@@ -26,6 +31,11 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <summary>
         /// Asynchronously detects objects in an events collection.
         /// </summary>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
+        /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
         public static Task<ICollection<ITimedObject>> GetObjectsAsync(
             this EventsCollection eventsCollection,
@@ -39,6 +49,11 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <summary>
         /// Asynchronously detects objects in a track.
         /// </summary>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
+        /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
         public static Task<ICollection<ITimedObject>> GetObjectsAsync(
             this TrackChunk trackChunk,
@@ -52,6 +67,11 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <summary>
         /// Asynchronously detects objects in tracks.
         /// </summary>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
+        /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
         public static Task<ICollection<ITimedObject>> GetObjectsAsync(
             this IEnumerable<TrackChunk?> trackChunks,
@@ -65,6 +85,11 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <summary>
         /// Asynchronously detects objects in a MIDI file.
         /// </summary>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
+        /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
         public static Task<ICollection<ITimedObject>> GetObjectsAsync(
             this MidiFile midiFile,
@@ -78,6 +103,11 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <summary>
         /// Asynchronously detects objects in timed objects.
         /// </summary>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
+        /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
         public static Task<ICollection<ITimedObject>> GetObjectsAsync(
             this IEnumerable<ITimedObject?> timedObjects,
@@ -91,6 +121,11 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <summary>
         /// Asynchronously detects objects from an asynchronous MIDI event source.
         /// </summary>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
+        /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
         public static Task<ICollection<ITimedObject>> GetObjectsAsync(
             this IAsyncEnumerable<MidiEvent?> midiEvents,
@@ -104,6 +139,11 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <summary>
         /// Asynchronously detects objects from an asynchronous timed object source.
         /// </summary>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
+        /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
         public static Task<ICollection<ITimedObject>> GetObjectsAsync(
             this IAsyncEnumerable<ITimedObject?> timedObjects,
@@ -117,6 +157,11 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <summary>
         /// Asynchronously detects objects from an asynchronous track source.
         /// </summary>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
+        /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
         public static Task<ICollection<ITimedObject>> GetObjectsAsync(
             this IAsyncEnumerable<TrackChunk?> trackChunks,
@@ -131,6 +176,11 @@ namespace Melanchall.DryWetMidi.Interaction
         /// Lazily detects objects on a worker and yields them asynchronously, without materializing
         /// the result. Disposing the enumerator cancels detection and disposes the source enumerator.
         /// </summary>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful enumeration.
+        /// </param>
+        /// <param name="cancellationToken">Token used to cancel enumeration.</param>
         /// <exception cref="OperationCanceledException">Enumeration was canceled.</exception>
         public static IAsyncEnumerable<ITimedObject> EnumerateObjectsAsync(
             this IEnumerable<MidiEvent?> midiEvents,

@@ -992,8 +992,9 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                         var aggregate = Assert.Throws<AggregateException>(() =>
                             (filePath == null
                                 ? CsvSerializer.DeserializeObjectsFromCsvAsync(stream, TempoMap.Default, settings, cancellationToken: System.Threading.CancellationToken.None)
-                                : CsvSerializer.DeserializeObjectsFromCsvAsync(filePath, TempoMap.Default, settings, cancellationToken: System.Threading.CancellationToken.None)).Wait());
-                        Assert.That(aggregate.InnerException, Is.TypeOf<TException>());
+                                : CsvSerializer.DeserializeObjectsFromCsvAsync(filePath, TempoMap.Default, settings, cancellationToken: System.Threading.CancellationToken.None)).Wait(), "Async CSV object deserialization did not throw.");
+
+                        ClassicAssert.IsInstanceOf<TException>(aggregate.InnerException, "Async CSV object exception type differs.");
                         exception = (TException)aggregate.InnerException;
                     }
                     else
@@ -1021,8 +1022,9 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                         var aggregate = Assert.Throws<AggregateException>(() =>
                             (filePath == null
                                 ? CsvSerializer.DeserializeFileFromCsvAsync(stream, settings, cancellationToken: System.Threading.CancellationToken.None)
-                                : CsvSerializer.DeserializeFileFromCsvAsync(filePath, settings, cancellationToken: System.Threading.CancellationToken.None)).Wait());
-                        Assert.That(aggregate.InnerException, Is.TypeOf<TException>());
+                                : CsvSerializer.DeserializeFileFromCsvAsync(filePath, settings, cancellationToken: System.Threading.CancellationToken.None)).Wait(), "Async CSV file deserialization did not throw.");
+
+                        ClassicAssert.IsInstanceOf<TException>(aggregate.InnerException, "Async CSV file exception type differs.");
                         exception = (TException)aggregate.InnerException;
                     }
                     else

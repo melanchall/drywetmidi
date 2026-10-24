@@ -16,7 +16,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <inheritdoc cref="MergeSequentially(IEnumerable{MidiFile}, SequentialMergingSettings)" path="/member/exception"/>
         /// <param name="midiFiles">Files to merge.</param>
         /// <param name="settings">Sequential merging settings.</param>
-        /// <param name="progress">Optional progress receiver.</param>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
         /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <returns>A task returning the merged file.</returns>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
@@ -33,7 +36,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <inheritdoc cref="MergeSimultaneously(IEnumerable{MidiFile}, SimultaneousMergingSettings)" path="/member/exception"/>
         /// <param name="midiFiles">Files to merge.</param>
         /// <param name="settings">Simultaneous merging settings.</param>
-        /// <param name="progress">Optional progress receiver.</param>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
         /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <returns>A task returning the merged file.</returns>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
@@ -53,7 +59,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="tempoMap">Tempo map used for time and length calculations.</param>
         /// <param name="settings">Object merging settings.</param>
         /// <param name="objectDetectionSettings">Settings used to detect objects.</param>
-        /// <param name="progress">Optional progress receiver.</param>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
         /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <returns>A task representing the merge.</returns>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
@@ -79,7 +88,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="tempoMap">Tempo map used for time and length calculations.</param>
         /// <param name="settings">Object merging settings.</param>
         /// <param name="objectDetectionSettings">Settings used to detect objects.</param>
-        /// <param name="progress">Optional progress receiver.</param>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
         /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <returns>A task representing the merge.</returns>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
@@ -104,7 +116,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="objectType">Types of objects to merge.</param>
         /// <param name="settings">Object merging settings.</param>
         /// <param name="objectDetectionSettings">Settings used to detect objects.</param>
-        /// <param name="progress">Optional progress receiver.</param>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
         /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <returns>A task representing the merge.</returns>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
@@ -124,7 +139,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="objects">Objects to merge.</param>
         /// <param name="tempoMap">Tempo map used for time and length calculations.</param>
         /// <param name="settings">Object merging settings.</param>
-        /// <param name="progress">Optional progress receiver.</param>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful enumeration.
+        /// </param>
         /// <param name="cancellationToken">Token used to cancel enumeration.</param>
         /// <returns>A lazy asynchronous sequence of merged objects.</returns>
         /// <exception cref="OperationCanceledException">Enumeration was canceled.</exception>

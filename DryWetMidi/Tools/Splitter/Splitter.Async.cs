@@ -17,7 +17,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="midiFile">Source MIDI file.</param>
         /// <param name="partLength">Length of the part to take.</param>
         /// <param name="settings">Slicing settings.</param>
-        /// <param name="progress">Optional progress receiver.</param>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
         /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <returns>A task returning the selected part.</returns>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
@@ -37,7 +40,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="partStart">Start of the part to take.</param>
         /// <param name="partLength">Length of the part to take.</param>
         /// <param name="settings">Slicing settings.</param>
-        /// <param name="progress">Optional progress receiver.</param>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
         /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <returns>A task returning the selected part.</returns>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
@@ -57,7 +63,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="midiFile">Source MIDI file.</param>
         /// <param name="partLength">Length of the beginning to skip.</param>
         /// <param name="settings">Slicing settings.</param>
-        /// <param name="progress">Optional progress receiver.</param>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
         /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <returns>A task returning the remainder of the file.</returns>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
@@ -77,7 +86,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="partStart">Start of the part to remove.</param>
         /// <param name="partLength">Length of the part to remove.</param>
         /// <param name="settings">Slicing settings.</param>
-        /// <param name="progress">Optional progress receiver.</param>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
         /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <returns>A task returning the file with the selected part removed.</returns>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
@@ -96,7 +108,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <inheritdoc cref="SplitByChannel(MidiFile, SplitFileByChannelSettings)" path="/member/exception"/>
         /// <param name="midiFile">Source MIDI file.</param>
         /// <param name="settings">Channel splitting settings.</param>
-        /// <param name="progress">Optional progress receiver.</param>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful enumeration.
+        /// </param>
         /// <param name="cancellationToken">Token used to cancel enumeration.</param>
         /// <returns>A lazy asynchronous sequence of files split by channel.</returns>
         /// <exception cref="OperationCanceledException">Enumeration was canceled.</exception>
@@ -113,7 +128,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <inheritdoc cref="SplitByChunks(MidiFile, SplitFileByChunksSettings)" path="/member/exception"/>
         /// <param name="midiFile">Source MIDI file.</param>
         /// <param name="settings">Chunk splitting settings.</param>
-        /// <param name="progress">Optional progress receiver.</param>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful enumeration.
+        /// </param>
         /// <param name="cancellationToken">Token used to cancel enumeration.</param>
         /// <returns>A lazy asynchronous sequence of files split by chunk.</returns>
         /// <exception cref="OperationCanceledException">Enumeration was canceled.</exception>
@@ -131,7 +149,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="midiFile">Source MIDI file.</param>
         /// <param name="grid">Grid defining the split positions.</param>
         /// <param name="settings">Slicing settings.</param>
-        /// <param name="progress">Optional progress receiver.</param>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful enumeration.
+        /// </param>
         /// <param name="cancellationToken">Token used to cancel enumeration.</param>
         /// <returns>A lazy asynchronous sequence of files split by the grid.</returns>
         /// <exception cref="OperationCanceledException">Enumeration was canceled.</exception>
@@ -151,7 +172,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="objectType">Types of objects used to split the file.</param>
         /// <param name="settings">Object splitting settings.</param>
         /// <param name="objectDetectionSettings">Settings used to detect objects.</param>
-        /// <param name="progress">Optional progress receiver.</param>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful enumeration.
+        /// </param>
         /// <param name="cancellationToken">Token used to cancel enumeration.</param>
         /// <returns>A lazy asynchronous sequence of files split by objects.</returns>
         /// <exception cref="OperationCanceledException">Enumeration was canceled.</exception>
@@ -177,7 +201,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="tempoMap">Tempo map used for time and length calculations.</param>
         /// <param name="objectDetectionSettings">Settings used to detect objects.</param>
         /// <param name="filter">Optional predicate selecting objects to split.</param>
-        /// <param name="progress">Optional progress receiver.</param>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
         /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <returns>A task representing the split.</returns>
         /// <exception cref="InvalidOperationException">The step converts to zero MIDI ticks at a split position.</exception>
@@ -206,7 +233,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="tempoMap">Tempo map used for time and length calculations.</param>
         /// <param name="objectDetectionSettings">Settings used to detect objects.</param>
         /// <param name="filter">Optional predicate selecting objects to split.</param>
-        /// <param name="progress">Optional progress receiver.</param>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
         /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <returns>A task representing the split.</returns>
         /// <exception cref="InvalidOperationException">The step converts to zero MIDI ticks at a split position.</exception>
@@ -234,7 +264,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="step">Length of each split part.</param>
         /// <param name="objectDetectionSettings">Settings used to detect objects.</param>
         /// <param name="filter">Optional predicate selecting objects to split.</param>
-        /// <param name="progress">Optional progress receiver.</param>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
         /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <returns>A task representing the split.</returns>
         /// <exception cref="InvalidOperationException">The step converts to zero MIDI ticks at a split position.</exception>
@@ -257,7 +290,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="step">Length of each split part.</param>
         /// <param name="tempoMap">Tempo map used for time and length calculations.</param>
         /// <param name="filter">Optional predicate selecting objects to split.</param>
-        /// <param name="progress">Optional progress receiver.</param>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful enumeration.
+        /// </param>
         /// <param name="cancellationToken">Token used to cancel enumeration.</param>
         /// <returns>A lazy asynchronous sequence of split objects.</returns>
         /// <exception cref="InvalidOperationException">The step converts to zero MIDI ticks at a split position.</exception>
@@ -281,7 +317,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="tempoMap">Tempo map used for time and length calculations.</param>
         /// <param name="objectDetectionSettings">Settings used to detect objects.</param>
         /// <param name="filter">Optional predicate selecting objects to split.</param>
-        /// <param name="progress">Optional progress receiver.</param>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
         /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <returns>A task representing the split.</returns>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
@@ -309,7 +348,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="tempoMap">Tempo map used for time and length calculations.</param>
         /// <param name="objectDetectionSettings">Settings used to detect objects.</param>
         /// <param name="filter">Optional predicate selecting objects to split.</param>
-        /// <param name="progress">Optional progress receiver.</param>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
         /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <returns>A task representing the split.</returns>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
@@ -336,7 +378,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="grid">Grid defining the split positions.</param>
         /// <param name="objectDetectionSettings">Settings used to detect objects.</param>
         /// <param name="filter">Optional predicate selecting objects to split.</param>
-        /// <param name="progress">Optional progress receiver.</param>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
         /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <returns>A task representing the split.</returns>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
@@ -358,7 +403,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="grid">Grid defining the split positions.</param>
         /// <param name="tempoMap">Tempo map used for time and length calculations.</param>
         /// <param name="filter">Optional predicate selecting objects to split.</param>
-        /// <param name="progress">Optional progress receiver.</param>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful enumeration.
+        /// </param>
         /// <param name="cancellationToken">Token used to cancel enumeration.</param>
         /// <returns>A lazy asynchronous sequence of split objects.</returns>
         /// <exception cref="OperationCanceledException">Enumeration was canceled.</exception>
@@ -382,7 +430,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="tempoMap">Tempo map used for time and length calculations.</param>
         /// <param name="objectDetectionSettings">Settings used to detect objects.</param>
         /// <param name="filter">Optional predicate selecting objects to split.</param>
-        /// <param name="progress">Optional progress receiver.</param>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
         /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <returns>A task representing the split.</returns>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
@@ -412,7 +463,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="tempoMap">Tempo map used for time and length calculations.</param>
         /// <param name="objectDetectionSettings">Settings used to detect objects.</param>
         /// <param name="filter">Optional predicate selecting objects to split.</param>
-        /// <param name="progress">Optional progress receiver.</param>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
         /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <returns>A task representing the split.</returns>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
@@ -441,7 +495,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="lengthType">Time span type used to divide object lengths.</param>
         /// <param name="objectDetectionSettings">Settings used to detect objects.</param>
         /// <param name="filter">Optional predicate selecting objects to split.</param>
-        /// <param name="progress">Optional progress receiver.</param>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
         /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <returns>A task representing the split.</returns>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
@@ -468,7 +525,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="lengthType">Time span type used to divide object lengths.</param>
         /// <param name="tempoMap">Tempo map used for time and length calculations.</param>
         /// <param name="filter">Optional predicate selecting objects to split.</param>
-        /// <param name="progress">Optional progress receiver.</param>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful enumeration.
+        /// </param>
         /// <param name="cancellationToken">Token used to cancel enumeration.</param>
         /// <returns>A lazy asynchronous sequence of split objects.</returns>
         /// <exception cref="OperationCanceledException">Enumeration was canceled.</exception>
@@ -496,7 +556,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="tempoMap">Tempo map used for time and length calculations.</param>
         /// <param name="objectDetectionSettings">Settings used to detect objects.</param>
         /// <param name="filter">Optional predicate selecting objects to split.</param>
-        /// <param name="progress">Optional progress receiver.</param>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
         /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <returns>A task representing the split.</returns>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
@@ -526,7 +589,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="tempoMap">Tempo map used for time and length calculations.</param>
         /// <param name="objectDetectionSettings">Settings used to detect objects.</param>
         /// <param name="filter">Optional predicate selecting objects to split.</param>
-        /// <param name="progress">Optional progress receiver.</param>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
         /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <returns>A task representing the split.</returns>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
@@ -555,7 +621,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="from">Object end from which the distance is measured.</param>
         /// <param name="objectDetectionSettings">Settings used to detect objects.</param>
         /// <param name="filter">Optional predicate selecting objects to split.</param>
-        /// <param name="progress">Optional progress receiver.</param>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
         /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <returns>A task representing the split.</returns>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
@@ -582,7 +651,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="from">Object end from which the distance is measured.</param>
         /// <param name="tempoMap">Tempo map used for time and length calculations.</param>
         /// <param name="filter">Optional predicate selecting objects to split.</param>
-        /// <param name="progress">Optional progress receiver.</param>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful enumeration.
+        /// </param>
         /// <param name="cancellationToken">Token used to cancel enumeration.</param>
         /// <returns>A lazy asynchronous sequence of split objects.</returns>
         /// <exception cref="OperationCanceledException">Enumeration was canceled.</exception>
@@ -608,7 +680,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="tempoMap">Tempo map used for time and length calculations.</param>
         /// <param name="objectDetectionSettings">Settings used to detect objects.</param>
         /// <param name="filter">Optional predicate selecting objects to split.</param>
-        /// <param name="progress">Optional progress receiver.</param>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
         /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <returns>A task representing the split.</returns>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
@@ -640,7 +715,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="tempoMap">Tempo map used for time and length calculations.</param>
         /// <param name="objectDetectionSettings">Settings used to detect objects.</param>
         /// <param name="filter">Optional predicate selecting objects to split.</param>
-        /// <param name="progress">Optional progress receiver.</param>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
         /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <returns>A task representing the split.</returns>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
@@ -671,7 +749,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="from">Object end from which the distance is measured.</param>
         /// <param name="objectDetectionSettings">Settings used to detect objects.</param>
         /// <param name="filter">Optional predicate selecting objects to split.</param>
-        /// <param name="progress">Optional progress receiver.</param>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
         /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <returns>A task representing the split.</returns>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
@@ -700,7 +781,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="from">Object end from which the distance is measured.</param>
         /// <param name="tempoMap">Tempo map used for time and length calculations.</param>
         /// <param name="filter">Optional predicate selecting objects to split.</param>
-        /// <param name="progress">Optional progress receiver.</param>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful enumeration.
+        /// </param>
         /// <param name="cancellationToken">Token used to cancel enumeration.</param>
         /// <returns>A lazy asynchronous sequence of split objects.</returns>
         /// <exception cref="OperationCanceledException">Enumeration was canceled.</exception>

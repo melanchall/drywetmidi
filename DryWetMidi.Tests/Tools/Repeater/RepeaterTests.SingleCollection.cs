@@ -746,7 +746,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 settings,
                 cancellationToken: System.Threading.CancellationToken.None).Result;
             MidiAsserts.AreEqual(asyncExpected.Select(obj => obj.Clone()).ToTrackChunk(), actualTrackChunk, true, "Invalid asynchronous track chunk.");
-            ClassicAssert.AreNotSame(inputTrackChunk, actualTrackChunk);
+            ClassicAssert.AreNotSame(inputTrackChunk, actualTrackChunk, "Async result track chunk refers to the input one.");
 
             inputTrackChunks = new[] { asyncSource.Select(obj => obj?.Clone()).ToTrackChunk() };
             actualTrackChunks = inputTrackChunks.RepeatAsync(
@@ -755,7 +755,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 settings,
                 cancellationToken: System.Threading.CancellationToken.None).Result;
             MidiAsserts.AreEqual(new[] { asyncExpected.Select(obj => obj.Clone()).ToTrackChunk() }, actualTrackChunks, true, "Invalid asynchronous track chunks.");
-            ClassicAssert.AreNotSame(inputTrackChunks.First(), actualTrackChunks.First());
+            ClassicAssert.AreNotSame(inputTrackChunks.First(), actualTrackChunks.First(), "Async result track chunks refer to the input ones.");
 
             inputFile = asyncSource.Select(obj => obj?.Clone()).ToFile();
             actualFile = inputFile.RepeatAsync(
@@ -763,7 +763,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 settings,
                 cancellationToken: System.Threading.CancellationToken.None).Result;
             MidiAsserts.AreEqual(asyncExpected.Select(obj => obj.Clone()).ToFile(), actualFile, true, "Invalid asynchronous file.");
-            ClassicAssert.AreNotSame(inputFile, actualFile);
+            ClassicAssert.AreNotSame(inputFile, actualFile, "Async result file refers to the input one.");
         }
 
         private static object[] GetRoundUpStepData_ShiftByMaxTime(

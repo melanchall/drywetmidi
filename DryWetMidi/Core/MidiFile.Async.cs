@@ -15,7 +15,10 @@ namespace Melanchall.DryWetMidi.Core
         /// </summary>
         /// <param name="stream">Readable stream, left open on completion or failure.</param>
         /// <param name="settings">Reading settings, or <c>null</c> for defaults.</param>
-        /// <param name="progress">Optional throttled progress in bytes read from the transport.</param>
+        /// <param name="progress">
+        /// Optional throttled progress in bytes read from the transport.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
         /// <param name="cancellationToken">Token used to cancel reading.</param>
         /// <returns>The MIDI file.</returns>
         /// <remarks>
@@ -47,7 +50,10 @@ namespace Melanchall.DryWetMidi.Core
         /// </summary>
         /// <param name="filePath">Path of the MIDI file.</param>
         /// <param name="settings">Reading settings, or <c>null</c> for defaults.</param>
-        /// <param name="progress">Optional throttled progress in bytes read from the transport.</param>
+        /// <param name="progress">
+        /// Optional throttled progress in bytes read from the transport.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
         /// <param name="cancellationToken">Token used to cancel reading.</param>
         /// <returns>The MIDI file.</returns>
         /// <inheritdoc cref="Read(string, ReadingSettings)" path="/member/exception"/>
@@ -88,7 +94,10 @@ namespace Melanchall.DryWetMidi.Core
         /// <param name="stream">Writable stream, left open on completion or failure.</param>
         /// <param name="format">Output MIDI file format.</param>
         /// <param name="settings">Writing settings, or <c>null</c> for defaults.</param>
-        /// <param name="progress">Optional throttled progress in bytes written to the transport.</param>
+        /// <param name="progress">
+        /// Optional throttled progress in bytes written to the transport.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
         /// <param name="cancellationToken">Token used to cancel writing.</param>
         /// <returns>A task representing writing.</returns>
         /// <remarks>
@@ -167,7 +176,10 @@ namespace Melanchall.DryWetMidi.Core
         /// <param name="overwriteFile">Whether an existing file may be overwritten.</param>
         /// <param name="format">Output MIDI file format.</param>
         /// <param name="settings">Writing settings, or <c>null</c> for defaults.</param>
-        /// <param name="progress">Optional throttled progress in bytes written to the transport.</param>
+        /// <param name="progress">
+        /// Optional throttled progress in bytes written to the transport.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
         /// <param name="cancellationToken">Token used to cancel writing.</param>
         /// <returns>A task representing writing.</returns>
         /// <remarks>Cancellation or failure can leave a partially written output file.</remarks>

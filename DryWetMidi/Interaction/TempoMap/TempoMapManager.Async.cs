@@ -13,6 +13,11 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <summary>
         /// Asynchronously creates and initializes a tempo map manager.
         /// </summary>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
+        /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
         public static Task<TempoMapManager> CreateAsync(
             TimeDivision timeDivision,
@@ -25,6 +30,11 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <summary>
         /// Asynchronously saves the managed tempo map back to its events collections.
         /// </summary>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
+        /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
         public Task SaveChangesAsync(
             IProgress<AsyncOperationProgress>? progress = null,
@@ -35,6 +45,11 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <summary>
         /// Asynchronously replaces the managed tempo map.
         /// </summary>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
+        /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
         public Task ReplaceTempoMapAsync(
             TempoMap tempoMap,

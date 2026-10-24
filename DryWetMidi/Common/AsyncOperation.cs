@@ -11,7 +11,7 @@ namespace Melanchall.DryWetMidi.Common
         {
             internal readonly CancellationToken CancellationToken;
             internal readonly IProgress<AsyncOperationProgress>? Progress;
-            internal readonly Stopwatch Stopwatch = Stopwatch.StartNew();
+            internal readonly Stopwatch? Stopwatch;
             internal long Processed;
             internal long LastReport;
 
@@ -19,10 +19,13 @@ namespace Melanchall.DryWetMidi.Common
             {
                 CancellationToken = cancellationToken;
                 Progress = progress;
+                Stopwatch = progress != null ? Stopwatch.StartNew() : null;
             }
         }
 
         private static readonly AsyncLocal<Context?> Current = new AsyncLocal<Context?>();
+
+        internal static bool IsActive => Current.Value != null;
 
         internal static Task Run(
             Action action,
@@ -49,7 +52,9 @@ namespace Melanchall.DryWetMidi.Common
                 () =>
                 {
                     var previous = Current.Value;
-                    var context = new Context(cancellationToken, progress);
+                    var context = cancellationToken.CanBeCanceled || progress != null
+                        ? new Context(cancellationToken, progress)
+                        : null;
                     Current.Value = context;
                     try
                     {
@@ -58,7 +63,7 @@ namespace Melanchall.DryWetMidi.Common
                         var result = action();
 
                         cancellationToken.ThrowIfCancellationRequested();
-                        progress?.Report(new AsyncOperationProgress(context.Processed, true));
+                        progress?.Report(new AsyncOperationProgress(context!.Processed, true));
 
                         return result;
                     }
@@ -79,7 +84,9 @@ namespace Melanchall.DryWetMidi.Common
                 async () =>
                 {
                     var previous = Current.Value;
-                    var context = new Context(cancellationToken, progress);
+                    var context = cancellationToken.CanBeCanceled || progress != null
+                        ? new Context(cancellationToken, progress)
+                        : null;
                     Current.Value = context;
                     try
                     {
@@ -88,7 +95,7 @@ namespace Melanchall.DryWetMidi.Common
                         var result = await action().ConfigureAwait(false);
 
                         cancellationToken.ThrowIfCancellationRequested();
-                        progress?.Report(new AsyncOperationProgress(context.Processed, true));
+                        progress?.Report(new AsyncOperationProgress(context!.Processed, true));
 
                         return result;
                     }
@@ -107,9 +114,12 @@ namespace Melanchall.DryWetMidi.Common
                 return;
 
             context.CancellationToken.ThrowIfCancellationRequested();
+            if (context.Progress == null)
+                return;
+
             context.Processed = processed ?? context.Processed + 1;
-            var elapsed = context.Stopwatch.ElapsedMilliseconds;
-            if (context.Progress != null && elapsed - context.LastReport >= 100)
+            var elapsed = context.Stopwatch!.ElapsedMilliseconds;
+            if (elapsed - context.LastReport >= 100)
             {
                 context.LastReport = elapsed;
                 context.Progress.Report(new AsyncOperationProgress(context.Processed));

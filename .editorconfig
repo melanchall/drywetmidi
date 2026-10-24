@@ -16,6 +16,9 @@ csharp_new_line_before_else = true
 csharp_new_line_before_finally = true
 csharp_preserve_single_line_blocks = false
 csharp_preserve_single_line_statements = false
+csharp_style_expression_bodied_constructors = false:suggestion
+# Member ordering, logical blank lines, documentation, and test rules require review;
+# the supported formatter options above do not enforce all of CODE_STYLE.txt.
 
 [*.md]
 indent_style = space

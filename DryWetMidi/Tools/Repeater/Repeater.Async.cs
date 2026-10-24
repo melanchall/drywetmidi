@@ -17,7 +17,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="midiFile">File to repeat.</param>
         /// <param name="repeatsNumber">Number of repeats to append.</param>
         /// <param name="settings">Repeating settings.</param>
-        /// <param name="progress">Optional progress receiver.</param>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
         /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <returns>A task returning the repeated file.</returns>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
@@ -37,7 +40,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="repeatsNumber">Number of repeats to append.</param>
         /// <param name="tempoMap">Tempo map used for time and length calculations.</param>
         /// <param name="settings">Repeating settings.</param>
-        /// <param name="progress">Optional progress receiver.</param>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
         /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <returns>A task returning the repeated tracks.</returns>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
@@ -58,7 +64,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="repeatsNumber">Number of repeats to append.</param>
         /// <param name="tempoMap">Tempo map used for time and length calculations.</param>
         /// <param name="settings">Repeating settings.</param>
-        /// <param name="progress">Optional progress receiver.</param>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
         /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <returns>A task returning the repeated track.</returns>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
@@ -79,7 +88,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="repeatsNumber">Number of repeats to append.</param>
         /// <param name="tempoMap">Tempo map used for time and length calculations.</param>
         /// <param name="settings">Repeating settings.</param>
-        /// <param name="progress">Optional progress receiver.</param>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
         /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <returns>A task returning the repeated objects.</returns>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
@@ -102,7 +114,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="midiFile">File to repeat.</param>
         /// <param name="repeatsNumber">Number of repeats to append.</param>
         /// <param name="settings">Repeating settings.</param>
-        /// <param name="progress">Optional progress receiver.</param>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
         /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <returns>A task returning the repeated file.</returns>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
@@ -122,7 +137,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="repeatsNumber">Number of repeats to append.</param>
         /// <param name="tempoMap">Tempo map used for time and length calculations.</param>
         /// <param name="settings">Repeating settings.</param>
-        /// <param name="progress">Optional progress receiver.</param>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
         /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <returns>A task returning the repeated track.</returns>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
@@ -143,7 +161,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="repeatsNumber">Number of repeats to append.</param>
         /// <param name="tempoMap">Tempo map used for time and length calculations.</param>
         /// <param name="settings">Repeating settings.</param>
-        /// <param name="progress">Optional progress receiver.</param>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
         /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <returns>A task returning the repeated tracks.</returns>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
@@ -164,7 +185,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="repeatsNumber">Number of repeats to append.</param>
         /// <param name="tempoMap">Tempo map used for time and length calculations.</param>
         /// <param name="settings">Repeating settings.</param>
-        /// <param name="progress">Optional progress receiver.</param>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
         /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <returns>A task returning the repeated objects.</returns>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>

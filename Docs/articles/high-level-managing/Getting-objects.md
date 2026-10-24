@@ -8,31 +8,93 @@ This article describes ways to get different objects (like [timed events](xref:M
 
 ## Asynchronous operations
 
-Bulk extraction and processing have `Async` counterparts, including `GetNotesAsync`,
-`GetChordsAsync`, `GetTimedEventsAsync`, `GetObjectsAsync`, `GetRestsAsync`,
-`GetTempoMapAsync`, and collection-level duration analysis. These operations run
+Bulk extraction and processing have asynchronous counterparts, including
+[NotesManagingUtilities.GetNotesAsync](xref:Melanchall.DryWetMidi.Interaction.NotesManagingUtilities.GetNotesAsync*),
+[ChordsManagingUtilities.GetChordsAsync](xref:Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.GetChordsAsync*),
+[TimedEventsManagingUtilities.GetTimedEventsAsync](xref:Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.GetTimedEventsAsync*),
+[GetObjectsUtilities.GetObjectsAsync](xref:Melanchall.DryWetMidi.Interaction.GetObjectsUtilities.GetObjectsAsync*),
+[RestsUtilities.GetRestsAsync](xref:Melanchall.DryWetMidi.Interaction.RestsUtilities.GetRestsAsync*),
+[TempoMapManagingUtilities.GetTempoMapAsync](xref:Melanchall.DryWetMidi.Interaction.TempoMapManagingUtilities.GetTempoMapAsync*),
+and [MidiFileUtilities.GetDurationAsync](xref:Melanchall.DryWetMidi.Interaction.MidiFileUtilities.GetDurationAsync*).
+These operations run
 CPU-bound work on the thread pool so an editor can remain responsive. They do not
 make detection faster, and synchronous methods are preferable for small inputs or
 when the caller already manages background execution.
 
 Pass a cancellation token to cancel substantial processing cooperatively. Optional
-`IProgress<AsyncOperationProgress>` notifications describe processed algorithm work
-items rather than a percentage or a guaranteed count of output notes. Notifications
+`IProgress<T>` notifications containing
+[AsyncOperationProgress](xref:Melanchall.DryWetMidi.Common.AsyncOperationProgress)
+describe work checkpoints across algorithm phases rather than a percentage or an
+exact count of processed events or output notes. Notifications
 are throttled; the total is not discovered by enumerating the input a second time.
 
-Async processing callbacks are awaited sequentially. Use an asynchronous callback
-overload rather than passing an `async` lambda to a synchronous `Action` callback,
-which would become `async void`. Cancellation and callback exceptions do not roll
-back changes already made or external side effects.
+Asynchronous processing callbacks are awaited sequentially. Use an asynchronous
+callback overload of
+[NotesManagingUtilities.ProcessNotesAsync](xref:Melanchall.DryWetMidi.Interaction.NotesManagingUtilities.ProcessNotesAsync*)
+rather than passing an `async` lambda to a synchronous `Action` callback, which
+would become `async void`.
+
+**Wrong:** [NotesManagingUtilities.ProcessNotes](xref:Melanchall.DryWetMidi.Interaction.NotesManagingUtilities.ProcessNotes*)
+cannot await the callback, so it can return and dispose the log while writes are pending.
+
+```csharp
+using (var log = new StreamWriter("notes.txt"))
+{
+    midiFile.ProcessNotes(async note =>
+    {
+        await log.WriteLineAsync(note.ToString());
+    });
+}
+```
+
+**Correct:** the two-parameter callback selects the asynchronous overload, and
+each write finishes before processing continues. Here `cancellationToken` is
+provided by the caller.
+
+```csharp
+using (var log = new StreamWriter("notes.txt"))
+{
+    await midiFile.ProcessNotesAsync(
+        async (note, token) =>
+        {
+            token.ThrowIfCancellationRequested();
+
+            await log.WriteLineAsync(note.ToString());
+        },
+        cancellationToken: cancellationToken);
+}
+```
+
+Cancellation and callback exceptions do not roll back changes already made or
+external side effects. These examples use `System.IO.StreamWriter`.
 
 Asynchronous enumeration preserves musical ordering, but note/chord detection may
 need to buffer unmatched events or preprocess input. It is not a promise of constant
 memory for every detection policy. Dispose the asynchronous enumerator when stopping
 early.
 
-Async operations do not make mutable MIDI files, collections, detection settings,
-or managers thread-safe. Do not edit or process the same data concurrently. A manager
-commit still rebuilds its underlying collection; it is not a disk write.
+Asynchronous operations do not make mutable MIDI files, collections, detection
+settings, or managers thread-safe. Do not edit or process the same data concurrently.
+
+**Wrong:** adding a track changes the file while note detection may be reading it.
+
+```csharp
+var pendingNotes = midiFile.GetNotesAsync();
+midiFile.Chunks.Add(new TrackChunk());
+
+var notes = await pendingNotes;
+```
+
+**Correct:** finish detection before changing the file.
+
+```csharp
+var notes = await midiFile.GetNotesAsync();
+
+midiFile.Chunks.Add(new TrackChunk());
+```
+
+A manager commit still rebuilds its underlying collection; it is not a disk write.
+See [Objects managers](xref:a_managers).
 
 ## GetTimedEvents
 

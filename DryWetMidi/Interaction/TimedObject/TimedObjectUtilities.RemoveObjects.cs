@@ -79,10 +79,10 @@ namespace Melanchall.DryWetMidi.Interaction
                     return eventsCollection.RemoveChords(match, settings?.ChordDetectionSettings, settings?.NoteDetectionSettings, settings?.TimedEventDetectionSettings);
             }
 
-            var eventsToRemove = new HashSet<MidiEvent>();
+            using var removal = new InteractionAsyncUtilities.RemovalScope();
             var objectsToRemoveCount = eventsCollection.ProcessObjects(
                 objectType,
-                obj => InteractionAsyncUtilities.CollectEventsForRemoval(obj, eventsToRemove),
+                removal.Mark,
                 match,
                 settings,
                 ObjectProcessingHint.None);
@@ -90,7 +90,7 @@ namespace Melanchall.DryWetMidi.Interaction
             if (objectsToRemoveCount == 0)
                 return 0;
 
-            eventsCollection.RemoveTimedEvents(e => eventsToRemove.Contains(e.Event));
+            eventsCollection.RemoveTimedEvents(removal.IsMarked);
             return objectsToRemoveCount;
         }
 
@@ -237,10 +237,10 @@ namespace Melanchall.DryWetMidi.Interaction
                     return trackChunks.RemoveChords(match, settings?.ChordDetectionSettings, settings?.NoteDetectionSettings, settings?.TimedEventDetectionSettings);
             }
 
-            var eventsToRemove = new HashSet<MidiEvent>();
+            using var removal = new InteractionAsyncUtilities.RemovalScope();
             var objectsToRemoveCount = trackChunks.ProcessObjects(
                 objectType,
-                obj => InteractionAsyncUtilities.CollectEventsForRemoval(obj, eventsToRemove),
+                removal.Mark,
                 match,
                 settings,
                 ObjectProcessingHint.None);
@@ -248,7 +248,7 @@ namespace Melanchall.DryWetMidi.Interaction
             if (objectsToRemoveCount == 0)
                 return 0;
 
-            trackChunks.RemoveTimedEvents(e => eventsToRemove.Contains(e.Event));
+            trackChunks.RemoveTimedEvents(removal.IsMarked);
             return objectsToRemoveCount;
         }
 

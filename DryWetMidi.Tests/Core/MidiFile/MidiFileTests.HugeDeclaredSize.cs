@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Linq;
 using Melanchall.DryWetMidi.Core;
+using Melanchall.DryWetMidi.Tests.Utilities;
 using NUnit.Framework;
 using NUnit.Framework.Legacy;
 
@@ -109,7 +110,11 @@ namespace Melanchall.DryWetMidi.Tests.Core
                         new ReadingSettings { NotEnoughBytesPolicy = NotEnoughBytesPolicy.Abort },
                         cancellationToken: System.Threading.CancellationToken.None).Result;
 
-                    ClassicAssert.IsTrue(MidiFile.Equals(read, asyncFile), "Async valid event reading differs.");
+                    var asyncEvents = asyncFile.GetTrackChunks().Single().Events;
+
+                    ClassicAssert.AreEqual("Name", ((SequenceTrackNameEvent)asyncEvents[0]).Text, "Async track name is invalid.");
+                    CollectionAssert.AreEqual(new byte[] { 1, 2, 3, 0xF7 }, ((NormalSysExEvent)asyncEvents[1]).Data, "Async SysEx data is invalid.");
+                    MidiAsserts.AreEqual(read, asyncFile, true, "Async valid event reading differs.");
                 }
             }
         }
@@ -190,9 +195,9 @@ namespace Melanchall.DryWetMidi.Tests.Core
                         var aggregate = Assert.Throws<AggregateException>(() => MidiFile.ReadAsync(
                             asyncStream,
                             settings,
-                            cancellationToken: System.Threading.CancellationToken.None).Wait());
+                            cancellationToken: System.Threading.CancellationToken.None).Wait(), "Async reading did not reject the huge declared event size.");
 
-                        ClassicAssert.AreEqual(exception.GetType(), aggregate!.InnerException!.GetType());
+                        ClassicAssert.AreEqual(exception.GetType(), aggregate!.InnerException!.GetType(), "Async huge declared size exception type differs.");
                     }
 
                     throw;
@@ -205,7 +210,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
                         settings,
                         cancellationToken: System.Threading.CancellationToken.None).Result;
 
-                    ClassicAssert.IsTrue(MidiFile.Equals(expected, actual), "Async huge declared size reading differs.");
+                    MidiAsserts.AreEqual(expected, actual, true, "Async huge declared size reading differs.");
                 }
 
                 return expected;

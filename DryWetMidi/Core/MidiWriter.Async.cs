@@ -7,6 +7,28 @@ namespace Melanchall.DryWetMidi.Core
 {
     public sealed partial class MidiWriter
     {
+        /// <summary>
+        /// Asynchronously flushes buffered MIDI bytes without closing the underlying stream.
+        /// </summary>
+        /// <returns>A task representing disposal.</returns>
+        /// <exception cref="IOException">An I/O error occurred while flushing the stream.</exception>
+        /// <exception cref="ObjectDisposedException">The underlying stream has been disposed.</exception>
+        public async ValueTask DisposeAsync()
+        {
+            if (_disposed)
+                return;
+
+            try
+            {
+                await FlushBufferAsync(CancellationToken.None).ConfigureAwait(false);
+                await _stream.FlushAsync(CancellationToken.None).ConfigureAwait(false);
+            }
+            finally
+            {
+                _disposed = true;
+            }
+        }
+
         internal MidiIoProgress? AsyncProgress { get; set; }
 
         internal async Task WriteEncodedAsync(Action<MidiWriter> encode, CancellationToken cancellationToken)
@@ -68,28 +90,6 @@ namespace Melanchall.DryWetMidi.Core
 
             await WriteTransportAsync(_buffer!, _bufferPosition, cancellationToken).ConfigureAwait(false);
             _bufferPosition = 0;
-        }
-
-        /// <summary>
-        /// Asynchronously flushes buffered MIDI bytes without closing the underlying stream.
-        /// </summary>
-        /// <returns>A task representing disposal.</returns>
-        /// <exception cref="IOException">An I/O error occurred while flushing the stream.</exception>
-        /// <exception cref="ObjectDisposedException">The underlying stream has been disposed.</exception>
-        public async ValueTask DisposeAsync()
-        {
-            if (_disposed)
-                return;
-
-            try
-            {
-                await FlushBufferAsync(CancellationToken.None).ConfigureAwait(false);
-                await _stream.FlushAsync(CancellationToken.None).ConfigureAwait(false);
-            }
-            finally
-            {
-                _disposed = true;
-            }
         }
     }
 }

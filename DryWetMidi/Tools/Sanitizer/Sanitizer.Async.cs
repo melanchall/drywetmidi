@@ -14,7 +14,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <inheritdoc cref="Sanitize(MidiFile, SanitizingSettings)" path="/member/exception"/>
         /// <param name="midiFile">File to sanitize.</param>
         /// <param name="settings">Sanitizing settings.</param>
-        /// <param name="progress">Optional progress receiver.</param>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
         /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <returns>A task representing the sanitization.</returns>
         /// <exception cref="InvalidOperationException">Completing an orphaned note requires a maximum note length,

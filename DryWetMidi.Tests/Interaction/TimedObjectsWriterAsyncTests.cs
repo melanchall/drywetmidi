@@ -1,12 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 
 namespace Melanchall.DryWetMidi.Tests.Interaction
 {
@@ -28,12 +30,14 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             await writer.DisposeAsync();
             await tokens.DisposeAsync();
 
-            Assert.That(stream.CanRead, Is.True);
+            ClassicAssert.IsTrue(stream.CanRead, "Async object writing disposed the caller-owned stream.");
+
             stream.Position = 0;
             var notes = MidiFile.Read(stream).GetNotes();
-            Assert.That(notes.Count, Is.EqualTo(2));
-            Assert.That(notes, Has.Some.Matches<Note>(n => n.Time == 0 && n.Length == 100));
-            Assert.That(notes, Has.Some.Matches<Note>(n => n.Time == 10 && n.Length == 50));
+
+            ClassicAssert.AreEqual(2, notes.Count, "Async object writing returned an invalid note count.");
+            ClassicAssert.IsTrue(notes.Any(n => n.Time == 0 && n.Length == 100), "The first deferred note-off was not preserved.");
+            ClassicAssert.IsTrue(notes.Any(n => n.Time == 10 && n.Length == 50), "The second deferred note-off was not preserved.");
         }
 
         [Test]
@@ -49,7 +53,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             await tokens.DisposeAsync();
 
             stream.Position = 0;
-            Assert.That(MidiFile.Read(stream).GetNotes().Count, Is.EqualTo(1));
+
+            ClassicAssert.AreEqual(1, MidiFile.Read(stream).GetNotes().Count, "Ending the track did not flush the object writer.");
         }
 
         [Test]
@@ -75,8 +80,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 }
             }
 
-            Assert.ThrowsAsync<InvalidOperationException>(async () => await writer.WriteObjectsAsync(Produce()));
-            Assert.That(disposed, Is.True);
+            Assert.ThrowsAsync<InvalidOperationException>(async () => await writer.WriteObjectsAsync(Produce()), "Async object writing did not propagate producer failure.");
+            ClassicAssert.IsTrue(disposed, "Failed async producer was not disposed.");
+
             await writer.DisposeAsync();
             await tokens.DisposeAsync();
         }
@@ -92,8 +98,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             source.Cancel();
 
             Assert.ThrowsAsync<OperationCanceledException>(async () =>
-                await writer.WriteObjectAsync(new Note((SevenBitNumber)60, 20, 100), source.Token));
-            Assert.That(tokens.CurrentTime, Is.EqualTo(0));
+                await writer.WriteObjectAsync(new Note((SevenBitNumber)60, 20, 100), source.Token), "Pre-canceled object writing did not throw.");
+            ClassicAssert.AreEqual(0, tokens.CurrentTime, "Canceled object writing advanced the token writer.");
+
             await writer.DisposeAsync();
             await tokens.DisposeAsync();
         }
@@ -107,10 +114,11 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             var writer = new TimedObjectsWriter(tokens);
             await writer.DisposeAsync();
 
-            Assert.Throws<ObjectDisposedException>(() => writer.WriteObject(new Note((SevenBitNumber)60)));
-            Assert.Throws<ObjectDisposedException>(() => writer.WriteObjects(Array.Empty<ITimedObject>()));
+            Assert.Throws<ObjectDisposedException>(() => writer.WriteObject(new Note((SevenBitNumber)60)), "Disposed writer accepted an object.");
+            Assert.Throws<ObjectDisposedException>(() => writer.WriteObjects(Array.Empty<ITimedObject>()), "Disposed writer accepted an object collection.");
             Assert.ThrowsAsync<ObjectDisposedException>(async () =>
-                await writer.WriteObjectAsync(new Note((SevenBitNumber)60)));
+                await writer.WriteObjectAsync(new Note((SevenBitNumber)60)), "Disposed writer accepted an async write.");
+
             await tokens.DisposeAsync();
         }
 
@@ -133,10 +141,12 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
             var pending = writer.WriteObjectsAsync(Produce());
             await started.Task;
-            Assert.Throws<InvalidOperationException>(() => writer.WriteObject(new Note((SevenBitNumber)60)));
-            Assert.Throws<InvalidOperationException>(() => tokens.EndTrackChunk());
+
+            Assert.Throws<InvalidOperationException>(() => writer.WriteObject(new Note((SevenBitNumber)60)), "Object writer accepted an overlapping synchronous write.");
+            Assert.Throws<InvalidOperationException>(() => tokens.EndTrackChunk(), "Track ending overlapped object writing.");
             Assert.ThrowsAsync<InvalidOperationException>(async () =>
-                await writer.WriteObjectAsync(new Note((SevenBitNumber)60)));
+                await writer.WriteObjectAsync(new Note((SevenBitNumber)60)), "Object writer accepted an overlapping async write.");
+
             release.SetResult(true);
             await pending;
             await writer.DisposeAsync();

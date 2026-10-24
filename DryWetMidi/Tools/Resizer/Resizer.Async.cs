@@ -17,7 +17,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="trackChunk">Track to resize.</param>
         /// <param name="length">Desired length.</param>
         /// <param name="tempoMap">Tempo map used for time and length calculations.</param>
-        /// <param name="progress">Optional progress receiver.</param>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
         /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <returns>A task representing the resize.</returns>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
@@ -35,7 +38,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <inheritdoc cref="Resize(TrackChunk, double)" path="/member/exception"/>
         /// <param name="trackChunk">Track to resize.</param>
         /// <param name="ratio">Ratio to multiply times and lengths by.</param>
-        /// <param name="progress">Optional progress receiver.</param>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
         /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <returns>A task representing the resize.</returns>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
@@ -53,7 +59,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="trackChunks">Tracks to resize.</param>
         /// <param name="length">Desired length.</param>
         /// <param name="tempoMap">Tempo map used for time and length calculations.</param>
-        /// <param name="progress">Optional progress receiver.</param>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
         /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <returns>A task representing the resize.</returns>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
@@ -71,7 +80,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <inheritdoc cref="Resize(IEnumerable{TrackChunk}, double)" path="/member/exception"/>
         /// <param name="trackChunks">Tracks to resize.</param>
         /// <param name="ratio">Ratio to multiply times and lengths by.</param>
-        /// <param name="progress">Optional progress receiver.</param>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
         /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <returns>A task representing the resize.</returns>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
@@ -88,7 +100,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <inheritdoc cref="Resize(MidiFile, ITimeSpan)" path="/member/exception"/>
         /// <param name="midiFile">File to resize.</param>
         /// <param name="length">Desired length.</param>
-        /// <param name="progress">Optional progress receiver.</param>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
         /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <returns>A task representing the resize.</returns>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
@@ -105,7 +120,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <inheritdoc cref="Resize(MidiFile, double)" path="/member/exception"/>
         /// <param name="midiFile">File to resize.</param>
         /// <param name="ratio">Ratio to multiply times and lengths by.</param>
-        /// <param name="progress">Optional progress receiver.</param>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
         /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <returns>A task representing the resize.</returns>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
@@ -124,7 +142,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="length">Desired group length.</param>
         /// <param name="tempoMap">Tempo map used for time and length calculations.</param>
         /// <param name="settings">Group resizing settings.</param>
-        /// <param name="progress">Optional progress receiver.</param>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
         /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <returns>A task representing the resize.</returns>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
@@ -145,7 +166,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="ratio">Ratio to multiply group distances and lengths by.</param>
         /// <param name="tempoMap">Tempo map used for time and length calculations.</param>
         /// <param name="settings">Group resizing settings.</param>
-        /// <param name="progress">Optional progress receiver.</param>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
         /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <returns>A task representing the resize.</returns>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>

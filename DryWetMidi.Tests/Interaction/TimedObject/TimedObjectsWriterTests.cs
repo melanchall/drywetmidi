@@ -289,12 +289,13 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 expectedMidiFile: new MidiFile(),
                 asyncMode: asyncMode);
 
-            ClassicAssert.Throws<InvalidOperationException>(() => Write(0));
+            ClassicAssert.Throws<InvalidOperationException>(() => Write(0), "Synchronous object writing accepted invalid time ordering.");
 
             foreach (var asyncMode in new[] { 1, 2 })
             {
-                var exception = ClassicAssert.Throws<AggregateException>(() => Write(asyncMode));
-                Assert.That(exception.InnerException, Is.TypeOf<InvalidOperationException>());
+                var exception = ClassicAssert.Throws<AggregateException>(() => Write(asyncMode), $"Async object writing accepted invalid time ordering (mode {asyncMode}).");
+
+                ClassicAssert.IsInstanceOf<InvalidOperationException>(exception.InnerException, $"Async object ordering exception type differs (mode {asyncMode}).");
             }
         }
 

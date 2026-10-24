@@ -13,6 +13,11 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <summary>
         /// Asynchronously detects the tempo map of tracks.
         /// </summary>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
+        /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
         public static Task<TempoMap> GetTempoMapAsync(
             this IEnumerable<TrackChunk> trackChunks,
@@ -25,6 +30,11 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <summary>
         /// Asynchronously detects the tempo map of a MIDI file.
         /// </summary>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
+        /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
         public static Task<TempoMap> GetTempoMapAsync(
             this MidiFile file,
@@ -36,6 +46,11 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <summary>
         /// Asynchronously detects the tempo map from an asynchronous track source.
         /// </summary>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
+        /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
         public static Task<TempoMap> GetTempoMapAsync(
             this IAsyncEnumerable<TrackChunk> trackChunks,
@@ -48,6 +63,11 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <summary>
         /// Asynchronously creates a tempo map manager for events collections.
         /// </summary>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
+        /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
         public static Task<TempoMapManager> ManageTempoMapAsync(
             this IEnumerable<EventsCollection> eventsCollections,
@@ -60,6 +80,11 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <summary>
         /// Asynchronously creates a tempo map manager for tracks.
         /// </summary>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
+        /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
         public static Task<TempoMapManager> ManageTempoMapAsync(
             this IEnumerable<TrackChunk> trackChunks,
@@ -72,6 +97,11 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <summary>
         /// Asynchronously creates a tempo map manager for a MIDI file.
         /// </summary>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
+        /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
         public static Task<TempoMapManager> ManageTempoMapAsync(
             this MidiFile file,
@@ -83,6 +113,11 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <summary>
         /// Asynchronously replaces the tempo map in events collections.
         /// </summary>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
+        /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
         public static Task ReplaceTempoMapAsync(
             this IEnumerable<EventsCollection> eventsCollections,
@@ -95,6 +130,11 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <summary>
         /// Asynchronously replaces the tempo map in tracks.
         /// </summary>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
+        /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
         public static Task ReplaceTempoMapAsync(
             this IEnumerable<TrackChunk> trackChunks,
@@ -107,6 +147,11 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <summary>
         /// Asynchronously replaces the tempo map in a MIDI file.
         /// </summary>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
+        /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
         public static Task ReplaceTempoMapAsync(
             this MidiFile file,

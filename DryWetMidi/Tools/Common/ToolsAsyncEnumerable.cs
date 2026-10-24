@@ -21,7 +21,10 @@ namespace Melanchall.DryWetMidi.Tools
             private long _lastReport;
             private readonly Stopwatch _stopwatch = Stopwatch.StartNew();
 
-            internal EnumerationProgress(IProgress<AsyncOperationProgress> progress) => _progress = progress;
+            internal EnumerationProgress(IProgress<AsyncOperationProgress> progress)
+            {
+                _progress = progress;
+            }
 
             public void Report(AsyncOperationProgress value)
             {

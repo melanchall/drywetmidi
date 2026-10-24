@@ -18,7 +18,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="grid">Grid to quantize to.</param>
         /// <param name="tempoMap">Tempo map used for time and length calculations.</param>
         /// <param name="settings">Quantizing settings.</param>
-        /// <param name="progress">Optional progress receiver.</param>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
         /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <returns>A task representing the quantization.</returns>
         /// <exception cref="InvalidOperationException">A quantizing policy aborts a move beyond zero or a fixed opposite end.</exception>
@@ -45,7 +48,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="tempoMap">Tempo map used for time and length calculations.</param>
         /// <param name="quantizerSettings">Quantizing settings.</param>
         /// <param name="objectDetectionSettings">Settings used to detect objects.</param>
-        /// <param name="progress">Optional progress receiver.</param>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
         /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <returns>A task representing the quantization.</returns>
         /// <exception cref="InvalidOperationException">A quantizing policy aborts a move beyond zero or a fixed opposite end.</exception>
@@ -75,7 +81,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="tempoMap">Tempo map used for time and length calculations.</param>
         /// <param name="quantizerSettings">Quantizing settings.</param>
         /// <param name="objectDetectionSettings">Settings used to detect objects.</param>
-        /// <param name="progress">Optional progress receiver.</param>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
         /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <returns>A task representing the quantization.</returns>
         /// <exception cref="InvalidOperationException">A quantizing policy aborts a move beyond zero or a fixed opposite end.</exception>
@@ -105,7 +114,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="tempoMap">Tempo map used for time and length calculations.</param>
         /// <param name="quantizerSettings">Quantizing settings.</param>
         /// <param name="objectDetectionSettings">Settings used to detect objects.</param>
-        /// <param name="progress">Optional progress receiver.</param>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
         /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <returns>A task representing the quantization.</returns>
         /// <exception cref="InvalidOperationException">A quantizing policy aborts a move beyond zero or a fixed opposite end.</exception>
@@ -135,7 +147,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="tempoMap">Tempo map used for time and length calculations.</param>
         /// <param name="quantizerSettings">Quantizing settings.</param>
         /// <param name="objectDetectionSettings">Settings used to detect objects.</param>
-        /// <param name="progress">Optional progress receiver.</param>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
         /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <returns>A task representing the quantization.</returns>
         /// <exception cref="InvalidOperationException">A quantizing policy aborts a move beyond zero or a fixed opposite end.</exception>
@@ -164,7 +179,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="grid">Grid to quantize to.</param>
         /// <param name="quantizerSettings">Quantizing settings.</param>
         /// <param name="objectDetectionSettings">Settings used to detect objects.</param>
-        /// <param name="progress">Optional progress receiver.</param>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
         /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <returns>A task representing the quantization.</returns>
         /// <exception cref="InvalidOperationException">A quantizing policy aborts a move beyond zero or a fixed opposite end.</exception>
@@ -192,7 +210,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="grid">Grid to quantize to.</param>
         /// <param name="quantizerSettings">Quantizing settings.</param>
         /// <param name="objectDetectionSettings">Settings used to detect objects.</param>
-        /// <param name="progress">Optional progress receiver.</param>
+        /// <param name="progress">
+        /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
+        /// The total is unknown. A final report marks successful completion.
+        /// </param>
         /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <returns>A task representing the quantization.</returns>
         /// <exception cref="InvalidOperationException">A quantizing policy aborts a move beyond zero or a fixed opposite end.</exception>

@@ -2,6 +2,7 @@
 using Melanchall.DryWetMidi.Interaction;
 using Melanchall.DryWetMidi.Tests.Utilities;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -61,13 +62,15 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
             var asyncTracks = CreateTracks();
             var timedEvents = asyncTracks.GetTimedEventsAsync(settings, cancellationToken: CancellationToken.None).Result;
+
             MidiAsserts.AreEqual(expectedTimedEvents, timedEvents, false, 0, "Async tracks timed events are invalid.");
-            Assert.That(timedEvents.Any(ev => asyncTracks.SelectMany(track => track.Events).Any(e => ReferenceEquals(e, ev.Event))), Is.False);
+            ClassicAssert.IsFalse(timedEvents.Any(ev => asyncTracks.SelectMany(track => track.Events).Any(e => ReferenceEquals(e, ev.Event))), "Async track detection returned source event references instead of clones.");
 
             var asyncFile = new MidiFile(CreateTracks());
             timedEvents = asyncFile.GetTimedEventsAsync(settings, cancellationToken: CancellationToken.None).Result;
+
             MidiAsserts.AreEqual(expectedTimedEvents, timedEvents, false, 0, "Async file timed events are invalid.");
-            Assert.That(timedEvents.Any(ev => asyncFile.GetTrackChunks().SelectMany(track => track.Events).Any(e => ReferenceEquals(e, ev.Event))), Is.False);
+            ClassicAssert.IsFalse(timedEvents.Any(ev => asyncFile.GetTrackChunks().SelectMany(track => track.Events).Any(e => ReferenceEquals(e, ev.Event))), "Async file detection returned source event references instead of clones.");
 
             var objects = CreateTracks().GetObjectsAsync(
                 ObjectType.TimedEvent,

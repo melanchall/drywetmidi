@@ -17,7 +17,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         public void ManageTempoMap_EmptyFile_NoException()
         {
             ClassicAssert.DoesNotThrow(() => new MidiFile().ManageTempoMap());
-            ClassicAssert.DoesNotThrow(() => new MidiFile().ManageTempoMapAsync(cancellationToken: CancellationToken.None).Wait());
+            ClassicAssert.DoesNotThrow(() => new MidiFile().ManageTempoMapAsync(cancellationToken: CancellationToken.None).Wait(), "Async tempo-map managing rejected an empty file.");
         }
 
         [Test]
@@ -26,7 +26,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             ClassicAssert.DoesNotThrow(() => new List<TrackChunk>().ManageTempoMap(new TicksPerQuarterNoteTimeDivision()));
             ClassicAssert.DoesNotThrow(() => new List<TrackChunk>().ManageTempoMapAsync(
                 new TicksPerQuarterNoteTimeDivision(),
-                cancellationToken: CancellationToken.None).Wait());
+                cancellationToken: CancellationToken.None).Wait(), "Async tempo-map managing rejected an empty track list.");
         }
 
         [Test]
@@ -36,9 +36,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
             var exception = ClassicAssert.Throws<AggregateException>(() => Array.Empty<TrackChunk>().ManageTempoMapAsync(
                 new TicksPerQuarterNoteTimeDivision(),
-                cancellationToken: CancellationToken.None).Wait());
+                cancellationToken: CancellationToken.None).Wait(), "Async tempo-map managing accepted an empty track array.");
 
-            Assert.That(exception.InnerException, Is.TypeOf<ArgumentOutOfRangeException>());
+            ClassicAssert.IsInstanceOf<ArgumentOutOfRangeException>(exception.InnerException, "Async empty-track exception type differs.");
         }
 
         [Test]
@@ -47,7 +47,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             ClassicAssert.DoesNotThrow(() => new List<EventsCollection>().ManageTempoMap(new TicksPerQuarterNoteTimeDivision()));
             ClassicAssert.DoesNotThrow(() => new List<EventsCollection>().ManageTempoMapAsync(
                 new TicksPerQuarterNoteTimeDivision(),
-                cancellationToken: CancellationToken.None).Wait());
+                cancellationToken: CancellationToken.None).Wait(), "Async tempo-map managing rejected an empty events-collection list.");
         }
 
         [Test]
@@ -57,9 +57,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
             var exception = ClassicAssert.Throws<AggregateException>(() => Array.Empty<EventsCollection>().ManageTempoMapAsync(
                 new TicksPerQuarterNoteTimeDivision(),
-                cancellationToken: CancellationToken.None).Wait());
+                cancellationToken: CancellationToken.None).Wait(), "Async tempo-map managing accepted an empty events-collection array.");
 
-            Assert.That(exception.InnerException, Is.TypeOf<ArgumentOutOfRangeException>());
+            ClassicAssert.IsInstanceOf<ArgumentOutOfRangeException>(exception.InnerException, "Async empty-events exception type differs.");
         }
 
         #endregion
