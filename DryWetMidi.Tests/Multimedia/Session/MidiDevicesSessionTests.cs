@@ -1,11 +1,13 @@
 ﻿using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Configuration;
 using Melanchall.DryWetMidi.Multimedia;
+using Melanchall.DryWetMidi.Tests.Attributes;
 using Melanchall.DryWetMidi.Tests.Utilities;
 using NUnit.Framework;
 using NUnit.Framework.Legacy;
 using System;
 using System.Runtime.CompilerServices;
+using System.Threading;
 
 namespace Melanchall.DryWetMidi.Tests.Multimedia
 {
@@ -54,6 +56,115 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 MidiDevicesSessionApi.SESSION_CLOSERESULT.SESSION_CLOSERESULT_OK,
                 result,
                 "Session was not closed successfully.");
+        }
+
+        [Test]
+        [MacOnly]
+        public void CheckMidiDevicesSession_RepeatedCloseStopsWorkerThread()
+        {
+            for (var i = 0; i < 5; i++)
+            {
+                var sessionHandle = CreateSessionHandle(InputEndpointCallback, OutputEndpointCallback, 0);
+
+                var workerStarted = WaitOperations.Wait(
+                    () => MidiDevicesSessionApi.Api_IsSessionWorkerThreadRunning_Mac(sessionHandle),
+                    TimeSpan.FromSeconds(5));
+                if (!workerStarted)
+                {
+                    var workerState = MidiDevicesSessionApi.Api_GetSessionWorkerDiagnostics_Mac(
+                        sessionHandle,
+                        out var clientCreationStatus);
+
+                    ClassicAssert.Fail(
+                        $"Session worker thread did not appear after opening the session. " +
+                        $"Worker state: {workerState}; client creation status: {clientCreationStatus}; " +
+                        $"run loop returned: {workerState.HasFlag(MidiDevicesSessionApi.SESSION_WORKERSTATE_MAC.SESSION_WORKERSTATE_MAC_RUNLOOPRETURNED)}.");
+                }
+
+                ClassicAssert.AreEqual(
+                    MidiDevicesSessionApi.SESSION_CLOSERESULT.SESSION_CLOSERESULT_OK,
+                    MidiDevicesSessionApi.Api_CloseSession(sessionHandle),
+                    "Session was not closed successfully.");
+                ClassicAssert.IsTrue(
+                    WaitOperations.Wait(() => !MidiDevicesSessionApi.Api_IsSessionWorkerThreadRunning_Mac(sessionHandle), TimeSpan.FromSeconds(5)),
+                    "Session worker thread remained after closing the session.");
+
+                ClassicAssert.AreEqual(
+                    MidiDevicesSessionApi.SESSION_CLOSERESULT.SESSION_CLOSERESULT_OK,
+                    MidiDevicesSessionApi.Api_CloseSession(sessionHandle),
+                    "Closing the session a second time did not succeed.");
+            }
+        }
+
+        [Test]
+        [MacOnly]
+        [VirtualDeviceApiRequired]
+        public void CheckMidiDevicesSession_CloseFromEndpointCallback()
+        {
+            using (var callbackCompleted = new ManualResetEventSlim())
+            {
+                var testThreadId = Thread.CurrentThread.ManagedThreadId;
+                var callbackThreadId = 0;
+                var closeStarted = 0;
+                var closeResult = MidiDevicesSessionApi.SESSION_CLOSERESULT.SESSION_CLOSERESULT_THREADEXITTIMEOUT;
+                var sessionHandle = IntPtr.Zero;
+
+                void CloseSessionFromCallback(MidiDevicesSessionApi.SESSION_CALLBACKOPERATION operation)
+                {
+                    if (operation != MidiDevicesSessionApi.SESSION_CALLBACKOPERATION.SESSION_CALLBACKOPERATION_ENDPOINTADDED ||
+                        Interlocked.Exchange(ref closeStarted, 1) != 0)
+                    {
+                        return;
+                    }
+
+                    callbackThreadId = Thread.CurrentThread.ManagedThreadId;
+                    closeResult = MidiDevicesSessionApi.Api_CloseSession(sessionHandle);
+                    callbackCompleted.Set();
+                }
+
+                MidiDevicesSessionApi.InputEndpointCallback inputEndpointCallback =
+                    (_, operation) => CloseSessionFromCallback(operation);
+                MidiDevicesSessionApi.OutputEndpointCallback outputEndpointCallback =
+                    (_, operation) => CloseSessionFromCallback(operation);
+
+                var openResult = MidiDevicesSessionApi.Api_OpenSession(
+                    Guid.NewGuid().ToString(),
+                    MidiConfiguration.GetConfigurationHandle(),
+                    inputEndpointCallback,
+                    outputEndpointCallback,
+                    out sessionHandle,
+                    out _);
+
+                ClassicAssert.AreEqual(
+                    MidiDevicesSessionApi.SESSION_OPENRESULT.SESSION_OPENRESULT_OK,
+                    openResult,
+                    "Session was not opened successfully.");
+
+                try
+                {
+                    using (var virtualDevice = VirtualDevice.Create(Guid.NewGuid().ToString()))
+                    {
+                        ClassicAssert.IsTrue(
+                            callbackCompleted.Wait(TimeSpan.FromSeconds(5)),
+                            "Session was not closed from an endpoint-added callback.");
+                    }
+
+                    ClassicAssert.AreNotEqual(
+                        testThreadId,
+                        callbackThreadId,
+                        "Endpoint callback did not run on a separate worker thread.");
+                    ClassicAssert.AreEqual(
+                        MidiDevicesSessionApi.SESSION_CLOSERESULT.SESSION_CLOSERESULT_OK,
+                        closeResult,
+                        "Session was not closed successfully from the endpoint callback.");
+                }
+                finally
+                {
+                    MidiDevicesSessionApi.Api_CloseSession(sessionHandle);
+                    GC.KeepAlive(inputEndpointCallback);
+                    GC.KeepAlive(outputEndpointCallback);
+                }
+            }
         }
 
         [Test]
