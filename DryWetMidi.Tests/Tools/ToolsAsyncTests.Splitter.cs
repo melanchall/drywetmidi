@@ -98,11 +98,8 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             Assert.That(progress.Reports.Select(report => report.ProcessedItems), Is.Ordered, "Batched splitting progress moved backwards.");
         }
 
-        [TestCase(1)]
-        [TestCase(63)]
-        [TestCase(64)]
-        [TestCase(65)]
-        public async Task Splitter_BatchedEnumeration_PreservesValidPrefixBeforeFault(int validItems)
+        [Test]
+        public async Task Splitter_BatchedEnumeration_PreservesValidPrefixBeforeFault([Values(1, 63, 64, 65)] int validItems)
         {
             bool disposed = false;
             var failure = new InvalidOperationException("Deferred source failure.");

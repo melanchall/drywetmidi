@@ -50,9 +50,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             ClassicAssert.AreEqual(new[] { "b", "a" }, track.Events.OfType<TextEvent>().Select(e => e.Text), "Processed event order is invalid.");
         }
 
-        [TestCase(false)]
-        [TestCase(true)]
-        public void RemoveTimedEvents_CancellationPreservesEvents(bool multipleTracks)
+        [Test]
+        public void RemoveTimedEvents_CancellationPreservesEvents([Values] bool multipleTracks)
         {
             var track = new TrackChunk(
                 new TextEvent("a") { DeltaTime = 10 },

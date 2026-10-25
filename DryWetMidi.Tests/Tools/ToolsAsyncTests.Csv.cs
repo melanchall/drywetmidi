@@ -15,11 +15,8 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 {
     public sealed partial class ToolsAsyncTests
     {
-        [TestCase(0)]
-        [TestCase(1)]
-        [TestCase(2)]
-        [TestCase(3)]
-        public async Task Csv_StreamOverloads_OnlyUseAsyncIo(int family)
+        [Test]
+        public async Task Csv_StreamOverloads_OnlyUseAsyncIo([Values(0, 1, 2, 3)] int family)
         {
             var track = CreateFile().GetTrackChunks().First();
             var file = new MidiFile(track);
@@ -75,11 +72,8 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             ClassicAssert.IsFalse(output.Disposed, "CSV serialization disposed the caller-owned stream.");
         }
 
-        [TestCase(0)]
-        [TestCase(1)]
-        [TestCase(2)]
-        [TestCase(3)]
-        public async Task Csv_PathOverloads_RoundTrip(int family)
+        [Test]
+        public async Task Csv_PathOverloads_RoundTrip([Values(0, 1, 2, 3)] int family)
         {
             var path = Path.Combine(TestContext.CurrentContext.WorkDirectory, "tools-async-" + Guid.NewGuid() + ".csv");
             var file = CreateFile();
@@ -112,8 +106,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             }
             finally
             {
-                if (File.Exists(path))
-                    File.Delete(path);
+                File.Delete(path);
             }
         }
 
@@ -136,8 +129,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             }
             finally
             {
-                if (File.Exists(path))
-                    File.Delete(path);
+                File.Delete(path);
             }
         }
 
@@ -267,9 +259,8 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             ClassicAssert.AreEqual(expectedObjects.Select(obj => (obj.GetType(), obj.Time)), actualObjects.Select(obj => (obj.GetType(), obj.Time)), "Async CSV multi-record object types or times differ.");
         }
 
-        [TestCase(true)]
-        [TestCase(false)]
-        public void Csv_IoErrors_PropagateWithoutDeadlock(bool writing)
+        [Test]
+        public void Csv_IoErrors_PropagateWithoutDeadlock([Values] bool writing)
         {
             using var stream = new AsyncOnlyStream { FailRead = !writing, FailWrite = writing };
 
@@ -282,9 +273,8 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             }, "CSV transport failure did not propagate without deadlock.");
         }
 
-        [TestCase(true)]
-        [TestCase(false)]
-        public void Csv_Cancellation_InterruptsPendingIo(bool writing)
+        [Test]
+        public void Csv_Cancellation_InterruptsPendingIo([Values] bool writing)
         {
             using var cancellation = new CancellationTokenSource(TimeSpan.FromMilliseconds(100));
             using var stream = new AsyncOnlyStream { BlockRead = !writing, BlockWrite = writing };

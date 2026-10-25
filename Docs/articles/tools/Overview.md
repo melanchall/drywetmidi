@@ -17,12 +17,13 @@ DryWetMIDI provides some useful tools to solve complex tasks:
 ## Asynchronous tools
 
 All tool families provide asynchronous counterparts for bulk operations. For example,
-[Sanitizer.SanitizeAsync](xref:Melanchall.DryWetMidi.Tools.Sanitizer.SanitizeAsync*)
+[`Sanitizer.SanitizeAsync`](xref:Melanchall.DryWetMidi.Tools.Sanitizer.SanitizeAsync*)
 cleans a file in place, and
-[Quantizer.QuantizeAsync](xref:Melanchall.DryWetMidi.Tools.Quantizer.QuantizeAsync*)
-quantizes objects. Splitter and merger operations that produce lazy sequences use asynchronous enumeration; operations
-that return one result or a materialized collection return a task. In-place operations
-return a task representing completion, not a new copy of their input.
+[`Quantizer.QuantizeAsync`](xref:Melanchall.DryWetMidi.Tools.Quantizer.QuantizeAsync*)
+quantizes objects. `Splitter` and `Merger` operations that produce lazy sequences
+use asynchronous enumeration; operations that return one result or a materialized
+collection return a task. In-place operations return a task representing completion,
+not a new copy of their input.
 
 Quantizing, splitting, merging, resizing, repeating, and sanitizing are CPU-bound.
 Their asynchronous APIs move that work from the calling thread to a thread-pool
@@ -63,7 +64,7 @@ using (var cancellation = new CancellationTokenSource())
 ```
 
 To report progress, pass an `IProgress<T>` receiver for
-[AsyncOperationProgress](xref:Melanchall.DryWetMidi.Common.AsyncOperationProgress).
+[`AsyncOperationProgress`](xref:Melanchall.DryWetMidi.Common.AsyncOperationProgress).
 Display its phase and processed work count rather than treating the count as a
 percentage or as the number of notes in the output:
 
@@ -81,15 +82,61 @@ var progress = new Progress<AsyncOperationProgress>(update =>
 await midiFile.SanitizeAsync(progress: progress);
 ```
 
-These examples assume an existing
-[MidiFile](xref:Melanchall.DryWetMidi.Core.MidiFile) named `midiFile` and use the
-`System`, `System.Threading`, `Melanchall.DryWetMidi.Common`, and
-`Melanchall.DryWetMidi.Tools` namespaces.
-
 CSV import/export uses asynchronous transport I/O; formatting, object detection,
 and parsing still require CPU time. Caller-supplied streams remain caller-owned.
 Canceled or failed writes may leave partial output.
 
+Consume lazy tool results with `await foreach`. For example,
+[`Splitter.SplitByChannelAsync`](xref:Melanchall.DryWetMidi.Tools.Splitter.SplitByChannelAsync*)
+returns an `IAsyncEnumerable<MidiFile>` whose enumeration observes the supplied
+cancellation token:
+
+```csharp
+using (var cancellation = new CancellationTokenSource())
+{
+    cancellation.CancelAfter(TimeSpan.FromSeconds(5));
+
+    IAsyncEnumerable<MidiFile> parts = midiFile.SplitByChannelAsync(
+        cancellationToken: cancellation.Token);
+
+    await foreach (var part in parts)
+    {
+        Console.WriteLine($"Received a file with {part.Chunks.Count} chunks.");
+    }
+}
+```
+
+Handle `OperationCanceledException` as in the earlier example; cancellation does
+not undo processing of results already consumed. `await foreach` disposes the enumerator on completion,
+cancellation, or an early `break`, without materializing the entire sequence.
+
 Do not mutate a file, its settings, or its collections while an asynchronous tool is
 using them. Existing synchronous subclass hooks remain supported; asynchronous
 execution does not add thread safety or transactional rollback.
+
+For example, an override of
+[`Repeater.ProcessPart`](xref:Melanchall.DryWetMidi.Tools.Repeater.ProcessPart*)
+is also called when using
+[`Repeater.RepeatAsync`](xref:Melanchall.DryWetMidi.Tools.Repeater.RepeatAsync*).
+The override runs synchronously on the worker performing the repetition; it must
+not access UI controls directly or start unawaited asynchronous work:
+
+```csharp
+class LoggingRepeater : Repeater
+{
+    protected override void ProcessPart(PartProcessingContext context)
+    {
+        Console.WriteLine("Processing a repeated part.");
+        base.ProcessPart(context);
+    }
+}
+```
+
+Await the operation before changing the input or using its result:
+
+```csharp
+var repeater = new LoggingRepeater();
+var repeatedFile = await repeater.RepeatAsync(midiFile, repeatsNumber: 2);
+
+await repeatedFile.WriteAsync("repeated.mid", overwriteFile: true);
+```

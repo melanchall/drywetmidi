@@ -11,11 +11,10 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 {
     public sealed partial class ToolsAsyncTests
     {
-        [TestCase(1, false)]
-        [TestCase(1, true)]
-        [TestCase(2, false)]
-        [TestCase(2, true)]
-        public void Quantize_CancelsBeforeFiltering(int canceledPass, bool nullItems)
+        [Test]
+        public void Quantize_CancelsBeforeFiltering(
+            [Values(1, 2)] int canceledPass,
+            [Values] bool nullItems)
         {
             using var cancellation = new CancellationTokenSource();
             var pass = 0;

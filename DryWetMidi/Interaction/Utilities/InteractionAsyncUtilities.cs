@@ -129,25 +129,21 @@ namespace Melanchall.DryWetMidi.Interaction
 
         internal static IEnumerable<EventsCollection> Collections(EventsCollection eventsCollection)
         {
-            ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
             return new[] { eventsCollection };
         }
 
         internal static IEnumerable<EventsCollection> Collections(TrackChunk trackChunk)
         {
-            ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
             return Collections(trackChunk.Events);
         }
 
         internal static IEnumerable<EventsCollection> Collections(IEnumerable<TrackChunk> trackChunks)
         {
-            ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
             return CheckpointItems(trackChunks).Where(t => t != null).Select(GetEvents);
         }
 
         internal static IEnumerable<EventsCollection> Collections(MidiFile file)
         {
-            ThrowIfArgument.IsNull(nameof(file), file);
             return Collections(file.GetTrackChunks());
         }
 
@@ -155,8 +151,6 @@ namespace Melanchall.DryWetMidi.Interaction
             IAsyncEnumerable<T> source,
             CancellationToken cancellationToken)
         {
-            ThrowIfArgument.IsNull(nameof(source), source);
-
             var result = new List<T>();
 
             await foreach (var item in source.WithCancellation(cancellationToken).ConfigureAwait(false))

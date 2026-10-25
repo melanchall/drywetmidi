@@ -41,7 +41,10 @@ namespace Melanchall.DryWetMidi.Tools
             => RunCsvAsync(async () =>
             {
                 ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
-                ValidateCsvStream(stream, true);
+                ThrowIfArgument.IsNull(nameof(stream), stream);
+
+                if (!stream.CanWrite)
+                    throw new ArgumentException("Stream doesn't support writing.", nameof(stream));
 
                 var serializationSettings = settings ?? new CsvSerializationSettings();
                 using var writer = new CsvWriter(serializationSettings);
@@ -96,6 +99,8 @@ namespace Melanchall.DryWetMidi.Tools
             cancellationToken.ThrowIfCancellationRequested();
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
 
+            ThrowIfArgument.IsNullOrEmptyString(nameof(filePath), filePath, "File path");
+
             using var stream = OpenCsvForWrite(filePath, overwriteFile);
 
             await SerializeToCsvAsync(
@@ -140,7 +145,10 @@ namespace Melanchall.DryWetMidi.Tools
             {
                 ThrowIfArgument.IsNull(nameof(midiChunks), midiChunks);
                 ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
-                ValidateCsvStream(stream, true);
+                ThrowIfArgument.IsNull(nameof(stream), stream);
+
+                if (!stream.CanWrite)
+                    throw new ArgumentException("Stream doesn't support writing.", nameof(stream));
 
                 var serializationSettings = settings ?? new CsvSerializationSettings();
                 using var writer = new CsvWriter(serializationSettings);
@@ -194,6 +202,8 @@ namespace Melanchall.DryWetMidi.Tools
             cancellationToken.ThrowIfCancellationRequested();
             ThrowIfArgument.IsNull(nameof(midiChunks), midiChunks);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
+            ThrowIfArgument.IsNullOrEmptyString(nameof(filePath), filePath, "File path");
+
             using var stream = OpenCsvForWrite(filePath, overwriteFile);
 
             await SerializeToCsvAsync(
@@ -239,7 +249,10 @@ namespace Melanchall.DryWetMidi.Tools
             {
                 ThrowIfArgument.IsNull(nameof(midiChunk), midiChunk);
                 ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
-                ValidateCsvStream(stream, true);
+                ThrowIfArgument.IsNull(nameof(stream), stream);
+
+                if (!stream.CanWrite)
+                    throw new ArgumentException("Stream doesn't support writing.", nameof(stream));
 
                 var serializationSettings = settings ?? new CsvSerializationSettings();
                 using var writer = new CsvWriter(serializationSettings);
@@ -293,6 +306,8 @@ namespace Melanchall.DryWetMidi.Tools
             cancellationToken.ThrowIfCancellationRequested();
             ThrowIfArgument.IsNull(nameof(midiChunk), midiChunk);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
+            ThrowIfArgument.IsNullOrEmptyString(nameof(filePath), filePath, "File path");
+
             using var stream = OpenCsvForWrite(filePath, overwriteFile);
 
             await SerializeToCsvAsync(
@@ -334,7 +349,10 @@ namespace Melanchall.DryWetMidi.Tools
             {
                 ThrowIfArgument.IsNull(nameof(timedObjects), timedObjects);
                 ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
-                ValidateCsvStream(stream, true);
+                ThrowIfArgument.IsNull(nameof(stream), stream);
+
+                if (!stream.CanWrite)
+                    throw new ArgumentException("Stream doesn't support writing.", nameof(stream));
 
                 var serializationSettings = settings ?? new CsvSerializationSettings();
                 using var writer = new CsvWriter(serializationSettings);
@@ -383,6 +401,8 @@ namespace Melanchall.DryWetMidi.Tools
             cancellationToken.ThrowIfCancellationRequested();
             ThrowIfArgument.IsNull(nameof(timedObjects), timedObjects);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
+            ThrowIfArgument.IsNullOrEmptyString(nameof(filePath), filePath, "File path");
+
             using var stream = OpenCsvForWrite(filePath, overwriteFile);
 
             await SerializeToCsvAsync(
@@ -417,7 +437,10 @@ namespace Melanchall.DryWetMidi.Tools
             CancellationToken cancellationToken = default)
             => AsyncOperation.Run(async () =>
             {
-                ValidateCsvStream(stream, false);
+                ThrowIfArgument.IsNull(nameof(stream), stream);
+
+                if (!stream.CanRead)
+                    throw new ArgumentException("Stream doesn't support reading.", nameof(stream));
 
                 var deserializationSettings = settings ?? new CsvDeserializationSettings();
                 using var reader = new CsvReader(stream, deserializationSettings);
@@ -462,6 +485,8 @@ namespace Melanchall.DryWetMidi.Tools
         {
             cancellationToken.ThrowIfCancellationRequested();
 
+            ThrowIfArgument.IsNullOrEmptyString(nameof(filePath), filePath, "File path");
+
             using var stream = OpenCsvForRead(filePath);
 
             return await DeserializeFileFromCsvAsync(stream, settings, progress, cancellationToken).ConfigureAwait(false);
@@ -491,7 +516,11 @@ namespace Melanchall.DryWetMidi.Tools
             CancellationToken cancellationToken = default)
             => AsyncOperation.Run(async () =>
             {
-                ValidateCsvStream(stream, false);
+                ThrowIfArgument.IsNull(nameof(stream), stream);
+
+                if (!stream.CanRead)
+                    throw new ArgumentException("Stream doesn't support reading.", nameof(stream));
+
                 ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
                 var deserializationSettings = settings ?? new CsvDeserializationSettings();
@@ -530,6 +559,8 @@ namespace Melanchall.DryWetMidi.Tools
         {
             cancellationToken.ThrowIfCancellationRequested();
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
+            ThrowIfArgument.IsNullOrEmptyString(nameof(filePath), filePath, "File path");
+
             using var stream = OpenCsvForRead(filePath);
 
             return await DeserializeChunksFromCsvAsync(stream, tempoMap, settings, progress, cancellationToken).ConfigureAwait(false);
@@ -559,7 +590,11 @@ namespace Melanchall.DryWetMidi.Tools
             CancellationToken cancellationToken = default)
             => AsyncOperation.Run(async () =>
             {
-                ValidateCsvStream(stream, false);
+                ThrowIfArgument.IsNull(nameof(stream), stream);
+
+                if (!stream.CanRead)
+                    throw new ArgumentException("Stream doesn't support reading.", nameof(stream));
+
                 ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
                 var deserializationSettings = settings ?? new CsvDeserializationSettings();
@@ -603,6 +638,8 @@ namespace Melanchall.DryWetMidi.Tools
         {
             cancellationToken.ThrowIfCancellationRequested();
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
+            ThrowIfArgument.IsNullOrEmptyString(nameof(filePath), filePath, "File path");
+
             using var stream = OpenCsvForRead(filePath);
 
             return await DeserializeChunkFromCsvAsync(stream, tempoMap, settings, progress, cancellationToken).ConfigureAwait(false);
@@ -632,7 +669,11 @@ namespace Melanchall.DryWetMidi.Tools
             CancellationToken cancellationToken = default)
             => AsyncOperation.Run(async () =>
             {
-                ValidateCsvStream(stream, false);
+                ThrowIfArgument.IsNull(nameof(stream), stream);
+
+                if (!stream.CanRead)
+                    throw new ArgumentException("Stream doesn't support reading.", nameof(stream));
+
                 ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
                 var deserializationSettings = settings ?? new CsvDeserializationSettings();
@@ -684,6 +725,8 @@ namespace Melanchall.DryWetMidi.Tools
         {
             cancellationToken.ThrowIfCancellationRequested();
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
+            ThrowIfArgument.IsNullOrEmptyString(nameof(filePath), filePath, "File path");
+
             using var stream = OpenCsvForRead(filePath);
 
             return await DeserializeObjectsFromCsvAsync(stream, tempoMap, settings, progress, cancellationToken).ConfigureAwait(false);
@@ -700,14 +743,6 @@ namespace Melanchall.DryWetMidi.Tools
             },
             cancellationToken,
             progress);
-
-        private static void ValidateCsvStream(Stream stream, bool writing)
-        {
-            ThrowIfArgument.IsNull(nameof(stream), stream);
-
-            if (writing ? !stream.CanWrite : !stream.CanRead)
-                throw new ArgumentException(writing ? "Stream doesn't support writing." : "Stream doesn't support reading.", nameof(stream));
-        }
 
         private static async Task WriteChunksAsync(
             IEnumerable<MidiChunk?> chunks,
@@ -841,8 +876,6 @@ namespace Melanchall.DryWetMidi.Tools
 
         private static FileStream OpenCsvForRead(string filePath)
         {
-            ThrowIfArgument.IsNullOrEmptyString(nameof(filePath), filePath, "File path");
-
             return new FileStream(
                 filePath,
                 FileMode.Open,
@@ -854,8 +887,6 @@ namespace Melanchall.DryWetMidi.Tools
 
         private static FileStream OpenCsvForWrite(string filePath, bool overwriteFile)
         {
-            ThrowIfArgument.IsNullOrEmptyString(nameof(filePath), filePath, "File path");
-
             return new FileStream(
                 filePath,
                 overwriteFile ? FileMode.Create : FileMode.CreateNew,

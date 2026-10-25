@@ -8,7 +8,7 @@ namespace Melanchall.DryWetMidi.Interaction
 {
     public static partial class RestsUtilities
     {
-        /// <inheritdoc cref="GetRests(IEnumerable{ITimedObject}, RestDetectionSettings)" />
+        /// <inheritdoc cref="GetRests(IEnumerable{ITimedObject}, RestDetectionSettings)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously detects rests between timed objects.
         /// </summary>
@@ -25,7 +25,7 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(() => timedObjects.GetRests(settings), cancellationToken, progress);
 
-        /// <inheritdoc cref="GetRests(IEnumerable{ITimedObject}, RestDetectionSettings)" />
+        /// <inheritdoc cref="GetRests(IEnumerable{ITimedObject}, RestDetectionSettings)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously detects rests from an asynchronous timed object source.
         /// </summary>
@@ -39,7 +39,11 @@ namespace Melanchall.DryWetMidi.Interaction
             this IAsyncEnumerable<ITimedObject> timedObjects,
             RestDetectionSettings? settings = null,
             IProgress<AsyncOperationProgress>? progress = null,
-            CancellationToken cancellationToken = default) =>
-            AsyncOperation.Run(async () => (await InteractionAsyncUtilities.CollectAsync(timedObjects, cancellationToken).ConfigureAwait(false)).GetRests(settings), cancellationToken, progress);
+            CancellationToken cancellationToken = default)
+        {
+            ThrowIfArgument.IsNull(nameof(timedObjects), timedObjects);
+
+            return AsyncOperation.Run(async () => (await InteractionAsyncUtilities.CollectAsync(timedObjects, cancellationToken).ConfigureAwait(false)).GetRests(settings), cancellationToken, progress);
+        }
     }
 }

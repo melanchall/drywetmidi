@@ -10,7 +10,7 @@ namespace Melanchall.DryWetMidi.Interaction
 {
     public static partial class TimedEventsManagingUtilities
     {
-        /// <inheritdoc cref="GetTimedEvents(EventsCollection, TimedEventDetectionSettings)" />
+        /// <inheritdoc cref="GetTimedEvents(EventsCollection, TimedEventDetectionSettings)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously detects timed events in an events collection.
         /// </summary>
@@ -27,7 +27,7 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(() => eventsCollection.GetTimedEvents(settings), cancellationToken, progress);
 
-        /// <inheritdoc cref="GetTimedEvents(TrackChunk, TimedEventDetectionSettings)" />
+        /// <inheritdoc cref="GetTimedEvents(TrackChunk, TimedEventDetectionSettings)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously detects timed events in a track.
         /// </summary>
@@ -44,7 +44,7 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(() => trackChunk.GetTimedEvents(settings), cancellationToken, progress);
 
-        /// <inheritdoc cref="GetTimedEvents(IEnumerable{TrackChunk}, TimedEventDetectionSettings)" />
+        /// <inheritdoc cref="GetTimedEvents(IEnumerable{TrackChunk}, TimedEventDetectionSettings)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously detects timed events in tracks.
         /// </summary>
@@ -61,7 +61,7 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(() => trackChunks.GetTimedEvents(settings), cancellationToken, progress);
 
-        /// <inheritdoc cref="GetTimedEvents(MidiFile, TimedEventDetectionSettings)" />
+        /// <inheritdoc cref="GetTimedEvents(MidiFile, TimedEventDetectionSettings)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously detects timed events in a MIDI file.
         /// </summary>
@@ -81,6 +81,9 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <summary>
         /// Asynchronously detects timed events from an asynchronous MIDI event source.
         /// </summary>
+        /// <param name="midiEvents">Asynchronous source of MIDI events to detect timed events from.</param>
+        /// <param name="settings">Settings according to which timed events should be detected and built.</param>
+        /// <returns>A task returning the detected timed events.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="midiEvents"/> is null.</exception>
         /// <param name="progress">
         /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
@@ -92,10 +95,14 @@ namespace Melanchall.DryWetMidi.Interaction
             this IAsyncEnumerable<MidiEvent> midiEvents,
             TimedEventDetectionSettings? settings = null,
             IProgress<AsyncOperationProgress>? progress = null,
-            CancellationToken cancellationToken = default) =>
-            AsyncOperation.Run(async () => (ICollection<TimedEvent>)(await InteractionAsyncUtilities.CollectAsync(midiEvents, cancellationToken).ConfigureAwait(false)).GetTimedEventsLazy(settings, 0).ToArray(), cancellationToken, progress);
+            CancellationToken cancellationToken = default)
+        {
+            ThrowIfArgument.IsNull(nameof(midiEvents), midiEvents);
 
-        /// <inheritdoc cref="GetTimedEvents(IEnumerable{TrackChunk}, TimedEventDetectionSettings)" />
+            return AsyncOperation.Run(async () => (ICollection<TimedEvent>)(await InteractionAsyncUtilities.CollectAsync(midiEvents, cancellationToken).ConfigureAwait(false)).GetTimedEventsLazy(settings, 0).ToArray(), cancellationToken, progress);
+        }
+
+        /// <inheritdoc cref="GetTimedEvents(IEnumerable{TrackChunk}, TimedEventDetectionSettings)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously detects timed events from an asynchronous track source.
         /// </summary>
@@ -109,10 +116,14 @@ namespace Melanchall.DryWetMidi.Interaction
             this IAsyncEnumerable<TrackChunk> trackChunks,
             TimedEventDetectionSettings? settings = null,
             IProgress<AsyncOperationProgress>? progress = null,
-            CancellationToken cancellationToken = default) =>
-            AsyncOperation.Run(async () => (await InteractionAsyncUtilities.CollectAsync(trackChunks, cancellationToken).ConfigureAwait(false)).GetTimedEvents(settings), cancellationToken, progress);
+            CancellationToken cancellationToken = default)
+        {
+            ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
 
-        /// <inheritdoc cref="ManageTimedEvents(EventsCollection, TimedEventDetectionSettings, TimedObjectsComparer)" />
+            return AsyncOperation.Run(async () => (await InteractionAsyncUtilities.CollectAsync(trackChunks, cancellationToken).ConfigureAwait(false)).GetTimedEvents(settings), cancellationToken, progress);
+        }
+
+        /// <inheritdoc cref="ManageTimedEvents(EventsCollection, TimedEventDetectionSettings, TimedObjectsComparer)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously creates a timed events manager.
         /// </summary>
@@ -130,7 +141,7 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(() => eventsCollection.ManageTimedEvents(settings, comparer), cancellationToken, progress);
 
-        /// <inheritdoc cref="ManageTimedEvents(TrackChunk, TimedEventDetectionSettings, TimedObjectsComparer)" />
+        /// <inheritdoc cref="ManageTimedEvents(TrackChunk, TimedEventDetectionSettings, TimedObjectsComparer)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously creates a timed events manager for a track.
         /// </summary>
@@ -148,7 +159,7 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(() => trackChunk.ManageTimedEvents(settings, comparer), cancellationToken, progress);
 
-        /// <inheritdoc cref="ProcessTimedEvents(EventsCollection, Action{TimedEvent}, TimedEventDetectionSettings, TimedEventProcessingHint)" />
+        /// <inheritdoc cref="ProcessTimedEvents(EventsCollection, Action{TimedEvent}, TimedEventDetectionSettings, TimedEventProcessingHint)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously processes timed events.
         /// </summary>
@@ -167,7 +178,7 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(() => eventsCollection.ProcessTimedEvents(action, settings, hint), cancellationToken, progress);
 
-        /// <inheritdoc cref="ProcessTimedEvents(EventsCollection, Action{TimedEvent}, Predicate{TimedEvent}, TimedEventDetectionSettings, TimedEventProcessingHint)" />
+        /// <inheritdoc cref="ProcessTimedEvents(EventsCollection, Action{TimedEvent}, Predicate{TimedEvent}, TimedEventDetectionSettings, TimedEventProcessingHint)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously processes matching timed events.
         /// </summary>
@@ -187,7 +198,7 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(() => eventsCollection.ProcessTimedEvents(action, match, settings, hint), cancellationToken, progress);
 
-        /// <inheritdoc cref="ProcessTimedEvents(TrackChunk, Action{TimedEvent}, TimedEventDetectionSettings, TimedEventProcessingHint)" />
+        /// <inheritdoc cref="ProcessTimedEvents(TrackChunk, Action{TimedEvent}, TimedEventDetectionSettings, TimedEventProcessingHint)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously processes timed events in a track.
         /// </summary>
@@ -206,7 +217,7 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(() => trackChunk.ProcessTimedEvents(action, settings, hint), cancellationToken, progress);
 
-        /// <inheritdoc cref="ProcessTimedEvents(TrackChunk, Action{TimedEvent}, Predicate{TimedEvent}, TimedEventDetectionSettings, TimedEventProcessingHint)" />
+        /// <inheritdoc cref="ProcessTimedEvents(TrackChunk, Action{TimedEvent}, Predicate{TimedEvent}, TimedEventDetectionSettings, TimedEventProcessingHint)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously processes matching timed events in a track.
         /// </summary>
@@ -226,7 +237,7 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(() => trackChunk.ProcessTimedEvents(action, match, settings, hint), cancellationToken, progress);
 
-        /// <inheritdoc cref="ProcessTimedEvents(IEnumerable{TrackChunk}, Action{TimedEvent}, TimedEventDetectionSettings, TimedEventProcessingHint)" />
+        /// <inheritdoc cref="ProcessTimedEvents(IEnumerable{TrackChunk}, Action{TimedEvent}, TimedEventDetectionSettings, TimedEventProcessingHint)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously processes timed events in tracks.
         /// </summary>
@@ -245,7 +256,7 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(() => trackChunks.ProcessTimedEvents(action, settings, hint), cancellationToken, progress);
 
-        /// <inheritdoc cref="ProcessTimedEvents(IEnumerable{TrackChunk}, Action{TimedEvent}, Predicate{TimedEvent}, TimedEventDetectionSettings, TimedEventProcessingHint)" />
+        /// <inheritdoc cref="ProcessTimedEvents(IEnumerable{TrackChunk}, Action{TimedEvent}, Predicate{TimedEvent}, TimedEventDetectionSettings, TimedEventProcessingHint)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously processes matching timed events in tracks.
         /// </summary>
@@ -265,7 +276,7 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(() => trackChunks.ProcessTimedEvents(action, match, settings, hint), cancellationToken, progress);
 
-        /// <inheritdoc cref="ProcessTimedEvents(MidiFile, Action{TimedEvent}, TimedEventDetectionSettings, TimedEventProcessingHint)" />
+        /// <inheritdoc cref="ProcessTimedEvents(MidiFile, Action{TimedEvent}, TimedEventDetectionSettings, TimedEventProcessingHint)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously processes timed events in a MIDI file.
         /// </summary>
@@ -284,7 +295,7 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(() => file.ProcessTimedEvents(action, settings, hint), cancellationToken, progress);
 
-        /// <inheritdoc cref="ProcessTimedEvents(MidiFile, Action{TimedEvent}, Predicate{TimedEvent}, TimedEventDetectionSettings, TimedEventProcessingHint)" />
+        /// <inheritdoc cref="ProcessTimedEvents(MidiFile, Action{TimedEvent}, Predicate{TimedEvent}, TimedEventDetectionSettings, TimedEventProcessingHint)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously processes matching timed events in a MIDI file.
         /// </summary>
@@ -304,7 +315,7 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(() => file.ProcessTimedEvents(action, match, settings, hint), cancellationToken, progress);
 
-        /// <inheritdoc cref="ProcessTimedEvents(EventsCollection, Action{TimedEvent}, TimedEventDetectionSettings, TimedEventProcessingHint)" />
+        /// <inheritdoc cref="ProcessTimedEvents(EventsCollection, Action{TimedEvent}, TimedEventDetectionSettings, TimedEventProcessingHint)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Sequentially awaits an asynchronous action for each timed event.
         /// </summary>
@@ -323,7 +334,7 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             eventsCollection.ProcessTimedEventsAsync(action, null, settings, hint, progress, cancellationToken);
 
-        /// <inheritdoc cref="ProcessTimedEvents(TrackChunk, Action{TimedEvent}, TimedEventDetectionSettings, TimedEventProcessingHint)" />
+        /// <inheritdoc cref="ProcessTimedEvents(TrackChunk, Action{TimedEvent}, TimedEventDetectionSettings, TimedEventProcessingHint)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Sequentially awaits an asynchronous action for each timed event in a track.
         /// </summary>
@@ -342,7 +353,7 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             trackChunk.ProcessTimedEventsAsync(action, null, settings, hint, progress, cancellationToken);
 
-        /// <inheritdoc cref="ProcessTimedEvents(IEnumerable{TrackChunk}, Action{TimedEvent}, TimedEventDetectionSettings, TimedEventProcessingHint)" />
+        /// <inheritdoc cref="ProcessTimedEvents(IEnumerable{TrackChunk}, Action{TimedEvent}, TimedEventDetectionSettings, TimedEventProcessingHint)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Sequentially awaits an asynchronous action for each timed event in tracks.
         /// </summary>
@@ -361,7 +372,7 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             trackChunks.ProcessTimedEventsAsync(action, null, settings, hint, progress, cancellationToken);
 
-        /// <inheritdoc cref="ProcessTimedEvents(MidiFile, Action{TimedEvent}, TimedEventDetectionSettings, TimedEventProcessingHint)" />
+        /// <inheritdoc cref="ProcessTimedEvents(MidiFile, Action{TimedEvent}, TimedEventDetectionSettings, TimedEventProcessingHint)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Sequentially awaits an asynchronous action for each timed event in a MIDI file.
         /// </summary>
@@ -380,11 +391,12 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             file.ProcessTimedEventsAsync(action, null, settings, hint, progress, cancellationToken);
 
-        /// <inheritdoc cref="ProcessTimedEvents(EventsCollection, Action{TimedEvent}, TimedEventDetectionSettings, TimedEventProcessingHint)" />
+        /// <inheritdoc cref="ProcessTimedEvents(EventsCollection, Action{TimedEvent}, TimedEventDetectionSettings, TimedEventProcessingHint)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Sequentially awaits an asynchronous action for matching timed events.
         /// A null match processes all events.
         /// </summary>
+        /// <param name="match">Predicate selecting events to process, or null to process all events.</param>
         /// <param name="progress">
         /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
         /// The total is unknown. A final report marks successful completion.
@@ -398,14 +410,20 @@ namespace Melanchall.DryWetMidi.Interaction
             TimedEventDetectionSettings? settings = null,
             TimedEventProcessingHint hint = TimedEventProcessingHint.Default,
             IProgress<AsyncOperationProgress>? progress = null,
-            CancellationToken cancellationToken = default) =>
-            AsyncOperation.Run(() => ProcessTimedEventsAwaitedAsync(InteractionAsyncUtilities.Collections(eventsCollection), action, match, settings, hint, cancellationToken), cancellationToken, progress);
+            CancellationToken cancellationToken = default)
+        {
+            ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
+            ThrowIfArgument.IsNull(nameof(action), action);
 
-        /// <inheritdoc cref="ProcessTimedEvents(TrackChunk, Action{TimedEvent}, TimedEventDetectionSettings, TimedEventProcessingHint)" />
+            return AsyncOperation.Run(() => ProcessTimedEventsAwaitedAsync(InteractionAsyncUtilities.Collections(eventsCollection), action, match, settings, hint, cancellationToken), cancellationToken, progress);
+        }
+
+        /// <inheritdoc cref="ProcessTimedEvents(TrackChunk, Action{TimedEvent}, TimedEventDetectionSettings, TimedEventProcessingHint)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Sequentially awaits an asynchronous action for matching timed events in a track.
         /// A null match processes all events.
         /// </summary>
+        /// <param name="match">Predicate selecting events to process, or null to process all events.</param>
         /// <param name="progress">
         /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
         /// The total is unknown. A final report marks successful completion.
@@ -419,14 +437,20 @@ namespace Melanchall.DryWetMidi.Interaction
             TimedEventDetectionSettings? settings = null,
             TimedEventProcessingHint hint = TimedEventProcessingHint.Default,
             IProgress<AsyncOperationProgress>? progress = null,
-            CancellationToken cancellationToken = default) =>
-            AsyncOperation.Run(() => ProcessTimedEventsAwaitedAsync(InteractionAsyncUtilities.Collections(trackChunk), action, match, settings, hint, cancellationToken), cancellationToken, progress);
+            CancellationToken cancellationToken = default)
+        {
+            ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
+            ThrowIfArgument.IsNull(nameof(action), action);
 
-        /// <inheritdoc cref="ProcessTimedEvents(IEnumerable{TrackChunk}, Action{TimedEvent}, TimedEventDetectionSettings, TimedEventProcessingHint)" />
+            return AsyncOperation.Run(() => ProcessTimedEventsAwaitedAsync(InteractionAsyncUtilities.Collections(trackChunk), action, match, settings, hint, cancellationToken), cancellationToken, progress);
+        }
+
+        /// <inheritdoc cref="ProcessTimedEvents(IEnumerable{TrackChunk}, Action{TimedEvent}, TimedEventDetectionSettings, TimedEventProcessingHint)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Sequentially awaits an asynchronous action for matching timed events in tracks.
         /// A null match processes all events.
         /// </summary>
+        /// <param name="match">Predicate selecting events to process, or null to process all events.</param>
         /// <param name="progress">
         /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
         /// The total is unknown. A final report marks successful completion.
@@ -440,14 +464,20 @@ namespace Melanchall.DryWetMidi.Interaction
             TimedEventDetectionSettings? settings = null,
             TimedEventProcessingHint hint = TimedEventProcessingHint.Default,
             IProgress<AsyncOperationProgress>? progress = null,
-            CancellationToken cancellationToken = default) =>
-            AsyncOperation.Run(() => ProcessTimedEventsAwaitedAsync(InteractionAsyncUtilities.Collections(trackChunks), action, match, settings, hint, cancellationToken), cancellationToken, progress);
+            CancellationToken cancellationToken = default)
+        {
+            ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
+            ThrowIfArgument.IsNull(nameof(action), action);
 
-        /// <inheritdoc cref="ProcessTimedEvents(MidiFile, Action{TimedEvent}, TimedEventDetectionSettings, TimedEventProcessingHint)" />
+            return AsyncOperation.Run(() => ProcessTimedEventsAwaitedAsync(InteractionAsyncUtilities.Collections(trackChunks), action, match, settings, hint, cancellationToken), cancellationToken, progress);
+        }
+
+        /// <inheritdoc cref="ProcessTimedEvents(MidiFile, Action{TimedEvent}, TimedEventDetectionSettings, TimedEventProcessingHint)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Sequentially awaits an asynchronous action for matching timed events in a MIDI file.
         /// A null match processes all events.
         /// </summary>
+        /// <param name="match">Predicate selecting events to process, or null to process all events.</param>
         /// <param name="progress">
         /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
         /// The total is unknown. A final report marks successful completion.
@@ -461,10 +491,15 @@ namespace Melanchall.DryWetMidi.Interaction
             TimedEventDetectionSettings? settings = null,
             TimedEventProcessingHint hint = TimedEventProcessingHint.Default,
             IProgress<AsyncOperationProgress>? progress = null,
-            CancellationToken cancellationToken = default) =>
-            AsyncOperation.Run(() => ProcessTimedEventsAwaitedAsync(InteractionAsyncUtilities.Collections(file), action, match, settings, hint, cancellationToken), cancellationToken, progress);
+            CancellationToken cancellationToken = default)
+        {
+            ThrowIfArgument.IsNull(nameof(file), file);
+            ThrowIfArgument.IsNull(nameof(action), action);
 
-        /// <inheritdoc cref="RemoveTimedEvents(EventsCollection)" />
+            return AsyncOperation.Run(() => ProcessTimedEventsAwaitedAsync(InteractionAsyncUtilities.Collections(file), action, match, settings, hint, cancellationToken), cancellationToken, progress);
+        }
+
+        /// <inheritdoc cref="RemoveTimedEvents(EventsCollection)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously removes all timed events.
         /// </summary>
@@ -480,7 +515,7 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(() => eventsCollection.RemoveTimedEvents(), cancellationToken, progress);
 
-        /// <inheritdoc cref="RemoveTimedEvents(EventsCollection, Predicate{TimedEvent}, TimedEventDetectionSettings)" />
+        /// <inheritdoc cref="RemoveTimedEvents(EventsCollection, Predicate{TimedEvent}, TimedEventDetectionSettings)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously removes matching timed events.
         /// </summary>
@@ -498,7 +533,7 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(() => eventsCollection.RemoveTimedEvents(match, settings), cancellationToken, progress);
 
-        /// <inheritdoc cref="RemoveTimedEvents(TrackChunk)" />
+        /// <inheritdoc cref="RemoveTimedEvents(TrackChunk)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously removes all timed events from a track.
         /// </summary>
@@ -514,7 +549,7 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(() => trackChunk.RemoveTimedEvents(), cancellationToken, progress);
 
-        /// <inheritdoc cref="RemoveTimedEvents(TrackChunk, Predicate{TimedEvent}, TimedEventDetectionSettings)" />
+        /// <inheritdoc cref="RemoveTimedEvents(TrackChunk, Predicate{TimedEvent}, TimedEventDetectionSettings)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously removes matching timed events from a track.
         /// </summary>
@@ -532,7 +567,7 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(() => trackChunk.RemoveTimedEvents(match, settings), cancellationToken, progress);
 
-        /// <inheritdoc cref="RemoveTimedEvents(IEnumerable{TrackChunk})" />
+        /// <inheritdoc cref="RemoveTimedEvents(IEnumerable{TrackChunk})" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously removes all timed events from tracks.
         /// </summary>
@@ -548,7 +583,7 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(() => trackChunks.RemoveTimedEvents(), cancellationToken, progress);
 
-        /// <inheritdoc cref="RemoveTimedEvents(IEnumerable{TrackChunk}, Predicate{TimedEvent}, TimedEventDetectionSettings)" />
+        /// <inheritdoc cref="RemoveTimedEvents(IEnumerable{TrackChunk}, Predicate{TimedEvent}, TimedEventDetectionSettings)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously removes matching timed events from tracks.
         /// </summary>
@@ -566,7 +601,7 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(() => trackChunks.RemoveTimedEvents(match, settings), cancellationToken, progress);
 
-        /// <inheritdoc cref="RemoveTimedEvents(MidiFile)" />
+        /// <inheritdoc cref="RemoveTimedEvents(MidiFile)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously removes all timed events from a MIDI file.
         /// </summary>
@@ -582,7 +617,7 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(() => file.RemoveTimedEvents(), cancellationToken, progress);
 
-        /// <inheritdoc cref="RemoveTimedEvents(MidiFile, Predicate{TimedEvent}, TimedEventDetectionSettings)" />
+        /// <inheritdoc cref="RemoveTimedEvents(MidiFile, Predicate{TimedEvent}, TimedEventDetectionSettings)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously removes matching timed events from a MIDI file.
         /// </summary>
@@ -608,8 +643,6 @@ namespace Melanchall.DryWetMidi.Interaction
             TimedEventProcessingHint hint,
             CancellationToken cancellationToken)
         {
-            ThrowIfArgument.IsNull(nameof(action), action);
-
             var count = 0;
             var index = 0;
 

@@ -11,6 +11,34 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
     public sealed partial class InteractionAsyncTests
     {
         [Test]
+        public void AsyncSourceGetters_NullSourceReportsPublicParameterName()
+        {
+            void CheckArgument(Action operation, string expectedParameterName)
+            {
+                var exception = Assert.Throws<ArgumentNullException>(
+                    () => operation(), "Async-source getter accepted a null source.");
+
+                ClassicAssert.AreEqual(expectedParameterName, exception.ParamName, "Async-source getter reported an internal parameter name.");
+            }
+
+            IAsyncEnumerable<MidiEvent> midiEvents = null;
+            IAsyncEnumerable<TrackChunk> trackChunks = null;
+            IAsyncEnumerable<Note> notes = null;
+            IAsyncEnumerable<ITimedObject> timedObjects = null;
+
+            CheckArgument(() => midiEvents.GetNotesAsync(), nameof(midiEvents));
+            CheckArgument(() => trackChunks.GetNotesAsync(), nameof(trackChunks));
+            CheckArgument(() => midiEvents.GetChordsAsync(), nameof(midiEvents));
+            CheckArgument(() => trackChunks.GetChordsAsync(), nameof(trackChunks));
+            CheckArgument(() => notes.GetChordsAsync(), nameof(notes));
+            CheckArgument(() => midiEvents.GetTimedEventsAsync(), nameof(midiEvents));
+            CheckArgument(() => trackChunks.GetTimedEventsAsync(), nameof(trackChunks));
+            CheckArgument(() => midiEvents.GetObjectsAsync(ObjectType.Note), nameof(midiEvents));
+            CheckArgument(() => trackChunks.GetObjectsAsync(ObjectType.Note), nameof(trackChunks));
+            CheckArgument(() => timedObjects.GetObjectsAsync(ObjectType.Note), nameof(timedObjects));
+        }
+
+        [Test]
         public void ArgumentErrors_MatchSynchronousOperations()
         {
             void CheckArgument(Action synchronous, Action asynchronous)

@@ -80,18 +80,16 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             MidiAsserts.AreEqual(synchronous.GetTimedEvents(), asynchronous.GetTimedEvents(), "Processed objects");
         }
 
-        [TestCase("Notes")]
-        [TestCase("Chords")]
-        [TestCase("TimedEvents")]
-        [TestCase("Objects")]
-        public void CancellationInFinalSynchronousCallback_DoesNotEraseEvents(string kind)
+        [Test]
+        public void CancellationInFinalSynchronousCallback_DoesNotEraseEvents(
+            [Values(NotesOperation, ChordsOperation, TimedEventsOperation, ObjectsOperation)] string kind)
         {
             using var cancellation = new CancellationTokenSource();
             var track = CreateTrack();
             var expected = track.GetTimedEvents();
-            var total = kind == "Notes" ? track.GetNotes().Count :
-                kind == "Chords" ? track.GetChords().Count :
-                kind == "TimedEvents" ? track.GetTimedEvents().Count :
+            var total = kind == NotesOperation ? track.GetNotes().Count :
+                kind == ChordsOperation ? track.GetChords().Count :
+                kind == TimedEventsOperation ? track.GetTimedEvents().Count :
                 track.GetObjects(ObjectType.Note | ObjectType.Chord | ObjectType.TimedEvent).Count;
             var count = 0;
             Action<ITimedObject> action = obj =>
@@ -109,11 +107,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             MidiAsserts.AreEqual(expected, track.GetTimedEvents(), "Canceled rewrite must preserve unrelated events and delta times");
         }
 
-        [TestCase("Notes")]
-        [TestCase("Chords")]
-        [TestCase("TimedEvents")]
-        [TestCase("Objects")]
-        public async Task AwaitedCallbacks_IgnoreNullTracksLikeSynchronousCallbacks(string kind)
+        [Test]
+        public async Task AwaitedCallbacks_IgnoreNullTracksLikeSynchronousCallbacks(
+            [Values(NotesOperation, ChordsOperation, TimedEventsOperation, ObjectsOperation)] string kind)
         {
             var expected = CreateTrack();
             var actual = CreateTrack();
@@ -129,13 +125,10 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             MidiAsserts.AreEqual(expected.GetTimedEvents(), actual.GetTimedEvents(), "Null tracks must be ignored");
         }
 
-        [TestCase(ObjectType.Note, false)]
-        [TestCase(ObjectType.Note, true)]
-        [TestCase(ObjectType.Chord, false)]
-        [TestCase(ObjectType.Chord, true)]
-        [TestCase(ObjectType.Note | ObjectType.TimedEvent, false)]
-        [TestCase(ObjectType.Note | ObjectType.TimedEvent, true)]
-        public void RemoveObjects_CancellationDoesNotLeaveRemovalFlags(ObjectType type, bool multipleTracks)
+        [Test]
+        public void RemoveObjects_CancellationDoesNotLeaveRemovalFlags(
+            [Values(ObjectType.Note, ObjectType.Chord, ObjectType.Note | ObjectType.TimedEvent)] ObjectType type,
+            [Values] bool multipleTracks)
         {
             var track = new TrackChunk();
             track.Events.AddObjects(new[]
@@ -174,7 +167,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
         [Test]
         public void RemoveOperations_PredicateFailureCleansRemovalFlags(
-            [Values("Notes", "Chords", "Mixed")] string operation,
+            [Values(NotesOperation, ChordsOperation, MixedOperation)] string operation,
             [Values] bool multipleTracks,
             [Values] bool cancel,
             [Values] bool finalItem)
@@ -187,8 +180,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             var originalDeltaTimes = originalEvents.Select(events => events.Select(ev => ev.DeltaTime).ToArray()).ToArray();
             var expectedNotesCount = tracks.GetNotes().Count;
             var objectType = ObjectType.Note | ObjectType.Chord | ObjectType.TimedEvent;
-            var total = operation == "Notes" ? tracks.GetNotes().Count :
-                operation == "Chords" ? tracks.GetChords().Count :
+            var total = operation == NotesOperation ? tracks.GetNotes().Count :
+                operation == ChordsOperation ? tracks.GetChords().Count :
                 tracks.GetObjects(objectType).Count;
             var failureIndex = finalItem ? total : 2;
             var visited = 0;
@@ -212,11 +205,11 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             {
                 switch (operation)
                 {
-                    case "Notes":
+                    case NotesOperation:
                         return multipleTracks
                             ? tracks.RemoveNotesAsync(note => Match(note), cancellationToken: cancellation.Token)
                             : track.Events.RemoveNotesAsync(note => Match(note), cancellationToken: cancellation.Token);
-                    case "Chords":
+                    case ChordsOperation:
                         return multipleTracks
                             ? tracks.RemoveChordsAsync(chord => Match(chord), cancellationToken: cancellation.Token)
                             : track.Events.RemoveChordsAsync(chord => Match(chord), cancellationToken: cancellation.Token);

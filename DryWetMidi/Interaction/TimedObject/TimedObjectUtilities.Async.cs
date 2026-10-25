@@ -31,7 +31,7 @@ namespace Melanchall.DryWetMidi.Interaction
             internal bool HasChanges { get; set; }
         }
 
-        /// <inheritdoc cref="ProcessObjects(EventsCollection, ObjectType, Action{ITimedObject}, ObjectDetectionSettings, ObjectProcessingHint)" />
+        /// <inheritdoc cref="ProcessObjects(EventsCollection, ObjectType, Action{ITimedObject}, ObjectDetectionSettings, ObjectProcessingHint)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously processes objects.
         /// </summary>
@@ -51,7 +51,7 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(() => eventsCollection.ProcessObjects(objectType, action, settings, hint), cancellationToken, progress);
 
-        /// <inheritdoc cref="ProcessObjects(EventsCollection, ObjectType, Action{ITimedObject}, Predicate{ITimedObject}, ObjectDetectionSettings, ObjectProcessingHint)" />
+        /// <inheritdoc cref="ProcessObjects(EventsCollection, ObjectType, Action{ITimedObject}, Predicate{ITimedObject}, ObjectDetectionSettings, ObjectProcessingHint)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously processes matching objects.
         /// </summary>
@@ -72,7 +72,7 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(() => eventsCollection.ProcessObjects(objectType, action, match, settings, hint), cancellationToken, progress);
 
-        /// <inheritdoc cref="ProcessObjects(TrackChunk, ObjectType, Action{ITimedObject}, ObjectDetectionSettings, ObjectProcessingHint)" />
+        /// <inheritdoc cref="ProcessObjects(TrackChunk, ObjectType, Action{ITimedObject}, ObjectDetectionSettings, ObjectProcessingHint)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously processes objects in a track.
         /// </summary>
@@ -92,7 +92,7 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(() => trackChunk.ProcessObjects(objectType, action, settings, hint), cancellationToken, progress);
 
-        /// <inheritdoc cref="ProcessObjects(TrackChunk, ObjectType, Action{ITimedObject}, Predicate{ITimedObject}, ObjectDetectionSettings, ObjectProcessingHint)" />
+        /// <inheritdoc cref="ProcessObjects(TrackChunk, ObjectType, Action{ITimedObject}, Predicate{ITimedObject}, ObjectDetectionSettings, ObjectProcessingHint)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously processes matching objects in a track.
         /// </summary>
@@ -113,7 +113,7 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(() => trackChunk.ProcessObjects(objectType, action, match, settings, hint), cancellationToken, progress);
 
-        /// <inheritdoc cref="ProcessObjects(IEnumerable{TrackChunk}, ObjectType, Action{ITimedObject}, ObjectDetectionSettings, ObjectProcessingHint)" />
+        /// <inheritdoc cref="ProcessObjects(IEnumerable{TrackChunk}, ObjectType, Action{ITimedObject}, ObjectDetectionSettings, ObjectProcessingHint)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously processes objects in tracks.
         /// </summary>
@@ -133,7 +133,7 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(() => trackChunks.ProcessObjects(objectType, action, settings, hint), cancellationToken, progress);
 
-        /// <inheritdoc cref="ProcessObjects(IEnumerable{TrackChunk}, ObjectType, Action{ITimedObject}, Predicate{ITimedObject}, ObjectDetectionSettings, ObjectProcessingHint)" />
+        /// <inheritdoc cref="ProcessObjects(IEnumerable{TrackChunk}, ObjectType, Action{ITimedObject}, Predicate{ITimedObject}, ObjectDetectionSettings, ObjectProcessingHint)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously processes matching objects in tracks.
         /// </summary>
@@ -154,7 +154,7 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(() => trackChunks.ProcessObjects(objectType, action, match, settings, hint), cancellationToken, progress);
 
-        /// <inheritdoc cref="ProcessObjects(MidiFile, ObjectType, Action{ITimedObject}, ObjectDetectionSettings, ObjectProcessingHint)" />
+        /// <inheritdoc cref="ProcessObjects(MidiFile, ObjectType, Action{ITimedObject}, ObjectDetectionSettings, ObjectProcessingHint)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously processes objects in a MIDI file.
         /// </summary>
@@ -174,7 +174,7 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(() => file.ProcessObjects(objectType, action, settings, hint), cancellationToken, progress);
 
-        /// <inheritdoc cref="ProcessObjects(MidiFile, ObjectType, Action{ITimedObject}, Predicate{ITimedObject}, ObjectDetectionSettings, ObjectProcessingHint)" />
+        /// <inheritdoc cref="ProcessObjects(MidiFile, ObjectType, Action{ITimedObject}, Predicate{ITimedObject}, ObjectDetectionSettings, ObjectProcessingHint)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously processes matching objects in a MIDI file.
         /// </summary>
@@ -195,7 +195,7 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(() => file.ProcessObjects(objectType, action, match, settings, hint), cancellationToken, progress);
 
-        /// <inheritdoc cref="ProcessObjects(EventsCollection, ObjectType, Action{ITimedObject}, ObjectDetectionSettings, ObjectProcessingHint)" />
+        /// <inheritdoc cref="ProcessObjects(EventsCollection, ObjectType, Action{ITimedObject}, ObjectDetectionSettings, ObjectProcessingHint)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Sequentially awaits an asynchronous action for each object.
         /// </summary>
@@ -215,7 +215,7 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             eventsCollection.ProcessObjectsAsync(objectType, action, null, settings, hint, progress, cancellationToken);
 
-        /// <inheritdoc cref="ProcessObjects(TrackChunk, ObjectType, Action{ITimedObject}, ObjectDetectionSettings, ObjectProcessingHint)" />
+        /// <inheritdoc cref="ProcessObjects(TrackChunk, ObjectType, Action{ITimedObject}, ObjectDetectionSettings, ObjectProcessingHint)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Sequentially awaits an asynchronous action for each object in a track.
         /// </summary>
@@ -235,7 +235,7 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             trackChunk.ProcessObjectsAsync(objectType, action, null, settings, hint, progress, cancellationToken);
 
-        /// <inheritdoc cref="ProcessObjects(IEnumerable{TrackChunk}, ObjectType, Action{ITimedObject}, ObjectDetectionSettings, ObjectProcessingHint)" />
+        /// <inheritdoc cref="ProcessObjects(IEnumerable{TrackChunk}, ObjectType, Action{ITimedObject}, ObjectDetectionSettings, ObjectProcessingHint)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Sequentially awaits an asynchronous action for each object in tracks.
         /// </summary>
@@ -255,7 +255,7 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             trackChunks.ProcessObjectsAsync(objectType, action, null, settings, hint, progress, cancellationToken);
 
-        /// <inheritdoc cref="ProcessObjects(MidiFile, ObjectType, Action{ITimedObject}, ObjectDetectionSettings, ObjectProcessingHint)" />
+        /// <inheritdoc cref="ProcessObjects(MidiFile, ObjectType, Action{ITimedObject}, ObjectDetectionSettings, ObjectProcessingHint)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Sequentially awaits an asynchronous action for each object in a MIDI file.
         /// </summary>
@@ -275,11 +275,12 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             file.ProcessObjectsAsync(objectType, action, null, settings, hint, progress, cancellationToken);
 
-        /// <inheritdoc cref="ProcessObjects(EventsCollection, ObjectType, Action{ITimedObject}, ObjectDetectionSettings, ObjectProcessingHint)" />
+        /// <inheritdoc cref="ProcessObjects(EventsCollection, ObjectType, Action{ITimedObject}, ObjectDetectionSettings, ObjectProcessingHint)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Sequentially awaits an asynchronous action for matching objects.
         /// A null match processes all objects.
         /// </summary>
+        /// <param name="match">Predicate selecting objects to process, or null to process all objects.</param>
         /// <param name="progress">
         /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
         /// The total is unknown. A final report marks successful completion.
@@ -294,14 +295,20 @@ namespace Melanchall.DryWetMidi.Interaction
             ObjectDetectionSettings? settings = null,
             ObjectProcessingHint hint = ObjectProcessingHint.Default,
             IProgress<AsyncOperationProgress>? progress = null,
-            CancellationToken cancellationToken = default) =>
-            AsyncOperation.Run(() => ProcessObjectsAwaitedAsync(InteractionAsyncUtilities.Collections(eventsCollection), objectType, action, match, settings, hint, cancellationToken), cancellationToken, progress);
+            CancellationToken cancellationToken = default)
+        {
+            ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
+            ThrowIfArgument.IsNull(nameof(action), action);
 
-        /// <inheritdoc cref="ProcessObjects(TrackChunk, ObjectType, Action{ITimedObject}, ObjectDetectionSettings, ObjectProcessingHint)" />
+            return AsyncOperation.Run(() => ProcessObjectsAwaitedAsync(InteractionAsyncUtilities.Collections(eventsCollection), objectType, action, match, settings, hint, cancellationToken), cancellationToken, progress);
+        }
+
+        /// <inheritdoc cref="ProcessObjects(TrackChunk, ObjectType, Action{ITimedObject}, ObjectDetectionSettings, ObjectProcessingHint)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Sequentially awaits an asynchronous action for matching objects in a track.
         /// A null match processes all objects.
         /// </summary>
+        /// <param name="match">Predicate selecting objects to process, or null to process all objects.</param>
         /// <param name="progress">
         /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
         /// The total is unknown. A final report marks successful completion.
@@ -316,14 +323,20 @@ namespace Melanchall.DryWetMidi.Interaction
             ObjectDetectionSettings? settings = null,
             ObjectProcessingHint hint = ObjectProcessingHint.Default,
             IProgress<AsyncOperationProgress>? progress = null,
-            CancellationToken cancellationToken = default) =>
-            AsyncOperation.Run(() => ProcessObjectsAwaitedAsync(InteractionAsyncUtilities.Collections(trackChunk), objectType, action, match, settings, hint, cancellationToken), cancellationToken, progress);
+            CancellationToken cancellationToken = default)
+        {
+            ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
+            ThrowIfArgument.IsNull(nameof(action), action);
 
-        /// <inheritdoc cref="ProcessObjects(IEnumerable{TrackChunk}, ObjectType, Action{ITimedObject}, ObjectDetectionSettings, ObjectProcessingHint)" />
+            return AsyncOperation.Run(() => ProcessObjectsAwaitedAsync(InteractionAsyncUtilities.Collections(trackChunk), objectType, action, match, settings, hint, cancellationToken), cancellationToken, progress);
+        }
+
+        /// <inheritdoc cref="ProcessObjects(IEnumerable{TrackChunk}, ObjectType, Action{ITimedObject}, ObjectDetectionSettings, ObjectProcessingHint)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Sequentially awaits an asynchronous action for matching objects in tracks.
         /// A null match processes all objects.
         /// </summary>
+        /// <param name="match">Predicate selecting objects to process, or null to process all objects.</param>
         /// <param name="progress">
         /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
         /// The total is unknown. A final report marks successful completion.
@@ -338,14 +351,20 @@ namespace Melanchall.DryWetMidi.Interaction
             ObjectDetectionSettings? settings = null,
             ObjectProcessingHint hint = ObjectProcessingHint.Default,
             IProgress<AsyncOperationProgress>? progress = null,
-            CancellationToken cancellationToken = default) =>
-            AsyncOperation.Run(() => ProcessObjectsAwaitedAsync(InteractionAsyncUtilities.Collections(trackChunks), objectType, action, match, settings, hint, cancellationToken), cancellationToken, progress);
+            CancellationToken cancellationToken = default)
+        {
+            ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
+            ThrowIfArgument.IsNull(nameof(action), action);
 
-        /// <inheritdoc cref="ProcessObjects(MidiFile, ObjectType, Action{ITimedObject}, ObjectDetectionSettings, ObjectProcessingHint)" />
+            return AsyncOperation.Run(() => ProcessObjectsAwaitedAsync(InteractionAsyncUtilities.Collections(trackChunks), objectType, action, match, settings, hint, cancellationToken), cancellationToken, progress);
+        }
+
+        /// <inheritdoc cref="ProcessObjects(MidiFile, ObjectType, Action{ITimedObject}, ObjectDetectionSettings, ObjectProcessingHint)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Sequentially awaits an asynchronous action for matching objects in a MIDI file.
         /// A null match processes all objects.
         /// </summary>
+        /// <param name="match">Predicate selecting objects to process, or null to process all objects.</param>
         /// <param name="progress">
         /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
         /// The total is unknown. A final report marks successful completion.
@@ -360,10 +379,15 @@ namespace Melanchall.DryWetMidi.Interaction
             ObjectDetectionSettings? settings = null,
             ObjectProcessingHint hint = ObjectProcessingHint.Default,
             IProgress<AsyncOperationProgress>? progress = null,
-            CancellationToken cancellationToken = default) =>
-            AsyncOperation.Run(() => ProcessObjectsAwaitedAsync(InteractionAsyncUtilities.Collections(file), objectType, action, match, settings, hint, cancellationToken), cancellationToken, progress);
+            CancellationToken cancellationToken = default)
+        {
+            ThrowIfArgument.IsNull(nameof(file), file);
+            ThrowIfArgument.IsNull(nameof(action), action);
 
-        /// <inheritdoc cref="RemoveObjects(EventsCollection, ObjectType, ObjectDetectionSettings)" />
+            return AsyncOperation.Run(() => ProcessObjectsAwaitedAsync(InteractionAsyncUtilities.Collections(file), objectType, action, match, settings, hint, cancellationToken), cancellationToken, progress);
+        }
+
+        /// <inheritdoc cref="RemoveObjects(EventsCollection, ObjectType, ObjectDetectionSettings)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously removes objects.
         /// </summary>
@@ -381,7 +405,7 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(() => eventsCollection.RemoveObjects(objectType, settings), cancellationToken, progress);
 
-        /// <inheritdoc cref="RemoveObjects(EventsCollection, ObjectType, Predicate{ITimedObject}, ObjectDetectionSettings)" />
+        /// <inheritdoc cref="RemoveObjects(EventsCollection, ObjectType, Predicate{ITimedObject}, ObjectDetectionSettings)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously removes matching objects.
         /// </summary>
@@ -400,7 +424,7 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(() => eventsCollection.RemoveObjects(objectType, match, settings), cancellationToken, progress);
 
-        /// <inheritdoc cref="RemoveObjects(TrackChunk, ObjectType, ObjectDetectionSettings)" />
+        /// <inheritdoc cref="RemoveObjects(TrackChunk, ObjectType, ObjectDetectionSettings)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously removes objects from a track.
         /// </summary>
@@ -418,7 +442,7 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(() => trackChunk.RemoveObjects(objectType, settings), cancellationToken, progress);
 
-        /// <inheritdoc cref="RemoveObjects(TrackChunk, ObjectType, Predicate{ITimedObject}, ObjectDetectionSettings)" />
+        /// <inheritdoc cref="RemoveObjects(TrackChunk, ObjectType, Predicate{ITimedObject}, ObjectDetectionSettings)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously removes matching objects from a track.
         /// </summary>
@@ -437,7 +461,7 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(() => trackChunk.RemoveObjects(objectType, match, settings), cancellationToken, progress);
 
-        /// <inheritdoc cref="RemoveObjects(IEnumerable{TrackChunk}, ObjectType, ObjectDetectionSettings)" />
+        /// <inheritdoc cref="RemoveObjects(IEnumerable{TrackChunk}, ObjectType, ObjectDetectionSettings)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously removes objects from tracks.
         /// </summary>
@@ -455,7 +479,7 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(() => trackChunks.RemoveObjects(objectType, settings), cancellationToken, progress);
 
-        /// <inheritdoc cref="RemoveObjects(IEnumerable{TrackChunk}, ObjectType, Predicate{ITimedObject}, ObjectDetectionSettings)" />
+        /// <inheritdoc cref="RemoveObjects(IEnumerable{TrackChunk}, ObjectType, Predicate{ITimedObject}, ObjectDetectionSettings)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously removes matching objects from tracks.
         /// </summary>
@@ -474,7 +498,7 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(() => trackChunks.RemoveObjects(objectType, match, settings), cancellationToken, progress);
 
-        /// <inheritdoc cref="RemoveObjects(MidiFile, ObjectType, ObjectDetectionSettings)" />
+        /// <inheritdoc cref="RemoveObjects(MidiFile, ObjectType, ObjectDetectionSettings)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously removes objects from a MIDI file.
         /// </summary>
@@ -492,7 +516,7 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(() => file.RemoveObjects(objectType, settings), cancellationToken, progress);
 
-        /// <inheritdoc cref="RemoveObjects(MidiFile, ObjectType, Predicate{ITimedObject}, ObjectDetectionSettings)" />
+        /// <inheritdoc cref="RemoveObjects(MidiFile, ObjectType, Predicate{ITimedObject}, ObjectDetectionSettings)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously removes matching objects from a MIDI file.
         /// </summary>
@@ -520,8 +544,6 @@ namespace Melanchall.DryWetMidi.Interaction
             ObjectProcessingHint hint,
             CancellationToken cancellationToken)
         {
-            ThrowIfArgument.IsNull(nameof(action), action);
-
             var index = 0;
             var count = 0;
 

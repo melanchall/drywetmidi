@@ -114,6 +114,13 @@ namespace Melanchall.DryWetMidi.Core
             IProgress<AsyncOperationProgress>? progress = null,
             CancellationToken cancellationToken = default)
         {
+            ThrowIfArgument.IsNull(nameof(stream), stream);
+            ThrowIfArgument.IsInvalidEnumValue(nameof(format), format);
+            cancellationToken.ThrowIfCancellationRequested();
+
+            if (!stream.CanWrite)
+                throw new ArgumentException("Stream doesn't support writing.", nameof(stream));
+
             var reporting = progress == null ? null : new MidiIoProgress(progress, "Writing");
             await WriteCoreAsync(stream, format, settings, reporting, cancellationToken).ConfigureAwait(false);
 
@@ -128,14 +135,9 @@ namespace Melanchall.DryWetMidi.Core
             MidiIoProgress? reporting,
             CancellationToken cancellationToken)
         {
-            ThrowIfArgument.IsNull(nameof(stream), stream);
-            ThrowIfArgument.IsInvalidEnumValue(nameof(format), format);
             cancellationToken.ThrowIfCancellationRequested();
             if (TimeDivision == null)
                 throw new InvalidOperationException("Time division is null.");
-
-            if (!stream.CanWrite)
-                throw new ArgumentException("Stream doesn't support writing.", nameof(stream));
 
             settings ??= new WritingSettings();
             settings.WriterSettings ??= new WriterSettings();

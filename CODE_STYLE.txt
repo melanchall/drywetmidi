@@ -37,6 +37,13 @@ on one line with only the final parameter on the following line.
 Expand lambdas with several statements into readable multiline blocks.
 Avoid densely packed object initializers and chained operations.
 
+Argument validation
+-------------------
+Use ThrowIfArgument at public API boundaries, not in private or internal helpers.
+Validate each public entry point before passing arguments to unchecked helpers,
+using the public parameter names in exceptions. Do not remove validation without
+moving it to the callers that own the public contract.
+
 Async code
 ----------
 Keep synchronous APIs compatible. Name asynchronous counterparts with Async.
@@ -57,6 +64,8 @@ parameters, return values, ownership, and relevant exception conditions.
 Reuse the corresponding synchronous API's documentation when appropriate, but
 also document async-specific cancellation, disposed-object, overlapping-operation,
 and state failures when the implementation can actually produce them.
+When adding a local async summary alongside inheritdoc, scope inheritance to
+exclude the inherited summary so DocFX preserves the async-specific description.
 Use OperationCanceledException for cancellation contracts; do not promise the
 more specific TaskCanceledException for every canceled operation.
 Document actual exceptions rather than adding every exception to every method.
@@ -71,6 +80,9 @@ reliable number of processed notes.
 In documentation articles, link methods with xref and their fully qualified
 method identifier; include the parameter signature to select an overload, or
 use the method's overload-group identifier ending in * when intended.
+Decorate code-related text with backticks, including API link labels:
+  [`MidiFile.ReadAsync`](xref:Melanchall.DryWetMidi.Core.MidiFile.ReadAsync*)
+End text introducing a code sample with a colon, not a period.
 Distinguish bulk async APIs, which complete an entire operation before returning
 the result, from lazy async APIs, which perform work as items or tokens are
 requested. Do not imply that asynchronous I/O alone makes a bulk API lazy.

@@ -8,7 +8,7 @@ namespace Melanchall.DryWetMidi.Interaction
 {
     public sealed partial class TimedObjectsManager
     {
-        /// <inheritdoc cref="TimedObjectsManager(EventsCollection, ObjectType, ObjectDetectionSettings, TimedObjectsComparer)" />
+        /// <inheritdoc cref="TimedObjectsManager(EventsCollection, ObjectType, ObjectDetectionSettings, TimedObjectsComparer)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously creates a manager for the specified object types.
         /// </summary>
@@ -30,7 +30,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
     public partial class TimedObjectsManager<TObject> where TObject : ITimedObject
     {
-        /// <inheritdoc cref="TimedObjectsManager{TObject}(EventsCollection, ObjectDetectionSettings, TimedObjectsComparer)" />
+        /// <inheritdoc cref="TimedObjectsManager{TObject}(EventsCollection, ObjectDetectionSettings, TimedObjectsComparer)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously creates and initializes an objects manager.
         /// </summary>
@@ -52,7 +52,7 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(() => new TimedObjectsManager<TObject>(eventsCollection, objectDetectionSettings, comparer), cancellationToken, progress);
 
-        /// <inheritdoc cref="SaveChanges" />
+        /// <inheritdoc cref="SaveChanges" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously saves managed objects back to the underlying events collection.
         /// </summary>

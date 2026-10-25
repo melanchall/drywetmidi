@@ -80,9 +80,7 @@ namespace Melanchall.DryWetMidi.Common
         /// </summary>
         public long? TotalItems { get; }
 
-        /// <summary>
-        /// Returns a string that represents the current object.
-        /// </summary>
+        /// <inheritdoc cref="object.ToString" path="/summary" />
         /// <returns>A string containing the phase, processed and total work items, and completion state.</returns>
         public override string ToString()
         {

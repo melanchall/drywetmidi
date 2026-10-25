@@ -9,7 +9,7 @@ namespace Melanchall.DryWetMidi.Interaction
 {
     public static partial class MidiFileUtilities
     {
-        /// <inheritdoc cref="GetDuration{TTimeSpan}(TrackChunk, TempoMap)" />
+        /// <inheritdoc cref="GetDuration{TTimeSpan}(TrackChunk, TempoMap)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously calculates a track duration.
         /// </summary>
@@ -27,7 +27,7 @@ namespace Melanchall.DryWetMidi.Interaction
             where TTimeSpan : class, ITimeSpan =>
             AsyncOperation.Run(() => trackChunk.GetDuration<TTimeSpan>(tempoMap), cancellationToken, progress);
 
-        /// <inheritdoc cref="GetDuration(TrackChunk, TimeSpanType, TempoMap)" />
+        /// <inheritdoc cref="GetDuration(TrackChunk, TimeSpanType, TempoMap)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously calculates a track duration in the specified representation.
         /// </summary>
@@ -45,7 +45,7 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(() => trackChunk.GetDuration(durationType, tempoMap), cancellationToken, progress);
 
-        /// <inheritdoc cref="GetDuration{TTimeSpan}(IEnumerable{TrackChunk}, TempoMap)" />
+        /// <inheritdoc cref="GetDuration{TTimeSpan}(IEnumerable{TrackChunk}, TempoMap)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously calculates the duration of tracks.
         /// </summary>
@@ -63,7 +63,7 @@ namespace Melanchall.DryWetMidi.Interaction
             where TTimeSpan : class, ITimeSpan =>
             AsyncOperation.Run(() => trackChunks.GetDuration<TTimeSpan>(tempoMap), cancellationToken, progress);
 
-        /// <inheritdoc cref="GetDuration(IEnumerable{TrackChunk}, TimeSpanType, TempoMap)" />
+        /// <inheritdoc cref="GetDuration(IEnumerable{TrackChunk}, TimeSpanType, TempoMap)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously calculates the duration of tracks in the specified representation.
         /// </summary>
@@ -81,7 +81,7 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(() => trackChunks.GetDuration(durationType, tempoMap), cancellationToken, progress);
 
-        /// <inheritdoc cref="GetDuration{TTimeSpan}(MidiFile)" />
+        /// <inheritdoc cref="GetDuration{TTimeSpan}(MidiFile)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously calculates a MIDI file duration.
         /// </summary>
@@ -98,7 +98,7 @@ namespace Melanchall.DryWetMidi.Interaction
             where TTimeSpan : class, ITimeSpan =>
             AsyncOperation.Run(() => midiFile.GetDuration<TTimeSpan>(), cancellationToken, progress);
 
-        /// <inheritdoc cref="GetDuration(MidiFile, TimeSpanType)" />
+        /// <inheritdoc cref="GetDuration(MidiFile, TimeSpanType)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously calculates a MIDI file duration in the specified representation.
         /// </summary>
@@ -115,7 +115,7 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(() => midiFile.GetDuration(durationType), cancellationToken, progress);
 
-        /// <inheritdoc cref="GetDuration{TTimeSpan}(IEnumerable{TrackChunk}, TempoMap)" />
+        /// <inheritdoc cref="GetDuration{TTimeSpan}(IEnumerable{TrackChunk}, TempoMap)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously calculates duration from an asynchronous track source.
         /// </summary>
@@ -130,10 +130,14 @@ namespace Melanchall.DryWetMidi.Interaction
             TempoMap tempoMap,
             IProgress<AsyncOperationProgress>? progress = null,
             CancellationToken cancellationToken = default)
-            where TTimeSpan : class, ITimeSpan =>
-            AsyncOperation.Run(async () => (await InteractionAsyncUtilities.CollectAsync(trackChunks, cancellationToken).ConfigureAwait(false)).GetDuration<TTimeSpan>(tempoMap), cancellationToken, progress);
+            where TTimeSpan : class, ITimeSpan
+        {
+            ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
 
-        /// <inheritdoc cref="GetDuration(IEnumerable{TrackChunk}, TimeSpanType, TempoMap)" />
+            return AsyncOperation.Run(async () => (await InteractionAsyncUtilities.CollectAsync(trackChunks, cancellationToken).ConfigureAwait(false)).GetDuration<TTimeSpan>(tempoMap), cancellationToken, progress);
+        }
+
+        /// <inheritdoc cref="GetDuration(IEnumerable{TrackChunk}, TimeSpanType, TempoMap)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously calculates duration from an asynchronous track source.
         /// </summary>
@@ -148,7 +152,11 @@ namespace Melanchall.DryWetMidi.Interaction
             TimeSpanType durationType,
             TempoMap tempoMap,
             IProgress<AsyncOperationProgress>? progress = null,
-            CancellationToken cancellationToken = default) =>
-            AsyncOperation.Run(async () => (await InteractionAsyncUtilities.CollectAsync(trackChunks, cancellationToken).ConfigureAwait(false)).GetDuration(durationType, tempoMap), cancellationToken, progress);
+            CancellationToken cancellationToken = default)
+        {
+            ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
+
+            return AsyncOperation.Run(async () => (await InteractionAsyncUtilities.CollectAsync(trackChunks, cancellationToken).ConfigureAwait(false)).GetDuration(durationType, tempoMap), cancellationToken, progress);
+        }
     }
 }

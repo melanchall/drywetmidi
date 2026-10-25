@@ -10,7 +10,7 @@ namespace Melanchall.DryWetMidi.Interaction
 {
     public static partial class ChordsManagingUtilities
     {
-        /// <inheritdoc cref="GetChords(IEnumerable{MidiEvent}, ChordDetectionSettings, NoteDetectionSettings, TimedEventDetectionSettings)" />
+        /// <inheritdoc cref="GetChords(IEnumerable{MidiEvent}, ChordDetectionSettings, NoteDetectionSettings, TimedEventDetectionSettings)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously detects chords in MIDI events.
         /// </summary>
@@ -29,7 +29,7 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(() => midiEvents.GetChords(settings, noteDetectionSettings, timedEventDetectionSettings), cancellationToken, progress);
 
-        /// <inheritdoc cref="GetChords(TrackChunk, ChordDetectionSettings, NoteDetectionSettings, TimedEventDetectionSettings)" />
+        /// <inheritdoc cref="GetChords(TrackChunk, ChordDetectionSettings, NoteDetectionSettings, TimedEventDetectionSettings)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously detects chords in a track.
         /// </summary>
@@ -48,7 +48,7 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(() => trackChunk.GetChords(settings, noteDetectionSettings, timedEventDetectionSettings), cancellationToken, progress);
 
-        /// <inheritdoc cref="GetChords(IEnumerable{TrackChunk}, ChordDetectionSettings, NoteDetectionSettings, TimedEventDetectionSettings)" />
+        /// <inheritdoc cref="GetChords(IEnumerable{TrackChunk}, ChordDetectionSettings, NoteDetectionSettings, TimedEventDetectionSettings)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously detects chords in tracks.
         /// </summary>
@@ -67,7 +67,7 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(() => trackChunks.GetChords(settings, noteDetectionSettings, timedEventDetectionSettings), cancellationToken, progress);
 
-        /// <inheritdoc cref="GetChords(MidiFile, ChordDetectionSettings, NoteDetectionSettings, TimedEventDetectionSettings)" />
+        /// <inheritdoc cref="GetChords(MidiFile, ChordDetectionSettings, NoteDetectionSettings, TimedEventDetectionSettings)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously detects chords in a MIDI file.
         /// </summary>
@@ -86,7 +86,7 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(() => file.GetChords(settings, noteDetectionSettings, timedEventDetectionSettings), cancellationToken, progress);
 
-        /// <inheritdoc cref="GetChords(IEnumerable{Note}, ChordDetectionSettings, NoteDetectionSettings, TimedEventDetectionSettings)" />
+        /// <inheritdoc cref="GetChords(IEnumerable{Note}, ChordDetectionSettings, NoteDetectionSettings, TimedEventDetectionSettings)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously enumerates chords grouped from notes. Detection starts on enumeration;
         /// a bounded handoff prevents the worker from advancing ahead of the consumer.
@@ -107,7 +107,7 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             InteractionAsyncUtilities.EnumerateAsync(() => notes.GetChords(settings, noteDetectionSettings, timedEventDetectionSettings), progress, cancellationToken);
 
-        /// <inheritdoc cref="GetChords(IEnumerable{MidiEvent}, ChordDetectionSettings, NoteDetectionSettings, TimedEventDetectionSettings)" />
+        /// <inheritdoc cref="GetChords(IEnumerable{MidiEvent}, ChordDetectionSettings, NoteDetectionSettings, TimedEventDetectionSettings)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously detects chords from an asynchronous MIDI event source.
         /// </summary>
@@ -123,10 +123,14 @@ namespace Melanchall.DryWetMidi.Interaction
             NoteDetectionSettings? noteDetectionSettings = null,
             TimedEventDetectionSettings? timedEventDetectionSettings = null,
             IProgress<AsyncOperationProgress>? progress = null,
-            CancellationToken cancellationToken = default) =>
-            AsyncOperation.Run(async () => (await InteractionAsyncUtilities.CollectAsync(midiEvents, cancellationToken).ConfigureAwait(false)).GetChords(settings, noteDetectionSettings, timedEventDetectionSettings), cancellationToken, progress);
+            CancellationToken cancellationToken = default)
+        {
+            ThrowIfArgument.IsNull(nameof(midiEvents), midiEvents);
 
-        /// <inheritdoc cref="GetChords(IEnumerable{TrackChunk}, ChordDetectionSettings, NoteDetectionSettings, TimedEventDetectionSettings)" />
+            return AsyncOperation.Run(async () => (await InteractionAsyncUtilities.CollectAsync(midiEvents, cancellationToken).ConfigureAwait(false)).GetChords(settings, noteDetectionSettings, timedEventDetectionSettings), cancellationToken, progress);
+        }
+
+        /// <inheritdoc cref="GetChords(IEnumerable{TrackChunk}, ChordDetectionSettings, NoteDetectionSettings, TimedEventDetectionSettings)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously detects chords from an asynchronous track source.
         /// </summary>
@@ -142,10 +146,14 @@ namespace Melanchall.DryWetMidi.Interaction
             NoteDetectionSettings? noteDetectionSettings = null,
             TimedEventDetectionSettings? timedEventDetectionSettings = null,
             IProgress<AsyncOperationProgress>? progress = null,
-            CancellationToken cancellationToken = default) =>
-            AsyncOperation.Run(async () => (await InteractionAsyncUtilities.CollectAsync(trackChunks, cancellationToken).ConfigureAwait(false)).GetChords(settings, noteDetectionSettings, timedEventDetectionSettings), cancellationToken, progress);
+            CancellationToken cancellationToken = default)
+        {
+            ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
 
-        /// <inheritdoc cref="GetChords(IEnumerable{Note}, ChordDetectionSettings, NoteDetectionSettings, TimedEventDetectionSettings)" />
+            return AsyncOperation.Run(async () => (await InteractionAsyncUtilities.CollectAsync(trackChunks, cancellationToken).ConfigureAwait(false)).GetChords(settings, noteDetectionSettings, timedEventDetectionSettings), cancellationToken, progress);
+        }
+
+        /// <inheritdoc cref="GetChords(IEnumerable{Note}, ChordDetectionSettings, NoteDetectionSettings, TimedEventDetectionSettings)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously groups notes from an asynchronous source into chords.
         /// </summary>
@@ -161,10 +169,14 @@ namespace Melanchall.DryWetMidi.Interaction
             NoteDetectionSettings? noteDetectionSettings = null,
             TimedEventDetectionSettings? timedEventDetectionSettings = null,
             IProgress<AsyncOperationProgress>? progress = null,
-            CancellationToken cancellationToken = default) =>
-            AsyncOperation.Run(async () => (ICollection<Chord>)(await InteractionAsyncUtilities.CollectAsync(notes, cancellationToken).ConfigureAwait(false)).GetChords(settings, noteDetectionSettings, timedEventDetectionSettings).ToArray(), cancellationToken, progress);
+            CancellationToken cancellationToken = default)
+        {
+            ThrowIfArgument.IsNull(nameof(notes), notes);
 
-        /// <inheritdoc cref="ManageChords(EventsCollection, ChordDetectionSettings, NoteDetectionSettings, TimedEventDetectionSettings, TimedObjectsComparer)" />
+            return AsyncOperation.Run(async () => (ICollection<Chord>)(await InteractionAsyncUtilities.CollectAsync(notes, cancellationToken).ConfigureAwait(false)).GetChords(settings, noteDetectionSettings, timedEventDetectionSettings).ToArray(), cancellationToken, progress);
+        }
+
+        /// <inheritdoc cref="ManageChords(EventsCollection, ChordDetectionSettings, NoteDetectionSettings, TimedEventDetectionSettings, TimedObjectsComparer)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously creates a chords manager.
         /// </summary>
@@ -184,7 +196,7 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(() => eventsCollection.ManageChords(settings, noteDetectionSettings, timedEventDetectionSettings, comparer), cancellationToken, progress);
 
-        /// <inheritdoc cref="ManageChords(TrackChunk, ChordDetectionSettings, NoteDetectionSettings, TimedEventDetectionSettings, TimedObjectsComparer)" />
+        /// <inheritdoc cref="ManageChords(TrackChunk, ChordDetectionSettings, NoteDetectionSettings, TimedEventDetectionSettings, TimedObjectsComparer)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously creates a chords manager for a track.
         /// </summary>
@@ -204,7 +216,7 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(() => trackChunk.ManageChords(settings, noteDetectionSettings, timedEventDetectionSettings, comparer), cancellationToken, progress);
 
-        /// <inheritdoc cref="ProcessChords(EventsCollection, Action{Chord}, ChordDetectionSettings, NoteDetectionSettings, TimedEventDetectionSettings, ChordProcessingHint)" />
+        /// <inheritdoc cref="ProcessChords(EventsCollection, Action{Chord}, ChordDetectionSettings, NoteDetectionSettings, TimedEventDetectionSettings, ChordProcessingHint)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously processes chords.
         /// </summary>
@@ -225,7 +237,7 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(() => eventsCollection.ProcessChords(action, settings, noteDetectionSettings, timedEventDetectionSettings, hint), cancellationToken, progress);
 
-        /// <inheritdoc cref="ProcessChords(EventsCollection, Action{Chord}, Predicate{Chord}, ChordDetectionSettings, NoteDetectionSettings, TimedEventDetectionSettings, ChordProcessingHint)" />
+        /// <inheritdoc cref="ProcessChords(EventsCollection, Action{Chord}, Predicate{Chord}, ChordDetectionSettings, NoteDetectionSettings, TimedEventDetectionSettings, ChordProcessingHint)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously processes matching chords.
         /// </summary>
@@ -247,7 +259,7 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(() => eventsCollection.ProcessChords(action, match, settings, noteDetectionSettings, timedEventDetectionSettings, hint), cancellationToken, progress);
 
-        /// <inheritdoc cref="ProcessChords(TrackChunk, Action{Chord}, ChordDetectionSettings, NoteDetectionSettings, TimedEventDetectionSettings, ChordProcessingHint)" />
+        /// <inheritdoc cref="ProcessChords(TrackChunk, Action{Chord}, ChordDetectionSettings, NoteDetectionSettings, TimedEventDetectionSettings, ChordProcessingHint)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously processes chords in a track.
         /// </summary>
@@ -268,7 +280,7 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(() => trackChunk.ProcessChords(action, settings, noteDetectionSettings, timedEventDetectionSettings, hint), cancellationToken, progress);
 
-        /// <inheritdoc cref="ProcessChords(TrackChunk, Action{Chord}, Predicate{Chord}, ChordDetectionSettings, NoteDetectionSettings, TimedEventDetectionSettings, ChordProcessingHint)" />
+        /// <inheritdoc cref="ProcessChords(TrackChunk, Action{Chord}, Predicate{Chord}, ChordDetectionSettings, NoteDetectionSettings, TimedEventDetectionSettings, ChordProcessingHint)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously processes matching chords in a track.
         /// </summary>
@@ -290,7 +302,7 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(() => trackChunk.ProcessChords(action, match, settings, noteDetectionSettings, timedEventDetectionSettings, hint), cancellationToken, progress);
 
-        /// <inheritdoc cref="ProcessChords(IEnumerable{TrackChunk}, Action{Chord}, ChordDetectionSettings, NoteDetectionSettings, TimedEventDetectionSettings, ChordProcessingHint)" />
+        /// <inheritdoc cref="ProcessChords(IEnumerable{TrackChunk}, Action{Chord}, ChordDetectionSettings, NoteDetectionSettings, TimedEventDetectionSettings, ChordProcessingHint)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously processes chords in tracks.
         /// </summary>
@@ -311,7 +323,7 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(() => trackChunks.ProcessChords(action, settings, noteDetectionSettings, timedEventDetectionSettings, hint), cancellationToken, progress);
 
-        /// <inheritdoc cref="ProcessChords(IEnumerable{TrackChunk}, Action{Chord}, Predicate{Chord}, ChordDetectionSettings, NoteDetectionSettings, TimedEventDetectionSettings, ChordProcessingHint)" />
+        /// <inheritdoc cref="ProcessChords(IEnumerable{TrackChunk}, Action{Chord}, Predicate{Chord}, ChordDetectionSettings, NoteDetectionSettings, TimedEventDetectionSettings, ChordProcessingHint)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously processes matching chords in tracks.
         /// </summary>
@@ -333,7 +345,7 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(() => trackChunks.ProcessChords(action, match, settings, noteDetectionSettings, timedEventDetectionSettings, hint), cancellationToken, progress);
 
-        /// <inheritdoc cref="ProcessChords(MidiFile, Action{Chord}, ChordDetectionSettings, NoteDetectionSettings, TimedEventDetectionSettings, ChordProcessingHint)" />
+        /// <inheritdoc cref="ProcessChords(MidiFile, Action{Chord}, ChordDetectionSettings, NoteDetectionSettings, TimedEventDetectionSettings, ChordProcessingHint)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously processes chords in a MIDI file.
         /// </summary>
@@ -354,7 +366,7 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(() => file.ProcessChords(action, settings, noteDetectionSettings, timedEventDetectionSettings, hint), cancellationToken, progress);
 
-        /// <inheritdoc cref="ProcessChords(MidiFile, Action{Chord}, Predicate{Chord}, ChordDetectionSettings, NoteDetectionSettings, TimedEventDetectionSettings, ChordProcessingHint)" />
+        /// <inheritdoc cref="ProcessChords(MidiFile, Action{Chord}, Predicate{Chord}, ChordDetectionSettings, NoteDetectionSettings, TimedEventDetectionSettings, ChordProcessingHint)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously processes matching chords in a MIDI file.
         /// </summary>
@@ -376,7 +388,7 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(() => file.ProcessChords(action, match, settings, noteDetectionSettings, timedEventDetectionSettings, hint), cancellationToken, progress);
 
-        /// <inheritdoc cref="ProcessChords(EventsCollection, Action{Chord}, ChordDetectionSettings, NoteDetectionSettings, TimedEventDetectionSettings, ChordProcessingHint)" />
+        /// <inheritdoc cref="ProcessChords(EventsCollection, Action{Chord}, ChordDetectionSettings, NoteDetectionSettings, TimedEventDetectionSettings, ChordProcessingHint)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Sequentially awaits an asynchronous action for each chord.
         /// </summary>
@@ -397,7 +409,7 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             eventsCollection.ProcessChordsAsync(action, null, settings, noteDetectionSettings, timedEventDetectionSettings, hint, progress, cancellationToken);
 
-        /// <inheritdoc cref="ProcessChords(TrackChunk, Action{Chord}, ChordDetectionSettings, NoteDetectionSettings, TimedEventDetectionSettings, ChordProcessingHint)" />
+        /// <inheritdoc cref="ProcessChords(TrackChunk, Action{Chord}, ChordDetectionSettings, NoteDetectionSettings, TimedEventDetectionSettings, ChordProcessingHint)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Sequentially awaits an asynchronous action for each chord in a track.
         /// </summary>
@@ -418,7 +430,7 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             trackChunk.ProcessChordsAsync(action, null, settings, noteDetectionSettings, timedEventDetectionSettings, hint, progress, cancellationToken);
 
-        /// <inheritdoc cref="ProcessChords(IEnumerable{TrackChunk}, Action{Chord}, ChordDetectionSettings, NoteDetectionSettings, TimedEventDetectionSettings, ChordProcessingHint)" />
+        /// <inheritdoc cref="ProcessChords(IEnumerable{TrackChunk}, Action{Chord}, ChordDetectionSettings, NoteDetectionSettings, TimedEventDetectionSettings, ChordProcessingHint)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Sequentially awaits an asynchronous action for each chord in tracks.
         /// </summary>
@@ -439,7 +451,7 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             trackChunks.ProcessChordsAsync(action, null, settings, noteDetectionSettings, timedEventDetectionSettings, hint, progress, cancellationToken);
 
-        /// <inheritdoc cref="ProcessChords(MidiFile, Action{Chord}, ChordDetectionSettings, NoteDetectionSettings, TimedEventDetectionSettings, ChordProcessingHint)" />
+        /// <inheritdoc cref="ProcessChords(MidiFile, Action{Chord}, ChordDetectionSettings, NoteDetectionSettings, TimedEventDetectionSettings, ChordProcessingHint)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Sequentially awaits an asynchronous action for each chord in a MIDI file.
         /// </summary>
@@ -460,11 +472,12 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             file.ProcessChordsAsync(action, null, settings, noteDetectionSettings, timedEventDetectionSettings, hint, progress, cancellationToken);
 
-        /// <inheritdoc cref="ProcessChords(EventsCollection, Action{Chord}, ChordDetectionSettings, NoteDetectionSettings, TimedEventDetectionSettings, ChordProcessingHint)" />
+        /// <inheritdoc cref="ProcessChords(EventsCollection, Action{Chord}, ChordDetectionSettings, NoteDetectionSettings, TimedEventDetectionSettings, ChordProcessingHint)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Sequentially awaits an asynchronous action for matching chords.
         /// A null match processes all chords.
         /// </summary>
+        /// <param name="match">Predicate selecting chords to process, or null to process all chords.</param>
         /// <param name="progress">
         /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
         /// The total is unknown. A final report marks successful completion.
@@ -480,14 +493,20 @@ namespace Melanchall.DryWetMidi.Interaction
             TimedEventDetectionSettings? timedEventDetectionSettings = null,
             ChordProcessingHint hint = ChordProcessingHint.Default,
             IProgress<AsyncOperationProgress>? progress = null,
-            CancellationToken cancellationToken = default) =>
-            AsyncOperation.Run(() => ProcessChordsAwaitedAsync(InteractionAsyncUtilities.Collections(eventsCollection), action, match, settings, noteDetectionSettings, timedEventDetectionSettings, hint, cancellationToken), cancellationToken, progress);
+            CancellationToken cancellationToken = default)
+        {
+            ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
+            ThrowIfArgument.IsNull(nameof(action), action);
 
-        /// <inheritdoc cref="ProcessChords(TrackChunk, Action{Chord}, ChordDetectionSettings, NoteDetectionSettings, TimedEventDetectionSettings, ChordProcessingHint)" />
+            return AsyncOperation.Run(() => ProcessChordsAwaitedAsync(InteractionAsyncUtilities.Collections(eventsCollection), action, match, settings, noteDetectionSettings, timedEventDetectionSettings, hint, cancellationToken), cancellationToken, progress);
+        }
+
+        /// <inheritdoc cref="ProcessChords(TrackChunk, Action{Chord}, ChordDetectionSettings, NoteDetectionSettings, TimedEventDetectionSettings, ChordProcessingHint)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Sequentially awaits an asynchronous action for matching chords in a track.
         /// A null match processes all chords.
         /// </summary>
+        /// <param name="match">Predicate selecting chords to process, or null to process all chords.</param>
         /// <param name="progress">
         /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
         /// The total is unknown. A final report marks successful completion.
@@ -503,14 +522,20 @@ namespace Melanchall.DryWetMidi.Interaction
             TimedEventDetectionSettings? timedEventDetectionSettings = null,
             ChordProcessingHint hint = ChordProcessingHint.Default,
             IProgress<AsyncOperationProgress>? progress = null,
-            CancellationToken cancellationToken = default) =>
-            AsyncOperation.Run(() => ProcessChordsAwaitedAsync(InteractionAsyncUtilities.Collections(trackChunk), action, match, settings, noteDetectionSettings, timedEventDetectionSettings, hint, cancellationToken), cancellationToken, progress);
+            CancellationToken cancellationToken = default)
+        {
+            ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
+            ThrowIfArgument.IsNull(nameof(action), action);
 
-        /// <inheritdoc cref="ProcessChords(IEnumerable{TrackChunk}, Action{Chord}, ChordDetectionSettings, NoteDetectionSettings, TimedEventDetectionSettings, ChordProcessingHint)" />
+            return AsyncOperation.Run(() => ProcessChordsAwaitedAsync(InteractionAsyncUtilities.Collections(trackChunk), action, match, settings, noteDetectionSettings, timedEventDetectionSettings, hint, cancellationToken), cancellationToken, progress);
+        }
+
+        /// <inheritdoc cref="ProcessChords(IEnumerable{TrackChunk}, Action{Chord}, ChordDetectionSettings, NoteDetectionSettings, TimedEventDetectionSettings, ChordProcessingHint)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Sequentially awaits an asynchronous action for matching chords in tracks.
         /// A null match processes all chords.
         /// </summary>
+        /// <param name="match">Predicate selecting chords to process, or null to process all chords.</param>
         /// <param name="progress">
         /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
         /// The total is unknown. A final report marks successful completion.
@@ -526,14 +551,20 @@ namespace Melanchall.DryWetMidi.Interaction
             TimedEventDetectionSettings? timedEventDetectionSettings = null,
             ChordProcessingHint hint = ChordProcessingHint.Default,
             IProgress<AsyncOperationProgress>? progress = null,
-            CancellationToken cancellationToken = default) =>
-            AsyncOperation.Run(() => ProcessChordsAwaitedAsync(InteractionAsyncUtilities.Collections(trackChunks), action, match, settings, noteDetectionSettings, timedEventDetectionSettings, hint, cancellationToken), cancellationToken, progress);
+            CancellationToken cancellationToken = default)
+        {
+            ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
+            ThrowIfArgument.IsNull(nameof(action), action);
 
-        /// <inheritdoc cref="ProcessChords(MidiFile, Action{Chord}, ChordDetectionSettings, NoteDetectionSettings, TimedEventDetectionSettings, ChordProcessingHint)" />
+            return AsyncOperation.Run(() => ProcessChordsAwaitedAsync(InteractionAsyncUtilities.Collections(trackChunks), action, match, settings, noteDetectionSettings, timedEventDetectionSettings, hint, cancellationToken), cancellationToken, progress);
+        }
+
+        /// <inheritdoc cref="ProcessChords(MidiFile, Action{Chord}, ChordDetectionSettings, NoteDetectionSettings, TimedEventDetectionSettings, ChordProcessingHint)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Sequentially awaits an asynchronous action for matching chords in a MIDI file.
         /// A null match processes all chords.
         /// </summary>
+        /// <param name="match">Predicate selecting chords to process, or null to process all chords.</param>
         /// <param name="progress">
         /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
         /// The total is unknown. A final report marks successful completion.
@@ -549,10 +580,15 @@ namespace Melanchall.DryWetMidi.Interaction
             TimedEventDetectionSettings? timedEventDetectionSettings = null,
             ChordProcessingHint hint = ChordProcessingHint.Default,
             IProgress<AsyncOperationProgress>? progress = null,
-            CancellationToken cancellationToken = default) =>
-            AsyncOperation.Run(() => ProcessChordsAwaitedAsync(InteractionAsyncUtilities.Collections(file), action, match, settings, noteDetectionSettings, timedEventDetectionSettings, hint, cancellationToken), cancellationToken, progress);
+            CancellationToken cancellationToken = default)
+        {
+            ThrowIfArgument.IsNull(nameof(file), file);
+            ThrowIfArgument.IsNull(nameof(action), action);
 
-        /// <inheritdoc cref="RemoveChords(EventsCollection, ChordDetectionSettings, NoteDetectionSettings, TimedEventDetectionSettings)" />
+            return AsyncOperation.Run(() => ProcessChordsAwaitedAsync(InteractionAsyncUtilities.Collections(file), action, match, settings, noteDetectionSettings, timedEventDetectionSettings, hint, cancellationToken), cancellationToken, progress);
+        }
+
+        /// <inheritdoc cref="RemoveChords(EventsCollection, ChordDetectionSettings, NoteDetectionSettings, TimedEventDetectionSettings)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously removes chords.
         /// </summary>
@@ -571,7 +607,7 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(() => eventsCollection.RemoveChords(settings, noteDetectionSettings, timedEventDetectionSettings), cancellationToken, progress);
 
-        /// <inheritdoc cref="RemoveChords(EventsCollection, Predicate{Chord}, ChordDetectionSettings, NoteDetectionSettings, TimedEventDetectionSettings)" />
+        /// <inheritdoc cref="RemoveChords(EventsCollection, Predicate{Chord}, ChordDetectionSettings, NoteDetectionSettings, TimedEventDetectionSettings)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously removes matching chords.
         /// </summary>
@@ -591,7 +627,7 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(() => eventsCollection.RemoveChords(match, settings, noteDetectionSettings, timedEventDetectionSettings), cancellationToken, progress);
 
-        /// <inheritdoc cref="RemoveChords(TrackChunk, ChordDetectionSettings, NoteDetectionSettings, TimedEventDetectionSettings)" />
+        /// <inheritdoc cref="RemoveChords(TrackChunk, ChordDetectionSettings, NoteDetectionSettings, TimedEventDetectionSettings)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously removes chords from a track.
         /// </summary>
@@ -610,7 +646,7 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(() => trackChunk.RemoveChords(settings, noteDetectionSettings, timedEventDetectionSettings), cancellationToken, progress);
 
-        /// <inheritdoc cref="RemoveChords(TrackChunk, Predicate{Chord}, ChordDetectionSettings, NoteDetectionSettings, TimedEventDetectionSettings)" />
+        /// <inheritdoc cref="RemoveChords(TrackChunk, Predicate{Chord}, ChordDetectionSettings, NoteDetectionSettings, TimedEventDetectionSettings)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously removes matching chords from a track.
         /// </summary>
@@ -630,7 +666,7 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(() => trackChunk.RemoveChords(match, settings, noteDetectionSettings, timedEventDetectionSettings), cancellationToken, progress);
 
-        /// <inheritdoc cref="RemoveChords(IEnumerable{TrackChunk}, ChordDetectionSettings, NoteDetectionSettings, TimedEventDetectionSettings)" />
+        /// <inheritdoc cref="RemoveChords(IEnumerable{TrackChunk}, ChordDetectionSettings, NoteDetectionSettings, TimedEventDetectionSettings)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously removes chords from tracks.
         /// </summary>
@@ -649,7 +685,7 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(() => trackChunks.RemoveChords(settings, noteDetectionSettings, timedEventDetectionSettings), cancellationToken, progress);
 
-        /// <inheritdoc cref="RemoveChords(IEnumerable{TrackChunk}, Predicate{Chord}, ChordDetectionSettings, NoteDetectionSettings, TimedEventDetectionSettings)" />
+        /// <inheritdoc cref="RemoveChords(IEnumerable{TrackChunk}, Predicate{Chord}, ChordDetectionSettings, NoteDetectionSettings, TimedEventDetectionSettings)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously removes matching chords from tracks.
         /// </summary>
@@ -669,7 +705,7 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(() => trackChunks.RemoveChords(match, settings, noteDetectionSettings, timedEventDetectionSettings), cancellationToken, progress);
 
-        /// <inheritdoc cref="RemoveChords(MidiFile, ChordDetectionSettings, NoteDetectionSettings, TimedEventDetectionSettings)" />
+        /// <inheritdoc cref="RemoveChords(MidiFile, ChordDetectionSettings, NoteDetectionSettings, TimedEventDetectionSettings)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously removes chords from a MIDI file.
         /// </summary>
@@ -688,7 +724,7 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(() => file.RemoveChords(settings, noteDetectionSettings, timedEventDetectionSettings), cancellationToken, progress);
 
-        /// <inheritdoc cref="RemoveChords(MidiFile, Predicate{Chord}, ChordDetectionSettings, NoteDetectionSettings, TimedEventDetectionSettings)" />
+        /// <inheritdoc cref="RemoveChords(MidiFile, Predicate{Chord}, ChordDetectionSettings, NoteDetectionSettings, TimedEventDetectionSettings)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously removes matching chords from a MIDI file.
         /// </summary>
@@ -718,8 +754,6 @@ namespace Melanchall.DryWetMidi.Interaction
             ChordProcessingHint hint,
             CancellationToken cancellationToken)
         {
-            ThrowIfArgument.IsNull(nameof(action), action);
-
             var count = 0;
             var index = 0;
 

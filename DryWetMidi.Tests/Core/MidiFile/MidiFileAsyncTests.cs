@@ -46,19 +46,26 @@ namespace Melanchall.DryWetMidi.Tests.Core
         {
             var bytes = new byte[]
             {
+                // MThd header: six-byte payload, format 0, one track, 96 ticks per quarter note.
                 0x4D, 0x54, 0x68, 0x64, 0x00, 0x00, 0x00, 0x06,
                 0x00, 0x00, 0x00, 0x01, 0x00, 0x60,
+                // MTrk header: ten bytes of track data follow.
                 0x4D, 0x54, 0x72, 0x6B, 0x00, 0x00, 0x00, 0x0A,
-                0x00, 0xF1, 0x00, 0x90, 0x3C, 0x40, 0x00, 0xFF, 0x2F, 0x00
+                // Zero delta-time and unknown F1 status; SkipStatusByte skips only F1.
+                0x00, 0xF1,
+                // Zero delta-time, Note On on channel 0, middle C, velocity 64.
+                0x00, 0x90, 0x3C, 0x40,
+                // Zero delta-time and End Of Track meta-event with an empty payload.
+                0x00, 0xFF, 0x2F, 0x00
             };
             var settings = new ReadingSettings { UnknownChannelEventPolicy = UnknownChannelEventPolicy.SkipStatusByte };
-            using var input = new MemoryStream(bytes);
-            using var synchronous = MidiFile.ReadLazy(input, settings);
+            using var synchronousInputStream = new MemoryStream(bytes);
+            using var synchronous = MidiFile.ReadLazy(synchronousInputStream, settings);
             var expected = synchronous.EnumerateTokens().OfType<MidiEventToken>().Select(t => t.Event.EventType).ToArray();
             ClassicAssert.AreEqual(new[] { MidiEventType.NoteOn, MidiEventType.EndOfTrack }, expected, "Synchronous lazy reader did not skip the unknown status byte.");
 
-            using var transport = new AsyncOnlyStream(bytes, false, 1);
-            await using var asynchronous = await MidiFile.ReadLazyAsync(transport, settings);
+            using var inputStream = new AsyncOnlyStream(bytes, false, 1);
+            await using var asynchronous = await MidiFile.ReadLazyAsync(inputStream, settings);
             var actual = new List<MidiEventType>();
 
             await foreach (var token in asynchronous.EnumerateTokensAsync())
@@ -187,14 +194,14 @@ namespace Melanchall.DryWetMidi.Tests.Core
         [Test]
         public void PreCanceled_DoesNotTouchTransport()
         {
-            using var stream = new AsyncOnlyStream();
+            using var outputStream = new AsyncOnlyStream();
             using var cancellation = new CancellationTokenSource();
             cancellation.Cancel();
 
             Assert.CatchAsync<OperationCanceledException>(async () =>
-                await CreateFile().WriteAsync(stream, cancellationToken: cancellation.Token), "Pre-canceled writing did not throw.");
-            ClassicAssert.AreEqual(0, stream.AsyncWrites, "Pre-canceled writing touched the transport.");
-            ClassicAssert.IsFalse(stream.IsDisposed, "Pre-canceled writing disposed the caller-owned stream.");
+                await CreateFile().WriteAsync(outputStream, cancellationToken: cancellation.Token), "Pre-canceled writing did not throw.");
+            ClassicAssert.AreEqual(0, outputStream.AsyncWrites, "Pre-canceled writing touched the transport.");
+            ClassicAssert.IsFalse(outputStream.IsDisposed, "Pre-canceled writing disposed the caller-owned stream.");
         }
 
         [Test]
@@ -260,7 +267,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
 
                     ClassicAssert.AreEqual(5, count, "Lazy path reading returned an invalid token count.");
                 }
-                using var exclusive = new FileStream(path, FileMode.Open, FileAccess.ReadWrite, FileShare.None);
+                using var exclusiveStream = new FileStream(path, FileMode.Open, FileAccess.ReadWrite, FileShare.None);
             }
             finally
             {
@@ -283,7 +290,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 };
                 Assert.ThrowsAsync<InvalidOperationException>(async () => await writer.DisposeAsync(), "Lazy finalization did not propagate the codec failure.");
                 await writer.DisposeAsync();
-                using var exclusive = new FileStream(path, FileMode.Open, FileAccess.ReadWrite, FileShare.None);
+                using var exclusiveStream = new FileStream(path, FileMode.Open, FileAccess.ReadWrite, FileShare.None);
             }
             finally
             {
@@ -339,12 +346,12 @@ namespace Melanchall.DryWetMidi.Tests.Core
 
                 MidiAsserts.AreEqual(expected, actual, true, path + ": Async corpus reading differs.");
 
-                using var synchronous = new MemoryStream();
-                using var asynchronous = new MemoryStream();
-                expected.Write(synchronous);
-                await expected.WriteAsync(asynchronous);
+                using var synchronousOutputStream = new MemoryStream();
+                using var asynchronousOutputStream = new MemoryStream();
+                expected.Write(synchronousOutputStream);
+                await expected.WriteAsync(asynchronousOutputStream);
 
-                ClassicAssert.AreEqual(synchronous.ToArray(), asynchronous.ToArray(), path + ": Async corpus writing differs.");
+                ClassicAssert.AreEqual(synchronousOutputStream.ToArray(), asynchronousOutputStream.ToArray(), path + ": Async corpus writing differs.");
             }
         }
 

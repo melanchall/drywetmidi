@@ -9,7 +9,7 @@ namespace Melanchall.DryWetMidi.Interaction
 {
     public static partial class GetObjectsUtilities
     {
-        /// <inheritdoc cref="GetObjects(IEnumerable{MidiEvent}, ObjectType, ObjectDetectionSettings)" />
+        /// <inheritdoc cref="GetObjects(IEnumerable{MidiEvent}, ObjectType, ObjectDetectionSettings)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously detects objects in MIDI events.
         /// </summary>
@@ -27,7 +27,7 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(() => midiEvents.GetObjects(objectType, settings), cancellationToken, progress);
 
-        /// <inheritdoc cref="GetObjects(EventsCollection, ObjectType, ObjectDetectionSettings)" />
+        /// <inheritdoc cref="GetObjects(EventsCollection, ObjectType, ObjectDetectionSettings)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously detects objects in an events collection.
         /// </summary>
@@ -45,7 +45,7 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(() => eventsCollection.GetObjects(objectType, settings), cancellationToken, progress);
 
-        /// <inheritdoc cref="GetObjects(TrackChunk, ObjectType, ObjectDetectionSettings)" />
+        /// <inheritdoc cref="GetObjects(TrackChunk, ObjectType, ObjectDetectionSettings)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously detects objects in a track.
         /// </summary>
@@ -63,7 +63,7 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(() => trackChunk.GetObjects(objectType, settings), cancellationToken, progress);
 
-        /// <inheritdoc cref="GetObjects(IEnumerable{TrackChunk}, ObjectType, ObjectDetectionSettings)" />
+        /// <inheritdoc cref="GetObjects(IEnumerable{TrackChunk}, ObjectType, ObjectDetectionSettings)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously detects objects in tracks.
         /// </summary>
@@ -81,7 +81,7 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(() => trackChunks.GetObjects(objectType, settings), cancellationToken, progress);
 
-        /// <inheritdoc cref="GetObjects(MidiFile, ObjectType, ObjectDetectionSettings)" />
+        /// <inheritdoc cref="GetObjects(MidiFile, ObjectType, ObjectDetectionSettings)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously detects objects in a MIDI file.
         /// </summary>
@@ -99,7 +99,7 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(() => midiFile.GetObjects(objectType, settings), cancellationToken, progress);
 
-        /// <inheritdoc cref="GetObjects(IEnumerable{ITimedObject}, ObjectType, ObjectDetectionSettings)" />
+        /// <inheritdoc cref="GetObjects(IEnumerable{ITimedObject}, ObjectType, ObjectDetectionSettings)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously detects objects in timed objects.
         /// </summary>
@@ -117,7 +117,7 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(() => timedObjects.GetObjects(objectType, settings), cancellationToken, progress);
 
-        /// <inheritdoc cref="GetObjects(IEnumerable{MidiEvent}, ObjectType, ObjectDetectionSettings)" />
+        /// <inheritdoc cref="GetObjects(IEnumerable{MidiEvent}, ObjectType, ObjectDetectionSettings)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously detects objects from an asynchronous MIDI event source.
         /// </summary>
@@ -132,10 +132,14 @@ namespace Melanchall.DryWetMidi.Interaction
             ObjectType objectType,
             ObjectDetectionSettings? settings = null,
             IProgress<AsyncOperationProgress>? progress = null,
-            CancellationToken cancellationToken = default) =>
-            AsyncOperation.Run(async () => (await InteractionAsyncUtilities.CollectAsync(midiEvents, cancellationToken).ConfigureAwait(false)).GetObjects(objectType, settings), cancellationToken, progress);
+            CancellationToken cancellationToken = default)
+        {
+            ThrowIfArgument.IsNull(nameof(midiEvents), midiEvents);
 
-        /// <inheritdoc cref="GetObjects(IEnumerable{ITimedObject}, ObjectType, ObjectDetectionSettings)" />
+            return AsyncOperation.Run(async () => (await InteractionAsyncUtilities.CollectAsync(midiEvents, cancellationToken).ConfigureAwait(false)).GetObjects(objectType, settings), cancellationToken, progress);
+        }
+
+        /// <inheritdoc cref="GetObjects(IEnumerable{ITimedObject}, ObjectType, ObjectDetectionSettings)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously detects objects from an asynchronous timed object source.
         /// </summary>
@@ -150,10 +154,14 @@ namespace Melanchall.DryWetMidi.Interaction
             ObjectType objectType,
             ObjectDetectionSettings? settings = null,
             IProgress<AsyncOperationProgress>? progress = null,
-            CancellationToken cancellationToken = default) =>
-            AsyncOperation.Run(async () => (await InteractionAsyncUtilities.CollectAsync(timedObjects, cancellationToken).ConfigureAwait(false)).GetObjects(objectType, settings), cancellationToken, progress);
+            CancellationToken cancellationToken = default)
+        {
+            ThrowIfArgument.IsNull(nameof(timedObjects), timedObjects);
 
-        /// <inheritdoc cref="GetObjects(IEnumerable{TrackChunk}, ObjectType, ObjectDetectionSettings)" />
+            return AsyncOperation.Run(async () => (await InteractionAsyncUtilities.CollectAsync(timedObjects, cancellationToken).ConfigureAwait(false)).GetObjects(objectType, settings), cancellationToken, progress);
+        }
+
+        /// <inheritdoc cref="GetObjects(IEnumerable{TrackChunk}, ObjectType, ObjectDetectionSettings)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously detects objects from an asynchronous track source.
         /// </summary>
@@ -168,10 +176,14 @@ namespace Melanchall.DryWetMidi.Interaction
             ObjectType objectType,
             ObjectDetectionSettings? settings = null,
             IProgress<AsyncOperationProgress>? progress = null,
-            CancellationToken cancellationToken = default) =>
-            AsyncOperation.Run(async () => (await InteractionAsyncUtilities.CollectAsync(trackChunks, cancellationToken).ConfigureAwait(false)).GetObjects(objectType, settings), cancellationToken, progress);
+            CancellationToken cancellationToken = default)
+        {
+            ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
 
-        /// <inheritdoc cref="EnumerateObjects(IEnumerable{MidiEvent}, ObjectType, ObjectDetectionSettings)" />
+            return AsyncOperation.Run(async () => (await InteractionAsyncUtilities.CollectAsync(trackChunks, cancellationToken).ConfigureAwait(false)).GetObjects(objectType, settings), cancellationToken, progress);
+        }
+
+        /// <inheritdoc cref="EnumerateObjects(IEnumerable{MidiEvent}, ObjectType, ObjectDetectionSettings)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Lazily detects objects on a worker and yields them asynchronously, without materializing
         /// the result. Disposing the enumerator cancels detection and disposes the source enumerator.

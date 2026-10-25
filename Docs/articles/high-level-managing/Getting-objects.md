@@ -9,13 +9,13 @@ This article describes ways to get different objects (like [timed events](xref:M
 ## Asynchronous operations
 
 Bulk extraction and processing have asynchronous counterparts, including
-[NotesManagingUtilities.GetNotesAsync](xref:Melanchall.DryWetMidi.Interaction.NotesManagingUtilities.GetNotesAsync*),
-[ChordsManagingUtilities.GetChordsAsync](xref:Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.GetChordsAsync*),
-[TimedEventsManagingUtilities.GetTimedEventsAsync](xref:Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.GetTimedEventsAsync*),
-[GetObjectsUtilities.GetObjectsAsync](xref:Melanchall.DryWetMidi.Interaction.GetObjectsUtilities.GetObjectsAsync*),
-[RestsUtilities.GetRestsAsync](xref:Melanchall.DryWetMidi.Interaction.RestsUtilities.GetRestsAsync*),
-[TempoMapManagingUtilities.GetTempoMapAsync](xref:Melanchall.DryWetMidi.Interaction.TempoMapManagingUtilities.GetTempoMapAsync*),
-and [MidiFileUtilities.GetDurationAsync](xref:Melanchall.DryWetMidi.Interaction.MidiFileUtilities.GetDurationAsync*).
+[`NotesManagingUtilities.GetNotesAsync`](xref:Melanchall.DryWetMidi.Interaction.NotesManagingUtilities.GetNotesAsync*),
+[`ChordsManagingUtilities.GetChordsAsync`](xref:Melanchall.DryWetMidi.Interaction.ChordsManagingUtilities.GetChordsAsync*),
+[`TimedEventsManagingUtilities.GetTimedEventsAsync`](xref:Melanchall.DryWetMidi.Interaction.TimedEventsManagingUtilities.GetTimedEventsAsync*),
+[`GetObjectsUtilities.GetObjectsAsync`](xref:Melanchall.DryWetMidi.Interaction.GetObjectsUtilities.GetObjectsAsync*),
+[`RestsUtilities.GetRestsAsync`](xref:Melanchall.DryWetMidi.Interaction.RestsUtilities.GetRestsAsync*),
+[`TempoMapManagingUtilities.GetTempoMapAsync`](xref:Melanchall.DryWetMidi.Interaction.TempoMapManagingUtilities.GetTempoMapAsync*),
+and [`MidiFileUtilities.GetDurationAsync`](xref:Melanchall.DryWetMidi.Interaction.MidiFileUtilities.GetDurationAsync*).
 These operations run
 CPU-bound work on the thread pool so an editor can remain responsive. They do not
 make detection faster, and synchronous methods are preferable for small inputs or
@@ -23,19 +23,35 @@ when the caller already manages background execution.
 
 Pass a cancellation token to cancel substantial processing cooperatively. Optional
 `IProgress<T>` notifications containing
-[AsyncOperationProgress](xref:Melanchall.DryWetMidi.Common.AsyncOperationProgress)
+[`AsyncOperationProgress`](xref:Melanchall.DryWetMidi.Common.AsyncOperationProgress)
 describe work checkpoints across algorithm phases rather than a percentage or an
 exact count of processed events or output notes. Notifications
 are throttled; the total is not discovered by enumerating the input a second time.
 
-Asynchronous processing callbacks are awaited sequentially. Use an asynchronous
+For example, pass a `Progress<AsyncOperationProgress>` receiver to report the
+`Phase`, `ProcessedItems`, and `IsCompleted` values while detecting notes:
+
+```csharp
+var progress = new Progress<AsyncOperationProgress>(update =>
+{
+    Console.WriteLine(
+        $"{update.Phase}: {update.ProcessedItems} work checkpoints; completed: {update.IsCompleted}");
+});
+
+var notes = await midiFile.GetNotesAsync(progress: progress);
+```
+
+Asynchronous processing callbacks are awaited sequentially in source enumeration
+order, not concurrently. For a MIDI file, tracks are visited in source order and
+notes follow the detection order within each track; this is not a global time
+sort across tracks. Use an asynchronous
 callback overload of
-[NotesManagingUtilities.ProcessNotesAsync](xref:Melanchall.DryWetMidi.Interaction.NotesManagingUtilities.ProcessNotesAsync*)
+[`NotesManagingUtilities.ProcessNotesAsync`](xref:Melanchall.DryWetMidi.Interaction.NotesManagingUtilities.ProcessNotesAsync*)
 rather than passing an `async` lambda to a synchronous `Action` callback, which
 would become `async void`.
 
-**Wrong:** [NotesManagingUtilities.ProcessNotes](xref:Melanchall.DryWetMidi.Interaction.NotesManagingUtilities.ProcessNotes*)
-cannot await the callback, so it can return and dispose the log while writes are pending.
+**Wrong:** [`NotesManagingUtilities.ProcessNotes`](xref:Melanchall.DryWetMidi.Interaction.NotesManagingUtilities.ProcessNotes*)
+cannot await the callback, so it can return and dispose the log while writes are pending:
 
 ```csharp
 using (var log = new StreamWriter("notes.txt"))
@@ -49,7 +65,7 @@ using (var log = new StreamWriter("notes.txt"))
 
 **Correct:** the two-parameter callback selects the asynchronous overload, and
 each write finishes before processing continues. Here `cancellationToken` is
-provided by the caller.
+provided by the caller:
 
 ```csharp
 using (var log = new StreamWriter("notes.txt"))
@@ -66,9 +82,10 @@ using (var log = new StreamWriter("notes.txt"))
 ```
 
 Cancellation and callback exceptions do not roll back changes already made or
-external side effects. These examples use `System.IO.StreamWriter`.
+external side effects.
 
-Asynchronous enumeration preserves musical ordering, but note/chord detection may
+Asynchronous enumeration follows the corresponding synchronous API's source
+enumeration and time-ordering rules, but note/chord detection may
 need to buffer unmatched events or preprocess input. It is not a promise of constant
 memory for every detection policy. Dispose the asynchronous enumerator when stopping
 early.
@@ -76,7 +93,7 @@ early.
 Asynchronous operations do not make mutable MIDI files, collections, detection
 settings, or managers thread-safe. Do not edit or process the same data concurrently.
 
-**Wrong:** adding a track changes the file while note detection may be reading it.
+**Wrong:** adding a track changes the file while note detection may be reading it:
 
 ```csharp
 var pendingNotes = midiFile.GetNotesAsync();
@@ -85,7 +102,7 @@ midiFile.Chunks.Add(new TrackChunk());
 var notes = await pendingNotes;
 ```
 
-**Correct:** finish detection before changing the file.
+**Correct:** finish detection before changing the file:
 
 ```csharp
 var notes = await midiFile.GetNotesAsync();

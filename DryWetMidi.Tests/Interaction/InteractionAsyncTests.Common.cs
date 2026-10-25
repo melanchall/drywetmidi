@@ -13,6 +13,12 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
     [TestFixture]
     public sealed partial class InteractionAsyncTests
     {
+        private const string NotesOperation = "Notes";
+        private const string ChordsOperation = "Chords";
+        private const string TimedEventsOperation = "TimedEvents";
+        private const string ObjectsOperation = "Objects";
+        private const string MixedOperation = "Mixed";
+
         private sealed class ImmediateProgress : IProgress<AsyncOperationProgress>
         {
             internal readonly List<AsyncOperationProgress> Reports = new List<AsyncOperationProgress>();
@@ -79,11 +85,11 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             switch (kind)
             {
-                case "Notes":
+                case NotesOperation:
                     return tracks.ProcessNotesAsync(action, cancellationToken: cancellationToken);
-                case "Chords":
+                case ChordsOperation:
                     return tracks.ProcessChordsAsync(action, cancellationToken: cancellationToken);
-                case "TimedEvents":
+                case TimedEventsOperation:
                     return tracks.ProcessTimedEventsAsync(action, cancellationToken: cancellationToken);
                 default:
                     return tracks.ProcessObjectsAsync(ObjectType.Note | ObjectType.Chord | ObjectType.TimedEvent, action, cancellationToken: cancellationToken);
@@ -97,11 +103,11 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             switch (kind)
             {
-                case "Notes":
+                case NotesOperation:
                     return tracks.ProcessNotesAsync(action);
-                case "Chords":
+                case ChordsOperation:
                     return tracks.ProcessChordsAsync(action);
-                case "TimedEvents":
+                case TimedEventsOperation:
                     return tracks.ProcessTimedEventsAsync(action);
                 default:
                     return tracks.ProcessObjectsAsync(ObjectType.Note | ObjectType.Chord | ObjectType.TimedEvent, action);

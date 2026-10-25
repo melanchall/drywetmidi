@@ -9,7 +9,7 @@ namespace Melanchall.DryWetMidi.Interaction
 {
     public sealed partial class TempoMapManager
     {
-        /// <inheritdoc cref="TempoMapManager(TimeDivision, IEnumerable{EventsCollection})" />
+        /// <inheritdoc cref="TempoMapManager(TimeDivision, IEnumerable{EventsCollection})" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously creates and initializes a tempo map manager.
         /// </summary>
@@ -26,7 +26,7 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(() => new TempoMapManager(timeDivision, eventsCollections), cancellationToken, progress);
 
-        /// <inheritdoc cref="SaveChanges" />
+        /// <inheritdoc cref="SaveChanges" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously saves the managed tempo map back to its events collections.
         /// </summary>
@@ -41,7 +41,7 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(SaveChanges, cancellationToken, progress);
 
-        /// <inheritdoc cref="ReplaceTempoMap" />
+        /// <inheritdoc cref="ReplaceTempoMap" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously replaces the managed tempo map.
         /// </summary>

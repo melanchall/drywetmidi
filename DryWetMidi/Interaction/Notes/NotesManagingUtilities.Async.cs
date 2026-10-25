@@ -10,7 +10,7 @@ namespace Melanchall.DryWetMidi.Interaction
 {
     public static partial class NotesManagingUtilities
     {
-        /// <inheritdoc cref="GetNotes(IEnumerable{MidiEvent}, NoteDetectionSettings, TimedEventDetectionSettings)" />
+        /// <inheritdoc cref="GetNotes(IEnumerable{MidiEvent}, NoteDetectionSettings, TimedEventDetectionSettings)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously detects notes in MIDI events.
         /// </summary>
@@ -28,7 +28,7 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(() => midiEvents.GetNotes(settings, timedEventDetectionSettings), cancellationToken, progress);
 
-        /// <inheritdoc cref="GetNotes(TrackChunk, NoteDetectionSettings, TimedEventDetectionSettings)" />
+        /// <inheritdoc cref="GetNotes(TrackChunk, NoteDetectionSettings, TimedEventDetectionSettings)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously detects notes in a track.
         /// </summary>
@@ -46,7 +46,7 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(() => trackChunk.GetNotes(settings, timedEventDetectionSettings), cancellationToken, progress);
 
-        /// <inheritdoc cref="GetNotes(IEnumerable{TrackChunk}, NoteDetectionSettings, TimedEventDetectionSettings)" />
+        /// <inheritdoc cref="GetNotes(IEnumerable{TrackChunk}, NoteDetectionSettings, TimedEventDetectionSettings)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously detects notes in tracks.
         /// </summary>
@@ -64,7 +64,7 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(() => trackChunks.GetNotes(settings, timedEventDetectionSettings), cancellationToken, progress);
 
-        /// <inheritdoc cref="GetNotes(MidiFile, NoteDetectionSettings, TimedEventDetectionSettings)" />
+        /// <inheritdoc cref="GetNotes(MidiFile, NoteDetectionSettings, TimedEventDetectionSettings)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously detects notes in a MIDI file.
         /// </summary>
@@ -82,7 +82,7 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(() => file.GetNotes(settings, timedEventDetectionSettings), cancellationToken, progress);
 
-        /// <inheritdoc cref="GetNotes(IEnumerable{MidiEvent}, NoteDetectionSettings, TimedEventDetectionSettings)" />
+        /// <inheritdoc cref="GetNotes(IEnumerable{MidiEvent}, NoteDetectionSettings, TimedEventDetectionSettings)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously detects notes from an asynchronous MIDI event source.
         /// </summary>
@@ -97,10 +97,14 @@ namespace Melanchall.DryWetMidi.Interaction
             NoteDetectionSettings? settings = null,
             TimedEventDetectionSettings? timedEventDetectionSettings = null,
             IProgress<AsyncOperationProgress>? progress = null,
-            CancellationToken cancellationToken = default) =>
-            AsyncOperation.Run(async () => (await InteractionAsyncUtilities.CollectAsync(midiEvents, cancellationToken).ConfigureAwait(false)).GetNotes(settings, timedEventDetectionSettings), cancellationToken, progress);
+            CancellationToken cancellationToken = default)
+        {
+            ThrowIfArgument.IsNull(nameof(midiEvents), midiEvents);
 
-        /// <inheritdoc cref="GetNotes(IEnumerable{TrackChunk}, NoteDetectionSettings, TimedEventDetectionSettings)" />
+            return AsyncOperation.Run(async () => (await InteractionAsyncUtilities.CollectAsync(midiEvents, cancellationToken).ConfigureAwait(false)).GetNotes(settings, timedEventDetectionSettings), cancellationToken, progress);
+        }
+
+        /// <inheritdoc cref="GetNotes(IEnumerable{TrackChunk}, NoteDetectionSettings, TimedEventDetectionSettings)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously detects notes from an asynchronous track source.
         /// </summary>
@@ -115,10 +119,14 @@ namespace Melanchall.DryWetMidi.Interaction
             NoteDetectionSettings? settings = null,
             TimedEventDetectionSettings? timedEventDetectionSettings = null,
             IProgress<AsyncOperationProgress>? progress = null,
-            CancellationToken cancellationToken = default) =>
-            AsyncOperation.Run(async () => (await InteractionAsyncUtilities.CollectAsync(trackChunks, cancellationToken).ConfigureAwait(false)).GetNotes(settings, timedEventDetectionSettings), cancellationToken, progress);
+            CancellationToken cancellationToken = default)
+        {
+            ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
 
-        /// <inheritdoc cref="ManageNotes(EventsCollection, NoteDetectionSettings, TimedEventDetectionSettings, TimedObjectsComparer)" />
+            return AsyncOperation.Run(async () => (await InteractionAsyncUtilities.CollectAsync(trackChunks, cancellationToken).ConfigureAwait(false)).GetNotes(settings, timedEventDetectionSettings), cancellationToken, progress);
+        }
+
+        /// <inheritdoc cref="ManageNotes(EventsCollection, NoteDetectionSettings, TimedEventDetectionSettings, TimedObjectsComparer)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously creates a notes manager.
         /// </summary>
@@ -137,7 +145,7 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(() => eventsCollection.ManageNotes(settings, timedEventDetectionSettings, comparer), cancellationToken, progress);
 
-        /// <inheritdoc cref="ManageNotes(TrackChunk, NoteDetectionSettings, TimedEventDetectionSettings, TimedObjectsComparer)" />
+        /// <inheritdoc cref="ManageNotes(TrackChunk, NoteDetectionSettings, TimedEventDetectionSettings, TimedObjectsComparer)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously creates a notes manager for a track.
         /// </summary>
@@ -156,7 +164,7 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(() => trackChunk.ManageNotes(settings, timedEventDetectionSettings, comparer), cancellationToken, progress);
 
-        /// <inheritdoc cref="ProcessNotes(EventsCollection, Action{Note}, NoteDetectionSettings, TimedEventDetectionSettings, NoteProcessingHint)" />
+        /// <inheritdoc cref="ProcessNotes(EventsCollection, Action{Note}, NoteDetectionSettings, TimedEventDetectionSettings, NoteProcessingHint)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously processes notes using the synchronous processing settings and hint.
         /// </summary>
@@ -176,7 +184,7 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(() => eventsCollection.ProcessNotes(action, settings, timedEventDetectionSettings, hint), cancellationToken, progress);
 
-        /// <inheritdoc cref="ProcessNotes(EventsCollection, Action{Note}, Predicate{Note}, NoteDetectionSettings, TimedEventDetectionSettings, NoteProcessingHint)" />
+        /// <inheritdoc cref="ProcessNotes(EventsCollection, Action{Note}, Predicate{Note}, NoteDetectionSettings, TimedEventDetectionSettings, NoteProcessingHint)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously processes matching notes.
         /// </summary>
@@ -197,7 +205,7 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(() => eventsCollection.ProcessNotes(action, match, settings, timedEventDetectionSettings, hint), cancellationToken, progress);
 
-        /// <inheritdoc cref="ProcessNotes(TrackChunk, Action{Note}, NoteDetectionSettings, TimedEventDetectionSettings, NoteProcessingHint)" />
+        /// <inheritdoc cref="ProcessNotes(TrackChunk, Action{Note}, NoteDetectionSettings, TimedEventDetectionSettings, NoteProcessingHint)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously processes notes in a track.
         /// </summary>
@@ -217,7 +225,7 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(() => trackChunk.ProcessNotes(action, settings, timedEventDetectionSettings, hint), cancellationToken, progress);
 
-        /// <inheritdoc cref="ProcessNotes(TrackChunk, Action{Note}, Predicate{Note}, NoteDetectionSettings, TimedEventDetectionSettings, NoteProcessingHint)" />
+        /// <inheritdoc cref="ProcessNotes(TrackChunk, Action{Note}, Predicate{Note}, NoteDetectionSettings, TimedEventDetectionSettings, NoteProcessingHint)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously processes matching notes in a track.
         /// </summary>
@@ -238,7 +246,7 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(() => trackChunk.ProcessNotes(action, match, settings, timedEventDetectionSettings, hint), cancellationToken, progress);
 
-        /// <inheritdoc cref="ProcessNotes(IEnumerable{TrackChunk}, Action{Note}, NoteDetectionSettings, TimedEventDetectionSettings, NoteProcessingHint)" />
+        /// <inheritdoc cref="ProcessNotes(IEnumerable{TrackChunk}, Action{Note}, NoteDetectionSettings, TimedEventDetectionSettings, NoteProcessingHint)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously processes notes in tracks.
         /// </summary>
@@ -258,7 +266,7 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(() => trackChunks.ProcessNotes(action, settings, timedEventDetectionSettings, hint), cancellationToken, progress);
 
-        /// <inheritdoc cref="ProcessNotes(IEnumerable{TrackChunk}, Action{Note}, Predicate{Note}, NoteDetectionSettings, TimedEventDetectionSettings, NoteProcessingHint)" />
+        /// <inheritdoc cref="ProcessNotes(IEnumerable{TrackChunk}, Action{Note}, Predicate{Note}, NoteDetectionSettings, TimedEventDetectionSettings, NoteProcessingHint)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously processes matching notes in tracks.
         /// </summary>
@@ -279,7 +287,7 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(() => trackChunks.ProcessNotes(action, match, settings, timedEventDetectionSettings, hint), cancellationToken, progress);
 
-        /// <inheritdoc cref="ProcessNotes(MidiFile, Action{Note}, NoteDetectionSettings, TimedEventDetectionSettings, NoteProcessingHint)" />
+        /// <inheritdoc cref="ProcessNotes(MidiFile, Action{Note}, NoteDetectionSettings, TimedEventDetectionSettings, NoteProcessingHint)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously processes notes in a MIDI file.
         /// </summary>
@@ -299,7 +307,7 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(() => file.ProcessNotes(action, settings, timedEventDetectionSettings, hint), cancellationToken, progress);
 
-        /// <inheritdoc cref="ProcessNotes(MidiFile, Action{Note}, Predicate{Note}, NoteDetectionSettings, TimedEventDetectionSettings, NoteProcessingHint)" />
+        /// <inheritdoc cref="ProcessNotes(MidiFile, Action{Note}, Predicate{Note}, NoteDetectionSettings, TimedEventDetectionSettings, NoteProcessingHint)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously processes matching notes in a MIDI file.
         /// </summary>
@@ -320,7 +328,7 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(() => file.ProcessNotes(action, match, settings, timedEventDetectionSettings, hint), cancellationToken, progress);
 
-        /// <inheritdoc cref="ProcessNotes(EventsCollection, Action{Note}, NoteDetectionSettings, TimedEventDetectionSettings, NoteProcessingHint)" />
+        /// <inheritdoc cref="ProcessNotes(EventsCollection, Action{Note}, NoteDetectionSettings, TimedEventDetectionSettings, NoteProcessingHint)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Sequentially awaits an asynchronous action for each note.
         /// </summary>
@@ -340,7 +348,7 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             eventsCollection.ProcessNotesAsync(action, null, settings, timedEventDetectionSettings, hint, progress, cancellationToken);
 
-        /// <inheritdoc cref="ProcessNotes(TrackChunk, Action{Note}, NoteDetectionSettings, TimedEventDetectionSettings, NoteProcessingHint)" />
+        /// <inheritdoc cref="ProcessNotes(TrackChunk, Action{Note}, NoteDetectionSettings, TimedEventDetectionSettings, NoteProcessingHint)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Sequentially awaits an asynchronous action for each note in a track.
         /// </summary>
@@ -360,7 +368,7 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             trackChunk.ProcessNotesAsync(action, null, settings, timedEventDetectionSettings, hint, progress, cancellationToken);
 
-        /// <inheritdoc cref="ProcessNotes(IEnumerable{TrackChunk}, Action{Note}, NoteDetectionSettings, TimedEventDetectionSettings, NoteProcessingHint)" />
+        /// <inheritdoc cref="ProcessNotes(IEnumerable{TrackChunk}, Action{Note}, NoteDetectionSettings, TimedEventDetectionSettings, NoteProcessingHint)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Sequentially awaits an asynchronous action for each note in tracks.
         /// </summary>
@@ -380,7 +388,7 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             trackChunks.ProcessNotesAsync(action, null, settings, timedEventDetectionSettings, hint, progress, cancellationToken);
 
-        /// <inheritdoc cref="ProcessNotes(MidiFile, Action{Note}, NoteDetectionSettings, TimedEventDetectionSettings, NoteProcessingHint)" />
+        /// <inheritdoc cref="ProcessNotes(MidiFile, Action{Note}, NoteDetectionSettings, TimedEventDetectionSettings, NoteProcessingHint)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Sequentially awaits an asynchronous action for each note in a MIDI file.
         /// </summary>
@@ -400,11 +408,12 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             file.ProcessNotesAsync(action, null, settings, timedEventDetectionSettings, hint, progress, cancellationToken);
 
-        /// <inheritdoc cref="ProcessNotes(EventsCollection, Action{Note}, NoteDetectionSettings, TimedEventDetectionSettings, NoteProcessingHint)" />
+        /// <inheritdoc cref="ProcessNotes(EventsCollection, Action{Note}, NoteDetectionSettings, TimedEventDetectionSettings, NoteProcessingHint)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Sequentially awaits an asynchronous action for matching notes.
         /// A null match processes all notes.
         /// </summary>
+        /// <param name="match">Predicate selecting notes to process, or null to process all notes.</param>
         /// <param name="progress">
         /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
         /// The total is unknown. A final report marks successful completion.
@@ -419,14 +428,20 @@ namespace Melanchall.DryWetMidi.Interaction
             TimedEventDetectionSettings? timedEventDetectionSettings = null,
             NoteProcessingHint hint = NoteProcessingHint.Default,
             IProgress<AsyncOperationProgress>? progress = null,
-            CancellationToken cancellationToken = default) =>
-            AsyncOperation.Run(() => ProcessNotesAwaitedAsync(InteractionAsyncUtilities.Collections(eventsCollection), action, match, settings, timedEventDetectionSettings, hint, cancellationToken), cancellationToken, progress);
+            CancellationToken cancellationToken = default)
+        {
+            ThrowIfArgument.IsNull(nameof(eventsCollection), eventsCollection);
+            ThrowIfArgument.IsNull(nameof(action), action);
 
-        /// <inheritdoc cref="ProcessNotes(TrackChunk, Action{Note}, NoteDetectionSettings, TimedEventDetectionSettings, NoteProcessingHint)" />
+            return AsyncOperation.Run(() => ProcessNotesAwaitedAsync(InteractionAsyncUtilities.Collections(eventsCollection), action, match, settings, timedEventDetectionSettings, hint, cancellationToken), cancellationToken, progress);
+        }
+
+        /// <inheritdoc cref="ProcessNotes(TrackChunk, Action{Note}, NoteDetectionSettings, TimedEventDetectionSettings, NoteProcessingHint)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Sequentially awaits an asynchronous action for matching notes in a track.
         /// A null match processes all notes.
         /// </summary>
+        /// <param name="match">Predicate selecting notes to process, or null to process all notes.</param>
         /// <param name="progress">
         /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
         /// The total is unknown. A final report marks successful completion.
@@ -441,14 +456,20 @@ namespace Melanchall.DryWetMidi.Interaction
             TimedEventDetectionSettings? timedEventDetectionSettings = null,
             NoteProcessingHint hint = NoteProcessingHint.Default,
             IProgress<AsyncOperationProgress>? progress = null,
-            CancellationToken cancellationToken = default) =>
-            AsyncOperation.Run(() => ProcessNotesAwaitedAsync(InteractionAsyncUtilities.Collections(trackChunk), action, match, settings, timedEventDetectionSettings, hint, cancellationToken), cancellationToken, progress);
+            CancellationToken cancellationToken = default)
+        {
+            ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
+            ThrowIfArgument.IsNull(nameof(action), action);
 
-        /// <inheritdoc cref="ProcessNotes(IEnumerable{TrackChunk}, Action{Note}, NoteDetectionSettings, TimedEventDetectionSettings, NoteProcessingHint)" />
+            return AsyncOperation.Run(() => ProcessNotesAwaitedAsync(InteractionAsyncUtilities.Collections(trackChunk), action, match, settings, timedEventDetectionSettings, hint, cancellationToken), cancellationToken, progress);
+        }
+
+        /// <inheritdoc cref="ProcessNotes(IEnumerable{TrackChunk}, Action{Note}, NoteDetectionSettings, TimedEventDetectionSettings, NoteProcessingHint)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Sequentially awaits an asynchronous action for matching notes in tracks.
         /// A null match processes all notes.
         /// </summary>
+        /// <param name="match">Predicate selecting notes to process, or null to process all notes.</param>
         /// <param name="progress">
         /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
         /// The total is unknown. A final report marks successful completion.
@@ -463,14 +484,20 @@ namespace Melanchall.DryWetMidi.Interaction
             TimedEventDetectionSettings? timedEventDetectionSettings = null,
             NoteProcessingHint hint = NoteProcessingHint.Default,
             IProgress<AsyncOperationProgress>? progress = null,
-            CancellationToken cancellationToken = default) =>
-            AsyncOperation.Run(() => ProcessNotesAwaitedAsync(InteractionAsyncUtilities.Collections(trackChunks), action, match, settings, timedEventDetectionSettings, hint, cancellationToken), cancellationToken, progress);
+            CancellationToken cancellationToken = default)
+        {
+            ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
+            ThrowIfArgument.IsNull(nameof(action), action);
 
-        /// <inheritdoc cref="ProcessNotes(MidiFile, Action{Note}, NoteDetectionSettings, TimedEventDetectionSettings, NoteProcessingHint)" />
+            return AsyncOperation.Run(() => ProcessNotesAwaitedAsync(InteractionAsyncUtilities.Collections(trackChunks), action, match, settings, timedEventDetectionSettings, hint, cancellationToken), cancellationToken, progress);
+        }
+
+        /// <inheritdoc cref="ProcessNotes(MidiFile, Action{Note}, NoteDetectionSettings, TimedEventDetectionSettings, NoteProcessingHint)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Sequentially awaits an asynchronous action for matching notes in a MIDI file.
         /// A null match processes all notes.
         /// </summary>
+        /// <param name="match">Predicate selecting notes to process, or null to process all notes.</param>
         /// <param name="progress">
         /// Optional throttled progress in work checkpoints across phases, not exact note or event counts.
         /// The total is unknown. A final report marks successful completion.
@@ -485,10 +512,15 @@ namespace Melanchall.DryWetMidi.Interaction
             TimedEventDetectionSettings? timedEventDetectionSettings = null,
             NoteProcessingHint hint = NoteProcessingHint.Default,
             IProgress<AsyncOperationProgress>? progress = null,
-            CancellationToken cancellationToken = default) =>
-            AsyncOperation.Run(() => ProcessNotesAwaitedAsync(InteractionAsyncUtilities.Collections(file), action, match, settings, timedEventDetectionSettings, hint, cancellationToken), cancellationToken, progress);
+            CancellationToken cancellationToken = default)
+        {
+            ThrowIfArgument.IsNull(nameof(file), file);
+            ThrowIfArgument.IsNull(nameof(action), action);
 
-        /// <inheritdoc cref="RemoveNotes(EventsCollection, NoteDetectionSettings, TimedEventDetectionSettings)" />
+            return AsyncOperation.Run(() => ProcessNotesAwaitedAsync(InteractionAsyncUtilities.Collections(file), action, match, settings, timedEventDetectionSettings, hint, cancellationToken), cancellationToken, progress);
+        }
+
+        /// <inheritdoc cref="RemoveNotes(EventsCollection, NoteDetectionSettings, TimedEventDetectionSettings)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously removes notes.
         /// </summary>
@@ -506,7 +538,7 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(() => eventsCollection.RemoveNotes(settings, timedEventDetectionSettings), cancellationToken, progress);
 
-        /// <inheritdoc cref="RemoveNotes(EventsCollection, Predicate{Note}, NoteDetectionSettings, TimedEventDetectionSettings)" />
+        /// <inheritdoc cref="RemoveNotes(EventsCollection, Predicate{Note}, NoteDetectionSettings, TimedEventDetectionSettings)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously removes matching notes.
         /// </summary>
@@ -525,7 +557,7 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(() => eventsCollection.RemoveNotes(match, settings, timedEventDetectionSettings), cancellationToken, progress);
 
-        /// <inheritdoc cref="RemoveNotes(TrackChunk, NoteDetectionSettings, TimedEventDetectionSettings)" />
+        /// <inheritdoc cref="RemoveNotes(TrackChunk, NoteDetectionSettings, TimedEventDetectionSettings)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously removes notes from a track.
         /// </summary>
@@ -543,7 +575,7 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(() => trackChunk.RemoveNotes(settings, timedEventDetectionSettings), cancellationToken, progress);
 
-        /// <inheritdoc cref="RemoveNotes(TrackChunk, Predicate{Note}, NoteDetectionSettings, TimedEventDetectionSettings)" />
+        /// <inheritdoc cref="RemoveNotes(TrackChunk, Predicate{Note}, NoteDetectionSettings, TimedEventDetectionSettings)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously removes matching notes from a track.
         /// </summary>
@@ -562,7 +594,7 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(() => trackChunk.RemoveNotes(match, settings, timedEventDetectionSettings), cancellationToken, progress);
 
-        /// <inheritdoc cref="RemoveNotes(IEnumerable{TrackChunk}, NoteDetectionSettings, TimedEventDetectionSettings)" />
+        /// <inheritdoc cref="RemoveNotes(IEnumerable{TrackChunk}, NoteDetectionSettings, TimedEventDetectionSettings)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously removes notes from tracks.
         /// </summary>
@@ -580,7 +612,7 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(() => trackChunks.RemoveNotes(settings, timedEventDetectionSettings), cancellationToken, progress);
 
-        /// <inheritdoc cref="RemoveNotes(IEnumerable{TrackChunk}, Predicate{Note}, NoteDetectionSettings, TimedEventDetectionSettings)" />
+        /// <inheritdoc cref="RemoveNotes(IEnumerable{TrackChunk}, Predicate{Note}, NoteDetectionSettings, TimedEventDetectionSettings)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously removes matching notes from tracks.
         /// </summary>
@@ -599,7 +631,7 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(() => trackChunks.RemoveNotes(match, settings, timedEventDetectionSettings), cancellationToken, progress);
 
-        /// <inheritdoc cref="RemoveNotes(MidiFile, NoteDetectionSettings, TimedEventDetectionSettings)" />
+        /// <inheritdoc cref="RemoveNotes(MidiFile, NoteDetectionSettings, TimedEventDetectionSettings)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously removes notes from a MIDI file.
         /// </summary>
@@ -617,7 +649,7 @@ namespace Melanchall.DryWetMidi.Interaction
             CancellationToken cancellationToken = default) =>
             AsyncOperation.Run(() => file.RemoveNotes(settings, timedEventDetectionSettings), cancellationToken, progress);
 
-        /// <inheritdoc cref="RemoveNotes(MidiFile, Predicate{Note}, NoteDetectionSettings, TimedEventDetectionSettings)" />
+        /// <inheritdoc cref="RemoveNotes(MidiFile, Predicate{Note}, NoteDetectionSettings, TimedEventDetectionSettings)" path="/*[not(self::summary) and not(self::param[@name='progress' or @name='cancellationToken'])]" />
         /// <summary>
         /// Asynchronously removes matching notes from a MIDI file.
         /// </summary>
@@ -645,8 +677,6 @@ namespace Melanchall.DryWetMidi.Interaction
             NoteProcessingHint hint,
             CancellationToken cancellationToken)
         {
-            ThrowIfArgument.IsNull(nameof(action), action);
-
             var count = 0;
             var index = 0;
 
