@@ -1,8 +1,9 @@
 DryWetMIDI code style
 ====================
 
-Use this reference for this PR and future contributions. Read the surrounding
-code before editing; preserve existing public API behavior and naming.
+Use this file as the single source of repository coding rules for this PR and
+future contributions. Read the surrounding code before editing; preserve existing
+public API behavior and naming.
 
 Layout
 ------

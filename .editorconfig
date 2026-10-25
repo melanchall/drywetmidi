@@ -6,7 +6,7 @@ resharper_check_namespace_highlighting=none
 resharper_unused_member_global_highlighting=none
 resharper_unused_auto_property_accessor_global_highlighting=none
 
-# Additional layout, async, documentation, and test conventions: CODE_STYLE.txt.
+# Additional layout, async, documentation, and test conventions: .github/copilot-instructions.md.
 [*.cs]
 indent_style = space
 indent_size = 4
@@ -18,7 +18,7 @@ csharp_preserve_single_line_blocks = false
 csharp_preserve_single_line_statements = false
 csharp_style_expression_bodied_constructors = false:suggestion
 # Member ordering, logical blank lines, documentation, and test rules require review;
-# the supported formatter options above do not enforce all of CODE_STYLE.txt.
+# the supported formatter options above do not enforce all of .github/copilot-instructions.md.
 
 [*.md]
 indent_style = space
