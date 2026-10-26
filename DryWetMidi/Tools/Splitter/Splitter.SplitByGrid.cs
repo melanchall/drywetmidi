@@ -50,8 +50,6 @@ namespace Melanchall.DryWetMidi.Tools
             {
                 foreach (var time in grid.GetTimes(tempoMap))
                 {
-                    AsyncOperation.Checkpoint();
-
                     if (time == 0)
                         continue;
 

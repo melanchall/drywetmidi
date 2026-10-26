@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Collections.Generic;
-using System.Threading;
 using Melanchall.DryWetMidi.Composing;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
@@ -22,7 +20,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var midiFile = new MidiFile();
             var duration = midiFile.GetDuration<MetricTimeSpan>();
-            CheckDurationAsync(midiFile, duration);
             ClassicAssert.AreEqual(new MetricTimeSpan(), duration, "Duration of empty MIDI file is invalid.");
         }
 
@@ -37,7 +34,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 .ToFile(TempoMap.Default);
 
             var duration = midiFile.GetDuration(TimeSpanType.Metric);
-            CheckDurationAsync(midiFile, duration);
             TimeSpanTestUtilities.AreEqual(new MetricTimeSpan(0, 0, 10), duration, "Duration of MIDI file is invalid.");
         }
 
@@ -50,7 +46,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     new NoteOffEvent { DeltaTime = 1000 }));
 
             var duration = midiFile.GetDuration(TimeSpanType.Midi);
-            CheckDurationAsync(midiFile, duration);
             ClassicAssert.AreEqual(new MidiTimeSpan(1000), duration, "Duration of MIDI file is invalid.");
         }
 
@@ -59,7 +54,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var trackChunk = new TrackChunk();
             var duration = trackChunk.GetDuration<MetricTimeSpan>(TempoMap.Default);
-            CheckDurationAsync(trackChunk, TempoMap.Default, duration);
             ClassicAssert.AreEqual(new MetricTimeSpan(), duration, "Invalid duration.");
         }
 
@@ -68,7 +62,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var trackChunk = new TrackChunk(new TextEvent("A") { DeltaTime = deltaTime });
             var duration = trackChunk.GetDuration<MidiTimeSpan>(TempoMap.Default);
-            CheckDurationAsync(trackChunk, TempoMap.Default, duration);
             ClassicAssert.AreEqual(new MidiTimeSpan(deltaTime), duration, "Invalid duration.");
         }
 
@@ -77,7 +70,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var trackChunk = new TrackChunk(new TextEvent("A") { DeltaTime = deltaTime });
             var duration = trackChunk.GetDuration(TimeSpanType.Midi, TempoMap.Default);
-            CheckDurationAsync(trackChunk, TempoMap.Default, duration);
             ClassicAssert.AreEqual(new MidiTimeSpan(deltaTime), duration, "Invalid duration.");
         }
 
@@ -86,7 +78,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var trackChunk = new TrackChunk(new TextEvent("A") { DeltaTime = deltaTime });
             var duration = trackChunk.GetDuration<MetricTimeSpan>(TempoMap.Default);
-            CheckDurationAsync(trackChunk, TempoMap.Default, duration);
             ClassicAssert.AreEqual(TimeConverter.ConvertTo<MetricTimeSpan>(deltaTime, TempoMap.Default), duration, "Invalid duration.");
         }
 
@@ -95,7 +86,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var trackChunk = new TrackChunk(new TextEvent("A") { DeltaTime = deltaTime });
             var duration = trackChunk.GetDuration(TimeSpanType.Metric, TempoMap.Default);
-            CheckDurationAsync(trackChunk, TempoMap.Default, duration);
             ClassicAssert.AreEqual(TimeConverter.ConvertTo<MetricTimeSpan>(deltaTime, TempoMap.Default), duration, "Invalid duration.");
         }
 
@@ -106,7 +96,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 new TextEvent("A") { DeltaTime = deltaTime1 },
                 new TextEvent("B") { DeltaTime = deltaTime2 });
             var duration = trackChunk.GetDuration<MidiTimeSpan>(TempoMap.Default);
-            CheckDurationAsync(trackChunk, TempoMap.Default, duration);
             ClassicAssert.AreEqual(new MidiTimeSpan(deltaTime1 + deltaTime2), duration, "Invalid duration.");
         }
 
@@ -115,7 +104,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var trackChunks = Array.Empty<TrackChunk>();
             var duration = trackChunks.GetDuration<MetricTimeSpan>(TempoMap.Default);
-            CheckDurationAsync(trackChunks, TempoMap.Default, duration);
             ClassicAssert.AreEqual(new MetricTimeSpan(), duration, "Invalid duration.");
         }
 
@@ -124,7 +112,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var trackChunks = new[] { new TrackChunk(), new TrackChunk() };
             var duration = trackChunks.GetDuration<MetricTimeSpan>(TempoMap.Default);
-            CheckDurationAsync(trackChunks, TempoMap.Default, duration);
             ClassicAssert.AreEqual(new MetricTimeSpan(), duration, "Invalid duration.");
         }
 
@@ -137,7 +124,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 new TrackChunk()
             };
             var duration = trackChunks.GetDuration<MidiTimeSpan>(TempoMap.Default);
-            CheckDurationAsync(trackChunks, TempoMap.Default, duration);
             ClassicAssert.AreEqual(new MidiTimeSpan(deltaTime), duration, "Invalid duration.");
         }
 
@@ -150,7 +136,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 new TrackChunk(new TextEvent("A") { DeltaTime = deltaTime }),
             };
             var duration = trackChunks.GetDuration<MidiTimeSpan>(TempoMap.Default);
-            CheckDurationAsync(trackChunks, TempoMap.Default, duration);
             ClassicAssert.AreEqual(new MidiTimeSpan(deltaTime), duration, "Invalid duration.");
         }
 
@@ -163,7 +148,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 new TrackChunk(new TextEvent("A") { DeltaTime = deltaTime }),
             };
             var duration = trackChunks.GetDuration<MetricTimeSpan>(TempoMap.Default);
-            CheckDurationAsync(trackChunks, TempoMap.Default, duration);
             ClassicAssert.AreEqual(TimeConverter.ConvertTo<MetricTimeSpan>(deltaTime, TempoMap.Default), duration, "Invalid duration.");
         }
 
@@ -176,7 +160,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 new TrackChunk(new TextEvent("B") { DeltaTime = deltaTime2 })
             };
             var duration = trackChunks.GetDuration<MidiTimeSpan>(TempoMap.Default);
-            CheckDurationAsync(trackChunks, TempoMap.Default, duration);
             ClassicAssert.AreEqual(new MidiTimeSpan(Math.Max(deltaTime1, deltaTime2)), duration, "Invalid duration.");
         }
 
@@ -242,66 +225,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         #endregion
-
-        #endregion
-
-        #region Private methods
-
-        private void CheckDurationAsync(MidiFile file, ITimeSpan expectedDuration)
-        {
-            var durationType = expectedDuration is MidiTimeSpan ? TimeSpanType.Midi : TimeSpanType.Metric;
-            var asyncFile = file.Clone();
-            var duration = asyncFile.GetDurationAsync(durationType, cancellationToken: CancellationToken.None).Result;
-            TimeSpanTestUtilities.AreEqual(expectedDuration, duration, "Async file duration is invalid.");
-
-            ITimeSpan genericDuration = expectedDuration is MidiTimeSpan
-                ? asyncFile.GetDurationAsync<MidiTimeSpan>(cancellationToken: CancellationToken.None).Result
-                : (ITimeSpan)asyncFile.GetDurationAsync<MetricTimeSpan>(cancellationToken: CancellationToken.None).Result;
-
-            TimeSpanTestUtilities.AreEqual(expectedDuration, genericDuration, "Generic async file duration is invalid.");
-        }
-
-        private void CheckDurationAsync(TrackChunk track, TempoMap tempoMap, ITimeSpan expectedDuration)
-        {
-            var durationType = expectedDuration is MidiTimeSpan ? TimeSpanType.Midi : TimeSpanType.Metric;
-            var asyncTrack = (TrackChunk)track.Clone();
-            var duration = asyncTrack.GetDurationAsync(durationType, tempoMap, cancellationToken: CancellationToken.None).Result;
-            TimeSpanTestUtilities.AreEqual(expectedDuration, duration, "Async track duration is invalid.");
-
-            ITimeSpan genericDuration = expectedDuration is MidiTimeSpan
-                ? asyncTrack.GetDurationAsync<MidiTimeSpan>(tempoMap, cancellationToken: CancellationToken.None).Result
-                : (ITimeSpan)asyncTrack.GetDurationAsync<MetricTimeSpan>(tempoMap, cancellationToken: CancellationToken.None).Result;
-
-            TimeSpanTestUtilities.AreEqual(expectedDuration, genericDuration, "Generic async track duration is invalid.");
-        }
-
-        private void CheckDurationAsync(
-            IEnumerable<TrackChunk> tracks,
-            TempoMap tempoMap,
-            ITimeSpan expectedDuration)
-        {
-            var durationType = expectedDuration is MidiTimeSpan ? TimeSpanType.Midi : TimeSpanType.Metric;
-            var asyncTracks = tracks.Select(track => (TrackChunk)track?.Clone()).ToArray();
-            var duration = asyncTracks.GetDurationAsync(durationType, tempoMap, cancellationToken: CancellationToken.None).Result;
-            TimeSpanTestUtilities.AreEqual(expectedDuration, duration, "Async tracks duration is invalid.");
-
-            ITimeSpan genericDuration = expectedDuration is MidiTimeSpan
-                ? asyncTracks.GetDurationAsync<MidiTimeSpan>(tempoMap, cancellationToken: CancellationToken.None).Result
-                : (ITimeSpan)asyncTracks.GetDurationAsync<MetricTimeSpan>(tempoMap, cancellationToken: CancellationToken.None).Result;
-
-            TimeSpanTestUtilities.AreEqual(expectedDuration, genericDuration, "Generic async tracks duration is invalid.");
-
-            duration = InteractionAsyncTests.AsAsync(asyncTracks)
-                .GetDurationAsync(durationType, tempoMap, cancellationToken: CancellationToken.None).Result;
-
-            TimeSpanTestUtilities.AreEqual(expectedDuration, duration, "Async-source tracks duration is invalid.");
-
-            genericDuration = expectedDuration is MidiTimeSpan
-                ? InteractionAsyncTests.AsAsync(asyncTracks).GetDurationAsync<MidiTimeSpan>(tempoMap, cancellationToken: CancellationToken.None).Result
-                : (ITimeSpan)InteractionAsyncTests.AsAsync(asyncTracks).GetDurationAsync<MetricTimeSpan>(tempoMap, cancellationToken: CancellationToken.None).Result;
-
-            TimeSpanTestUtilities.AreEqual(expectedDuration, genericDuration, "Generic async-source tracks duration is invalid.");
-        }
 
         #endregion
     }

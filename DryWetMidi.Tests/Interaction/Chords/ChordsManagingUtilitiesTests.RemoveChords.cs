@@ -1200,23 +1200,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             ICollection<MidiEvent> midiEvents,
             Predicate<Chord> match,
             ICollection<MidiEvent> expectedMidiEvents,
-            int expectedRemovedCount,
-            bool useAsync = false,
-            ChordDetectionSettings settings = null,
-            NoteDetectionSettings noteDetectionSettings = null,
-            TimedEventDetectionSettings timedEventDetectionSettings = null)
+            int expectedRemovedCount)
         {
-            if (!useAsync && (containerType == ContainerType.EventsCollection || containerType == ContainerType.TrackChunk))
-            {
-                RemoveChords_EventsCollection_WithPredicate(
-                    containerType,
-                    midiEvents.Select(e => e.Clone()).ToArray(),
-                    match,
-                    expectedMidiEvents,
-                    expectedRemovedCount,
-                    useAsync: true);
-            }
-
             var eventsCollection = new EventsCollection();
             eventsCollection.AddRange(midiEvents);
 
@@ -1226,9 +1211,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     {
                         ClassicAssert.AreEqual(
                             expectedRemovedCount,
-                            useAsync
-                                ? eventsCollection.RemoveChordsAsync(match, settings, noteDetectionSettings, timedEventDetectionSettings, cancellationToken: System.Threading.CancellationToken.None).Result
-                                : eventsCollection.RemoveChords(match),
+                            eventsCollection.RemoveChords(match),
                             "Invalid count of removed chords.");
 
                         var expectedEventsCollection = new EventsCollection();
@@ -1245,9 +1228,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
                         ClassicAssert.AreEqual(
                             expectedRemovedCount,
-                            useAsync
-                                ? trackChunk.RemoveChordsAsync(match, settings, noteDetectionSettings, timedEventDetectionSettings, cancellationToken: System.Threading.CancellationToken.None).Result
-                                : trackChunk.RemoveChords(match),
+                            trackChunk.RemoveChords(match),
                             "Invalid count of removed chords.");
 
                         var expectedTrackChunk = new TrackChunk(expectedMidiEvents);
@@ -1274,25 +1255,12 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         private void RemoveChords_EventsCollection_WithoutPredicate(
             ContainerType containerType,
             ICollection<MidiEvent> midiEvents,
-            ICollection<MidiEvent> expectedMidiEvents,
-            bool useAsync = false,
-            ChordDetectionSettings settings = null,
-            NoteDetectionSettings noteDetectionSettings = null,
-            TimedEventDetectionSettings timedEventDetectionSettings = null)
+            ICollection<MidiEvent> expectedMidiEvents)
         {
-            if (!useAsync && (containerType == ContainerType.EventsCollection || containerType == ContainerType.TrackChunk))
-            {
-                RemoveChords_EventsCollection_WithoutPredicate(
-                    containerType,
-                    midiEvents.Select(e => e.Clone()).ToArray(),
-                    expectedMidiEvents,
-                    useAsync: true);
-            }
-
             var eventsCollection = new EventsCollection();
             eventsCollection.AddRange(midiEvents);
 
-            var chordsCount = eventsCollection.GetChords(settings, noteDetectionSettings, timedEventDetectionSettings).Count;
+            var chordsCount = eventsCollection.GetChords().Count;
 
             switch (containerType)
             {
@@ -1300,9 +1268,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     {
                         ClassicAssert.AreEqual(
                             chordsCount,
-                            useAsync
-                                ? eventsCollection.RemoveChordsAsync(settings, noteDetectionSettings, timedEventDetectionSettings, cancellationToken: System.Threading.CancellationToken.None).Result
-                                : eventsCollection.RemoveChords(),
+                            eventsCollection.RemoveChords(),
                             "Invalid count of removed chords.");
 
                         var expectedEventsCollection = new EventsCollection();
@@ -1320,9 +1286,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
                         ClassicAssert.AreEqual(
                             chordsCount,
-                            useAsync
-                                ? trackChunk.RemoveChordsAsync(settings, noteDetectionSettings, timedEventDetectionSettings, cancellationToken: System.Threading.CancellationToken.None).Result
-                                : trackChunk.RemoveChords(),
+                            trackChunk.RemoveChords(),
                             "Invalid count of removed chords.");
 
                         var expectedTrackChunk = new TrackChunk(expectedMidiEvents);
@@ -1349,23 +1313,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             ICollection<ICollection<MidiEvent>> midiEvents,
             Predicate<Chord> match,
             ICollection<ICollection<MidiEvent>> expectedMidiEvents,
-            int expectedRemovedCount,
-            bool useAsync = false,
-            ChordDetectionSettings settings = null,
-            NoteDetectionSettings noteDetectionSettings = null,
-            TimedEventDetectionSettings timedEventDetectionSettings = null)
+            int expectedRemovedCount)
         {
-            if (!useAsync)
-            {
-                RemoveChords_TrackChunks_WithPredicate(
-                    wrapToFile,
-                    midiEvents.Select(events => (ICollection<MidiEvent>)events.Select(e => e.Clone()).ToArray()).ToArray(),
-                    match,
-                    expectedMidiEvents,
-                    expectedRemovedCount,
-                    useAsync: true);
-            }
-
             var trackChunks = midiEvents.Select(e => new TrackChunk(e)).ToList();
 
             if (wrapToFile)
@@ -1374,9 +1323,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
                 ClassicAssert.AreEqual(
                     expectedRemovedCount,
-                    useAsync
-                        ? midiFile.RemoveChordsAsync(match, settings, noteDetectionSettings, timedEventDetectionSettings, cancellationToken: System.Threading.CancellationToken.None).Result
-                        : midiFile.RemoveChords(match),
+                    midiFile.RemoveChords(match),
                     "Invalid count of removed chords.");
 
                 MidiAsserts.AreEqual(new MidiFile(expectedMidiEvents.Select(e => new TrackChunk(e))), midiFile, false, "Events are invalid.");
@@ -1388,9 +1335,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             {
                 ClassicAssert.AreEqual(
                     expectedRemovedCount,
-                    useAsync
-                        ? trackChunks.RemoveChordsAsync(match, settings, noteDetectionSettings, timedEventDetectionSettings, cancellationToken: System.Threading.CancellationToken.None).Result
-                        : trackChunks.RemoveChords(match),
+                    trackChunks.RemoveChords(match),
                     "Invalid count of removed chords.");
 
                 MidiAsserts.AreEqual(expectedMidiEvents.Select(e => new TrackChunk(e)), trackChunks, true, "Events are invalid.");
@@ -1403,23 +1348,10 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         private void RemoveChords_TrackChunks_WithoutPredicate(
             bool wrapToFile,
             ICollection<ICollection<MidiEvent>> midiEvents,
-            ICollection<ICollection<MidiEvent>> expectedMidiEvents,
-            bool useAsync = false,
-            ChordDetectionSettings settings = null,
-            NoteDetectionSettings noteDetectionSettings = null,
-            TimedEventDetectionSettings timedEventDetectionSettings = null)
+            ICollection<ICollection<MidiEvent>> expectedMidiEvents)
         {
-            if (!useAsync)
-            {
-                RemoveChords_TrackChunks_WithoutPredicate(
-                    wrapToFile,
-                    midiEvents.Select(events => (ICollection<MidiEvent>)events.Select(e => e.Clone()).ToArray()).ToArray(),
-                    expectedMidiEvents,
-                    useAsync: true);
-            }
-
             var trackChunks = midiEvents.Select(e => new TrackChunk(e)).ToList();
-            var chordsCount = trackChunks.GetChords(settings, noteDetectionSettings, timedEventDetectionSettings).Count;
+            var chordsCount = trackChunks.GetChords().Count;
 
             if (wrapToFile)
             {
@@ -1427,9 +1359,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
                 ClassicAssert.AreEqual(
                     chordsCount,
-                    useAsync
-                        ? midiFile.RemoveChordsAsync(settings, noteDetectionSettings, timedEventDetectionSettings, cancellationToken: System.Threading.CancellationToken.None).Result
-                        : midiFile.RemoveChords(),
+                    midiFile.RemoveChords(),
                     "Invalid count of removed chords.");
 
                 MidiAsserts.AreEqual(new MidiFile(expectedMidiEvents.Select(e => new TrackChunk(e))), midiFile, false, "Events are invalid.");
@@ -1441,9 +1371,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             {
                 ClassicAssert.AreEqual(
                     chordsCount,
-                    useAsync
-                        ? trackChunks.RemoveChordsAsync(settings, noteDetectionSettings, timedEventDetectionSettings, cancellationToken: System.Threading.CancellationToken.None).Result
-                        : trackChunks.RemoveChords(),
+                    trackChunks.RemoveChords(),
                     "Invalid count of removed chords.");
 
                 MidiAsserts.AreEqual(expectedMidiEvents.Select(e => new TrackChunk(e)), trackChunks, true, "Events are invalid.");

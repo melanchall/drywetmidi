@@ -5,7 +5,6 @@ using NUnit.Framework.Legacy;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 
 namespace Melanchall.DryWetMidi.Tests.Tools
 {
@@ -238,28 +237,11 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             TempoMap tempoMap,
             QuantizingSettings settings,
             (long Min, long Max)[] expectedTimeRanges,
-            double unchangedMaxPercent = 0.7,
-            bool useAsync = false)
+            double unchangedMaxPercent = 0.7)
         {
-            if (!useAsync)
-            {
-                CheckRandomize(
-                    timedObjects.Select(obj => obj.Clone()).ToArray(),
-                    grid,
-                    tempoMap,
-                    settings,
-                    expectedTimeRanges,
-                    unchangedMaxPercent,
-                    true);
-            }
-
             var originalTimedEvents = timedObjects.GetObjects(ObjectType.TimedEvent).Select(obj => obj.Clone()).ToArray();
 
-            if (useAsync)
-                new Quantizer().QuantizeAsync(timedObjects, grid, tempoMap, settings, cancellationToken: CancellationToken.None).Wait();
-            else
-                new Quantizer().Quantize(timedObjects, grid, tempoMap, settings);
-
+            new Quantizer().Quantize(timedObjects, grid, tempoMap, settings);
             var actualTimedEvents = timedObjects.GetObjects(ObjectType.TimedEvent).ToArray();
 
             var timesForChangeCount = 0;

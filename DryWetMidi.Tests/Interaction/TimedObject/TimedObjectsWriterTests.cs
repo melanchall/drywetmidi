@@ -7,6 +7,7 @@ using NUnit.Framework.Legacy;
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace Melanchall.DryWetMidi.Tests.Interaction
 {
@@ -46,7 +47,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                         break;
                     default:
                         _writer.WriteObjectsAsync(
-                            InteractionAsyncTests.AsAsync(timedObjects),
+                            AsAsync(timedObjects),
                             cancellationToken: CancellationToken.None).Wait();
                         break;
                 }
@@ -58,6 +59,16 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     _writer.Dispose();
                 else
                     _writer.DisposeAsync().AsTask().Wait();
+            }
+
+            private static async IAsyncEnumerable<ITimedObject> AsAsync(IEnumerable<ITimedObject> items)
+            {
+                foreach (var item in items)
+                {
+                    await Task.Yield();
+
+                    yield return item;
+                }
             }
         }
 

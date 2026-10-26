@@ -1352,29 +1352,14 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             Predicate<ITimedObject> match,
             ICollection<MidiEvent> expectedMidiEvents,
             int expectedRemovedCount,
-            ObjectDetectionSettings settings = null,
-            bool useAsync = false)
+            ObjectDetectionSettings settings = null)
         {
-            if (!useAsync)
-            {
-                RemoveObjects_EventsCollection(
-                    objectType,
-                    InteractionAsyncTests.CloneEvents(midiEvents),
-                    match,
-                    expectedMidiEvents,
-                    expectedRemovedCount,
-                    settings,
-                    useAsync: true);
-            }
-
             var eventsCollection = new EventsCollection();
             eventsCollection.AddRange(midiEvents);
 
             ClassicAssert.AreEqual(
                 expectedRemovedCount,
-                useAsync
-                    ? eventsCollection.RemoveObjectsAsync(objectType, match, settings, cancellationToken: System.Threading.CancellationToken.None).Result
-                    : eventsCollection.RemoveObjects(objectType, match, settings),
+                eventsCollection.RemoveObjects(objectType, match, settings),
                 "Invalid count of removed objects for events collection.");
 
             var expectedEventsCollection = new EventsCollection();
@@ -1389,28 +1374,13 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             Predicate<ITimedObject> match,
             ICollection<MidiEvent> expectedMidiEvents,
             int expectedRemovedCount,
-            ObjectDetectionSettings settings = null,
-            bool useAsync = false)
+            ObjectDetectionSettings settings = null)
         {
-            if (!useAsync)
-            {
-                RemoveObjects_TrackChunk(
-                    objectType,
-                    InteractionAsyncTests.CloneEvents(midiEvents),
-                    match,
-                    expectedMidiEvents,
-                    expectedRemovedCount,
-                    settings,
-                    useAsync: true);
-            }
-
             var trackChunk = new TrackChunk(midiEvents);
 
             ClassicAssert.AreEqual(
                 expectedRemovedCount,
-                useAsync
-                    ? trackChunk.RemoveObjectsAsync(objectType, match, settings, cancellationToken: System.Threading.CancellationToken.None).Result
-                    : trackChunk.RemoveObjects(objectType, match, settings),
+                trackChunk.RemoveObjects(objectType, match, settings),
                 "Invalid count of removed objects for track chunk.");
 
             var expectedTrackChunk = new TrackChunk(expectedMidiEvents);
@@ -1424,28 +1394,13 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             Predicate<ITimedObject> match,
             ICollection<ICollection<MidiEvent>> expectedMidiEvents,
             int expectedRemovedCount,
-            ObjectDetectionSettings settings = null,
-            bool useAsync = false)
+            ObjectDetectionSettings settings = null)
         {
-            if (!useAsync)
-            {
-                RemoveObjects_TrackChunks(
-                    objectType,
-                    InteractionAsyncTests.CloneEvents(midiEvents),
-                    match,
-                    expectedMidiEvents,
-                    expectedRemovedCount,
-                    settings,
-                    useAsync: true);
-            }
-
             var trackChunks = midiEvents.Select(e => new TrackChunk(e)).ToList();
 
             ClassicAssert.AreEqual(
                 expectedRemovedCount,
-                useAsync
-                    ? trackChunks.RemoveObjectsAsync(objectType, match, settings, cancellationToken: System.Threading.CancellationToken.None).Result
-                    : trackChunks.RemoveObjects(objectType, match, settings),
+                trackChunks.RemoveObjects(objectType, match, settings),
                 "Invalid count of removed objects for track chunks.");
 
             MidiAsserts.AreEqual(expectedMidiEvents.Select(e => new TrackChunk(e)), trackChunks, true, "Track chunks are invalid.");
@@ -1458,28 +1413,13 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             Predicate<ITimedObject> match,
             ICollection<ICollection<MidiEvent>> expectedMidiEvents,
             int expectedRemovedCount,
-            ObjectDetectionSettings settings = null,
-            bool useAsync = false)
+            ObjectDetectionSettings settings = null)
         {
-            if (!useAsync)
-            {
-                RemoveObjects_File(
-                    objectType,
-                    InteractionAsyncTests.CloneEvents(midiEvents),
-                    match,
-                    expectedMidiEvents,
-                    expectedRemovedCount,
-                    settings,
-                    useAsync: true);
-            }
-
             var midiFile = new MidiFile(midiEvents.Select(e => new TrackChunk(e)));
 
             ClassicAssert.AreEqual(
                 expectedRemovedCount,
-                useAsync
-                    ? midiFile.RemoveObjectsAsync(objectType, match, settings, cancellationToken: System.Threading.CancellationToken.None).Result
-                    : midiFile.RemoveObjects(objectType, match, settings),
+                midiFile.RemoveObjects(objectType, match, settings),
                 "Invalid count of removed objects for file.");
 
             MidiAsserts.AreEqual(new MidiFile(expectedMidiEvents.Select(e => new TrackChunk(e))), midiFile, false, "File is invalid.");
@@ -1490,19 +1430,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             ObjectType objectType,
             ICollection<MidiEvent> midiEvents,
             ICollection<MidiEvent> expectedMidiEvents,
-            ObjectDetectionSettings settings = null,
-            bool useAsync = false)
+            ObjectDetectionSettings settings = null)
         {
-            if (!useAsync)
-            {
-                RemoveObjects_EventsCollection(
-                    objectType,
-                    InteractionAsyncTests.CloneEvents(midiEvents),
-                    expectedMidiEvents,
-                    settings,
-                    useAsync: true);
-            }
-
             var eventsCollection = new EventsCollection();
             eventsCollection.AddRange(midiEvents);
 
@@ -1510,9 +1439,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
             ClassicAssert.AreEqual(
                 expectedRemovedCount,
-                useAsync
-                    ? eventsCollection.RemoveObjectsAsync(objectType, settings, cancellationToken: System.Threading.CancellationToken.None).Result
-                    : eventsCollection.RemoveObjects(objectType, settings),
+                eventsCollection.RemoveObjects(objectType, settings),
                 "Invalid count of removed objects for events collection.");
 
             var expectedEventsCollection = new EventsCollection();
@@ -1525,27 +1452,14 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             ObjectType objectType,
             ICollection<MidiEvent> midiEvents,
             ICollection<MidiEvent> expectedMidiEvents,
-            ObjectDetectionSettings settings = null,
-            bool useAsync = false)
+            ObjectDetectionSettings settings = null)
         {
-            if (!useAsync)
-            {
-                RemoveObjects_TrackChunk(
-                    objectType,
-                    InteractionAsyncTests.CloneEvents(midiEvents),
-                    expectedMidiEvents,
-                    settings,
-                    useAsync: true);
-            }
-
             var trackChunk = new TrackChunk(midiEvents);
             var expectedRemovedCount = trackChunk.GetObjects(objectType, settings).Count;
 
             ClassicAssert.AreEqual(
                 expectedRemovedCount,
-                useAsync
-                    ? trackChunk.RemoveObjectsAsync(objectType, settings, cancellationToken: System.Threading.CancellationToken.None).Result
-                    : trackChunk.RemoveObjects(objectType, settings),
+                trackChunk.RemoveObjects(objectType, settings),
                 "Invalid count of removed objects for track chunk.");
 
             var expectedTrackChunk = new TrackChunk(expectedMidiEvents);
@@ -1557,27 +1471,14 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             ObjectType objectType,
             ICollection<ICollection<MidiEvent>> midiEvents,
             ICollection<ICollection<MidiEvent>> expectedMidiEvents,
-            ObjectDetectionSettings settings = null,
-            bool useAsync = false)
+            ObjectDetectionSettings settings = null)
         {
-            if (!useAsync)
-            {
-                RemoveObjects_TrackChunks(
-                    objectType,
-                    InteractionAsyncTests.CloneEvents(midiEvents),
-                    expectedMidiEvents,
-                    settings,
-                    useAsync: true);
-            }
-
             var trackChunks = midiEvents.Select(e => new TrackChunk(e)).ToList();
             var expectedRemovedCount = trackChunks.GetObjects(objectType, settings).Count;
 
             ClassicAssert.AreEqual(
                 expectedRemovedCount,
-                useAsync
-                    ? trackChunks.RemoveObjectsAsync(objectType, settings, cancellationToken: System.Threading.CancellationToken.None).Result
-                    : trackChunks.RemoveObjects(objectType, settings),
+                trackChunks.RemoveObjects(objectType, settings),
                 "Invalid count of removed objects for track chunks.");
 
             MidiAsserts.AreEqual(expectedMidiEvents.Select(e => new TrackChunk(e)), trackChunks, true, "Track chunks are invalid.");
@@ -1588,27 +1489,14 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             ObjectType objectType,
             ICollection<ICollection<MidiEvent>> midiEvents,
             ICollection<ICollection<MidiEvent>> expectedMidiEvents,
-            ObjectDetectionSettings settings = null,
-            bool useAsync = false)
+            ObjectDetectionSettings settings = null)
         {
-            if (!useAsync)
-            {
-                RemoveObjects_File(
-                    objectType,
-                    InteractionAsyncTests.CloneEvents(midiEvents),
-                    expectedMidiEvents,
-                    settings,
-                    useAsync: true);
-            }
-
             var midiFile = new MidiFile(midiEvents.Select(e => new TrackChunk(e)));
             var expectedRemovedCount = midiFile.GetObjects(objectType, settings).Count;
 
             ClassicAssert.AreEqual(
                 expectedRemovedCount,
-                useAsync
-                    ? midiFile.RemoveObjectsAsync(objectType, settings, cancellationToken: System.Threading.CancellationToken.None).Result
-                    : midiFile.RemoveObjects(objectType, settings),
+                midiFile.RemoveObjects(objectType, settings),
                 "Invalid count of removed objects for file.");
 
             MidiAsserts.AreEqual(new MidiFile(expectedMidiEvents.Select(e => new TrackChunk(e))), midiFile, false, "File is invalid.");

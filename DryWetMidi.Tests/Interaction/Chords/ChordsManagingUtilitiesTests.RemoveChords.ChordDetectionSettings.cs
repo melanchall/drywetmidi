@@ -652,20 +652,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             NoteDetectionSettings noteDetectionSettings = null,
             TimedEventDetectionSettings timedEventDetectionSettings = null)
         {
-            if (containerType == ContainerType.EventsCollection || containerType == ContainerType.TrackChunk)
-            {
-                RemoveChords_EventsCollection_WithPredicate(
-                    containerType,
-                    midiEvents.Select(e => e.Clone()).ToArray(),
-                    match,
-                    expectedMidiEvents,
-                    expectedRemovedCount,
-                    useAsync: true,
-                    settings: settings,
-                    noteDetectionSettings: noteDetectionSettings,
-                    timedEventDetectionSettings: timedEventDetectionSettings);
-            }
-
             var eventsCollection = new EventsCollection();
             eventsCollection.AddRange(midiEvents);
 
@@ -725,16 +711,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             ICollection<MidiEvent> midiEvents,
             ICollection<MidiEvent> expectedMidiEvents)
         {
-            if (containerType == ContainerType.EventsCollection || containerType == ContainerType.TrackChunk)
-            {
-                RemoveChords_EventsCollection_WithoutPredicate(
-                    containerType,
-                    midiEvents.Select(e => e.Clone()).ToArray(),
-                    expectedMidiEvents,
-                    useAsync: true,
-                    settings: settings);
-            }
-
             var eventsCollection = new EventsCollection();
             eventsCollection.AddRange(midiEvents);
 
@@ -797,17 +773,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             NoteDetectionSettings noteDetectionSettings = null,
             TimedEventDetectionSettings timedEventDetectionSettings = null)
         {
-            RemoveChords_TrackChunks_WithPredicate(
-                wrapToFile,
-                midiEvents.Select(events => (ICollection<MidiEvent>)events.Select(e => e.Clone()).ToArray()).ToArray(),
-                match,
-                expectedMidiEvents,
-                expectedRemovedCount,
-                useAsync: true,
-                settings: settings,
-                noteDetectionSettings: noteDetectionSettings,
-                timedEventDetectionSettings: timedEventDetectionSettings);
-
             var trackChunks = midiEvents.Select(e => new TrackChunk(e)).ToList();
 
             if (wrapToFile)
@@ -844,13 +809,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             ICollection<ICollection<MidiEvent>> midiEvents,
             ICollection<ICollection<MidiEvent>> expectedMidiEvents)
         {
-            RemoveChords_TrackChunks_WithoutPredicate(
-                wrapToFile,
-                midiEvents.Select(events => (ICollection<MidiEvent>)events.Select(e => e.Clone()).ToArray()).ToArray(),
-                expectedMidiEvents,
-                useAsync: true,
-                settings: settings);
-
             var trackChunks = midiEvents.Select(e => new TrackChunk(e)).ToList();
             var chordsCount = trackChunks.GetChords(settings).Count;
 

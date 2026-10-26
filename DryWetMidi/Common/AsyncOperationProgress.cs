@@ -5,15 +5,16 @@ namespace Melanchall.DryWetMidi.Common
     /// and a total is not inferred by enumerating an input sequence.
     /// </summary>
     /// <remarks>
-    /// MIDI I/O reports bytes read from or written to the transport. CPU-bound operations
-    /// report work checkpoints, including internal algorithm steps; these counts are not
-    /// a reliable number of processed notes or output objects. Reports are throttled, so
+    /// MIDI I/O reports bytes read from or written to the transport. CSV I/O reports
+    /// work checkpoints for records and object processing, not bytes or a reliable count
+    /// of processed notes. Timed-object writers report accepted input objects, not emitted
+    /// MIDI events. Reports are throttled, so
     /// not every checkpoint produces a notification. Successful completion produces a
     /// final report with <see cref="IsCompleted"/> set to <c>true</c>.
     /// </remarks>
     /// <example>
     /// The following asynchronous method reads a complete MIDI file, then writes it
-    /// to a different path, reporting transported bytes separately for each operation.
+    /// to a different path, reporting transported bytes separately for each operation:
     /// <code language="csharp"><![CDATA[
     /// using System;
     /// using System.Threading.Tasks;
@@ -59,9 +60,9 @@ namespace Melanchall.DryWetMidi.Common
         }
 
         /// <summary>
-        /// Gets the number of processed work items. A work item can represent an event,
-        /// object, chunk, or algorithm checkpoint; this is not necessarily a count of
-        /// processed notes or output objects. For MIDI I/O, the unit is transported bytes.
+        /// Gets the number of processed work items: transported bytes for MIDI I/O,
+        /// record/object work checkpoints for CSV I/O, or accepted input objects for
+        /// timed-object writers. CSV checkpoints are not a count of processed notes.
         /// </summary>
         public long ProcessedItems { get; }
 

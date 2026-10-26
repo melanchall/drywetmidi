@@ -1235,32 +1235,14 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             int expectedProcessedCount,
             ObjectDetectionSettings settings,
             ObjectProcessingHint hint,
-            bool newReferencesAllowed,
-            bool useAsync = false)
+            bool newReferencesAllowed)
         {
-            if (!useAsync)
-            {
-                ProcessObjects_EventsCollection(
-                    objectType,
-                    InteractionAsyncTests.CloneEvents(midiEvents),
-                    match,
-                    action,
-                    expectedMidiEvents,
-                    expectedProcessedCount,
-                    settings,
-                    hint,
-                    newReferencesAllowed,
-                    useAsync: true);
-            }
-
             var eventsCollection = new EventsCollection();
             eventsCollection.AddRange(midiEvents);
 
             ClassicAssert.AreEqual(
                 expectedProcessedCount,
-                useAsync
-                    ? eventsCollection.ProcessObjectsAsync(objectType, action, match, settings, hint, cancellationToken: System.Threading.CancellationToken.None).Result
-                    : eventsCollection.ProcessObjects(objectType, action, match, settings, hint),
+                eventsCollection.ProcessObjects(objectType, action, match, settings, hint),
                 "Invalid count of processed objects for events collection.");
 
             var expectedEventsCollection = new EventsCollection();
@@ -1280,31 +1262,13 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             int expectedProcessedCount,
             ObjectDetectionSettings settings,
             ObjectProcessingHint hint,
-            bool newReferencesAllowed,
-            bool useAsync = false)
+            bool newReferencesAllowed)
         {
-            if (!useAsync)
-            {
-                ProcessObjects_TrackChunk(
-                    objectType,
-                    InteractionAsyncTests.CloneEvents(midiEvents),
-                    match,
-                    action,
-                    expectedMidiEvents,
-                    expectedProcessedCount,
-                    settings,
-                    hint,
-                    newReferencesAllowed,
-                    useAsync: true);
-            }
-
             var trackChunk = new TrackChunk(midiEvents);
 
             ClassicAssert.AreEqual(
                 expectedProcessedCount,
-                useAsync
-                    ? trackChunk.ProcessObjectsAsync(objectType, action, match, settings, hint, cancellationToken: System.Threading.CancellationToken.None).Result
-                    : trackChunk.ProcessObjects(objectType, action, match, settings, hint),
+                trackChunk.ProcessObjects(objectType, action, match, settings, hint),
                 "Invalid count of processed objects for track chunk.");
 
             var expectedTrackChunk = new TrackChunk(expectedMidiEvents);
@@ -1323,31 +1287,13 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             int expectedProcessedCount,
             ObjectDetectionSettings settings,
             ObjectProcessingHint hint,
-            bool newReferencesAllowed,
-            bool useAsync = false)
+            bool newReferencesAllowed)
         {
-            if (!useAsync)
-            {
-                ProcessObjects_TrackChunks(
-                    objectType,
-                    InteractionAsyncTests.CloneEvents(midiEvents),
-                    match,
-                    action,
-                    expectedMidiEvents,
-                    expectedProcessedCount,
-                    settings,
-                    hint,
-                    newReferencesAllowed,
-                    useAsync: true);
-            }
-
             var trackChunks = midiEvents.Select(e => new TrackChunk(e)).ToList();
 
             ClassicAssert.AreEqual(
                 expectedProcessedCount,
-                useAsync
-                    ? trackChunks.ProcessObjectsAsync(objectType, action, match, settings, hint, cancellationToken: System.Threading.CancellationToken.None).Result
-                    : trackChunks.ProcessObjects(objectType, action, match, settings, hint),
+                trackChunks.ProcessObjects(objectType, action, match, settings, hint),
                 "Invalid count of processed objects for track chunks.");
 
             MidiAsserts.AreEqual(expectedMidiEvents.Select(e => new TrackChunk(e)), trackChunks, true, "Track chunks are invalid.");
@@ -1365,31 +1311,13 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             int expectedProcessedCount,
             ObjectDetectionSettings settings,
             ObjectProcessingHint hint,
-            bool newReferencesAllowed,
-            bool useAsync = false)
+            bool newReferencesAllowed)
         {
-            if (!useAsync)
-            {
-                ProcessObjects_File(
-                    objectType,
-                    InteractionAsyncTests.CloneEvents(midiEvents),
-                    match,
-                    action,
-                    expectedMidiEvents,
-                    expectedProcessedCount,
-                    settings,
-                    hint,
-                    newReferencesAllowed,
-                    useAsync: true);
-            }
-
             var midiFile = new MidiFile(midiEvents.Select(e => new TrackChunk(e)));
 
             ClassicAssert.AreEqual(
                 expectedProcessedCount,
-                useAsync
-                    ? midiFile.ProcessObjectsAsync(objectType, action, match, settings, hint, cancellationToken: System.Threading.CancellationToken.None).Result
-                    : midiFile.ProcessObjects(objectType, action, match, settings, hint),
+                midiFile.ProcessObjects(objectType, action, match, settings, hint),
                 "Invalid count of processed objects for file.");
 
             MidiAsserts.AreEqual(new MidiFile(expectedMidiEvents.Select(e => new TrackChunk(e))), midiFile, false, "File is invalid.");
@@ -1405,22 +1333,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             ICollection<MidiEvent> expectedMidiEvents,
             ObjectDetectionSettings settings,
             ObjectProcessingHint hint,
-            bool newReferencesAllowed,
-            bool useAsync = false)
+            bool newReferencesAllowed)
         {
-            if (!useAsync)
-            {
-                ProcessObjects_EventsCollection(
-                    objectType,
-                    InteractionAsyncTests.CloneEvents(midiEvents),
-                    action,
-                    expectedMidiEvents,
-                    settings,
-                    hint,
-                    newReferencesAllowed,
-                    useAsync: true);
-            }
-
             var eventsCollection = new EventsCollection();
             eventsCollection.AddRange(midiEvents);
 
@@ -1428,9 +1342,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
             ClassicAssert.AreEqual(
                 expectedProcessedCount,
-                useAsync
-                    ? eventsCollection.ProcessObjectsAsync(objectType, action, settings, hint, cancellationToken: System.Threading.CancellationToken.None).Result
-                    : eventsCollection.ProcessObjects(objectType, action, settings, hint),
+                eventsCollection.ProcessObjects(objectType, action, settings, hint),
                 "Invalid count of processed objects for events collection.");
 
             var expectedEventsCollection = new EventsCollection();
@@ -1448,30 +1360,14 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             ICollection<MidiEvent> expectedMidiEvents,
             ObjectDetectionSettings settings,
             ObjectProcessingHint hint,
-            bool newReferencesAllowed,
-            bool useAsync = false)
+            bool newReferencesAllowed)
         {
-            if (!useAsync)
-            {
-                ProcessObjects_TrackChunk(
-                    objectType,
-                    InteractionAsyncTests.CloneEvents(midiEvents),
-                    action,
-                    expectedMidiEvents,
-                    settings,
-                    hint,
-                    newReferencesAllowed,
-                    useAsync: true);
-            }
-
             var trackChunk = new TrackChunk(midiEvents);
             var expectedProcessedCount = trackChunk.GetObjects(objectType, settings).Count;
 
             ClassicAssert.AreEqual(
                 expectedProcessedCount,
-                useAsync
-                    ? trackChunk.ProcessObjectsAsync(objectType, action, settings, hint, cancellationToken: System.Threading.CancellationToken.None).Result
-                    : trackChunk.ProcessObjects(objectType, action, settings, hint),
+                trackChunk.ProcessObjects(objectType, action, settings, hint),
                 "Invalid count of processed objects for track chunk.");
 
             var expectedTrackChunk = new TrackChunk(expectedMidiEvents);
@@ -1488,30 +1384,14 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             ICollection<ICollection<MidiEvent>> expectedMidiEvents,
             ObjectDetectionSettings settings,
             ObjectProcessingHint hint,
-            bool newReferencesAllowed,
-            bool useAsync = false)
+            bool newReferencesAllowed)
         {
-            if (!useAsync)
-            {
-                ProcessObjects_TrackChunks(
-                    objectType,
-                    InteractionAsyncTests.CloneEvents(midiEvents),
-                    action,
-                    expectedMidiEvents,
-                    settings,
-                    hint,
-                    newReferencesAllowed,
-                    useAsync: true);
-            }
-
             var trackChunks = midiEvents.Select(e => new TrackChunk(e)).ToList();
             var expectedProcessedCount = trackChunks.GetObjects(objectType, settings).Count;
 
             ClassicAssert.AreEqual(
                 expectedProcessedCount,
-                useAsync
-                    ? trackChunks.ProcessObjectsAsync(objectType, action, settings, hint, cancellationToken: System.Threading.CancellationToken.None).Result
-                    : trackChunks.ProcessObjects(objectType, action, settings, hint),
+                trackChunks.ProcessObjects(objectType, action, settings, hint),
                 "Invalid count of processed objects for track chunks.");
 
             MidiAsserts.AreEqual(expectedMidiEvents.Select(e => new TrackChunk(e)), trackChunks, true, "Track chunks are invalid.");
@@ -1527,30 +1407,14 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             ICollection<ICollection<MidiEvent>> expectedMidiEvents,
             ObjectDetectionSettings settings,
             ObjectProcessingHint hint,
-            bool newReferencesAllowed,
-            bool useAsync = false)
+            bool newReferencesAllowed)
         {
-            if (!useAsync)
-            {
-                ProcessObjects_File(
-                    objectType,
-                    InteractionAsyncTests.CloneEvents(midiEvents),
-                    action,
-                    expectedMidiEvents,
-                    settings,
-                    hint,
-                    newReferencesAllowed,
-                    useAsync: true);
-            }
-
             var midiFile = new MidiFile(midiEvents.Select(e => new TrackChunk(e)));
             var expectedProcessedCount = midiFile.GetObjects(objectType, settings).Count;
 
             ClassicAssert.AreEqual(
                 expectedProcessedCount,
-                useAsync
-                    ? midiFile.ProcessObjectsAsync(objectType, action, settings, hint, cancellationToken: System.Threading.CancellationToken.None).Result
-                    : midiFile.ProcessObjects(objectType, action, settings, hint),
+                midiFile.ProcessObjects(objectType, action, settings, hint),
                 "Invalid count of processed objects for file.");
 
             MidiAsserts.AreEqual(new MidiFile(expectedMidiEvents.Select(e => new TrackChunk(e))), midiFile, false, "File is invalid.");

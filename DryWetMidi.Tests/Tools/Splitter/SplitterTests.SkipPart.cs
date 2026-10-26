@@ -17,7 +17,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         public void SkipPart_EmptyFile()
         {
             var midiFile = new MidiFile();
-            var result = SkipPart(midiFile, MusicalTimeSpan.Eighth);
+            var result = midiFile.SkipPart(MusicalTimeSpan.Eighth);
 
             ClassicAssert.IsTrue(result.IsEmpty(), "Empty file part skipping produced non-empty result.");
         }
@@ -45,7 +45,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 PreserveTimes = false
             };
 
-            var result = SkipPart(midiFile, partLength, settings);
+            var result = midiFile.SkipPart(partLength, settings);
 
             CompareTimedEvents(
                 result.GetTimedEvents(),
@@ -82,7 +82,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 PreserveTimes = true
             };
 
-            var result = SkipPart(midiFile, partLength, settings);
+            var result = midiFile.SkipPart(partLength, settings);
 
             CompareTimedEvents(
                 result.GetTimedEvents(),
@@ -118,7 +118,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 PreserveTimes = false
             };
 
-            var result = SkipPart(midiFile, partLength, settings);
+            var result = midiFile.SkipPart(partLength, settings);
 
             CompareTimedEvents(
                 result.GetTimedEvents(),
@@ -150,7 +150,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 PreserveTimes = false
             };
 
-            var result = SkipPart(midiFile, partLength, settings);
+            var result = midiFile.SkipPart(partLength, settings);
 
             CompareTimedEvents(
                 result.GetTimedEvents(),
@@ -183,7 +183,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 PreserveTrackChunks = preserveTrackChunks
             };
 
-            var result = SkipPart(midiFile, partLength, settings);
+            var result = midiFile.SkipPart(partLength, settings);
             ClassicAssert.AreEqual(preserveTrackChunks ? 2 : 1, result.GetTrackChunks().Count(), "Track chunks count of resulting file is invalid.");
 
             if (preserveTrackChunks)

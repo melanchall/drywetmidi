@@ -5,7 +5,6 @@ using Melanchall.DryWetMidi.Tools;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Melanchall.DryWetMidi.Tests.Tools
 {
@@ -451,10 +450,6 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             ObjectsGroupResizingSettings settings,
             ICollection<ITimedObject> expectedObjects)
         {
-            var asyncObjects = timedObjects.Select(obj => obj?.Clone()).ToArray();
-            asyncObjects.ResizeObjectsGroupAsync(length, tempoMap, settings, cancellationToken: System.Threading.CancellationToken.None).Wait();
-            MidiAsserts.AreEqual(expectedObjects, asyncObjects, "Invalid asynchronously resized objects.");
-
             timedObjects.ResizeObjectsGroup(length, tempoMap, settings);
             MidiAsserts.AreEqual(expectedObjects, timedObjects, "Invalid objects.");
         }
@@ -477,10 +472,6 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             ObjectsGroupResizingSettings settings,
             ICollection<ITimedObject> expectedObjects)
         {
-            var asyncObjects = timedObjects.Select(obj => obj?.Clone()).ToArray();
-            asyncObjects.ResizeObjectsGroupAsync(ratio, tempoMap, settings, cancellationToken: System.Threading.CancellationToken.None).Wait();
-            MidiAsserts.AreEqual(expectedObjects, asyncObjects, "Invalid asynchronously resized objects.");
-
             timedObjects.ResizeObjectsGroup(ratio, tempoMap, settings);
             MidiAsserts.AreEqual(expectedObjects, timedObjects, "Invalid objects.");
         }

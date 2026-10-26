@@ -344,10 +344,6 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 midiFile.TimeDivision = timeDivision;
 
             var midiFilesByChunks = midiFile.SplitByChunks(settings).ToList();
-            var asyncFiles = ToolsAsyncTests.Collect(midiFile.Clone().SplitByChunksAsync(
-                settings,
-                cancellationToken: System.Threading.CancellationToken.None)).Result;
-            MidiAsserts.AreEqual(midiFilesByChunks, asyncFiles, false, "Invalid asynchronously split files.");
 
             ClassicAssert.AreEqual(expectedFiles.Count, midiFilesByChunks.Count, "Invalid count of new files.");
 

@@ -2,11 +2,8 @@
 using Melanchall.DryWetMidi.Tests.Utilities;
 using Melanchall.DryWetMidi.Tools;
 using NUnit.Framework;
-using NUnit.Framework.Legacy;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
 
 namespace Melanchall.DryWetMidi.Tests.Tools
 {
@@ -120,27 +117,8 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             QuantizingSettings settings,
             ICollection<ITimedObject> expectedObjects)
         {
-            var asyncObjects = timedObjects.Select(obj => obj?.Clone()).ToArray();
-
-            try
-            {
-                quantizer.Quantize(timedObjects, grid, tempoMap, settings);
-            }
-            catch (Exception exception)
-            {
-                var aggregate = Assert.Throws<AggregateException>(() =>
-                    quantizer.QuantizeAsync(asyncObjects, grid, tempoMap, settings, cancellationToken: CancellationToken.None).Wait(), "Async quantizing did not throw.");
-
-                ClassicAssert.AreEqual(exception.GetType(), aggregate.InnerException.GetType(), "Async quantizing exception type differs.");
-
-                throw;
-            }
-
+            quantizer.Quantize(timedObjects, grid, tempoMap, settings);
             MidiAsserts.AreEqual(expectedObjects, timedObjects, "Invalid quantized objects.");
-
-            quantizer.QuantizeAsync(asyncObjects, grid, tempoMap, settings, cancellationToken: CancellationToken.None).Wait();
-
-            MidiAsserts.AreEqual(expectedObjects, asyncObjects, "Invalid asynchronously quantized objects.");
         }
 
         #endregion

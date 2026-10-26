@@ -1,6 +1,7 @@
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
+using Melanchall.DryWetMidi.Tests.Utilities;
 using Melanchall.DryWetMidi.Tools;
 using NUnit.Framework;
 using NUnit.Framework.Legacy;
@@ -15,6 +16,69 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 {
     public sealed partial class ToolsAsyncTests
     {
+        [Test]
+        public void Csv_ImmediatelyCompletedIo_DoesNotRequireWorker([Values] bool writing)
+        {
+            using var expected = new MemoryStream();
+            CreateFile().SerializeToCsv(expected);
+
+            Exception failure = null;
+            var callingThreadId = 0;
+            var firstIoThreadId = 0;
+            var ioStayedOnCallingThread = true;
+            var thread = new Thread(() =>
+            {
+                try
+                {
+                    callingThreadId = Thread.CurrentThread.ManagedThreadId;
+
+                    void ObserveIo()
+                    {
+                        var currentThreadId = Thread.CurrentThread.ManagedThreadId;
+
+                        if (firstIoThreadId == 0)
+                            firstIoThreadId = currentThreadId;
+
+                        ioStayedOnCallingThread &= currentThreadId == callingThreadId;
+                    }
+
+                    using var stream = new AsyncOnlyStream(writing ? null : expected.ToArray())
+                    {
+                        CompleteSynchronously = true,
+                        OnRead = ObserveIo,
+                        OnWrite = ObserveIo
+                    };
+
+                    if (writing)
+                    {
+                        CreateFile().SerializeToCsvAsync(stream).GetAwaiter().GetResult();
+
+                        ClassicAssert.AreEqual(expected.ToArray(), stream.ToArray(), "Inline CSV export differs from synchronous output.");
+                    }
+                    else
+                    {
+                        var restored = CsvSerializer.DeserializeFileFromCsvAsync(stream).GetAwaiter().GetResult();
+
+                        MidiAsserts.AreEqual(CreateFile(), restored, false, "Inline CSV import differs from the original MIDI file.");
+                    }
+                }
+                catch (Exception exception)
+                {
+                    failure = exception;
+                }
+            })
+            {
+                IsBackground = true
+            };
+
+            thread.Start();
+
+            ClassicAssert.IsTrue(thread.Join(TimeSpan.FromSeconds(10)), "Immediately completed CSV I/O did not finish.");
+            ClassicAssert.IsNull(failure, $"Immediately completed CSV I/O failed: {failure}");
+            ClassicAssert.AreEqual(callingThreadId, firstIoThreadId, "CSV moved to a worker before its first transport operation.");
+            ClassicAssert.IsTrue(ioStayedOnCallingThread, "CSV scheduled a worker despite synchronously completed transport operations.");
+        }
+
         [Test]
         public async Task Csv_StreamOverloads_OnlyUseAsyncIo([Values(0, 1, 2, 3)] int family)
         {

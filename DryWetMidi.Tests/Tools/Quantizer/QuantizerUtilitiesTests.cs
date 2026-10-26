@@ -7,7 +7,6 @@ using NUnit.Framework;
 using NUnit.Framework.Legacy;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 
 namespace Melanchall.DryWetMidi.Tests.Tools
 {
@@ -377,30 +376,6 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             ObjectDetectionSettings objectDetectionSettings,
             ICollection<TimedEvent> expectedEvents)
         {
-            foreach (var customQuantizer in new[] { false, true })
-            {
-                var asyncTrack = events.Select(e => e.Clone()).ToTrackChunk();
-                var trackTask = customQuantizer
-                    ? asyncTrack.QuantizeObjectsAsync(new Quantizer(), objectType, grid, tempoMap, settings, objectDetectionSettings, cancellationToken: CancellationToken.None)
-                    : asyncTrack.QuantizeObjectsAsync(objectType, grid, tempoMap, settings, objectDetectionSettings, cancellationToken: CancellationToken.None);
-                trackTask.Wait();
-                MidiAsserts.AreEqual(expectedEvents.ToTrackChunk(), asyncTrack, true, "Invalid asynchronous track quantization.");
-
-                var asyncTracks = new[] { events.Select(e => e.Clone()).ToTrackChunk() };
-                var tracksTask = customQuantizer
-                    ? asyncTracks.QuantizeObjectsAsync(new Quantizer(), objectType, grid, tempoMap, settings, objectDetectionSettings, cancellationToken: CancellationToken.None)
-                    : asyncTracks.QuantizeObjectsAsync(objectType, grid, tempoMap, settings, objectDetectionSettings, cancellationToken: CancellationToken.None);
-                tracksTask.Wait();
-                MidiAsserts.AreEqual(new[] { expectedEvents.ToTrackChunk() }, asyncTracks, true, "Invalid asynchronous tracks quantization.");
-
-                var asyncFile = events.Select(e => e.Clone()).ToFile();
-                var fileTask = customQuantizer
-                    ? asyncFile.QuantizeObjectsAsync(new Quantizer(), objectType, grid, settings, objectDetectionSettings, cancellationToken: CancellationToken.None)
-                    : asyncFile.QuantizeObjectsAsync(objectType, grid, settings, objectDetectionSettings, cancellationToken: CancellationToken.None);
-                fileTask.Wait();
-                MidiAsserts.AreEqual(expectedEvents.ToFile(), asyncFile, true, "Invalid asynchronous file quantization.");
-            }
-
             var trackChunk = events.ToTrackChunk();
             trackChunk.QuantizeObjects(objectType, grid, tempoMap, settings, objectDetectionSettings);
             MidiAsserts.AreEqual(expectedEvents.ToTrackChunk(), trackChunk, true, "Invalid quantized objects in track chunk.");
@@ -428,23 +403,6 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             ICollection<ICollection<TimedEvent>> expectedEvents)
         {
             ClassicAssert.Greater(events.Count, 1, "Invalid events collections count.");
-
-            foreach (var customQuantizer in new[] { false, true })
-            {
-                var asyncTracks = events.Select(e => e.Select(obj => obj.Clone()).ToTrackChunk()).ToArray();
-                var tracksTask = customQuantizer
-                    ? asyncTracks.QuantizeObjectsAsync(new Quantizer(), objectType, grid, tempoMap, settings, objectDetectionSettings, cancellationToken: CancellationToken.None)
-                    : asyncTracks.QuantizeObjectsAsync(objectType, grid, tempoMap, settings, objectDetectionSettings, cancellationToken: CancellationToken.None);
-                tracksTask.Wait();
-                MidiAsserts.AreEqual(expectedEvents.Select(e => e.ToTrackChunk()).ToArray(), asyncTracks, true, "Invalid asynchronous tracks quantization.");
-
-                var asyncFile = new MidiFile(events.Select(e => e.Select(obj => obj.Clone()).ToTrackChunk()));
-                var fileTask = customQuantizer
-                    ? asyncFile.QuantizeObjectsAsync(new Quantizer(), objectType, grid, settings, objectDetectionSettings, cancellationToken: CancellationToken.None)
-                    : asyncFile.QuantizeObjectsAsync(objectType, grid, settings, objectDetectionSettings, cancellationToken: CancellationToken.None);
-                fileTask.Wait();
-                MidiAsserts.AreEqual(new MidiFile(expectedEvents.Select(e => e.ToTrackChunk())), asyncFile, true, "Invalid asynchronous file quantization.");
-            }
 
             //
 

@@ -12,7 +12,7 @@ namespace Melanchall.DryWetMidi.Tools
     /// <see href="xref:a_quantizer">Quantizer</see> article.
     /// </summary>
     /// <seealso cref="Quantizer"/>
-    public static partial class QuantizerUtilities
+    public static class QuantizerUtilities
     {
         #region Methods
 
@@ -200,8 +200,6 @@ namespace Melanchall.DryWetMidi.Tools
 
             foreach (var trackChunk in trackChunks.OfType<TrackChunk>())
             {
-                AsyncOperation.Checkpoint();
-
                 trackChunk.QuantizeObjects(quantizer, objectType, grid, tempoMap, quantizerSettings, objectDetectionSettings);
             }
         }

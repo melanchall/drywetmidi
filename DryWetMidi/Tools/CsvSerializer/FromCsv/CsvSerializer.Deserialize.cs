@@ -352,8 +352,6 @@ namespace Melanchall.DryWetMidi.Tools
 
             while ((record = ReadRecord(reader, readChunkId)) != null)
             {
-                AsyncOperation.Checkpoint();
-
                 var lineNumber = record.CsvRecord.LineNumber;
 
                 var recordType = GetRecordType(record.RecordType, lineNumber, settings.UnknownRecordPolicy);
@@ -411,8 +409,6 @@ namespace Melanchall.DryWetMidi.Tools
 
             while ((record = ReadRecord(reader, readChunkId)) != null)
             {
-                AsyncOperation.Checkpoint();
-
                 var lineNumber = record.CsvRecord.LineNumber;
 
                 var recordType = GetRecordType(record.RecordType, lineNumber, settings.UnknownRecordPolicy);
@@ -472,13 +468,16 @@ namespace Melanchall.DryWetMidi.Tools
 
         private static ICollection<ICollection<ITimedObject>> GetTimedObjects(
             ICollection<CsvObject> objects,
-            TempoMap tempoMap)
+            TempoMap tempoMap,
+            CsvOperation? operation = null)
         {
             return objects
                 .GroupBy(obj => obj.ChunkIndex)
                 .Select(g => g
                     .Select(obj =>
                     {
+                        operation?.Checkpoint();
+
                         var csvEvent = obj as CsvEvent;
                         if (csvEvent != null)
                             return new TimedEvent(csvEvent.Event).SetTime(csvEvent.Time, tempoMap);
@@ -488,9 +487,19 @@ namespace Melanchall.DryWetMidi.Tools
                         {
                             var notes = csvChord
                                 .Notes
-                                .Select(n => new Note(n.NoteNumber) { Channel = n.Channel, Velocity = n.Velocity, OffVelocity = n.OffVlocity }
+                                .Select(n =>
+                                {
+                                    operation?.Checkpoint();
+
+                                    return new Note(n.NoteNumber)
+                                    {
+                                        Channel = n.Channel,
+                                        Velocity = n.Velocity,
+                                        OffVelocity = n.OffVlocity
+                                    }
                                     .SetTime(n.Time, tempoMap)
-                                    .SetLength(n.Length, tempoMap))
+                                    .SetLength(n.Length, tempoMap);
+                                })
                                 .ToArray();
 
                             if (notes.Length == 1)
@@ -727,7 +736,10 @@ namespace Melanchall.DryWetMidi.Tools
             return length!;
         }
 
-        private static TempoMap GetTempoMap(ICollection<CsvObject> objects, TimeDivision timeDivision)
+        private static TempoMap GetTempoMap(
+            ICollection<CsvObject> objects,
+            TimeDivision timeDivision,
+            CsvOperation? operation = null)
         {
             using (var tempoMapManager = new TempoMapManager(timeDivision))
             {
@@ -738,7 +750,7 @@ namespace Melanchall.DryWetMidi.Tools
 
                 foreach (var csvEvent in setTempoEvents)
                 {
-                    AsyncOperation.Checkpoint();
+                    operation?.Checkpoint();
 
                     var setTempoEvent = (SetTempoEvent)csvEvent.Event;
                     tempoMapManager.SetTempo(
@@ -753,7 +765,7 @@ namespace Melanchall.DryWetMidi.Tools
 
                 foreach (var csvEvent in timeSignatureEvents)
                 {
-                    AsyncOperation.Checkpoint();
+                    operation?.Checkpoint();
 
                     var timeSignatureEvent = (TimeSignatureEvent)csvEvent.Event;
                     tempoMapManager.SetTimeSignature(

@@ -363,7 +363,7 @@ namespace Melanchall.DryWetMidi.Interaction
                     return trackChunks.ProcessChords(action, match, settings?.ChordDetectionSettings, settings?.NoteDetectionSettings, settings?.TimedEventDetectionSettings, hint.ToChordProcessingHint());
             }
 
-            return InteractionAsyncUtilities.CheckpointItems(trackChunks)
+            return trackChunks
                 .Where(c => c != null)
                 .Select(c => c.Events)
                 .ProcessObjectsInternal(objectType, action, match, settings, hint);
@@ -493,7 +493,6 @@ namespace Melanchall.DryWetMidi.Interaction
 
             foreach (var eventsCollection in eventsCollectionsIn)
             {
-                AsyncOperation.Checkpoint();
                 var iMatched = 0;
 
                 var processingContext = new ProcessingContext
@@ -529,7 +528,6 @@ namespace Melanchall.DryWetMidi.Interaction
 
                 foreach (var timedObjectAt in timedObjects)
                 {
-                    AsyncOperation.Checkpoint();
                     if (timedObjectAt is Note note && !getNotes && getTimedEvents)
                     {
                         if (TryProcessTimedEvent(note.TimedNoteOnEvent, getTimedEvents, action, match, processingContext))
@@ -663,7 +661,6 @@ namespace Melanchall.DryWetMidi.Interaction
                 {
                     foreach (var note in addedNotes)
                     {
-                        AsyncOperation.Checkpoint();
                         collectedTimedEvents?.Add(note.TimedNoteOnEvent);
                         collectedTimedEvents?.Add(note.TimedNoteOffEvent);
                     }
@@ -673,7 +670,6 @@ namespace Melanchall.DryWetMidi.Interaction
                 {
                     foreach (var note in removedNotes)
                     {
-                        AsyncOperation.Checkpoint();
                         note.TimedNoteOnEvent.Event.MustBeRemoved = note.TimedNoteOffEvent.Event.MustBeRemoved = true;
                     }
                 }

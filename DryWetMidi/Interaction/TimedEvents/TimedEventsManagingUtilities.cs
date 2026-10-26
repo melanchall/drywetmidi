@@ -9,7 +9,7 @@ namespace Melanchall.DryWetMidi.Interaction
     /// <summary>
     /// Extension methods for managing MIDI events by their absolute time.
     /// </summary>
-    public static partial class TimedEventsManagingUtilities
+    public static class TimedEventsManagingUtilities
     {
         #region Methods
 
@@ -79,7 +79,6 @@ namespace Melanchall.DryWetMidi.Interaction
 
             foreach (var timedEvent in eventsCollection.GetTimedEventsLazy(settings, 0))
             {
-                AsyncOperation.Checkpoint();
                 result.Add(timedEvent);
             }
 
@@ -123,15 +122,11 @@ namespace Melanchall.DryWetMidi.Interaction
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
 
-            var eventsCollections = InteractionAsyncUtilities.CheckpointItems(trackChunks)
-                .Where(c => c != null)
-                .Select(InteractionAsyncUtilities.GetEvents)
-                .ToArray();
+            var eventsCollections = trackChunks.Where(c => c != null).Select(c => c.Events).ToArray();
             var result = new List<TimedEvent>();
 
             foreach (var timedEvent in eventsCollections.GetTimedEventsLazy(settings))
             {
-                AsyncOperation.Checkpoint();
                 result.Add(timedEvent);
             }
 
@@ -388,9 +383,9 @@ namespace Melanchall.DryWetMidi.Interaction
             ThrowIfArgument.IsNull(nameof(action), action);
             ThrowIfArgument.IsNull(nameof(match), match);
 
-            return InteractionAsyncUtilities.CheckpointItems(trackChunks)
+            return trackChunks
                 .Where(c => c != null)
-                .Select(InteractionAsyncUtilities.GetEvents)
+                .Select(c => c.Events)
                 .ProcessTimedEventsInternal(action, match, settings, hint);
         }
 
@@ -518,15 +513,11 @@ namespace Melanchall.DryWetMidi.Interaction
             var removedEventsCount = 0;
             var time = 0L;
             var latestTime = 0L;
-            var replacement = AsyncOperation.IsActive
-                ? new List<(MidiEvent Event, long DeltaTime)>(eventsCount)
-                : null;
 
             var constructor = settings?.Constructor;
 
             for (var i = 0; i < eventsCount; i++)
             {
-                AsyncOperation.Checkpoint();
                 var midiEvent = eventsCollection.GetByIndexInternal(i);
                 time += midiEvent.DeltaTime;
 
@@ -541,27 +532,14 @@ namespace Melanchall.DryWetMidi.Interaction
                     removedEventsCount++;
                 else
                 {
-                    if (replacement != null)
-                        replacement.Add((midiEvent, time - latestTime));
-                    else
-                    {
-                        midiEvent.DeltaTime = time - latestTime;
-                        eventsCollection.SetByIndexInternal(i - removedEventsCount, midiEvent);
-                    }
-
+                    midiEvent.DeltaTime = time - latestTime;
+                    eventsCollection.SetByIndexInternal(i - removedEventsCount, midiEvent);
                     latestTime = time;
                 }
             }
 
-            AsyncOperation.Checkpoint();
-
             if (removedEventsCount > 0)
-            {
-                if (replacement != null)
-                    InteractionAsyncUtilities.CommitReplacement(eventsCollection, replacement);
-                else
-                    eventsCollection.RemoveRangeInternal(eventsCount - removedEventsCount, removedEventsCount);
-            }
+                eventsCollection.RemoveRangeInternal(eventsCount - removedEventsCount, removedEventsCount);
 
             return removedEventsCount;
         }
@@ -627,7 +605,6 @@ namespace Melanchall.DryWetMidi.Interaction
 
             foreach (var trackChunk in trackChunks)
             {
-                AsyncOperation.Checkpoint();
                 result += trackChunk.RemoveTimedEvents();
             }
 
@@ -661,10 +638,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
             // TODO: rework
 
-            var eventsCollections = InteractionAsyncUtilities.CheckpointItems(trackChunks)
-                .Where(c => c != null)
-                .Select(InteractionAsyncUtilities.GetEvents)
-                .ToArray();
+            var eventsCollections = trackChunks.Where(c => c != null).Select(c => c.Events).ToArray();
             var eventsCount = eventsCollections.Sum(c => c.Count);
 
             var eventsCollectionsCount = eventsCollections.Length;
@@ -680,15 +654,11 @@ namespace Melanchall.DryWetMidi.Interaction
             var eventsCollectionTimes = new long[eventsCollectionsCount];
             var eventsCollectionLatestTimes = new long[eventsCollectionsCount];
             var removedEventsCounts = new int[eventsCollectionsCount];
-            var replacements = AsyncOperation.IsActive
-                ? eventsCollections.Select(c => new List<(MidiEvent Event, long DeltaTime)>(c.Count)).ToArray()
-                : null;
 
             var constructor = settings?.Constructor;
 
             for (var i = 0; i < eventsCount; i++)
             {
-                AsyncOperation.Checkpoint();
                 var eventsCollectionIndex = 0;
                 var minTime = long.MaxValue;
 
@@ -719,14 +689,8 @@ namespace Melanchall.DryWetMidi.Interaction
                     removedEventsCounts[eventsCollectionIndex]++;
                 else
                 {
-                    if (replacements != null)
-                        replacements[eventsCollectionIndex].Add((midiEvent, minTime - eventsCollectionLatestTimes[eventsCollectionIndex]));
-                    else
-                    {
-                        midiEvent.DeltaTime = minTime - eventsCollectionLatestTimes[eventsCollectionIndex];
-                        eventsCollections[eventsCollectionIndex][eventsCollectionIndices[eventsCollectionIndex] - removedEventsCounts[eventsCollectionIndex]] = midiEvent;
-                    }
-
+                    midiEvent.DeltaTime = minTime - eventsCollectionLatestTimes[eventsCollectionIndex];
+                    eventsCollections[eventsCollectionIndex][eventsCollectionIndices[eventsCollectionIndex] - removedEventsCounts[eventsCollectionIndex]] = midiEvent;
                     eventsCollectionLatestTimes[eventsCollectionIndex] = minTime;
                 }
 
@@ -734,18 +698,11 @@ namespace Melanchall.DryWetMidi.Interaction
                 eventsCollectionIndices[eventsCollectionIndex]++;
             }
 
-            AsyncOperation.Checkpoint();
-
             for (var i = 0; i < eventsCollectionsCount; i++)
             {
                 var removedEventsCount = removedEventsCounts[i];
                 if (removedEventsCount > 0)
-                {
-                    if (replacements != null)
-                        InteractionAsyncUtilities.CommitReplacement(eventsCollections[i], replacements[i]);
-                    else
-                        eventsCollections[i].RemoveRangeInternal(eventsCollections[i].Count - removedEventsCount, removedEventsCount);
-                }
+                    eventsCollections[i].RemoveRangeInternal(eventsCollections[i].Count - removedEventsCount, removedEventsCount);
             }
 
             return removedEventsCounts.Sum();
@@ -808,7 +765,6 @@ namespace Melanchall.DryWetMidi.Interaction
 
             foreach (var eventsCollection in eventsCollectionsIn)
             {
-                AsyncOperation.Checkpoint();
                 var matchedCount = 0;
 
                 var timesChanged = false;
@@ -816,7 +772,6 @@ namespace Melanchall.DryWetMidi.Interaction
 
                 foreach (var timedEvent in timedEvents)
                 {
-                    AsyncOperation.Checkpoint();
                     if (!match(timedEvent))
                         continue;
 
@@ -848,11 +803,7 @@ namespace Melanchall.DryWetMidi.Interaction
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
 
-            var eventsCollections = InteractionAsyncUtilities.CheckpointItems(trackChunks)
-                .Where(c => c != null)
-                .Select(InteractionAsyncUtilities.GetEvents)
-                .ToArray();
-
+            var eventsCollections = trackChunks.Where(c => c != null).Select(c => c.Events).ToArray();
             return new SortedLazyCollection<TimedEvent>(eventsCollections.GetTimedEventsLazy(settings, cloneEvent));
         }
 
@@ -887,13 +838,21 @@ namespace Melanchall.DryWetMidi.Interaction
             if (timedEvents == null)
                 return;
 
-            var replacement = InteractionAsyncUtilities.PrepareReplacement(
-                timedEvents.OrderBy(e => e.Time),
-                removeMarked: true);
+            var time = 0L;
 
-            AsyncOperation.Checkpoint();
+            eventsCollection.Clear();
 
-            InteractionAsyncUtilities.CommitReplacement(eventsCollection, replacement);
+            foreach (var timedEvent in timedEvents.OrderBy(e => e.Time))
+            {
+                if (timedEvent.Event.MustBeRemoved)
+                    continue;
+
+                var midiEvent = timedEvent.Event;
+                midiEvent.DeltaTime = timedEvent.Time - time;
+
+                eventsCollection.AddInternal(midiEvent);
+                time = timedEvent.Time;
+            }
         }
 
         private static IEnumerable<TimedEvent> GetSortedTimedEventsLazy(
@@ -919,7 +878,6 @@ namespace Melanchall.DryWetMidi.Interaction
 
             foreach (var midiEvent in events)
             {
-                AsyncOperation.Checkpoint();
                 if (midiEvent == null)
                     continue;
 

@@ -1,12 +1,10 @@
 ﻿using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
-using Melanchall.DryWetMidi.Tests.Utilities;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 
 namespace Melanchall.DryWetMidi.Tests.Interaction
 {
@@ -88,88 +86,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     return false;
 
                 return customChord.EventsCollectionIndex == EventsCollectionIndex;
-            }
-        }
-
-        #endregion
-
-        #region Private methods
-
-        private void CheckGetChordsAsync(
-            ContainerType containerType,
-            IEnumerable<IEnumerable<MidiEvent>> midiEvents,
-            IEnumerable<Chord> expectedChords,
-            ChordDetectionSettings settings = null,
-            NoteDetectionSettings noteDetectionSettings = null,
-            TimedEventDetectionSettings timedEventDetectionSettings = null,
-            Action<ICollection<Chord>> additionalChecks = null)
-        {
-            TrackChunk[] CreateTracks() =>
-                midiEvents.Select(events => new TrackChunk(events.Select(e => e.Clone()))).ToArray();
-
-            var tracks = CreateTracks();
-            ICollection<Chord> chords;
-
-            switch (containerType)
-            {
-                case ContainerType.EventsCollection:
-                    chords = tracks[0].Events.GetChordsAsync(settings, noteDetectionSettings, timedEventDetectionSettings, cancellationToken: CancellationToken.None).Result;
-                    break;
-                case ContainerType.TrackChunk:
-                    chords = tracks[0].GetChordsAsync(settings, noteDetectionSettings, timedEventDetectionSettings, cancellationToken: CancellationToken.None).Result;
-                    break;
-                case ContainerType.TrackChunks:
-                    chords = tracks.GetChordsAsync(settings, noteDetectionSettings, timedEventDetectionSettings, cancellationToken: CancellationToken.None).Result;
-                    break;
-                default:
-                    chords = new MidiFile(tracks).GetChordsAsync(settings, noteDetectionSettings, timedEventDetectionSettings, cancellationToken: CancellationToken.None).Result;
-                    break;
-            }
-
-            MidiAsserts.AreEqual(expectedChords, chords, "Async chords are invalid.");
-            additionalChecks?.Invoke(chords);
-
-            var objectSettings = new ObjectDetectionSettings
-            {
-                ChordDetectionSettings = settings,
-                NoteDetectionSettings = noteDetectionSettings,
-                TimedEventDetectionSettings = timedEventDetectionSettings
-            };
-            tracks = CreateTracks();
-            ICollection<ITimedObject> objects;
-
-            switch (containerType)
-            {
-                case ContainerType.EventsCollection:
-                    objects = tracks[0].Events.GetObjectsAsync(ObjectType.Chord, objectSettings, cancellationToken: CancellationToken.None).Result;
-                    break;
-                case ContainerType.TrackChunk:
-                    objects = tracks[0].GetObjectsAsync(ObjectType.Chord, objectSettings, cancellationToken: CancellationToken.None).Result;
-                    break;
-                case ContainerType.TrackChunks:
-                    objects = tracks.GetObjectsAsync(ObjectType.Chord, objectSettings, cancellationToken: CancellationToken.None).Result;
-                    break;
-                default:
-                    objects = new MidiFile(tracks).GetObjectsAsync(ObjectType.Chord, objectSettings, cancellationToken: CancellationToken.None).Result;
-                    break;
-            }
-
-            MidiAsserts.AreEqual(expectedChords, objects, "Async chords from GetObjects are invalid.");
-            additionalChecks?.Invoke(objects.Cast<Chord>().ToArray());
-
-            chords = InteractionAsyncTests.AsAsync(CreateTracks())
-                .GetChordsAsync(settings, noteDetectionSettings, timedEventDetectionSettings, cancellationToken: CancellationToken.None).Result;
-
-            MidiAsserts.AreEqual(expectedChords, chords, "Chords from an async track source are invalid.");
-            additionalChecks?.Invoke(chords);
-
-            if (containerType == ContainerType.EventsCollection || containerType == ContainerType.TrackChunk)
-            {
-                chords = InteractionAsyncTests.AsAsync(CreateTracks()[0].Events)
-                    .GetChordsAsync(settings, noteDetectionSettings, timedEventDetectionSettings, cancellationToken: CancellationToken.None).Result;
-
-                MidiAsserts.AreEqual(expectedChords, chords, "Chords from an async event source are invalid.");
-                additionalChecks?.Invoke(chords);
             }
         }
 

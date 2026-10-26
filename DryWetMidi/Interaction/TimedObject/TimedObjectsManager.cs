@@ -1,7 +1,6 @@
 ﻿using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
@@ -25,7 +24,7 @@ namespace Melanchall.DryWetMidi.Interaction
     /// the <c>using</c> block.
     /// </para>
     /// </remarks>
-    public sealed partial class TimedObjectsManager : TimedObjectsManager<ITimedObject>
+    public sealed class TimedObjectsManager : TimedObjectsManager<ITimedObject>
     {
         #region Constructor
 
@@ -77,7 +76,7 @@ namespace Melanchall.DryWetMidi.Interaction
     /// <seealso cref="TimedEventsManagingUtilities"/>
     /// <seealso cref="NotesManagingUtilities"/>
     /// <seealso cref="ChordsManagingUtilities"/>
-    public partial class TimedObjectsManager<TObject> : IDisposable
+    public class TimedObjectsManager<TObject> : IDisposable
         where TObject : ITimedObject
     {
         #region Fields
@@ -155,26 +154,11 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </remarks>
         public void SaveChanges()
         {
-            var replacement = PrepareChanges();
-            AsyncOperation.Checkpoint();
-
-            CommitChanges(replacement);
-        }
-
-        internal List<(MidiEvent Event, long DeltaTime)> PrepareChanges()
-        {
-            return InteractionAsyncUtilities.PrepareReplacement(
+            _eventsCollection.Clear();
+            _eventsCollection.AddObjects(
                 _backgroundObjects
                     .Concat(Objects.OfType<ITimedObject>())
-                    .OrderBy(obj => obj, _comparer)
-                    .GetObjects(ObjectType.TimedEvent)
-                    .Cast<TimedEvent>(),
-                smfOnly: true);
-        }
-
-        internal void CommitChanges(IEnumerable<(MidiEvent Event, long DeltaTime)> replacement)
-        {
-            InteractionAsyncUtilities.CommitReplacement(_eventsCollection, replacement);
+                    .OrderBy(obj => obj, _comparer));
         }
 
         private ObjectType GetObjectType()
@@ -210,7 +194,6 @@ namespace Melanchall.DryWetMidi.Interaction
             ObjectDetectionSettings? objectDetectionSettings,
             TimedObjectsComparer? comparer)
         {
-            AsyncOperation.Checkpoint();
             _eventsCollection = eventsCollection;
             _comparer = comparer ?? new TimedObjectsComparer();
             _backgroundObjects = new TimedObjectsCollection<ITimedObject>(Enumerable.Empty<ITimedObject>(), _comparer);
@@ -220,7 +203,6 @@ namespace Melanchall.DryWetMidi.Interaction
 
             foreach (var obj in allObjects)
             {
-                AsyncOperation.Checkpoint();
                 if (objectType.HasFlag(GetObjectType(obj)))
                     objects.Add((TObject)obj);
                 else

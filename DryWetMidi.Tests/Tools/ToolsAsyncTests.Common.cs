@@ -1,6 +1,5 @@
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
-using Melanchall.DryWetMidi.Tools;
 using NUnit.Framework;
 using NUnit.Framework.Legacy;
 using System;
@@ -24,10 +23,15 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             internal bool FailWrite;
             internal bool BlockRead;
             internal bool BlockWrite;
+            internal bool CompleteSynchronously;
+            internal Action OnRead;
             internal Action OnWrite;
             internal bool Disposed;
 
-            internal AsyncOnlyStream(byte[] bytes = null) => _storage = bytes == null ? new MemoryStream() : new MemoryStream(bytes);
+            internal AsyncOnlyStream(byte[] bytes = null)
+            {
+                _storage = bytes == null ? new MemoryStream() : new MemoryStream(bytes);
+            }
 
             internal byte[] ToArray() => _storage.ToArray();
 
@@ -62,7 +66,11 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 CancellationToken cancellationToken)
             {
                 Reads++;
-                await Task.Yield();
+                OnRead?.Invoke();
+
+                if (!CompleteSynchronously)
+                    await Task.Yield();
+
                 if (BlockRead)
                     await Task.Delay(Timeout.Infinite, cancellationToken).ConfigureAwait(false);
 
@@ -81,7 +89,10 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 CancellationToken cancellationToken)
             {
                 Writes++;
-                await Task.Yield();
+
+                if (!CompleteSynchronously)
+                    await Task.Yield();
+
                 OnWrite?.Invoke();
                 if (BlockWrite)
                     await Task.Delay(Timeout.Infinite, cancellationToken).ConfigureAwait(false);
@@ -111,17 +122,6 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             }
         }
 
-        private sealed class CustomRepeater : Repeater
-        {
-            internal int Calls;
-
-            protected override void ProcessPart(PartProcessingContext context)
-            {
-                Calls++;
-                base.ProcessPart(context);
-            }
-        }
-
         private sealed class InlineProgress : IProgress<AsyncOperationProgress>
         {
             internal readonly List<AsyncOperationProgress> Reports = new List<AsyncOperationProgress>();
@@ -141,18 +141,6 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             var aggregate = Assert.Throws<AggregateException>(() => action(), "Async operation did not throw an aggregate exception.");
 
             ClassicAssert.AreEqual(exceptionType, aggregate.InnerException.GetType(), "Async exception type differs.");
-        }
-
-        internal static async Task<List<T>> Collect<T>(IAsyncEnumerable<T> source)
-        {
-            var result = new List<T>();
-
-            await foreach (var item in source.ConfigureAwait(false))
-            {
-                result.Add(item);
-            }
-
-            return result;
         }
     }
 }

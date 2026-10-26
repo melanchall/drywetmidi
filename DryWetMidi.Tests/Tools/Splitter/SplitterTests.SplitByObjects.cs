@@ -656,13 +656,6 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 settings,
                 objectDetectionSettings).ToArray();
 
-            var asyncFiles = ToolsAsyncTests.Collect(midiFile.Clone().SplitByObjectsAsync(
-                objectType,
-                settings,
-                objectDetectionSettings,
-                cancellationToken: System.Threading.CancellationToken.None)).Result;
-            MidiAsserts.AreEqual(actualFiles, asyncFiles, false, "Invalid asynchronously split files.");
-
             var expectedFiles = expectedObjects
                 .Select(objects =>
                 {

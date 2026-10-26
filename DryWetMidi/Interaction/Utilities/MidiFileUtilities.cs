@@ -4,14 +4,13 @@ using System.ComponentModel;
 using System.Linq;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
-using AsyncOperation = Melanchall.DryWetMidi.Common.AsyncOperation;
 
 namespace Melanchall.DryWetMidi.Interaction
 {
     /// <summary>
     /// Utility methods for <see cref="MidiFile"/>.
     /// </summary>
-    public static partial class MidiFileUtilities
+    public static class MidiFileUtilities
     {
         #region Methods
 
@@ -221,11 +220,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
         private static long GetLastTime(TrackChunk trackChunk)
         {
-            return trackChunk.Events.DefaultIfEmpty().Sum(e =>
-            {
-                AsyncOperation.Checkpoint();
-                return e?.DeltaTime ?? 0L;
-            });
+            return trackChunk.Events.DefaultIfEmpty().Sum(e => e?.DeltaTime ?? 0L);
         }
 
         private static long GetMaxTime(IEnumerable<TrackChunk?> trackChunks)
@@ -234,7 +229,6 @@ namespace Melanchall.DryWetMidi.Interaction
 
             foreach (var trackChunk in trackChunks.OfType<TrackChunk>())
             {
-                AsyncOperation.Checkpoint();
                 var lastTime = GetLastTime(trackChunk);
                 if (lastTime > maxTime)
                     maxTime = lastTime;

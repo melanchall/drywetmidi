@@ -2976,26 +2976,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             ICollection<MidiEvent> expectedMidiEvents,
             int expectedProcessedCount,
             ChordProcessingHint hint = ChordProcessingHint.Default,
-            bool newReferencesAllowed = false,
-            bool useAsync = false,
-            ChordDetectionSettings settings = null,
-            NoteDetectionSettings noteDetectionSettings = null,
-            TimedEventDetectionSettings timedEventDetectionSettings = null)
+            bool newReferencesAllowed = false)
         {
-            if (!useAsync && (containerType == ContainerType.EventsCollection || containerType == ContainerType.TrackChunk))
-            {
-                ProcessChords_EventsCollection_WithPredicate(
-                    containerType,
-                    midiEvents.Select(e => e.Clone()).ToArray(),
-                    action,
-                    match,
-                    expectedMidiEvents,
-                    expectedProcessedCount,
-                    hint,
-                    newReferencesAllowed,
-                    useAsync: true);
-            }
-
             var eventsCollection = new EventsCollection();
             eventsCollection.AddRange(midiEvents);
 
@@ -3005,9 +2987,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                     {
                         ClassicAssert.AreEqual(
                             expectedProcessedCount,
-                            useAsync
-                                ? eventsCollection.ProcessChordsAsync(action, match, settings, noteDetectionSettings, timedEventDetectionSettings, hint, cancellationToken: System.Threading.CancellationToken.None).Result
-                                : eventsCollection.ProcessChords(action, match, hint: hint),
+                            eventsCollection.ProcessChords(action, match, hint: hint),
                             "Invalid count of processed chords.");
 
                         var expectedEventsCollection = new EventsCollection();
@@ -3025,9 +3005,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
                         ClassicAssert.AreEqual(
                             expectedProcessedCount,
-                            useAsync
-                                ? trackChunk.ProcessChordsAsync(action, match, settings, noteDetectionSettings, timedEventDetectionSettings, hint, cancellationToken: System.Threading.CancellationToken.None).Result
-                                : trackChunk.ProcessChords(action, match, hint: hint),
+                            trackChunk.ProcessChords(action, match, hint: hint),
                             "Invalid count of processed chords.");
 
                         var expectedTrackChunk = new TrackChunk(expectedMidiEvents);
@@ -3061,25 +3039,9 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             Action<Chord> action,
             ICollection<MidiEvent> expectedMidiEvents,
             ChordProcessingHint hint = ChordProcessingHint.Default,
-            bool newReferencesAllowed = false,
-            bool useAsync = false,
-            ChordDetectionSettings settings = null,
-            NoteDetectionSettings noteDetectionSettings = null,
-            TimedEventDetectionSettings timedEventDetectionSettings = null)
+            bool newReferencesAllowed = false)
         {
-            if (!useAsync && (containerType == ContainerType.EventsCollection || containerType == ContainerType.TrackChunk))
-            {
-                ProcessChords_EventsCollection_WithoutPredicate(
-                    containerType,
-                    midiEvents.Select(e => e.Clone()).ToArray(),
-                    action,
-                    expectedMidiEvents,
-                    hint,
-                    newReferencesAllowed,
-                    useAsync: true);
-            }
-
-            var chordsCount = midiEvents.GetChords(settings, noteDetectionSettings, timedEventDetectionSettings).Count;
+            var chordsCount = midiEvents.GetChords().Count;
 
             switch (containerType)
             {
@@ -3090,9 +3052,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
                         ClassicAssert.AreEqual(
                             chordsCount,
-                            useAsync
-                                ? eventsCollection.ProcessChordsAsync(action, settings, noteDetectionSettings, timedEventDetectionSettings, hint, cancellationToken: System.Threading.CancellationToken.None).Result
-                                : eventsCollection.ProcessChords(action, hint: hint),
+                            eventsCollection.ProcessChords(action, hint: hint),
                             "Invalid count of processed chords.");
 
                         var expectedEventsCollection = new EventsCollection();
@@ -3110,9 +3070,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
                         ClassicAssert.AreEqual(
                             chordsCount,
-                            useAsync
-                                ? trackChunk.ProcessChordsAsync(action, settings, noteDetectionSettings, timedEventDetectionSettings, hint, cancellationToken: System.Threading.CancellationToken.None).Result
-                                : trackChunk.ProcessChords(action, hint: hint),
+                            trackChunk.ProcessChords(action, hint: hint),
                             "Invalid count of processed chords.");
 
                         var expectedTrackChunk = new TrackChunk(expectedMidiEvents);
@@ -3156,26 +3114,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             ICollection<ICollection<MidiEvent>> expectedMidiEvents,
             int expectedProcessedCount,
             ChordProcessingHint hint = ChordProcessingHint.Default,
-            bool newReferencesAllowed = false,
-            bool useAsync = false,
-            ChordDetectionSettings settings = null,
-            NoteDetectionSettings noteDetectionSettings = null,
-            TimedEventDetectionSettings timedEventDetectionSettings = null)
+            bool newReferencesAllowed = false)
         {
-            if (!useAsync)
-            {
-                ProcessChords_TrackChunks_WithPredicate(
-                    wrapToFile,
-                    midiEvents.Select(events => (ICollection<MidiEvent>)events.Select(e => e.Clone()).ToArray()).ToArray(),
-                    action,
-                    match,
-                    expectedMidiEvents,
-                    expectedProcessedCount,
-                    hint,
-                    newReferencesAllowed,
-                    useAsync: true);
-            }
-
             var trackChunks = midiEvents.Select(e => new TrackChunk(e)).ToList();
 
             if (wrapToFile)
@@ -3184,9 +3124,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
                 ClassicAssert.AreEqual(
                     expectedProcessedCount,
-                    useAsync
-                        ? midiFile.ProcessChordsAsync(action, match, settings, noteDetectionSettings, timedEventDetectionSettings, hint, cancellationToken: System.Threading.CancellationToken.None).Result
-                        : midiFile.ProcessChords(action, match, hint: hint),
+                    midiFile.ProcessChords(action, match, hint: hint),
                     "Invalid count of processed chords.");
 
                 MidiAsserts.AreEqual(new MidiFile(expectedMidiEvents.Select(e => new TrackChunk(e))), midiFile, false, "Events are invalid.");
@@ -3199,9 +3137,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             {
                 ClassicAssert.AreEqual(
                     expectedProcessedCount,
-                    useAsync
-                        ? trackChunks.ProcessChordsAsync(action, match, settings, noteDetectionSettings, timedEventDetectionSettings, hint, cancellationToken: System.Threading.CancellationToken.None).Result
-                        : trackChunks.ProcessChords(action, match, hint: hint),
+                    trackChunks.ProcessChords(action, match, hint: hint),
                     "Invalid count of processed chords.");
 
                 MidiAsserts.AreEqual(expectedMidiEvents.Select(e => new TrackChunk(e)), trackChunks, true, "Events are invalid.");
@@ -3218,26 +3154,10 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             Action<Chord> action,
             ICollection<ICollection<MidiEvent>> expectedMidiEvents,
             ChordProcessingHint hint = ChordProcessingHint.Default,
-            bool newReferencesAllowed = false,
-            bool useAsync = false,
-            ChordDetectionSettings settings = null,
-            NoteDetectionSettings noteDetectionSettings = null,
-            TimedEventDetectionSettings timedEventDetectionSettings = null)
+            bool newReferencesAllowed = false)
         {
-            if (!useAsync)
-            {
-                ProcessChords_TrackChunks_WithoutPredicate(
-                    wrapToFile,
-                    midiEvents.Select(events => (ICollection<MidiEvent>)events.Select(e => e.Clone()).ToArray()).ToArray(),
-                    action,
-                    expectedMidiEvents,
-                    hint,
-                    newReferencesAllowed,
-                    useAsync: true);
-            }
-
             var trackChunks = midiEvents.Select(e => new TrackChunk(e)).ToList();
-            var chordsCount = trackChunks.GetChords(settings, noteDetectionSettings, timedEventDetectionSettings).Count;
+            var chordsCount = trackChunks.GetChords().Count;
 
             if (wrapToFile)
             {
@@ -3245,9 +3165,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
 
                 ClassicAssert.AreEqual(
                     chordsCount,
-                    useAsync
-                        ? midiFile.ProcessChordsAsync(action, settings, noteDetectionSettings, timedEventDetectionSettings, hint, cancellationToken: System.Threading.CancellationToken.None).Result
-                        : midiFile.ProcessChords(action, hint: hint),
+                    midiFile.ProcessChords(action, hint: hint),
                     "Invalid count of processed chords.");
 
                 MidiAsserts.AreEqual(new MidiFile(expectedMidiEvents.Select(e => new TrackChunk(e))), midiFile, false, "Events are invalid.");
@@ -3260,9 +3178,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             {
                 ClassicAssert.AreEqual(
                     chordsCount,
-                    useAsync
-                        ? trackChunks.ProcessChordsAsync(action, settings, noteDetectionSettings, timedEventDetectionSettings, hint, cancellationToken: System.Threading.CancellationToken.None).Result
-                        : trackChunks.ProcessChords(action, hint: hint),
+                    trackChunks.ProcessChords(action, hint: hint),
                     "Invalid count of processed chords.");
 
                 MidiAsserts.AreEqual(expectedMidiEvents.Select(e => new TrackChunk(e)), trackChunks, true, "Events are invalid.");

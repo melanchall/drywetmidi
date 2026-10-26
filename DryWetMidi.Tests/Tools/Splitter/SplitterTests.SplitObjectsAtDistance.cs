@@ -643,14 +643,6 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             ICollection<ITimedObject> expectedObjects,
             Predicate<ITimedObject> filter = null)
         {
-            var asyncObjects = ToolsAsyncTests.Collect(inputObjects.Select(obj => obj?.Clone()).SplitObjectsAtDistanceAsync(
-                distance,
-                from,
-                TempoMap.Default,
-                filter,
-                cancellationToken: System.Threading.CancellationToken.None)).Result;
-            MidiAsserts.AreEqual(expectedObjects, asyncObjects, "Invalid asynchronous result objects.");
-
             var actualObjects = inputObjects.SplitObjectsAtDistance(distance, from, TempoMap.Default, filter).ToArray();
             MidiAsserts.AreEqual(
                 expectedObjects,
@@ -668,8 +660,6 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             ObjectDetectionSettings objectDetectionSettings = null,
             Predicate<ITimedObject> filter = null)
         {
-            SplitObjectsAtDistance(inputObjects, distance, from, expectedObjects, filter);
-
             var actualObjects = inputObjects.SplitObjectsAtDistance(distance, from, TempoMap.Default, filter).ToArray();
             MidiAsserts.AreEqual(
                 expectedObjects,
@@ -679,17 +669,6 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             //
 
             var trackChunk = inputObjects.ToTrackChunk();
-            var asyncTrackChunk = (TrackChunk)trackChunk.Clone();
-            asyncTrackChunk.SplitObjectsAtDistanceAsync(
-                objectType,
-                distance,
-                from,
-                TempoMap.Default,
-                objectDetectionSettings,
-                filter,
-                cancellationToken: System.Threading.CancellationToken.None).Wait();
-            MidiAsserts.AreEqual(expectedTimedEvents, asyncTrackChunk.GetTimedEvents(), false, 0, "Invalid asynchronous track chunk.");
-
             trackChunk.SplitObjectsAtDistance(objectType, distance, from, TempoMap.Default, objectDetectionSettings, filter);
             var actualTimedEvents = trackChunk.GetTimedEvents();
             MidiAsserts.AreEqual(expectedTimedEvents, actualTimedEvents, false, 0, "Invalid track chunk.");
@@ -697,17 +676,6 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             //
 
             var trackChunks = new[] { inputObjects.ToTrackChunk() };
-            var asyncTrackChunks = trackChunks.Select(chunk => (TrackChunk)chunk.Clone()).ToArray();
-            asyncTrackChunks.SplitObjectsAtDistanceAsync(
-                objectType,
-                distance,
-                from,
-                TempoMap.Default,
-                objectDetectionSettings,
-                filter,
-                cancellationToken: System.Threading.CancellationToken.None).Wait();
-            MidiAsserts.AreEqual(expectedTimedEvents, asyncTrackChunks.Single().GetTimedEvents(), false, 0, "Invalid asynchronous track chunks.");
-
             trackChunks.SplitObjectsAtDistance(objectType, distance, from, TempoMap.Default, objectDetectionSettings, filter);
             actualTimedEvents = trackChunks.Single().GetTimedEvents();
             MidiAsserts.AreEqual(expectedTimedEvents, actualTimedEvents, false, 0, "Invalid track chunks.");
@@ -715,16 +683,6 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             //
 
             var midiFile = inputObjects.ToFile();
-            var asyncFile = midiFile.Clone();
-            asyncFile.SplitObjectsAtDistanceAsync(
-                objectType,
-                distance,
-                from,
-                objectDetectionSettings,
-                filter,
-                cancellationToken: System.Threading.CancellationToken.None).Wait();
-            MidiAsserts.AreEqual(expectedTimedEvents, asyncFile.GetTimedEvents(), false, 0, "Invalid asynchronous file.");
-
             midiFile.SplitObjectsAtDistance(objectType, distance, from, objectDetectionSettings, filter);
             actualTimedEvents = midiFile.GetTimedEvents();
             MidiAsserts.AreEqual(expectedTimedEvents, actualTimedEvents, false, 0, "Invalid file.");
@@ -738,15 +696,6 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             ICollection<ITimedObject> expectedObjects,
             Predicate<ITimedObject> filter = null)
         {
-            var asyncObjects = ToolsAsyncTests.Collect(inputObjects.Select(obj => obj?.Clone()).SplitObjectsAtDistanceAsync(
-                ratio,
-                lengthType,
-                from,
-                TempoMap.Default,
-                filter,
-                cancellationToken: System.Threading.CancellationToken.None)).Result;
-            MidiAsserts.AreEqual(expectedObjects, asyncObjects, "Invalid asynchronous result objects.");
-
             var actualObjects = inputObjects.SplitObjectsAtDistance(ratio, lengthType, from, TempoMap.Default, filter).ToArray();
             MidiAsserts.AreEqual(
                 expectedObjects,
@@ -765,8 +714,6 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             ObjectDetectionSettings objectDetectionSettings = null,
             Predicate<ITimedObject> filter = null)
         {
-            SplitObjectsAtDistance(inputObjects, ratio, lengthType, from, expectedObjects, filter);
-
             var actualObjects = inputObjects.SplitObjectsAtDistance(ratio, lengthType, from, TempoMap.Default, filter).ToArray();
             MidiAsserts.AreEqual(
                 expectedObjects,
@@ -776,18 +723,6 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             //
 
             var trackChunk = inputObjects.ToTrackChunk();
-            var asyncTrackChunk = (TrackChunk)trackChunk.Clone();
-            asyncTrackChunk.SplitObjectsAtDistanceAsync(
-                objectType,
-                ratio,
-                lengthType,
-                from,
-                TempoMap.Default,
-                objectDetectionSettings,
-                filter,
-                cancellationToken: System.Threading.CancellationToken.None).Wait();
-            MidiAsserts.AreEqual(expectedTimedEvents, asyncTrackChunk.GetTimedEvents(), false, 0, "Invalid asynchronous track chunk.");
-
             trackChunk.SplitObjectsAtDistance(objectType, ratio, lengthType, from, TempoMap.Default, objectDetectionSettings, filter);
             var actualTimedEvents = trackChunk.GetTimedEvents();
             MidiAsserts.AreEqual(expectedTimedEvents, actualTimedEvents, false, 0, "Invalid track chunk.");
@@ -795,18 +730,6 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             //
 
             var trackChunks = new[] { inputObjects.ToTrackChunk() };
-            var asyncTrackChunks = trackChunks.Select(chunk => (TrackChunk)chunk.Clone()).ToArray();
-            asyncTrackChunks.SplitObjectsAtDistanceAsync(
-                objectType,
-                ratio,
-                lengthType,
-                from,
-                TempoMap.Default,
-                objectDetectionSettings,
-                filter,
-                cancellationToken: System.Threading.CancellationToken.None).Wait();
-            MidiAsserts.AreEqual(expectedTimedEvents, asyncTrackChunks.Single().GetTimedEvents(), false, 0, "Invalid asynchronous track chunks.");
-
             trackChunks.SplitObjectsAtDistance(objectType, ratio, lengthType, from, TempoMap.Default, objectDetectionSettings, filter);
             actualTimedEvents = trackChunks.Single().GetTimedEvents();
             MidiAsserts.AreEqual(expectedTimedEvents, actualTimedEvents, false, 0, "Invalid track chunks.");
@@ -814,17 +737,6 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             //
 
             var midiFile = inputObjects.ToFile();
-            var asyncFile = midiFile.Clone();
-            asyncFile.SplitObjectsAtDistanceAsync(
-                objectType,
-                ratio,
-                lengthType,
-                from,
-                objectDetectionSettings,
-                filter,
-                cancellationToken: System.Threading.CancellationToken.None).Wait();
-            MidiAsserts.AreEqual(expectedTimedEvents, asyncFile.GetTimedEvents(), false, 0, "Invalid asynchronous file.");
-
             midiFile.SplitObjectsAtDistance(objectType, ratio, lengthType, from, objectDetectionSettings, filter);
             actualTimedEvents = midiFile.GetTimedEvents();
             MidiAsserts.AreEqual(expectedTimedEvents, actualTimedEvents, false, 0, "Invalid file.");

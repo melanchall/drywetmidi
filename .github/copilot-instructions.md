@@ -48,6 +48,8 @@ moving it to the callers that own the public contract.
 Async code
 ----------
 Keep synchronous APIs compatible. Name asynchronous counterparts with Async.
+Add async APIs for genuinely awaitable I/O, not solely to wrap CPU-bound
+operations in Task.Run. Leave CPU offloading to the caller.
 Use ConfigureAwait(false) for internal library awaits that do not require a
 caller synchronization context, including asynchronous disposal where applicable.
 It is not necessary to add an await solely to a method that returns a task.
@@ -73,8 +75,9 @@ Document actual exceptions rather than adding every exception to every method.
 
 For every public async API's progress parameter, document the reporting unit,
 throttling, unknown totals, and successful-completion notification. CPU-bound
-operations count work checkpoints (including internal algorithm steps), not
-necessarily notes, events, or output objects. MIDI I/O counts transported bytes.
+work performed during CSV I/O counts work checkpoints (including internal
+algorithm steps), not necessarily notes, events, or output objects. MIDI I/O
+counts transported bytes. Timed-object output counts accepted non-null objects.
 Do not infer a total by enumerating input or describe checkpoint counts as a
 reliable number of processed notes.
 

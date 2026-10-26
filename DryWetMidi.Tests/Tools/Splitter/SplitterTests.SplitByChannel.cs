@@ -33,10 +33,6 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                     continue;
 
                 var filesByChannel = midiFile.SplitByChannel().ToList();
-                var asyncFiles = ToolsAsyncTests.Collect(midiFile.Clone().SplitByChannelAsync(
-                    cancellationToken: System.Threading.CancellationToken.None)).Result;
-                MidiAsserts.AreEqual(filesByChannel, asyncFiles, false, $"Invalid asynchronously split files for '{filePath}'.");
-
                 var allChannels = new List<FourBitNumber>(FourBitNumber.Values.Length);
 
                 foreach (var fileByChannel in filesByChannel)
@@ -541,9 +537,6 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 midiFile.TimeDivision = timeDivision;
 
             var midiFilesByChannel = midiFile.SplitByChannel().ToList();
-            var asyncFiles = ToolsAsyncTests.Collect(midiFile.Clone().SplitByChannelAsync(
-                cancellationToken: System.Threading.CancellationToken.None)).Result;
-            MidiAsserts.AreEqual(midiFilesByChannel, asyncFiles, false, "Invalid asynchronously split files.");
 
             ClassicAssert.AreEqual(expectedTimedEvents.Count, midiFilesByChannel.Count, "Invalid count of new files.");
 
@@ -603,15 +596,6 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                     Filter = filter
                 })
                 .ToList();
-
-            var asyncFiles = ToolsAsyncTests.Collect(midiFile.Clone().SplitByChannelAsync(
-                new SplitFileByChannelSettings
-                {
-                    CopyNonChannelEventsToEachFile = copyNonChannelEventsToEachFile,
-                    Filter = filter
-                },
-                cancellationToken: System.Threading.CancellationToken.None)).Result;
-            MidiAsserts.AreEqual(midiFilesByChannel, asyncFiles, false, "Invalid asynchronously split files.");
 
             ClassicAssert.AreEqual(expectedTimedEvents.Count, midiFilesByChannel.Count, "Invalid count of new files.");
 

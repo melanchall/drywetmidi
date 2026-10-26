@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using AsyncOperation = Melanchall.DryWetMidi.Common.AsyncOperation;
 
 namespace Melanchall.DryWetMidi.Tools
 {
@@ -117,8 +116,6 @@ namespace Melanchall.DryWetMidi.Tools
 
             foreach (var trackChunk in trackChunks.OfType<TrackChunk>())
             {
-                AsyncOperation.Checkpoint();
-
                 trackChunk.SplitObjectsByPartsNumber(objectType, partsNumber, lengthType, tempoMap, objectDetectionSettings, filter);
             }
         }
@@ -209,8 +206,6 @@ namespace Melanchall.DryWetMidi.Tools
 
             foreach (var obj in objects)
             {
-                AsyncOperation.Checkpoint();
-
                 if (obj == null)
                 {
                     yield return null;
@@ -246,8 +241,6 @@ namespace Melanchall.DryWetMidi.Tools
 
                 for (int partsRemaining = partsNumber; partsRemaining > 1 && tail != null; partsRemaining--)
                 {
-                    AsyncOperation.Checkpoint();
-
                     var length = tail.LengthAs(lengthType, tempoMap);
                     var partLength = length.Divide(partsRemaining);
 

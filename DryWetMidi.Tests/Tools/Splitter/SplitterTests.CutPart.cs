@@ -281,13 +281,6 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             MidiFile expectedMidiFile,
             SliceMidiFileSettings settings = null)
         {
-            var asyncFile = midiFile.Clone().CutPartAsync(
-                partStart,
-                partLength,
-                settings,
-                cancellationToken: System.Threading.CancellationToken.None).Result;
-            MidiAsserts.AreEqual(expectedMidiFile, asyncFile, false, "Invalid asynchronous MIDI file.");
-
             var newMidiFile = midiFile.CutPart(partStart, partLength, settings);
             MidiAsserts.AreEqual(expectedMidiFile, newMidiFile, false, "Invalid new MIDI file.");
         }

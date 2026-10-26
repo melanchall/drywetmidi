@@ -3,6 +3,7 @@ using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -12,6 +13,48 @@ namespace Melanchall.DryWetMidi.Tools
 {
     public static partial class CsvSerializer
     {
+        private sealed class CsvOperation
+        {
+            private readonly CancellationToken _cancellationToken;
+            private readonly IProgress<AsyncOperationProgress>? _progress;
+            private readonly Stopwatch? _stopwatch;
+            private long _processed;
+            private long _lastReport;
+
+            internal CsvOperation(
+                CancellationToken cancellationToken,
+                IProgress<AsyncOperationProgress>? progress)
+            {
+                _cancellationToken = cancellationToken;
+                _progress = progress;
+                _stopwatch = progress != null ? Stopwatch.StartNew() : null;
+
+                cancellationToken.ThrowIfCancellationRequested();
+            }
+
+            internal void Checkpoint()
+            {
+                _cancellationToken.ThrowIfCancellationRequested();
+
+                if (_progress == null)
+                    return;
+
+                _processed++;
+                var elapsed = _stopwatch!.ElapsedMilliseconds;
+                if (elapsed - _lastReport >= 100)
+                {
+                    _lastReport = elapsed;
+                    _progress.Report(new AsyncOperationProgress(_processed));
+                }
+            }
+
+            internal void Complete()
+            {
+                _cancellationToken.ThrowIfCancellationRequested();
+                _progress?.Report(new AsyncOperationProgress(_processed, true));
+            }
+        }
+
         /// <summary>
         /// Serializes a MIDI file using asynchronous stream writes and flush. The stream remains open.
         /// </summary>
@@ -30,7 +73,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
         /// <exception cref="ObjectDisposedException">The stream was disposed during writing.</exception>
         /// <exception cref="IOException">Writing or flushing the stream failed.</exception>
-        public static Task SerializeToCsvAsync(
+        public static async Task SerializeToCsvAsync(
             this MidiFile midiFile,
             Stream stream,
             CsvSerializationSettings? settings = null,
@@ -38,33 +81,34 @@ namespace Melanchall.DryWetMidi.Tools
             ObjectDetectionSettings? objectDetectionSettings = null,
             IProgress<AsyncOperationProgress>? progress = null,
             CancellationToken cancellationToken = default)
-            => RunCsvAsync(async () =>
-            {
-                ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
-                ThrowIfArgument.IsNull(nameof(stream), stream);
+        {
+            var operation = new CsvOperation(cancellationToken, progress);
 
-                if (!stream.CanWrite)
-                    throw new ArgumentException("Stream doesn't support writing.", nameof(stream));
+            ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
+            ThrowIfArgument.IsNull(nameof(stream), stream);
 
-                var serializationSettings = settings ?? new CsvSerializationSettings();
-                using var writer = new CsvWriter(serializationSettings);
+            if (!stream.CanWrite)
+                throw new ArgumentException("Stream doesn't support writing.", nameof(stream));
 
-                WriteHeaderChunk(midiFile, writer, serializationSettings, 0);
-                await writer.DrainAsync(stream, cancellationToken).ConfigureAwait(false);
-                await WriteChunksAsync(
-                    midiFile.Chunks,
-                    stream,
-                    writer,
-                    midiFile.GetTempoMap(),
-                    serializationSettings,
-                    objectType,
-                    objectDetectionSettings ?? new ObjectDetectionSettings(),
-                    1,
-                    cancellationToken).ConfigureAwait(false);
-                await stream.FlushAsync(cancellationToken).ConfigureAwait(false);
-            },
-            progress,
-            cancellationToken);
+            var serializationSettings = settings ?? new CsvSerializationSettings();
+            using var writer = new CsvWriter(serializationSettings);
+
+            WriteHeaderChunk(midiFile, writer, serializationSettings, 0);
+            await writer.DrainAsync(stream, cancellationToken).ConfigureAwait(false);
+            await WriteChunksAsync(
+                midiFile.Chunks,
+                stream,
+                writer,
+                midiFile.GetTempoMap(),
+                serializationSettings,
+                objectType,
+                objectDetectionSettings ?? new ObjectDetectionSettings(),
+                1,
+                operation,
+                cancellationToken).ConfigureAwait(false);
+            await stream.FlushAsync(cancellationToken).ConfigureAwait(false);
+            operation.Complete();
+        }
 
         /// <summary>
         /// Serializes a MIDI file to a CSV file asynchronously.
@@ -132,7 +176,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
         /// <exception cref="ObjectDisposedException">The stream was disposed during writing.</exception>
         /// <exception cref="IOException">Writing or flushing the stream failed.</exception>
-        public static Task SerializeToCsvAsync(
+        public static async Task SerializeToCsvAsync(
             this IEnumerable<MidiChunk?> midiChunks,
             Stream stream,
             TempoMap tempoMap,
@@ -141,31 +185,33 @@ namespace Melanchall.DryWetMidi.Tools
             ObjectDetectionSettings? objectDetectionSettings = null,
             IProgress<AsyncOperationProgress>? progress = null,
             CancellationToken cancellationToken = default)
-            => RunCsvAsync(async () =>
-            {
-                ThrowIfArgument.IsNull(nameof(midiChunks), midiChunks);
-                ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
-                ThrowIfArgument.IsNull(nameof(stream), stream);
+        {
+            var operation = new CsvOperation(cancellationToken, progress);
 
-                if (!stream.CanWrite)
-                    throw new ArgumentException("Stream doesn't support writing.", nameof(stream));
+            ThrowIfArgument.IsNull(nameof(midiChunks), midiChunks);
+            ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
+            ThrowIfArgument.IsNull(nameof(stream), stream);
 
-                var serializationSettings = settings ?? new CsvSerializationSettings();
-                using var writer = new CsvWriter(serializationSettings);
-                await WriteChunksAsync(
-                    midiChunks,
-                    stream,
-                    writer,
-                    tempoMap,
-                    serializationSettings,
-                    objectType,
-                    objectDetectionSettings ?? new ObjectDetectionSettings(),
-                    0,
-                    cancellationToken).ConfigureAwait(false);
-                await stream.FlushAsync(cancellationToken).ConfigureAwait(false);
-            },
-            progress,
-            cancellationToken);
+            if (!stream.CanWrite)
+                throw new ArgumentException("Stream doesn't support writing.", nameof(stream));
+
+            var serializationSettings = settings ?? new CsvSerializationSettings();
+            using var writer = new CsvWriter(serializationSettings);
+
+            await WriteChunksAsync(
+                midiChunks,
+                stream,
+                writer,
+                tempoMap,
+                serializationSettings,
+                objectType,
+                objectDetectionSettings ?? new ObjectDetectionSettings(),
+                0,
+                operation,
+                cancellationToken).ConfigureAwait(false);
+            await stream.FlushAsync(cancellationToken).ConfigureAwait(false);
+            operation.Complete();
+        }
 
         /// <summary>
         /// Serializes MIDI chunks to a CSV file asynchronously.
@@ -236,7 +282,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
         /// <exception cref="ObjectDisposedException">The stream was disposed during writing.</exception>
         /// <exception cref="IOException">Writing or flushing the stream failed.</exception>
-        public static Task SerializeToCsvAsync(
+        public static async Task SerializeToCsvAsync(
             this MidiChunk midiChunk,
             Stream stream,
             TempoMap tempoMap,
@@ -245,31 +291,33 @@ namespace Melanchall.DryWetMidi.Tools
             ObjectDetectionSettings? objectDetectionSettings = null,
             IProgress<AsyncOperationProgress>? progress = null,
             CancellationToken cancellationToken = default)
-            => RunCsvAsync(async () =>
-            {
-                ThrowIfArgument.IsNull(nameof(midiChunk), midiChunk);
-                ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
-                ThrowIfArgument.IsNull(nameof(stream), stream);
+        {
+            var operation = new CsvOperation(cancellationToken, progress);
 
-                if (!stream.CanWrite)
-                    throw new ArgumentException("Stream doesn't support writing.", nameof(stream));
+            ThrowIfArgument.IsNull(nameof(midiChunk), midiChunk);
+            ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
+            ThrowIfArgument.IsNull(nameof(stream), stream);
 
-                var serializationSettings = settings ?? new CsvSerializationSettings();
-                using var writer = new CsvWriter(serializationSettings);
-                await WriteChunksAsync(
-                    new[] { midiChunk },
-                    stream,
-                    writer,
-                    tempoMap,
-                    serializationSettings,
-                    objectType,
-                    objectDetectionSettings ?? new ObjectDetectionSettings(),
-                    0,
-                    cancellationToken).ConfigureAwait(false);
-                await stream.FlushAsync(cancellationToken).ConfigureAwait(false);
-            },
-            progress,
-            cancellationToken);
+            if (!stream.CanWrite)
+                throw new ArgumentException("Stream doesn't support writing.", nameof(stream));
+
+            var serializationSettings = settings ?? new CsvSerializationSettings();
+            using var writer = new CsvWriter(serializationSettings);
+
+            await WriteChunksAsync(
+                new[] { midiChunk },
+                stream,
+                writer,
+                tempoMap,
+                serializationSettings,
+                objectType,
+                objectDetectionSettings ?? new ObjectDetectionSettings(),
+                0,
+                operation,
+                cancellationToken).ConfigureAwait(false);
+            await stream.FlushAsync(cancellationToken).ConfigureAwait(false);
+            operation.Complete();
+        }
 
         /// <summary>
         /// Serializes a MIDI chunk to a CSV file asynchronously.
@@ -338,37 +386,39 @@ namespace Melanchall.DryWetMidi.Tools
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
         /// <exception cref="ObjectDisposedException">The stream was disposed during writing.</exception>
         /// <exception cref="IOException">Writing or flushing the stream failed.</exception>
-        public static Task SerializeToCsvAsync(
+        public static async Task SerializeToCsvAsync(
             this IEnumerable<ITimedObject?> timedObjects,
             Stream stream,
             TempoMap tempoMap,
             CsvSerializationSettings? settings = null,
             IProgress<AsyncOperationProgress>? progress = null,
             CancellationToken cancellationToken = default)
-            => RunCsvAsync(async () =>
-            {
-                ThrowIfArgument.IsNull(nameof(timedObjects), timedObjects);
-                ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
-                ThrowIfArgument.IsNull(nameof(stream), stream);
+        {
+            var operation = new CsvOperation(cancellationToken, progress);
 
-                if (!stream.CanWrite)
-                    throw new ArgumentException("Stream doesn't support writing.", nameof(stream));
+            ThrowIfArgument.IsNull(nameof(timedObjects), timedObjects);
+            ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
+            ThrowIfArgument.IsNull(nameof(stream), stream);
 
-                var serializationSettings = settings ?? new CsvSerializationSettings();
-                using var writer = new CsvWriter(serializationSettings);
-                await WriteObjectsAsync(
-                    timedObjects,
-                    stream,
-                    writer,
-                    tempoMap,
-                    serializationSettings,
-                    null,
-                    null,
-                    cancellationToken).ConfigureAwait(false);
-                await stream.FlushAsync(cancellationToken).ConfigureAwait(false);
-            },
-            progress,
-            cancellationToken);
+            if (!stream.CanWrite)
+                throw new ArgumentException("Stream doesn't support writing.", nameof(stream));
+
+            var serializationSettings = settings ?? new CsvSerializationSettings();
+            using var writer = new CsvWriter(serializationSettings);
+
+            await WriteObjectsAsync(
+                timedObjects,
+                stream,
+                writer,
+                tempoMap,
+                serializationSettings,
+                null,
+                null,
+                operation,
+                cancellationToken).ConfigureAwait(false);
+            await stream.FlushAsync(cancellationToken).ConfigureAwait(false);
+            operation.Complete();
+        }
 
         /// <summary>
         /// Serializes objects to a CSV file asynchronously.
@@ -430,36 +480,42 @@ namespace Melanchall.DryWetMidi.Tools
         /// <exception cref="ObjectDisposedException">The stream was disposed during reading.</exception>
         /// <exception cref="IOException">Reading the stream failed.</exception>
         /// <exception cref="InvalidOperationException">The CSV data contains no header.</exception>
-        public static Task<MidiFile> DeserializeFileFromCsvAsync(
+        public static async Task<MidiFile> DeserializeFileFromCsvAsync(
             Stream stream,
             CsvDeserializationSettings? settings = null,
             IProgress<AsyncOperationProgress>? progress = null,
             CancellationToken cancellationToken = default)
-            => AsyncOperation.Run(async () =>
-            {
-                ThrowIfArgument.IsNull(nameof(stream), stream);
+        {
+            var operation = new CsvOperation(cancellationToken, progress);
 
-                if (!stream.CanRead)
-                    throw new ArgumentException("Stream doesn't support reading.", nameof(stream));
+            ThrowIfArgument.IsNull(nameof(stream), stream);
 
-                var deserializationSettings = settings ?? new CsvDeserializationSettings();
-                using var reader = new CsvReader(stream, deserializationSettings);
-                var chunks = await ReadChunksAsync(
-                    reader,
-                    deserializationSettings,
-                    (objects, readChunks) => GetTempoMap(objects, readChunks.OfType<HeaderChunk>().First().TimeDivision),
-                    cancellationToken).ConfigureAwait(false);
+            if (!stream.CanRead)
+                throw new ArgumentException("Stream doesn't support reading.", nameof(stream));
 
-                if (!chunks.Any())
-                    throw CsvError.BadFormat("No CSV data.");
+            var deserializationSettings = settings ?? new CsvDeserializationSettings();
+            using var reader = new CsvReader(stream, deserializationSettings);
 
-                var header = chunks.OfType<HeaderChunk>().First();
-                var file = new MidiFile { TimeDivision = header.TimeDivision };
-                file.Chunks.AddRange(chunks.Where(chunk => !(chunk is HeaderChunk)));
-                return file;
-            },
-            cancellationToken,
-            progress);
+            var chunks = await ReadChunksAsync(
+                reader,
+                deserializationSettings,
+                (objects, readChunks) => GetTempoMap(
+                    objects,
+                    readChunks.OfType<HeaderChunk>().First().TimeDivision,
+                    operation),
+                operation,
+                cancellationToken).ConfigureAwait(false);
+
+            if (!chunks.Any())
+                throw CsvError.BadFormat("No CSV data.");
+
+            var header = chunks.OfType<HeaderChunk>().First();
+            var file = new MidiFile { TimeDivision = header.TimeDivision };
+            file.Chunks.AddRange(chunks.Where(chunk => !(chunk is HeaderChunk)));
+            operation.Complete();
+
+            return file;
+        }
 
         /// <summary>
         /// Deserializes a MIDI file from CSV asynchronously.
@@ -508,31 +564,35 @@ namespace Melanchall.DryWetMidi.Tools
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
         /// <exception cref="ObjectDisposedException">The stream was disposed during reading.</exception>
         /// <exception cref="IOException">Reading the stream failed.</exception>
-        public static Task<ICollection<MidiChunk>> DeserializeChunksFromCsvAsync(
+        public static async Task<ICollection<MidiChunk>> DeserializeChunksFromCsvAsync(
             Stream stream,
             TempoMap tempoMap,
             CsvDeserializationSettings? settings = null,
             IProgress<AsyncOperationProgress>? progress = null,
             CancellationToken cancellationToken = default)
-            => AsyncOperation.Run(async () =>
-            {
-                ThrowIfArgument.IsNull(nameof(stream), stream);
+        {
+            var operation = new CsvOperation(cancellationToken, progress);
 
-                if (!stream.CanRead)
-                    throw new ArgumentException("Stream doesn't support reading.", nameof(stream));
+            ThrowIfArgument.IsNull(nameof(stream), stream);
 
-                ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
+            if (!stream.CanRead)
+                throw new ArgumentException("Stream doesn't support reading.", nameof(stream));
 
-                var deserializationSettings = settings ?? new CsvDeserializationSettings();
-                using var reader = new CsvReader(stream, deserializationSettings);
-                return await ReadChunksAsync(
-                    reader,
-                    deserializationSettings,
-                    (objects, chunks) => tempoMap,
-                    cancellationToken).ConfigureAwait(false);
-            },
-            cancellationToken,
-            progress);
+            ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
+
+            var deserializationSettings = settings ?? new CsvDeserializationSettings();
+            using var reader = new CsvReader(stream, deserializationSettings);
+
+            var chunks = await ReadChunksAsync(
+                reader,
+                deserializationSettings,
+                (objects, readChunks) => tempoMap,
+                operation,
+                cancellationToken).ConfigureAwait(false);
+            operation.Complete();
+
+            return chunks;
+        }
 
         /// <summary>
         /// Deserializes MIDI chunks from CSV asynchronously.
@@ -582,36 +642,39 @@ namespace Melanchall.DryWetMidi.Tools
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
         /// <exception cref="ObjectDisposedException">The stream was disposed during reading.</exception>
         /// <exception cref="IOException">Reading the stream failed.</exception>
-        public static Task<MidiChunk> DeserializeChunkFromCsvAsync(
+        public static async Task<MidiChunk> DeserializeChunkFromCsvAsync(
             Stream stream,
             TempoMap tempoMap,
             CsvDeserializationSettings? settings = null,
             IProgress<AsyncOperationProgress>? progress = null,
             CancellationToken cancellationToken = default)
-            => AsyncOperation.Run(async () =>
-            {
-                ThrowIfArgument.IsNull(nameof(stream), stream);
+        {
+            var operation = new CsvOperation(cancellationToken, progress);
 
-                if (!stream.CanRead)
-                    throw new ArgumentException("Stream doesn't support reading.", nameof(stream));
+            ThrowIfArgument.IsNull(nameof(stream), stream);
 
-                ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
+            if (!stream.CanRead)
+                throw new ArgumentException("Stream doesn't support reading.", nameof(stream));
 
-                var deserializationSettings = settings ?? new CsvDeserializationSettings();
-                using var reader = new CsvReader(stream, deserializationSettings);
-                var chunks = await ReadChunksAsync(
-                    reader,
-                    deserializationSettings,
-                    (objects, readChunks) => tempoMap,
-                    cancellationToken).ConfigureAwait(false);
+            ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
-                if (!chunks.Any())
-                    throw CsvError.BadFormat("No CSV data.");
+            var deserializationSettings = settings ?? new CsvDeserializationSettings();
+            using var reader = new CsvReader(stream, deserializationSettings);
 
-                return chunks.First();
-            },
-            cancellationToken,
-            progress);
+            var chunks = await ReadChunksAsync(
+                reader,
+                deserializationSettings,
+                (objects, readChunks) => tempoMap,
+                operation,
+                cancellationToken).ConfigureAwait(false);
+
+            if (!chunks.Any())
+                throw CsvError.BadFormat("No CSV data.");
+
+            operation.Complete();
+
+            return chunks.First();
+        }
 
         /// <summary>
         /// Deserializes a MIDI chunk from CSV asynchronously.
@@ -661,44 +724,47 @@ namespace Melanchall.DryWetMidi.Tools
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
         /// <exception cref="ObjectDisposedException">The stream was disposed during reading.</exception>
         /// <exception cref="IOException">Reading the stream failed.</exception>
-        public static Task<ICollection<ITimedObject>> DeserializeObjectsFromCsvAsync(
+        public static async Task<ICollection<ITimedObject>> DeserializeObjectsFromCsvAsync(
             Stream stream,
             TempoMap tempoMap,
             CsvDeserializationSettings? settings = null,
             IProgress<AsyncOperationProgress>? progress = null,
             CancellationToken cancellationToken = default)
-            => AsyncOperation.Run(async () =>
+        {
+            var operation = new CsvOperation(cancellationToken, progress);
+
+            ThrowIfArgument.IsNull(nameof(stream), stream);
+
+            if (!stream.CanRead)
+                throw new ArgumentException("Stream doesn't support reading.", nameof(stream));
+
+            ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
+
+            var deserializationSettings = settings ?? new CsvDeserializationSettings();
+            using var reader = new CsvReader(stream, deserializationSettings);
+            var objects = new List<CsvObject>();
+            var chords = new Dictionary<(int?, int?), CsvChord>();
+            CsvRecord? csvRecord;
+
+            while ((csvRecord = await reader.ReadRecordAsync(cancellationToken).ConfigureAwait(false)) != null)
             {
-                ThrowIfArgument.IsNull(nameof(stream), stream);
+                operation.Checkpoint();
 
-                if (!stream.CanRead)
-                    throw new ArgumentException("Stream doesn't support reading.", nameof(stream));
+                var record = ParseRecord(csvRecord, false)!;
+                var type = GetRecordType(record.RecordType, csvRecord.LineNumber, deserializationSettings.UnknownRecordPolicy);
+                if (type != null)
+                    ReadObject(record, type, objects, chords, deserializationSettings, false);
+            }
 
-                ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
+            if (!objects.Any())
+                throw CsvError.BadFormat("No CSV data.");
 
-                var deserializationSettings = settings ?? new CsvDeserializationSettings();
-                using var reader = new CsvReader(stream, deserializationSettings);
-                var objects = new List<CsvObject>();
-                var chords = new Dictionary<(int?, int?), CsvChord>();
-                CsvRecord? csvRecord;
+            var result = GetTimedObjects(objects, tempoMap, operation).FirstOrDefault()
+                ?? (ICollection<ITimedObject>)Array.Empty<ITimedObject>();
+            operation.Complete();
 
-                while ((csvRecord = await reader.ReadRecordAsync(cancellationToken).ConfigureAwait(false)) != null)
-                {
-                    AsyncOperation.Checkpoint();
-
-                    var record = ParseRecord(csvRecord, false)!;
-                    var type = GetRecordType(record.RecordType, csvRecord.LineNumber, deserializationSettings.UnknownRecordPolicy);
-                    if (type != null)
-                        ReadObject(record, type, objects, chords, deserializationSettings, false);
-                }
-
-                if (!objects.Any())
-                    throw CsvError.BadFormat("No CSV data.");
-
-                return GetTimedObjects(objects, tempoMap).FirstOrDefault() ?? (ICollection<ITimedObject>)Array.Empty<ITimedObject>();
-            },
-            cancellationToken,
-            progress);
+            return result;
+        }
 
         /// <summary>
         /// Deserializes objects from CSV asynchronously.
@@ -732,18 +798,6 @@ namespace Melanchall.DryWetMidi.Tools
             return await DeserializeObjectsFromCsvAsync(stream, tempoMap, settings, progress, cancellationToken).ConfigureAwait(false);
         }
 
-        private static Task RunCsvAsync(
-            Func<Task> action,
-            IProgress<AsyncOperationProgress>? progress,
-            CancellationToken cancellationToken)
-            => AsyncOperation.Run(async () =>
-            {
-                await action().ConfigureAwait(false);
-                return true;
-            },
-            cancellationToken,
-            progress);
-
         private static async Task WriteChunksAsync(
             IEnumerable<MidiChunk?> chunks,
             Stream stream,
@@ -753,11 +807,12 @@ namespace Melanchall.DryWetMidi.Tools
             ObjectType objectType,
             ObjectDetectionSettings detectionSettings,
             int chunkIndex,
+            CsvOperation operation,
             CancellationToken cancellationToken)
         {
             foreach (var chunk in chunks.OfType<MidiChunk>())
             {
-                AsyncOperation.Checkpoint();
+                operation.Checkpoint();
 
                 if (chunk is TrackChunk track)
                 {
@@ -769,6 +824,7 @@ namespace Melanchall.DryWetMidi.Tools
                         settings,
                         chunkIndex,
                         TrackChunk.Id,
+                        operation,
                         cancellationToken).ConfigureAwait(false);
                 }
                 else
@@ -789,19 +845,20 @@ namespace Melanchall.DryWetMidi.Tools
             CsvSerializationSettings settings,
             int? chunkIndex,
             string? chunkId,
+            CsvOperation operation,
             CancellationToken cancellationToken)
         {
             int objectIndex = 0;
 
             foreach (var obj in objects.OfType<ITimedObject>())
             {
-                AsyncOperation.Checkpoint();
+                operation.Checkpoint();
 
                 if (obj is Chord chord)
                 {
                     foreach (var note in chord.Notes)
                     {
-                        AsyncOperation.Checkpoint();
+                        operation.Checkpoint();
 
                         WriteNote(note, writer, settings, tempoMap, chunkIndex, chunkId, objectIndex);
                         await writer.DrainAsync(stream, cancellationToken).ConfigureAwait(false);
@@ -811,7 +868,7 @@ namespace Melanchall.DryWetMidi.Tools
                 {
                     foreach (var timedEvent in parameter.GetTimedEvents())
                     {
-                        AsyncOperation.Checkpoint();
+                        operation.Checkpoint();
 
                         WriteTimedEvent(timedEvent, writer, settings, tempoMap, chunkIndex, chunkId, objectIndex);
                         await writer.DrainAsync(stream, cancellationToken).ConfigureAwait(false);
@@ -831,6 +888,7 @@ namespace Melanchall.DryWetMidi.Tools
             CsvReader reader,
             CsvDeserializationSettings settings,
             Func<ICollection<CsvObject>, ICollection<MidiChunk>, TempoMap> getTempoMap,
+            CsvOperation operation,
             CancellationToken cancellationToken)
         {
             var result = new List<MidiChunk>();
@@ -840,7 +898,7 @@ namespace Melanchall.DryWetMidi.Tools
 
             while ((csvRecord = await reader.ReadRecordAsync(cancellationToken).ConfigureAwait(false)) != null)
             {
-                AsyncOperation.Checkpoint();
+                operation.Checkpoint();
 
                 var record = ParseRecord(csvRecord, true)!;
                 var type = GetRecordType(record.RecordType, csvRecord.LineNumber, settings.UnknownRecordPolicy);
@@ -864,9 +922,9 @@ namespace Melanchall.DryWetMidi.Tools
 
             var tempoMap = getTempoMap(objects, result);
 
-            foreach (var chunkObjects in GetTimedObjects(objects, tempoMap))
+            foreach (var chunkObjects in GetTimedObjects(objects, tempoMap, operation))
             {
-                AsyncOperation.Checkpoint();
+                operation.Checkpoint();
 
                 result.Add(chunkObjects.ToTrackChunk());
             }
