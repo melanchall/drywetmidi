@@ -240,12 +240,20 @@ namespace Melanchall.DryWetMidi.Core
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            if (!_useBuffering)
-                await _stream.WriteAsync(data, dataOffset, count, cancellationToken).ConfigureAwait(false);
-            else
-                await WriteBytesWithBufferingAsync(data, dataOffset, count, cancellationToken).ConfigureAwait(false);
+            while (count > 0)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
 
-            _length += count;
+                var bytesToWrite = Math.Min(count, 65536);
+                if (!_useBuffering)
+                    await _stream.WriteAsync(data, dataOffset, bytesToWrite, cancellationToken).ConfigureAwait(false);
+                else
+                    await WriteBytesWithBufferingAsync(data, dataOffset, bytesToWrite, cancellationToken).ConfigureAwait(false);
+
+                _length += bytesToWrite;
+                dataOffset += bytesToWrite;
+                count -= bytesToWrite;
+            }
         }
 
         private async Task WriteBytesWithBufferingAsync(

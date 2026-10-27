@@ -208,10 +208,11 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 await using var writer = await MidiFile.WriteLazyAsync(output, writingSettings);
                 await writer.WriteChunkAsync(chunk);
                 await writer.WriteChunkAsync(new TrackChunk(new TextEvent("following chunk")));
+                await writer.WriteChunkAsync(new TrackChunk());
             }
             else
             {
-                await new MidiFile(chunk, new TrackChunk(new TextEvent("following chunk")))
+                await new MidiFile(chunk, new TrackChunk(new TextEvent("following chunk")), new TrackChunk())
                     .WriteAsync(output, settings: writingSettings);
             }
 
@@ -226,7 +227,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
             ClassicAssert.AreEqual(nonSeekable ? long.MaxValue : bytes.Length, readChunk.ContentLength, "The hook received a payload-only buffered reader.");
             ClassicAssert.AreSame(readingSettings, readChunk.ReadSettings, "Reading settings were not passed to the hook.");
             ClassicAssert.AreSame(writingSettings, chunk.WriteSettings, "Writing settings were not passed to the hook.");
-            ClassicAssert.AreEqual(2, actual.Chunks.Count, "Reading consumed the following chunk.");
+            ClassicAssert.AreEqual(3, actual.Chunks.Count, "Reading consumed a following chunk.");
             ClassicAssert.IsFalse(input.IsDisposed, "Reading disposed the caller's stream.");
             ClassicAssert.IsFalse(output.IsDisposed, "Writing disposed the caller's stream.");
 
@@ -262,7 +263,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
 
             cancellation.Cancel();
 
-            Assert.ThrowsAsync<OperationCanceledException>(async () => await pending, "Cancellation was not passed to the hook.");
+            Assert.CatchAsync<OperationCanceledException>(async () => await pending, "Cancellation was not passed to the hook.");
             ClassicAssert.IsFalse(input.IsDisposed, "Cancellation disposed the caller's stream.");
         }
 
@@ -298,7 +299,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 await entered.Task;
                 cancellation.Cancel();
 
-                Assert.ThrowsAsync<OperationCanceledException>(
+                Assert.CatchAsync<OperationCanceledException>(
                     async () => await pending,
                     "Cancellation did not interrupt the asynchronous custom content write.");
                 ClassicAssert.IsFalse(output.IsDisposed, "Cancellation disposed the caller's output stream.");
