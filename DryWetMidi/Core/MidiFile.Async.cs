@@ -22,9 +22,11 @@ namespace Melanchall.DryWetMidi.Core
         /// <param name="cancellationToken">Token used to cancel reading.</param>
         /// <returns>The MIDI file.</returns>
         /// <remarks>
-        /// Transport I/O is awaited. Synchronous codecs decode individual buffered
-        /// events or custom chunks. Whole-file buffering is used only when requested by
-        /// <see cref="ReaderSettings.BufferingPolicy"/>.
+        /// Transport I/O is awaited. Synchronous codecs decode individual buffered events.
+        /// Custom chunks can override <see cref="MidiChunk.ReadContentAsync"/> to read content
+        /// directly with asynchronous reader methods. The default implementation buffers custom
+        /// content for synchronous decoding. Whole-file buffering is used only when requested
+        /// by <see cref="ReaderSettings.BufferingPolicy"/>.
         /// </remarks>
         /// <inheritdoc cref="Read(Stream, ReadingSettings)" path="/member/exception"/>
         /// <exception cref="OperationCanceledException"><paramref name="cancellationToken"/> was canceled.</exception>
@@ -101,9 +103,11 @@ namespace Melanchall.DryWetMidi.Core
         /// <param name="cancellationToken">Token used to cancel writing.</param>
         /// <returns>A task representing writing.</returns>
         /// <remarks>
-        /// Synchronous codecs encode individual events or custom chunks in memory;
-        /// transport writes and flushing are awaited. Cancellation or failure can leave
-        /// partially written data in the stream.
+        /// Synchronous codecs encode individual events in memory. Custom chunks can override
+        /// <see cref="MidiChunk.WriteContentAsync"/> to write content directly with asynchronous
+        /// writer methods. The default implementation buffers synchronously encoded custom
+        /// content. Transport writes and flushing are awaited. Cancellation or failure can
+        /// leave partially written data in the stream.
         /// </remarks>
         /// <inheritdoc cref="Write(Stream, MidiFileFormat, WritingSettings)" path="/member/exception"/>
         /// <exception cref="OperationCanceledException"><paramref name="cancellationToken"/> was canceled.</exception>

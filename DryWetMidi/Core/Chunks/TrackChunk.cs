@@ -228,7 +228,21 @@ namespace Melanchall.DryWetMidi.Core
             return midiEvent;
         }
 
-        internal async Task WriteContentAsync(MidiWriter writer, WritingSettings settings, CancellationToken cancellationToken)
+        /// <inheritdoc/>
+        protected override Task ReadContentAsync(
+            MidiReader reader,
+            ReadingSettings settings,
+            uint size,
+            CancellationToken cancellationToken = default)
+        {
+            return MidiFile.ReadTrackAsync(this, reader, settings, reader.Position + size, cancellationToken);
+        }
+
+        /// <inheritdoc/>
+        protected override async Task WriteContentAsync(
+            MidiWriter writer,
+            WritingSettings settings,
+            CancellationToken cancellationToken = default)
         {
             byte? runningStatus = null;
             var skipTempo = true;

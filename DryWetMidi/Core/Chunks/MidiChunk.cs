@@ -214,24 +214,48 @@ namespace Melanchall.DryWetMidi.Core
         internal async Task WriteAsync(MidiWriter writer, WritingSettings settings, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            if (this is TrackChunk track)
-            {
-                await writer.WriteEncodedAsync(
-                    codec => WriteHeader(ChunkId, track.GetContentSize(settings, cancellationToken), codec, settings),
-                    cancellationToken).ConfigureAwait(false);
-                await track.WriteContentAsync(writer, settings, cancellationToken).ConfigureAwait(false);
-            }
-            else if (this is UnknownChunk unknown)
-            {
-                await writer.WriteEncodedAsync(
-                    codec => WriteHeader(ChunkId, GetContentSize(settings), codec, settings),
-                    cancellationToken).ConfigureAwait(false);
+            var size = this is TrackChunk track
+                ? track.GetContentSize(settings, cancellationToken)
+                : GetContentSize(settings);
 
-                if (unknown.Data != null)
-                    await writer.WriteDataAsync(unknown.Data, cancellationToken).ConfigureAwait(false);
+            await writer.WriteEncodedAsync(
+                codec => WriteHeader(ChunkId, size, codec, settings),
+                cancellationToken).ConfigureAwait(false);
+            await WriteContentAsync(writer, settings, cancellationToken).ConfigureAwait(false);
+        }
+
+        internal async Task ReadAsync(
+            MidiReader reader,
+            ReadingSettings settings,
+            uint size,
+            CancellationToken cancellationToken)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            var start = reader.Position;
+            var estimateMemory = settings.MaxMemorySize != null;
+            var isCustomChunk = !(this is HeaderChunk || this is TrackChunk || this is UnknownChunk);
+
+            if (estimateMemory && isCustomChunk)
+                reader.ThrowIfMemoryLimitExceeded(Math.Min(size, Math.Max(0, reader.Length - start)), settings);
+
+            var initialSize = 0L;
+            if (estimateMemory && !(this is HeaderChunk))
+            {
+                initialSize = MemorySizeEstimator.EstimateDeep(this);
+                reader.AddEstimatedMemory(initialSize, settings);
             }
-            else
-                await writer.WriteEncodedAsync(codec => Write(codec, settings), cancellationToken).ConfigureAwait(false);
+
+            await ReadContentAsync(reader, settings, size, cancellationToken).ConfigureAwait(false);
+
+            if (estimateMemory && isCustomChunk)
+                reader.AddEstimatedMemory(Math.Max(0, MemorySizeEstimator.EstimateDeep(this) - initialSize), settings);
+
+            var consumed = reader.Position - start;
+            if (settings.InvalidChunkSizePolicy == InvalidChunkSizePolicy.Abort && consumed != size)
+                throw new InvalidChunkSizeException(ChunkId, size, consumed);
+
+            if (consumed < size)
+                await reader.SetPositionAsync(Math.Min(start + size, reader.Length), cancellationToken).ConfigureAwait(false);
         }
 
         internal static uint ReadSize(MidiReader reader, out long readerPosition)
@@ -260,6 +284,46 @@ namespace Melanchall.DryWetMidi.Core
         protected abstract void ReadContent(MidiReader reader, ReadingSettings settings, uint size);
 
         /// <summary>
+        /// Asynchronously reads the chunk's content, excluding its ID and size.
+        /// </summary>
+        /// <param name="reader">Reader to use. The reader and its underlying stream are left open.</param>
+        /// <param name="settings">Settings according to which the content must be read.</param>
+        /// <param name="size">Expected content size from the chunk's header.</param>
+        /// <param name="cancellationToken">Token used to cancel reading.</param>
+        /// <returns>A task representing reading the content.</returns>
+        /// <remarks>
+        /// Override this method to read directly using asynchronous reader methods. The default
+        /// implementation buffers the content asynchronously and calls <see cref="ReadContent"/>
+        /// with a synchronous in-memory reader for compatibility with existing custom chunks.
+        /// The MIDI file reading APIs initialize the reader's buffering before invoking this method;
+        /// overrides do not need to initialize the reader or construct a replacement.
+        /// </remarks>
+        /// <exception cref="OperationCanceledException">Reading was canceled.</exception>
+        /// <exception cref="ObjectDisposedException">The reader or its underlying stream was disposed.</exception>
+        /// <exception cref="IOException">An I/O error occurred.</exception>
+        /// <exception cref="InvalidChunkSizeException">The content size is invalid and the settings require aborting.</exception>
+        protected virtual async Task ReadContentAsync(
+            MidiReader reader,
+            ReadingSettings settings,
+            uint size,
+            CancellationToken cancellationToken = default)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            var start = reader.Position;
+            using var memory = new MemoryStream();
+            await reader.CopyBytesAsync(memory, size, cancellationToken).ConfigureAwait(false);
+            var buffer = memory.Length == 0 ? new byte[1] : memory.GetBuffer();
+            using var codec = new MidiReader(buffer, 0, checked((int)memory.Length), settings.ReaderSettings, start);
+            codec.AddEstimatedMemory(reader.EstimatedMemorySize, settings);
+            ReadContent(codec, settings, size);
+            cancellationToken.ThrowIfCancellationRequested();
+
+            var consumed = codec.Position - start;
+            if (settings.InvalidChunkSizePolicy == InvalidChunkSizePolicy.Abort && consumed != size)
+                throw new InvalidChunkSizeException(ChunkId, size, consumed);
+        }
+
+        /// <summary>
         /// Writes content of a chunk. Content is a part of chunk's data without its header (ID and size).
         /// </summary>
         /// <param name="writer">Writer to write the chunk's content with.</param>
@@ -269,6 +333,29 @@ namespace Melanchall.DryWetMidi.Core
         /// <exception cref="System.IO.IOException">An I/O error occurred on the <paramref name="writer"/>'s
         /// underlying stream.</exception>
         protected abstract void WriteContent(MidiWriter writer, WritingSettings settings);
+
+        /// <summary>
+        /// Asynchronously writes the chunk's content, excluding its ID and size.
+        /// </summary>
+        /// <param name="writer">Writer to use. The writer and its underlying stream are left open.</param>
+        /// <param name="settings">Settings according to which the content must be written.</param>
+        /// <param name="cancellationToken">Token used to cancel writing.</param>
+        /// <returns>A task representing writing the content.</returns>
+        /// <remarks>
+        /// Override this method to write directly using asynchronous writer methods. The default
+        /// implementation calls <see cref="WriteContent"/> with a synchronous in-memory writer
+        /// and then asynchronously writes the buffered content.
+        /// </remarks>
+        /// <exception cref="OperationCanceledException">Writing was canceled.</exception>
+        /// <exception cref="ObjectDisposedException">The writer or its underlying stream was disposed.</exception>
+        /// <exception cref="IOException">An I/O error occurred.</exception>
+        protected virtual Task WriteContentAsync(
+            MidiWriter writer,
+            WritingSettings settings,
+            CancellationToken cancellationToken = default)
+        {
+            return writer.WriteEncodedAsync(codec => WriteContent(codec, settings), cancellationToken);
+        }
 
         /// <summary>
         /// Gets size of chunk's content as number of bytes required to write it according to specified
