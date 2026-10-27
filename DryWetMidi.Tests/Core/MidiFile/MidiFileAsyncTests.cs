@@ -485,7 +485,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
         }
 
         [Test]
-        public async Task NonSeekableMalformedLength_BuffersOnlyAvailablePayload()
+        public async Task NonSeekableMalformedLength_BuffersOnlyAvailablePayload([Values] bool limitMemory)
         {
             using var bytes = new MemoryStream();
             new MidiFile(new UnknownChunk("Test") { Data = new byte[] { 1, 2, 3 } }).Write(bytes);
@@ -496,14 +496,51 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 data[i] = 0xFF;
             }
 
-            using var input = new AsyncOnlyStream(data, false, 2);
-            var file = await MidiFile.ReadAsync(input, new ReadingSettings
+            var settings = new ReadingSettings
             {
                 NotEnoughBytesPolicy = NotEnoughBytesPolicy.Ignore,
-                InvalidChunkSizePolicy = InvalidChunkSizePolicy.Ignore
-            });
+                InvalidChunkSizePolicy = InvalidChunkSizePolicy.Ignore,
+                MaxMemorySize = limitMemory ? 10000 : (long?)null
+            };
+            using var expectedInput = new MemoryStream(data);
+            var expected = MidiFile.Read(expectedInput, settings);
+            using var input = new AsyncOnlyStream(data, false, 2);
+
+            var file = await MidiFile.ReadAsync(input, settings);
 
             ClassicAssert.AreEqual(new byte[] { 1, 2, 3 }, ((UnknownChunk)file.Chunks[0]).Data, "Malformed-length handling did not preserve the available payload.");
+            ClassicAssert.AreEqual(expected.EstimatedMemorySize, file.EstimatedMemorySize, "Malformed-length handling did not account for the actual retained payload.");
+            ClassicAssert.IsFalse(input.IsDisposed, "Malformed-length handling disposed the caller's stream.");
+        }
+
+        [Test]
+        public void NonSeekableUnknownChunk_StopsAtMemoryLimit([Values] bool malformedLength)
+        {
+            using var bytes = new MemoryStream();
+            new MidiFile(new UnknownChunk("Test") { Data = new byte[20000] }).Write(bytes);
+            var data = bytes.ToArray();
+            if (malformedLength)
+            {
+                for (var i = 18; i < 22; i++)
+                {
+                    data[i] = 0xFF;
+                }
+            }
+
+            using var input = new AsyncOnlyStream(data, false, 997);
+            var settings = new ReadingSettings
+            {
+                NotEnoughBytesPolicy = NotEnoughBytesPolicy.Ignore,
+                InvalidChunkSizePolicy = InvalidChunkSizePolicy.Ignore,
+                MaxMemorySize = 10000
+            };
+
+            Assert.ThrowsAsync<MidiFileTooLargeException>(
+                async () => await MidiFile.ReadAsync(input, settings),
+                "The memory limit did not reject a genuinely oversized retained unknown payload.");
+
+            ClassicAssert.Less(input.BytesRead, data.Length, "The entire oversized payload was buffered before checking the memory limit.");
+            ClassicAssert.IsFalse(input.IsDisposed, "A memory-limit failure disposed the caller's stream.");
         }
 
         [Test]
