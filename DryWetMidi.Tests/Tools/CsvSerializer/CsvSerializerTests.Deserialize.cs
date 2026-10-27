@@ -18,6 +18,27 @@ namespace Melanchall.DryWetMidi.Tests.Tools
     {
         #region Test methods
 
+        [Test]
+        public void DeserializeAsync_ImmediatelyCompletedIo_DoesNotRequireWorker() =>
+            CheckImmediatelyCompletedCsvIo(false);
+
+        [Test]
+        public void DeserializeAsync_IoErrors_PropagateWithoutDeadlock() =>
+            CheckCsvIoErrors(false);
+
+        [Test]
+        public void DeserializeAsync_Cancellation_InterruptsPendingIo() =>
+            CheckCsvCancellation(false);
+
+        [Test]
+        public void DeserializeAsync_CodecErrors_PropagateWithoutDeadlock()
+        {
+            using var input = new AsyncOnlyStream(System.Text.Encoding.UTF8.GetBytes("not a valid CSV MIDI file\n" + new string('x', 20000)));
+
+            Assert.ThrowsAsync<CsvException>(async () =>
+                await CsvSerializer.DeserializeFileFromCsvAsync(input).WaitAsync(TimeSpan.FromSeconds(10)), "CSV codec failure did not propagate without deadlock.");
+        }
+
         [TestCaseSource(nameof(EventsDataForDeserialization))]
         public void Deserialize_Event(MidiEvent midiEvent, string expectedCsv, CsvDeserializationSettings settings) => CheckDeserialize(
             csvLines: new[] { $"0,\"{midiEvent.EventType}\",0{(string.IsNullOrEmpty(expectedCsv) ? string.Empty : $",{expectedCsv}")}" },

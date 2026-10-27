@@ -9,6 +9,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Melanchall.DryWetMidi.Tests.Tools
 {
@@ -16,6 +18,101 @@ namespace Melanchall.DryWetMidi.Tests.Tools
     public sealed partial class CsvSerializerTests
     {
         #region Test methods
+
+        [Test]
+        public void SerializeAsync_ImmediatelyCompletedIo_DoesNotRequireWorker() =>
+            CheckImmediatelyCompletedCsvIo(true);
+
+        [Test]
+        public void SerializeAsync_IoErrors_PropagateWithoutDeadlock() =>
+            CheckCsvIoErrors(true);
+
+        [Test]
+        public void SerializeAsync_Cancellation_InterruptsPendingIo() =>
+            CheckCsvCancellation(true);
+
+        [Test]
+        public void SerializeAsync_CodecErrors_PropagateWithoutDeadlock()
+        {
+            IEnumerable<ITimedObject> Source()
+            {
+                yield return new TimedEvent(new TextEvent("first"));
+                throw new InvalidOperationException("Source failure.");
+            }
+
+            using var output = new AsyncOnlyStream();
+
+            Assert.ThrowsAsync<InvalidOperationException>(async () =>
+                await Source().SerializeToCsvAsync(output, TempoMap.Default).WaitAsync(TimeSpan.FromSeconds(10)), "CSV source failure did not propagate without deadlock.");
+        }
+
+        [Test]
+        public void Csv_InvalidOrCanceledPathWrite_DoesNotCreateFile()
+        {
+            var path = Path.Combine(TestContext.CurrentContext.WorkDirectory, "tools-async-" + Guid.NewGuid() + ".csv");
+
+            try
+            {
+                Assert.ThrowsAsync<ArgumentNullException>(() => ((MidiFile)null).SerializeToCsvAsync(path, true), "CSV path serialization accepted a null file.");
+                ClassicAssert.IsFalse(File.Exists(path), "Invalid file serialization created a path.");
+                Assert.ThrowsAsync<ArgumentNullException>(() => CreateFile().GetTrackChunks().First().SerializeToCsvAsync(path, true, null), "CSV path serialization accepted a null tempo map.");
+                ClassicAssert.IsFalse(File.Exists(path), "Invalid tempo-map serialization created a path.");
+
+                using var cancellation = new CancellationTokenSource();
+                cancellation.Cancel();
+
+                Assert.CatchAsync<OperationCanceledException>(() => CreateFile().SerializeToCsvAsync(path, true, cancellationToken: cancellation.Token), "Pre-canceled CSV serialization did not throw.");
+                ClassicAssert.IsFalse(File.Exists(path), "Pre-canceled serialization created a path.");
+            }
+            finally
+            {
+                File.Delete(path);
+            }
+        }
+
+        [Test]
+        public async Task Csv_Serialization_DoesNotStageWholeInput()
+        {
+            int visited = 0;
+            int visitedAtFirstWrite = -1;
+
+            IEnumerable<ITimedObject> Source()
+            {
+                for (int i = 0; i < 10000; i++)
+                {
+                    Interlocked.Increment(ref visited);
+                    yield return new TimedEvent(new TextEvent("a buffered CSV record"), i);
+                }
+            }
+
+            using var output = new AsyncOnlyStream
+            {
+                OnWrite = () =>
+                {
+                    if (visitedAtFirstWrite == -1)
+                        visitedAtFirstWrite = Volatile.Read(ref visited);
+                }
+            };
+
+            await Source().SerializeToCsvAsync(output, TempoMap.Default);
+
+            ClassicAssert.AreEqual(10000, visited, "CSV serialization did not consume the full source.");
+            ClassicAssert.GreaterOrEqual(visitedAtFirstWrite, 1, "CSV serialization wrote before visiting a source item.");
+            ClassicAssert.LessOrEqual(visitedAtFirstWrite, 9999, "CSV serialization staged the whole source before writing.");
+        }
+
+        [Test]
+        public async Task Csv_Progress_CompletesAfterFlush()
+        {
+            using var output = new AsyncOnlyStream();
+            var progress = new InlineProgress();
+
+            await CreateFile().SerializeToCsvAsync(output, progress: progress);
+
+            ClassicAssert.IsTrue(progress.Reports.Last().IsCompleted, "CSV progress did not report completion.");
+            ClassicAssert.Greater(progress.Reports.Last().ProcessedItems, 0, "CSV progress reported no work.");
+            ClassicAssert.AreEqual(1, output.Flushes, "Completed CSV serialization did not flush exactly once.");
+        }
 
         [TestCaseSource(nameof(EventsData))]
         public void Serialize_Event(MidiEvent midiEvent, string expectedCsv, CsvSerializationSettings settings)
