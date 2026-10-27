@@ -162,7 +162,7 @@ protected override uint GetContentSize(WritingSettings settings)
         _changes.Count.GetVlqLength() +
         _changes.Select(c =>
         {
-            var commentLength = Encoding.Unicode.GetByteCount(c.Comment.ToCharArray());
+            var commentLength = Encoding.Unicode.GetByteCount(c.Comment ?? string.Empty);
             return 4 /* 1 for day, 1 for month, 2 for year */ +
                     commentLength.GetVlqLength() +
                     commentLength;
@@ -215,3 +215,138 @@ var historyChunks = fileWithHistoryChunk.Chunks.OfType<HistoryChunk>();
 ```
 
 If you don't provide information about your custom chunk in `ReadingSettings`, the chunks will be read as [UnknownChunk](xref:Melanchall.DryWetMidi.Core.UnknownChunk).
+
+## Asynchronous content I/O
+
+Keep the four synchronous methods above, even when adding asynchronous support.
+Existing subclasses remain compatible: the default
+[`MidiChunk.ReadContentAsync`](xref:Melanchall.DryWetMidi.Core.MidiChunk.ReadContentAsync(Melanchall.DryWetMidi.Core.MidiReader,Melanchall.DryWetMidi.Core.ReadingSettings,System.UInt32,System.Threading.CancellationToken))
+buffers the declared chunk content before invoking `ReadContent`, and the default
+[`MidiChunk.WriteContentAsync`](xref:Melanchall.DryWetMidi.Core.MidiChunk.WriteContentAsync(Melanchall.DryWetMidi.Core.MidiWriter,Melanchall.DryWetMidi.Core.WritingSettings,System.Threading.CancellationToken))
+buffers the output of `WriteContent` before asynchronously transporting it.
+These fallbacks can allocate memory proportional to the custom chunk size and
+cannot interrupt arbitrary synchronous custom code with cancellation.
+
+Override these protected virtual methods to process content incrementally with
+the supplied reader or writer instead. The framework owns the chunk header:
+read or write only content, not the chunk ID or size. Do not dispose the supplied
+reader or writer, start overlapping operations, or wrap the synchronous overrides
+in `Task.Run`.
+
+For example, add these overrides to the `HistoryChunk` defined above:
+
+```csharp
+protected override async Task ReadContentAsync(
+    MidiReader reader,
+    ReadingSettings settings,
+    uint size,
+    CancellationToken cancellationToken)
+{
+    var changes = new List<Change>();
+    var changesCount = await reader.ReadVlqNumberAsync(cancellationToken)
+        .ConfigureAwait(false);
+
+    for (var i = 0; i < changesCount; i++)
+    {
+        var day = await reader.ReadByteAsync(cancellationToken).ConfigureAwait(false);
+        var month = await reader.ReadByteAsync(cancellationToken).ConfigureAwait(false);
+        var year = await reader.ReadWordAsync(cancellationToken).ConfigureAwait(false);
+
+        var commentLength = await reader.ReadVlqNumberAsync(cancellationToken)
+            .ConfigureAwait(false);
+        var commentBytes = await reader.ReadBytesAsync(commentLength, cancellationToken)
+            .ConfigureAwait(false);
+
+        if (commentBytes.Length != commentLength)
+            throw new EndOfStreamException("The history comment is incomplete.");
+
+        var comment = Encoding.Unicode.GetString(commentBytes);
+        changes.Add(new Change(new DateTime(year, month, day), comment));
+    }
+
+    cancellationToken.ThrowIfCancellationRequested();
+    _changes.AddRange(changes);
+}
+
+protected override async Task WriteContentAsync(
+    MidiWriter writer,
+    WritingSettings settings,
+    CancellationToken cancellationToken)
+{
+    await writer.WriteVlqNumberAsync(_changes.Count, cancellationToken)
+        .ConfigureAwait(false);
+
+    foreach (var change in _changes)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+
+        var date = change.Date;
+        await writer.WriteByteAsync((byte)date.Day, cancellationToken)
+            .ConfigureAwait(false);
+        await writer.WriteByteAsync((byte)date.Month, cancellationToken)
+            .ConfigureAwait(false);
+        await writer.WriteWordAsync((ushort)date.Year, cancellationToken)
+            .ConfigureAwait(false);
+
+        var commentBytes = Encoding.Unicode.GetBytes(change.Comment ?? string.Empty);
+        await writer.WriteVlqNumberAsync(commentBytes.Length, cancellationToken)
+            .ConfigureAwait(false);
+        await writer.WriteBytesAsync(commentBytes, cancellationToken)
+            .ConfigureAwait(false);
+    }
+}
+```
+
+The public reader primitives include
+[`ReadByteAsync`](xref:Melanchall.DryWetMidi.Core.MidiReader.ReadByteAsync(System.Threading.CancellationToken)),
+[`ReadWordAsync`](xref:Melanchall.DryWetMidi.Core.MidiReader.ReadWordAsync(System.Threading.CancellationToken)),
+[`ReadBytesAsync`](xref:Melanchall.DryWetMidi.Core.MidiReader.ReadBytesAsync(System.Int32,System.Threading.CancellationToken)),
+and [`ReadVlqNumberAsync`](xref:Melanchall.DryWetMidi.Core.MidiReader.ReadVlqNumberAsync(System.Threading.CancellationToken)).
+`ReadBytesAsync` can return fewer bytes at end of input; validate the returned
+length when the format requires an exact number. Corresponding writer primitives
+include
+[`WriteByteAsync`](xref:Melanchall.DryWetMidi.Core.MidiWriter.WriteByteAsync(System.Byte,System.Threading.CancellationToken)),
+[`WriteWordAsync`](xref:Melanchall.DryWetMidi.Core.MidiWriter.WriteWordAsync(System.UInt16,System.Threading.CancellationToken)),
+[`WriteBytesAsync`](xref:Melanchall.DryWetMidi.Core.MidiWriter.WriteBytesAsync*),
+and [`WriteVlqNumberAsync`](xref:Melanchall.DryWetMidi.Core.MidiWriter.WriteVlqNumberAsync*).
+
+These methods are public and can also be used with directly constructed
+[`MidiReader`](xref:Melanchall.DryWetMidi.Core.MidiReader) and
+[`MidiWriter`](xref:Melanchall.DryWetMidi.Core.MidiWriter) instances outside chunk
+overrides. Await each operation before starting the next. Reader construction
+is still synchronous: a policy that buffers all input can perform synchronous
+I/O during construction. Do not select
+[`BufferingPolicy.BufferAllData`](xref:Melanchall.DryWetMidi.Core.BufferingPolicy.BufferAllData)
+when the underlying stream must not be read synchronously.
+
+The `size` parameter is the declared content size, not a bounded substream.
+Overrides must avoid reading into the following chunk; the configured
+[`InvalidChunkSizePolicy`](xref:Melanchall.DryWetMidi.Core.ReadingSettings.InvalidChunkSizePolicy)
+is applied after the override returns. Keep `GetContentSize` consistent with both
+writers: it still determines the content size in the header and remains synchronous.
+
+The example avoids a separate whole-chunk transport buffer, but it still
+materializes the `HistoryChunk` and its comments. The temporary list also keeps
+incomplete or canceled reads from committing partial changes to `_changes`.
+This is not constant-memory deserialization. CPU-bound decoding, encoding,
+size calculation, and other custom work remain synchronous unless they genuinely
+await I/O. Pass the supplied cancellation token to every awaited I/O operation
+and check it during long CPU-bound processing; cancellation is cooperative.
+Cancellation or failure can leave partial output, without rollback or atomic
+replacement.
+
+[`MidiFile.ReadAsync`](xref:Melanchall.DryWetMidi.Core.MidiFile.ReadAsync*) uses the
+read hook for registered custom chunks, and
+[`MidiFile.WriteAsync`](xref:Melanchall.DryWetMidi.Core.MidiFile.WriteAsync*) uses
+the write hook. Registration through `ReadingSettings.CustomChunkTypes` is
+unchanged. For bulk file examples, progress, and stream ownership, see
+[MIDI file reading](xref:a_file_reading#asynchronous-reading) and
+[MIDI file writing](xref:a_file_writing#asynchronous-writing).
+
+Lazy reading preserves the token model: nonstandard chunk content is returned
+as [`BytesPacketToken`](xref:Melanchall.DryWetMidi.Core.BytesPacketToken) objects
+instead of invoking the custom read hook.
+[`MidiTokensWriter.WriteChunkAsync`](xref:Melanchall.DryWetMidi.Core.MidiTokensWriter.WriteChunkAsync(Melanchall.DryWetMidi.Core.MidiChunk,System.Threading.CancellationToken))
+invokes the custom write hook when writing a chunk. See
+[Lazy reading/writing](xref:a_file_lazy_reading_writing) for token sequencing,
+seekability requirements, and asynchronous disposal.

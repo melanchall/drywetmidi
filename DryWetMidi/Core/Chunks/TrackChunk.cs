@@ -228,7 +228,7 @@ namespace Melanchall.DryWetMidi.Core
             return midiEvent;
         }
 
-        internal async Task WriteContentAsync(MidiWriter writer, WritingSettings settings, CancellationToken cancellationToken)
+        protected override async Task WriteContentAsync(MidiWriter writer, WritingSettings settings, CancellationToken cancellationToken)
         {
             byte? runningStatus = null;
             var skipTempo = true;

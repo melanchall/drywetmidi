@@ -22,8 +22,10 @@ namespace Melanchall.DryWetMidi.Core
         /// <param name="cancellationToken">Token used to cancel reading.</param>
         /// <returns>The MIDI file.</returns>
         /// <remarks>
-        /// Transport I/O is awaited. Synchronous codecs decode individual buffered
-        /// events or custom chunks. Whole-file buffering is used only when requested by
+        /// Transport I/O is awaited. Synchronous codecs decode individual buffered events.
+        /// Custom chunks can override their asynchronous content hooks to avoid payload buffering;
+        /// synchronous-only custom chunks use a buffered compatibility fallback.
+        /// Whole-file buffering is used only when requested by
         /// <see cref="ReaderSettings.BufferingPolicy"/>.
         /// </remarks>
         /// <inheritdoc cref="Read(Stream, ReadingSettings)" path="/member/exception"/>
@@ -101,7 +103,8 @@ namespace Melanchall.DryWetMidi.Core
         /// <param name="cancellationToken">Token used to cancel writing.</param>
         /// <returns>A task representing writing.</returns>
         /// <remarks>
-        /// Synchronous codecs encode individual events or custom chunks in memory;
+        /// Synchronous codecs encode individual events in memory. Custom chunks can override
+        /// their asynchronous content hooks to avoid the buffered synchronous compatibility fallback;
         /// transport writes and flushing are awaited. Cancellation or failure can leave
         /// partially written data in the stream.
         /// </remarks>

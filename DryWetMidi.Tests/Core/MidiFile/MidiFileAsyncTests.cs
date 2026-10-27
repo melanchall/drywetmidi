@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 namespace Melanchall.DryWetMidi.Tests.Core
 {
     [TestFixture]
-    public sealed class MidiFileAsyncTests
+    public sealed partial class MidiFileAsyncTests
     {
         private static MidiFile CreateFile() => new MidiFile(new TrackChunk(
             new NoteOnEvent { Velocity = (SevenBitNumber)100 },
@@ -320,11 +320,18 @@ namespace Melanchall.DryWetMidi.Tests.Core
         }
 
         [Test]
-        public async Task CustomChunk_UsesInMemoryCodec_WithAbsolutePositions()
+        public async Task CustomChunk_UsesInMemoryCodec_WithAbsolutePositions([Values] bool lazyWrite)
         {
             var file = new MidiFile(new CustomChunk { Value = 42 });
             using var output = new AsyncOnlyStream();
-            await file.WriteAsync(output);
+            if (lazyWrite)
+            {
+                await using var writer = await MidiFile.WriteLazyAsync(output);
+                await writer.WriteChunkAsync(file.Chunks[0]);
+            }
+            else
+                await file.WriteAsync(output);
+
             using var input = new AsyncOnlyStream(output.ToArray(), false, 2);
             var actual = await MidiFile.ReadAsync(input, new ReadingSettings
             {

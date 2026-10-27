@@ -175,7 +175,7 @@ namespace Melanchall.DryWetMidi.Core
 
                     await ReadTrackAsync(track, reader, settings, start + size, cancellationToken).ConfigureAwait(false);
                 }
-                else
+                else if (chunk is UnknownChunk)
                 {
                     var available = Math.Min(size, Math.Max(0, reader.Length - reader.Position));
                     reader.ThrowIfMemoryLimitExceeded(available, settings);
@@ -190,6 +190,11 @@ namespace Melanchall.DryWetMidi.Core
                     if (settings.MaxMemorySize != null)
                         reader.AddEstimatedMemory(codec.EstimatedMemorySize - reader.EstimatedMemorySize, settings);
 
+                    return chunk;
+                }
+                else
+                {
+                    await chunk.ReadAsync(reader, settings, size, cancellationToken).ConfigureAwait(false);
                     return chunk;
                 }
 

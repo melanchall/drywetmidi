@@ -7,6 +7,10 @@ namespace Melanchall.DryWetMidi.Core
     /// <summary>
     /// Writer of the MIDI data types.
     /// </summary>
+    /// <remarks>
+    /// Asynchronous methods leave the underlying stream open and must not overlap other operations
+    /// on this writer. Their optional cancellation tokens default to no cancellation.
+    /// </remarks>
     public sealed partial class MidiWriter : IDisposable, IAsyncDisposable
     {
         #region Fields

@@ -12,6 +12,13 @@ namespace Melanchall.DryWetMidi.Core
     /// <summary>
     /// Reader of the MIDI data types.
     /// </summary>
+    /// <remarks>
+    /// Asynchronous methods leave the underlying stream open and must not overlap other operations
+    /// on this reader. Their optional cancellation tokens default to no cancellation.
+    /// Construction can read synchronously when <see cref="BufferingPolicy.BufferAllData"/> is
+    /// explicitly requested. For asynchronous primitive I/O on directly constructed readers,
+    /// select another buffering policy.
+    /// </remarks>
     public sealed partial class MidiReader : IDisposable
     {
         #region Constants
