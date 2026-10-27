@@ -47,7 +47,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
 
             ClassicAssert.AreEqual(synchronousOutput.ToArray(), output.ToArray(), "Async primitive bytes differ from synchronous output.");
             ClassicAssert.AreEqual(synchronousOutput.Length, asynchronous.Length, "Async writer length differs from the serialized length.");
-            ClassicAssert.Greater(output.AsyncWrites, 0, "Async primitives did not use async transport.");
+            ClassicAssert.Greater(output.AsyncWrites, 0, "Async primitives did not use async stream IO.");
             ClassicAssert.IsFalse(output.IsDisposed, "Async primitive writer disposal closed the caller-owned stream.");
         }
 
@@ -70,7 +70,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
             ClassicAssert.AreEqual("bytes", nullException.ParamName, "Null-byte validation reported an invalid parameter name.");
             ClassicAssert.AreEqual("offset", offsetException.ParamName, "Offset validation reported an invalid parameter name.");
             ClassicAssert.AreEqual("length", lengthException.ParamName, "Length validation reported an invalid parameter name.");
-            ClassicAssert.AreEqual(0, output.AsyncWrites, "Invalid primitive writes touched the transport.");
+            ClassicAssert.AreEqual(0, output.AsyncWrites, "Invalid primitive writes touched the stream.");
             ClassicAssert.AreEqual(0, writer.Length, "Invalid primitive writes changed the writer length.");
         }
 
@@ -91,7 +91,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
             Assert.CatchAsync<OperationCanceledException>(
                 async () => await writer.WriteVlqNumberAsync(42, cancellation.Token),
                 "A pre-canceled primitive VLQ write did not fail.");
-            ClassicAssert.AreEqual(0, output.AsyncWrites, "Pre-canceled primitives touched the transport.");
+            ClassicAssert.AreEqual(0, output.AsyncWrites, "Pre-canceled primitives touched the stream.");
             ClassicAssert.AreEqual(0, writer.Length, "Pre-canceled primitives changed the writer length.");
 
             await writer.DisposeAsync();

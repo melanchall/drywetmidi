@@ -136,8 +136,9 @@ The code above writes one million notes to a MIDI file. Of course, you can combi
 ## Asynchronous reading
 
 [`MidiFile.ReadLazyAsync`](xref:Melanchall.DryWetMidi.Core.MidiFile.ReadLazyAsync*)
-creates a token reader; format validation and further I/O happen as tokens are
-requested with
+creates a token reader using the same initialization steps as
+[`MidiFile.ReadLazy`](xref:Melanchall.DryWetMidi.Core.MidiFile.ReadLazy*), awaiting
+stream reads where needed. Subsequent tokens are requested with
 [`MidiTokensReader.ReadTokenAsync`](xref:Melanchall.DryWetMidi.Core.MidiTokensReader.ReadTokenAsync*).
 Unlike the complete-file APIs described in
 [MIDI file reading](xref:a_file_reading), this does not first construct a complete
@@ -155,8 +156,9 @@ await using (var tokensReader = await MidiFile.ReadLazyAsync("input.mid"))
 }
 ```
 
-The reader retains its current buffers and token. Collecting tokens or applying
-detection algorithms can still require additional memory.
+Tokens are read as requested, rather than collected into a complete file.
+Collecting tokens or applying detection algorithms can still require additional
+memory.
 
 ## Asynchronous writing
 
@@ -194,15 +196,8 @@ Await
 before ending the track: it emits deferred note-offs into the open track without
 disposing the caller-owned token writer. Subsequently await
 [`MidiTokensWriter.DisposeAsync`](xref:Melanchall.DryWetMidi.Core.MidiTokensWriter.DisposeAsync)
-to flush remaining bytes and finalize MIDI headers. The nested scopes above
+to finish writing and finalize MIDI headers. The nested scopes above
 enforce this order.
-
-The optional `progress` parameter of
-[`TimedObjectsWriter.WriteObjectsAsync`](xref:Melanchall.DryWetMidi.Interaction.TimedObjectsWriter.WriteObjectsAsync*)
-reports accepted non-null input objects, not emitted events or transported bytes.
-Reports are throttled, the total is unknown, and successful completion produces a
-final report with `IsCompleted` set to `true`. That report does not mean deferred
-events have been flushed or the token writer has been finalized.
 
 ### Sequential operations and disposal
 

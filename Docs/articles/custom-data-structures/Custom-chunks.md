@@ -23,10 +23,12 @@ public sealed class Change
 }
 ```
 
-Now we are going to implement a custom chunk. Custom chunk class must be derived from the [`MidiChunk`](xref:Melanchall.DryWetMidi.Core.MidiChunk) and must implement four abstract methods:
+Now we are going to implement a custom chunk. Custom chunk class must be derived from the [`MidiChunk`](xref:Melanchall.DryWetMidi.Core.MidiChunk) and must implement six abstract methods:
 
 * [`ReadContent`](xref:Melanchall.DryWetMidi.Core.MidiChunk.ReadContent(Melanchall.DryWetMidi.Core.MidiReader,Melanchall.DryWetMidi.Core.ReadingSettings,System.UInt32));
 * [`WriteContent`](xref:Melanchall.DryWetMidi.Core.MidiChunk.WriteContent(Melanchall.DryWetMidi.Core.MidiWriter,Melanchall.DryWetMidi.Core.WritingSettings));
+* [`ReadContentAsync`](xref:Melanchall.DryWetMidi.Core.MidiChunk.ReadContentAsync(Melanchall.DryWetMidi.Core.MidiReader,Melanchall.DryWetMidi.Core.ReadingSettings,System.UInt32,System.Threading.CancellationToken));
+* [`WriteContentAsync`](xref:Melanchall.DryWetMidi.Core.MidiChunk.WriteContentAsync(Melanchall.DryWetMidi.Core.MidiWriter,Melanchall.DryWetMidi.Core.WritingSettings,System.Threading.CancellationToken));
 * [`GetContentSize`](xref:Melanchall.DryWetMidi.Core.MidiChunk.GetContentSize(Melanchall.DryWetMidi.Core.WritingSettings));
 * [`Clone`](xref:Melanchall.DryWetMidi.Core.MidiChunk.Clone).
 
@@ -61,6 +63,23 @@ public sealed class HistoryChunk : MidiChunk
         throw new NotImplementedException();
     }
 
+    protected override Task ReadContentAsync(
+        MidiReader reader,
+        ReadingSettings settings,
+        uint size,
+        CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
+    }
+
+    protected override Task WriteContentAsync(
+        MidiWriter writer,
+        WritingSettings settings,
+        CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
+    }
+
     protected override uint GetContentSize(WritingSettings settings)
     {
         throw new NotImplementedException();
@@ -73,7 +92,7 @@ public sealed class HistoryChunk : MidiChunk
 }
 ```
 
-Before we start to implement the four methods mentioned above, we need to determine the structure of change records according to which it should be read and written.
+Before we start to implement these methods, we need to determine the structure of change records according to which it should be read and written.
 
 Chunk's content will start with the count of changes. We will write this count as a [variable-length quantity](https://en.wikipedia.org/wiki/Variable-length_quantity) (VLQ) number. The count is followed by change records.
 
@@ -153,7 +172,7 @@ protected override void WriteContent(MidiWriter writer, WritingSettings settings
 }
 ```
 
-Every chunk starts with an ID and its size. DryWetMIDI calls the `GetContentSize` method of the `MidiChunk` to write its return value as the chunk's size. You must calculate the real size of the chunk's content so that programs that read a MIDI file with your custom chunk can skip it by advancing the reader's position by this size. Let's implement `GetContentSize`:
+Every chunk starts with an ID and its size. DryWetMIDI calls the `GetContentSize` method of the `MidiChunk` to write its return value as the chunk's size. This calculation is synchronous CPU work, including during asynchronous writing; there is no `GetContentSizeAsync` method. It should calculate a size, not read or write a stream. You must calculate the real size of the chunk's content so that programs that read a MIDI file with your custom chunk can skip it by advancing the reader's position by this size. Let's implement `GetContentSize`:
 
 ```csharp
 protected override uint GetContentSize(WritingSettings settings)
@@ -183,7 +202,9 @@ public override MidiChunk Clone()
 }
 ```
 
-That's all! The custom chunk is completely implemented. See code sample below to know how to read and write it:
+The synchronous methods are now implemented. Complete the asynchronous overrides as
+shown below. The following example uses the synchronous methods to read and write
+the chunk:
 
 ```csharp
 // Create a history chunk and populate it by some changes
@@ -218,22 +239,19 @@ If you don't provide information about your custom chunk in `ReadingSettings`, t
 
 ## Asynchronous content I/O
 
-Existing custom chunks work with
+The two asynchronous content methods are abstract and must be overridden, just
+like the unchanged synchronous methods. There is no default implementation that
+calls `ReadContent` or `WriteContent`.
+
 [`MidiFile.ReadAsync`](xref:Melanchall.DryWetMidi.Core.MidiFile.ReadAsync*) and
 [`MidiFile.WriteAsync`](xref:Melanchall.DryWetMidi.Core.MidiFile.WriteAsync*)
-without additional overrides.
+call the corresponding asynchronous override.
 [`MidiTokensWriter.WriteChunkAsync`](xref:Melanchall.DryWetMidi.Core.MidiTokensWriter.WriteChunkAsync*)
 also uses the asynchronous content override. Lazy token reading instead returns
 custom-chunk bytes as tokens; it does not instantiate custom chunks or invoke
 their content overrides.
 
-By default, asynchronous reading buffers the chunk
-content before calling the synchronous `ReadContent` override with an in-memory
-reader. Asynchronous writing calls `WriteContent` with an in-memory writer, then
-asynchronously transports the buffered content. These fallbacks buffer a whole
-custom chunk, and cancellation cannot interrupt its synchronous implementation.
-
-To avoid that whole-chunk fallback buffer, override
+To await stream I/O, implement
 [`ReadContentAsync`](xref:Melanchall.DryWetMidi.Core.MidiChunk.ReadContentAsync(Melanchall.DryWetMidi.Core.MidiReader,Melanchall.DryWetMidi.Core.ReadingSettings,System.UInt32,System.Threading.CancellationToken))
 and
 [`WriteContentAsync`](xref:Melanchall.DryWetMidi.Core.MidiChunk.WriteContentAsync(Melanchall.DryWetMidi.Core.MidiWriter,Melanchall.DryWetMidi.Core.WritingSettings,System.Threading.CancellationToken)).
@@ -298,14 +316,86 @@ chunk header. Read the number of bytes specified by `size`, and ensure
 `GetContentSize` matches the bytes written. Do not dispose the supplied reader or
 writer: they belong to the enclosing file operation. Pass the cancellation token
 to every asynchronous I/O call and await each operation before starting the next.
-Encoding and decoding strings still use CPU time; the example buffers each comment,
-not the entire chunk.
+Encoding and decoding strings still use CPU time.
 
 If an override needs to skip content or check for the end of input, use
 [`MidiReader.SetPositionAsync`](xref:Melanchall.DryWetMidi.Core.MidiReader.SetPositionAsync*)
 and
 [`MidiReader.EndReachedAsync`](xref:Melanchall.DryWetMidi.Core.MidiReader.EndReachedAsync*)
 instead of the synchronous position setter or end check. On non-seekable streams,
-these operations can require transport reads. Moving backward is limited to bytes
-still held in the replay buffer; cancellation or failure while moving forward can
-leave the position partially advanced.
+these operations can require stream reads. Cancellation or failure while moving
+forward can leave the position partially advanced.
+
+### Synchronous-only custom chunks
+
+If a chunk deliberately supports only synchronous reading and writing, its
+asynchronous overrides must still be present. Make that limitation explicit:
+
+```csharp
+protected override Task ReadContentAsync(
+    MidiReader reader,
+    ReadingSettings settings,
+    uint size,
+    CancellationToken cancellationToken)
+{
+    throw new NotSupportedException("This chunk supports only synchronous reading.");
+}
+
+protected override Task WriteContentAsync(
+    MidiWriter writer,
+    WritingSettings settings,
+    CancellationToken cancellationToken)
+{
+    throw new NotSupportedException("This chunk supports only synchronous writing.");
+}
+```
+
+Synchronous file operations continue to use `ReadContent` and `WriteContent`.
+Asynchronous file operations fail with `NotSupportedException` when they reach
+this chunk. `MidiTokensWriter.WriteChunkAsync` also fails when it invokes this
+chunk's `WriteContentAsync`. Lazy token reading does not invoke custom chunk
+content methods.
+
+### Synchronous execution and completed tasks
+
+An override does not need `async` or `await` when it intentionally performs
+synchronous work. For a chunk whose synchronous methods operate only on memory,
+the overrides can execute that work directly and return a completed task:
+
+```csharp
+protected override Task ReadContentAsync(
+    MidiReader reader,
+    ReadingSettings settings,
+    uint size,
+    CancellationToken cancellationToken)
+{
+    cancellationToken.ThrowIfCancellationRequested();
+    ReadContent(reader, settings, size);
+
+    return Task.CompletedTask;
+}
+
+protected override Task WriteContentAsync(
+    MidiWriter writer,
+    WritingSettings settings,
+    CancellationToken cancellationToken)
+{
+    cancellationToken.ThrowIfCancellationRequested();
+    WriteContent(writer, settings);
+
+    return Task.CompletedTask;
+}
+```
+
+This is synchronous execution, not asynchronous stream I/O. It finishes before
+the task is returned, and cancellation cannot interrupt the synchronous call.
+Use it only when the supplied `MidiReader` or `MidiWriter` will not perform
+blocking stream I/O. In particular, forwarding to synchronous methods can fail
+on streams that support only asynchronous I/O. Use the awaited overrides above
+when the reader or writer needs asynchronous stream access.
+
+For content that requires no reading or writing, an override can simply check
+cancellation and return `Task.CompletedTask`. An empty chunk must also return
+zero from `GetContentSize`; its reading override must not ignore a nonzero `size`.
+There is no need to use `Task.Run` or add an artificial `await` for these fast
+completed-task paths.

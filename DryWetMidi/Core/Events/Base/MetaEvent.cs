@@ -1,4 +1,7 @@
-﻿namespace Melanchall.DryWetMidi.Core
+﻿using System.Threading;
+using System.Threading.Tasks;
+
+namespace Melanchall.DryWetMidi.Core
 {
     /// <summary>
     /// Represents a MIDI file meta event.
@@ -58,6 +61,33 @@
         internal sealed override void Write(MidiWriter writer, WritingSettings settings)
         {
             WriteContent(writer, settings);
+        }
+
+        internal override async Task ReadAsync(
+            MidiReader reader,
+            ReadingSettings settings,
+            int size,
+            CancellationToken cancellationToken)
+        {
+            // Custom meta events expose synchronous payload callbacks only.
+            var position = reader.Position;
+            var payload = await reader.ReadBytesAsync(size, cancellationToken).ConfigureAwait(false);
+            var buffer = payload.Length == 0 ? new byte[1] : payload;
+            using var payloadReader = new MidiReader(buffer, 0, payload.Length, settings.ReaderSettings, position);
+            payloadReader.AddEstimatedMemory(reader.EstimatedMemorySize, settings);
+
+            ReadContent(payloadReader, settings, size);
+
+            if (payloadReader.Position > reader.Position)
+                await reader.SetPositionAsync(payloadReader.Position, cancellationToken).ConfigureAwait(false);
+        }
+
+        internal override Task WriteAsync(
+            MidiWriter writer,
+            WritingSettings settings,
+            CancellationToken cancellationToken)
+        {
+            return writer.WriteCustomMetaEventPayloadAsync(this, settings, cancellationToken);
         }
 
         /// <inheritdoc/>

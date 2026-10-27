@@ -23,21 +23,21 @@ namespace Melanchall.DryWetMidi.Tests.Core
         };
 
         [Test]
-        public async Task RoundTrip_AsyncOnlyTransport([Values] bool nonSeekable)
+        public async Task RoundTrip_AsyncOnlyStream([Values] bool nonSeekable)
         {
             var expected = CreateFile();
             using var output = new AsyncOnlyStream(seekable: !nonSeekable);
 
             await expected.WriteAsync(output);
 
-            ClassicAssert.Greater(output.AsyncWrites, 0, "Writing did not use asynchronous transport.");
+            ClassicAssert.Greater(output.AsyncWrites, 0, "Writing did not use asynchronous stream IO.");
             ClassicAssert.IsFalse(output.IsDisposed, "Writing disposed the caller-owned stream.");
 
             using var input = new AsyncOnlyStream(output.ToArray(), !nonSeekable, 3);
             var actual = await MidiFile.ReadAsync(input);
 
             MidiAsserts.AreEqual(expected, actual, true, "Async round-trip file is invalid.");
-            ClassicAssert.Greater(input.AsyncReads, 0, "Reading did not use asynchronous transport.");
+            ClassicAssert.Greater(input.AsyncReads, 0, "Reading did not use asynchronous stream IO.");
             ClassicAssert.IsFalse(input.IsDisposed, "Reading disposed the caller-owned stream.");
         }
 
@@ -125,7 +125,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
         }
 
         [Test]
-        public async Task Lazy_AsyncOnlyTransport_FinalizesHeaders()
+        public async Task Lazy_AsyncOnlyStream_FinalizesHeaders()
         {
             using var output = new AsyncOnlyStream();
             var writer = await MidiFile.WriteLazyAsync(output);
@@ -192,7 +192,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
         }
 
         [Test]
-        public void PreCanceled_DoesNotTouchTransport()
+        public void PreCanceled_DoesNotTouchStream()
         {
             using var outputStream = new AsyncOnlyStream();
             using var cancellation = new CancellationTokenSource();
@@ -200,7 +200,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
 
             Assert.CatchAsync<OperationCanceledException>(async () =>
                 await CreateFile().WriteAsync(outputStream, cancellationToken: cancellation.Token), "Pre-canceled writing did not throw.");
-            ClassicAssert.AreEqual(0, outputStream.AsyncWrites, "Pre-canceled writing touched the transport.");
+            ClassicAssert.AreEqual(0, outputStream.AsyncWrites, "Pre-canceled writing touched the stream.");
             ClassicAssert.IsFalse(outputStream.IsDisposed, "Pre-canceled writing disposed the caller-owned stream.");
         }
 
@@ -224,7 +224,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
         }
 
         [Test]
-        public async Task ReadAsync_CancellationDuringTransport_LeavesStreamOpen()
+        public async Task ReadAsync_CancellationDuringStreamIO_LeavesStreamOpen()
         {
             using var bytes = new MemoryStream();
             CreateFile().Write(bytes);
@@ -286,9 +286,9 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 writer.BeforeEndTrackChunkAsync = async cancellationToken =>
                 {
                     await Task.Yield();
-                    throw new InvalidOperationException("Codec failure.");
+                    throw new InvalidOperationException("Track finalization failure.");
                 };
-                Assert.ThrowsAsync<InvalidOperationException>(async () => await writer.DisposeAsync(), "Lazy finalization did not propagate the codec failure.");
+                Assert.ThrowsAsync<InvalidOperationException>(async () => await writer.DisposeAsync(), "Lazy finalization did not propagate the callback failure.");
                 await writer.DisposeAsync();
                 using var exclusiveStream = new FileStream(path, FileMode.Open, FileAccess.ReadWrite, FileShare.None);
             }
@@ -299,7 +299,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
         }
 
         [Test]
-        public async Task CustomCodec_UsesAsyncTransport_AndSettings()
+        public async Task CustomEvent_UsesAsyncStreamIO_AndSettings()
         {
             var types = new EventTypesCollection { { typeof(CustomEvent), 0x5A } };
             var expected = new MidiFile(new TrackChunk(new CustomEvent { Value = 42 }));
@@ -320,7 +320,50 @@ namespace Melanchall.DryWetMidi.Tests.Core
         }
 
         [Test]
-        public async Task CustomChunk_UsesInMemoryCodec_WithAbsolutePositions([Values] bool lazyWrite)
+        public async Task CustomEvent_UnderreadLargePayload_PreservesFollowingEvent()
+        {
+            const int payloadSize = 4096;
+            using var bytes = new MemoryStream();
+
+            using (var writer = new MidiWriter(bytes, new WriterSettings { UseBuffering = false }))
+            {
+                writer.WriteString("MThd");
+                writer.WriteDword(6);
+                writer.WriteWord(0);
+                writer.WriteWord(1);
+                writer.WriteWord(96);
+                writer.WriteString("MTrk");
+                writer.WriteDword(payloadSize + 13);
+                writer.WriteByte(0);
+                writer.WriteByte(0xFF);
+                writer.WriteByte(0x5A);
+                writer.WriteVlqNumber(payloadSize);
+                writer.WriteByte(42);
+                writer.WriteBytes(new byte[payloadSize - 1]);
+                writer.WriteBytes(new byte[] { 0, 0x90, 60, 100, 0, 0xFF, 0x2F, 0 });
+            }
+
+            var settings = new ReadingSettings
+            {
+                CustomMetaEventTypes = new EventTypesCollection { { typeof(CustomEvent), 0x5A } },
+                ReaderSettings = new ReaderSettings { BufferingPolicy = BufferingPolicy.DontUseBuffering }
+            };
+            bytes.Position = 0;
+            var expected = MidiFile.Read(bytes, settings);
+            using var input = new AsyncOnlyStream(bytes.ToArray(), false, 113);
+
+            var actual = await MidiFile.ReadAsync(input, settings);
+
+            MidiAsserts.AreEqual(expected, actual, true, "Async custom meta-event under-read changed event framing.");
+            var events = actual.GetTrackChunks().Single().Events;
+            ClassicAssert.AreEqual(42, ((CustomEvent)events[0]).Value, "The custom event did not read its first payload byte.");
+            ClassicAssert.AreEqual(1, events.OfType<NoteOnEvent>().Count(), "Skipping custom event padding consumed the following note event.");
+            ClassicAssert.AreEqual(payloadSize + 35, input.BytesRead, "Reading did not consume the full custom payload and following events.");
+            ClassicAssert.IsFalse(input.IsDisposed, "Custom event reading disposed the caller-owned stream.");
+        }
+
+        [Test]
+        public async Task CustomChunk_UsesAsyncReaderAndWriter_WithAbsolutePositions([Values] bool lazyWrite)
         {
             var expected = new CustomChunk { Value = 42 };
             using var output = new AsyncOnlyStream();
@@ -343,10 +386,10 @@ namespace Melanchall.DryWetMidi.Tests.Core
             var chunk = (CustomChunk)actual.Chunks[0];
 
             ClassicAssert.AreEqual(42, chunk.Value, "Async custom chunk value is invalid.");
-            ClassicAssert.AreEqual(22, chunk.ContentPosition, "Custom chunk codec received an invalid absolute position.");
-            ClassicAssert.AreEqual(22, expected.WritePosition, "Synchronous fallback write hook received an invalid absolute position.");
-            ClassicAssert.IsFalse(input.IsDisposed, "Synchronous fallback reading disposed the caller-owned stream.");
-            ClassicAssert.IsFalse(output.IsDisposed, "Synchronous fallback writing disposed the caller-owned stream.");
+            ClassicAssert.AreEqual(22, chunk.ContentPosition, "Custom chunk MidiReader received an invalid absolute position.");
+            ClassicAssert.AreEqual(22, expected.WritePosition, "Custom chunk MidiWriter received an invalid absolute position.");
+            ClassicAssert.IsFalse(input.IsDisposed, "Custom chunk reading disposed the caller-owned stream.");
+            ClassicAssert.IsFalse(output.IsDisposed, "Custom chunk writing disposed the caller-owned stream.");
         }
 
         [Test]
@@ -575,69 +618,18 @@ namespace Melanchall.DryWetMidi.Tests.Core
         }
 
         [Test]
-        public async Task BulkIo_ReportsActualBytes_AndSuccessfulCompletion()
+        public void BulkIo_FailureOrCancellation_LeavesStreamsOpen()
         {
-            var writing = new ProgressRecorder();
-            using var output = new AsyncOnlyStream();
-            await CreateFile().WriteAsync(output, progress: writing);
-            var bytes = output.ToArray();
-            var written = writing.Reports[writing.Reports.Count - 1];
-
-            ClassicAssert.AreEqual(bytes.Length, written.ProcessedItems, "Writing progress does not match bytes written.");
-            ClassicAssert.AreEqual("Writing", written.Phase, "Writing progress has an invalid phase.");
-            ClassicAssert.IsTrue(written.IsCompleted, "Successful writing did not report completion.");
-
-            var reading = new ProgressRecorder();
-            using var input = new AsyncOnlyStream(bytes, false, 2);
-            await MidiFile.ReadAsync(input, progress: reading);
-            var read = reading.Reports[reading.Reports.Count - 1];
-
-            ClassicAssert.AreEqual(bytes.Length, read.ProcessedItems, "Reading progress does not match bytes read.");
-            ClassicAssert.AreEqual("Reading", read.Phase, "Reading progress has an invalid phase.");
-            ClassicAssert.IsTrue(read.IsCompleted, "Successful reading did not report completion.");
-        }
-
-        [Test]
-        public async Task ReadProgress_IsThrottled_AndReportsDuringIo()
-        {
-            using var bytes = new MemoryStream();
-            new MidiFile(new UnknownChunk("Test") { Data = new byte[262144] }).Write(bytes);
-            var progress = new ProgressRecorder();
-            using var input = new AsyncOnlyStream(bytes.ToArray(), false, 4096) { ReadDelayMilliseconds = 5 };
-            await MidiFile.ReadAsync(input, progress: progress);
-
-            ClassicAssert.Greater(progress.Reports.Count, 1, "Reading did not report intermediate progress.");
-            ClassicAssert.Less(progress.Reports.Count, input.AsyncReads, "Reading progress was not throttled.");
-            ClassicAssert.AreEqual(bytes.Length, progress.Reports[progress.Reports.Count - 1].ProcessedItems, "Final reading progress has an invalid byte count.");
-
-            long previous = 0;
-            foreach (var report in progress.Reports)
-            {
-                ClassicAssert.GreaterOrEqual(report.ProcessedItems, previous, "Reading progress moved backwards.");
-                previous = report.ProcessedItems;
-            }
-        }
-
-        [Test]
-        public void BulkIo_FailureOrCancellation_DoesNotReportCompletion()
-        {
-            var progress = new ProgressRecorder();
             using var input = new AsyncOnlyStream(new byte[] { 1, 2, 3 });
-            Assert.ThrowsAsync<NotEnoughBytesException>(async () => await MidiFile.ReadAsync(input, progress: progress), "Truncated input did not fail.");
+            Assert.ThrowsAsync<NotEnoughBytesException>(async () => await MidiFile.ReadAsync(input), "Truncated input did not fail.");
+            ClassicAssert.IsFalse(input.IsDisposed, "Failed reading disposed the caller-owned stream.");
 
             using var cancellation = new CancellationTokenSource();
             cancellation.Cancel();
             using var output = new AsyncOnlyStream();
             Assert.CatchAsync<OperationCanceledException>(async () =>
-                await CreateFile().WriteAsync(output, progress: progress, cancellationToken: cancellation.Token), "Pre-canceled writing did not throw.");
-            ClassicAssert.IsTrue(progress.Reports.TrueForAll(report => !report.IsCompleted), "Failed or canceled I/O reported successful completion.");
-        }
-
-        private sealed class ProgressRecorder : IProgress<AsyncOperationProgress>
-        {
-            internal readonly List<AsyncOperationProgress> Reports = new List<AsyncOperationProgress>();
-
-            public void Report(AsyncOperationProgress value) => Reports.Add(value);
+                await CreateFile().WriteAsync(output, cancellationToken: cancellation.Token), "Pre-canceled writing did not throw.");
+            ClassicAssert.IsFalse(output.IsDisposed, "Canceled writing disposed the caller-owned stream.");
         }
 
         [Test]
@@ -727,6 +719,10 @@ namespace Melanchall.DryWetMidi.Tests.Core
             protected override void ReadContent(MidiReader reader, ReadingSettings settings, int size) => Value = reader.ReadByte();
 
             protected override void WriteContent(MidiWriter writer, WritingSettings settings) => writer.WriteByte(Value);
+
+            public override bool Equals(object obj) => obj is CustomEvent other && other.Value == Value;
+
+            public override int GetHashCode() => Value.GetHashCode();
         }
 
         private sealed class CustomChunk : MidiChunk
@@ -756,6 +752,25 @@ namespace Melanchall.DryWetMidi.Tests.Core
             {
                 WritePosition = writer.Length;
                 writer.WriteByte(Value);
+            }
+
+            protected override async Task ReadContentAsync(
+                MidiReader reader,
+                ReadingSettings settings,
+                uint size,
+                CancellationToken cancellationToken)
+            {
+                ContentPosition = reader.Position;
+                Value = await reader.ReadByteAsync(cancellationToken).ConfigureAwait(false);
+            }
+
+            protected override Task WriteContentAsync(
+                MidiWriter writer,
+                WritingSettings settings,
+                CancellationToken cancellationToken)
+            {
+                WritePosition = writer.Length;
+                return writer.WriteByteAsync(Value, cancellationToken);
             }
         }
 

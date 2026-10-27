@@ -1,4 +1,6 @@
 ﻿using Melanchall.DryWetMidi.Common;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Melanchall.DryWetMidi.Core
 {
@@ -66,6 +68,36 @@ namespace Melanchall.DryWetMidi.Core
         internal override void Write(MidiWriter writer, WritingSettings settings)
         {
             writer.WriteByte(Number);
+        }
+
+        internal override async Task ReadAsync(
+            MidiReader reader,
+            ReadingSettings settings,
+            int size,
+            CancellationToken cancellationToken)
+        {
+            var number = await reader.ReadByteAsync(cancellationToken).ConfigureAwait(false);
+            if (number > SevenBitNumber.MaxValue)
+            {
+                switch (settings.InvalidSystemCommonEventParameterValuePolicy)
+                {
+                    case InvalidSystemCommonEventParameterValuePolicy.Abort:
+                        throw new InvalidSystemCommonEventParameterValueException(EventType, nameof(Number), number);
+                    case InvalidSystemCommonEventParameterValuePolicy.SnapToLimits:
+                        number = SevenBitNumber.MaxValue;
+                        break;
+                }
+            }
+
+            Number = (SevenBitNumber)number;
+        }
+
+        internal override Task WriteAsync(
+            MidiWriter writer,
+            WritingSettings settings,
+            CancellationToken cancellationToken)
+        {
+            return writer.WriteByteAsync(Number, cancellationToken);
         }
 
         internal override int GetSize(WritingSettings settings)

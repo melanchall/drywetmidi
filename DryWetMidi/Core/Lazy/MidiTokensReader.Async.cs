@@ -9,7 +9,6 @@ namespace Melanchall.DryWetMidi.Core
     {
         internal async Task InitializeAsync(CancellationToken cancellationToken)
         {
-            await _reader.InitializeAsync(cancellationToken).ConfigureAwait(false);
             if (await _reader.EndReachedAsync(cancellationToken).ConfigureAwait(false))
                 throw new ArgumentException("Stream is already read.", "stream");
         }
@@ -54,12 +53,9 @@ namespace Melanchall.DryWetMidi.Core
                         case State.ChunkContent:
                             if (_chunkId == HeaderChunk.Id)
                             {
-                                var bytes = await _reader.ReadBytesAsync(6, cancellationToken).ConfigureAwait(false);
-                                using var memory = new MemoryStream(bytes, false);
-                                using var codec = new MidiReader(memory, _settings.ReaderSettings);
-                                HeaderChunk.ReadData(codec, _settings, out var format, out var division, out var tracks);
+                                var data = await HeaderChunk.ReadDataAsync(_reader, _settings, cancellationToken).ConfigureAwait(false);
                                 GoToNextState();
-                                token = new FileHeaderToken(format, division, tracks);
+                                token = new FileHeaderToken(data.FileFormat, data.TimeDivision, data.TracksNumber);
                             }
                             else if (_reader.Position < _endReaderPosition)
                             {

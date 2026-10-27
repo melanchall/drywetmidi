@@ -802,7 +802,10 @@ namespace Melanchall.DryWetMidi.Core
         private static MidiTokensReader ReadLazy(Stream stream, bool disposeStream, ReadingSettings? settings)
         {
             ThrowIfArgument.IsNull(nameof(stream), stream);
-            return new MidiTokensReader(stream, settings, disposeStream);
+            var reader = new MidiTokensReader(stream, settings, disposeStream);
+            reader.Initialize();
+
+            return reader;
         }
 
         private static MidiTokensWriter WriteLazy(
@@ -813,12 +816,10 @@ namespace Melanchall.DryWetMidi.Core
             TimeDivision? timeDivision)
         {
             ThrowIfArgument.IsNull(nameof(stream), stream);
-            return new MidiTokensWriter(
-                stream,
-                settings,
-                disposeStream,
-                format,
-                timeDivision ?? new TicksPerQuarterNoteTimeDivision());
+            var writer = new MidiTokensWriter(stream, settings, disposeStream);
+            writer.WriteFileHeader(format, timeDivision ?? new TicksPerQuarterNoteTimeDivision());
+
+            return writer;
         }
 
         private static MidiChunk? ReadChunk(MidiReader reader, ReadingSettings settings, int actualTrackChunksCount, int? expectedTrackChunksCount)

@@ -139,13 +139,6 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             }
         }
 
-        private sealed class InlineProgress : IProgress<AsyncOperationProgress>
-        {
-            internal readonly List<AsyncOperationProgress> Reports = new List<AsyncOperationProgress>();
-
-            public void Report(AsyncOperationProgress value) => Reports.Add(value);
-        }
-
         #endregion
 
         #region Constants
@@ -546,8 +539,8 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
             ClassicAssert.IsTrue(thread.Join(TimeSpan.FromSeconds(10)), "Immediately completed CSV I/O did not finish.");
             ClassicAssert.IsNull(failure, $"Immediately completed CSV I/O failed: {failure}");
-            ClassicAssert.AreEqual(callingThreadId, firstIoThreadId, "CSV moved to a worker before its first transport operation.");
-            ClassicAssert.IsTrue(ioStayedOnCallingThread, "CSV scheduled a worker despite synchronously completed transport operations.");
+            ClassicAssert.AreEqual(callingThreadId, firstIoThreadId, "CSV moved to a worker before its first stream operation.");
+            ClassicAssert.IsTrue(ioStayedOnCallingThread, "CSV scheduled a worker despite synchronously completed stream operations.");
         }
 
         private static void CheckCsvIoErrors(bool writing)
@@ -560,7 +553,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                     await CreateFile().SerializeToCsvAsync(stream).WaitAsync(TimeSpan.FromSeconds(10));
                 else
                     await CsvSerializer.DeserializeFileFromCsvAsync(stream).WaitAsync(TimeSpan.FromSeconds(10));
-            }, "CSV transport failure did not propagate without deadlock.");
+            }, "CSV stream failure did not propagate without deadlock.");
         }
 
         private static void CheckCsvCancellation(bool writing)

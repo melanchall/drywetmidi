@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
 using NUnit.Framework;
@@ -80,6 +82,34 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 foreach (var value in Values ?? Array.Empty<int>())
                 {
                     writer.WriteDword((uint)value);
+                }
+            }
+
+            protected override async Task ReadContentAsync(
+                MidiReader reader,
+                ReadingSettings settings,
+                uint size,
+                CancellationToken cancellationToken)
+            {
+                var count = (int)(size / sizeof(int));
+                Values = new int[count];
+                Strings = new List<string>();
+
+                for (var i = 0; i < count; i++)
+                {
+                    Values[i] = (int)await reader.ReadDwordAsync(cancellationToken).ConfigureAwait(false);
+                    Strings.Add(new string('b', 10));
+                }
+            }
+
+            protected override async Task WriteContentAsync(
+                MidiWriter writer,
+                WritingSettings settings,
+                CancellationToken cancellationToken)
+            {
+                foreach (var value in Values ?? Array.Empty<int>())
+                {
+                    await writer.WriteDwordAsync((uint)value, cancellationToken).ConfigureAwait(false);
                 }
             }
         }

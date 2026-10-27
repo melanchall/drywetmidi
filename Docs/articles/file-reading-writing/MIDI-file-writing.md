@@ -32,15 +32,9 @@ This is a bulk operation over an existing file object, not lazy object streaming
 For writing events or timed objects incrementally, see
 [Lazy reading/writing](xref:a_file_lazy_reading_writing).
 
-Write with cancellation and byte-based progress:
+Write with cancellation:
 
 ```csharp
-var progress = new Progress<AsyncOperationProgress>(value =>
-{
-    Console.WriteLine(
-        $"{value.ProcessedItems} bytes written; completed: {value.IsCompleted}");
-});
-
 using (var cancellation = new CancellationTokenSource())
 {
     cancellation.CancelAfter(TimeSpan.FromSeconds(10));
@@ -48,15 +42,9 @@ using (var cancellation = new CancellationTokenSource())
     await file.WriteAsync(
         "output.mid",
         overwriteFile: true,
-        progress: progress,
         cancellationToken: cancellation.Token);
 }
 ```
-
-Reports are throttled and count bytes written to the transport, not events.
-The total is unknown (`TotalItems` is `null`); successful completion produces a
-final report with `IsCompleted` set to `true`. Await the operation rather than
-relying on callback timing.
 
 File-path overloads own and dispose their streams. Stream overloads leave
 caller-supplied streams open on completion or failure. Await writing before
@@ -67,8 +55,10 @@ Cancellation raises `OperationCanceledException` and can leave partially written
 output, as can other failures. Overwriting is not an atomic replacement and does
 not roll back on failure. Encoding and custom chunk or event code still use CPU
 time; asynchronous I/O does not guarantee background-thread execution or interrupt
-arbitrary synchronous custom code. See [Custom chunks](xref:a_custom_chunk) for
-asynchronous chunk overrides.
+arbitrary synchronous custom code. Custom chunks must implement their asynchronous
+content methods; an override that throws `NotSupportedException` makes asynchronous
+writing of that chunk fail. See [Custom chunks](xref:a_custom_chunk) for
+asynchronous and synchronous-execution examples.
 
 ## Compression
 

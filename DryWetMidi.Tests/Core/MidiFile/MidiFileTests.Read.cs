@@ -51,7 +51,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
             Assert.ThrowsAsync<InvalidOperationException>(
                 async () => await reader.SetPositionAsync(0, CancellationToken.None),
                 "Rewinding from the nonseekable EOF sentinel did not reject an unrepresentable replay distance.");
-            ClassicAssert.Greater(input.AsyncReads, 0, "Positioning did not use async transport.");
+            ClassicAssert.Greater(input.AsyncReads, 0, "Positioning did not use async stream IO.");
             ClassicAssert.IsFalse(input.IsDisposed, "Positioning disposed the caller-owned stream.");
         }
 
@@ -73,7 +73,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
             Assert.CatchAsync<OperationCanceledException>(
                 async () => await reader.EndReachedAsync(cancellation.Token),
                 "Pre-canceled async EOF peeking did not fail.");
-            ClassicAssert.AreEqual(0, input.AsyncReads, "Invalid or pre-canceled positioning touched the transport.");
+            ClassicAssert.AreEqual(0, input.AsyncReads, "Invalid or pre-canceled positioning touched the stream.");
             ClassicAssert.AreEqual(0, reader.Position, "Invalid or pre-canceled positioning changed the logical position.");
 
             reader.Dispose();
@@ -128,7 +128,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
             else
                 ClassicAssert.IsTrue(await asynchronous.EndReachedAsync(CancellationToken.None), "Async nonseekable primitive reading did not reach the end of the stream.");
 
-            ClassicAssert.Greater(asynchronousInput.AsyncReads, 0, "Async primitives did not use async transport.");
+            ClassicAssert.Greater(asynchronousInput.AsyncReads, 0, "Async primitives did not use async stream IO.");
             ClassicAssert.IsFalse(asynchronousInput.IsDisposed, "Async primitive reading disposed the caller-owned stream.");
         }
 
@@ -149,7 +149,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
 
             ClassicAssert.AreEqual("count", bytesException.ParamName, "Byte reading reported an invalid parameter name.");
             ClassicAssert.AreEqual("count", stringException.ParamName, "String reading reported an invalid parameter name.");
-            ClassicAssert.AreEqual(0, input.AsyncReads, "Empty or invalid reads touched the transport.");
+            ClassicAssert.AreEqual(0, input.AsyncReads, "Empty or invalid reads touched the stream.");
         }
 
         [Test]
@@ -207,7 +207,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
             Assert.CatchAsync<OperationCanceledException>(
                 async () => await reader.ReadVlqNumberAsync(cancellation.Token),
                 "A pre-canceled primitive VLQ read did not fail.");
-            ClassicAssert.AreEqual(0, input.AsyncReads, "Pre-canceled primitives touched the transport.");
+            ClassicAssert.AreEqual(0, input.AsyncReads, "Pre-canceled primitives touched the stream.");
 
             reader.Dispose();
 

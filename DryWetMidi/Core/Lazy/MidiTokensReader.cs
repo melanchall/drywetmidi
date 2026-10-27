@@ -88,7 +88,7 @@ namespace Melanchall.DryWetMidi.Core
 
         #region Constructor
 
-        internal MidiTokensReader(Stream stream, ReadingSettings? settings, bool disposeStream, bool deferInitialization = false)
+        internal MidiTokensReader(Stream stream, ReadingSettings? settings, bool disposeStream)
         {
             _stream = stream;
             if (!_stream.CanRead)
@@ -99,11 +99,15 @@ namespace Melanchall.DryWetMidi.Core
             if (_settings.ReaderSettings == null)
                 _settings.ReaderSettings = new ReaderSettings();
 
-            _reader = new MidiReader(_stream, _settings.ReaderSettings, deferInitialization);
-            if (!deferInitialization && _reader.EndReached)
-                throw new ArgumentException("Stream is already read.", nameof(stream));
+            _reader = new MidiReader(_stream, _settings.ReaderSettings);
 
             _disposeStream = disposeStream;
+        }
+
+        internal void Initialize()
+        {
+            if (_reader.EndReached)
+                throw new ArgumentException("Stream is already read.", "stream");
         }
 
         #endregion
@@ -163,13 +167,13 @@ namespace Melanchall.DryWetMidi.Core
         }
 
         /// <summary>
-        /// Reads the next token using asynchronous transport I/O.
+        /// Reads the next token using asynchronous stream I/O.
         /// </summary>
         /// <param name="cancellationToken">Token used to cancel reading.</param>
         /// <returns>The next token, or <c>null</c> at the end.</returns>
         /// <remarks>
         /// Operations on one reader must not overlap. After a failed or canceled
-        /// read the reader should be disposed; partial codec state cannot be rolled back.
+        /// read the reader should be disposed; partial reading state cannot be rolled back.
         /// </remarks>
         /// <exception cref="IOException">An I/O error occurred while reading the file.</exception>
         /// <exception cref="UnknownFileFormatException">The file header specifies an unknown format

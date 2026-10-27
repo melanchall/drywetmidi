@@ -229,13 +229,65 @@ namespace Melanchall.DryWetMidi.Core
         }
 
         /// <inheritdoc/>
-        protected override Task ReadContentAsync(
+        protected override async Task ReadContentAsync(
             MidiReader reader,
             ReadingSettings settings,
             uint size,
             CancellationToken cancellationToken = default)
         {
-            return MidiFile.ReadTrackAsync(this, reader, settings, reader.Position + size, cancellationToken);
+            var endReaderPosition = reader.Position + size;
+            var endOfTrackPresented = false;
+            byte? currentChannelEventStatusByte = null;
+            var estimateMemory = settings.MaxMemorySize != null;
+            var eventsCapacity = Events.Capacity;
+
+            while (reader.Position < endReaderPosition && !await reader.EndReachedAsync(cancellationToken).ConfigureAwait(false))
+            {
+                var result = await MidiFileReadingUtilities.ReadEventAsync(
+                    reader,
+                    settings,
+                    currentChannelEventStatusByte,
+                    cancellationToken).ConfigureAwait(false);
+                currentChannelEventStatusByte = result.Status;
+                var midiEvent = result.Event;
+                if (midiEvent == null)
+                    continue;
+
+                if (midiEvent is EndOfTrackEvent)
+                {
+                    endOfTrackPresented = true;
+                    if (settings.EndOfTrackStoringPolicy == EndOfTrackStoringPolicy.Store)
+                    {
+                        Events.Add(midiEvent);
+
+                        if (estimateMemory)
+                            reader.AddEstimatedMemory(
+                                MemorySizeEstimator.EstimateEvent(midiEvent) +
+                                MemorySizeEstimator.EstimateReferencesArray(Events.Capacity) - MemorySizeEstimator.EstimateReferencesArray(eventsCapacity),
+                                settings);
+                    }
+
+                    break;
+                }
+
+                if (estimateMemory)
+                    reader.AddEstimatedMemory(MemorySizeEstimator.EstimateEvent(midiEvent), settings);
+
+                Events.AddInternal(midiEvent);
+
+                if (estimateMemory && Events.Capacity != eventsCapacity)
+                {
+                    reader.AddEstimatedMemory(
+                        MemorySizeEstimator.EstimateReferencesArray(Events.Capacity) - MemorySizeEstimator.EstimateReferencesArray(eventsCapacity),
+                        settings);
+                    eventsCapacity = Events.Capacity;
+                }
+            }
+
+            if (settings.MissedEndOfTrackPolicy == MissedEndOfTrackPolicy.Abort && !endOfTrackPresented)
+                throw new MissedEndOfTrackEventException();
+
+            Events.IsInitialState = true;
         }
 
         /// <inheritdoc/>
@@ -275,24 +327,14 @@ namespace Melanchall.DryWetMidi.Core
 
                 if (eventToWrite != null && eventWriter != null)
                 {
-                    await writer.WriteEncodedAsync(
-                        codec =>
-                        {
-                            codec.WriteVlqNumber(eventToWrite.DeltaTime);
-                            eventWriter.Write(eventToWrite, codec, settings, writeStatus);
-                        },
-                        cancellationToken).ConfigureAwait(false);
+                    await writer.WriteVlqNumberAsync(eventToWrite.DeltaTime, cancellationToken).ConfigureAwait(false);
+                    await eventWriter.WriteAsync(eventToWrite, writer, settings, writeStatus, cancellationToken).ConfigureAwait(false);
                 }
-
             }
+
             var end = new EndOfTrackEvent { DeltaTime = lastEnd ? additionalDelta : 0 };
-            await writer.WriteEncodedAsync(
-                codec =>
-                {
-                    codec.WriteVlqNumber(end.DeltaTime);
-                    EventWriterFactory.GetWriter(end).Write(end, codec, settings, true);
-                },
-                cancellationToken).ConfigureAwait(false);
+            await writer.WriteVlqNumberAsync(end.DeltaTime, cancellationToken).ConfigureAwait(false);
+            await EventWriterFactory.GetWriter(end).WriteAsync(end, writer, settings, true, cancellationToken).ConfigureAwait(false);
         }
 
         internal uint GetContentSize(WritingSettings settings, CancellationToken cancellationToken)

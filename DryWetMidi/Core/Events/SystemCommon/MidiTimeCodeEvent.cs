@@ -1,6 +1,8 @@
 ﻿using System;
 using System.ComponentModel;
 using Melanchall.DryWetMidi.Common;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Melanchall.DryWetMidi.Core
 {
@@ -114,6 +116,51 @@ namespace Melanchall.DryWetMidi.Core
             var data = DataTypesUtilities.CombineAsFourBitNumbers((byte)component, (byte)componentValue);
 
             writer.WriteByte(data);
+        }
+
+        internal override async Task ReadAsync(
+            MidiReader reader,
+            ReadingSettings settings,
+            int size,
+            CancellationToken cancellationToken)
+        {
+            var data = await reader.ReadByteAsync(cancellationToken).ConfigureAwait(false);
+
+            var midiTimeCodeComponent = (byte)data.GetHead();
+            if (!Enum.IsDefined(typeof(MidiTimeCodeComponent), midiTimeCodeComponent))
+                throw new InvalidMidiTimeCodeComponentException(midiTimeCodeComponent);
+
+            Component = (MidiTimeCodeComponent)midiTimeCodeComponent;
+
+            var componentValue = data.GetTail();
+            if (componentValue > ComponentValueMasks[Component])
+            {
+                switch (settings.InvalidSystemCommonEventParameterValuePolicy)
+                {
+                    case InvalidSystemCommonEventParameterValuePolicy.Abort:
+                        throw new InvalidSystemCommonEventParameterValueException(EventType, $"{nameof(ComponentValue)} (component is {Component})", componentValue);
+                    case InvalidSystemCommonEventParameterValuePolicy.SnapToLimits:
+                        componentValue = (FourBitNumber)ComponentValueMasks[Component];
+                        break;
+                }
+            }
+
+            ComponentValue = componentValue;
+        }
+
+        internal override Task WriteAsync(
+            MidiWriter writer,
+            WritingSettings settings,
+            CancellationToken cancellationToken)
+        {
+            var component = Component;
+
+            var componentValueMask = ComponentValueMasks[component];
+            var componentValue = ComponentValue & componentValueMask;
+
+            var data = DataTypesUtilities.CombineAsFourBitNumbers((byte)component, (byte)componentValue);
+
+            return writer.WriteByteAsync(data, cancellationToken);
         }
 
         internal override int GetSize(WritingSettings settings)

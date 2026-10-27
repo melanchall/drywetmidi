@@ -39,7 +39,6 @@ namespace Melanchall.DryWetMidi.Common
 
         public override long Length => long.MaxValue;
 
-        internal Action<int>? AsyncBytesRead { get; set; }
 
         public override long Position
         {
@@ -126,7 +125,6 @@ namespace Melanchall.DryWetMidi.Common
             if (count > 0 && total == 0)
                 _position = long.MaxValue;
 
-            AsyncBytesRead?.Invoke(read);
             return total;
         }
 

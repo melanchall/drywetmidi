@@ -1,4 +1,7 @@
-﻿namespace Melanchall.DryWetMidi.Core
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace Melanchall.DryWetMidi.Core
 {
     /// <summary>
     /// Represents a Sequence Number meta event.
@@ -59,6 +62,29 @@
         protected override void WriteContent(MidiWriter writer, WritingSettings settings)
         {
             writer.WriteWord(Number);
+        }
+
+        /// <inheritdoc/>
+        internal override async Task ReadAsync(
+            MidiReader reader,
+            ReadingSettings settings,
+            int size,
+            CancellationToken cancellationToken)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            if (size < 2)
+                return;
+
+            Number = await reader.ReadWordAsync(cancellationToken).ConfigureAwait(false);
+        }
+
+        internal override Task WriteAsync(
+            MidiWriter writer,
+            WritingSettings settings,
+            CancellationToken cancellationToken)
+        {
+            return writer.WriteWordAsync(Number, cancellationToken);
         }
 
         /// <inheritdoc/>

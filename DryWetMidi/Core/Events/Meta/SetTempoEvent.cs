@@ -1,5 +1,7 @@
 ﻿using System;
 using Melanchall.DryWetMidi.Common;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Melanchall.DryWetMidi.Core
 {
@@ -102,6 +104,24 @@ namespace Melanchall.DryWetMidi.Core
         protected override void WriteContent(MidiWriter writer, WritingSettings settings)
         {
             writer.Write3ByteDword((uint)MicrosecondsPerQuarterNote);
+        }
+
+        /// <inheritdoc/>
+        internal override async Task ReadAsync(
+            MidiReader reader,
+            ReadingSettings settings,
+            int size,
+            CancellationToken cancellationToken)
+        {
+            MicrosecondsPerQuarterNote = await reader.Read3ByteDwordAsync(cancellationToken).ConfigureAwait(false);
+        }
+
+        internal override Task WriteAsync(
+            MidiWriter writer,
+            WritingSettings settings,
+            CancellationToken cancellationToken)
+        {
+            return writer.Write3ByteDwordAsync((uint)MicrosecondsPerQuarterNote, cancellationToken);
         }
 
         /// <inheritdoc/>

@@ -1,4 +1,7 @@
-﻿namespace Melanchall.DryWetMidi.Core
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace Melanchall.DryWetMidi.Core
 {
     /// <summary>
     /// Represents an End Of Track meta event.
@@ -27,6 +30,26 @@
         /// <inheritdoc/>
         protected override void WriteContent(MidiWriter writer, WritingSettings settings)
         {
+        }
+
+        /// <inheritdoc/>
+        internal override Task ReadAsync(
+            MidiReader reader,
+            ReadingSettings settings,
+            int size,
+            CancellationToken cancellationToken)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            return Task.CompletedTask;
+        }
+
+        internal override Task WriteAsync(
+            MidiWriter writer,
+            WritingSettings settings,
+            CancellationToken cancellationToken)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            return Task.CompletedTask;
         }
 
         /// <inheritdoc/>

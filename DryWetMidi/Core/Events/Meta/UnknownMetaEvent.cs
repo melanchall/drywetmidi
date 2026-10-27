@@ -1,5 +1,7 @@
 ﻿using Melanchall.DryWetMidi.Common;
 using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Melanchall.DryWetMidi.Core
 {
@@ -94,6 +96,49 @@ namespace Melanchall.DryWetMidi.Core
             var data = Data;
             if (data != null)
                 writer.WriteBytes(data);
+        }
+
+        /// <inheritdoc/>
+        internal override async Task ReadAsync(
+            MidiReader reader,
+            ReadingSettings settings,
+            int size,
+            CancellationToken cancellationToken)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            if (size == 0)
+            {
+                switch (settings.ZeroLengthDataPolicy)
+                {
+                    case ZeroLengthDataPolicy.ReadAsEmptyObject:
+                        Data = Array.Empty<byte>();
+                        break;
+                    case ZeroLengthDataPolicy.ReadAsNull:
+                        Data = null;
+                        break;
+                }
+
+                return;
+            }
+
+            var data = await reader.ReadBytesAsync(size, cancellationToken).ConfigureAwait(false);
+            if (data.Length != size && settings.NotEnoughBytesPolicy == NotEnoughBytesPolicy.Abort)
+                throw new NotEnoughBytesException("Not enough bytes in the stream to read the data of an unknown meta event.", size, data.Length);
+
+            Data = data;
+        }
+
+        internal override async Task WriteAsync(
+            MidiWriter writer,
+            WritingSettings settings,
+            CancellationToken cancellationToken)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            var data = Data;
+            if (data != null)
+                await writer.WriteBytesAsync(data, cancellationToken).ConfigureAwait(false);
         }
 
         /// <inheritdoc/>

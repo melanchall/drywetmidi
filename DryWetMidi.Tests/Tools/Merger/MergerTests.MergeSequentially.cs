@@ -8,6 +8,8 @@ using NUnit.Framework.Legacy;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Melanchall.DryWetMidi.Tests.Tools
 {
@@ -65,6 +67,23 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             protected override void WriteContent(MidiWriter writer, WritingSettings settings)
             {
                 writer.WriteVlqNumber(A);
+            }
+
+            protected override async Task ReadContentAsync(
+                MidiReader reader,
+                ReadingSettings settings,
+                uint size,
+                CancellationToken cancellationToken)
+            {
+                A = await reader.ReadVlqNumberAsync(cancellationToken).ConfigureAwait(false);
+            }
+
+            protected override Task WriteContentAsync(
+                MidiWriter writer,
+                WritingSettings settings,
+                CancellationToken cancellationToken)
+            {
+                return writer.WriteVlqNumberAsync(A, cancellationToken);
             }
 
             public override bool Equals(object obj) =>

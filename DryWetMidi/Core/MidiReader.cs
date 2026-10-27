@@ -15,9 +15,8 @@ namespace Melanchall.DryWetMidi.Core
     /// <remarks>
     /// Asynchronous methods leave the underlying stream open and must not overlap other operations
     /// on this reader. Their optional cancellation tokens default to no cancellation.
-    /// Construction can read synchronously when <see cref="BufferingPolicy.BufferAllData"/> is
-    /// explicitly requested. For asynchronous primitive I/O on directly constructed readers,
-    /// select another buffering policy.
+    /// Buffers are filled on the first read, using synchronous or asynchronous I/O according
+    /// to the operation requested.
     /// </remarks>
     public sealed partial class MidiReader : IDisposable
     {
@@ -75,11 +74,6 @@ namespace Melanchall.DryWetMidi.Core
         /// is <c>null</c> in case of <see cref="ReaderSettings.BufferingPolicy"/> set to
         /// <see cref="BufferingPolicy.UseCustomBuffer"/>.</exception>
         public MidiReader(Stream stream, ReaderSettings settings)
-            : this(stream, settings, false)
-        {
-        }
-
-        internal MidiReader(Stream stream, ReaderSettings settings, bool deferInitialization)
         {
             ThrowIfArgument.IsNull(nameof(stream), stream);
             ThrowIfArgument.IsNull(nameof(settings), settings);
@@ -96,7 +90,7 @@ namespace Melanchall.DryWetMidi.Core
             Length = _stream.Length;
 
             _useBuffering = _settings.BufferingPolicy != BufferingPolicy.DontUseBuffering && !_isStreamWrapped && !(_stream is MemoryStream);
-            if (_useBuffering && !(deferInitialization && settings.BufferingPolicy == BufferingPolicy.BufferAllData))
+            if (_useBuffering && settings.BufferingPolicy != BufferingPolicy.BufferAllData)
                 PrepareBuffer();
         }
 
@@ -484,6 +478,9 @@ namespace Melanchall.DryWetMidi.Core
         [MemberNotNullWhen(true, nameof(_buffer))]
         private bool EnsureBufferIsReadyForReading()
         {
+            if (_buffer == null)
+                PrepareBuffer();
+
             if (EndReached)
                 return false;
 

@@ -73,14 +73,6 @@ Use OperationCanceledException for cancellation contracts; do not promise the
 more specific TaskCanceledException for every canceled operation.
 Document actual exceptions rather than adding every exception to every method.
 
-For every public async API's progress parameter, document the reporting unit,
-throttling, unknown totals, and successful-completion notification. CPU-bound
-work performed during CSV I/O counts work checkpoints (including internal
-algorithm steps), not necessarily notes, events, or output objects. MIDI I/O
-counts transported bytes. Timed-object output counts accepted non-null objects.
-Do not infer a total by enumerating input or describe checkpoint counts as a
-reliable number of processed notes.
-
 In documentation articles, link methods with xref and their fully qualified
 method identifier; include the parameter signature to select an overload, or
 use the method's overload-group identifier ending in * when intended.

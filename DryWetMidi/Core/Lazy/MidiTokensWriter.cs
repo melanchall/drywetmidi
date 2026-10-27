@@ -15,6 +15,11 @@ namespace Melanchall.DryWetMidi.Core
     /// <seealso cref="MidiTokensReader"/>
     public sealed class MidiTokensWriter : IDisposable, IAsyncDisposable
     {
+        private sealed class CallbackScope
+        {
+            internal bool Active = true;
+        }
+
         #region Enums
 
         private enum State
@@ -56,11 +61,6 @@ namespace Melanchall.DryWetMidi.Core
         private int _callbackWrite;
         private bool _suppressEndCallback;
 
-        private sealed class CallbackScope
-        {
-            internal bool Active = true;
-        }
-
         #endregion
 
         #region Constructor
@@ -68,10 +68,7 @@ namespace Melanchall.DryWetMidi.Core
         internal MidiTokensWriter(
             Stream stream,
             WritingSettings? settings,
-            bool disposeStream,
-            MidiFileFormat format,
-            TimeDivision timeDivision,
-            bool deferInitialization = false)
+            bool disposeStream)
         {
             _stream = stream;
             if (!_stream.CanWrite)
@@ -89,9 +86,6 @@ namespace Melanchall.DryWetMidi.Core
 
             _writer = new MidiWriter(_stream, _settings.WriterSettings);
             _disposeStream = disposeStream;
-
-            if (!deferInitialization)
-                WriteFileHeader(format, timeDivision);
         }
 
         #endregion
@@ -263,7 +257,7 @@ namespace Melanchall.DryWetMidi.Core
         }
 
         /// <summary>
-        /// Starts a track chunk using asynchronous transport writes.
+        /// Starts a track chunk using asynchronous stream writes.
         /// </summary>
         /// <param name="cancellationToken">Token used to cancel writing.</param>
         /// <returns>A task representing writing.</returns>
@@ -272,10 +266,10 @@ namespace Melanchall.DryWetMidi.Core
         /// <exception cref="InvalidOperationException">Another writer operation is in progress.</exception>
         /// <exception cref="OperationCanceledException"><paramref name="cancellationToken"/> was canceled.</exception>
         public Task StartTrackChunkAsync(CancellationToken cancellationToken = default) =>
-            ExecuteTrackAsync(StartTrackChunkCore, cancellationToken);
+            ExecuteTrackAsync(() => StartTrackChunkCoreAsync(cancellationToken), cancellationToken);
 
         /// <summary>
-        /// Ends a track chunk using asynchronous transport writes.
+        /// Ends a track chunk using asynchronous stream writes.
         /// </summary>
         /// <param name="cancellationToken">Token used to cancel writing.</param>
         /// <returns>A task representing writing.</returns>
@@ -284,10 +278,10 @@ namespace Melanchall.DryWetMidi.Core
         /// <exception cref="InvalidOperationException">Another writer operation is in progress.</exception>
         /// <exception cref="OperationCanceledException"><paramref name="cancellationToken"/> was canceled.</exception>
         public Task EndTrackChunkAsync(CancellationToken cancellationToken = default) =>
-            ExecuteTrackAsync(EndTrackChunkCore, cancellationToken, alwaysEnd: true);
+            ExecuteTrackAsync(() => EndTrackChunkCoreAsync(cancellationToken), cancellationToken, alwaysEnd: true);
 
         /// <summary>
-        /// Writes an event using asynchronous transport writes.
+        /// Writes an event using asynchronous stream writes.
         /// </summary>
         /// <param name="midiEvent">The event to write.</param>
         /// <param name="cancellationToken">Token used to cancel writing.</param>
@@ -302,7 +296,9 @@ namespace Melanchall.DryWetMidi.Core
             if (_callbackScope.Value?.Active == true)
                 return WriteCallbackEventAsync(midiEvent, cancellationToken);
 
-            return ExecuteAsync(() => WriteEventCore(midiEvent), cancellationToken);
+            ThrowIfArgument.IsNull(nameof(midiEvent), midiEvent);
+
+            return ExecuteAsync(() => WriteEventCoreAsync(midiEvent, cancellationToken), cancellationToken);
         }
 
         private async Task WriteCallbackEventAsync(MidiEvent midiEvent, CancellationToken cancellationToken)
@@ -312,7 +308,8 @@ namespace Melanchall.DryWetMidi.Core
 
             try
             {
-                await EncodeAsync(() => WriteEventCore(midiEvent), cancellationToken).ConfigureAwait(false);
+                ThrowIfArgument.IsNull(nameof(midiEvent), midiEvent);
+                await WriteEventCoreAsync(midiEvent, cancellationToken).ConfigureAwait(false);
             }
             finally
             {
@@ -339,7 +336,7 @@ namespace Melanchall.DryWetMidi.Core
         }
 
         /// <summary>
-        /// Writes a chunk using asynchronous transport writes.
+        /// Writes a chunk using asynchronous stream writes.
         /// </summary>
         /// <param name="chunk">The chunk to write.</param>
         /// <param name="cancellationToken">Token used to cancel writing.</param>
@@ -393,12 +390,13 @@ namespace Melanchall.DryWetMidi.Core
             }
         }
 
-        private async Task ExecuteAsync(Action action, CancellationToken cancellationToken)
+        private async Task ExecuteAsync(Func<Task> action, CancellationToken cancellationToken)
         {
             EnterOperation();
             try
             {
-                await EncodeAsync(action, cancellationToken).ConfigureAwait(false);
+                cancellationToken.ThrowIfCancellationRequested();
+                await action().ConfigureAwait(false);
             }
             finally
             {
@@ -406,30 +404,11 @@ namespace Melanchall.DryWetMidi.Core
             }
         }
 
-        private Task EncodeAsync(Action action, CancellationToken cancellationToken)
-        {
-            var writer = _writer;
-            return writer.WriteEncodedAsync(
-                codec =>
-                {
-                    _writer = codec;
-                    try
-                    {
-                        action();
-                    }
-                    finally
-                    {
-                        _writer = writer;
-                    }
-                },
-                cancellationToken);
-        }
-
         internal Task InitializeAsync(MidiFileFormat format, TimeDivision timeDivision, CancellationToken cancellationToken) =>
-            ExecuteAsync(() => WriteFileHeader(format, timeDivision), cancellationToken);
+            ExecuteAsync(() => WriteFileHeaderAsync(format, timeDivision, cancellationToken), cancellationToken);
 
         private async Task ExecuteTrackAsync(
-            Action action,
+            Func<Task> action,
             CancellationToken cancellationToken,
             bool alwaysEnd = false)
         {
@@ -456,7 +435,7 @@ namespace Melanchall.DryWetMidi.Core
 
                 try
                 {
-                    await EncodeAsync(action, cancellationToken).ConfigureAwait(false);
+                    await action().ConfigureAwait(false);
                 }
                 finally
                 {
@@ -469,7 +448,7 @@ namespace Melanchall.DryWetMidi.Core
             }
         }
 
-        private void WriteFileHeader(MidiFileFormat format, TimeDivision timeDivision)
+        internal void WriteFileHeader(MidiFileFormat format, TimeDivision timeDivision)
         {
             var headerChunk = new HeaderChunk
             {
@@ -482,6 +461,110 @@ namespace Melanchall.DryWetMidi.Core
             _tracksNumberPosition = _writer.Length - 4;
 
             _state = State.Chunk;
+        }
+
+        private async Task WriteFileHeaderAsync(
+            MidiFileFormat format,
+            TimeDivision timeDivision,
+            CancellationToken cancellationToken)
+        {
+            var headerChunk = new HeaderChunk
+            {
+                FileFormat = (ushort)format,
+                TimeDivision = timeDivision,
+                TracksNumber = 0
+            };
+            await headerChunk.WriteAsync(_writer, _settings, cancellationToken).ConfigureAwait(false);
+
+            _tracksNumberPosition = _writer.Length - 4;
+            _state = State.Chunk;
+        }
+
+        private async Task StartTrackChunkCoreAsync(CancellationToken cancellationToken)
+        {
+            if (_state == State.Event)
+                await EndTrackChunkCoreAsync(cancellationToken).ConfigureAwait(false);
+
+            _trackChunkPosition = _writer.Length;
+            await MidiChunk.WriteHeaderAsync(TrackChunk.Id, 0, _writer, cancellationToken).ConfigureAwait(false);
+
+            _runningStatus = null;
+            _skipSetTempo = true;
+            _skipKeySignature = true;
+            _skipTimeSignature = true;
+            _additionalDeltaTime = 0;
+            _lastEventIsEndOfTrack = false;
+            CurrentTime = 0;
+            _state = State.Event;
+        }
+
+        private async Task EndTrackChunkCoreAsync(CancellationToken cancellationToken)
+        {
+            _callbackThread = Environment.CurrentManagedThreadId;
+            try
+            {
+                if (!_suppressEndCallback)
+                    BeforeEndTrackChunk?.Invoke();
+            }
+            finally
+            {
+                _callbackThread = 0;
+            }
+
+            var endOfTrackEvent = new EndOfTrackEvent
+            {
+                DeltaTime = _lastEventIsEndOfTrack ? _additionalDeltaTime : 0
+            };
+            await _writer.WriteVlqNumberAsync(endOfTrackEvent.DeltaTime, cancellationToken).ConfigureAwait(false);
+            await EventWriterFactory.GetWriter(endOfTrackEvent).WriteAsync(
+                endOfTrackEvent,
+                _writer,
+                _settings,
+                true,
+                cancellationToken).ConfigureAwait(false);
+
+            _positionsToChunkSizes.Add(
+                _trackChunkPosition + MidiChunk.IdLength,
+                (uint)(_writer.Length - (_trackChunkPosition + MidiChunk.IdLength + 4)));
+            _tracksNumber++;
+            _state = State.Chunk;
+        }
+
+        private async Task WriteEventCoreAsync(MidiEvent midiEvent, CancellationToken cancellationToken)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            if (_state != State.Event)
+                throw new InvalidOperationException("A track chunk is not started.");
+
+            if (_lastEventIsEndOfTrack)
+                throw new InvalidOperationException("Last written event is 'End of Track' one, so it's not possible to write an event after it.");
+
+            IEventWriter? eventWriter = null;
+            MidiEvent? eventToWrite = null;
+            var writeStatus = true;
+            TrackChunk.ProcessEvent(
+                midiEvent,
+                _settings,
+                (writer, e, status) =>
+                {
+                    eventWriter = writer;
+                    eventToWrite = e;
+                    writeStatus = status;
+                },
+                ref _lastEventIsEndOfTrack,
+                ref _additionalDeltaTime,
+                ref _runningStatus,
+                ref _skipSetTempo,
+                ref _skipKeySignature,
+                ref _skipTimeSignature);
+
+            if (eventToWrite != null && eventWriter != null)
+            {
+                await _writer.WriteVlqNumberAsync(eventToWrite.DeltaTime, cancellationToken).ConfigureAwait(false);
+                await eventWriter.WriteAsync(eventToWrite, _writer, _settings, writeStatus, cancellationToken).ConfigureAwait(false);
+            }
+
+            CurrentTime += midiEvent.DeltaTime;
         }
 
         private void UpdateChunkSizes()
@@ -568,7 +651,7 @@ namespace Melanchall.DryWetMidi.Core
 
                         try
                         {
-                            await EncodeAsync(EndTrackChunkCore, CancellationToken.None).ConfigureAwait(false);
+                            await EndTrackChunkCoreAsync(CancellationToken.None).ConfigureAwait(false);
                         }
                         finally
                         {

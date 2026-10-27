@@ -15,34 +15,27 @@ namespace Melanchall.DryWetMidi.Core
         /// </summary>
         /// <param name="stream">Readable stream, left open on completion or failure.</param>
         /// <param name="settings">Reading settings, or <c>null</c> for defaults.</param>
-        /// <param name="progress">
-        /// Optional throttled progress in bytes read from the transport.
-        /// The total is unknown. A final report marks successful completion.
-        /// </param>
         /// <param name="cancellationToken">Token used to cancel reading.</param>
         /// <returns>The MIDI file.</returns>
         /// <remarks>
-        /// Transport I/O is awaited. Synchronous codecs decode individual buffered events.
-        /// Custom chunks can override <see cref="MidiChunk.ReadContentAsync"/> to read content
-        /// directly with asynchronous reader methods. The default implementation buffers custom
-        /// content for synchronous decoding. Whole-file buffering is used only when requested
+        /// Stream reads are awaited. Chunks and events read their content using asynchronous
+        /// reader methods. Whole-file buffering is used only when requested
         /// by <see cref="ReaderSettings.BufferingPolicy"/>.
+        /// Custom meta events retain their synchronous content callbacks; only their payloads
+        /// are buffered before invoking those callbacks.
         /// </remarks>
         /// <inheritdoc cref="Read(Stream, ReadingSettings)" path="/member/exception"/>
         /// <exception cref="OperationCanceledException"><paramref name="cancellationToken"/> was canceled.</exception>
         public static async Task<MidiFile> ReadAsync(
             Stream stream,
             ReadingSettings? settings = null,
-            IProgress<AsyncOperationProgress>? progress = null,
             CancellationToken cancellationToken = default)
         {
             ThrowIfArgument.IsNull(nameof(stream), stream);
 
-            var reporting = progress == null ? null : new MidiIoProgress(progress, "Reading");
-            var file = await ReadCoreAsync(stream, settings ?? new ReadingSettings(), cancellationToken, reporting).ConfigureAwait(false);
+            var file = await ReadCoreAsync(stream, settings ?? new ReadingSettings(), cancellationToken).ConfigureAwait(false);
 
             cancellationToken.ThrowIfCancellationRequested();
-            reporting?.Complete();
 
             return file;
         }
@@ -52,10 +45,6 @@ namespace Melanchall.DryWetMidi.Core
         /// </summary>
         /// <param name="filePath">Path of the MIDI file.</param>
         /// <param name="settings">Reading settings, or <c>null</c> for defaults.</param>
-        /// <param name="progress">
-        /// Optional throttled progress in bytes read from the transport.
-        /// The total is unknown. A final report marks successful completion.
-        /// </param>
         /// <param name="cancellationToken">Token used to cancel reading.</param>
         /// <returns>The MIDI file.</returns>
         /// <inheritdoc cref="Read(string, ReadingSettings)" path="/member/exception"/>
@@ -63,13 +52,11 @@ namespace Melanchall.DryWetMidi.Core
         public static async Task<MidiFile> ReadAsync(
             string filePath,
             ReadingSettings? settings = null,
-            IProgress<AsyncOperationProgress>? progress = null,
             CancellationToken cancellationToken = default)
         {
             ThrowIfArgument.IsNullOrWhiteSpaceString(nameof(filePath), filePath, "File path is null or white space.");
             cancellationToken.ThrowIfCancellationRequested();
 
-            var reporting = progress == null ? null : new MidiIoProgress(progress, "Reading");
             MidiFile file;
             var stream = new FileStream(
                 filePath,
@@ -81,11 +68,10 @@ namespace Melanchall.DryWetMidi.Core
 
             await using (stream.ConfigureAwait(false))
             {
-                file = await ReadCoreAsync(stream, settings ?? new ReadingSettings(), cancellationToken, reporting).ConfigureAwait(false);
+                file = await ReadCoreAsync(stream, settings ?? new ReadingSettings(), cancellationToken).ConfigureAwait(false);
             }
 
             cancellationToken.ThrowIfCancellationRequested();
-            reporting?.Complete();
 
             return file;
         }
@@ -96,18 +82,14 @@ namespace Melanchall.DryWetMidi.Core
         /// <param name="stream">Writable stream, left open on completion or failure.</param>
         /// <param name="format">Output MIDI file format.</param>
         /// <param name="settings">Writing settings, or <c>null</c> for defaults.</param>
-        /// <param name="progress">
-        /// Optional throttled progress in bytes written to the transport.
-        /// The total is unknown. A final report marks successful completion.
-        /// </param>
         /// <param name="cancellationToken">Token used to cancel writing.</param>
         /// <returns>A task representing writing.</returns>
         /// <remarks>
-        /// Synchronous codecs encode individual events in memory. Custom chunks can override
-        /// <see cref="MidiChunk.WriteContentAsync"/> to write content directly with asynchronous
-        /// writer methods. The default implementation buffers synchronously encoded custom
-        /// content. Transport writes and flushing are awaited. Cancellation or failure can
+        /// Chunks and events write their content using asynchronous writer methods.
+        /// Stream writes and flushing are awaited. Cancellation or failure can
         /// leave partially written data in the stream.
+        /// Custom meta events retain their synchronous content callbacks; only their payloads
+        /// are buffered before writing them asynchronously.
         /// </remarks>
         /// <inheritdoc cref="Write(Stream, MidiFileFormat, WritingSettings)" path="/member/exception"/>
         /// <exception cref="OperationCanceledException"><paramref name="cancellationToken"/> was canceled.</exception>
@@ -115,7 +97,6 @@ namespace Melanchall.DryWetMidi.Core
             Stream stream,
             MidiFileFormat format = MidiFileFormat.MultiTrack,
             WritingSettings? settings = null,
-            IProgress<AsyncOperationProgress>? progress = null,
             CancellationToken cancellationToken = default)
         {
             ThrowIfArgument.IsNull(nameof(stream), stream);
@@ -125,18 +106,15 @@ namespace Melanchall.DryWetMidi.Core
             if (!stream.CanWrite)
                 throw new ArgumentException("Stream doesn't support writing.", nameof(stream));
 
-            var reporting = progress == null ? null : new MidiIoProgress(progress, "Writing");
-            await WriteCoreAsync(stream, format, settings, reporting, cancellationToken).ConfigureAwait(false);
+            await WriteCoreAsync(stream, format, settings, cancellationToken).ConfigureAwait(false);
 
             cancellationToken.ThrowIfCancellationRequested();
-            reporting?.Complete();
         }
 
         private async Task WriteCoreAsync(
             Stream stream,
             MidiFileFormat format,
             WritingSettings? settings,
-            MidiIoProgress? reporting,
             CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
@@ -145,7 +123,7 @@ namespace Melanchall.DryWetMidi.Core
 
             settings ??= new WritingSettings();
             settings.WriterSettings ??= new WriterSettings();
-            var writer = new MidiWriter(stream, settings.WriterSettings) { AsyncProgress = reporting };
+            var writer = new MidiWriter(stream, settings.WriterSettings);
 
             await using (writer.ConfigureAwait(false))
             {
@@ -182,10 +160,6 @@ namespace Melanchall.DryWetMidi.Core
         /// <param name="overwriteFile">Whether an existing file may be overwritten.</param>
         /// <param name="format">Output MIDI file format.</param>
         /// <param name="settings">Writing settings, or <c>null</c> for defaults.</param>
-        /// <param name="progress">
-        /// Optional throttled progress in bytes written to the transport.
-        /// The total is unknown. A final report marks successful completion.
-        /// </param>
         /// <param name="cancellationToken">Token used to cancel writing.</param>
         /// <returns>A task representing writing.</returns>
         /// <remarks>Cancellation or failure can leave a partially written output file.</remarks>
@@ -196,14 +170,12 @@ namespace Melanchall.DryWetMidi.Core
             bool overwriteFile = false,
             MidiFileFormat format = MidiFileFormat.MultiTrack,
             WritingSettings? settings = null,
-            IProgress<AsyncOperationProgress>? progress = null,
             CancellationToken cancellationToken = default)
         {
             ThrowIfArgument.IsNullOrWhiteSpaceString(nameof(filePath), filePath, "File path is null or white space.");
             ThrowIfArgument.IsInvalidEnumValue(nameof(format), format);
             cancellationToken.ThrowIfCancellationRequested();
 
-            var reporting = progress == null ? null : new MidiIoProgress(progress, "Writing");
             var stream = new FileStream(
                 filePath,
                 overwriteFile ? FileMode.Create : FileMode.CreateNew,
@@ -214,15 +186,14 @@ namespace Melanchall.DryWetMidi.Core
 
             await using (stream.ConfigureAwait(false))
             {
-                await WriteCoreAsync(stream, format, settings, reporting, cancellationToken).ConfigureAwait(false);
+                await WriteCoreAsync(stream, format, settings, cancellationToken).ConfigureAwait(false);
             }
 
             cancellationToken.ThrowIfCancellationRequested();
-            reporting?.Complete();
         }
 
         /// <summary>
-        /// Creates a lazy reader without synchronous transport reads, including on nonseekable streams.
+        /// Creates a lazy reader without synchronous stream reads, including on nonseekable streams.
         /// </summary>
         /// <param name="stream">Readable stream, left open when the reader is disposed.</param>
         /// <param name="settings">Reading settings, or <c>null</c> for defaults.</param>
@@ -241,7 +212,7 @@ namespace Melanchall.DryWetMidi.Core
             ThrowIfArgument.IsNull(nameof(stream), stream);
             cancellationToken.ThrowIfCancellationRequested();
 
-            var reader = new MidiTokensReader(stream, settings, false, true);
+            var reader = new MidiTokensReader(stream, settings, false);
             await reader.InitializeAsync(cancellationToken).ConfigureAwait(false);
 
             return reader;
@@ -277,7 +248,7 @@ namespace Melanchall.DryWetMidi.Core
 
             try
             {
-                var reader = new MidiTokensReader(stream, settings, true, true);
+                var reader = new MidiTokensReader(stream, settings, true);
                 await reader.InitializeAsync(cancellationToken).ConfigureAwait(false);
 
                 return reader;
@@ -316,7 +287,7 @@ namespace Melanchall.DryWetMidi.Core
             cancellationToken.ThrowIfCancellationRequested();
 
             timeDivision ??= new TicksPerQuarterNoteTimeDivision();
-            var writer = new MidiTokensWriter(stream, settings, false, format, timeDivision, true);
+            var writer = new MidiTokensWriter(stream, settings, false);
             await writer.InitializeAsync(format, timeDivision, cancellationToken).ConfigureAwait(false);
 
             return writer;
@@ -358,7 +329,7 @@ namespace Melanchall.DryWetMidi.Core
             try
             {
                 timeDivision ??= new TicksPerQuarterNoteTimeDivision();
-                var writer = new MidiTokensWriter(stream, settings, true, format, timeDivision, true);
+                var writer = new MidiTokensWriter(stream, settings, true);
                 await writer.InitializeAsync(format, timeDivision, cancellationToken).ConfigureAwait(false);
 
                 return writer;

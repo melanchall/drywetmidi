@@ -91,7 +91,10 @@ namespace Melanchall.DryWetMidi.Core
         {
             ThrowIfDisposed();
 
-            return WriteEncodedAsync(codec => codec.WriteWord(value), cancellationToken);
+            _numberBuffer[0] = (byte)(value >> 8);
+            _numberBuffer[1] = (byte)value;
+
+            return WriteBytesAsync(_numberBuffer, 0, 2, cancellationToken);
         }
 
         /// <summary>
@@ -106,7 +109,12 @@ namespace Melanchall.DryWetMidi.Core
         {
             ThrowIfDisposed();
 
-            return WriteEncodedAsync(codec => codec.WriteDword(value), cancellationToken);
+            _numberBuffer[0] = (byte)(value >> 24);
+            _numberBuffer[1] = (byte)(value >> 16);
+            _numberBuffer[2] = (byte)(value >> 8);
+            _numberBuffer[3] = (byte)value;
+
+            return WriteBytesAsync(_numberBuffer, 0, 4, cancellationToken);
         }
 
         /// <summary>
@@ -121,7 +129,7 @@ namespace Melanchall.DryWetMidi.Core
         {
             ThrowIfDisposed();
 
-            return WriteEncodedAsync(codec => codec.WriteInt16(value), cancellationToken);
+            return WriteWordAsync((ushort)value, cancellationToken);
         }
 
         /// <summary>
@@ -167,7 +175,9 @@ namespace Melanchall.DryWetMidi.Core
         {
             ThrowIfDisposed();
 
-            return WriteEncodedAsync(codec => codec.WriteVlqNumber(value), cancellationToken);
+            var bytesCount = value.GetVlqBytes(_numberBuffer);
+
+            return WriteBytesAsync(_numberBuffer, _numberBuffer.Length - bytesCount, bytesCount, cancellationToken);
         }
 
         /// <summary>
@@ -182,7 +192,11 @@ namespace Melanchall.DryWetMidi.Core
         {
             ThrowIfDisposed();
 
-            return WriteEncodedAsync(codec => codec.Write3ByteDword(value), cancellationToken);
+            _numberBuffer[0] = (byte)(value >> 16);
+            _numberBuffer[1] = (byte)(value >> 8);
+            _numberBuffer[2] = (byte)value;
+
+            return WriteBytesAsync(_numberBuffer, 0, 3, cancellationToken);
         }
 
         /// <summary>
@@ -207,22 +221,6 @@ namespace Melanchall.DryWetMidi.Core
             }
         }
 
-        internal MidiIoProgress? AsyncProgress { get; set; }
-
-        internal async Task WriteEncodedAsync(Action<MidiWriter> encode, CancellationToken cancellationToken)
-        {
-            cancellationToken.ThrowIfCancellationRequested();
-
-            using var memory = new MemoryStream();
-            using (var codec = new MidiWriter(memory, new WriterSettings { UseBuffering = false }))
-            {
-                codec._length = _length;
-                encode(codec);
-            }
-
-            await WritePayloadAsync(memory.GetBuffer(), checked((int)memory.Length), cancellationToken).ConfigureAwait(false);
-        }
-
         internal async Task WriteDataAsync(byte[] data, CancellationToken cancellationToken)
         {
             await WritePayloadAsync(data, data.Length, cancellationToken).ConfigureAwait(false);
@@ -243,35 +241,42 @@ namespace Melanchall.DryWetMidi.Core
             cancellationToken.ThrowIfCancellationRequested();
 
             if (!_useBuffering)
-                await WriteTransportAsync(data, count, cancellationToken, dataOffset).ConfigureAwait(false);
+                await _stream.WriteAsync(data, dataOffset, count, cancellationToken).ConfigureAwait(false);
             else
-            {
-                for (var offset = 0; offset < count;)
-                {
-                    var size = Math.Min(count - offset, _buffer!.Length - _bufferPosition);
-                    Buffer.BlockCopy(data, dataOffset + offset, _buffer, _bufferPosition, size);
-                    _bufferPosition += size;
-                    offset += size;
-                    if (_bufferPosition == _buffer.Length)
-                        await FlushBufferAsync(cancellationToken).ConfigureAwait(false);
-                }
-            }
+                await WriteBytesWithBufferingAsync(data, dataOffset, count, cancellationToken).ConfigureAwait(false);
 
             _length += count;
         }
 
-        private async Task WriteTransportAsync(
+        private async Task WriteBytesWithBufferingAsync(
             byte[] data,
+            int offset,
             int count,
-            CancellationToken cancellationToken,
-            int dataOffset = 0)
+            CancellationToken cancellationToken)
         {
-            for (var offset = 0; offset < count;)
+            if (_bufferPosition > 0)
             {
-                var size = Math.Min(65536, count - offset);
-                await _stream.WriteAsync(data, dataOffset + offset, size, cancellationToken).ConfigureAwait(false);
-                AsyncProgress?.Add(size);
-                offset += size;
+                var bytesToBuffer = Math.Min(_buffer!.Length - _bufferPosition, count);
+                Buffer.BlockCopy(data, offset, _buffer, _bufferPosition, bytesToBuffer);
+                _bufferPosition += bytesToBuffer;
+                offset += bytesToBuffer;
+                count -= bytesToBuffer;
+
+                if (_bufferPosition == _buffer.Length)
+                    await FlushBufferAsync(cancellationToken).ConfigureAwait(false);
+            }
+
+            while (count >= _buffer!.Length)
+            {
+                await _stream.WriteAsync(data, offset, _buffer.Length, cancellationToken).ConfigureAwait(false);
+                offset += _buffer.Length;
+                count -= _buffer.Length;
+            }
+
+            if (count > 0)
+            {
+                Buffer.BlockCopy(data, offset, _buffer, 0, count);
+                _bufferPosition = count;
             }
         }
 
@@ -280,7 +285,7 @@ namespace Melanchall.DryWetMidi.Core
             if (_bufferPosition == 0)
                 return;
 
-            await WriteTransportAsync(_buffer!, _bufferPosition, cancellationToken).ConfigureAwait(false);
+            await _stream.WriteAsync(_buffer!, 0, _bufferPosition, cancellationToken).ConfigureAwait(false);
             _bufferPosition = 0;
         }
     }

@@ -262,12 +262,37 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 C = reader.ReadByte();
             }
 
+            protected override async Task ReadContentAsync(
+                MidiReader reader,
+                ReadingSettings settings,
+                uint size,
+                CancellationToken cancellationToken)
+            {
+                A = await reader.ReadVlqNumberAsync(cancellationToken).ConfigureAwait(false);
+
+                var bLength = await reader.ReadVlqNumberAsync(cancellationToken).ConfigureAwait(false);
+                B = await reader.ReadStringAsync(bLength, cancellationToken).ConfigureAwait(false);
+
+                C = await reader.ReadByteAsync(cancellationToken).ConfigureAwait(false);
+            }
+
             protected override void WriteContent(MidiWriter writer, WritingSettings settings)
             {
                 writer.WriteVlqNumber(A);
                 writer.WriteVlqNumber(B?.Length ?? 0);
                 writer.WriteString(B);
                 writer.WriteByte(C);
+            }
+
+            protected override async Task WriteContentAsync(
+                MidiWriter writer,
+                WritingSettings settings,
+                CancellationToken cancellationToken)
+            {
+                await writer.WriteVlqNumberAsync(A, cancellationToken).ConfigureAwait(false);
+                await writer.WriteVlqNumberAsync(B?.Length ?? 0, cancellationToken).ConfigureAwait(false);
+                await writer.WriteStringAsync(B, cancellationToken).ConfigureAwait(false);
+                await writer.WriteByteAsync(C, cancellationToken).ConfigureAwait(false);
             }
 
             public override bool Equals(object obj) => obj is CustomChunk customChunk &&
@@ -460,7 +485,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
                     if (cancel)
                         cancellation.Cancel();
                     else
-                        throw new InvalidOperationException("Custom codec failure.");
+                        throw new InvalidOperationException("Custom chunk write failure.");
                 }
             };
             using var output = new MidiFileAsyncTests.AsyncOnlyStream();

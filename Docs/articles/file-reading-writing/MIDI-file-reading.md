@@ -32,15 +32,9 @@ complete [`MidiFile`](xref:Melanchall.DryWetMidi.Core.MidiFile) in memory before
 returning; it does not yield chunks or events lazily. For token-by-token processing,
 see [Lazy reading/writing](xref:a_file_lazy_reading_writing).
 
-Read a file with cancellation and byte-based progress:
+Read a file with cancellation:
 
 ```csharp
-var progress = new Progress<AsyncOperationProgress>(value =>
-{
-    Console.WriteLine(
-        $"{value.ProcessedItems} bytes read; completed: {value.IsCompleted}");
-});
-
 using (var cancellation = new CancellationTokenSource())
 {
     cancellation.CancelAfter(TimeSpan.FromSeconds(10));
@@ -51,22 +45,19 @@ using (var cancellation = new CancellationTokenSource())
         {
             UnknownChunkIdPolicy = UnknownChunkIdPolicy.Abort
         },
-        progress: progress,
         cancellationToken: cancellation.Token);
 }
 ```
-
-Progress reports count bytes read from the transport, not parsed events. Reports
-are throttled, the total is unknown (`TotalItems` is `null`), and successful
-completion produces a final report with `IsCompleted` set to `true`. Await the
-operation itself to determine completion: a `Progress<T>` callback can run later.
 
 File-path overloads own and dispose their streams. Stream overloads leave
 caller-supplied streams open on completion or failure, so dispose them separately.
 Cancellation is cooperative and raises `OperationCanceledException`; it cannot
 interrupt arbitrary synchronous custom chunk or event code. Parsing still uses
 CPU time, and asynchronous I/O does not move all work to a background thread.
-See [Custom chunks](xref:a_custom_chunk) for asynchronous chunk overrides.
+Custom chunks must implement their asynchronous content methods; an override
+that throws `NotSupportedException` makes asynchronous reading of that chunk fail.
+See [Custom chunks](xref:a_custom_chunk) for asynchronous and synchronous-execution
+examples.
 
 ## Reading corrupted files
 

@@ -1,4 +1,7 @@
-﻿namespace Melanchall.DryWetMidi.Core
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace Melanchall.DryWetMidi.Core
 {
     /// <summary>
     /// Represents a MIDI Channel Prefix meta event.
@@ -53,6 +56,24 @@
         protected override void WriteContent(MidiWriter writer, WritingSettings settings)
         {
             writer.WriteByte(Channel);
+        }
+
+        /// <inheritdoc/>
+        internal override async Task ReadAsync(
+            MidiReader reader,
+            ReadingSettings settings,
+            int size,
+            CancellationToken cancellationToken)
+        {
+            Channel = await reader.ReadByteAsync(cancellationToken).ConfigureAwait(false);
+        }
+
+        internal override Task WriteAsync(
+            MidiWriter writer,
+            WritingSettings settings,
+            CancellationToken cancellationToken)
+        {
+            return writer.WriteByteAsync(Channel, cancellationToken);
         }
 
         /// <inheritdoc/>

@@ -81,16 +81,16 @@ namespace Melanchall.DryWetMidi.Tests.Core
             }
         }
 
-        private class PartialSyncChunk : MidiChunk
+        private class PartialChunk : MidiChunk
         {
-            public PartialSyncChunk()
+            public PartialChunk()
                 : base("Part")
             {
             }
 
             public byte Value { get; protected set; }
 
-            public override MidiChunk Clone() => new PartialSyncChunk();
+            public override MidiChunk Clone() => new PartialChunk();
 
             protected override uint GetContentSize(WritingSettings settings) => 2;
 
@@ -103,13 +103,6 @@ namespace Melanchall.DryWetMidi.Tests.Core
             {
                 writer.WriteBytes(new byte[] { 17, 18 });
             }
-        }
-
-        private sealed class PartialAsyncChunk : PartialSyncChunk
-        {
-            public PartialAsyncChunk()
-            {
-            }
 
             protected override async Task ReadContentAsync(
                 MidiReader reader,
@@ -119,6 +112,82 @@ namespace Melanchall.DryWetMidi.Tests.Core
             {
                 Value = await reader.ReadByteAsync(cancellationToken).ConfigureAwait(false);
             }
+
+            protected override Task WriteContentAsync(
+                MidiWriter writer,
+                WritingSettings settings,
+                CancellationToken cancellationToken)
+            {
+                return writer.WriteBytesAsync(new byte[] { 17, 18 }, cancellationToken);
+            }
+        }
+
+        private sealed class PartialArrayChunk : PartialChunk
+        {
+            public PartialArrayChunk()
+            {
+            }
+
+            protected override async Task ReadContentAsync(
+                MidiReader reader,
+                ReadingSettings settings,
+                uint size,
+                CancellationToken cancellationToken)
+            {
+                Value = (await reader.ReadBytesAsync(1, cancellationToken).ConfigureAwait(false))[0];
+            }
+        }
+
+        private sealed class SyncOnlyChunk : PartialChunk
+        {
+            public SyncOnlyChunk()
+            {
+            }
+
+            protected override Task ReadContentAsync(
+                MidiReader reader,
+                ReadingSettings settings,
+                uint size,
+                CancellationToken cancellationToken)
+            {
+                throw new NotSupportedException("This custom chunk supports only synchronous reading.");
+            }
+
+            protected override Task WriteContentAsync(
+                MidiWriter writer,
+                WritingSettings settings,
+                CancellationToken cancellationToken)
+            {
+                throw new NotSupportedException("This custom chunk supports only synchronous writing.");
+            }
+        }
+
+        [Test]
+        public void CustomChunk_SyncOnly_ExplicitlyRejectsAsyncIO()
+        {
+            using var bytes = new MemoryStream();
+            new MidiFile(new SyncOnlyChunk()).Write(bytes);
+            var settings = new ReadingSettings
+            {
+                CustomChunkTypes = new ChunkTypesCollection { { typeof(SyncOnlyChunk), "Part" } },
+                InvalidChunkSizePolicy = InvalidChunkSizePolicy.Ignore
+            };
+            bytes.Position = 0;
+            var synchronous = MidiFile.Read(bytes, settings);
+
+            ClassicAssert.AreEqual(17, ((SyncOnlyChunk)synchronous.Chunks[0]).Value, "Synchronous custom chunk reading failed.");
+
+            using var input = new AsyncOnlyStream(bytes.ToArray());
+            using var output = new AsyncOnlyStream();
+
+            Assert.ThrowsAsync<NotSupportedException>(
+                async () => await MidiFile.ReadAsync(input, settings),
+                "Async reading ignored the custom chunk's explicit unsupported-operation override.");
+            Assert.ThrowsAsync<NotSupportedException>(
+                async () => await new MidiFile(new SyncOnlyChunk()).WriteAsync(output),
+                "Async writing ignored the custom chunk's explicit unsupported-operation override.");
+            ClassicAssert.IsFalse(input.IsDisposed, "Unsupported reading disposed the caller's stream.");
+            ClassicAssert.IsFalse(output.IsDisposed, "Unsupported writing disposed the caller's stream.");
         }
 
         [Test]
@@ -274,16 +343,16 @@ namespace Melanchall.DryWetMidi.Tests.Core
         [Test]
         public async Task CustomChunk_ReadAsync_SizePolicy(
             [Values] InvalidChunkSizePolicy policy,
-            [Values] bool asynchronousHook)
+            [Values] bool arrayRead)
         {
             using var output = new MemoryStream();
-            new MidiFile(new PartialAsyncChunk(), new UnknownChunk("Next") { Data = new byte[] { 19 } }).Write(output);
+            new MidiFile(new PartialArrayChunk(), new UnknownChunk("Next") { Data = new byte[] { 19 } }).Write(output);
             using var input = new AsyncOnlyStream(output.ToArray(), false, 1);
             var settings = new ReadingSettings
             {
                 CustomChunkTypes = new ChunkTypesCollection
                 {
-                    { asynchronousHook ? typeof(PartialAsyncChunk) : typeof(PartialSyncChunk), "Part" }
+                    { arrayRead ? typeof(PartialArrayChunk) : typeof(PartialChunk), "Part" }
                 },
                 InvalidChunkSizePolicy = policy
             };
@@ -298,7 +367,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
             {
                 var file = await MidiFile.ReadAsync(input, settings);
 
-                ClassicAssert.AreEqual(17, ((PartialSyncChunk)file.Chunks[0]).Value, "The hook read an invalid value.");
+                ClassicAssert.AreEqual(17, ((PartialChunk)file.Chunks[0]).Value, "The hook read an invalid value.");
                 ClassicAssert.AreEqual(new byte[] { 19 }, ((UnknownChunk)file.Chunks[1]).Data, "Skipping unread content damaged the next chunk.");
             }
         }
@@ -379,7 +448,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
         }
 
         [Test]
-        public async Task AsyncPrimitives_ZeroLengthOperations_DoNotTouchTransport()
+        public async Task AsyncPrimitives_ZeroLengthOperations_DoNotTouchStream()
         {
             using var input = new AsyncOnlyStream(new byte[] { 1 });
             using var reader = new MidiReader(input, new ReaderSettings());
@@ -395,8 +464,8 @@ namespace Melanchall.DryWetMidi.Tests.Core
 
             ClassicAssert.IsEmpty(bytes, "A zero-length read returned bytes.");
             ClassicAssert.AreEqual(string.Empty, text, "A zero-length string read returned characters.");
-            ClassicAssert.AreEqual(0, input.AsyncReads, "A zero-length read touched the transport.");
-            ClassicAssert.AreEqual(0, output.AsyncWrites, "A zero-length write touched the transport.");
+            ClassicAssert.AreEqual(0, input.AsyncReads, "A zero-length read touched the stream.");
+            ClassicAssert.AreEqual(0, output.AsyncWrites, "A zero-length write touched the stream.");
             ClassicAssert.AreEqual(0, writer.Length, "Zero-length writes changed the output length.");
         }
 
@@ -426,7 +495,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
         }
 
         [Test]
-        public async Task AsyncPrimitives_DisposedAndCanceledOperationsDoNotTouchTransport()
+        public async Task AsyncPrimitives_DisposedAndCanceledOperationsDoNotTouchStream()
         {
             using var input = new AsyncOnlyStream(new byte[] { 1 });
             using var reader = new MidiReader(input, new ReaderSettings());
@@ -441,8 +510,8 @@ namespace Melanchall.DryWetMidi.Tests.Core
             Assert.ThrowsAsync<OperationCanceledException>(
                 async () => await writer.WriteBytesAsync(Array.Empty<byte>(), cancellation.Token),
                 "An empty canceled write was accepted.");
-            ClassicAssert.AreEqual(0, input.AsyncReads, "A canceled read touched the transport.");
-            ClassicAssert.AreEqual(0, output.AsyncWrites, "A canceled write touched the transport.");
+            ClassicAssert.AreEqual(0, input.AsyncReads, "A canceled read touched the stream.");
+            ClassicAssert.AreEqual(0, output.AsyncWrites, "A canceled write touched the stream.");
 
             reader.Dispose();
             await writer.DisposeAsync();

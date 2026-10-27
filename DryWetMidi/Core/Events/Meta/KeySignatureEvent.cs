@@ -1,5 +1,7 @@
 ﻿using Melanchall.DryWetMidi.Common;
 using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Melanchall.DryWetMidi.Core
 {
@@ -186,6 +188,39 @@ namespace Melanchall.DryWetMidi.Core
         {
             writer.WriteSByte(Key);
             writer.WriteByte(Scale);
+        }
+
+        /// <inheritdoc/>
+        internal override async Task ReadAsync(
+            MidiReader reader,
+            ReadingSettings settings,
+            int size,
+            CancellationToken cancellationToken)
+        {
+            var invalidMetaEventParameterValuePolicy = settings.InvalidMetaEventParameterValuePolicy;
+
+            Key = (sbyte)ProcessValue(
+                await reader.ReadSByteAsync(cancellationToken).ConfigureAwait(false),
+                nameof(Key),
+                MinKey,
+                MaxKey,
+                invalidMetaEventParameterValuePolicy);
+
+            Scale = (byte)ProcessValue(
+                await reader.ReadByteAsync(cancellationToken).ConfigureAwait(false),
+                nameof(Scale),
+                MinScale,
+                MaxScale,
+                invalidMetaEventParameterValuePolicy);
+        }
+
+        internal override async Task WriteAsync(
+            MidiWriter writer,
+            WritingSettings settings,
+            CancellationToken cancellationToken)
+        {
+            await writer.WriteSByteAsync(Key, cancellationToken).ConfigureAwait(false);
+            await writer.WriteByteAsync(Scale, cancellationToken).ConfigureAwait(false);
         }
 
         /// <inheritdoc/>

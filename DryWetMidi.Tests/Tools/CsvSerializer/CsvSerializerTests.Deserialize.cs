@@ -31,12 +31,12 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             CheckCsvCancellation(false);
 
         [Test]
-        public void DeserializeAsync_CodecErrors_PropagateWithoutDeadlock()
+        public void DeserializeAsync_InvalidCsv_PropagatesWithoutDeadlock()
         {
             using var input = new AsyncOnlyStream(System.Text.Encoding.UTF8.GetBytes("not a valid CSV MIDI file\n" + new string('x', 20000)));
 
             Assert.ThrowsAsync<CsvException>(async () =>
-                await CsvSerializer.DeserializeFileFromCsvAsync(input).WaitAsync(TimeSpan.FromSeconds(10)), "CSV codec failure did not propagate without deadlock.");
+                await CsvSerializer.DeserializeFileFromCsvAsync(input).WaitAsync(TimeSpan.FromSeconds(10)), "CSV parsing failure did not propagate without deadlock.");
         }
 
         [TestCaseSource(nameof(EventsDataForDeserialization))]

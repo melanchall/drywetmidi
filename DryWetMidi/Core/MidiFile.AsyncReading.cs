@@ -12,8 +12,7 @@ namespace Melanchall.DryWetMidi.Core
         private static async Task<MidiFile> ReadCoreAsync(
             Stream stream,
             ReadingSettings settings,
-            CancellationToken cancellationToken,
-            MidiIoProgress? progress = null)
+            CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
             if (!stream.CanRead)
@@ -24,11 +23,9 @@ namespace Melanchall.DryWetMidi.Core
             int? expected = null;
             var actual = 0;
             var hasHeader = false;
-            using var reader = new MidiReader(stream, settings.ReaderSettings, true);
-            reader.SetProgress(progress);
+            using var reader = new MidiReader(stream, settings.ReaderSettings);
             try
             {
-                await reader.InitializeAsync(cancellationToken).ConfigureAwait(false);
                 if (await reader.EndReachedAsync(cancellationToken).ConfigureAwait(false))
                     throw new ArgumentException("Stream is already read.", nameof(stream));
 
@@ -158,28 +155,7 @@ namespace Melanchall.DryWetMidi.Core
 
             try
             {
-                if (chunk is HeaderChunk header)
-                {
-                    var bytes = await reader.ReadBytesAsync(6, cancellationToken).ConfigureAwait(false);
-                    using var memory = new MemoryStream(bytes, false);
-                    using var codec = new MidiReader(memory, settings.ReaderSettings);
-                    HeaderChunk.ReadData(codec, settings, out var format, out var division, out var count);
-                    header.FileFormat = format;
-                    header.TimeDivision = division;
-                    header.TracksNumber = count;
-                }
-                else
-                {
-                    await chunk.ReadAsync(reader, settings, size, cancellationToken).ConfigureAwait(false);
-                    return chunk;
-                }
-
-                var consumed = reader.Position - start;
-                if (settings.InvalidChunkSizePolicy == InvalidChunkSizePolicy.Abort && consumed != size)
-                    throw new InvalidChunkSizeException(id, size, consumed);
-
-                if (consumed < size)
-                    await reader.SetPositionAsync(Math.Min(start + size, reader.Length), cancellationToken).ConfigureAwait(false);
+                await chunk.ReadAsync(reader, settings, size, cancellationToken).ConfigureAwait(false);
             }
             catch (NotEnoughBytesException exception)
             {
@@ -191,54 +167,6 @@ namespace Melanchall.DryWetMidi.Core
             }
 
             return chunk;
-        }
-
-        internal static async Task ReadTrackAsync(
-            TrackChunk track,
-            MidiReader reader,
-            ReadingSettings settings,
-            long end,
-            CancellationToken cancellationToken)
-        {
-            byte? status = null;
-            var foundEnd = false;
-
-            while (reader.Position < end && !await reader.EndReachedAsync(cancellationToken).ConfigureAwait(false))
-            {
-                var result = await MidiFileReadingUtilities.ReadEventAsync(reader, settings, status, cancellationToken).ConfigureAwait(false);
-                status = result.Status;
-                var midiEvent = result.Event;
-                if (midiEvent == null)
-                    continue;
-
-                var isEnd = midiEvent is EndOfTrackEvent;
-                if (isEnd)
-                    foundEnd = true;
-
-                if (!isEnd || settings.EndOfTrackStoringPolicy == EndOfTrackStoringPolicy.Store)
-                {
-                    var capacity = track.Events.Capacity;
-                    if (isEnd)
-                        track.Events.Add(midiEvent);
-                    else
-                        track.Events.AddInternal(midiEvent);
-
-                    if (settings.MaxMemorySize != null)
-                        reader.AddEstimatedMemory(
-                            MemorySizeEstimator.EstimateEvent(midiEvent) +
-                            MemorySizeEstimator.EstimateReferencesArray(track.Events.Capacity) -
-                            MemorySizeEstimator.EstimateReferencesArray(capacity),
-                            settings);
-                }
-
-                if (isEnd)
-                    break;
-            }
-
-            if (!foundEnd && settings.MissedEndOfTrackPolicy == MissedEndOfTrackPolicy.Abort)
-                throw new MissedEndOfTrackEventException();
-
-            track.Events.IsInitialState = true;
         }
     }
 }

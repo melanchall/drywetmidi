@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using Melanchall.DryWetMidi.Common;
@@ -10,36 +9,6 @@ namespace Melanchall.DryWetMidi.Interaction
     public sealed partial class TimedObjectsWriter
     {
         private int _asyncOperation;
-
-        private sealed class WritingProgress
-        {
-            private readonly IProgress<AsyncOperationProgress>? _progress;
-            private readonly Stopwatch _stopwatch = Stopwatch.StartNew();
-            private long _lastReport;
-            private long _count;
-
-            internal WritingProgress(IProgress<AsyncOperationProgress>? progress)
-            {
-                _progress = progress;
-            }
-
-            internal void Advance()
-            {
-                _count++;
-
-                var elapsed = _stopwatch.ElapsedMilliseconds;
-                if (_progress != null && elapsed - _lastReport >= 100)
-                {
-                    _lastReport = elapsed;
-                    _progress.Report(new AsyncOperationProgress(_count, phase: "Writing objects"));
-                }
-            }
-
-            internal void Complete()
-            {
-                _progress?.Report(new AsyncOperationProgress(_count, true, "Writing objects"));
-            }
-        }
 
         /// <inheritdoc cref="WriteObject" path="/member/exception" />
         /// <summary>
@@ -76,7 +45,6 @@ namespace Melanchall.DryWetMidi.Interaction
         /// The supplied token writer remains owned by the caller.
         /// </summary>
         /// <param name="timedObjects">Objects to write; null elements are ignored.</param>
-        /// <param name="progress">Optional throttled progress of accepted objects, excluding final token-writer completion.</param>
         /// <param name="cancellationToken">Token used to cancel enumeration and output.</param>
         /// <exception cref="ArgumentNullException"><paramref name="timedObjects"/> is null.</exception>
         /// <exception cref="ObjectDisposedException">This writer or its underlying token writer is disposed.</exception>
@@ -84,7 +52,6 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
         public async Task WriteObjectsAsync(
             IEnumerable<ITimedObject?> timedObjects,
-            IProgress<AsyncOperationProgress>? progress = null,
             CancellationToken cancellationToken = default)
         {
             ThrowIfArgument.IsNull(nameof(timedObjects), timedObjects);
@@ -93,7 +60,6 @@ namespace Melanchall.DryWetMidi.Interaction
 
             try
             {
-                var reporter = new WritingProgress(progress);
                 cancellationToken.ThrowIfCancellationRequested();
 
                 foreach (var timedObject in timedObjects)
@@ -101,14 +67,10 @@ namespace Melanchall.DryWetMidi.Interaction
                     cancellationToken.ThrowIfCancellationRequested();
 
                     if (timedObject != null)
-                    {
                         await WriteObjectCoreAsync(timedObject, cancellationToken).ConfigureAwait(false);
-                        reporter.Advance();
-                    }
-
                 }
+
                 cancellationToken.ThrowIfCancellationRequested();
-                reporter.Complete();
             }
             finally
             {
@@ -122,7 +84,6 @@ namespace Melanchall.DryWetMidi.Interaction
         /// Cancellation or producer failure can leave partially written output.
         /// </summary>
         /// <param name="timedObjects">Objects to write; null elements are ignored.</param>
-        /// <param name="progress">Optional throttled progress of accepted objects, excluding final token-writer completion.</param>
         /// <param name="cancellationToken">Token used to cancel enumeration and output.</param>
         /// <exception cref="ArgumentNullException"><paramref name="timedObjects"/> is null.</exception>
         /// <exception cref="ObjectDisposedException">This writer or its underlying token writer is disposed.</exception>
@@ -130,7 +91,6 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
         public async Task WriteObjectsAsync(
             IAsyncEnumerable<ITimedObject?> timedObjects,
-            IProgress<AsyncOperationProgress>? progress = null,
             CancellationToken cancellationToken = default)
         {
             ThrowIfArgument.IsNull(nameof(timedObjects), timedObjects);
@@ -139,7 +99,6 @@ namespace Melanchall.DryWetMidi.Interaction
 
             try
             {
-                var reporter = new WritingProgress(progress);
                 cancellationToken.ThrowIfCancellationRequested();
 
                 await foreach (var timedObject in timedObjects.WithCancellation(cancellationToken).ConfigureAwait(false))
@@ -147,14 +106,10 @@ namespace Melanchall.DryWetMidi.Interaction
                     cancellationToken.ThrowIfCancellationRequested();
 
                     if (timedObject != null)
-                    {
                         await WriteObjectCoreAsync(timedObject, cancellationToken).ConfigureAwait(false);
-                        reporter.Advance();
-                    }
-
                 }
+
                 cancellationToken.ThrowIfCancellationRequested();
-                reporter.Complete();
             }
             finally
             {

@@ -3,7 +3,6 @@ using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -13,48 +12,6 @@ namespace Melanchall.DryWetMidi.Tools
 {
     public static partial class CsvSerializer
     {
-        private sealed class CsvOperation
-        {
-            private readonly CancellationToken _cancellationToken;
-            private readonly IProgress<AsyncOperationProgress>? _progress;
-            private readonly Stopwatch? _stopwatch;
-            private long _processed;
-            private long _lastReport;
-
-            internal CsvOperation(
-                CancellationToken cancellationToken,
-                IProgress<AsyncOperationProgress>? progress)
-            {
-                _cancellationToken = cancellationToken;
-                _progress = progress;
-                _stopwatch = progress != null ? Stopwatch.StartNew() : null;
-
-                cancellationToken.ThrowIfCancellationRequested();
-            }
-
-            internal void Checkpoint()
-            {
-                _cancellationToken.ThrowIfCancellationRequested();
-
-                if (_progress == null)
-                    return;
-
-                _processed++;
-                var elapsed = _stopwatch!.ElapsedMilliseconds;
-                if (elapsed - _lastReport >= 100)
-                {
-                    _lastReport = elapsed;
-                    _progress.Report(new AsyncOperationProgress(_processed));
-                }
-            }
-
-            internal void Complete()
-            {
-                _cancellationToken.ThrowIfCancellationRequested();
-                _progress?.Report(new AsyncOperationProgress(_processed, true));
-            }
-        }
-
         /// <summary>
         /// Serializes a MIDI file using asynchronous stream writes and flush. The stream remains open.
         /// </summary>
@@ -64,10 +21,6 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="settings">CSV serialization settings.</param>
         /// <param name="objectType">Types of objects to serialize from track chunks.</param>
         /// <param name="objectDetectionSettings">Settings used to detect objects.</param>
-        /// <param name="progress">
-        /// Optional throttled work-checkpoint progress for chunk/object processing, not bytes or CSV records.
-        /// The total is unknown. A final report marks successful completion.
-        /// </param>
         /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <returns>A task representing serialization and stream flushing.</returns>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
@@ -79,10 +32,9 @@ namespace Melanchall.DryWetMidi.Tools
             CsvSerializationSettings? settings = null,
             ObjectType objectType = ObjectType.TimedEvent,
             ObjectDetectionSettings? objectDetectionSettings = null,
-            IProgress<AsyncOperationProgress>? progress = null,
             CancellationToken cancellationToken = default)
         {
-            var operation = new CsvOperation(cancellationToken, progress);
+            cancellationToken.ThrowIfCancellationRequested();
 
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
             ThrowIfArgument.IsNull(nameof(stream), stream);
@@ -104,10 +56,9 @@ namespace Melanchall.DryWetMidi.Tools
                 objectType,
                 objectDetectionSettings ?? new ObjectDetectionSettings(),
                 1,
-                operation,
                 cancellationToken).ConfigureAwait(false);
             await stream.FlushAsync(cancellationToken).ConfigureAwait(false);
-            operation.Complete();
+            cancellationToken.ThrowIfCancellationRequested();
         }
 
         /// <summary>
@@ -120,10 +71,6 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="settings">CSV serialization settings.</param>
         /// <param name="objectType">Types of objects to serialize from track chunks.</param>
         /// <param name="objectDetectionSettings">Settings used to detect objects.</param>
-        /// <param name="progress">
-        /// Optional throttled work-checkpoint progress for chunk/object processing, not bytes or CSV records.
-        /// The total is unknown. A final report marks successful completion.
-        /// </param>
         /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <returns>A task representing serialization and file closure.</returns>
         /// <exception cref="ArgumentException"><paramref name="filePath"/> is null, empty or invalid.</exception>
@@ -137,7 +84,6 @@ namespace Melanchall.DryWetMidi.Tools
             CsvSerializationSettings? settings = null,
             ObjectType objectType = ObjectType.TimedEvent,
             ObjectDetectionSettings? objectDetectionSettings = null,
-            IProgress<AsyncOperationProgress>? progress = null,
             CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
@@ -153,7 +99,6 @@ namespace Melanchall.DryWetMidi.Tools
                 settings,
                 objectType,
                 objectDetectionSettings,
-                progress,
                 cancellationToken).ConfigureAwait(false);
         }
 
@@ -167,10 +112,6 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="settings">CSV serialization settings.</param>
         /// <param name="objectType">Types of objects to serialize from track chunks.</param>
         /// <param name="objectDetectionSettings">Settings used to detect objects.</param>
-        /// <param name="progress">
-        /// Optional throttled work-checkpoint progress for chunk/object processing, not bytes or CSV records.
-        /// The total is unknown. A final report marks successful completion.
-        /// </param>
         /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <returns>A task representing serialization and stream flushing.</returns>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
@@ -183,10 +124,9 @@ namespace Melanchall.DryWetMidi.Tools
             CsvSerializationSettings? settings = null,
             ObjectType objectType = ObjectType.TimedEvent,
             ObjectDetectionSettings? objectDetectionSettings = null,
-            IProgress<AsyncOperationProgress>? progress = null,
             CancellationToken cancellationToken = default)
         {
-            var operation = new CsvOperation(cancellationToken, progress);
+            cancellationToken.ThrowIfCancellationRequested();
 
             ThrowIfArgument.IsNull(nameof(midiChunks), midiChunks);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
@@ -207,10 +147,9 @@ namespace Melanchall.DryWetMidi.Tools
                 objectType,
                 objectDetectionSettings ?? new ObjectDetectionSettings(),
                 0,
-                operation,
                 cancellationToken).ConfigureAwait(false);
             await stream.FlushAsync(cancellationToken).ConfigureAwait(false);
-            operation.Complete();
+            cancellationToken.ThrowIfCancellationRequested();
         }
 
         /// <summary>
@@ -224,10 +163,6 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="settings">CSV serialization settings.</param>
         /// <param name="objectType">Types of objects to serialize from track chunks.</param>
         /// <param name="objectDetectionSettings">Settings used to detect objects.</param>
-        /// <param name="progress">
-        /// Optional throttled work-checkpoint progress for chunk/object processing, not bytes or CSV records.
-        /// The total is unknown. A final report marks successful completion.
-        /// </param>
         /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <returns>A task representing serialization and file closure.</returns>
         /// <exception cref="ArgumentException"><paramref name="filePath"/> is null, empty or invalid.</exception>
@@ -242,7 +177,6 @@ namespace Melanchall.DryWetMidi.Tools
             CsvSerializationSettings? settings = null,
             ObjectType objectType = ObjectType.TimedEvent,
             ObjectDetectionSettings? objectDetectionSettings = null,
-            IProgress<AsyncOperationProgress>? progress = null,
             CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
@@ -259,7 +193,6 @@ namespace Melanchall.DryWetMidi.Tools
                 settings,
                 objectType,
                 objectDetectionSettings,
-                progress,
                 cancellationToken).ConfigureAwait(false);
         }
 
@@ -273,10 +206,6 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="settings">CSV serialization settings.</param>
         /// <param name="objectType">Types of objects to serialize from track chunks.</param>
         /// <param name="objectDetectionSettings">Settings used to detect objects.</param>
-        /// <param name="progress">
-        /// Optional throttled work-checkpoint progress for chunk/object processing, not bytes or CSV records.
-        /// The total is unknown. A final report marks successful completion.
-        /// </param>
         /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <returns>A task representing serialization and stream flushing.</returns>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
@@ -289,10 +218,9 @@ namespace Melanchall.DryWetMidi.Tools
             CsvSerializationSettings? settings = null,
             ObjectType objectType = ObjectType.TimedEvent,
             ObjectDetectionSettings? objectDetectionSettings = null,
-            IProgress<AsyncOperationProgress>? progress = null,
             CancellationToken cancellationToken = default)
         {
-            var operation = new CsvOperation(cancellationToken, progress);
+            cancellationToken.ThrowIfCancellationRequested();
 
             ThrowIfArgument.IsNull(nameof(midiChunk), midiChunk);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
@@ -313,10 +241,9 @@ namespace Melanchall.DryWetMidi.Tools
                 objectType,
                 objectDetectionSettings ?? new ObjectDetectionSettings(),
                 0,
-                operation,
                 cancellationToken).ConfigureAwait(false);
             await stream.FlushAsync(cancellationToken).ConfigureAwait(false);
-            operation.Complete();
+            cancellationToken.ThrowIfCancellationRequested();
         }
 
         /// <summary>
@@ -330,10 +257,6 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="settings">CSV serialization settings.</param>
         /// <param name="objectType">Types of objects to serialize from track chunks.</param>
         /// <param name="objectDetectionSettings">Settings used to detect objects.</param>
-        /// <param name="progress">
-        /// Optional throttled work-checkpoint progress for chunk/object processing, not bytes or CSV records.
-        /// The total is unknown. A final report marks successful completion.
-        /// </param>
         /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <returns>A task representing serialization and file closure.</returns>
         /// <exception cref="ArgumentException"><paramref name="filePath"/> is null, empty or invalid.</exception>
@@ -348,7 +271,6 @@ namespace Melanchall.DryWetMidi.Tools
             CsvSerializationSettings? settings = null,
             ObjectType objectType = ObjectType.TimedEvent,
             ObjectDetectionSettings? objectDetectionSettings = null,
-            IProgress<AsyncOperationProgress>? progress = null,
             CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
@@ -365,7 +287,6 @@ namespace Melanchall.DryWetMidi.Tools
                 settings,
                 objectType,
                 objectDetectionSettings,
-                progress,
                 cancellationToken).ConfigureAwait(false);
         }
 
@@ -377,10 +298,6 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="stream">Writable stream, which remains open.</param>
         /// <param name="tempoMap">Tempo map used to convert times and lengths.</param>
         /// <param name="settings">CSV serialization settings.</param>
-        /// <param name="progress">
-        /// Optional throttled work-checkpoint progress for input and nested object processing, not bytes or CSV records.
-        /// The total is unknown. A final report marks successful completion.
-        /// </param>
         /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <returns>A task representing serialization and stream flushing.</returns>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
@@ -391,10 +308,9 @@ namespace Melanchall.DryWetMidi.Tools
             Stream stream,
             TempoMap tempoMap,
             CsvSerializationSettings? settings = null,
-            IProgress<AsyncOperationProgress>? progress = null,
             CancellationToken cancellationToken = default)
         {
-            var operation = new CsvOperation(cancellationToken, progress);
+            cancellationToken.ThrowIfCancellationRequested();
 
             ThrowIfArgument.IsNull(nameof(timedObjects), timedObjects);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
@@ -414,10 +330,9 @@ namespace Melanchall.DryWetMidi.Tools
                 serializationSettings,
                 null,
                 null,
-                operation,
                 cancellationToken).ConfigureAwait(false);
             await stream.FlushAsync(cancellationToken).ConfigureAwait(false);
-            operation.Complete();
+            cancellationToken.ThrowIfCancellationRequested();
         }
 
         /// <summary>
@@ -429,10 +344,6 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="overwriteFile">Whether an existing destination may be overwritten.</param>
         /// <param name="tempoMap">Tempo map used to convert times and lengths.</param>
         /// <param name="settings">CSV serialization settings.</param>
-        /// <param name="progress">
-        /// Optional throttled work-checkpoint progress for input and nested object processing, not bytes or CSV records.
-        /// The total is unknown. A final report marks successful completion.
-        /// </param>
         /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <returns>A task representing serialization and file closure.</returns>
         /// <exception cref="ArgumentException"><paramref name="filePath"/> is null, empty or invalid.</exception>
@@ -445,7 +356,6 @@ namespace Melanchall.DryWetMidi.Tools
             bool overwriteFile,
             TempoMap tempoMap,
             CsvSerializationSettings? settings = null,
-            IProgress<AsyncOperationProgress>? progress = null,
             CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
@@ -460,7 +370,6 @@ namespace Melanchall.DryWetMidi.Tools
                 stream,
                 tempoMap,
                 settings,
-                progress,
                 cancellationToken).ConfigureAwait(false);
         }
 
@@ -470,10 +379,6 @@ namespace Melanchall.DryWetMidi.Tools
         /// <inheritdoc cref="DeserializeFileFromCsv(Stream, CsvDeserializationSettings)" path="/member/exception"/>
         /// <param name="stream">Readable stream, which remains open.</param>
         /// <param name="settings">CSV deserialization settings.</param>
-        /// <param name="progress">
-        /// Optional throttled work-checkpoint progress for CSV records and object reconstruction, not bytes or lines.
-        /// The total is unknown. A final report marks successful completion.
-        /// </param>
         /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <returns>A task returning the deserialized MIDI file.</returns>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
@@ -483,10 +388,9 @@ namespace Melanchall.DryWetMidi.Tools
         public static async Task<MidiFile> DeserializeFileFromCsvAsync(
             Stream stream,
             CsvDeserializationSettings? settings = null,
-            IProgress<AsyncOperationProgress>? progress = null,
             CancellationToken cancellationToken = default)
         {
-            var operation = new CsvOperation(cancellationToken, progress);
+            cancellationToken.ThrowIfCancellationRequested();
 
             ThrowIfArgument.IsNull(nameof(stream), stream);
 
@@ -502,8 +406,7 @@ namespace Melanchall.DryWetMidi.Tools
                 (objects, readChunks) => GetTempoMap(
                     objects,
                     readChunks.OfType<HeaderChunk>().First().TimeDivision,
-                    operation),
-                operation,
+                    cancellationToken),
                 cancellationToken).ConfigureAwait(false);
 
             if (!chunks.Any())
@@ -512,7 +415,7 @@ namespace Melanchall.DryWetMidi.Tools
             var header = chunks.OfType<HeaderChunk>().First();
             var file = new MidiFile { TimeDivision = header.TimeDivision };
             file.Chunks.AddRange(chunks.Where(chunk => !(chunk is HeaderChunk)));
-            operation.Complete();
+            cancellationToken.ThrowIfCancellationRequested();
 
             return file;
         }
@@ -523,10 +426,6 @@ namespace Melanchall.DryWetMidi.Tools
         /// <inheritdoc cref="DeserializeFileFromCsv(string, CsvDeserializationSettings)" path="/member/exception"/>
         /// <param name="filePath">Source CSV file path.</param>
         /// <param name="settings">CSV deserialization settings.</param>
-        /// <param name="progress">
-        /// Optional throttled work-checkpoint progress for CSV records and object reconstruction, not bytes or lines.
-        /// The total is unknown. A final report marks successful completion.
-        /// </param>
         /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <returns>A task returning the deserialized MIDI file after closing the source file.</returns>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
@@ -536,7 +435,6 @@ namespace Melanchall.DryWetMidi.Tools
         public static async Task<MidiFile> DeserializeFileFromCsvAsync(
             string filePath,
             CsvDeserializationSettings? settings = null,
-            IProgress<AsyncOperationProgress>? progress = null,
             CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
@@ -545,7 +443,7 @@ namespace Melanchall.DryWetMidi.Tools
 
             using var stream = OpenCsvForRead(filePath);
 
-            return await DeserializeFileFromCsvAsync(stream, settings, progress, cancellationToken).ConfigureAwait(false);
+            return await DeserializeFileFromCsvAsync(stream, settings, cancellationToken).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -555,10 +453,6 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="stream">Readable stream, which remains open.</param>
         /// <param name="tempoMap">Tempo map used to convert times and lengths.</param>
         /// <param name="settings">CSV deserialization settings.</param>
-        /// <param name="progress">
-        /// Optional throttled work-checkpoint progress for CSV records and object reconstruction, not bytes or lines.
-        /// The total is unknown. A final report marks successful completion.
-        /// </param>
         /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <returns>A task returning the deserialized chunks.</returns>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
@@ -568,10 +462,9 @@ namespace Melanchall.DryWetMidi.Tools
             Stream stream,
             TempoMap tempoMap,
             CsvDeserializationSettings? settings = null,
-            IProgress<AsyncOperationProgress>? progress = null,
             CancellationToken cancellationToken = default)
         {
-            var operation = new CsvOperation(cancellationToken, progress);
+            cancellationToken.ThrowIfCancellationRequested();
 
             ThrowIfArgument.IsNull(nameof(stream), stream);
 
@@ -587,9 +480,8 @@ namespace Melanchall.DryWetMidi.Tools
                 reader,
                 deserializationSettings,
                 (objects, readChunks) => tempoMap,
-                operation,
                 cancellationToken).ConfigureAwait(false);
-            operation.Complete();
+            cancellationToken.ThrowIfCancellationRequested();
 
             return chunks;
         }
@@ -601,10 +493,6 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="filePath">Source CSV file path.</param>
         /// <param name="tempoMap">Tempo map used to convert times and lengths.</param>
         /// <param name="settings">CSV deserialization settings.</param>
-        /// <param name="progress">
-        /// Optional throttled work-checkpoint progress for CSV records and object reconstruction, not bytes or lines.
-        /// The total is unknown. A final report marks successful completion.
-        /// </param>
         /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <returns>A task returning the deserialized chunks after closing the source file.</returns>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
@@ -614,7 +502,6 @@ namespace Melanchall.DryWetMidi.Tools
             string filePath,
             TempoMap tempoMap,
             CsvDeserializationSettings? settings = null,
-            IProgress<AsyncOperationProgress>? progress = null,
             CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
@@ -623,7 +510,7 @@ namespace Melanchall.DryWetMidi.Tools
 
             using var stream = OpenCsvForRead(filePath);
 
-            return await DeserializeChunksFromCsvAsync(stream, tempoMap, settings, progress, cancellationToken).ConfigureAwait(false);
+            return await DeserializeChunksFromCsvAsync(stream, tempoMap, settings, cancellationToken).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -633,10 +520,6 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="stream">Readable stream, which remains open.</param>
         /// <param name="tempoMap">Tempo map used to convert times and lengths.</param>
         /// <param name="settings">CSV deserialization settings.</param>
-        /// <param name="progress">
-        /// Optional throttled work-checkpoint progress for CSV records and object reconstruction, not bytes or lines.
-        /// The total is unknown. A final report marks successful completion.
-        /// </param>
         /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <returns>A task returning the deserialized chunk.</returns>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
@@ -646,10 +529,9 @@ namespace Melanchall.DryWetMidi.Tools
             Stream stream,
             TempoMap tempoMap,
             CsvDeserializationSettings? settings = null,
-            IProgress<AsyncOperationProgress>? progress = null,
             CancellationToken cancellationToken = default)
         {
-            var operation = new CsvOperation(cancellationToken, progress);
+            cancellationToken.ThrowIfCancellationRequested();
 
             ThrowIfArgument.IsNull(nameof(stream), stream);
 
@@ -665,13 +547,12 @@ namespace Melanchall.DryWetMidi.Tools
                 reader,
                 deserializationSettings,
                 (objects, readChunks) => tempoMap,
-                operation,
                 cancellationToken).ConfigureAwait(false);
 
             if (!chunks.Any())
                 throw CsvError.BadFormat("No CSV data.");
 
-            operation.Complete();
+            cancellationToken.ThrowIfCancellationRequested();
 
             return chunks.First();
         }
@@ -683,10 +564,6 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="filePath">Source CSV file path.</param>
         /// <param name="tempoMap">Tempo map used to convert times and lengths.</param>
         /// <param name="settings">CSV deserialization settings.</param>
-        /// <param name="progress">
-        /// Optional throttled work-checkpoint progress for CSV records and object reconstruction, not bytes or lines.
-        /// The total is unknown. A final report marks successful completion.
-        /// </param>
         /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <returns>A task returning the deserialized chunk after closing the source file.</returns>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
@@ -696,7 +573,6 @@ namespace Melanchall.DryWetMidi.Tools
             string filePath,
             TempoMap tempoMap,
             CsvDeserializationSettings? settings = null,
-            IProgress<AsyncOperationProgress>? progress = null,
             CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
@@ -705,7 +581,7 @@ namespace Melanchall.DryWetMidi.Tools
 
             using var stream = OpenCsvForRead(filePath);
 
-            return await DeserializeChunkFromCsvAsync(stream, tempoMap, settings, progress, cancellationToken).ConfigureAwait(false);
+            return await DeserializeChunkFromCsvAsync(stream, tempoMap, settings, cancellationToken).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -715,10 +591,6 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="stream">Readable stream, which remains open.</param>
         /// <param name="tempoMap">Tempo map used to convert times and lengths.</param>
         /// <param name="settings">CSV deserialization settings.</param>
-        /// <param name="progress">
-        /// Optional throttled work-checkpoint progress for CSV records and object reconstruction, not bytes or lines.
-        /// The total is unknown. A final report marks successful completion.
-        /// </param>
         /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <returns>A task returning the deserialized objects.</returns>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
@@ -728,10 +600,9 @@ namespace Melanchall.DryWetMidi.Tools
             Stream stream,
             TempoMap tempoMap,
             CsvDeserializationSettings? settings = null,
-            IProgress<AsyncOperationProgress>? progress = null,
             CancellationToken cancellationToken = default)
         {
-            var operation = new CsvOperation(cancellationToken, progress);
+            cancellationToken.ThrowIfCancellationRequested();
 
             ThrowIfArgument.IsNull(nameof(stream), stream);
 
@@ -748,7 +619,7 @@ namespace Melanchall.DryWetMidi.Tools
 
             while ((csvRecord = await reader.ReadRecordAsync(cancellationToken).ConfigureAwait(false)) != null)
             {
-                operation.Checkpoint();
+                cancellationToken.ThrowIfCancellationRequested();
 
                 var record = ParseRecord(csvRecord, false)!;
                 var type = GetRecordType(record.RecordType, csvRecord.LineNumber, deserializationSettings.UnknownRecordPolicy);
@@ -759,9 +630,9 @@ namespace Melanchall.DryWetMidi.Tools
             if (!objects.Any())
                 throw CsvError.BadFormat("No CSV data.");
 
-            var result = GetTimedObjects(objects, tempoMap, operation).FirstOrDefault()
+            var result = GetTimedObjects(objects, tempoMap, cancellationToken).FirstOrDefault()
                 ?? (ICollection<ITimedObject>)Array.Empty<ITimedObject>();
-            operation.Complete();
+            cancellationToken.ThrowIfCancellationRequested();
 
             return result;
         }
@@ -773,10 +644,6 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="filePath">Source CSV file path.</param>
         /// <param name="tempoMap">Tempo map used to convert times and lengths.</param>
         /// <param name="settings">CSV deserialization settings.</param>
-        /// <param name="progress">
-        /// Optional throttled work-checkpoint progress for CSV records and object reconstruction, not bytes or lines.
-        /// The total is unknown. A final report marks successful completion.
-        /// </param>
         /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <returns>A task returning the deserialized objects after closing the source file.</returns>
         /// <exception cref="OperationCanceledException">The operation was canceled.</exception>
@@ -786,7 +653,6 @@ namespace Melanchall.DryWetMidi.Tools
             string filePath,
             TempoMap tempoMap,
             CsvDeserializationSettings? settings = null,
-            IProgress<AsyncOperationProgress>? progress = null,
             CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
@@ -795,7 +661,7 @@ namespace Melanchall.DryWetMidi.Tools
 
             using var stream = OpenCsvForRead(filePath);
 
-            return await DeserializeObjectsFromCsvAsync(stream, tempoMap, settings, progress, cancellationToken).ConfigureAwait(false);
+            return await DeserializeObjectsFromCsvAsync(stream, tempoMap, settings, cancellationToken).ConfigureAwait(false);
         }
 
         private static async Task WriteChunksAsync(
@@ -807,12 +673,11 @@ namespace Melanchall.DryWetMidi.Tools
             ObjectType objectType,
             ObjectDetectionSettings detectionSettings,
             int chunkIndex,
-            CsvOperation operation,
             CancellationToken cancellationToken)
         {
             foreach (var chunk in chunks.OfType<MidiChunk>())
             {
-                operation.Checkpoint();
+                cancellationToken.ThrowIfCancellationRequested();
 
                 if (chunk is TrackChunk track)
                 {
@@ -824,7 +689,6 @@ namespace Melanchall.DryWetMidi.Tools
                         settings,
                         chunkIndex,
                         TrackChunk.Id,
-                        operation,
                         cancellationToken).ConfigureAwait(false);
                 }
                 else
@@ -845,20 +709,19 @@ namespace Melanchall.DryWetMidi.Tools
             CsvSerializationSettings settings,
             int? chunkIndex,
             string? chunkId,
-            CsvOperation operation,
             CancellationToken cancellationToken)
         {
             int objectIndex = 0;
 
             foreach (var obj in objects.OfType<ITimedObject>())
             {
-                operation.Checkpoint();
+                cancellationToken.ThrowIfCancellationRequested();
 
                 if (obj is Chord chord)
                 {
                     foreach (var note in chord.Notes)
                     {
-                        operation.Checkpoint();
+                        cancellationToken.ThrowIfCancellationRequested();
 
                         WriteNote(note, writer, settings, tempoMap, chunkIndex, chunkId, objectIndex);
                         await writer.DrainAsync(stream, cancellationToken).ConfigureAwait(false);
@@ -868,7 +731,7 @@ namespace Melanchall.DryWetMidi.Tools
                 {
                     foreach (var timedEvent in parameter.GetTimedEvents())
                     {
-                        operation.Checkpoint();
+                        cancellationToken.ThrowIfCancellationRequested();
 
                         WriteTimedEvent(timedEvent, writer, settings, tempoMap, chunkIndex, chunkId, objectIndex);
                         await writer.DrainAsync(stream, cancellationToken).ConfigureAwait(false);
@@ -888,7 +751,6 @@ namespace Melanchall.DryWetMidi.Tools
             CsvReader reader,
             CsvDeserializationSettings settings,
             Func<ICollection<CsvObject>, ICollection<MidiChunk>, TempoMap> getTempoMap,
-            CsvOperation operation,
             CancellationToken cancellationToken)
         {
             var result = new List<MidiChunk>();
@@ -898,7 +760,7 @@ namespace Melanchall.DryWetMidi.Tools
 
             while ((csvRecord = await reader.ReadRecordAsync(cancellationToken).ConfigureAwait(false)) != null)
             {
-                operation.Checkpoint();
+                cancellationToken.ThrowIfCancellationRequested();
 
                 var record = ParseRecord(csvRecord, true)!;
                 var type = GetRecordType(record.RecordType, csvRecord.LineNumber, settings.UnknownRecordPolicy);
@@ -922,9 +784,9 @@ namespace Melanchall.DryWetMidi.Tools
 
             var tempoMap = getTempoMap(objects, result);
 
-            foreach (var chunkObjects in GetTimedObjects(objects, tempoMap, operation))
+            foreach (var chunkObjects in GetTimedObjects(objects, tempoMap, cancellationToken))
             {
-                operation.Checkpoint();
+                cancellationToken.ThrowIfCancellationRequested();
 
                 result.Add(chunkObjects.ToTrackChunk());
             }

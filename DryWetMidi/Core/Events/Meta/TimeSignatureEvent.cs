@@ -1,5 +1,7 @@
 ﻿using Melanchall.DryWetMidi.Common;
 using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Melanchall.DryWetMidi.Core
 {
@@ -147,6 +149,34 @@ namespace Melanchall.DryWetMidi.Core
             writer.WriteByte((byte)Math.Log(Denominator, 2));
             writer.WriteByte(ClocksPerClick);
             writer.WriteByte(ThirtySecondNotesPerBeat);
+        }
+
+        /// <inheritdoc/>
+        internal override async Task ReadAsync(
+            MidiReader reader,
+            ReadingSettings settings,
+            int size,
+            CancellationToken cancellationToken)
+        {
+            Numerator = await reader.ReadByteAsync(cancellationToken).ConfigureAwait(false);
+            Denominator = (byte)Math.Pow(2, await reader.ReadByteAsync(cancellationToken).ConfigureAwait(false));
+
+            if (size >= 4)
+            {
+                ClocksPerClick = await reader.ReadByteAsync(cancellationToken).ConfigureAwait(false);
+                ThirtySecondNotesPerBeat = await reader.ReadByteAsync(cancellationToken).ConfigureAwait(false);
+            }
+        }
+
+        internal override async Task WriteAsync(
+            MidiWriter writer,
+            WritingSettings settings,
+            CancellationToken cancellationToken)
+        {
+            await writer.WriteByteAsync(Numerator, cancellationToken).ConfigureAwait(false);
+            await writer.WriteByteAsync((byte)Math.Log(Denominator, 2), cancellationToken).ConfigureAwait(false);
+            await writer.WriteByteAsync(ClocksPerClick, cancellationToken).ConfigureAwait(false);
+            await writer.WriteByteAsync(ThirtySecondNotesPerBeat, cancellationToken).ConfigureAwait(false);
         }
 
         /// <inheritdoc/>

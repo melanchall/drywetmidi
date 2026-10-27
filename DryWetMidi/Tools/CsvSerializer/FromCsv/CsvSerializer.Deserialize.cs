@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
 
 namespace Melanchall.DryWetMidi.Tools
 {
@@ -469,14 +470,14 @@ namespace Melanchall.DryWetMidi.Tools
         private static ICollection<ICollection<ITimedObject>> GetTimedObjects(
             ICollection<CsvObject> objects,
             TempoMap tempoMap,
-            CsvOperation? operation = null)
+            CancellationToken cancellationToken = default)
         {
             return objects
                 .GroupBy(obj => obj.ChunkIndex)
                 .Select(g => g
                     .Select(obj =>
                     {
-                        operation?.Checkpoint();
+                        cancellationToken.ThrowIfCancellationRequested();
 
                         var csvEvent = obj as CsvEvent;
                         if (csvEvent != null)
@@ -489,7 +490,7 @@ namespace Melanchall.DryWetMidi.Tools
                                 .Notes
                                 .Select(n =>
                                 {
-                                    operation?.Checkpoint();
+                                    cancellationToken.ThrowIfCancellationRequested();
 
                                     return new Note(n.NoteNumber)
                                     {
@@ -739,7 +740,7 @@ namespace Melanchall.DryWetMidi.Tools
         private static TempoMap GetTempoMap(
             ICollection<CsvObject> objects,
             TimeDivision timeDivision,
-            CsvOperation? operation = null)
+            CancellationToken cancellationToken = default)
         {
             using (var tempoMapManager = new TempoMapManager(timeDivision))
             {
@@ -750,7 +751,7 @@ namespace Melanchall.DryWetMidi.Tools
 
                 foreach (var csvEvent in setTempoEvents)
                 {
-                    operation?.Checkpoint();
+                    cancellationToken.ThrowIfCancellationRequested();
 
                     var setTempoEvent = (SetTempoEvent)csvEvent.Event;
                     tempoMapManager.SetTempo(
@@ -765,7 +766,7 @@ namespace Melanchall.DryWetMidi.Tools
 
                 foreach (var csvEvent in timeSignatureEvents)
                 {
-                    operation?.Checkpoint();
+                    cancellationToken.ThrowIfCancellationRequested();
 
                     var timeSignatureEvent = (TimeSignatureEvent)csvEvent.Event;
                     tempoMapManager.SetTimeSignature(

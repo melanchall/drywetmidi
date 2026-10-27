@@ -1,6 +1,8 @@
 using Melanchall.DryWetMidi.Common;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -9,36 +11,13 @@ namespace Melanchall.DryWetMidi.Core
     public sealed partial class MidiReader
     {
         private readonly byte[] _asyncByte = new byte[1];
-        private MidiIoProgress? _asyncProgress;
 
-        internal void SetProgress(MidiIoProgress? progress)
-        {
-            _asyncProgress = progress;
-            if (_isStreamWrapped)
-                ((StreamWrapper)_stream).AsyncBytesRead = progress == null ? null : count => progress.Add(count);
-        }
-
-        private async Task<int> ReadStreamAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken)
-        {
-            var read = await _stream.ReadAsync(buffer, offset, count, cancellationToken).ConfigureAwait(false);
-            if (!_isStreamWrapped)
-                _asyncProgress?.Add(read);
-
-            return read;
-        }
-
-        internal async ValueTask InitializeAsync(CancellationToken cancellationToken)
+        private async ValueTask PrepareBufferAsync(CancellationToken cancellationToken)
         {
             if (_useBuffering && _buffer == null)
             {
                 using var memory = new MemoryStream();
-                var packet = new byte[65536];
-                int count;
-
-                while ((count = await ReadStreamAsync(packet, 0, packet.Length, cancellationToken).ConfigureAwait(false)) > 0)
-                {
-                    memory.Write(packet, 0, count);
-                }
+                await _stream.CopyToAsync(memory, 81920, cancellationToken).ConfigureAwait(false);
 
                 _buffer = memory.ToArray();
                 _bufferStart = 0;
@@ -119,7 +98,7 @@ namespace Melanchall.DryWetMidi.Core
                 return value;
             }
 
-            if (await ReadStreamAsync(_asyncByte, 0, 1, cancellationToken).ConfigureAwait(false) == 0)
+            if (await _stream.ReadAsync(_asyncByte, 0, 1, cancellationToken).ConfigureAwait(false) == 0)
                 throw new EndOfStreamException();
 
             return _asyncByte[0];
@@ -142,40 +121,66 @@ namespace Melanchall.DryWetMidi.Core
             if (!_isStreamWrapped)
                 count = (int)Math.Min(count, Math.Max(0, Length - Position));
 
-            using var memory = new MemoryStream(Math.Min(count, 4096));
-            await CopyBytesAsync(memory, count, cancellationToken).ConfigureAwait(false);
+            if (_isStreamWrapped && count > _settings.NonSeekableStreamIncrementalBytesReadingThreshold)
+            {
+                var bytesList = new List<byte[]>();
 
-            return memory.ToArray();
+                while (count > 0)
+                {
+                    var bytes = await ReadBytesInternalAsync(
+                        Math.Min(count, _settings.NonSeekableStreamIncrementalBytesReadingStep),
+                        cancellationToken).ConfigureAwait(false);
+                    if (bytes.Length == 0)
+                        break;
+
+                    count -= bytes.Length;
+                    bytesList.Add(bytes);
+                }
+
+                return bytesList.SelectMany(bytes => bytes).ToArray();
+            }
+
+            return await ReadBytesInternalAsync(count, cancellationToken).ConfigureAwait(false);
         }
 
-        internal async Task CopyBytesAsync(MemoryStream destination, long count, CancellationToken cancellationToken)
+        private async Task<byte[]> ReadBytesInternalAsync(int count, CancellationToken cancellationToken)
         {
-            var packet = new byte[(int)Math.Min(count, 65536)];
+            if (count == 0)
+                return EmptyByteArray;
 
-            while (count > 0)
+            var result = new byte[count];
+            var bytesRead = 0;
+
+            while (bytesRead < count)
             {
                 cancellationToken.ThrowIfCancellationRequested();
 
-                var wanted = (int)Math.Min(count, packet.Length);
-                var read = 0;
+                int read;
                 if (_useBuffering)
                 {
                     if (!await EnsureBufferAsync(cancellationToken).ConfigureAwait(false))
                         break;
 
-                    read = Math.Min(wanted, _bufferSize - _bufferPosition);
-                    Buffer.BlockCopy(_buffer!, _bufferPosition, packet, 0, read);
+                    read = Math.Min(count - bytesRead, _bufferSize - _bufferPosition);
+                    Buffer.BlockCopy(_buffer!, _bufferPosition, result, bytesRead, read);
                     Position += read;
                 }
                 else
-                    read = await ReadStreamAsync(packet, 0, wanted, cancellationToken).ConfigureAwait(false);
+                    read = await _stream.ReadAsync(result, bytesRead, count - bytesRead, cancellationToken).ConfigureAwait(false);
 
                 if (read == 0)
                     break;
 
-                destination.Write(packet, 0, read);
-                count -= read;
+                bytesRead += read;
             }
+
+            if (bytesRead == result.Length)
+                return result;
+
+            var copy = new byte[bytesRead];
+            Buffer.BlockCopy(result, 0, copy, 0, bytesRead);
+
+            return copy;
         }
 
         /// <summary>
@@ -185,13 +190,9 @@ namespace Melanchall.DryWetMidi.Core
         /// <returns>A task containing the integer read.</returns>
         /// <inheritdoc cref="ReadDword" path="/*[not(self::summary) and not(self::param) and not(self::returns)]"/>
         /// <exception cref="OperationCanceledException">Reading was canceled.</exception>
-        public async ValueTask<uint> ReadDwordAsync(CancellationToken cancellationToken = default)
+        public ValueTask<uint> ReadDwordAsync(CancellationToken cancellationToken = default)
         {
-            var bytes = await ReadBytesAsync(4, cancellationToken).ConfigureAwait(false);
-            if (bytes.Length < 4)
-                throw new NotEnoughBytesException("Not enough bytes to read a DWORD.", 4, bytes.Length);
-
-            return ((uint)bytes[0] << 24) | ((uint)bytes[1] << 16) | ((uint)bytes[2] << 8) | bytes[3];
+            return ReadNumberAsync(4, "DWORD", cancellationToken);
         }
 
         /// <summary>
@@ -337,6 +338,9 @@ namespace Melanchall.DryWetMidi.Core
 
         private async ValueTask<bool> EnsureBufferAsync(CancellationToken cancellationToken)
         {
+            if (_buffer == null)
+                await PrepareBufferAsync(cancellationToken).ConfigureAwait(false);
+
             if (await EndReachedAsync(cancellationToken).ConfigureAwait(false))
                 return false;
 
@@ -348,7 +352,7 @@ namespace Melanchall.DryWetMidi.Core
 
                 while (count < _buffer.Length)
                 {
-                    var read = await ReadStreamAsync(_buffer, count, _buffer.Length - count, cancellationToken).ConfigureAwait(false);
+                    var read = await _stream.ReadAsync(_buffer, count, _buffer.Length - count, cancellationToken).ConfigureAwait(false);
                     if (read == 0)
                         break;
 

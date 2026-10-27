@@ -32,7 +32,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             CheckCsvCancellation(true);
 
         [Test]
-        public void SerializeAsync_CodecErrors_PropagateWithoutDeadlock()
+        public void SerializeAsync_SourceErrors_PropagateWithoutDeadlock()
         {
             IEnumerable<ITimedObject> Source()
             {
@@ -102,15 +102,12 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         }
 
         [Test]
-        public async Task Csv_Progress_CompletesAfterFlush()
+        public async Task Csv_Serialization_FlushesExactlyOnce()
         {
             using var output = new AsyncOnlyStream();
-            var progress = new InlineProgress();
 
-            await CreateFile().SerializeToCsvAsync(output, progress: progress);
+            await CreateFile().SerializeToCsvAsync(output);
 
-            ClassicAssert.IsTrue(progress.Reports.Last().IsCompleted, "CSV progress did not report completion.");
-            ClassicAssert.Greater(progress.Reports.Last().ProcessedItems, 0, "CSV progress reported no work.");
             ClassicAssert.AreEqual(1, output.Flushes, "Completed CSV serialization did not flush exactly once.");
         }
 
