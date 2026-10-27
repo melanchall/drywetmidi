@@ -168,30 +168,6 @@ namespace Melanchall.DryWetMidi.Core
                     header.TimeDivision = division;
                     header.TracksNumber = count;
                 }
-                else if (chunk is TrackChunk track)
-                {
-                    if (settings.MaxMemorySize != null)
-                        reader.AddEstimatedMemory(MemorySizeEstimator.EstimateDeep(track), settings);
-
-                    await ReadTrackAsync(track, reader, settings, start + size, cancellationToken).ConfigureAwait(false);
-                }
-                else if (chunk is UnknownChunk)
-                {
-                    var available = Math.Min(size, Math.Max(0, reader.Length - reader.Position));
-                    reader.ThrowIfMemoryLimitExceeded(available, settings);
-                    using var memory = new MemoryStream();
-                    using (var prefix = new MidiWriter(memory, new WriterSettings { UseBuffering = false }))
-                        prefix.WriteDword(size);
-
-                    await reader.CopyBytesAsync(memory, size, cancellationToken).ConfigureAwait(false);
-                    using var codec = new MidiReader(memory.GetBuffer(), 0, checked((int)memory.Length), settings.ReaderSettings, start - 4);
-                    codec.AddEstimatedMemory(reader.EstimatedMemorySize, settings);
-                    chunk.Read(codec, settings);
-                    if (settings.MaxMemorySize != null)
-                        reader.AddEstimatedMemory(codec.EstimatedMemorySize - reader.EstimatedMemorySize, settings);
-
-                    return chunk;
-                }
                 else
                 {
                     await chunk.ReadAsync(reader, settings, size, cancellationToken).ConfigureAwait(false);
@@ -217,7 +193,7 @@ namespace Melanchall.DryWetMidi.Core
             return chunk;
         }
 
-        private static async Task ReadTrackAsync(
+        internal static async Task ReadTrackAsync(
             TrackChunk track,
             MidiReader reader,
             ReadingSettings settings,

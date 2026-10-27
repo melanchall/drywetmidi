@@ -23,10 +23,10 @@ namespace Melanchall.DryWetMidi.Core
         /// <returns>The MIDI file.</returns>
         /// <remarks>
         /// Transport I/O is awaited. Synchronous codecs decode individual buffered events.
-        /// Custom chunks can override their asynchronous content hooks to avoid payload buffering;
-        /// synchronous-only custom chunks use a buffered compatibility fallback.
-        /// Whole-file buffering is used only when requested by
-        /// <see cref="ReaderSettings.BufferingPolicy"/>.
+        /// Custom chunks can override <see cref="MidiChunk.ReadContentAsync"/> to read content
+        /// directly with asynchronous reader methods. The default implementation buffers custom
+        /// content for synchronous decoding. Whole-file buffering is used only when requested
+        /// by <see cref="ReaderSettings.BufferingPolicy"/>.
         /// </remarks>
         /// <inheritdoc cref="Read(Stream, ReadingSettings)" path="/member/exception"/>
         /// <exception cref="OperationCanceledException"><paramref name="cancellationToken"/> was canceled.</exception>
@@ -104,9 +104,10 @@ namespace Melanchall.DryWetMidi.Core
         /// <returns>A task representing writing.</returns>
         /// <remarks>
         /// Synchronous codecs encode individual events in memory. Custom chunks can override
-        /// their asynchronous content hooks to avoid the buffered synchronous compatibility fallback;
-        /// transport writes and flushing are awaited. Cancellation or failure can leave
-        /// partially written data in the stream.
+        /// <see cref="MidiChunk.WriteContentAsync"/> to write content directly with asynchronous
+        /// writer methods. The default implementation buffers synchronously encoded custom
+        /// content. Transport writes and flushing are awaited. Cancellation or failure can
+        /// leave partially written data in the stream.
         /// </remarks>
         /// <inheritdoc cref="Write(Stream, MidiFileFormat, WritingSettings)" path="/member/exception"/>
         /// <exception cref="OperationCanceledException"><paramref name="cancellationToken"/> was canceled.</exception>

@@ -18,47 +18,34 @@ file.Write("Some great song.mid", overwriteFile: true);
 
 ## Asynchronous writing
 
-[`MidiFile.WriteAsync`](xref:Melanchall.DryWetMidi.Core.MidiFile.WriteAsync*) awaits
-file or stream I/O and supports the same
-[`WritingSettings`](xref:Melanchall.DryWetMidi.Core.WritingSettings) as synchronous
-writing. For example, read a complete file and write it to another path:
+Use [`MidiFile.WriteAsync`](xref:Melanchall.DryWetMidi.Core.MidiFile.WriteAsync*)
+to await writing a complete [`MidiFile`](xref:Melanchall.DryWetMidi.Core.MidiFile)
+to a file or stream. It accepts the same output format and
+[`WritingSettings`](xref:Melanchall.DryWetMidi.Core.WritingSettings) options as
+[`MidiFile.Write`](xref:Melanchall.DryWetMidi.Core.MidiFile.Write*):
 
 ```csharp
-var midiFile = await MidiFile.ReadAsync("input.mid");
-
-await midiFile.WriteAsync("output.mid", overwriteFile: true);
+await file.WriteAsync("output.mid", overwriteFile: true);
 ```
 
-This is a bulk API: await the task to finish writing the file. It requires a
-[`MidiFile`](xref:Melanchall.DryWetMidi.Core.MidiFile) in memory; asynchronous I/O
-does not make the object model lazy or reduce its memory use. For token-based
-output, see [Lazy reading/writing](xref:a_file_lazy_reading_writing#asynchronous-writing).
+This is a bulk operation over an existing file object, not lazy object streaming.
+For writing events or timed objects incrementally, see
+[Lazy reading/writing](xref:a_file_lazy_reading_writing).
 
-Transport writes are awaited, but formatting and custom chunk or event processing
-still use CPU time. Asynchronous I/O does not guarantee execution on a background
-thread. Custom chunks can supply asynchronous content writers; see
-[Custom chunks](xref:a_custom_chunk#asynchronous-content-io).
-
-### Cancellation, progress, and stream ownership
-
-For example, cancel writing after ten seconds and report transported bytes:
+Write with cancellation and byte-based progress:
 
 ```csharp
+var progress = new Progress<AsyncOperationProgress>(value =>
+{
+    Console.WriteLine(
+        $"{value.ProcessedItems} bytes written; completed: {value.IsCompleted}");
+});
+
 using (var cancellation = new CancellationTokenSource())
 {
     cancellation.CancelAfter(TimeSpan.FromSeconds(10));
 
-    var progress = new Progress<AsyncOperationProgress>(update =>
-    {
-        Console.WriteLine($"{update.ProcessedItems} bytes written");
-
-        if (update.IsCompleted)
-        {
-            Console.WriteLine("Writing completed.");
-        }
-    });
-
-    await midiFile.WriteAsync(
+    await file.WriteAsync(
         "output.mid",
         overwriteFile: true,
         progress: progress,
@@ -66,26 +53,26 @@ using (var cancellation = new CancellationTokenSource())
 }
 ```
 
-Cancellation is cooperative and is reported with `OperationCanceledException`.
-It cannot interrupt arbitrary synchronous custom chunk or event implementations.
-Cancellation or failure can leave partially written data; neither rollback nor
-atomic replacement is implied.
+Reports are throttled and count bytes written to the transport, not events.
+The total is unknown (`TotalItems` is `null`); successful completion produces a
+final report with `IsCompleted` set to `true`. Await the operation rather than
+relying on callback timing.
 
-Optional [`AsyncOperationProgress`](xref:Melanchall.DryWetMidi.Common.AsyncOperationProgress)
-notifications count bytes written to the transport, not events or notes. Reports
-are throttled, the total is unknown, and successful completion emits a final
-notification after output has been flushed. A `Progress<T>` handler may execute
-later; await the write operation itself to determine when writing has finished.
+File-path overloads own and dispose their streams. Stream overloads leave
+caller-supplied streams open on completion or failure. Await writing before
+disposing a supplied stream or starting another operation on it; do not mutate
+the file while it is being written.
 
-File-path overloads own and dispose their file streams. Stream overloads leave
-caller-supplied streams open; dispose those streams separately after awaiting the
-operation. Do not overlap operations on the same stream, dispose it during pending
-work, or mutate the file, its chunks, events, or settings while writing uses them.
-Asynchronous methods do not make mutable objects thread-safe.
+Cancellation raises `OperationCanceledException` and can leave partially written
+output, as can other failures. Overwriting is not an atomic replacement and does
+not roll back on failure. Encoding and custom chunk or event code still use CPU
+time; asynchronous I/O does not guarantee background-thread execution or interrupt
+arbitrary synchronous custom code. See [Custom chunks](xref:a_custom_chunk) for
+asynchronous chunk overrides.
 
 ## Compression
 
-You can set specific policies via [WritingSettings](xref:Melanchall.DryWetMidi.Core.WritingSettings) to reduce the size of an output file. For example, to use running status and thus not write status bytes of channel events of the same type, set the properties shown in the following code:
+You can set specific policies via [`WritingSettings`](xref:Melanchall.DryWetMidi.Core.WritingSettings) to reduce the size of an output file. For example, to use running status and thus not write status bytes of channel events of the same type, set the properties shown in the following code:
 
 ```csharp
 file.Write("Some great song.mid", settings: new WritingSettings
@@ -95,4 +82,4 @@ file.Write("Some great song.mid", settings: new WritingSettings
 });
 ```
 
-Complete list of available properties is placed in the documentation of [WritingSettings](xref:Melanchall.DryWetMidi.Core.WritingSettings).
+Complete list of available properties is placed in the documentation of [`WritingSettings`](xref:Melanchall.DryWetMidi.Core.WritingSettings).

@@ -6,7 +6,7 @@ uid: a_custom_chunk
 
 MIDI files are made up of **chunks**. Each chunk has a 4-character ID and a 32-bit length, which is the number of bytes in the chunk. This structure allows future or custom chunk types to be designed which may be easily ignored if encountered by a program written before a chunk type is introduced or if the program doesn't know about the type. DryWetMIDI allows you to implement custom chunks which can be written to a MIDI file and be read from it.
 
-For example, we want to design a chunk that will contain information about changes in whatever we want. A change is described by **date** (day, month, year) and **comment**. Let's create a class to store a single change.
+For example, we want to design a chunk that will contain information about changes in whatever we want. A change is described by **date** (day, month, year) and **comment**. Let's create a class to store a single change:
 
 ```csharp
 public sealed class Change
@@ -23,14 +23,14 @@ public sealed class Change
 }
 ```
 
-Now we are going to implement a custom chunk. Custom chunk class must be derived from the [MidiChunk](xref:Melanchall.DryWetMidi.Core.MidiChunk) and must implement four abstract methods:
+Now we are going to implement a custom chunk. Custom chunk class must be derived from the [`MidiChunk`](xref:Melanchall.DryWetMidi.Core.MidiChunk) and must implement four abstract methods:
 
-* [ReadContent](xref:Melanchall.DryWetMidi.Core.MidiChunk.ReadContent(Melanchall.DryWetMidi.Core.MidiReader,Melanchall.DryWetMidi.Core.ReadingSettings,System.UInt32));
-* [WriteContent](xref:Melanchall.DryWetMidi.Core.MidiChunk.WriteContent(Melanchall.DryWetMidi.Core.MidiWriter,Melanchall.DryWetMidi.Core.WritingSettings));
-* [GetContentSize](xref:Melanchall.DryWetMidi.Core.MidiChunk.GetContentSize(Melanchall.DryWetMidi.Core.WritingSettings));
-* [Clone](xref:Melanchall.DryWetMidi.Core.MidiChunk.Clone).
+* [`ReadContent`](xref:Melanchall.DryWetMidi.Core.MidiChunk.ReadContent(Melanchall.DryWetMidi.Core.MidiReader,Melanchall.DryWetMidi.Core.ReadingSettings,System.UInt32));
+* [`WriteContent`](xref:Melanchall.DryWetMidi.Core.MidiChunk.WriteContent(Melanchall.DryWetMidi.Core.MidiWriter,Melanchall.DryWetMidi.Core.WritingSettings));
+* [`GetContentSize`](xref:Melanchall.DryWetMidi.Core.MidiChunk.GetContentSize(Melanchall.DryWetMidi.Core.WritingSettings));
+* [`Clone`](xref:Melanchall.DryWetMidi.Core.MidiChunk.Clone).
 
-Also, the class must have a parameterless constructor which calls the constructor of the base class ([MidiChunk](xref:Melanchall.DryWetMidi.Core.MidiChunk)) passing chunk's ID to it. ID is a 4-character string which will be **Hstr** for our chunk. The ID of a custom chunk should not be the same as one of standard chunks IDs.
+Also, the class must have a parameterless constructor which calls the constructor of the base class ([`MidiChunk`](xref:Melanchall.DryWetMidi.Core.MidiChunk)) passing chunk's ID to it. ID is a 4-character string which will be `Hstr` for our chunk. The ID of a custom chunk should not be the same as one of standard chunks IDs.
 
 The class will look like this:
 
@@ -85,7 +85,7 @@ Each change is:
 * VLQ number bytes representing size of bytes array which is encoded comment;
 * bytes which represent an encoded comment string.
 
-To store comments, we will use [](xref:System.Text.Encoding.Unicode?title=Encoding.Unicode) encoding.
+To store comments, we will use [`Encoding.Unicode`](https://learn.microsoft.com/en-us/dotnet/api/system.text.encoding.unicode) encoding.
 
 Let's implement the `ReadContent` method:
 
@@ -214,26 +214,31 @@ var fileWithHistoryChunk = MidiFile.Read(
 var historyChunks = fileWithHistoryChunk.Chunks.OfType<HistoryChunk>();
 ```
 
-If you don't provide information about your custom chunk in `ReadingSettings`, the chunks will be read as [UnknownChunk](xref:Melanchall.DryWetMidi.Core.UnknownChunk).
+If you don't provide information about your custom chunk in `ReadingSettings`, the chunks will be read as [`UnknownChunk`](xref:Melanchall.DryWetMidi.Core.UnknownChunk).
 
 ## Asynchronous content I/O
 
-Keep the four synchronous methods above, even when adding asynchronous support.
-Existing subclasses remain compatible: the default
-[`MidiChunk.ReadContentAsync`](xref:Melanchall.DryWetMidi.Core.MidiChunk.ReadContentAsync(Melanchall.DryWetMidi.Core.MidiReader,Melanchall.DryWetMidi.Core.ReadingSettings,System.UInt32,System.Threading.CancellationToken))
-buffers the declared chunk content before invoking `ReadContent`, and the default
-[`MidiChunk.WriteContentAsync`](xref:Melanchall.DryWetMidi.Core.MidiChunk.WriteContentAsync(Melanchall.DryWetMidi.Core.MidiWriter,Melanchall.DryWetMidi.Core.WritingSettings,System.Threading.CancellationToken))
-buffers the output of `WriteContent` before asynchronously transporting it.
-These fallbacks can allocate memory proportional to the custom chunk size and
-cannot interrupt arbitrary synchronous custom code with cancellation.
+Existing custom chunks work with
+[`MidiFile.ReadAsync`](xref:Melanchall.DryWetMidi.Core.MidiFile.ReadAsync*) and
+[`MidiFile.WriteAsync`](xref:Melanchall.DryWetMidi.Core.MidiFile.WriteAsync*)
+without additional overrides.
+[`MidiTokensWriter.WriteChunkAsync`](xref:Melanchall.DryWetMidi.Core.MidiTokensWriter.WriteChunkAsync*)
+also uses the asynchronous content override. Lazy token reading instead returns
+custom-chunk bytes as tokens; it does not instantiate custom chunks or invoke
+their content overrides.
 
-Override these protected virtual methods to process content incrementally with
-the supplied reader or writer instead. The framework owns the chunk header:
-read or write only content, not the chunk ID or size. Do not dispose the supplied
-reader or writer, start overlapping operations, or wrap the synchronous overrides
-in `Task.Run`.
+By default, asynchronous reading buffers the chunk
+content before calling the synchronous `ReadContent` override with an in-memory
+reader. Asynchronous writing calls `WriteContent` with an in-memory writer, then
+asynchronously transports the buffered content. These fallbacks buffer a whole
+custom chunk, and cancellation cannot interrupt its synchronous implementation.
 
-For example, add these overrides to the `HistoryChunk` defined above:
+To avoid that whole-chunk fallback buffer, override
+[`ReadContentAsync`](xref:Melanchall.DryWetMidi.Core.MidiChunk.ReadContentAsync(Melanchall.DryWetMidi.Core.MidiReader,Melanchall.DryWetMidi.Core.ReadingSettings,System.UInt32,System.Threading.CancellationToken))
+and
+[`WriteContentAsync`](xref:Melanchall.DryWetMidi.Core.MidiChunk.WriteContentAsync(Melanchall.DryWetMidi.Core.MidiWriter,Melanchall.DryWetMidi.Core.WritingSettings,System.Threading.CancellationToken)).
+Keep the synchronous overrides for synchronous callers. Add these overrides to
+`HistoryChunk`:
 
 ```csharp
 protected override async Task ReadContentAsync(
@@ -242,7 +247,6 @@ protected override async Task ReadContentAsync(
     uint size,
     CancellationToken cancellationToken)
 {
-    var changes = new List<Change>();
     var changesCount = await reader.ReadVlqNumberAsync(cancellationToken)
         .ConfigureAwait(false);
 
@@ -256,16 +260,10 @@ protected override async Task ReadContentAsync(
             .ConfigureAwait(false);
         var commentBytes = await reader.ReadBytesAsync(commentLength, cancellationToken)
             .ConfigureAwait(false);
-
-        if (commentBytes.Length != commentLength)
-            throw new EndOfStreamException("The history comment is incomplete.");
-
         var comment = Encoding.Unicode.GetString(commentBytes);
-        changes.Add(new Change(new DateTime(year, month, day), comment));
-    }
 
-    cancellationToken.ThrowIfCancellationRequested();
-    _changes.AddRange(changes);
+        AddChange(new DateTime(year, month, day), comment);
+    }
 }
 
 protected override async Task WriteContentAsync(
@@ -278,8 +276,6 @@ protected override async Task WriteContentAsync(
 
     foreach (var change in _changes)
     {
-        cancellationToken.ThrowIfCancellationRequested();
-
         var date = change.Date;
         await writer.WriteByteAsync((byte)date.Day, cancellationToken)
             .ConfigureAwait(false);
@@ -297,56 +293,19 @@ protected override async Task WriteContentAsync(
 }
 ```
 
-The public reader primitives include
-[`ReadByteAsync`](xref:Melanchall.DryWetMidi.Core.MidiReader.ReadByteAsync(System.Threading.CancellationToken)),
-[`ReadWordAsync`](xref:Melanchall.DryWetMidi.Core.MidiReader.ReadWordAsync(System.Threading.CancellationToken)),
-[`ReadBytesAsync`](xref:Melanchall.DryWetMidi.Core.MidiReader.ReadBytesAsync(System.Int32,System.Threading.CancellationToken)),
-and [`ReadVlqNumberAsync`](xref:Melanchall.DryWetMidi.Core.MidiReader.ReadVlqNumberAsync(System.Threading.CancellationToken)).
-`ReadBytesAsync` can return fewer bytes at end of input; validate the returned
-length when the format requires an exact number. Corresponding writer primitives
-include
-[`WriteByteAsync`](xref:Melanchall.DryWetMidi.Core.MidiWriter.WriteByteAsync(System.Byte,System.Threading.CancellationToken)),
-[`WriteWordAsync`](xref:Melanchall.DryWetMidi.Core.MidiWriter.WriteWordAsync(System.UInt16,System.Threading.CancellationToken)),
-[`WriteBytesAsync`](xref:Melanchall.DryWetMidi.Core.MidiWriter.WriteBytesAsync*),
-and [`WriteVlqNumberAsync`](xref:Melanchall.DryWetMidi.Core.MidiWriter.WriteVlqNumberAsync*).
+Like the synchronous implementation, these overrides process content only, not the
+chunk header. Read the number of bytes specified by `size`, and ensure
+`GetContentSize` matches the bytes written. Do not dispose the supplied reader or
+writer: they belong to the enclosing file operation. Pass the cancellation token
+to every asynchronous I/O call and await each operation before starting the next.
+Encoding and decoding strings still use CPU time; the example buffers each comment,
+not the entire chunk.
 
-These methods are public and can also be used with directly constructed
-[`MidiReader`](xref:Melanchall.DryWetMidi.Core.MidiReader) and
-[`MidiWriter`](xref:Melanchall.DryWetMidi.Core.MidiWriter) instances outside chunk
-overrides. Await each operation before starting the next. Reader construction
-is still synchronous: a policy that buffers all input can perform synchronous
-I/O during construction. Do not select
-[`BufferingPolicy.BufferAllData`](xref:Melanchall.DryWetMidi.Core.BufferingPolicy.BufferAllData)
-when the underlying stream must not be read synchronously.
-
-The `size` parameter is the declared content size, not a bounded substream.
-Overrides must avoid reading into the following chunk; the configured
-[`InvalidChunkSizePolicy`](xref:Melanchall.DryWetMidi.Core.ReadingSettings.InvalidChunkSizePolicy)
-is applied after the override returns. Keep `GetContentSize` consistent with both
-writers: it still determines the content size in the header and remains synchronous.
-
-The example avoids a separate whole-chunk transport buffer, but it still
-materializes the `HistoryChunk` and its comments. The temporary list also keeps
-incomplete or canceled reads from committing partial changes to `_changes`.
-This is not constant-memory deserialization. CPU-bound decoding, encoding,
-size calculation, and other custom work remain synchronous unless they genuinely
-await I/O. Pass the supplied cancellation token to every awaited I/O operation
-and check it during long CPU-bound processing; cancellation is cooperative.
-Cancellation or failure can leave partial output, without rollback or atomic
-replacement.
-
-[`MidiFile.ReadAsync`](xref:Melanchall.DryWetMidi.Core.MidiFile.ReadAsync*) uses the
-read hook for registered custom chunks, and
-[`MidiFile.WriteAsync`](xref:Melanchall.DryWetMidi.Core.MidiFile.WriteAsync*) uses
-the write hook. Registration through `ReadingSettings.CustomChunkTypes` is
-unchanged. For bulk file examples, progress, and stream ownership, see
-[MIDI file reading](xref:a_file_reading#asynchronous-reading) and
-[MIDI file writing](xref:a_file_writing#asynchronous-writing).
-
-Lazy reading preserves the token model: nonstandard chunk content is returned
-as [`BytesPacketToken`](xref:Melanchall.DryWetMidi.Core.BytesPacketToken) objects
-instead of invoking the custom read hook.
-[`MidiTokensWriter.WriteChunkAsync`](xref:Melanchall.DryWetMidi.Core.MidiTokensWriter.WriteChunkAsync(Melanchall.DryWetMidi.Core.MidiChunk,System.Threading.CancellationToken))
-invokes the custom write hook when writing a chunk. See
-[Lazy reading/writing](xref:a_file_lazy_reading_writing) for token sequencing,
-seekability requirements, and asynchronous disposal.
+If an override needs to skip content or check for the end of input, use
+[`MidiReader.SetPositionAsync`](xref:Melanchall.DryWetMidi.Core.MidiReader.SetPositionAsync*)
+and
+[`MidiReader.EndReachedAsync`](xref:Melanchall.DryWetMidi.Core.MidiReader.EndReachedAsync*)
+instead of the synchronous position setter or end check. On non-seekable streams,
+these operations can require transport reads. Moving backward is limited to bytes
+still held in the replay buffer; cancellation or failure while moving forward can
+leave the position partially advanced.

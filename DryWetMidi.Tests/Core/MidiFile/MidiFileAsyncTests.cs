@@ -322,15 +322,18 @@ namespace Melanchall.DryWetMidi.Tests.Core
         [Test]
         public async Task CustomChunk_UsesInMemoryCodec_WithAbsolutePositions([Values] bool lazyWrite)
         {
-            var file = new MidiFile(new CustomChunk { Value = 42 });
+            var expected = new CustomChunk { Value = 42 };
             using var output = new AsyncOnlyStream();
+
             if (lazyWrite)
             {
                 await using var writer = await MidiFile.WriteLazyAsync(output);
-                await writer.WriteChunkAsync(file.Chunks[0]);
+                await writer.WriteChunkAsync(expected);
             }
             else
-                await file.WriteAsync(output);
+            {
+                await new MidiFile(expected).WriteAsync(output);
+            }
 
             using var input = new AsyncOnlyStream(output.ToArray(), false, 2);
             var actual = await MidiFile.ReadAsync(input, new ReadingSettings
@@ -341,6 +344,9 @@ namespace Melanchall.DryWetMidi.Tests.Core
 
             ClassicAssert.AreEqual(42, chunk.Value, "Async custom chunk value is invalid.");
             ClassicAssert.AreEqual(22, chunk.ContentPosition, "Custom chunk codec received an invalid absolute position.");
+            ClassicAssert.AreEqual(22, expected.WritePosition, "Synchronous fallback write hook received an invalid absolute position.");
+            ClassicAssert.IsFalse(input.IsDisposed, "Synchronous fallback reading disposed the caller-owned stream.");
+            ClassicAssert.IsFalse(output.IsDisposed, "Synchronous fallback writing disposed the caller-owned stream.");
         }
 
         [Test]
@@ -697,6 +703,8 @@ namespace Melanchall.DryWetMidi.Tests.Core
 
             public long ContentPosition { get; private set; }
 
+            public long WritePosition { get; private set; }
+
             public override MidiChunk Clone() => new CustomChunk { Value = Value };
 
             protected override uint GetContentSize(WritingSettings settings) => 1;
@@ -707,10 +715,14 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 Value = reader.ReadByte();
             }
 
-            protected override void WriteContent(MidiWriter writer, WritingSettings settings) => writer.WriteByte(Value);
+            protected override void WriteContent(MidiWriter writer, WritingSettings settings)
+            {
+                WritePosition = writer.Length;
+                writer.WriteByte(Value);
+            }
         }
 
-        private sealed class AsyncOnlyStream : Stream
+        internal sealed class AsyncOnlyStream : Stream
         {
             private readonly MemoryStream _inner;
             private readonly bool _seekable;

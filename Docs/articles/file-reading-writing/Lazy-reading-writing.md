@@ -4,16 +4,11 @@ uid: a_file_lazy_reading_writing
 
 # Lazy reading/writing
 
-For bulk asynchronous I/O that uses a complete `MidiFile`, see
-[MIDI file reading](xref:a_file_reading#asynchronous-reading) and
-[MIDI file writing](xref:a_file_writing#asynchronous-writing). Lazy APIs instead
-perform work as tokens or objects are requested or supplied.
-
 ## Reading
 
-When you call the [MidiFile.Read](xref:Melanchall.DryWetMidi.Core.MidiFile.Read*) method, the entire structure of a MIDI file will be put to memory as an object of the [MidiFile](xref:Melanchall.DryWetMidi.Core.MidiFile) type. It means that a more or less big MIDI file will span a significant number of bytes in the memory. Although it's much easier to work with such fully initialized objects, memory consumption can be a critical parameter for your application.
+When you call the [`MidiFile.Read`](xref:Melanchall.DryWetMidi.Core.MidiFile.Read*) method, the entire structure of a MIDI file will be put to memory as an object of the [`MidiFile`](xref:Melanchall.DryWetMidi.Core.MidiFile) type. It means that a more or less big MIDI file will span a significant number of bytes in the memory. Although it's much easier to work with such fully initialized objects, memory consumption can be a critical parameter for your application.
 
-To solve the problem DryWetMIDI provides [MidiFile.ReadLazy](xref:Melanchall.DryWetMidi.Core.MidiFile.ReadLazy*) methods which return an instance of the [MidiTokensReader](xref:Melanchall.DryWetMidi.Core.MidiTokensReader) class that can read a MIDI file sequentially token by token:
+To solve the problem DryWetMIDI provides [`MidiFile.ReadLazy`](xref:Melanchall.DryWetMidi.Core.MidiFile.ReadLazy*) methods which return an instance of the [`MidiTokensReader`](xref:Melanchall.DryWetMidi.Core.MidiTokensReader) class that can read a MIDI file sequentially token by token:
 
 ```csharp
 using (var tokensReader = MidiFile.ReadLazy("test.mid"))
@@ -39,9 +34,9 @@ using (var tokensReader = MidiFile.ReadLazy("test.mid"))
 }
 ```
 
-With this approach each call of [ReadToken](xref:Melanchall.DryWetMidi.Core.MidiTokensReader.ReadToken) method will read next portion of data from a MIDI file (in fact, the internal reader in DryWetMIDI uses the buffer of `4096` bytes by default, the size of this buffer can be adjusted via [BufferSize](xref:Melanchall.DryWetMidi.Core.ReaderSettings.BufferSize) property of [ReadingSettings.ReaderSettings](xref:Melanchall.DryWetMidi.Core.ReadingSettings.ReaderSettings)). So, the memory consumption will be almost always constant (despite a MIDI file size) and low. But of course, there's the price – slower reading and much more difficult implementation of some logic and algorithms needed for your application. Also, many high level tools provided by DryWetMIDI will be unavailable.
+With this approach each call of [`ReadToken`](xref:Melanchall.DryWetMidi.Core.MidiTokensReader.ReadToken) method will read next portion of data from a MIDI file (in fact, the internal reader in DryWetMIDI uses the buffer of `4096` bytes by default, the size of this buffer can be adjusted via [`BufferSize`](xref:Melanchall.DryWetMidi.Core.ReaderSettings.BufferSize) property of [`ReadingSettings.ReaderSettings`](xref:Melanchall.DryWetMidi.Core.ReadingSettings.ReaderSettings)). So, the memory consumption will be almost always constant (despite a MIDI file size) and low. But of course, there's the price – slower reading and much more difficult implementation of some logic and algorithms needed for your application. Also, many high level tools provided by DryWetMIDI will be unavailable.
 
-Some useful methods can be found in the [MidiTokensReaderUtilities](xref:Melanchall.DryWetMidi.Core.MidiTokensReaderUtilities) class. The following example shows how you can calculate the count of all _A#_ notes for each track chunk (the [EnumerateObjects](xref:Melanchall.DryWetMidi.Interaction.GetObjectsUtilities.EnumerateObjects*) method is also used):
+Some useful methods can be found in the [`MidiTokensReaderUtilities`](xref:Melanchall.DryWetMidi.Core.MidiTokensReaderUtilities) class. The following example shows how you can calculate the count of all _A#_ notes for each track chunk (the [`EnumerateObjects`](xref:Melanchall.DryWetMidi.Interaction.GetObjectsUtilities.EnumerateObjects*) method is also used):
 
 ```csharp
 bool IsTrackChunkHeaderToken(MidiToken token) =>
@@ -83,10 +78,6 @@ using (var tokensReader = MidiFile.ReadLazy("test.mid"))
 }
 ```
 
-The reader holds its current buffers and token instead of a complete file object.
-Consumers that collect tokens or run detection algorithms may still need additional
-memory.
-
 In comparison, the standard approach takes far fewer lines of code (but takes much more memory, of course):
 
 ```csharp
@@ -103,42 +94,11 @@ foreach (var trackChunk in midiFile.GetTrackChunks())
 }
 ```
 
-### Asynchronous reading
-
-[`MidiFile.ReadLazyAsync`](xref:Melanchall.DryWetMidi.Core.MidiFile.ReadLazyAsync*)
-opens an asynchronous token reader. Await
-[`MidiTokensReader.ReadTokenAsync`](xref:Melanchall.DryWetMidi.Core.MidiTokensReader.ReadTokenAsync*)
-to request each token; opening the reader does not materialize a complete file:
-
-```csharp
-await using (var tokensReader = await MidiFile.ReadLazyAsync("input.mid"))
-{
-    MidiToken token;
-
-    while ((token = await tokensReader.ReadTokenAsync()) != null)
-    {
-        Console.WriteLine(token);
-    }
-}
-```
-
-Pass a cancellation token both when opening the reader and to subsequent read
-operations as needed. After a failed or canceled token read, dispose the reader
-rather than trying to resume from partially updated chunk or event reading state.
-Cancellation cannot interrupt arbitrary synchronous custom chunk or event code.
-
-Lazy reading returns nonstandard chunk content as
-[`BytesPacketToken`](xref:Melanchall.DryWetMidi.Core.BytesPacketToken) objects; it
-does not construct registered custom chunk instances or invoke their content
-readers. To deserialize custom chunks, use
-[`MidiFile.ReadAsync`](xref:Melanchall.DryWetMidi.Core.MidiFile.ReadAsync*) and
-the hooks described in [Custom chunks](xref:a_custom_chunk#asynchronous-content-io).
-
 ## Writing
 
-The same applies to the process of writing a MIDI file. [MidiFile.Write](xref:Melanchall.DryWetMidi.Core.MidiFile.Write*) requires an instance of the [MidiFile](xref:Melanchall.DryWetMidi.Core.MidiFile), which can obviously occupy a lot of memory for big files.
+The same applies to the process of writing a MIDI file. [`MidiFile.Write`](xref:Melanchall.DryWetMidi.Core.MidiFile.Write*) requires an instance of the [`MidiFile`](xref:Melanchall.DryWetMidi.Core.MidiFile), which can obviously occupy a lot of memory for big files.
 
-Here is an example of how to write MIDI data in a lazy way using [MidiTokensWriter](xref:Melanchall.DryWetMidi.Core.MidiTokensWriter):
+Here is an example of how to write MIDI data in a lazy way using [`MidiTokensWriter`](xref:Melanchall.DryWetMidi.Core.MidiTokensWriter):
 
 ```csharp
 using (var tokensWriter = MidiFile.WriteLazy("test.mid", true))
@@ -157,7 +117,7 @@ using (var tokensWriter = MidiFile.WriteLazy("test.mid", true))
 }
 ```
 
-DryWetMIDI also provides the [TimedObjectsWriter](xref:Melanchall.DryWetMidi.Interaction.TimedObjectsWriter) class which simplifies writing of complex objects with [MidiTokensWriter](xref:Melanchall.DryWetMidi.Core.MidiTokensWriter):
+DryWetMIDI also provides the [`TimedObjectsWriter`](xref:Melanchall.DryWetMidi.Interaction.TimedObjectsWriter) class which simplifies writing of complex objects with [`MidiTokensWriter`](xref:Melanchall.DryWetMidi.Core.MidiTokensWriter):
 
 ```csharp
 IEnumerable<ITimedObject> GetObjects() => Enumerable
@@ -171,16 +131,41 @@ using (var objectsWriter = new TimedObjectsWriter(tokensWriter))
 }
 ```
 
-The code above writes one million notes to a MIDI file. Of course, you can combine [MidiTokensReader](xref:Melanchall.DryWetMidi.Core.MidiTokensReader), [EnumerateObjects](xref:Melanchall.DryWetMidi.Interaction.GetObjectsUtilities.EnumerateObjects*), [MidiTokensWriter](xref:Melanchall.DryWetMidi.Core.MidiTokensWriter) and [TimedObjectsWriter](xref:Melanchall.DryWetMidi.Interaction.TimedObjectsWriter) to process MIDI objects transforming a MIDI file into another one.
+The code above writes one million notes to a MIDI file. Of course, you can combine [`MidiTokensReader`](xref:Melanchall.DryWetMidi.Core.MidiTokensReader), [`EnumerateObjects`](xref:Melanchall.DryWetMidi.Interaction.GetObjectsUtilities.EnumerateObjects*), [`MidiTokensWriter`](xref:Melanchall.DryWetMidi.Core.MidiTokensWriter) and [`TimedObjectsWriter`](xref:Melanchall.DryWetMidi.Interaction.TimedObjectsWriter) to process MIDI objects transforming a MIDI file into another one.
 
-### Asynchronous writing
+## Asynchronous reading
+
+[`MidiFile.ReadLazyAsync`](xref:Melanchall.DryWetMidi.Core.MidiFile.ReadLazyAsync*)
+creates a token reader; format validation and further I/O happen as tokens are
+requested with
+[`MidiTokensReader.ReadTokenAsync`](xref:Melanchall.DryWetMidi.Core.MidiTokensReader.ReadTokenAsync*).
+Unlike the complete-file APIs described in
+[MIDI file reading](xref:a_file_reading), this does not first construct a complete
+[`MidiFile`](xref:Melanchall.DryWetMidi.Core.MidiFile):
+
+```csharp
+await using (var tokensReader = await MidiFile.ReadLazyAsync("input.mid"))
+{
+    MidiToken token;
+
+    while ((token = await tokensReader.ReadTokenAsync()) != null)
+    {
+        Console.WriteLine(token);
+    }
+}
+```
+
+The reader retains its current buffers and token. Collecting tokens or applying
+detection algorithms can still require additional memory.
+
+## Asynchronous writing
 
 [`MidiFile.WriteLazyAsync`](xref:Melanchall.DryWetMidi.Core.MidiFile.WriteLazyAsync*)
 creates a [`MidiTokensWriter`](xref:Melanchall.DryWetMidi.Core.MidiTokensWriter)
-with asynchronous track and event operations.
+whose track and event operations can be awaited.
 [`TimedObjectsWriter.WriteObjectsAsync`](xref:Melanchall.DryWetMidi.Interaction.TimedObjectsWriter.WriteObjectsAsync*)
-accepts both ordinary and asynchronously produced object sequences. Objects must
-still be supplied in non-descending time order:
+accepts either `IEnumerable<ITimedObject>` or `IAsyncEnumerable<ITimedObject>`.
+Supply objects in non-descending time order:
 
 ```csharp
 var notes = new[]
@@ -204,56 +189,48 @@ await using (var tokensWriter = await MidiFile.WriteLazyAsync(
 }
 ```
 
-Await [`TimedObjectsWriter.DisposeAsync`](xref:Melanchall.DryWetMidi.Interaction.TimedObjectsWriter.DisposeAsync)
-before ending the track so deferred note-offs are emitted into the open track.
-The supplied token writer remains caller-owned; await
+Await
+[`TimedObjectsWriter.DisposeAsync`](xref:Melanchall.DryWetMidi.Interaction.TimedObjectsWriter.DisposeAsync)
+before ending the track: it emits deferred note-offs into the open track without
+disposing the caller-owned token writer. Subsequently await
 [`MidiTokensWriter.DisposeAsync`](xref:Melanchall.DryWetMidi.Core.MidiTokensWriter.DisposeAsync)
-afterwards to flush remaining bytes and finalize MIDI headers. The nested
-`await using` scopes above enforce this order.
+to flush remaining bytes and finalize MIDI headers. The nested scopes above
+enforce this order.
 
-Optional [`AsyncOperationProgress`](xref:Melanchall.DryWetMidi.Common.AsyncOperationProgress)
-notifications from `WriteObjectsAsync` count accepted non-null input objects, not
-emitted MIDI events. Reports are throttled, totals can be unknown without
-pre-enumerating the input, and successful completion emits a final notification.
-Completion of a `WriteObjectsAsync` call does not replace disposal: deferred
-note-offs still need to be written before the track ends.
+The optional `progress` parameter of
+[`TimedObjectsWriter.WriteObjectsAsync`](xref:Melanchall.DryWetMidi.Interaction.TimedObjectsWriter.WriteObjectsAsync*)
+reports accepted non-null input objects, not emitted events or transported bytes.
+Reports are throttled, the total is unknown, and successful completion produces a
+final report with `IsCompleted` set to `true`. That report does not mean deferred
+events have been flushed or the token writer has been finalized.
 
 ### Sequential operations and disposal
 
 Do not overlap operations on the same reader or writer, including synchronous
-operations while an asynchronous operation is outstanding. These objects keep
-mutable state; asynchronous methods do not make them thread-safe.
+operations while an asynchronous operation is outstanding. These objects retain
+mutable state and are not made thread-safe by asynchronous I/O.
 
-**Wrong:** the second read can start before the first finishes:
+**Wrong:** the synchronous read can race with the pending asynchronous read:
 
 ```csharp
-await using (var tokensReader = await MidiFile.ReadLazyAsync("input.mid"))
-{
-    var pendingRead = tokensReader.ReadTokenAsync();
-    var nextToken = tokensReader.ReadToken();
+var pendingRead = tokensReader.ReadTokenAsync();
+var nextToken = tokensReader.ReadToken();
 
-    await pendingRead;
-}
+await pendingRead;
 ```
 
 **Correct:** await each operation before starting the next:
 
 ```csharp
-await using (var tokensReader = await MidiFile.ReadLazyAsync("input.mid"))
-{
-    var firstToken = await tokensReader.ReadTokenAsync();
-    var nextToken = await tokensReader.ReadTokenAsync();
-}
+var firstToken = await tokensReader.ReadTokenAsync();
+var nextToken = await tokensReader.ReadTokenAsync();
 ```
 
-Disposal is also an operation and must not overlap pending work.
+Disposal must also wait for pending work.
 
-**Wrong:** disposing the writer can race with output that is still in progress:
+**Wrong:** disposal can race with output:
 
 ```csharp
-var tokensWriter = await MidiFile.WriteLazyAsync("output.mid", overwriteFile: true);
-await tokensWriter.StartTrackChunkAsync();
-
 var pendingWrite = tokensWriter.WriteEventAsync(new TextEvent("Hello"));
 await tokensWriter.DisposeAsync();
 
@@ -275,17 +252,30 @@ await using (var tokensWriter = await MidiFile.WriteLazyAsync(
 
 ### Ownership, cancellation, and failures
 
-File-path operations own their file streams. Stream overloads leave caller-supplied
-streams open; the caller must dispose those streams separately after the reader
-or writer is finished.
+File-path operations own their streams. Stream overloads leave supplied streams
+open when the token reader or writer is disposed; the caller must dispose them.
+Asynchronous output still requires a seekable stream to patch track lengths and
+track counts during finalization.
 
-Pass cancellation tokens to the factory and subsequent asynchronous operations
-as needed; cancellation is cooperative and is reported with
-`OperationCanceledException`. Opening a reader or writer with a token does not
-replace passing a token to later operations.
+Pass cancellation tokens to both initialization and subsequent operations.
+For example, using a `CancellationToken` named `cancellationToken`:
 
-Asynchronous output does not remove lazy writing's seekability requirements.
-Track lengths and track counts must be patched during finalization. Cancellation
-or failure can leave partially written data; neither rollback nor atomic replacement
-is implied. Await pending work before disposing the writer, including after an
-operation fails.
+```csharp
+await using (var tokensReader = await MidiFile.ReadLazyAsync(
+    "input.mid",
+    cancellationToken: cancellationToken))
+{
+    MidiToken token;
+
+    while ((token = await tokensReader.ReadTokenAsync(cancellationToken)) != null)
+    {
+        Console.WriteLine(token);
+    }
+}
+```
+
+Cancellation is cooperative and raises `OperationCanceledException`; it cannot
+interrupt arbitrary synchronous custom chunk or event code. After a canceled or
+failed token read, dispose the reader instead of resuming partially updated
+parsing state. Cancellation or failure during writing can leave partial output;
+neither rollback nor atomic replacement is implied.

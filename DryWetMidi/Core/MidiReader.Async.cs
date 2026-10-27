@@ -47,13 +47,13 @@ namespace Melanchall.DryWetMidi.Core
         }
 
         /// <summary>
-        /// Asynchronously determines whether the end of the underlying stream has been reached.
+        /// Asynchronously determines whether the end of the underlying stream is reached.
         /// </summary>
-        /// <param name="cancellationToken">Token used to cancel reading.</param>
-        /// <returns>Whether the end of the stream has been reached.</returns>
-        /// <exception cref="OperationCanceledException">Reading was canceled.</exception>
-        /// <exception cref="ObjectDisposedException">The reader or underlying stream has been disposed.</exception>
-        /// <exception cref="IOException">An I/O error occurred while reading.</exception>
+        /// <param name="cancellationToken">Token used to cancel checking the stream.</param>
+        /// <returns>A task containing <c>true</c> if the end of the stream is reached; otherwise, <c>false</c>.</returns>
+        /// <remarks>Checking a non-seekable stream can require an asynchronous read into its replay buffer.</remarks>
+        /// <inheritdoc cref="EndReached" path="/*[not(self::summary) and not(self::param) and not(self::returns)]"/>
+        /// <exception cref="OperationCanceledException">Checking the stream was canceled.</exception>
         public async ValueTask<bool> EndReachedAsync(CancellationToken cancellationToken = default)
         {
             ThrowIfDisposed();
@@ -64,16 +64,21 @@ namespace Melanchall.DryWetMidi.Core
         }
 
         /// <summary>
-        /// Asynchronously changes the position, reading skipped bytes when a non-seekable stream requires it.
+        /// Sets the reader's position, asynchronously consuming bytes when moving forward on a non-seekable stream.
         /// </summary>
-        /// <param name="position">The new position within the underlying stream.</param>
-        /// <param name="cancellationToken">Token used to cancel repositioning.</param>
-        /// <returns>A task representing repositioning.</returns>
-        /// <exception cref="OperationCanceledException">Repositioning was canceled.</exception>
-        /// <exception cref="ObjectDisposedException">The reader or underlying stream has been disposed.</exception>
-        /// <exception cref="IOException">The position cannot be reached or an I/O error occurred.</exception>
+        /// <param name="position">Non-negative absolute position to move to.</param>
+        /// <param name="cancellationToken">Token used to cancel moving the position.</param>
+        /// <returns>A task representing moving the position.</returns>
+        /// <remarks>
+        /// Moving backward on a non-seekable stream requires the requested bytes to remain in its replay buffer.
+        /// Moving forward can stop at the end of a non-seekable stream before the requested position.
+        /// Cancellation or failure can leave the position partially advanced. The reader and its stream remain open.
+        /// </remarks>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="position"/> is negative.</exception>
-        /// <remarks>Backward movement on non-seekable streams is limited by the reader's history buffer.</remarks>
+        /// <exception cref="InvalidOperationException">The requested backward position is outside the non-seekable stream's replay buffer.</exception>
+        /// <exception cref="ObjectDisposedException">The reader or its underlying stream was disposed.</exception>
+        /// <exception cref="IOException">An I/O error occurred.</exception>
+        /// <exception cref="OperationCanceledException">Moving the position was canceled.</exception>
         public async ValueTask SetPositionAsync(long position, CancellationToken cancellationToken = default)
         {
             ThrowIfArgument.IsNegative(nameof(position), position, "Position is negative.");
@@ -81,17 +86,22 @@ namespace Melanchall.DryWetMidi.Core
             cancellationToken.ThrowIfCancellationRequested();
 
             if (!_useBuffering && _isStreamWrapped)
+            {
+                if (position < Position && Position - position > int.MaxValue)
+                    throw new InvalidOperationException("Failed to move position back beyond the start of the buffer.");
+
                 await ((StreamWrapper)_stream).SetPositionAsync(position, cancellationToken).ConfigureAwait(false);
+            }
             else
                 Position = position;
         }
 
         /// <summary>
-        /// Asynchronously reads a byte and advances the position by one.
+        /// Asynchronously reads one byte and advances the current position.
         /// </summary>
-        /// <inheritdoc cref="ReadByte" path="/*[not(self::summary) and not(self::param) and not(self::returns)]"/>
         /// <param name="cancellationToken">Token used to cancel reading.</param>
         /// <returns>A task containing the next byte.</returns>
+        /// <inheritdoc cref="ReadByte" path="/*[not(self::summary) and not(self::param) and not(self::returns)]"/>
         /// <exception cref="OperationCanceledException">Reading was canceled.</exception>
         public async ValueTask<byte> ReadByteAsync(CancellationToken cancellationToken = default)
         {
@@ -116,12 +126,12 @@ namespace Melanchall.DryWetMidi.Core
         }
 
         /// <summary>
-        /// Asynchronously reads up to the specified number of bytes.
+        /// Asynchronously reads up to the requested number of bytes and advances the current position.
         /// </summary>
-        /// <inheritdoc cref="ReadBytes" path="/*[not(self::summary) and not(self::param) and not(self::returns)]"/>
-        /// <param name="count">Maximum number of bytes to read; must be non-negative.</param>
+        /// <param name="count">Non-negative number of bytes to read.</param>
         /// <param name="cancellationToken">Token used to cancel reading.</param>
         /// <returns>A task containing the bytes read, possibly fewer than requested at the end of the stream.</returns>
+        /// <inheritdoc cref="ReadBytes" path="/*[not(self::summary) and not(self::param) and not(self::returns)]"/>
         /// <exception cref="OperationCanceledException">Reading was canceled.</exception>
         public async Task<byte[]> ReadBytesAsync(int count, CancellationToken cancellationToken = default)
         {
@@ -169,11 +179,11 @@ namespace Melanchall.DryWetMidi.Core
         }
 
         /// <summary>
-        /// Asynchronously reads a DWORD (32-bit unsigned integer).
+        /// Asynchronously reads a big-endian 32-bit unsigned integer.
         /// </summary>
-        /// <inheritdoc cref="ReadDword" path="/*[not(self::summary) and not(self::param) and not(self::returns)]"/>
         /// <param name="cancellationToken">Token used to cancel reading.</param>
-        /// <returns>A task containing the DWORD value.</returns>
+        /// <returns>A task containing the integer read.</returns>
+        /// <inheritdoc cref="ReadDword" path="/*[not(self::summary) and not(self::param) and not(self::returns)]"/>
         /// <exception cref="OperationCanceledException">Reading was canceled.</exception>
         public async ValueTask<uint> ReadDwordAsync(CancellationToken cancellationToken = default)
         {
@@ -187,9 +197,9 @@ namespace Melanchall.DryWetMidi.Core
         /// <summary>
         /// Asynchronously reads a signed byte.
         /// </summary>
-        /// <inheritdoc cref="ReadSByte" path="/*[not(self::summary) and not(self::param) and not(self::returns)]"/>
         /// <param name="cancellationToken">Token used to cancel reading.</param>
-        /// <returns>A task containing the signed byte.</returns>
+        /// <returns>A task containing the signed byte read.</returns>
+        /// <inheritdoc cref="ReadSByte" path="/*[not(self::summary) and not(self::param) and not(self::returns)]"/>
         /// <exception cref="OperationCanceledException">Reading was canceled.</exception>
         public async ValueTask<sbyte> ReadSByteAsync(CancellationToken cancellationToken = default)
         {
@@ -197,52 +207,50 @@ namespace Melanchall.DryWetMidi.Core
         }
 
         /// <summary>
-        /// Asynchronously reads a WORD (16-bit unsigned integer).
+        /// Asynchronously reads a big-endian 16-bit unsigned integer.
         /// </summary>
-        /// <inheritdoc cref="ReadWord" path="/*[not(self::summary) and not(self::param) and not(self::returns)]"/>
         /// <param name="cancellationToken">Token used to cancel reading.</param>
-        /// <returns>A task containing the WORD value.</returns>
+        /// <returns>A task containing the integer read.</returns>
+        /// <inheritdoc cref="ReadWord" path="/*[not(self::summary) and not(self::param) and not(self::returns)]"/>
         /// <exception cref="OperationCanceledException">Reading was canceled.</exception>
         public async ValueTask<ushort> ReadWordAsync(CancellationToken cancellationToken = default)
         {
-            var bytes = await ReadNumberBytesAsync(2, cancellationToken).ConfigureAwait(false);
-            return (ushort)((bytes[0] << 8) | bytes[1]);
+            return (ushort)await ReadNumberAsync(2, "WORD", cancellationToken).ConfigureAwait(false);
         }
 
         /// <summary>
-        /// Asynchronously reads an INT16 (16-bit signed integer).
+        /// Asynchronously reads a big-endian 16-bit signed integer.
         /// </summary>
-        /// <inheritdoc cref="ReadInt16" path="/*[not(self::summary) and not(self::param) and not(self::returns)]"/>
         /// <param name="cancellationToken">Token used to cancel reading.</param>
-        /// <returns>A task containing the INT16 value.</returns>
+        /// <returns>A task containing the integer read.</returns>
+        /// <inheritdoc cref="ReadInt16" path="/*[not(self::summary) and not(self::param) and not(self::returns)]"/>
         /// <exception cref="OperationCanceledException">Reading was canceled.</exception>
         public async ValueTask<short> ReadInt16Async(CancellationToken cancellationToken = default)
         {
-            return (short)await ReadWordAsync(cancellationToken).ConfigureAwait(false);
+            return (short)await ReadNumberAsync(2, "INT16", cancellationToken).ConfigureAwait(false);
         }
 
         /// <summary>
-        /// Asynchronously reads a DWORD represented by three bytes.
+        /// Asynchronously reads a big-endian unsigned integer stored in three bytes.
         /// </summary>
+        /// <param name="cancellationToken">Token used to cancel reading.</param>
+        /// <returns>A task containing the integer read.</returns>
         /// <inheritdoc cref="Read3ByteDword" path="/*[not(self::summary) and not(self::param) and not(self::returns)]"/>
-        /// <param name="cancellationToken">Token used to cancel reading.</param>
-        /// <returns>A task containing the three-byte DWORD value.</returns>
         /// <exception cref="OperationCanceledException">Reading was canceled.</exception>
-        public async ValueTask<uint> Read3ByteDwordAsync(CancellationToken cancellationToken = default)
+        public ValueTask<uint> Read3ByteDwordAsync(CancellationToken cancellationToken = default)
         {
-            var bytes = await ReadNumberBytesAsync(3, cancellationToken).ConfigureAwait(false);
-            return ((uint)bytes[0] << 16) | ((uint)bytes[1] << 8) | bytes[2];
+            return ReadNumberAsync(3, "3-byte DWORD", cancellationToken);
         }
 
         /// <summary>
-        /// Asynchronously reads a string encoded using the MIDI ASCII encoding.
+        /// Asynchronously reads an ASCII string of up to the specified length.
         /// </summary>
-        /// <inheritdoc cref="ReadString" path="/*[not(self::summary) and not(self::param) and not(self::returns)]"/>
-        /// <param name="count">Number of ASCII bytes to read; must be non-negative.</param>
+        /// <param name="count">Non-negative number of characters to read.</param>
         /// <param name="cancellationToken">Token used to cancel reading.</param>
-        /// <returns>A task containing the decoded string.</returns>
+        /// <returns>A task containing the string read.</returns>
+        /// <inheritdoc cref="ReadString" path="/*[not(self::summary) and not(self::param) and not(self::returns)]"/>
         /// <exception cref="OperationCanceledException">Reading was canceled.</exception>
-        public async Task<string> ReadStringAsync(int count, CancellationToken cancellationToken = default)
+        public async ValueTask<string> ReadStringAsync(int count, CancellationToken cancellationToken = default)
         {
             ThrowIfArgument.IsNegative(nameof(count), count, "Count is negative.");
 
@@ -251,41 +259,51 @@ namespace Melanchall.DryWetMidi.Core
         }
 
         /// <summary>
-        /// Asynchronously reads a variable-length 32-bit integer.
+        /// Asynchronously reads a 32-bit variable-length quantity.
         /// </summary>
-        /// <inheritdoc cref="ReadVlqNumber" path="/*[not(self::summary) and not(self::param) and not(self::returns)]"/>
         /// <param name="cancellationToken">Token used to cancel reading.</param>
-        /// <returns>A task containing the decoded 32-bit integer.</returns>
+        /// <returns>A task containing the integer read.</returns>
+        /// <inheritdoc cref="ReadVlqNumber" path="/*[not(self::summary) and not(self::param) and not(self::returns)]"/>
+        /// <exception cref="VlqNumberOverflowException">The number exceeds the supported range.</exception>
         /// <exception cref="OperationCanceledException">Reading was canceled.</exception>
-        /// <exception cref="VlqNumberOverflowException">The encoded value is too large.</exception>
         public async ValueTask<int> ReadVlqNumberAsync(CancellationToken cancellationToken = default)
         {
-            return (int)await ReadVlqNumberCoreAsync(
-                VlqIntMaxBytes,
-                VlqIntLastCheckReference,
-                cancellationToken).ConfigureAwait(false);
+            return (int)await ReadVlqNumberCoreAsync(VlqIntMaxBytes, VlqIntLastCheckReference, cancellationToken).ConfigureAwait(false);
         }
 
         /// <summary>
-        /// Asynchronously reads a variable-length 64-bit integer.
+        /// Asynchronously reads a 64-bit variable-length quantity.
         /// </summary>
-        /// <inheritdoc cref="ReadVlqLongNumber" path="/*[not(self::summary) and not(self::param) and not(self::returns)]"/>
         /// <param name="cancellationToken">Token used to cancel reading.</param>
-        /// <returns>A task containing the decoded 64-bit integer.</returns>
+        /// <returns>A task containing the integer read.</returns>
+        /// <inheritdoc cref="ReadVlqLongNumber" path="/*[not(self::summary) and not(self::param) and not(self::returns)]"/>
+        /// <exception cref="VlqNumberOverflowException">The number exceeds the supported range.</exception>
         /// <exception cref="OperationCanceledException">Reading was canceled.</exception>
-        /// <exception cref="VlqNumberOverflowException">The encoded value is too large.</exception>
         public ValueTask<long> ReadVlqLongNumberAsync(CancellationToken cancellationToken = default)
         {
             return ReadVlqNumberCoreAsync(VlqLongMaxBytes, VlqLongLastCheckReference, cancellationToken);
         }
 
-        private async ValueTask<byte[]> ReadNumberBytesAsync(int count, CancellationToken cancellationToken)
+        private void ThrowIfDisposed()
         {
-            var bytes = await ReadBytesAsync(count, cancellationToken).ConfigureAwait(false);
-            if (bytes.Length != count)
-                throw new NotEnoughBytesException("Not enough bytes to read a number.", count, bytes.Length);
+            if (_disposed)
+                throw new ObjectDisposedException(nameof(MidiReader));
+        }
 
-            return bytes;
+        private async ValueTask<uint> ReadNumberAsync(int size, string name, CancellationToken cancellationToken)
+        {
+            var bytes = await ReadBytesAsync(size, cancellationToken).ConfigureAwait(false);
+            if (bytes.Length < size)
+                throw new NotEnoughBytesException($"Not enough bytes in the stream to read a {name}.", size, bytes.Length);
+
+            uint result = 0;
+
+            foreach (var value in bytes)
+            {
+                result = (result << 8) | value;
+            }
+
+            return result;
         }
 
         private async ValueTask<long> ReadVlqNumberCoreAsync(
@@ -293,35 +311,28 @@ namespace Melanchall.DryWetMidi.Core
             long lastCheckReference,
             CancellationToken cancellationToken)
         {
-            long value = 0;
+            long result = 0;
 
-            for (var count = 1; ; count++)
+            try
             {
-                byte b;
-                try
+                for (var count = 1; ; count++)
                 {
-                    b = await ReadByteAsync(cancellationToken).ConfigureAwait(false);
-                }
-                catch (EndOfStreamException exception)
-                {
-                    throw new NotEnoughBytesException(
-                        "Not enough bytes in the stream to read a variable-length quantity number.",
-                        exception);
-                }
+                    if (count > maxBytes)
+                        throw new VlqNumberOverflowException("VLQ number is too large.");
 
-                if (count == maxBytes && (b >= 128 || value > lastCheckReference))
-                    throw new VlqNumberOverflowException("VLQ number is too large.");
+                    var value = await ReadByteAsync(cancellationToken).ConfigureAwait(false);
+                    if (count == maxBytes && ((value >> 7) != 0 || result > lastCheckReference))
+                        throw new VlqNumberOverflowException("VLQ number is too large.");
 
-                value = (value << 7) + (b & 127);
-                if (b < 128)
-                    return value;
+                    result = (result << 7) + (value & 127);
+                    if (value < 128)
+                        return result;
+                }
             }
-        }
-
-        private void ThrowIfDisposed()
-        {
-            if (_disposed)
-                throw new ObjectDisposedException(nameof(MidiReader));
+            catch (EndOfStreamException exception)
+            {
+                throw new NotEnoughBytesException("Not enough bytes in the stream to read a variable-length quantity number.", exception);
+            }
         }
 
         private async ValueTask<bool> EnsureBufferAsync(CancellationToken cancellationToken)

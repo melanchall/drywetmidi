@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Tests.Utilities;
@@ -15,6 +17,208 @@ namespace Melanchall.DryWetMidi.Tests.Core
     public sealed partial class MidiFileTests
     {
         #region Test methods
+
+        [Test]
+        public async Task ReadPosition_AsyncNonseekableSkipRewindAndEnd()
+        {
+            using var input = new MidiFileAsyncTests.AsyncOnlyStream(new byte[] { 10, 20, 30, 40, 50, 60 }, false, 1);
+            using var reader = new MidiReader(input, new ReaderSettings
+            {
+                BufferingPolicy = BufferingPolicy.DontUseBuffering,
+                NonSeekableStreamBufferSize = 4
+            });
+
+            ClassicAssert.IsFalse(await reader.EndReachedAsync(CancellationToken.None), "EOF peeking lost available input.");
+            ClassicAssert.AreEqual(0, reader.Position, "EOF peeking changed the logical position.");
+            ClassicAssert.AreEqual(10, await reader.ReadByteAsync(), "EOF peeking consumed the first byte.");
+
+            await reader.SetPositionAsync(4, CancellationToken.None);
+
+            ClassicAssert.AreEqual(4, reader.Position, "Forward skipping ended at an invalid position.");
+
+            await reader.SetPositionAsync(3, CancellationToken.None);
+
+            ClassicAssert.AreEqual(40, await reader.ReadByteAsync(), "Rewinding did not replay the buffered byte.");
+            ClassicAssert.IsFalse(await reader.EndReachedAsync(CancellationToken.None), "EOF peeking after replay lost unread input.");
+            ClassicAssert.AreEqual(50, await reader.ReadByteAsync(), "EOF peeking after replay consumed a byte.");
+
+            await reader.SetPositionAsync(6, CancellationToken.None);
+
+            Assert.ThrowsAsync<InvalidOperationException>(
+                async () => await reader.SetPositionAsync(0, CancellationToken.None),
+                "Rewinding outside the replay buffer did not fail.");
+            ClassicAssert.IsTrue(await reader.EndReachedAsync(CancellationToken.None), "EOF peeking did not detect the end of the stream.");
+            Assert.ThrowsAsync<InvalidOperationException>(
+                async () => await reader.SetPositionAsync(0, CancellationToken.None),
+                "Rewinding from the nonseekable EOF sentinel did not reject an unrepresentable replay distance.");
+            ClassicAssert.Greater(input.AsyncReads, 0, "Positioning did not use async transport.");
+            ClassicAssert.IsFalse(input.IsDisposed, "Positioning disposed the caller-owned stream.");
+        }
+
+        [Test]
+        public void ReadPosition_AsyncValidationCancellationAndDisposal()
+        {
+            using var input = new MidiFileAsyncTests.AsyncOnlyStream(new byte[] { 42 }, false, 1);
+            var reader = new MidiReader(input, new ReaderSettings { BufferingPolicy = BufferingPolicy.DontUseBuffering });
+            using var cancellation = new CancellationTokenSource();
+            cancellation.Cancel();
+
+            var exception = Assert.ThrowsAsync<ArgumentOutOfRangeException>(
+                async () => await reader.SetPositionAsync(-1, CancellationToken.None),
+                "Async positioning accepted a negative position.");
+            ClassicAssert.AreEqual("position", exception.ParamName, "Position validation reported an invalid parameter name.");
+            Assert.CatchAsync<OperationCanceledException>(
+                async () => await reader.SetPositionAsync(1, cancellation.Token),
+                "Pre-canceled async positioning did not fail.");
+            Assert.CatchAsync<OperationCanceledException>(
+                async () => await reader.EndReachedAsync(cancellation.Token),
+                "Pre-canceled async EOF peeking did not fail.");
+            ClassicAssert.AreEqual(0, input.AsyncReads, "Invalid or pre-canceled positioning touched the transport.");
+            ClassicAssert.AreEqual(0, reader.Position, "Invalid or pre-canceled positioning changed the logical position.");
+
+            reader.Dispose();
+
+            Assert.ThrowsAsync<ObjectDisposedException>(
+                async () => await reader.SetPositionAsync(0, CancellationToken.None),
+                "Disposed async positioning did not fail.");
+            Assert.ThrowsAsync<ObjectDisposedException>(
+                async () => await reader.EndReachedAsync(CancellationToken.None),
+                "Disposed async EOF peeking did not fail.");
+            ClassicAssert.IsFalse(input.IsDisposed, "Positioning reader disposal closed the caller-owned stream.");
+        }
+
+        [Test]
+        public async Task ReadPrimitives_AsyncParity(
+            [Values] bool seekable,
+            [Values(
+                BufferingPolicy.DontUseBuffering,
+                BufferingPolicy.UseFixedSizeBuffer,
+                BufferingPolicy.UseCustomBuffer)] BufferingPolicy policy)
+        {
+            using var bytes = new MemoryStream();
+            using (var writer = new MidiWriter(bytes, new WriterSettings { UseBuffering = false }))
+            {
+                WritePrimitivePayload(writer);
+            }
+
+            var settings = new ReaderSettings
+            {
+                BufferingPolicy = policy,
+                BufferSize = 3,
+                Buffer = new byte[3]
+            };
+            using var synchronousInput = new MemoryStream(bytes.ToArray());
+            using var synchronous = new MidiReader(synchronousInput, settings);
+            using var asynchronousInput = new MidiFileAsyncTests.AsyncOnlyStream(bytes.ToArray(), seekable, 1);
+            using var asynchronous = new MidiReader(asynchronousInput, settings);
+
+            ClassicAssert.AreEqual(synchronous.ReadByte(), await asynchronous.ReadByteAsync(CancellationToken.None), "Async unsigned-byte reading differs.");
+            ClassicAssert.AreEqual(synchronous.ReadSByte(), await asynchronous.ReadSByteAsync(CancellationToken.None), "Async signed-byte reading differs.");
+            ClassicAssert.AreEqual(synchronous.ReadWord(), await asynchronous.ReadWordAsync(CancellationToken.None), "Async WORD endianness differs.");
+            ClassicAssert.AreEqual(synchronous.ReadDword(), await asynchronous.ReadDwordAsync(CancellationToken.None), "Async DWORD endianness differs.");
+            ClassicAssert.AreEqual(synchronous.ReadInt16(), await asynchronous.ReadInt16Async(CancellationToken.None), "Async INT16 endianness differs.");
+            ClassicAssert.AreEqual(synchronous.Read3ByteDword(), await asynchronous.Read3ByteDwordAsync(CancellationToken.None), "Async three-byte DWORD endianness differs.");
+            ClassicAssert.AreEqual(synchronous.ReadString(4), await asynchronous.ReadStringAsync(4, CancellationToken.None), "Async ASCII string reading differs.");
+            ClassicAssert.AreEqual(synchronous.ReadBytes(3), await asynchronous.ReadBytesAsync(3, CancellationToken.None), "Async byte-array reading differs.");
+            ClassicAssert.AreEqual(synchronous.ReadVlqNumber(), await asynchronous.ReadVlqNumberAsync(CancellationToken.None), "Async integer VLQ reading differs.");
+            ClassicAssert.AreEqual(synchronous.ReadVlqLongNumber(), await asynchronous.ReadVlqLongNumberAsync(CancellationToken.None), "Async long VLQ reading differs.");
+            ClassicAssert.AreEqual(synchronous.ReadBytes(3), await asynchronous.ReadBytesAsync(3, CancellationToken.None), "Async short reading at end of stream differs.");
+            if (seekable)
+                ClassicAssert.AreEqual(synchronous.Position, asynchronous.Position, "Async primitive reading ended at a different position.");
+            else
+                ClassicAssert.IsTrue(await asynchronous.EndReachedAsync(CancellationToken.None), "Async nonseekable primitive reading did not reach the end of the stream.");
+
+            ClassicAssert.Greater(asynchronousInput.AsyncReads, 0, "Async primitives did not use async transport.");
+            ClassicAssert.IsFalse(asynchronousInput.IsDisposed, "Async primitive reading disposed the caller-owned stream.");
+        }
+
+        [Test]
+        public async Task ReadPrimitives_AsyncEmptyAndInvalidCounts()
+        {
+            using var input = new MidiFileAsyncTests.AsyncOnlyStream(new byte[] { 42 });
+            using var reader = new MidiReader(input, new ReaderSettings { BufferingPolicy = BufferingPolicy.DontUseBuffering });
+
+            ClassicAssert.IsEmpty(await reader.ReadBytesAsync(0), "Reading zero bytes returned data.");
+            ClassicAssert.AreEqual(string.Empty, await reader.ReadStringAsync(0), "Reading zero characters returned text.");
+            var bytesException = Assert.ThrowsAsync<ArgumentOutOfRangeException>(
+                async () => await reader.ReadBytesAsync(-1),
+                "Async byte reading accepted a negative count.");
+            var stringException = Assert.ThrowsAsync<ArgumentOutOfRangeException>(
+                async () => await reader.ReadStringAsync(-1),
+                "Async string reading accepted a negative count.");
+
+            ClassicAssert.AreEqual("count", bytesException.ParamName, "Byte reading reported an invalid parameter name.");
+            ClassicAssert.AreEqual("count", stringException.ParamName, "String reading reported an invalid parameter name.");
+            ClassicAssert.AreEqual(0, input.AsyncReads, "Empty or invalid reads touched the transport.");
+        }
+
+        [Test]
+        public void ReadPrimitives_AsyncTruncation([Values(2, 3, 4)] int size)
+        {
+            using var input = new MidiFileAsyncTests.AsyncOnlyStream(new byte[size - 1], false, 1);
+            using var reader = new MidiReader(input, new ReaderSettings { BufferingPolicy = BufferingPolicy.DontUseBuffering });
+
+            Assert.ThrowsAsync<NotEnoughBytesException>(
+                async () =>
+                {
+                    if (size == 2)
+                        await reader.ReadWordAsync();
+                    else if (size == 3)
+                        await reader.Read3ByteDwordAsync();
+                    else
+                        await reader.ReadDwordAsync();
+                },
+                "A truncated async primitive did not fail.");
+            ClassicAssert.IsFalse(input.IsDisposed, "Truncated primitive reading disposed the caller-owned stream.");
+        }
+
+        [Test]
+        public void ReadPrimitives_AsyncVlqOverflow([Values] bool longNumber)
+        {
+            var bytes = Enumerable.Repeat((byte)0xFF, longNumber ? 9 : 5).ToArray();
+            using var input = new MidiFileAsyncTests.AsyncOnlyStream(bytes, false, 1);
+            using var reader = new MidiReader(input, new ReaderSettings { BufferingPolicy = BufferingPolicy.DontUseBuffering });
+
+            Assert.ThrowsAsync<VlqNumberOverflowException>(
+                async () =>
+                {
+                    if (longNumber)
+                        await reader.ReadVlqLongNumberAsync();
+                    else
+                        await reader.ReadVlqNumberAsync();
+                },
+                "Async VLQ reading accepted an overflowing value.");
+        }
+
+        [Test]
+        public void ReadPrimitives_AsyncCancellationAndDisposal()
+        {
+            using var input = new MidiFileAsyncTests.AsyncOnlyStream(new byte[] { 42, 43 });
+            var reader = new MidiReader(input, new ReaderSettings { BufferingPolicy = BufferingPolicy.DontUseBuffering });
+            using var cancellation = new CancellationTokenSource();
+            cancellation.Cancel();
+
+            Assert.CatchAsync<OperationCanceledException>(
+                async () => await reader.ReadByteAsync(cancellation.Token),
+                "A pre-canceled primitive byte read did not fail.");
+            Assert.CatchAsync<OperationCanceledException>(
+                async () => await reader.ReadWordAsync(cancellation.Token),
+                "A pre-canceled primitive number read did not fail.");
+            Assert.CatchAsync<OperationCanceledException>(
+                async () => await reader.ReadVlqNumberAsync(cancellation.Token),
+                "A pre-canceled primitive VLQ read did not fail.");
+            ClassicAssert.AreEqual(0, input.AsyncReads, "Pre-canceled primitives touched the transport.");
+
+            reader.Dispose();
+
+            Assert.ThrowsAsync<ObjectDisposedException>(
+                async () => await reader.ReadByteAsync(),
+                "Disposed primitive byte reading did not fail.");
+            Assert.ThrowsAsync<ObjectDisposedException>(
+                async () => await reader.ReadStringAsync(1),
+                "Disposed primitive string reading did not fail.");
+            ClassicAssert.IsFalse(input.IsDisposed, "Reader disposal closed the caller-owned stream.");
+        }
 
         [Test]
         public void Read_SmpteTimeDivision_1()
