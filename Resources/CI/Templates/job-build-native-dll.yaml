@@ -10,7 +10,7 @@ jobs:
 - job: BuildDll${{ parameters.configuration }}
   displayName: 'Build dll (${{ parameters.configuration }})'
   pool:
-    vmImage: 'windows-2022'
+    vmImage: 'windows-latest'
   steps:
   - task: PowerShell@2
     displayName: 'Download Windows.Devices.Midi2.nupkg'
@@ -41,10 +41,9 @@ jobs:
     displayName: 'Build dll'
     inputs:
       solution: 'Resources/Native/Windows/Melanchall.DryWetMidi.Native.Windows/Melanchall.DryWetMidi.Native.Windows/Melanchall.DryWetMidi.Native.Windows.vcxproj'
-      vsVersion: '17.0'
       platform: '${{ parameters.configuration }}'
       configuration: 'Release'
-      msbuildArgs: '/p:SolutionDir=$(Build.SourcesDirectory)\Resources\Native\Windows\Melanchall.DryWetMidi.Native.Windows\'
+      msbuildArgs: '/p:PlatformToolset=v145 /p:SolutionDir=$(Build.SourcesDirectory)\Resources\Native\Windows\Melanchall.DryWetMidi.Native.Windows\'
 
   - task: PublishPipelineArtifact@1
     displayName: 'Publish dll artifact'
