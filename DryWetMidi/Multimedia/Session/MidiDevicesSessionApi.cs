@@ -49,6 +49,19 @@ namespace Melanchall.DryWetMidi.Multimedia
             SESSION_CLOSERESULT_THREADEXITTIMEOUT = 101,
         }
 
+        [Flags]
+        public enum SESSION_WORKERSTATE_MAC
+        {
+            SESSION_WORKERSTATE_MAC_STARTED = 1,
+            SESSION_WORKERSTATE_MAC_RUNNING = 2,
+            SESSION_WORKERSTATE_MAC_CLIENTCREATED = 4,
+            SESSION_WORKERSTATE_MAC_RUNLOOPSTARTED = 8,
+            SESSION_WORKERSTATE_MAC_EXITED = 16,
+            SESSION_WORKERSTATE_MAC_SESSIONCLOSED = 32,
+            SESSION_WORKERSTATE_MAC_RUNLOOPRETURNED = 64,
+            SESSION_WORKERSTATE_MAC_RUNLOOPSOURCECREATED = 128,
+        }
+
         #endregion
 
         #region Delegates
@@ -81,6 +94,17 @@ namespace Melanchall.DryWetMidi.Multimedia
         [LibraryImport(NativeApi.LibraryName)]
         [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
         private static partial SESSION_CLOSERESULT CloseSession(IntPtr handle);
+
+        [LibraryImport(NativeApi.LibraryName)]
+        [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
+        private static partial uint IsSessionWorkerThreadRunning_Mac(IntPtr handle);
+
+        [LibraryImport(NativeApi.LibraryName)]
+        [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
+        private static partial SESSION_WORKERSTATE_MAC GetSessionWorkerDiagnostics_Mac(
+            IntPtr handle,
+            out int clientCreationStatus);
+
 #else
         [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Unicode)]
         private static extern SESSION_OPENRESULT OpenSession_Win(
@@ -96,6 +120,14 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
         private static extern SESSION_CLOSERESULT CloseSession(IntPtr handle);
+
+        [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
+        private static extern uint IsSessionWorkerThreadRunning_Mac(IntPtr handle);
+
+        [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
+        private static extern SESSION_WORKERSTATE_MAC GetSessionWorkerDiagnostics_Mac(
+            IntPtr handle,
+            out int clientCreationStatus);
 #endif
 
         #endregion
@@ -148,6 +180,26 @@ namespace Melanchall.DryWetMidi.Multimedia
         {
             return MidiOperationsExecutor.Instance.ExecuteOperation(() =>
                 CloseSession(handle));
+        }
+
+        public static bool Api_IsSessionWorkerThreadRunning_Mac(IntPtr handle)
+        {
+            return MidiOperationsExecutor.Instance.ExecuteOperation(() =>
+                IsSessionWorkerThreadRunning_Mac(handle) != 0);
+        }
+
+        public static SESSION_WORKERSTATE_MAC Api_GetSessionWorkerDiagnostics_Mac(
+            IntPtr handle,
+            out int clientCreationStatus)
+        {
+            var clientCreationStatusLocal = 0;
+
+            var workerState = MidiOperationsExecutor.Instance.ExecuteOperation(() =>
+                GetSessionWorkerDiagnostics_Mac(handle, out clientCreationStatusLocal));
+
+            clientCreationStatus = clientCreationStatusLocal;
+
+            return workerState;
         }
 
         #endregion
