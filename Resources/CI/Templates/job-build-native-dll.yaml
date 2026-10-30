@@ -43,7 +43,7 @@ jobs:
       solution: 'Resources/Native/Windows/Melanchall.DryWetMidi.Native.Windows/Melanchall.DryWetMidi.Native.Windows/Melanchall.DryWetMidi.Native.Windows.vcxproj'
       platform: '${{ parameters.configuration }}'
       configuration: 'Release'
-      msbuildArgs: '/p:SolutionDir=$(Build.SourcesDirectory)\Resources\Native\Windows\Melanchall.DryWetMidi.Native.Windows\'
+      msbuildArgs: '/p:PlatformToolset=v145 /p:SolutionDir=$(Build.SourcesDirectory)\Resources\Native\Windows\Melanchall.DryWetMidi.Native.Windows\'
 
   - task: PublishPipelineArtifact@1
     displayName: 'Publish dll artifact'
