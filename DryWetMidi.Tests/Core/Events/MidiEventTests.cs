@@ -6,6 +6,8 @@ using NUnit.Framework.Legacy;
 using System;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Melanchall.DryWetMidi.Tests.Core
 {
@@ -18,11 +20,15 @@ namespace Melanchall.DryWetMidi.Tests.Core
         {
             private byte _data;
 
-            public CustomMetaEvent() =>
+            public CustomMetaEvent()
+            {
                 _data = 0;
+            }
 
-            public CustomMetaEvent(byte data) =>
+            public CustomMetaEvent(byte data)
+            {
                 _data = data;
+            }
 
             protected override MidiEvent CloneEvent() =>
                 new CustomMetaEvent(_data);
@@ -35,6 +41,23 @@ namespace Melanchall.DryWetMidi.Tests.Core
 
             protected override void WriteContent(MidiWriter writer, WritingSettings settings) =>
                 writer.WriteByte(_data);
+
+            protected override async Task ReadContentAsync(
+                MidiReader reader,
+                ReadingSettings settings,
+                int size,
+                CancellationToken cancellationToken = default)
+            {
+                _data = await reader.ReadByteAsync(cancellationToken).ConfigureAwait(false);
+            }
+
+            protected override async Task WriteContentAsync(
+                MidiWriter writer,
+                WritingSettings settings,
+                CancellationToken cancellationToken = default)
+            {
+                await writer.WriteByteAsync(_data, cancellationToken).ConfigureAwait(false);
+            }
 
             public override string ToString() =>
                 _data.ToString();

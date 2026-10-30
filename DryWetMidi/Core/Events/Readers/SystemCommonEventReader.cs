@@ -1,4 +1,7 @@
-﻿namespace Melanchall.DryWetMidi.Core
+﻿using System.Threading;
+using System.Threading.Tasks;
+
+namespace Melanchall.DryWetMidi.Core
 {
     internal sealed class SystemCommonEventReader : IEventReader
     {
@@ -6,26 +9,43 @@
 
         public MidiEvent? Read(MidiReader reader, ReadingSettings settings, byte currentStatusByte)
         {
-            SystemCommonEvent? systemCommonEvent = null;
+            var systemCommonEvent = CreateEvent(currentStatusByte);
+            systemCommonEvent?.Read(reader, settings, MidiEvent.UnknownContentSize);
+            return systemCommonEvent;
+        }
 
+        public async Task<MidiEvent?> ReadAsync(
+            MidiReader reader,
+            ReadingSettings settings,
+            byte currentStatusByte,
+            CancellationToken cancellationToken)
+        {
+            var systemCommonEvent = CreateEvent(currentStatusByte);
+            if (systemCommonEvent != null)
+                await systemCommonEvent.ReadAsync(reader, settings, MidiEvent.UnknownContentSize, cancellationToken).ConfigureAwait(false);
+
+            return systemCommonEvent;
+        }
+
+        #endregion
+
+        #region Methods
+
+        private static SystemCommonEvent? CreateEvent(byte currentStatusByte)
+        {
             switch (currentStatusByte)
             {
                 case EventStatusBytes.SystemCommon.MtcQuarterFrame:
-                    systemCommonEvent = new MidiTimeCodeEvent();
-                    break;
+                    return new MidiTimeCodeEvent();
                 case EventStatusBytes.SystemCommon.SongSelect:
-                    systemCommonEvent = new SongSelectEvent();
-                    break;
+                    return new SongSelectEvent();
                 case EventStatusBytes.SystemCommon.SongPositionPointer:
-                    systemCommonEvent = new SongPositionPointerEvent();
-                    break;
+                    return new SongPositionPointerEvent();
                 case EventStatusBytes.SystemCommon.TuneRequest:
-                    systemCommonEvent = new TuneRequestEvent();
-                    break;
+                    return new TuneRequestEvent();
             }
 
-            systemCommonEvent?.Read(reader, settings, MidiEvent.UnknownContentSize);
-            return systemCommonEvent;
+            return null;
         }
 
         #endregion

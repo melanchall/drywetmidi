@@ -1,5 +1,7 @@
 ﻿using System;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Melanchall.DryWetMidi.Core
 {
@@ -97,6 +99,71 @@ namespace Melanchall.DryWetMidi.Core
             var data = Data;
             if (data != null)
                 writer.WriteBytes(data);
+        }
+
+        /// <inheritdoc/>
+        protected override async Task ReadContentAsync(
+            MidiReader reader,
+            ReadingSettings settings,
+            uint size,
+            CancellationToken cancellationToken = default)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            if (size == 0)
+            {
+                ReadContent(reader, settings, size);
+                return;
+            }
+
+            byte[] bytes;
+            if (reader.Length == long.MaxValue && settings.MaxMemorySize != null)
+            {
+                using var memory = new MemoryStream();
+                long remaining = Math.Min(size, int.MaxValue);
+
+                while (remaining > 0)
+                {
+                    var packet = await reader.ReadBytesAsync((int)Math.Min(remaining, 4096), cancellationToken).ConfigureAwait(false);
+                    if (packet.Length == 0)
+                        break;
+
+                    reader.ThrowIfMemoryLimitExceeded(
+                        MemorySizeEstimator.EstimateArray(typeof(byte), memory.Length + packet.Length),
+                        settings);
+                    memory.Write(packet, 0, packet.Length);
+                    remaining -= packet.Length;
+                }
+
+                bytes = memory.ToArray();
+                if (settings.MaxMemorySize != null)
+                    reader.AddEstimatedMemory(MemorySizeEstimator.EstimateArray(typeof(byte), bytes.Length), settings);
+            }
+            else
+            {
+                var bytesCount = Math.Min(size, Math.Max(0, reader.Length - reader.Position));
+                if (settings.MaxMemorySize != null)
+                    reader.AddEstimatedMemory(MemorySizeEstimator.EstimateArray(typeof(byte), bytesCount), settings);
+
+                bytes = await reader.ReadBytesAsync((int)Math.Min(bytesCount, int.MaxValue), cancellationToken).ConfigureAwait(false);
+            }
+
+            if (bytes.Length < size && settings.NotEnoughBytesPolicy == NotEnoughBytesPolicy.Abort)
+                throw new NotEnoughBytesException(
+                    "Unknown chunk's data cannot be read since the reader's underlying stream doesn't have enough bytes.",
+                    size,
+                    bytes.Length);
+
+            Data = bytes;
+        }
+
+        /// <inheritdoc/>
+        protected override Task WriteContentAsync(
+            MidiWriter writer,
+            WritingSettings settings,
+            CancellationToken cancellationToken = default)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            return Data == null ? Task.CompletedTask : writer.WriteDataAsync(Data, cancellationToken);
         }
 
         /// <inheritdoc/>

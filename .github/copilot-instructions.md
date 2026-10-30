@@ -1,0 +1,108 @@
+DryWetMIDI code style
+====================
+
+Use this file as the single source of repository coding rules for this PR and
+future contributions. Read the surrounding code before editing; preserve existing
+public API behavior and naming.
+
+Layout
+------
+Use four spaces for C# indentation and put opening braces on separate lines.
+Keep the existing namespace, using-directive, and region conventions.
+
+Separate logical steps with blank lines. In particular:
+  - Put a blank line after an if/else body before the next independent statement.
+  - Put blank lines before and after loops, except at a containing block boundary.
+  - Keep related declarations together, but separate setup, validation,
+    processing, and return/completion steps.
+  - In tests, separate setup, action, and verification blocks with blank lines.
+  - Do not insert blank lines between an if body and its else, or between a try
+    body and its catch/finally.
+
+Always put loop bodies in braces, including single-statement bodies.
+Follow surrounding code for single-statement if bodies; braces are not required
+just because a loop's braces are required.
+
+Put blank lines between properties, methods, and constructors. Place nested
+classes at the start of their parent class, before other members. Put public
+members before internal and private implementation helpers.
+
+Do not put catch bodies or multiple independent statements on the same line.
+Constructor bodies must be multiline blocks, never expression-bodied.
+Keep other short expression-bodied members when they are genuinely easier to read.
+
+When a declaration or invocation is split into a multiline parameter/argument
+list, put each parameter/argument on its own line. Do not leave most parameters
+on one line with only the final parameter on the following line.
+
+Expand lambdas with several statements into readable multiline blocks.
+Avoid densely packed object initializers and chained operations.
+
+Argument validation
+-------------------
+Use ThrowIfArgument at public API boundaries, not in private or internal helpers.
+Validate each public entry point before passing arguments to unchecked helpers,
+using the public parameter names in exceptions. Do not remove validation without
+moving it to the callers that own the public contract.
+
+Async code
+----------
+Keep synchronous APIs compatible. Name asynchronous counterparts with Async.
+Add async APIs for genuinely awaitable I/O, not solely to wrap CPU-bound
+operations in Task.Run. Leave CPU offloading to the caller.
+Use ConfigureAwait(false) for internal library awaits that do not require a
+caller synchronization context, including asynchronous disposal where applicable.
+It is not necessary to add an await solely to a method that returns a task.
+Do not remove ConfigureAwait(false) merely because a particular test uses no
+synchronization context.
+
+Keep cancellation cooperative. Check it while preparing a mutation, not halfway
+through a destructive commit. Async does not make mutable objects thread-safe.
+Do not refactor duplicated sync/async algorithms as part of a style-only change.
+
+XML documentation
+-----------------
+Use multiline summary comments, matching existing public APIs. Document
+parameters, return values, ownership, and relevant exception conditions.
+Reuse the corresponding synchronous API's documentation when appropriate, but
+also document async-specific cancellation, disposed-object, overlapping-operation,
+and state failures when the implementation can actually produce them.
+When adding a local async summary alongside inheritdoc, scope inheritance to
+exclude the inherited summary so DocFX preserves the async-specific description.
+Use OperationCanceledException for cancellation contracts; do not promise the
+more specific TaskCanceledException for every canceled operation.
+Document actual exceptions rather than adding every exception to every method.
+
+In documentation articles, link methods with xref and their fully qualified
+method identifier; include the parameter signature to select an overload, or
+use the method's overload-group identifier ending in * when intended.
+Decorate code-related text with backticks, including API link labels:
+  [`MidiFile.ReadAsync`](xref:Melanchall.DryWetMidi.Core.MidiFile.ReadAsync*)
+End text introducing a code sample with a colon, not a period.
+Distinguish bulk async APIs, which complete an entire operation before returning
+the result, from lazy async APIs, which perform work as items or tokens are
+requested. Do not imply that asynchronous I/O alone makes a bulk API lazy.
+
+Validate documentation with docfx 2.78.0 using:
+  docfx Docs/docfx.json
+Inspect diagnostics for unresolved xrefs and other warnings, and inspect the
+rendered HTML for working links, readable examples, and correct API descriptions.
+
+Tests
+-----
+Keep existing synchronous assertions and dedicated asynchronous tests.
+For parity checks in existing synchronous tests, also exercise the asynchronous
+operation using CancellationToken.None and Result or Wait. Recreate mutable
+inputs and streams so both operations start from equivalent state.
+Remember that Result and Wait wrap task failures in AggregateException; preserve
+the original synchronous exception assertions.
+Prefer extending existing common assertion helpers so all their cases gain
+async coverage. Verify output, state changes, settings, and failure behavior,
+not just task completion. Do not add async calls for APIs without an async
+counterpart.
+
+Prefer NUnit Values for independent parameter values; use TestCase when values
+are correlated cases that must stay together. Use ClassicAssert when an
+equivalent assertion exists. Give every assertion an informative failure message.
+Use MidiAsserts for MIDI equality instead of manual comparisons or calling
+Equals, except when Equals itself is the behavior under test.

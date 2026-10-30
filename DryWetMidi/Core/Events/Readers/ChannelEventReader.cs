@@ -1,5 +1,7 @@
 ﻿using System;
 using Melanchall.DryWetMidi.Common;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Melanchall.DryWetMidi.Core
 {
@@ -12,39 +14,73 @@ namespace Melanchall.DryWetMidi.Core
             var statusByte = currentStatusByte.GetHead();
             var channel = currentStatusByte.GetTail();
 
-            ChannelEvent channelEvent;
-
-            switch (statusByte)
+            var channelEvent = CreateEvent(statusByte);
+            if (channelEvent == null)
             {
-                case EventStatusBytes.Channel.NoteOff:
-                    channelEvent = new NoteOffEvent();
-                    break;
-                case EventStatusBytes.Channel.NoteOn:
-                    channelEvent = new NoteOnEvent();
-                    break;
-                case EventStatusBytes.Channel.ControlChange:
-                    channelEvent = new ControlChangeEvent();
-                    break;
-                case EventStatusBytes.Channel.PitchBend:
-                    channelEvent = new PitchBendEvent();
-                    break;
-                case EventStatusBytes.Channel.ChannelAftertouch:
-                    channelEvent = new ChannelAftertouchEvent();
-                    break;
-                case EventStatusBytes.Channel.ProgramChange:
-                    channelEvent = new ProgramChangeEvent();
-                    break;
-                case EventStatusBytes.Channel.NoteAftertouch:
-                    channelEvent = new NoteAftertouchEvent();
-                    break;
-                default:
-                    ReactOnUnknownChannelEvent(statusByte, channel, reader, settings);
-                    return null;
+                ReactOnUnknownChannelEvent(statusByte, channel, reader, settings);
+                return null;
             }
 
             channelEvent.Read(reader, settings, MidiEvent.UnknownContentSize);
             channelEvent.Channel = channel;
 
+            return ProcessSilentNoteOn(channelEvent, settings);
+        }
+
+        public async Task<MidiEvent?> ReadAsync(
+            MidiReader reader,
+            ReadingSettings settings,
+            byte currentStatusByte,
+            CancellationToken cancellationToken)
+        {
+            var statusByte = currentStatusByte.GetHead();
+            var channel = currentStatusByte.GetTail();
+
+            var channelEvent = CreateEvent(statusByte);
+            if (channelEvent == null)
+            {
+                var bytesToSkip = GetUnknownEventBytesToSkip(statusByte, channel, settings);
+                if (bytesToSkip != 0)
+                    await reader.SetPositionAsync(reader.Position + bytesToSkip, cancellationToken).ConfigureAwait(false);
+
+                return null;
+            }
+
+            await channelEvent.ReadAsync(reader, settings, MidiEvent.UnknownContentSize, cancellationToken).ConfigureAwait(false);
+            channelEvent.Channel = channel;
+
+            return ProcessSilentNoteOn(channelEvent, settings);
+        }
+
+        #endregion
+
+        #region Methods
+
+        private static ChannelEvent? CreateEvent(FourBitNumber statusByte)
+        {
+            switch (statusByte)
+            {
+                case EventStatusBytes.Channel.NoteOff:
+                    return new NoteOffEvent();
+                case EventStatusBytes.Channel.NoteOn:
+                    return new NoteOnEvent();
+                case EventStatusBytes.Channel.ControlChange:
+                    return new ControlChangeEvent();
+                case EventStatusBytes.Channel.PitchBend:
+                    return new PitchBendEvent();
+                case EventStatusBytes.Channel.ChannelAftertouch:
+                    return new ChannelAftertouchEvent();
+                case EventStatusBytes.Channel.ProgramChange:
+                    return new ProgramChangeEvent();
+                case EventStatusBytes.Channel.NoteAftertouch:
+                    return new NoteAftertouchEvent();
+                default:
+                    return null;
+            }
+        }
+
+        private static ChannelEvent ProcessSilentNoteOn(ChannelEvent channelEvent, ReadingSettings settings)
+        {
             if (channelEvent.EventType == MidiEventType.NoteOn)
             {
                 var noteOnEvent = (NoteOnEvent)channelEvent;
@@ -60,24 +96,28 @@ namespace Melanchall.DryWetMidi.Core
             return channelEvent;
         }
 
-        #endregion
-
-        #region Methods
-
         private void ReactOnUnknownChannelEvent(FourBitNumber statusByte, FourBitNumber channel, MidiReader reader, ReadingSettings settings)
+        {
+            var bytesToSkip = GetUnknownEventBytesToSkip(statusByte, channel, settings);
+            if (bytesToSkip != 0)
+                reader.Position += bytesToSkip;
+        }
+
+        private static int GetUnknownEventBytesToSkip(
+            FourBitNumber statusByte,
+            FourBitNumber channel,
+            ReadingSettings settings)
         {
             switch (settings.UnknownChannelEventPolicy)
             {
                 case UnknownChannelEventPolicy.Abort:
                     throw new UnknownChannelEventException(statusByte, channel);
                 case UnknownChannelEventPolicy.SkipStatusByte:
-                    return;
+                    return 0;
                 case UnknownChannelEventPolicy.SkipStatusByteAndOneDataByte:
-                    reader.Position += 1;
-                    return;
+                    return 1;
                 case UnknownChannelEventPolicy.SkipStatusByteAndTwoDataBytes:
-                    reader.Position += 2;
-                    return;
+                    return 2;
                 case UnknownChannelEventPolicy.UseCallback:
                     var callback = settings.UnknownChannelEventCallback;
                     if (callback == null)
@@ -89,11 +129,12 @@ namespace Melanchall.DryWetMidi.Core
                         case UnknownChannelEventInstruction.Abort:
                             throw new UnknownChannelEventException(statusByte, channel);
                         case UnknownChannelEventInstruction.SkipData:
-                            reader.Position += action.DataBytesToSkipCount;
-                            return;
+                            return action.DataBytesToSkipCount;
                     }
                     break;
             }
+
+            return 0;
         }
 
         #endregion

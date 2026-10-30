@@ -1,4 +1,7 @@
-﻿namespace Melanchall.DryWetMidi.Core
+﻿using System.Threading;
+using System.Threading.Tasks;
+
+namespace Melanchall.DryWetMidi.Core
 {
     /// <summary>
     /// Represents a system real-time event.
@@ -30,6 +33,25 @@
 
         internal sealed override void Write(MidiWriter writer, WritingSettings settings)
         {
+        }
+
+        internal sealed override Task ReadAsync(
+            MidiReader reader,
+            ReadingSettings settings,
+            int size,
+            CancellationToken cancellationToken)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            return Task.CompletedTask;
+        }
+
+        internal sealed override Task WriteAsync(
+            MidiWriter writer,
+            WritingSettings settings,
+            CancellationToken cancellationToken)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            return Task.CompletedTask;
         }
 
         internal sealed override int GetSize(WritingSettings settings)

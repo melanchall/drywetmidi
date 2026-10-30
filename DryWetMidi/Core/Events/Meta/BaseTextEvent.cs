@@ -1,6 +1,8 @@
 ﻿using Melanchall.DryWetMidi.Common;
 using System;
 using System.ComponentModel;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Melanchall.DryWetMidi.Core
 {
@@ -104,6 +106,59 @@ namespace Melanchall.DryWetMidi.Core
             var encoding = settings.TextEncoding ?? SmfConstants.DefaultTextEncoding;
             var bytes = encoding.GetBytes(text);
             writer.WriteBytes(bytes);
+        }
+
+        /// <inheritdoc/>
+        protected sealed override async Task ReadContentAsync(
+            MidiReader reader,
+            ReadingSettings settings,
+            int size,
+            CancellationToken cancellationToken = default)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            if (size == 0)
+            {
+                switch (settings.ZeroLengthDataPolicy)
+                {
+                    case ZeroLengthDataPolicy.ReadAsEmptyObject:
+                        Text = string.Empty;
+                        break;
+                    case ZeroLengthDataPolicy.ReadAsNull:
+                        Text = null;
+                        break;
+                }
+
+                return;
+            }
+
+            var bytes = await reader.ReadBytesAsync(size, cancellationToken).ConfigureAwait(false);
+            if (bytes.Length != size && settings.NotEnoughBytesPolicy == NotEnoughBytesPolicy.Abort)
+                throw new NotEnoughBytesException("Not enough bytes in the stream to read the text of a text based meta event.", size, bytes.Length);
+
+            var encoding = settings.TextEncoding ?? SmfConstants.DefaultTextEncoding;
+
+            var decodeTextCallback = settings.DecodeTextCallback;
+            Text = decodeTextCallback != null
+                ? decodeTextCallback(bytes, settings)
+                : encoding.GetString(bytes);
+        }
+
+        /// <inheritdoc/>
+        protected sealed override async Task WriteContentAsync(
+            MidiWriter writer,
+            WritingSettings settings,
+            CancellationToken cancellationToken = default)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            var text = Text;
+            if (string.IsNullOrEmpty(text))
+                return;
+
+            var encoding = settings.TextEncoding ?? SmfConstants.DefaultTextEncoding;
+            var bytes = encoding.GetBytes(text);
+            await writer.WriteBytesAsync(bytes, cancellationToken).ConfigureAwait(false);
         }
 
         /// <summary>

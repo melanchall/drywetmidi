@@ -3,7 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Melanchall.DryWetMidi.Core
 {
-    internal static class MidiFileReadingUtilities
+    internal static partial class MidiFileReadingUtilities
     {
         #region Constants
 

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Melanchall.DryWetMidi.Core
 {
@@ -54,6 +56,21 @@ namespace Melanchall.DryWetMidi.Core
             timeDivision = TimeDivisionFactory.GetTimeDivision(reader.ReadInt16());
         }
 
+        internal static async Task<(ushort FileFormat, TimeDivision TimeDivision, ushort TracksNumber)> ReadDataAsync(
+            MidiReader reader,
+            ReadingSettings settings,
+            CancellationToken cancellationToken)
+        {
+            var fileFormat = await reader.ReadWordAsync(cancellationToken).ConfigureAwait(false);
+            if (settings.UnknownFileFormatPolicy == UnknownFileFormatPolicy.Abort && !Enum.IsDefined(typeof(MidiFileFormat), fileFormat))
+                throw new UnknownFileFormatException(fileFormat);
+
+            var tracksNumber = await reader.ReadWordAsync(cancellationToken).ConfigureAwait(false);
+            var timeDivision = TimeDivisionFactory.GetTimeDivision(await reader.ReadInt16Async(cancellationToken).ConfigureAwait(false));
+
+            return (fileFormat, timeDivision, tracksNumber);
+        }
+
         #endregion
 
         #region Overrides
@@ -94,6 +111,29 @@ namespace Melanchall.DryWetMidi.Core
             writer.WriteWord(FileFormat);
             writer.WriteWord(TracksNumber);
             writer.WriteInt16(TimeDivision.ToInt16());
+        }
+
+        protected override async Task ReadContentAsync(
+            MidiReader reader,
+            ReadingSettings settings,
+            uint size,
+            CancellationToken cancellationToken = default)
+        {
+            var data = await ReadDataAsync(reader, settings, cancellationToken).ConfigureAwait(false);
+
+            FileFormat = data.FileFormat;
+            TimeDivision = data.TimeDivision;
+            TracksNumber = data.TracksNumber;
+        }
+
+        protected override async Task WriteContentAsync(
+            MidiWriter writer,
+            WritingSettings settings,
+            CancellationToken cancellationToken = default)
+        {
+            await writer.WriteWordAsync(FileFormat, cancellationToken).ConfigureAwait(false);
+            await writer.WriteWordAsync(TracksNumber, cancellationToken).ConfigureAwait(false);
+            await writer.WriteInt16Async(TimeDivision.ToInt16(), cancellationToken).ConfigureAwait(false);
         }
 
         /// <inheritdoc/>

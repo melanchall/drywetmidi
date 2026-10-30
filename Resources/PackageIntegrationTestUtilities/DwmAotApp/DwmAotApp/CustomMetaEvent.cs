@@ -1,4 +1,6 @@
 ﻿using Melanchall.DryWetMidi.Core;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace DwmAotApp
 {
@@ -17,6 +19,23 @@ namespace DwmAotApp
 
         protected override void WriteContent(MidiWriter writer, WritingSettings settings) =>
             writer.WriteByte(X);
+
+        protected override async Task ReadContentAsync(
+            MidiReader reader,
+            ReadingSettings settings,
+            int size,
+            CancellationToken cancellationToken = default)
+        {
+            X = await reader.ReadByteAsync(cancellationToken).ConfigureAwait(false);
+        }
+
+        protected override async Task WriteContentAsync(
+            MidiWriter writer,
+            WritingSettings settings,
+            CancellationToken cancellationToken = default)
+        {
+            await writer.WriteByteAsync(X, cancellationToken).ConfigureAwait(false);
+        }
 
         public override bool Equals(object obj) =>
             obj is CustomMetaEvent customMetaEvent && customMetaEvent.X == X;

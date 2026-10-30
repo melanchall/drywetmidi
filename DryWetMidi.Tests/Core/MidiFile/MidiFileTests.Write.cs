@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Tests.Utilities;
@@ -14,6 +16,94 @@ namespace Melanchall.DryWetMidi.Tests.Core
     public sealed partial class MidiFileTests
     {
         #region Test methods
+
+        [Test]
+        public async Task WritePrimitives_AsyncParity([Values] bool buffering)
+        {
+            using var synchronousOutput = new MemoryStream();
+            using (var writer = new MidiWriter(synchronousOutput, new WriterSettings { UseBuffering = buffering, BufferSize = 3 }))
+            {
+                WritePrimitivePayload(writer);
+            }
+
+            using var output = new MidiFileAsyncTests.AsyncOnlyStream(seekable: false);
+            var asynchronous = new MidiWriter(output, new WriterSettings { UseBuffering = buffering, BufferSize = 3 });
+
+            await asynchronous.WriteByteAsync(0xAB, CancellationToken.None);
+            await asynchronous.WriteSByteAsync(-12, CancellationToken.None);
+            await asynchronous.WriteWordAsync(0x1234, CancellationToken.None);
+            await asynchronous.WriteDwordAsync(0x89ABCDEF, CancellationToken.None);
+            await asynchronous.WriteInt16Async(-12345, CancellationToken.None);
+            await asynchronous.Write3ByteDwordAsync(0x123456, CancellationToken.None);
+            await asynchronous.WriteStringAsync("A\u00E9Z!", CancellationToken.None);
+            await asynchronous.WriteBytesAsync(new byte[] { 99, 1, 2, 3, 99 }, 1, 3, CancellationToken.None);
+            await asynchronous.WriteVlqNumberAsync(int.MaxValue, CancellationToken.None);
+            await asynchronous.WriteVlqNumberAsync(long.MaxValue, CancellationToken.None);
+            await asynchronous.WriteBytesAsync(new byte[] { 42 }, CancellationToken.None);
+            await asynchronous.WriteBytesAsync(Array.Empty<byte>(), CancellationToken.None);
+            await asynchronous.WriteStringAsync(null, CancellationToken.None);
+            await asynchronous.WriteStringAsync(string.Empty, CancellationToken.None);
+            await asynchronous.DisposeAsync();
+
+            ClassicAssert.AreEqual(synchronousOutput.ToArray(), output.ToArray(), "Async primitive bytes differ from synchronous output.");
+            ClassicAssert.AreEqual(synchronousOutput.Length, asynchronous.Length, "Async writer length differs from the serialized length.");
+            ClassicAssert.Greater(output.AsyncWrites, 0, "Async primitives did not use async stream IO.");
+            ClassicAssert.IsFalse(output.IsDisposed, "Async primitive writer disposal closed the caller-owned stream.");
+        }
+
+        [Test]
+        public async Task WritePrimitives_AsyncArgumentValidation()
+        {
+            using var output = new MidiFileAsyncTests.AsyncOnlyStream();
+            await using var writer = new MidiWriter(output, new WriterSettings { UseBuffering = false });
+
+            var nullException = Assert.ThrowsAsync<ArgumentNullException>(
+                async () => await writer.WriteBytesAsync(null),
+                "Async byte writing accepted null bytes.");
+            var offsetException = Assert.ThrowsAsync<ArgumentOutOfRangeException>(
+                async () => await writer.WriteBytesAsync(new byte[2], -1, 1),
+                "Async byte writing accepted a negative offset.");
+            var lengthException = Assert.ThrowsAsync<ArgumentOutOfRangeException>(
+                async () => await writer.WriteBytesAsync(new byte[2], 1, 2),
+                "Async byte writing accepted an out-of-range length.");
+
+            ClassicAssert.AreEqual("bytes", nullException.ParamName, "Null-byte validation reported an invalid parameter name.");
+            ClassicAssert.AreEqual("offset", offsetException.ParamName, "Offset validation reported an invalid parameter name.");
+            ClassicAssert.AreEqual("length", lengthException.ParamName, "Length validation reported an invalid parameter name.");
+            ClassicAssert.AreEqual(0, output.AsyncWrites, "Invalid primitive writes touched the stream.");
+            ClassicAssert.AreEqual(0, writer.Length, "Invalid primitive writes changed the writer length.");
+        }
+
+        [Test]
+        public async Task WritePrimitives_AsyncCancellationAndDisposal()
+        {
+            using var output = new MidiFileAsyncTests.AsyncOnlyStream();
+            var writer = new MidiWriter(output, new WriterSettings { UseBuffering = false });
+            using var cancellation = new CancellationTokenSource();
+            cancellation.Cancel();
+
+            Assert.CatchAsync<OperationCanceledException>(
+                async () => await writer.WriteByteAsync(42, cancellation.Token),
+                "A pre-canceled primitive byte write did not fail.");
+            Assert.CatchAsync<OperationCanceledException>(
+                async () => await writer.WriteWordAsync(42, cancellation.Token),
+                "A pre-canceled primitive number write did not fail.");
+            Assert.CatchAsync<OperationCanceledException>(
+                async () => await writer.WriteVlqNumberAsync(42, cancellation.Token),
+                "A pre-canceled primitive VLQ write did not fail.");
+            ClassicAssert.AreEqual(0, output.AsyncWrites, "Pre-canceled primitives touched the stream.");
+            ClassicAssert.AreEqual(0, writer.Length, "Pre-canceled primitives changed the writer length.");
+
+            await writer.DisposeAsync();
+
+            Assert.ThrowsAsync<ObjectDisposedException>(
+                async () => await writer.WriteByteAsync(42),
+                "Disposed primitive byte writing did not fail.");
+            Assert.ThrowsAsync<ObjectDisposedException>(
+                async () => await writer.WriteStringAsync("test"),
+                "Disposed primitive string writing did not fail.");
+            ClassicAssert.IsFalse(output.IsDisposed, "Writer disposal closed the caller-owned stream.");
+        }
 
         [Test]
         public void Write_SmpteTimeDivision()
@@ -350,7 +440,16 @@ namespace Melanchall.DryWetMidi.Tests.Core
             using (var streamToWrite = new MemoryStream())
             {
                 midiFile.Write(streamToWrite);
-                ClassicAssert.DoesNotThrow(() => { var l = streamToWrite.Length; });
+                ClassicAssert.DoesNotThrow(() => { var l = streamToWrite.Length; }, "Synchronous writing disposed the caller-owned stream.");
+            }
+
+            using (var streamToWrite = new MemoryStream())
+            {
+                midiFile.Clone().WriteAsync(
+                    streamToWrite,
+                    cancellationToken: System.Threading.CancellationToken.None).Wait();
+
+                ClassicAssert.DoesNotThrow(() => { var l = streamToWrite.Length; }, "Async writing disposed the caller-owned stream.");
             }
         }
 
@@ -913,6 +1012,21 @@ namespace Melanchall.DryWetMidi.Tests.Core
         #endregion
 
         #region Private methods
+
+        private static void WritePrimitivePayload(MidiWriter writer)
+        {
+            writer.WriteByte(0xAB);
+            writer.WriteSByte(-12);
+            writer.WriteWord(0x1234);
+            writer.WriteDword(0x89ABCDEF);
+            writer.WriteInt16(-12345);
+            writer.Write3ByteDword(0x123456);
+            writer.WriteString("A\u00E9Z!");
+            writer.WriteBytes(new byte[] { 99, 1, 2, 3, 99 }, 1, 3);
+            writer.WriteVlqNumber(int.MaxValue);
+            writer.WriteVlqNumber(long.MaxValue);
+            writer.WriteBytes(new byte[] { 42 });
+        }
 
         private void CheckWritingWithFormat_MultiSequence(
             IEnumerable<MidiChunk> chunks,

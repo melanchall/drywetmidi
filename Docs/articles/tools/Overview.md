@@ -13,3 +13,56 @@ DryWetMIDI provides some useful tools to solve complex tasks:
 * [Repeater](xref:a_repeater) to repeat groups of objects or MIDI files.
 * [Sanitizer](xref:a_sanitizer) to clean a MIDI file, removing redundant events and so on.
 * [CSV serializer](xref:a_csv_serializer) to convert MIDI objects to CSV representation and read them back.
+
+## Asynchronous CSV I/O
+
+[`CsvSerializer.SerializeToCsvAsync`](xref:Melanchall.DryWetMidi.Tools.CsvSerializer.SerializeToCsvAsync*)
+and
+[`CsvSerializer.DeserializeFileFromCsvAsync`](xref:Melanchall.DryWetMidi.Tools.CsvSerializer.DeserializeFileFromCsvAsync*)
+await stream writes and reads. Formatting, parsing, and object reconstruction
+run on the calling thread until an incomplete I/O operation is awaited.
+Subsequent processing runs on the continuation thread; these methods do not
+schedule CPU-bound processing on a background worker.
+
+CSV import is a bulk operation: the returned task completes with a fully
+materialized result, not a lazy asynchronous sequence. Export writes CSV data
+as the input is processed. Caller-supplied streams remain caller-owned;
+path overloads manage their own file streams. Cancellation or failure can leave
+partial output, and no rollback or atomic replacement is implied.
+
+For example, export a MIDI file to CSV and import it again:
+
+```csharp
+using (var cancellation = new CancellationTokenSource())
+{
+    cancellation.CancelAfter(TimeSpan.FromSeconds(30));
+
+    try
+    {
+        var midiFile = await MidiFile.ReadAsync(
+            "input.mid",
+            cancellationToken: cancellation.Token);
+
+        await midiFile.SerializeToCsvAsync(
+            "output.csv",
+            overwriteFile: true,
+            cancellationToken: cancellation.Token);
+
+        var restoredFile = await CsvSerializer.DeserializeFileFromCsvAsync(
+            "output.csv",
+            cancellationToken: cancellation.Token);
+
+        await restoredFile.WriteAsync(
+            "restored.mid",
+            overwriteFile: true,
+            cancellationToken: cancellation.Token);
+    }
+    catch (OperationCanceledException)
+    {
+        Console.WriteLine("Canceled; output files may be incomplete.");
+    }
+}
+```
+
+Do not mutate the input, its settings, or its collections while an operation
+uses them. Asynchronous I/O does not add thread safety.

@@ -1,7 +1,10 @@
-﻿using System.Linq;
+﻿using System.IO;
+using System.Linq;
 using Melanchall.DryWetMidi.Core;
 using NUnit.Framework;
 using NUnit.Framework.Legacy;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Melanchall.DryWetMidi.Tests.Core
 {
@@ -38,6 +41,25 @@ namespace Melanchall.DryWetMidi.Tests.Core
 
             protected override void WriteContent(MidiWriter writer, WritingSettings settings)
             {
+            }
+
+            protected override Task ReadContentAsync(
+                MidiReader reader,
+                ReadingSettings settings,
+                int size,
+                CancellationToken cancellationToken = default)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                return Task.CompletedTask;
+            }
+
+            protected override Task WriteContentAsync(
+                MidiWriter writer,
+                WritingSettings settings,
+                CancellationToken cancellationToken = default)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                return Task.CompletedTask;
             }
 
             #endregion
@@ -80,12 +102,53 @@ namespace Melanchall.DryWetMidi.Tests.Core
             {
             }
 
+            protected override Task ReadContentAsync(
+                MidiReader reader,
+                ReadingSettings settings,
+                uint size,
+                CancellationToken cancellationToken)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                ReadContent(reader, settings, size);
+                return Task.CompletedTask;
+            }
+
+            protected override Task WriteContentAsync(
+                MidiWriter writer,
+                WritingSettings settings,
+                CancellationToken cancellationToken)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                WriteContent(writer, settings);
+                return Task.CompletedTask;
+            }
+
             #endregion
         }
 
         #endregion
 
         #region Test methods
+
+        [Test]
+        public async Task ReadWriteEmptyCustomChunk_CompletedTaskDelegation()
+        {
+            using var stream = new MemoryStream();
+            var file = new MidiFile(new EmptyCustomChunk());
+            var settings = new ReadingSettings
+            {
+                CustomChunkTypes = new ChunkTypesCollection { { typeof(EmptyCustomChunk), EmptyCustomChunk.Id } }
+            };
+
+            await file.WriteAsync(stream);
+            stream.Position = 0;
+            var actual = await MidiFile.ReadAsync(stream, settings);
+
+            ClassicAssert.AreEqual(1, actual.Chunks.Count, "Reading changed the number of empty custom chunks.");
+            ClassicAssert.IsInstanceOf<EmptyCustomChunk>(actual.Chunks[0], "Reading did not use the empty custom chunk implementation.");
+            ClassicAssert.AreEqual(stream.Length, stream.Position, "Reading did not consume the empty custom chunk header.");
+            ClassicAssert.IsTrue(stream.CanRead, "Reading disposed the caller-owned stream.");
+        }
 
         [Test]
         public void ReadZeroLengthData_TextEvent_ReadAsEmptyObject()

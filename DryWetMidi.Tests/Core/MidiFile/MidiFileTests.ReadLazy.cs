@@ -3,6 +3,9 @@ using Melanchall.DryWetMidi.Core;
 using NUnit.Framework;
 using NUnit.Framework.Legacy;
 using System.Linq;
+using System.Collections.Generic;
+using System.IO;
+using System.Threading;
 
 namespace Melanchall.DryWetMidi.Tests.Core
 {
@@ -241,11 +244,84 @@ namespace Melanchall.DryWetMidi.Tests.Core
                         ClassicAssert.IsTrue(AreTokensEqual(expectedToken, actualToken), $"Invalid token {i}. Actual: {actualToken}. Expected: {expectedToken}.");
                     }
                 }
+
+                using (var reader = MidiFile.ReadLazyAsync(
+                    filePath,
+                    readingSettings,
+                    CancellationToken.None).Result)
+                {
+                    CheckAsyncTokens(reader, expectedTokens);
+                }
+
+                using (var reader = MidiFile.ReadLazyAsync(
+                    filePath,
+                    readingSettings,
+                    CancellationToken.None).Result)
+                {
+                    CheckAsyncTokens(reader, expectedTokens, enumerate: true);
+                }
+
+                using (var stream = File.OpenRead(filePath))
+                using (var reader = MidiFile.ReadLazyAsync(
+                    stream,
+                    readingSettings,
+                    CancellationToken.None).Result)
+                {
+                    CheckAsyncTokens(reader, expectedTokens);
+                }
+
+                using (var stream = new NonSeekableStream(filePath))
+                using (var reader = MidiFile.ReadLazyAsync(
+                    stream,
+                    readingSettings,
+                    CancellationToken.None).Result)
+                {
+                    CheckAsyncTokens(reader, expectedTokens);
+                }
             }
             finally
             {
                 FileOperations.DeleteFile(filePath);
             }
+        }
+
+        private void CheckAsyncTokens(MidiTokensReader reader, MidiToken[] expectedTokens, bool enumerate = false)
+        {
+            var actualTokens = new List<MidiToken>();
+
+            if (enumerate)
+            {
+                var enumerator = reader.EnumerateTokensAsync(CancellationToken.None).GetAsyncEnumerator(CancellationToken.None);
+                try
+                {
+                    while (enumerator.MoveNextAsync().AsTask().Result)
+                    {
+                        actualTokens.Add(enumerator.Current);
+                    }
+                }
+                finally
+                {
+                    enumerator.DisposeAsync().AsTask().Wait();
+                }
+            }
+            else
+            {
+                MidiToken token;
+
+                while ((token = reader.ReadTokenAsync(CancellationToken.None).Result) != null)
+                {
+                    actualTokens.Add(token);
+                }
+            }
+
+            ClassicAssert.AreEqual(expectedTokens.Length, actualTokens.Count, "Invalid async tokens count.");
+
+            for (var i = 0; i < expectedTokens.Length; i++)
+            {
+                ClassicAssert.IsTrue(AreTokensEqual(expectedTokens[i], actualTokens[i]), $"Invalid async token {i}.");
+            }
+
+            reader.DisposeAsync().AsTask().Wait();
         }
 
         private MidiToken[] ReadAllTokens(MidiTokensReader reader) =>

@@ -12,7 +12,7 @@ namespace Melanchall.DryWetMidi.Interaction
     /// low memory consumption. See
     /// <see href="xref:a_file_lazy_reading_writing">Lazy reading/writing</see> article to learn more.
     /// </summary>
-    public sealed class TimedObjectsWriter : IDisposable
+    public sealed partial class TimedObjectsWriter : IDisposable, IAsyncDisposable
     {
         #region Fields
 
@@ -37,6 +37,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
             _tokensWriter = tokensWriter;
             _tokensWriter.BeforeEndTrackChunk = Flush;
+            _tokensWriter.BeforeEndTrackChunkAsync = FlushPendingAsync;
         }
 
         #endregion
@@ -58,6 +59,11 @@ namespace Melanchall.DryWetMidi.Interaction
         /// (see <see cref="MidiTokensWriter.StartTrackChunk"/>).</exception>
         public void WriteObject(ITimedObject timedObject)
         {
+            EnsureNoAsyncOperation();
+
+            if (_disposed)
+                throw new ObjectDisposedException(nameof(TimedObjectsWriter));
+
             ThrowIfArgument.IsNull(nameof(timedObject), timedObject);
 
             var time = timedObject.Time;
@@ -91,6 +97,11 @@ namespace Melanchall.DryWetMidi.Interaction
         /// (see <see cref="MidiTokensWriter.StartTrackChunk"/>).</exception>
         public void WriteObjects(IEnumerable<ITimedObject?> timedObjects)
         {
+            EnsureNoAsyncOperation();
+
+            if (_disposed)
+                throw new ObjectDisposedException(nameof(TimedObjectsWriter));
+
             ThrowIfArgument.IsNull(nameof(timedObjects), timedObjects);
 
             foreach (var obj in timedObjects.OfType<ITimedObject>())
@@ -193,6 +204,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
         private void Flush()
         {
+            EnsureNoAsyncOperation();
             foreach (var timedEvent in _timedEvents)
             {
                 WriteTimedEvent(timedEvent);
@@ -211,6 +223,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         public void Dispose()
         {
+            EnsureNoAsyncOperation();
             Dispose(true);
         }
 

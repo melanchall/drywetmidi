@@ -1,4 +1,6 @@
 ﻿using Melanchall.DryWetMidi.Common;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Melanchall.DryWetMidi.Core
 {
@@ -15,6 +17,22 @@ namespace Melanchall.DryWetMidi.Core
             }
 
             midiEvent.Write(writer, settings);
+        }
+
+        public async Task WriteAsync(
+            MidiEvent midiEvent,
+            MidiWriter writer,
+            WritingSettings settings,
+            bool writeStatusByte,
+            CancellationToken cancellationToken)
+        {
+            if (writeStatusByte)
+            {
+                var statusByte = GetStatusByte(midiEvent);
+                await writer.WriteByteAsync(statusByte, cancellationToken).ConfigureAwait(false);
+            }
+
+            await midiEvent.WriteAsync(writer, settings, cancellationToken).ConfigureAwait(false);
         }
 
         public int CalculateSize(MidiEvent midiEvent, WritingSettings settings, bool writeStatusByte)

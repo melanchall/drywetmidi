@@ -1,4 +1,7 @@
-﻿namespace Melanchall.DryWetMidi.Core
+﻿using System.Threading;
+using System.Threading.Tasks;
+
+namespace Melanchall.DryWetMidi.Core
 {
     internal sealed class SystemRealTimeEventReader : IEventReader
     {
@@ -6,32 +9,47 @@
 
         public MidiEvent? Read(MidiReader reader, ReadingSettings settings, byte currentStatusByte)
         {
-            SystemRealTimeEvent? systemRealTimeEvent = null;
+            var systemRealTimeEvent = CreateEvent(currentStatusByte);
+            systemRealTimeEvent?.Read(reader, settings, MidiEvent.UnknownContentSize);
+            return systemRealTimeEvent;
+        }
 
+        public async Task<MidiEvent?> ReadAsync(
+            MidiReader reader,
+            ReadingSettings settings,
+            byte currentStatusByte,
+            CancellationToken cancellationToken)
+        {
+            var systemRealTimeEvent = CreateEvent(currentStatusByte);
+            if (systemRealTimeEvent != null)
+                await systemRealTimeEvent.ReadAsync(reader, settings, MidiEvent.UnknownContentSize, cancellationToken).ConfigureAwait(false);
+
+            return systemRealTimeEvent;
+        }
+
+        #endregion
+
+        #region Methods
+
+        private static SystemRealTimeEvent? CreateEvent(byte currentStatusByte)
+        {
             switch (currentStatusByte)
             {
                 case EventStatusBytes.SystemRealTime.ActiveSensing:
-                    systemRealTimeEvent = new ActiveSensingEvent();
-                    break;
+                    return new ActiveSensingEvent();
                 case EventStatusBytes.SystemRealTime.Continue:
-                    systemRealTimeEvent = new ContinueEvent();
-                    break;
+                    return new ContinueEvent();
                 case EventStatusBytes.SystemRealTime.Reset:
-                    systemRealTimeEvent = new ResetEvent();
-                    break;
+                    return new ResetEvent();
                 case EventStatusBytes.SystemRealTime.Start:
-                    systemRealTimeEvent = new StartEvent();
-                    break;
+                    return new StartEvent();
                 case EventStatusBytes.SystemRealTime.Stop:
-                    systemRealTimeEvent = new StopEvent();
-                    break;
+                    return new StopEvent();
                 case EventStatusBytes.SystemRealTime.TimingClock:
-                    systemRealTimeEvent = new TimingClockEvent();
-                    break;
+                    return new TimingClockEvent();
             }
 
-            systemRealTimeEvent?.Read(reader, settings, MidiEvent.UnknownContentSize);
-            return systemRealTimeEvent;
+            return null;
         }
 
         #endregion

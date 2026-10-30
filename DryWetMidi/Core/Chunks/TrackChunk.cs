@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Melanchall.DryWetMidi.Core
 {
@@ -226,6 +228,127 @@ namespace Melanchall.DryWetMidi.Core
             return midiEvent;
         }
 
+        /// <inheritdoc/>
+        protected override async Task ReadContentAsync(
+            MidiReader reader,
+            ReadingSettings settings,
+            uint size,
+            CancellationToken cancellationToken = default)
+        {
+            var endReaderPosition = reader.Position + size;
+            var endOfTrackPresented = false;
+            byte? currentChannelEventStatusByte = null;
+            var estimateMemory = settings.MaxMemorySize != null;
+            var eventsCapacity = Events.Capacity;
+
+            while (reader.Position < endReaderPosition && !await reader.EndReachedAsync(cancellationToken).ConfigureAwait(false))
+            {
+                var result = await MidiFileReadingUtilities.ReadEventAsync(
+                    reader,
+                    settings,
+                    currentChannelEventStatusByte,
+                    cancellationToken).ConfigureAwait(false);
+                currentChannelEventStatusByte = result.Status;
+                var midiEvent = result.Event;
+                if (midiEvent == null)
+                    continue;
+
+                if (midiEvent is EndOfTrackEvent)
+                {
+                    endOfTrackPresented = true;
+                    if (settings.EndOfTrackStoringPolicy == EndOfTrackStoringPolicy.Store)
+                    {
+                        Events.Add(midiEvent);
+
+                        if (estimateMemory)
+                            reader.AddEstimatedMemory(
+                                MemorySizeEstimator.EstimateEvent(midiEvent) +
+                                MemorySizeEstimator.EstimateReferencesArray(Events.Capacity) - MemorySizeEstimator.EstimateReferencesArray(eventsCapacity),
+                                settings);
+                    }
+
+                    break;
+                }
+
+                if (estimateMemory)
+                    reader.AddEstimatedMemory(MemorySizeEstimator.EstimateEvent(midiEvent), settings);
+
+                Events.AddInternal(midiEvent);
+
+                if (estimateMemory && Events.Capacity != eventsCapacity)
+                {
+                    reader.AddEstimatedMemory(
+                        MemorySizeEstimator.EstimateReferencesArray(Events.Capacity) - MemorySizeEstimator.EstimateReferencesArray(eventsCapacity),
+                        settings);
+                    eventsCapacity = Events.Capacity;
+                }
+            }
+
+            if (settings.MissedEndOfTrackPolicy == MissedEndOfTrackPolicy.Abort && !endOfTrackPresented)
+                throw new MissedEndOfTrackEventException();
+
+            Events.IsInitialState = true;
+        }
+
+        /// <inheritdoc/>
+        protected override async Task WriteContentAsync(
+            MidiWriter writer,
+            WritingSettings settings,
+            CancellationToken cancellationToken = default)
+        {
+            byte? runningStatus = null;
+            var skipTempo = true;
+            var skipKey = true;
+            var skipTime = true;
+            var additionalDelta = 0L;
+            var lastEnd = false;
+
+            foreach (var midiEvent in Events)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                IEventWriter? eventWriter = null;
+                MidiEvent? eventToWrite = null;
+                var writeStatus = true;
+                ProcessEvent(
+                    midiEvent,
+                    settings,
+                    (w, e, s) =>
+                    {
+                        eventWriter = w;
+                        eventToWrite = e;
+                        writeStatus = s;
+                    },
+                    ref lastEnd,
+                    ref additionalDelta,
+                    ref runningStatus,
+                    ref skipTempo,
+                    ref skipKey,
+                    ref skipTime);
+
+                if (eventToWrite != null && eventWriter != null)
+                {
+                    await writer.WriteVlqNumberAsync(eventToWrite.DeltaTime, cancellationToken).ConfigureAwait(false);
+                    await eventWriter.WriteAsync(eventToWrite, writer, settings, writeStatus, cancellationToken).ConfigureAwait(false);
+                }
+            }
+
+            var end = new EndOfTrackEvent { DeltaTime = lastEnd ? additionalDelta : 0 };
+            await writer.WriteVlqNumberAsync(end.DeltaTime, cancellationToken).ConfigureAwait(false);
+            await EventWriterFactory.GetWriter(end).WriteAsync(end, writer, settings, true, cancellationToken).ConfigureAwait(false);
+        }
+
+        internal uint GetContentSize(WritingSettings settings, CancellationToken cancellationToken)
+        {
+            uint size = 0;
+            ProcessEvents(
+                settings,
+                (writer, midiEvent, writeStatus) =>
+                    size += (uint)(midiEvent.DeltaTime.GetVlqLength() + writer.CalculateSize(midiEvent, settings, writeStatus)),
+                cancellationToken);
+
+            return size;
+        }
+
         internal static void ProcessEvent(
             MidiEvent midiEvent,
             WritingSettings settings,
@@ -303,7 +426,10 @@ namespace Melanchall.DryWetMidi.Core
             eventHandler(eventWriter, eventToWrite, writeStatusByte);
         }
 
-        private void ProcessEvents(WritingSettings settings, Action<IEventWriter, MidiEvent, bool> eventHandler)
+        private void ProcessEvents(
+            WritingSettings settings,
+            Action<IEventWriter, MidiEvent, bool> eventHandler,
+            CancellationToken cancellationToken = default)
         {
             byte? runningStatus = null;
 
@@ -315,6 +441,7 @@ namespace Melanchall.DryWetMidi.Core
 
             foreach (var midiEvent in Events)
             {
+                cancellationToken.ThrowIfCancellationRequested();
                 ProcessEvent(
                     midiEvent,
                     settings,
