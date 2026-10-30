@@ -182,6 +182,31 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 writer.WriteByte(C);
             }
 
+            protected override async Task ReadContentAsync(
+                MidiReader reader,
+                ReadingSettings settings,
+                int size,
+                CancellationToken cancellationToken = default)
+            {
+                A = await reader.ReadVlqNumberAsync(cancellationToken).ConfigureAwait(false);
+
+                var bLength = await reader.ReadVlqNumberAsync(cancellationToken).ConfigureAwait(false);
+                B = await reader.ReadStringAsync(bLength, cancellationToken).ConfigureAwait(false);
+
+                C = await reader.ReadByteAsync(cancellationToken).ConfigureAwait(false);
+            }
+
+            protected override async Task WriteContentAsync(
+                MidiWriter writer,
+                WritingSettings settings,
+                CancellationToken cancellationToken = default)
+            {
+                await writer.WriteVlqNumberAsync(A, cancellationToken).ConfigureAwait(false);
+                await writer.WriteVlqNumberAsync(B?.Length ?? 0, cancellationToken).ConfigureAwait(false);
+                await writer.WriteStringAsync(B, cancellationToken).ConfigureAwait(false);
+                await writer.WriteByteAsync(C, cancellationToken).ConfigureAwait(false);
+            }
+
             public override bool Equals(object obj) => obj is CustomMetaEvent customEvent &&
                 customEvent.A == A &&
                 customEvent.B == B &&

@@ -40,6 +40,25 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 if (Payload != null)
                     writer.WriteBytes(Payload);
             }
+
+            protected override async Task ReadContentAsync(
+                MidiReader reader,
+                ReadingSettings settings,
+                int size,
+                CancellationToken cancellationToken = default)
+            {
+                Payload = await reader.ReadBytesAsync(size, cancellationToken).ConfigureAwait(false);
+                Description = new string('a', size);
+            }
+
+            protected override async Task WriteContentAsync(
+                MidiWriter writer,
+                WritingSettings settings,
+                CancellationToken cancellationToken = default)
+            {
+                if (Payload != null)
+                    await writer.WriteBytesAsync(Payload, cancellationToken).ConfigureAwait(false);
+            }
         }
 
         private sealed class PayloadCustomChunk : MidiChunk

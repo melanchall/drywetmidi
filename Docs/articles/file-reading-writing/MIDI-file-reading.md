@@ -54,10 +54,11 @@ caller-supplied streams open on completion or failure, so dispose them separatel
 Cancellation is cooperative and raises `OperationCanceledException`; it cannot
 interrupt arbitrary synchronous custom chunk or event code. Parsing still uses
 CPU time, and asynchronous I/O does not move all work to a background thread.
-Custom chunks must implement their asynchronous content methods; an override
-that throws `NotSupportedException` makes asynchronous reading of that chunk fail.
-See [Custom chunks](xref:a_custom_chunk) for asynchronous and synchronous-execution
-examples.
+Custom chunks and meta events must implement their asynchronous content methods;
+an override that throws `NotSupportedException` makes asynchronous reading fail
+when that object is reached. See [Custom chunks](xref:a_custom_chunk) and
+[Custom meta events](xref:a_custom_meta_event) for asynchronous and
+synchronous-execution examples.
 
 ## Reading corrupted files
 

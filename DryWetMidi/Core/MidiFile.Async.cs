@@ -21,8 +21,6 @@ namespace Melanchall.DryWetMidi.Core
         /// Stream reads are awaited. Chunks and events read their content using asynchronous
         /// reader methods. Whole-file buffering is used only when requested
         /// by <see cref="ReaderSettings.BufferingPolicy"/>.
-        /// Custom meta events retain their synchronous content callbacks; only their payloads
-        /// are buffered before invoking those callbacks.
         /// </remarks>
         /// <inheritdoc cref="Read(Stream, ReadingSettings)" path="/member/exception"/>
         /// <exception cref="OperationCanceledException"><paramref name="cancellationToken"/> was canceled.</exception>
@@ -88,8 +86,6 @@ namespace Melanchall.DryWetMidi.Core
         /// Chunks and events write their content using asynchronous writer methods.
         /// Stream writes and flushing are awaited. Cancellation or failure can
         /// leave partially written data in the stream.
-        /// Custom meta events retain their synchronous content callbacks; only their payloads
-        /// are buffered before writing them asynchronously.
         /// </remarks>
         /// <inheritdoc cref="Write(Stream, MidiFileFormat, WritingSettings)" path="/member/exception"/>
         /// <exception cref="OperationCanceledException"><paramref name="cancellationToken"/> was canceled.</exception>

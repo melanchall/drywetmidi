@@ -205,11 +205,11 @@ namespace Melanchall.DryWetMidi.Core
         }
 
         /// <inheritdoc/>
-        internal override async Task ReadAsync(
+        protected override async Task ReadContentAsync(
             MidiReader reader,
             ReadingSettings settings,
             int size,
-            CancellationToken cancellationToken)
+            CancellationToken cancellationToken = default)
         {
             var policy = settings.InvalidMetaEventParameterValuePolicy;
             var formatAndHours = await reader.ReadByteAsync(cancellationToken).ConfigureAwait(false);
@@ -239,10 +239,11 @@ namespace Melanchall.DryWetMidi.Core
             _smpteData = new SmpteData(format, hours, minutes, seconds, frames, subFrames);
         }
 
-        internal override async Task WriteAsync(
+        /// <inheritdoc/>
+        protected override async Task WriteContentAsync(
             MidiWriter writer,
             WritingSettings settings,
-            CancellationToken cancellationToken)
+            CancellationToken cancellationToken = default)
         {
             await writer.WriteByteAsync(_smpteData.GetFormatAndHours(), cancellationToken).ConfigureAwait(false);
             await writer.WriteByteAsync(_smpteData.Minutes, cancellationToken).ConfigureAwait(false);

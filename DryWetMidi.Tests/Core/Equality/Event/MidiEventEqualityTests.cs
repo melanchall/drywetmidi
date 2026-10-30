@@ -4,6 +4,8 @@ using NUnit.Framework;
 using NUnit.Framework.Legacy;
 using System;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Melanchall.DryWetMidi.Tests.Core
 {
@@ -16,8 +18,10 @@ namespace Melanchall.DryWetMidi.Tests.Core
         {
             private readonly string _data;
 
-            public CustomMetaEvent(string data) =>
+            public CustomMetaEvent(string data)
+            {
                 _data = data;
+            }
 
             protected override MidiEvent CloneEvent() =>
                 new CustomMetaEvent(_data);
@@ -29,6 +33,19 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 throw new NotImplementedException();
 
             protected override void WriteContent(MidiWriter writer, WritingSettings settings) =>
+                throw new NotImplementedException();
+
+            protected override Task ReadContentAsync(
+                MidiReader reader,
+                ReadingSettings settings,
+                int size,
+                CancellationToken cancellationToken = default) =>
+                throw new NotImplementedException();
+
+            protected override Task WriteContentAsync(
+                MidiWriter writer,
+                WritingSettings settings,
+                CancellationToken cancellationToken = default) =>
                 throw new NotImplementedException();
 
             public override string ToString() =>

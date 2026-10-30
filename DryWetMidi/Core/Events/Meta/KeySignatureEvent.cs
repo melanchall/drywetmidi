@@ -191,11 +191,11 @@ namespace Melanchall.DryWetMidi.Core
         }
 
         /// <inheritdoc/>
-        internal override async Task ReadAsync(
+        protected override async Task ReadContentAsync(
             MidiReader reader,
             ReadingSettings settings,
             int size,
-            CancellationToken cancellationToken)
+            CancellationToken cancellationToken = default)
         {
             var invalidMetaEventParameterValuePolicy = settings.InvalidMetaEventParameterValuePolicy;
 
@@ -214,10 +214,11 @@ namespace Melanchall.DryWetMidi.Core
                 invalidMetaEventParameterValuePolicy);
         }
 
-        internal override async Task WriteAsync(
+        /// <inheritdoc/>
+        protected override async Task WriteContentAsync(
             MidiWriter writer,
             WritingSettings settings,
-            CancellationToken cancellationToken)
+            CancellationToken cancellationToken = default)
         {
             await writer.WriteSByteAsync(Key, cancellationToken).ConfigureAwait(false);
             await writer.WriteByteAsync(Scale, cancellationToken).ConfigureAwait(false);

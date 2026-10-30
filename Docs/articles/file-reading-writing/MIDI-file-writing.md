@@ -55,10 +55,11 @@ Cancellation raises `OperationCanceledException` and can leave partially written
 output, as can other failures. Overwriting is not an atomic replacement and does
 not roll back on failure. Encoding and custom chunk or event code still use CPU
 time; asynchronous I/O does not guarantee background-thread execution or interrupt
-arbitrary synchronous custom code. Custom chunks must implement their asynchronous
+arbitrary synchronous custom code. Custom chunks and meta events must implement their asynchronous
 content methods; an override that throws `NotSupportedException` makes asynchronous
-writing of that chunk fail. See [Custom chunks](xref:a_custom_chunk) for
-asynchronous and synchronous-execution examples.
+writing fail when that object is reached. See [Custom chunks](xref:a_custom_chunk)
+and [Custom meta events](xref:a_custom_meta_event) for asynchronous and
+synchronous-execution examples.
 
 ## Compression
 

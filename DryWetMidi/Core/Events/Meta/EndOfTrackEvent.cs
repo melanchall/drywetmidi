@@ -33,20 +33,21 @@ namespace Melanchall.DryWetMidi.Core
         }
 
         /// <inheritdoc/>
-        internal override Task ReadAsync(
+        protected override Task ReadContentAsync(
             MidiReader reader,
             ReadingSettings settings,
             int size,
-            CancellationToken cancellationToken)
+            CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
             return Task.CompletedTask;
         }
 
-        internal override Task WriteAsync(
+        /// <inheritdoc/>
+        protected override Task WriteContentAsync(
             MidiWriter writer,
             WritingSettings settings,
-            CancellationToken cancellationToken)
+            CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
             return Task.CompletedTask;

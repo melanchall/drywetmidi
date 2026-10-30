@@ -320,9 +320,11 @@ namespace Melanchall.DryWetMidi.Tests.Core
         }
 
         [Test]
-        public async Task CustomEvent_UnderreadLargePayload_PreservesFollowingEvent()
+        public async Task CustomEvent_UnderreadLargePayload_PreservesFollowingEvent(
+            [Values(2, 4096, 100000)] int payloadSize,
+            [Values] bool nonSeekable,
+            [Values] bool lazy)
         {
-            const int payloadSize = 4096;
             using var bytes = new MemoryStream();
 
             using (var writer = new MidiWriter(bytes, new WriterSettings { UseBuffering = false }))
@@ -333,7 +335,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 writer.WriteWord(1);
                 writer.WriteWord(96);
                 writer.WriteString("MTrk");
-                writer.WriteDword(payloadSize + 13);
+                writer.WriteDword((uint)(payloadSize + DataTypesUtilities.GetVlqLength(payloadSize) + 11));
                 writer.WriteByte(0);
                 writer.WriteByte(0xFF);
                 writer.WriteByte(0x5A);
@@ -346,19 +348,42 @@ namespace Melanchall.DryWetMidi.Tests.Core
             var settings = new ReadingSettings
             {
                 CustomMetaEventTypes = new EventTypesCollection { { typeof(CustomEvent), 0x5A } },
+                EndOfTrackStoringPolicy = EndOfTrackStoringPolicy.Store,
                 ReaderSettings = new ReaderSettings { BufferingPolicy = BufferingPolicy.DontUseBuffering }
             };
             bytes.Position = 0;
             var expected = MidiFile.Read(bytes, settings);
-            using var input = new AsyncOnlyStream(bytes.ToArray(), false, 113);
+            using var input = new AsyncOnlyStream(bytes.ToArray(), !nonSeekable, 113);
 
-            var actual = await MidiFile.ReadAsync(input, settings);
+            MidiFile actual;
+            if (lazy)
+            {
+                await using var reader = await MidiFile.ReadLazyAsync(input, settings);
+                var track = new TrackChunk();
 
-            MidiAsserts.AreEqual(expected, actual, true, "Async custom meta-event under-read changed event framing.");
+                await foreach (var token in reader.EnumerateTokensAsync())
+                {
+                    if (token is MidiEventToken eventToken)
+                        track.Events.Add(eventToken.Event);
+                }
+
+                actual = new MidiFile(track);
+            }
+            else
+                actual = await MidiFile.ReadAsync(input, settings);
+
+            MidiAsserts.AreEqual(
+                expected.GetTrackChunks().Single(),
+                actual.GetTrackChunks().Single(),
+                true,
+                "Async custom meta-event under-read changed event framing.");
             var events = actual.GetTrackChunks().Single().Events;
             ClassicAssert.AreEqual(42, ((CustomEvent)events[0]).Value, "The custom event did not read its first payload byte.");
             ClassicAssert.AreEqual(1, events.OfType<NoteOnEvent>().Count(), "Skipping custom event padding consumed the following note event.");
-            ClassicAssert.AreEqual(payloadSize + 35, input.BytesRead, "Reading did not consume the full custom payload and following events.");
+            ClassicAssert.AreEqual(
+                bytes.Length,
+                nonSeekable ? input.BytesRead : input.Position,
+                "Reading did not consume the full custom payload and following events.");
             ClassicAssert.IsFalse(input.IsDisposed, "Custom event reading disposed the caller-owned stream.");
         }
 
@@ -719,6 +744,23 @@ namespace Melanchall.DryWetMidi.Tests.Core
             protected override void ReadContent(MidiReader reader, ReadingSettings settings, int size) => Value = reader.ReadByte();
 
             protected override void WriteContent(MidiWriter writer, WritingSettings settings) => writer.WriteByte(Value);
+
+            protected override async Task ReadContentAsync(
+                MidiReader reader,
+                ReadingSettings settings,
+                int size,
+                CancellationToken cancellationToken = default)
+            {
+                Value = await reader.ReadByteAsync(cancellationToken).ConfigureAwait(false);
+            }
+
+            protected override async Task WriteContentAsync(
+                MidiWriter writer,
+                WritingSettings settings,
+                CancellationToken cancellationToken = default)
+            {
+                await writer.WriteByteAsync(Value, cancellationToken).ConfigureAwait(false);
+            }
 
             public override bool Equals(object obj) => obj is CustomEvent other && other.Value == Value;
 

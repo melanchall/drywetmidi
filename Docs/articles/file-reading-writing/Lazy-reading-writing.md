@@ -252,6 +252,12 @@ open when the token reader or writer is disposed; the caller must dispose them.
 Asynchronous output still requires a seekable stream to patch track lengths and
 track counts during finalization.
 
+Custom meta events use their mandatory async content overrides during async
+event reading and writing. These receive the original reader or writer without
+an intermediate payload reader or writer. See
+[Custom meta events](xref:a_custom_meta_event) for implementations and ownership
+and cancellation guidance.
+
 Pass cancellation tokens to both initialization and subsequent operations.
 For example, using a `CancellationToken` named `cancellationToken`:
 
