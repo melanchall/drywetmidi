@@ -53,7 +53,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
 
                 ClassicAssert.DoesNotThrow(() =>
                     {
-                        midiFile = MidiFile.Read(filePath);
+                        midiFile = MidiFileTestUtilities.ReadWithAsyncChecks(filePath);
                         midiFile2 = MidiFileTestUtilities.Read(midiFile, null, null);
                     },
                     $"Read/Write/Read failed for '{filePath}'.");
@@ -72,7 +72,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 if (noFile)
                     continue;
 
-                var midiFile = MidiFile.Read(filePath);
+                var midiFile = MidiFileTestUtilities.ReadWithAsyncChecks(filePath);
                 MidiAsserts.AreEqual(midiFile, referenceMidiFile, false, $"File '{filePath}' read wrong.");
             }
         }
@@ -116,18 +116,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
 
         private MidiFile WriteRead(MidiFile midiFile, WritingSettings writingSettings = null, ReadingSettings readingSettings = null)
         {
-            var filePath = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid():N}.mid");
-
-            try
-            {
-                midiFile.Write(filePath, settings: writingSettings);
-                midiFile = MidiFile.Read(filePath, readingSettings);
-                return midiFile;
-            }
-            finally
-            {
-                FileOperations.DeleteFile(filePath);
-            }
+            return MidiFileTestUtilities.Read(midiFile, writingSettings, readingSettings, MidiFileFormat.MultiTrack);
         }
 
         #endregion

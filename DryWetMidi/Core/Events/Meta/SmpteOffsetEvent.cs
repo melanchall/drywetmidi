@@ -1,6 +1,8 @@
 ﻿using System;
 using System.ComponentModel;
 using Melanchall.DryWetMidi.Common;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Melanchall.DryWetMidi.Core
 {
@@ -200,6 +202,54 @@ namespace Melanchall.DryWetMidi.Core
         protected override void WriteContent(MidiWriter writer, WritingSettings settings)
         {
             _smpteData.Write(writer.WriteByte);
+        }
+
+        /// <inheritdoc/>
+        protected override async Task ReadContentAsync(
+            MidiReader reader,
+            ReadingSettings settings,
+            int size,
+            CancellationToken cancellationToken = default)
+        {
+            var policy = settings.InvalidMetaEventParameterValuePolicy;
+            var formatAndHours = await reader.ReadByteAsync(cancellationToken).ConfigureAwait(false);
+            var format = SmpteData.GetFormat(formatAndHours);
+            var hours = ProcessValue(SmpteData.GetHours(formatAndHours), nameof(Hours), MaxHours, policy);
+            var minutes = ProcessValue(
+                await reader.ReadByteAsync(cancellationToken).ConfigureAwait(false),
+                nameof(Minutes),
+                MaxMinutes,
+                policy);
+            var seconds = ProcessValue(
+                await reader.ReadByteAsync(cancellationToken).ConfigureAwait(false),
+                nameof(Seconds),
+                MaxSeconds,
+                policy);
+            var frames = ProcessValue(
+                await reader.ReadByteAsync(cancellationToken).ConfigureAwait(false),
+                nameof(Frames),
+                (byte)((byte)format - 1),
+                policy);
+            var subFrames = ProcessValue(
+                await reader.ReadByteAsync(cancellationToken).ConfigureAwait(false),
+                nameof(SubFrames),
+                MaxSubFrames,
+                policy);
+
+            _smpteData = new SmpteData(format, hours, minutes, seconds, frames, subFrames);
+        }
+
+        /// <inheritdoc/>
+        protected override async Task WriteContentAsync(
+            MidiWriter writer,
+            WritingSettings settings,
+            CancellationToken cancellationToken = default)
+        {
+            await writer.WriteByteAsync(_smpteData.GetFormatAndHours(), cancellationToken).ConfigureAwait(false);
+            await writer.WriteByteAsync(_smpteData.Minutes, cancellationToken).ConfigureAwait(false);
+            await writer.WriteByteAsync(_smpteData.Seconds, cancellationToken).ConfigureAwait(false);
+            await writer.WriteByteAsync(_smpteData.Frames, cancellationToken).ConfigureAwait(false);
+            await writer.WriteByteAsync(_smpteData.SubFrames, cancellationToken).ConfigureAwait(false);
         }
 
         /// <inheritdoc/>

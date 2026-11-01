@@ -1,4 +1,7 @@
-﻿namespace Melanchall.DryWetMidi.Core
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace Melanchall.DryWetMidi.Core
 {
     /// <summary>
     /// Represents a MIDI Port meta event.
@@ -54,6 +57,28 @@
         protected override void WriteContent(MidiWriter writer, WritingSettings settings)
         {
             writer.WriteByte(Port);
+        }
+
+        /// <inheritdoc/>
+        protected override async Task ReadContentAsync(
+            MidiReader reader,
+            ReadingSettings settings,
+            int size,
+            CancellationToken cancellationToken = default)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            if (size >= 1)
+                Port = await reader.ReadByteAsync(cancellationToken).ConfigureAwait(false);
+        }
+
+        /// <inheritdoc/>
+        protected override Task WriteContentAsync(
+            MidiWriter writer,
+            WritingSettings settings,
+            CancellationToken cancellationToken = default)
+        {
+            return writer.WriteByteAsync(Port, cancellationToken);
         }
 
         /// <inheritdoc/>

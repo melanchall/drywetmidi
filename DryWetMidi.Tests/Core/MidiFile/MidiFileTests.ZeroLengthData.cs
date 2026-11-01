@@ -1,7 +1,10 @@
-﻿using System.Linq;
+﻿using System.IO;
+using System.Linq;
 using Melanchall.DryWetMidi.Core;
 using NUnit.Framework;
 using NUnit.Framework.Legacy;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Melanchall.DryWetMidi.Tests.Core
 {
@@ -38,6 +41,25 @@ namespace Melanchall.DryWetMidi.Tests.Core
 
             protected override void WriteContent(MidiWriter writer, WritingSettings settings)
             {
+            }
+
+            protected override Task ReadContentAsync(
+                MidiReader reader,
+                ReadingSettings settings,
+                int size,
+                CancellationToken cancellationToken = default)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                return Task.CompletedTask;
+            }
+
+            protected override Task WriteContentAsync(
+                MidiWriter writer,
+                WritingSettings settings,
+                CancellationToken cancellationToken = default)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                return Task.CompletedTask;
             }
 
             #endregion
@@ -78,6 +100,27 @@ namespace Melanchall.DryWetMidi.Tests.Core
 
             protected override void WriteContent(MidiWriter writer, WritingSettings settings)
             {
+            }
+
+            protected override Task ReadContentAsync(
+                MidiReader reader,
+                ReadingSettings settings,
+                uint size,
+                CancellationToken cancellationToken)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                ReadContent(reader, settings, size);
+                return Task.CompletedTask;
+            }
+
+            protected override Task WriteContentAsync(
+                MidiWriter writer,
+                WritingSettings settings,
+                CancellationToken cancellationToken)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                WriteContent(writer, settings);
+                return Task.CompletedTask;
             }
 
             #endregion

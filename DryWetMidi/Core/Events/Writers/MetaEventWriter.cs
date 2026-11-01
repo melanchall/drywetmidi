@@ -1,6 +1,8 @@
 ﻿using Melanchall.DryWetMidi.Common;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Melanchall.DryWetMidi.Core
 {
@@ -14,8 +16,48 @@ namespace Melanchall.DryWetMidi.Core
             if (writeStatusByte)
                 writer.WriteByte(EventStatusBytes.Global.Meta);
 
-            //
+            writer.WriteByte(GetMetaStatusByte(midiEvent, settings));
 
+            var contentSize = midiEvent.GetSize(settings);
+            writer.WriteVlqNumber(contentSize);
+            midiEvent.Write(writer, settings);
+        }
+
+        public async Task WriteAsync(
+            MidiEvent midiEvent,
+            MidiWriter writer,
+            WritingSettings settings,
+            bool writeStatusByte,
+            CancellationToken cancellationToken)
+        {
+            if (writeStatusByte)
+                await writer.WriteByteAsync(EventStatusBytes.Global.Meta, cancellationToken).ConfigureAwait(false);
+
+            await writer.WriteByteAsync(GetMetaStatusByte(midiEvent, settings), cancellationToken).ConfigureAwait(false);
+
+            var contentSize = midiEvent.GetSize(settings);
+            await writer.WriteVlqNumberAsync(contentSize, cancellationToken).ConfigureAwait(false);
+            await midiEvent.WriteAsync(writer, settings, cancellationToken).ConfigureAwait(false);
+        }
+
+        public int CalculateSize(MidiEvent midiEvent, WritingSettings settings, bool writeStatusByte)
+        {
+            var contentSize = midiEvent.GetSize(settings);
+            return (writeStatusByte ? 1 : 0) + 1 + contentSize.GetVlqLength() + contentSize;
+        }
+
+        public byte GetStatusByte(MidiEvent midiEvent)
+        {
+            return EventStatusBytes.Global.Meta;
+        }
+
+        #endregion
+
+        #region Methods
+
+        [UnconditionalSuppressMessage("Trimming", "IL2072", Justification = "Custom meta event types are guaranteed to have public parameterless constructors when registered via CustomMetaEventTypes.Add.")]
+        private static byte GetMetaStatusByte(MidiEvent midiEvent, WritingSettings settings)
+        {
             byte statusByte = 0;
 
             switch (midiEvent.EventType)
@@ -86,24 +128,7 @@ namespace Melanchall.DryWetMidi.Core
                     break;
             }
 
-            writer.WriteByte(statusByte);
-
-            //
-
-            var contentSize = midiEvent.GetSize(settings);
-            writer.WriteVlqNumber(contentSize);
-            midiEvent.Write(writer, settings);
-        }
-
-        public int CalculateSize(MidiEvent midiEvent, WritingSettings settings, bool writeStatusByte)
-        {
-            var contentSize = midiEvent.GetSize(settings);
-            return (writeStatusByte ? 1 : 0) + 1 + contentSize.GetVlqLength() + contentSize;
-        }
-
-        public byte GetStatusByte(MidiEvent midiEvent)
-        {
-            return EventStatusBytes.Global.Meta;
+            return statusByte;
         }
 
         #endregion

@@ -5,6 +5,8 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Melanchall.DryWetMidi.Tests.Interaction
 {
@@ -36,6 +38,23 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             }
 
             protected override void WriteContent(MidiWriter writer, WritingSettings settings)
+            {
+                throw new NotImplementedException();
+            }
+
+            protected override Task ReadContentAsync(
+                MidiReader reader,
+                ReadingSettings settings,
+                uint size,
+                CancellationToken cancellationToken)
+            {
+                throw new NotImplementedException();
+            }
+
+            protected override Task WriteContentAsync(
+                MidiWriter writer,
+                WritingSettings settings,
+                CancellationToken cancellationToken)
             {
                 throw new NotImplementedException();
             }

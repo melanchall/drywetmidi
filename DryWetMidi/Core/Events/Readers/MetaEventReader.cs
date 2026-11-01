@@ -1,6 +1,8 @@
 ﻿using Melanchall.DryWetMidi.Common;
 using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Melanchall.DryWetMidi.Core
 {
@@ -13,8 +15,49 @@ namespace Melanchall.DryWetMidi.Core
             var statusByte = reader.ReadByte();
             var size = reader.ReadVlqNumber();
 
-            //
+            var metaEvent = CreateEvent(statusByte, settings);
+            var readerPosition = reader.Position;
+            metaEvent.Read(reader, settings, size);
 
+            var bytesRead = reader.Position - readerPosition;
+            var bytesUnread = size - bytesRead;
+            if (bytesUnread > 0)
+                reader.Position = Math.Min(reader.Position + bytesUnread, reader.Length);
+
+            return metaEvent;
+        }
+
+        public async Task<MidiEvent?> ReadAsync(
+            MidiReader reader,
+            ReadingSettings settings,
+            byte currentStatusByte,
+            CancellationToken cancellationToken)
+        {
+            var statusByte = await reader.ReadByteAsync(cancellationToken).ConfigureAwait(false);
+            var size = await reader.ReadVlqNumberAsync(cancellationToken).ConfigureAwait(false);
+
+            var metaEvent = CreateEvent(statusByte, settings);
+            var readerPosition = reader.Position;
+            await metaEvent.ReadAsync(reader, settings, size, cancellationToken).ConfigureAwait(false);
+
+            var bytesRead = reader.Position - readerPosition;
+            var bytesUnread = size - bytesRead;
+            if (bytesUnread > 0)
+            {
+                await reader.SetPositionAsync(
+                    Math.Min(reader.Position + bytesUnread, reader.Length),
+                    cancellationToken).ConfigureAwait(false);
+            }
+
+            return metaEvent;
+        }
+
+        #endregion
+
+        #region Methods
+
+        private static MetaEvent CreateEvent(byte statusByte, ReadingSettings settings)
+        {
             MetaEvent metaEvent;
 
             switch (statusByte)
@@ -94,22 +137,8 @@ namespace Melanchall.DryWetMidi.Core
                     break;
             }
 
-            //
-
-            var readerPosition = reader.Position;
-            metaEvent.Read(reader, settings, size);
-
-            var bytesRead = reader.Position - readerPosition;
-            var bytesUnread = size - bytesRead;
-            if (bytesUnread > 0)
-                reader.Position = Math.Min(reader.Position + bytesUnread, reader.Length);
-
             return metaEvent;
         }
-
-        #endregion
-
-        #region Methods
 
         private static bool IsMetaEventType([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor)] Type type)
         {

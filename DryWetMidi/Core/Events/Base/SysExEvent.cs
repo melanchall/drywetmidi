@@ -1,5 +1,7 @@
 ﻿using System.Linq;
 using Melanchall.DryWetMidi.Common;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Melanchall.DryWetMidi.Core
 {
@@ -106,6 +108,37 @@ namespace Melanchall.DryWetMidi.Core
                     writer.WriteBytes(data, 1, data.Length - 1);
                 else
                     writer.WriteBytes(data);
+            }
+        }
+
+        /// <inheritdoc/>
+        internal sealed override async Task ReadAsync(
+            MidiReader reader,
+            ReadingSettings settings,
+            int size,
+            CancellationToken cancellationToken)
+        {
+            var data = await reader.ReadBytesAsync(size, cancellationToken).ConfigureAwait(false);
+            if (data.Length != size && settings.NotEnoughBytesPolicy == NotEnoughBytesPolicy.Abort)
+                throw new NotEnoughBytesException("Not enough bytes in the stream to read the data of a sys ex event.", size, data.Length);
+
+            Data = data;
+        }
+
+        internal sealed override async Task WriteAsync(
+            MidiWriter writer,
+            WritingSettings settings,
+            CancellationToken cancellationToken)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            var data = Data;
+            if (data != null && data.Length > 0)
+            {
+                if (StartsWithStatusByte)
+                    await writer.WriteBytesAsync(data, 1, data.Length - 1, cancellationToken).ConfigureAwait(false);
+                else
+                    await writer.WriteBytesAsync(data, cancellationToken).ConfigureAwait(false);
             }
         }
 

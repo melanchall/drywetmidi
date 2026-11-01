@@ -1,4 +1,6 @@
 ﻿using Melanchall.DryWetMidi.Common;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Melanchall.DryWetMidi.Core
 {
@@ -53,6 +55,30 @@ namespace Melanchall.DryWetMidi.Core
         protected byte ReadDataByte(MidiReader reader, ReadingSettings settings)
         {
             var value = reader.ReadByte();
+            if (value > SevenBitNumber.MaxValue)
+            {
+                switch (settings.InvalidChannelEventParameterValuePolicy)
+                {
+                    case InvalidChannelEventParameterValuePolicy.Abort:
+                        throw new InvalidChannelEventParameterValueException(EventType, value);
+                    case InvalidChannelEventParameterValuePolicy.ReadValid:
+                        value &= SevenBitNumber.MaxValue;
+                        break;
+                    case InvalidChannelEventParameterValuePolicy.SnapToLimits:
+                        value = SevenBitNumber.MaxValue;
+                        break;
+                }
+            }
+
+            return value;
+        }
+
+        internal async ValueTask<byte> ReadDataByteAsync(
+            MidiReader reader,
+            ReadingSettings settings,
+            CancellationToken cancellationToken)
+        {
+            var value = await reader.ReadByteAsync(cancellationToken).ConfigureAwait(false);
             if (value > SevenBitNumber.MaxValue)
             {
                 switch (settings.InvalidChannelEventParameterValuePolicy)

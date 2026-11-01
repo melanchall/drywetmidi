@@ -4,13 +4,16 @@ using Melanchall.DryWetMidi.Tests.Utilities;
 using NUnit.Framework;
 using NUnit.Framework.Legacy;
 using System;
+using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Melanchall.DryWetMidi.Tests.Core
 {
     [TestFixture]
-    public sealed class MidiEventTests
+    public sealed partial class MidiEventTests
     {
         #region Nested classes
 
@@ -18,11 +21,15 @@ namespace Melanchall.DryWetMidi.Tests.Core
         {
             private byte _data;
 
-            public CustomMetaEvent() =>
+            public CustomMetaEvent()
+            {
                 _data = 0;
+            }
 
-            public CustomMetaEvent(byte data) =>
+            public CustomMetaEvent(byte data)
+            {
                 _data = data;
+            }
 
             protected override MidiEvent CloneEvent() =>
                 new CustomMetaEvent(_data);
@@ -35,6 +42,23 @@ namespace Melanchall.DryWetMidi.Tests.Core
 
             protected override void WriteContent(MidiWriter writer, WritingSettings settings) =>
                 writer.WriteByte(_data);
+
+            protected override async Task ReadContentAsync(
+                MidiReader reader,
+                ReadingSettings settings,
+                int size,
+                CancellationToken cancellationToken = default)
+            {
+                _data = await reader.ReadByteAsync(cancellationToken).ConfigureAwait(false);
+            }
+
+            protected override async Task WriteContentAsync(
+                MidiWriter writer,
+                WritingSettings settings,
+                CancellationToken cancellationToken = default)
+            {
+                await writer.WriteByteAsync(_data, cancellationToken).ConfigureAwait(false);
+            }
 
             public override string ToString() =>
                 _data.ToString();
@@ -240,6 +264,12 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 MidiFileFormat.SingleTrack);
             var readMidiEvent = midiFile.GetTrackChunks().First().Events.First();
             MidiAsserts.AreEqual(expectedMidiEvent, readMidiEvent, true, "MIDI event is invalid.");
+
+            AssertEventWriteReadAsync(
+                midiEvent,
+                expectedMidiEvent,
+                writingSettings,
+                readingSettings);
         }
 
         [Test]
@@ -275,6 +305,12 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 MidiFileFormat.SingleTrack);
             var readMidiEvent = midiFile.GetTrackChunks().First().Events.First();
             MidiAsserts.AreEqual(midiEvent, readMidiEvent, true, "MIDI event is invalid.");
+
+            AssertEventWriteReadAsync(
+                midiEvent,
+                midiEvent,
+                null,
+                null);
         }
 
         [Test]
@@ -310,6 +346,34 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 },
                 statusBytes,
                 "Status bytes are invalid.");
+        }
+
+        #endregion
+
+        #region Private methods
+
+        private static void AssertEventWriteReadAsync(
+            MidiEvent midiEvent,
+            MidiEvent expectedMidiEvent,
+            WritingSettings writingSettings,
+            ReadingSettings readingSettings)
+        {
+            using (var stream = new MemoryStream())
+            {
+                new MidiFile(new TrackChunk(midiEvent.Clone())).WriteAsync(
+                    stream,
+                    format: MidiFileFormat.SingleTrack,
+                    settings: writingSettings,
+                    cancellationToken: CancellationToken.None).Wait();
+                stream.Position = 0;
+                var asynchronousFile = MidiFile.ReadAsync(
+                    stream,
+                    readingSettings,
+                    cancellationToken: CancellationToken.None).Result;
+                var asynchronousEvent = asynchronousFile.GetTrackChunks().First().Events.First();
+
+                MidiAsserts.AreEqual(expectedMidiEvent, asynchronousEvent, true, "Asynchronously read MIDI event is invalid.");
+            }
         }
 
         #endregion

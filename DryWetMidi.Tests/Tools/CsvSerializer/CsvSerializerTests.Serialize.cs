@@ -5,9 +5,12 @@ using Melanchall.DryWetMidi.Tools;
 using NUnit.Framework;
 using NUnit.Framework.Legacy;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Melanchall.DryWetMidi.Tests.Tools
 {
@@ -16,20 +19,125 @@ namespace Melanchall.DryWetMidi.Tests.Tools
     {
         #region Test methods
 
+        [Test]
+        public void SerializeAsync_ImmediatelyCompletedIo_DoesNotRequireWorker() =>
+            CheckImmediatelyCompletedCsvIo(true);
+
+        [Test]
+        public void SerializeAsync_IoErrors_PropagateWithoutDeadlock() =>
+            CheckCsvIoErrors(true);
+
+        [Test]
+        public void SerializeAsync_Cancellation_InterruptsPendingIo() =>
+            CheckCsvCancellation(true);
+
+        [Test]
+        public void SerializeAsync_SourceErrors_PropagateWithoutDeadlock()
+        {
+            IEnumerable<ITimedObject> Source()
+            {
+                yield return new TimedEvent(new TextEvent("first"));
+                throw new InvalidOperationException("Source failure.");
+            }
+
+            using var output = new AsyncOnlyStream();
+
+            Assert.ThrowsAsync<InvalidOperationException>(async () =>
+                await Source().SerializeToCsvAsync(output, TempoMap.Default).WaitAsync(TimeSpan.FromSeconds(10)), "CSV source failure did not propagate without deadlock.");
+        }
+
+        [Test]
+        public void Csv_InvalidOrCanceledPathWrite_DoesNotCreateFile()
+        {
+            var path = Path.Combine(TestContext.CurrentContext.WorkDirectory, "tools-async-" + Guid.NewGuid() + ".csv");
+
+            try
+            {
+                Assert.ThrowsAsync<ArgumentNullException>(() => ((MidiFile)null).SerializeToCsvAsync(path, true), "CSV path serialization accepted a null file.");
+                ClassicAssert.IsFalse(File.Exists(path), "Invalid file serialization created a path.");
+                Assert.ThrowsAsync<ArgumentNullException>(() => CreateFile().GetTrackChunks().First().SerializeToCsvAsync(path, true, null), "CSV path serialization accepted a null tempo map.");
+                ClassicAssert.IsFalse(File.Exists(path), "Invalid tempo-map serialization created a path.");
+
+                using var cancellation = new CancellationTokenSource();
+                cancellation.Cancel();
+
+                Assert.CatchAsync<OperationCanceledException>(() => CreateFile().SerializeToCsvAsync(path, true, cancellationToken: cancellation.Token), "Pre-canceled CSV serialization did not throw.");
+                ClassicAssert.IsFalse(File.Exists(path), "Pre-canceled serialization created a path.");
+            }
+            finally
+            {
+                File.Delete(path);
+            }
+        }
+
+        [Test]
+        public async Task Csv_Serialization_DoesNotStageWholeInput()
+        {
+            int visited = 0;
+            int visitedAtFirstWrite = -1;
+
+            IEnumerable<ITimedObject> Source()
+            {
+                for (int i = 0; i < 10000; i++)
+                {
+                    Interlocked.Increment(ref visited);
+                    yield return new TimedEvent(new TextEvent("a buffered CSV record"), i);
+                }
+            }
+
+            using var output = new AsyncOnlyStream
+            {
+                OnWrite = () =>
+                {
+                    if (visitedAtFirstWrite == -1)
+                        visitedAtFirstWrite = Volatile.Read(ref visited);
+                }
+            };
+
+            await Source().SerializeToCsvAsync(output, TempoMap.Default);
+
+            ClassicAssert.AreEqual(10000, visited, "CSV serialization did not consume the full source.");
+            ClassicAssert.GreaterOrEqual(visitedAtFirstWrite, 1, "CSV serialization wrote before visiting a source item.");
+            ClassicAssert.LessOrEqual(visitedAtFirstWrite, 9999, "CSV serialization staged the whole source before writing.");
+        }
+
+        [Test]
+        public async Task Csv_Serialization_FlushesExactlyOnce()
+        {
+            using var output = new AsyncOnlyStream();
+
+            await CreateFile().SerializeToCsvAsync(output);
+
+            ClassicAssert.AreEqual(1, output.Flushes, "Completed CSV serialization did not flush exactly once.");
+        }
+
         [TestCaseSource(nameof(EventsData))]
         public void Serialize_Event(MidiEvent midiEvent, string expectedCsv, CsvSerializationSettings settings)
         {
-            using (var stream = new MemoryStream())
+            foreach (var useAsync in new[] { false, true })
             {
-                var timedEvent = new TimedEvent(midiEvent);
-                new[] { timedEvent }.SerializeToCsv(stream, TempoMap.Default, settings);
-
-                stream.Seek(0, SeekOrigin.Begin);
-
-                using (var streamReader = new StreamReader(stream))
+                using (var stream = new MemoryStream())
                 {
-                    var csv = streamReader.ReadToEnd().Trim();
-                    ClassicAssert.AreEqual($"0,\"{midiEvent.EventType}\",0{(string.IsNullOrEmpty(expectedCsv) ? string.Empty : $",{expectedCsv}")}", csv, "Invalid CSV.");
+                    var timedEvent = new TimedEvent(midiEvent.Clone());
+
+                    if (useAsync)
+                    {
+                        new[] { timedEvent }.SerializeToCsvAsync(
+                            stream,
+                            TempoMap.Default,
+                            settings,
+                            cancellationToken: System.Threading.CancellationToken.None).Wait();
+                    }
+                    else
+                        new[] { timedEvent }.SerializeToCsv(stream, TempoMap.Default, settings);
+
+                    stream.Seek(0, SeekOrigin.Begin);
+
+                    using (var streamReader = new StreamReader(stream))
+                    {
+                        var csv = streamReader.ReadToEnd().Trim();
+                        ClassicAssert.AreEqual($"0,\"{midiEvent.EventType}\",0{(string.IsNullOrEmpty(expectedCsv) ? string.Empty : $",{expectedCsv}")}", csv, "Invalid CSV.");
+                    }
                 }
             }
         }
@@ -288,8 +396,22 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             ObjectType objectType,
             ObjectDetectionSettings objectDetectionSettings,
             string[] expectedCsvLines,
-            bool checkSeparateChunks = true)
+            bool checkSeparateChunks = true,
+            bool useAsync = false)
         {
+            if (!useAsync)
+            {
+                Serialize(
+                    midiFile.Clone(),
+                    originalFormat,
+                    settings,
+                    objectType,
+                    objectDetectionSettings,
+                    expectedCsvLines,
+                    checkSeparateChunks,
+                    true);
+            }
+
             if (originalFormat != null)
                 midiFile = MidiFileTestUtilities.Read(midiFile, null, null, originalFormat);
 
@@ -303,7 +425,8 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                     settings,
                     objectType,
                     objectDetectionSettings,
-                    expectedCsvLines);
+                    expectedCsvLines,
+                    useAsync);
 
                 Serialize_ChunksFromFile(
                     midiFile,
@@ -311,7 +434,8 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                     settings,
                     objectType,
                     objectDetectionSettings,
-                    expectedCsvLines);
+                    expectedCsvLines,
+                    useAsync);
 
                 if (checkSeparateChunks)
                 {
@@ -321,7 +445,8 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                         settings,
                         objectType,
                         objectDetectionSettings,
-                        expectedCsvLines);
+                        expectedCsvLines,
+                        useAsync);
 
                     Serialize_ObjectsFromFile(
                         midiFile,
@@ -329,7 +454,8 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                         settings,
                         objectType,
                         objectDetectionSettings,
-                        expectedCsvLines);
+                        expectedCsvLines,
+                        useAsync);
                 }
             }
             finally
@@ -344,9 +470,33 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             CsvSerializationSettings settings,
             ObjectType objectType,
             ObjectDetectionSettings objectDetectionSettings,
-            string[] expectedCsvLines)
+            string[] expectedCsvLines,
+            bool useAsync)
         {
-            midiFile.SerializeToCsv(filePath, true, settings, objectType, objectDetectionSettings);
+            if (useAsync)
+            {
+                midiFile.SerializeToCsvAsync(
+                    filePath,
+                    true,
+                    settings,
+                    objectType,
+                    objectDetectionSettings,
+                    cancellationToken: System.Threading.CancellationToken.None).Wait();
+
+                using (var stream = new MemoryStream())
+                {
+                    midiFile.Clone().SerializeToCsvAsync(
+                        stream,
+                        settings,
+                        objectType,
+                        objectDetectionSettings,
+                        cancellationToken: System.Threading.CancellationToken.None).Wait();
+                    CollectionAssert.AreEqual(GetCsvLines(filePath), GetCsvLines(stream), "Invalid asynchronous stream CSV.");
+                }
+            }
+            else
+                midiFile.SerializeToCsv(filePath, true, settings, objectType, objectDetectionSettings);
+
             var csvLines = GetCsvLines(filePath);
 
             CollectionAssert.AreEqual(expectedCsvLines, csvLines, "Invalid CSV lines for file.");
@@ -358,10 +508,36 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             CsvSerializationSettings settings,
             ObjectType objectType,
             ObjectDetectionSettings objectDetectionSettings,
-            string[] expectedCsvLines)
+            string[] expectedCsvLines,
+            bool useAsync)
         {
             var tempoMap = midiFile.GetTempoMap();
-            midiFile.Chunks.SerializeToCsv(filePath, true, tempoMap, settings, objectType, objectDetectionSettings);
+            if (useAsync)
+            {
+                midiFile.Chunks.SerializeToCsvAsync(
+                    filePath,
+                    true,
+                    tempoMap,
+                    settings,
+                    objectType,
+                    objectDetectionSettings,
+                    cancellationToken: System.Threading.CancellationToken.None).Wait();
+
+                using (var stream = new MemoryStream())
+                {
+                    midiFile.Clone().Chunks.SerializeToCsvAsync(
+                        stream,
+                        tempoMap,
+                        settings,
+                        objectType,
+                        objectDetectionSettings,
+                        cancellationToken: System.Threading.CancellationToken.None).Wait();
+                    CollectionAssert.AreEqual(GetCsvLines(filePath), GetCsvLines(stream), "Invalid asynchronous chunks stream CSV.");
+                }
+            }
+            else
+                midiFile.Chunks.SerializeToCsv(filePath, true, tempoMap, settings, objectType, objectDetectionSettings);
+
             var csvLines = GetCsvLines(filePath);
 
             CollectionAssert.AreEqual(
@@ -378,14 +554,40 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             CsvSerializationSettings settings,
             ObjectType objectType,
             ObjectDetectionSettings objectDetectionSettings,
-            string[] expectedCsvLines)
+            string[] expectedCsvLines,
+            bool useAsync)
         {
             var i = 0;
             var tempoMap = midiFile.GetTempoMap();
 
             foreach (var chunk in midiFile.Chunks)
             {
-                chunk.SerializeToCsv(filePath, true, tempoMap, settings, objectType, objectDetectionSettings);
+                if (useAsync)
+                {
+                    chunk.SerializeToCsvAsync(
+                        filePath,
+                        true,
+                        tempoMap,
+                        settings,
+                        objectType,
+                        objectDetectionSettings,
+                        cancellationToken: System.Threading.CancellationToken.None).Wait();
+
+                    using (var stream = new MemoryStream())
+                    {
+                        chunk.Clone().SerializeToCsvAsync(
+                            stream,
+                            tempoMap,
+                            settings,
+                            objectType,
+                            objectDetectionSettings,
+                            cancellationToken: System.Threading.CancellationToken.None).Wait();
+                        CollectionAssert.AreEqual(GetCsvLines(filePath), GetCsvLines(stream), "Invalid asynchronous chunk stream CSV.");
+                    }
+                }
+                else
+                    chunk.SerializeToCsv(filePath, true, tempoMap, settings, objectType, objectDetectionSettings);
+
                 var csvLines = GetCsvLines(filePath);
 
                 CollectionAssert.AreEqual(
@@ -406,7 +608,8 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             CsvSerializationSettings settings,
             ObjectType objectType,
             ObjectDetectionSettings objectDetectionSettings,
-            string[] expectedCsvLines)
+            string[] expectedCsvLines,
+            bool useAsync)
         {
             var i = 0;
             var tempoMap = midiFile.GetTempoMap();
@@ -416,7 +619,28 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             {
                 var objects = ((TrackChunk)chunk).GetObjects(objectType, objectDetectionSettings);
 
-                objects.SerializeToCsv(filePath, true, tempoMap, settings);
+                if (useAsync)
+                {
+                    objects.SerializeToCsvAsync(
+                        filePath,
+                        true,
+                        tempoMap,
+                        settings,
+                        cancellationToken: System.Threading.CancellationToken.None).Wait();
+
+                    using (var stream = new MemoryStream())
+                    {
+                        objects.Select(obj => obj?.Clone()).SerializeToCsvAsync(
+                            stream,
+                            tempoMap,
+                            settings,
+                            cancellationToken: System.Threading.CancellationToken.None).Wait();
+                        CollectionAssert.AreEqual(GetCsvLines(filePath), GetCsvLines(stream), "Invalid asynchronous objects stream CSV.");
+                    }
+                }
+                else
+                    objects.SerializeToCsv(filePath, true, tempoMap, settings);
+
                 var csvLines = GetCsvLines(filePath);
 
                 CollectionAssert.AreEqual(
@@ -428,6 +652,24 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                     $"Invalid CSV lines for objects of chunk {i}.");
 
                 i++;
+            }
+        }
+
+        private static string[] GetCsvLines(MemoryStream stream)
+        {
+            stream.Position = 0;
+
+            using (var reader = new StreamReader(stream, leaveOpen: true))
+            {
+                var lines = new List<string>();
+                string line;
+
+                while ((line = reader.ReadLine()) != null)
+                {
+                    lines.Add(line.Trim());
+                }
+
+                return lines.ToArray();
             }
         }
 

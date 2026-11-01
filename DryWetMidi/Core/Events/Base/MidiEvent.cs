@@ -1,5 +1,7 @@
 ﻿using System;
 using Melanchall.DryWetMidi.Common;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Melanchall.DryWetMidi.Core
 {
@@ -83,12 +85,23 @@ namespace Melanchall.DryWetMidi.Core
         /// <param name="size">Size of the event's content.</param>
         internal abstract void Read(MidiReader reader, ReadingSettings settings, int size);
 
+        internal abstract Task ReadAsync(
+            MidiReader reader,
+            ReadingSettings settings,
+            int size,
+            CancellationToken cancellationToken);
+
         /// <summary>
         /// Writes content of a MIDI event.
         /// </summary>
         /// <param name="writer">Writer to write the content with.</param>
         /// <param name="settings">Settings according to which the event's content must be written.</param>
         internal abstract void Write(MidiWriter writer, WritingSettings settings);
+
+        internal abstract Task WriteAsync(
+            MidiWriter writer,
+            WritingSettings settings,
+            CancellationToken cancellationToken);
 
         /// <summary>
         /// Gets the size of the content of a MIDI event.

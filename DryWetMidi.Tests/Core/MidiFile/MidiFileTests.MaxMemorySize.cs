@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
 using NUnit.Framework;
@@ -37,6 +39,25 @@ namespace Melanchall.DryWetMidi.Tests.Core
             {
                 if (Payload != null)
                     writer.WriteBytes(Payload);
+            }
+
+            protected override async Task ReadContentAsync(
+                MidiReader reader,
+                ReadingSettings settings,
+                int size,
+                CancellationToken cancellationToken = default)
+            {
+                Payload = await reader.ReadBytesAsync(size, cancellationToken).ConfigureAwait(false);
+                Description = new string('a', size);
+            }
+
+            protected override async Task WriteContentAsync(
+                MidiWriter writer,
+                WritingSettings settings,
+                CancellationToken cancellationToken = default)
+            {
+                if (Payload != null)
+                    await writer.WriteBytesAsync(Payload, cancellationToken).ConfigureAwait(false);
             }
         }
 
@@ -80,6 +101,34 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 foreach (var value in Values ?? Array.Empty<int>())
                 {
                     writer.WriteDword((uint)value);
+                }
+            }
+
+            protected override async Task ReadContentAsync(
+                MidiReader reader,
+                ReadingSettings settings,
+                uint size,
+                CancellationToken cancellationToken)
+            {
+                var count = (int)(size / sizeof(int));
+                Values = new int[count];
+                Strings = new List<string>();
+
+                for (var i = 0; i < count; i++)
+                {
+                    Values[i] = (int)await reader.ReadDwordAsync(cancellationToken).ConfigureAwait(false);
+                    Strings.Add(new string('b', 10));
+                }
+            }
+
+            protected override async Task WriteContentAsync(
+                MidiWriter writer,
+                WritingSettings settings,
+                CancellationToken cancellationToken)
+            {
+                foreach (var value in Values ?? Array.Empty<int>())
+                {
+                    await writer.WriteDwordAsync((uint)value, cancellationToken).ConfigureAwait(false);
                 }
             }
         }
@@ -214,7 +263,17 @@ namespace Melanchall.DryWetMidi.Tests.Core
             AssertThrowsTooLarge(bytes, 4000, readingSettings);
 
             var file = MidiFile.Read(new MemoryStream(bytes), new ReadingSettings { CustomChunkTypes = chunkTypes, MaxMemorySize = minimalLimit });
-            ClassicAssert.AreEqual(1000, file.Chunks.OfType<PayloadCustomChunk>().Single().Values!.Length);
+            ClassicAssert.AreEqual(1000, file.Chunks.OfType<PayloadCustomChunk>().Single().Values!.Length, "Custom chunk payload length is invalid.");
+
+            using (var stream = new MemoryStream(bytes))
+            {
+                file = MidiFile.ReadAsync(
+                    stream,
+                    new ReadingSettings { CustomChunkTypes = chunkTypes, MaxMemorySize = minimalLimit },
+                    cancellationToken: System.Threading.CancellationToken.None).Result;
+
+                ClassicAssert.AreEqual(1000, file.Chunks.OfType<PayloadCustomChunk>().Single().Values!.Length, "Async custom chunk payload length is invalid.");
+            }
         }
 
         [Test]
@@ -295,7 +354,17 @@ namespace Melanchall.DryWetMidi.Tests.Core
         {
             var bytes = GetFileBytes(new TrackChunk(CreateNotes(1000)));
             var file = MidiFile.Read(new MemoryStream(bytes), new ReadingSettings { MaxMemorySize = null });
-            ClassicAssert.AreEqual(2000, file.GetEvents().Count());
+            ClassicAssert.AreEqual(2000, file.GetEvents().Count(), "Unlimited reading returned an invalid event count.");
+
+            using (var stream = new MemoryStream(bytes))
+            {
+                file = MidiFile.ReadAsync(
+                    stream,
+                    new ReadingSettings { MaxMemorySize = null },
+                    cancellationToken: System.Threading.CancellationToken.None).Result;
+
+                ClassicAssert.AreEqual(2000, file.GetEvents().Count(), "Async unlimited reading returned an invalid event count.");
+            }
         }
 
         [Test]
@@ -306,8 +375,28 @@ namespace Melanchall.DryWetMidi.Tests.Core
             var file = MidiFile.Read(new MemoryStream(bytes), new ReadingSettings { MaxMemorySize = long.MaxValue });
             ClassicAssert.Greater(file.EstimatedMemorySize, 2000 * 32);
 
+            using (var stream = new MemoryStream(bytes))
+            {
+                var asyncFile = MidiFile.ReadAsync(
+                    stream,
+                    new ReadingSettings { MaxMemorySize = long.MaxValue },
+                    cancellationToken: System.Threading.CancellationToken.None).Result;
+
+                ClassicAssert.Greater(asyncFile.EstimatedMemorySize, 2000 * 32, "Async estimated memory size is too small.");
+                ClassicAssert.AreEqual(file.EstimatedMemorySize, asyncFile.EstimatedMemorySize, "Async estimated memory size differs.");
+            }
+
             file = MidiFile.Read(new MemoryStream(bytes));
-            ClassicAssert.AreEqual(0, file.EstimatedMemorySize);
+            ClassicAssert.AreEqual(0, file.EstimatedMemorySize, "Reading estimated memory size when no limit was requested.");
+
+            using (var stream = new MemoryStream(bytes))
+            {
+                file = MidiFile.ReadAsync(
+                    stream,
+                    cancellationToken: System.Threading.CancellationToken.None).Result;
+
+                ClassicAssert.AreEqual(0, file.EstimatedMemorySize, "Async reading estimated memory size when no limit was requested.");
+            }
         }
 
         private static IEnumerable<MidiEvent> CreateNotes(int count)
@@ -353,15 +442,39 @@ namespace Melanchall.DryWetMidi.Tests.Core
 
         private static bool TryRead(byte[] bytes, long limit, ReadingSettings? settings)
         {
+            bool expected;
+
             try
             {
                 MidiFile.Read(new MemoryStream(bytes), CreateSettings(limit, settings));
-                return true;
+                expected = true;
             }
             catch (MidiFileTooLargeException)
             {
-                return false;
+                expected = false;
             }
+
+            using (var stream = new MemoryStream(bytes))
+            {
+                if (expected)
+                {
+                    MidiFile.ReadAsync(
+                        stream,
+                        CreateSettings(limit, settings),
+                        cancellationToken: System.Threading.CancellationToken.None).Wait();
+                }
+                else
+                {
+                    var aggregate = Assert.Throws<AggregateException>(() => MidiFile.ReadAsync(
+                        stream,
+                        CreateSettings(limit, settings),
+                        cancellationToken: System.Threading.CancellationToken.None).Wait(), "Async reading did not reject the memory limit.");
+
+                    ClassicAssert.IsInstanceOf<MidiFileTooLargeException>(aggregate!.InnerException, "Async memory-limit exception type differs.");
+                }
+            }
+
+            return expected;
         }
 
         private static void AssertThrowsTooLarge(byte[] bytes, long limit, ReadingSettings? settings = null)
@@ -370,6 +483,19 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 () => MidiFile.Read(new MemoryStream(bytes), CreateSettings(limit, settings)));
             ClassicAssert.AreEqual(limit, ex!.MaxSize);
             ClassicAssert.Greater(ex.EstimatedSize, limit);
+
+            using (var stream = new MemoryStream(bytes))
+            {
+                var aggregate = Assert.Throws<AggregateException>(() => MidiFile.ReadAsync(
+                    stream,
+                    CreateSettings(limit, settings),
+                    cancellationToken: System.Threading.CancellationToken.None).Wait(), "Async oversized-file reading did not throw.");
+                var asyncException = aggregate!.InnerException as MidiFileTooLargeException;
+
+                ClassicAssert.IsNotNull(asyncException, "Async oversized-file exception type is invalid.");
+                ClassicAssert.AreEqual(limit, asyncException!.MaxSize, "Async oversized-file exception reported an invalid limit.");
+                ClassicAssert.Greater(asyncException.EstimatedSize, limit, "Async oversized-file exception did not report an exceeded estimate.");
+            }
         }
 
         private static ReadingSettings CreateSettings(long limit, ReadingSettings? settings)
