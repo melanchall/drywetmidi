@@ -115,3 +115,12 @@ are correlated cases that must stay together. Use ClassicAssert when an
 equivalent assertion exists. Give every assertion an informative failure message.
 Use MidiAsserts for MIDI equality instead of manual comparisons or calling
 Equals, except when Equals itself is the behavior under test.
+
+Pull requests
+-------------
+Always open pull requests as drafts.
+
+If a pull request or issue from another (foreign) project is reviewed and that
+leads to a pull request in DryWetMIDI, do not mention the foreign issue or pull
+request in the DryWetMIDI pull request description, so that no link is created
+between DryWetMIDI and the other project.
