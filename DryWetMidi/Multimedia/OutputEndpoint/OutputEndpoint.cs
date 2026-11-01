@@ -2,12 +2,9 @@
 using Melanchall.DryWetMidi.Configuration;
 using Melanchall.DryWetMidi.Core;
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Melanchall.DryWetMidi.Multimedia
 {
@@ -27,7 +24,6 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         private static readonly IEventWriter ChannelEventWriter = new ChannelEventWriter();
         private static readonly IEventWriter SystemRealTimeEventWriter = new SystemRealTimeEventWriter();
-        private static readonly ConcurrentDictionary<OutputEndpointHandle, OutputEndpoint> EndpointsPendingClose = new();
 
         #endregion
 
@@ -46,7 +42,6 @@ namespace Melanchall.DryWetMidi.Multimedia
         private readonly BytesToMidiEventConverter _bytesToMidiEventConverter = new BytesToMidiEventConverter { BytesFormat = BytesFormat.Device };
 
         private OutputEndpointApi.Callback_Win? _callback;
-        private int _closeRetryStarted;
 
         private readonly CommonApi.OsType _osType;
 
@@ -60,7 +55,6 @@ namespace Melanchall.DryWetMidi.Multimedia
             : base(context, new OutputEndpointHandle(info))
         {
             _osType = CommonApi.Api_GetOsType();
-            ((OutputEndpointHandle)Handle).CloseStillPlaying = RetainForCloseRetry;
         }
 
         #endregion
@@ -448,61 +442,6 @@ namespace Melanchall.DryWetMidi.Multimedia
             {
                 if (dataPointer != IntPtr.Zero)
                     Marshal.FreeHGlobal(dataPointer);
-            }
-        }
-
-        private void RetainForCloseRetry()
-        {
-            EndpointsPendingClose.TryAdd((OutputEndpointHandle)Handle, this);
-            StartCloseRetry();
-        }
-
-        private void StartCloseRetry()
-        {
-            if (Interlocked.CompareExchange(ref _closeRetryStarted, 1, 0) != 0)
-                return;
-
-            _ = Task.Run(RetryCloseAsync);
-        }
-
-        private async Task RetryCloseAsync()
-        {
-            var outputEndpointHandle = (OutputEndpointHandle)Handle;
-
-            try
-            {
-                while (EndpointsPendingClose.ContainsKey(outputEndpointHandle))
-                {
-                    await Task.Delay(TimeSpan.FromSeconds(1)).ConfigureAwait(false);
-
-                    var endpointHandle = outputEndpointHandle.OpenedEndpointHandle;
-                    if (endpointHandle == IntPtr.Zero)
-                    {
-                        EndpointsPendingClose.TryRemove(outputEndpointHandle, out _);
-                        return;
-                    }
-
-                    try
-                    {
-                        var closeResult = OutputEndpointApi.Api_CloseEndpoint(endpointHandle, out _);
-                        if (closeResult == OutputEndpointApi.OUT_CLOSERESULT.OUT_CLOSERESULT_CLOSE_STILLPLAYING)
-                            continue;
-
-                        outputEndpointHandle.OpenedEndpointHandle = IntPtr.Zero;
-                        EndpointsPendingClose.TryRemove(outputEndpointHandle, out _);
-                        return;
-                    }
-                    catch
-                    {
-                    }
-                }
-            }
-            finally
-            {
-                Interlocked.Exchange(ref _closeRetryStarted, 0);
-
-                if (EndpointsPendingClose.ContainsKey(outputEndpointHandle))
-                    StartCloseRetry();
             }
         }
 

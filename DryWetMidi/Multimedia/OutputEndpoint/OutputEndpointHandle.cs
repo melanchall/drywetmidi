@@ -14,8 +14,6 @@ namespace Melanchall.DryWetMidi.Multimedia
         {
         }
 
-        public Action? CloseStillPlaying { get; set; }
-
         protected override bool ReleaseHandle()
         {
             var closed = true;
@@ -31,11 +29,6 @@ namespace Melanchall.DryWetMidi.Multimedia
                     var closeResult = OutputEndpointApi.Api_CloseEndpoint(OpenedEndpointHandle, out var errorCode);
                     closed = closeResult == OutputEndpointApi.OUT_CLOSERESULT.OUT_CLOSERESULT_OK;
 
-                    if (closeResult == OutputEndpointApi.OUT_CLOSERESULT.OUT_CLOSERESULT_CLOSE_STILLPLAYING)
-                        CloseStillPlaying?.Invoke();
-                    else
-                        OpenedEndpointHandle = IntPtr.Zero;
-
 #if TEST
                     TestCheckpoints?.SetCheckpointReached(OutputEndpointCheckpointsNames.CloseEndpointExecutedInReleaseHandle);
 
@@ -44,6 +37,8 @@ namespace Melanchall.DryWetMidi.Multimedia
                     else
                         TestCheckpoints?.SetErrorReached($"Failed to close output endpoint: {closeResult} ({errorCode}).");
 #endif
+
+                    OpenedEndpointHandle = IntPtr.Zero;
                 }
 
 #if TEST
