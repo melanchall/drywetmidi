@@ -1,7 +1,9 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
+using Melanchall.DryWetMidi.Interaction;
 using Melanchall.DryWetMidi.Tests.Utilities;
 using NUnit.Framework;
 using NUnit.Framework.Legacy;
@@ -110,6 +112,38 @@ namespace Melanchall.DryWetMidi.Tests.Core
             }
         }
 
+        [Test]
+        public void Write_SameTimeControlChanges_OrderIsPreserved()
+        {
+            var expected = GetSameTimeControlChanges();
+
+            var trackChunk = new TrackChunk(expected.Select(e => (MidiEvent)e.Clone()));
+            var readFile = WriteRead(new MidiFile(trackChunk));
+
+            CheckControlChangesOrder(readFile.GetTrackChunks().First(), expected);
+        }
+
+        [Test]
+        public void SaveChanges_SameTimeControlChanges_OrderIsPreserved()
+        {
+            var expected = GetSameTimeControlChanges();
+
+            var trackChunk = new TrackChunk();
+            using (var manager = trackChunk.ManageTimedEvents())
+            {
+                manager.Objects.Add(new TimedEvent(expected[0].Clone(), 10));
+                manager.Objects.Add(new TimedEvent(expected[1].Clone(), 10));
+                manager.Objects.Add(new TimedEvent(expected[2].Clone(), 10));
+                manager.Objects.Add(new TimedEvent(expected[3].Clone(), 10));
+                manager.Objects.Add(new TimedEvent(expected[4].Clone(), 10));
+                manager.Objects.Add(new TimedEvent(expected[5].Clone(), 10));
+            }
+
+            var readFile = WriteRead(new MidiFile(trackChunk));
+
+            CheckControlChangesOrder(readFile.GetTrackChunks().First(), expected);
+        }
+
         #endregion
 
         #region Private methods
@@ -117,6 +151,34 @@ namespace Melanchall.DryWetMidi.Tests.Core
         private MidiFile WriteRead(MidiFile midiFile, WritingSettings writingSettings = null, ReadingSettings readingSettings = null)
         {
             return MidiFileTestUtilities.Read(midiFile, writingSettings, readingSettings, MidiFileFormat.MultiTrack);
+        }
+
+        private static ControlChangeEvent[] GetSameTimeControlChanges()
+        {
+            return new[]
+            {
+                new ControlChangeEvent((SevenBitNumber)7, (SevenBitNumber)100),
+                new ControlChangeEvent((SevenBitNumber)7, (SevenBitNumber)40),
+                new ControlChangeEvent((SevenBitNumber)101, (SevenBitNumber)0),
+                new ControlChangeEvent((SevenBitNumber)100, (SevenBitNumber)0),
+                new ControlChangeEvent((SevenBitNumber)6, (SevenBitNumber)2),
+                new ControlChangeEvent((SevenBitNumber)38, (SevenBitNumber)10)
+            };
+        }
+
+        private static void CheckControlChangesOrder(
+            TrackChunk trackChunk,
+            ControlChangeEvent[] expected)
+        {
+            var actual = trackChunk
+                .Events
+                .OfType<ControlChangeEvent>()
+                .Select(e => (e.ControlNumber, e.ControlValue))
+                .ToArray();
+
+            CollectionAssert.AreEqual(
+                expected.Select(e => (e.ControlNumber, e.ControlValue)).ToArray(),
+                actual);
         }
 
         #endregion
