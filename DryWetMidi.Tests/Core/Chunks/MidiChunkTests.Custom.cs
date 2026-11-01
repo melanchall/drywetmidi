@@ -10,8 +10,7 @@ using NUnit.Framework.Legacy;
 
 namespace Melanchall.DryWetMidi.Tests.Core
 {
-    [TestFixture]
-    public sealed partial class MidiFileTests
+    public sealed partial class MidiChunkTests
     {
         #region Nested classes
 
@@ -120,114 +119,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
             }
         }
 
-        private sealed class CustomMetaEvent : MetaEvent
-        {
-            #region Constructor
-
-            public CustomMetaEvent()
-                : base()
-            {
-            }
-
-            public CustomMetaEvent(int a, string b, byte c)
-                : this()
-            {
-                A = a;
-                B = b;
-                C = c;
-            }
-
-            #endregion
-
-            #region Properties
-
-            public int A { get; private set; }
-
-            public string B { get; private set; }
-
-            public byte C { get; private set; }
-
-            #endregion
-
-            #region Overrides
-
-            protected override MidiEvent CloneEvent()
-            {
-                return new CustomMetaEvent(A, B, C);
-            }
-
-            protected override int GetContentSize(WritingSettings settings)
-            {
-                return DataTypesUtilities.GetVlqLength(A) +
-                       DataTypesUtilities.GetVlqLength(B?.Length ?? 0) +
-                       (B?.Length ?? 0) +
-                       1;
-            }
-
-            protected override void ReadContent(MidiReader reader, ReadingSettings settings, int size)
-            {
-                A = reader.ReadVlqNumber();
-
-                var bLength = reader.ReadVlqNumber();
-                B = reader.ReadString(bLength);
-
-                C = reader.ReadByte();
-            }
-
-            protected override void WriteContent(MidiWriter writer, WritingSettings settings)
-            {
-                writer.WriteVlqNumber(A);
-                writer.WriteVlqNumber(B?.Length ?? 0);
-                writer.WriteString(B);
-                writer.WriteByte(C);
-            }
-
-            protected override async Task ReadContentAsync(
-                MidiReader reader,
-                ReadingSettings settings,
-                int size,
-                CancellationToken cancellationToken = default)
-            {
-                A = await reader.ReadVlqNumberAsync(cancellationToken).ConfigureAwait(false);
-
-                var bLength = await reader.ReadVlqNumberAsync(cancellationToken).ConfigureAwait(false);
-                B = await reader.ReadStringAsync(bLength, cancellationToken).ConfigureAwait(false);
-
-                C = await reader.ReadByteAsync(cancellationToken).ConfigureAwait(false);
-            }
-
-            protected override async Task WriteContentAsync(
-                MidiWriter writer,
-                WritingSettings settings,
-                CancellationToken cancellationToken = default)
-            {
-                await writer.WriteVlqNumberAsync(A, cancellationToken).ConfigureAwait(false);
-                await writer.WriteVlqNumberAsync(B?.Length ?? 0, cancellationToken).ConfigureAwait(false);
-                await writer.WriteStringAsync(B, cancellationToken).ConfigureAwait(false);
-                await writer.WriteByteAsync(C, cancellationToken).ConfigureAwait(false);
-            }
-
-            public override bool Equals(object obj) => obj is CustomMetaEvent customEvent &&
-                customEvent.A == A &&
-                customEvent.B == B &&
-                customEvent.C == C;
-
-            public override int GetHashCode()
-            {
-                unchecked
-                {
-                    var result = 17;
-                    result = result * 23 + A.GetHashCode();
-                    result = result * 23 + (B?.GetHashCode() ?? 0);
-                    result = result * 23 + C.GetHashCode();
-                    return result;
-                }
-            }
-
-            #endregion
-        }
-
-        private sealed class CustomChunk : MidiChunk
+        internal sealed class CustomChunk : MidiChunk
         {
             #region Constants
 
@@ -350,12 +242,12 @@ namespace Melanchall.DryWetMidi.Tests.Core
             [Values] bool inherited,
             [Values] bool seekable)
         {
-            AsyncCustomChunk expected = inherited
+            AsyncCustomChunk expectedChunk = inherited
                 ? new InheritedAsyncCustomChunk()
                 : new AsyncCustomChunk();
-            expected.Value = 42;
+            expectedChunk.Value = 42;
             using var cancellation = new CancellationTokenSource();
-            using var output = new MidiFileAsyncTests.AsyncOnlyStream(seekable: lazyWrite || seekable);
+            using var output = new AsyncOnlyStream(seekable: lazyWrite || seekable);
             var writingSettings = new WritingSettings
             {
                 WriterSettings = new WriterSettings { UseBuffering = false }
@@ -364,38 +256,38 @@ namespace Melanchall.DryWetMidi.Tests.Core
             if (lazyWrite)
             {
                 await using var writer = await MidiFile.WriteLazyAsync(output, writingSettings);
-                await writer.WriteChunkAsync(expected, cancellation.Token);
+                await writer.WriteChunkAsync(expectedChunk, cancellation.Token);
             }
             else
             {
-                await new MidiFile(expected).WriteAsync(
+                await new MidiFile(expectedChunk).WriteAsync(
                     output,
                     settings: writingSettings,
                     cancellationToken: cancellation.Token);
             }
 
-            ClassicAssert.AreEqual(cancellation.Token, expected.HookToken, "The write hook received a different cancellation token.");
-            ClassicAssert.AreSame(writingSettings, expected.WriteSettings, "The write hook received different settings.");
-            ClassicAssert.AreEqual(22, expected.ContentPosition, "The write hook received an invalid absolute position.");
+            ClassicAssert.AreEqual(cancellation.Token, expectedChunk.HookToken, "The write hook received a different cancellation token.");
+            ClassicAssert.AreSame(writingSettings, expectedChunk.WriteSettings, "The write hook received different settings.");
+            ClassicAssert.AreEqual(22, expectedChunk.ContentPosition, "The write hook received an invalid absolute position.");
             ClassicAssert.IsFalse(output.IsDisposed, "Async chunk writing disposed the caller-owned stream.");
 
             var readingSettings = new ReadingSettings
             {
-                CustomChunkTypes = new ChunkTypesCollection { { expected.GetType(), "Asyn" } },
+                CustomChunkTypes = new ChunkTypesCollection { { expectedChunk.GetType(), "Asyn" } },
                 ReaderSettings = new ReaderSettings { BufferingPolicy = BufferingPolicy.DontUseBuffering }
             };
-            using var input = new MidiFileAsyncTests.AsyncOnlyStream(output.ToArray(), seekable, 1);
+            using var input = new AsyncOnlyStream(output.ToArray(), seekable, 1);
             var file = await MidiFile.ReadAsync(input, readingSettings, cancellationToken: cancellation.Token);
-            var actual = (AsyncCustomChunk)file.Chunks.Single();
+            var actualChunk = (AsyncCustomChunk)file.Chunks.Single();
 
-            ClassicAssert.AreEqual(expected.GetType(), actual.GetType(), "The registered custom chunk type was not created.");
-            ClassicAssert.AreEqual(42, actual.Value, "The async read hook returned an invalid value.");
-            ClassicAssert.AreEqual(22, actual.ContentPosition, "The read hook received an invalid absolute position.");
-            ClassicAssert.AreEqual(cancellation.Token, actual.HookToken, "The read hook received a different cancellation token.");
-            ClassicAssert.AreSame(readingSettings, actual.ReadSettings, "The read hook received different settings.");
+            ClassicAssert.AreEqual(expectedChunk.GetType(), actualChunk.GetType(), "The registered custom chunk type was not created.");
+            ClassicAssert.AreEqual(42, actualChunk.Value, "The async read hook returned an invalid value.");
+            ClassicAssert.AreEqual(22, actualChunk.ContentPosition, "The read hook received an invalid absolute position.");
+            ClassicAssert.AreEqual(cancellation.Token, actualChunk.HookToken, "The read hook received a different cancellation token.");
+            ClassicAssert.AreSame(readingSettings, actualChunk.ReadSettings, "The read hook received different settings.");
             ClassicAssert.IsFalse(input.IsDisposed, "Async chunk reading disposed the caller-owned stream.");
 
-            using var lazyInput = new MidiFileAsyncTests.AsyncOnlyStream(output.ToArray(), seekable, 1);
+            using var lazyInput = new AsyncOnlyStream(output.ToArray(), seekable, 1);
             await using var lazyReader = await MidiFile.ReadLazyAsync(lazyInput, readingSettings);
             var payload = new System.Collections.Generic.List<byte>();
 
@@ -421,7 +313,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
             new MidiFile(
                 new UnknownChunk(chunkId) { Data = new byte[] { 42, 0, 43, 0xFE, 0xFF } },
                 new UnknownChunk("Next") { Data = new byte[] { 7 } }).Write(bytes);
-            using var input = new MidiFileAsyncTests.AsyncOnlyStream(bytes.ToArray(), seekable, 1);
+            using var input = new AsyncOnlyStream(bytes.ToArray(), seekable, 1);
             var settings = new ReadingSettings
             {
                 CustomChunkTypes = new ChunkTypesCollection { { chunkType, chunkId } },
@@ -456,7 +348,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
         {
             using var bytes = new MemoryStream();
             new MidiFile(new UnknownChunk("Asyn") { Data = new byte[] { 42 } }).Write(bytes);
-            using var input = new MidiFileAsyncTests.AsyncOnlyStream(bytes.ToArray(), false, 1);
+            using var input = new AsyncOnlyStream(bytes.ToArray(), false, 1);
             var settings = new ReadingSettings
             {
                 CustomChunkTypes = new ChunkTypesCollection { { typeof(AllocatingAsyncCustomChunk), "Asyn" } },
@@ -474,7 +366,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
         {
             using var bytes = new MemoryStream();
             new MidiFile(new UnknownChunk("Asyn") { Data = new byte[] { 42, 43 } }).Write(bytes);
-            using var input = new MidiFileAsyncTests.AsyncOnlyStream(bytes.ToArray(), false, 1);
+            using var input = new AsyncOnlyStream(bytes.ToArray(), false, 1);
             using var cancellation = new CancellationTokenSource();
             CancelingAsyncCustomChunk.Cancellation = cancellation;
             var settings = new ReadingSettings
@@ -513,7 +405,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
                         throw new InvalidOperationException("Custom chunk write failure.");
                 }
             };
-            using var output = new MidiFileAsyncTests.AsyncOnlyStream();
+            using var output = new AsyncOnlyStream();
             Func<Task> write;
             MidiTokensWriter writer = null;
             if (lazy)
@@ -548,40 +440,6 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 if (writer != null)
                     await writer.DisposeAsync();
             }
-        }
-
-        [Test]
-        public void ReadWriteCustomMetaEvent()
-        {
-            const int expectedA = 1234567;
-            const string expectedB = "Test";
-            const byte expectedC = 45;
-
-            var customMetaEventTypes = new EventTypesCollection
-            {
-                { typeof(CustomMetaEvent), 0x5A }
-            };
-
-            var writingSettings = new WritingSettings { CustomMetaEventTypes = customMetaEventTypes };
-            var readingSettings = new ReadingSettings { CustomMetaEventTypes = customMetaEventTypes };
-
-            var midiFile = MidiFileTestUtilities.Read(
-                new MidiFile(
-                    new TrackChunk(
-                        new CustomMetaEvent(expectedA, expectedB, expectedC) { DeltaTime = 100 },
-                        new TextEvent("foo"),
-                        new MarkerEvent("bar"))),
-                writingSettings,
-                readingSettings);
-
-            var customMetaEvents = midiFile.GetEvents().OfType<CustomMetaEvent>().ToArray();
-            ClassicAssert.AreEqual(1, customMetaEvents.Length, "Custom meta events count is invalid.");
-
-            var customMetaEvent = customMetaEvents.Single();
-            ClassicAssert.AreEqual(100, customMetaEvent.DeltaTime, "Delta-time is invalid.");
-            ClassicAssert.AreEqual(expectedA, customMetaEvent.A, "A value is invalid");
-            ClassicAssert.AreEqual(expectedB, customMetaEvent.B, "B value is invalid");
-            ClassicAssert.AreEqual(expectedC, customMetaEvent.C, "C value is invalid");
         }
 
         [Test]

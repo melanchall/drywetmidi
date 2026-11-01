@@ -8,12 +8,12 @@ Meta events specify non-MIDI information useful to specific applications. As wit
 
 For example, let's create an event which will hold an image. Custom meta event must be derived from [`MetaEvent`](xref:Melanchall.DryWetMidi.Core.MetaEvent) and must implement six abstract methods:
 
-* [ReadContent](xref:Melanchall.DryWetMidi.Core.MetaEvent.ReadContent(Melanchall.DryWetMidi.Core.MidiReader,Melanchall.DryWetMidi.Core.ReadingSettings,System.Int32));
-* [WriteContent](xref:Melanchall.DryWetMidi.Core.MetaEvent.WriteContent(Melanchall.DryWetMidi.Core.MidiWriter,Melanchall.DryWetMidi.Core.WritingSettings));
+* [`ReadContent`](xref:Melanchall.DryWetMidi.Core.MetaEvent.ReadContent(Melanchall.DryWetMidi.Core.MidiReader,Melanchall.DryWetMidi.Core.ReadingSettings,System.Int32));
+* [`WriteContent`](xref:Melanchall.DryWetMidi.Core.MetaEvent.WriteContent(Melanchall.DryWetMidi.Core.MidiWriter,Melanchall.DryWetMidi.Core.WritingSettings));
 * [`ReadContentAsync`](xref:Melanchall.DryWetMidi.Core.MetaEvent.ReadContentAsync(Melanchall.DryWetMidi.Core.MidiReader,Melanchall.DryWetMidi.Core.ReadingSettings,System.Int32,System.Threading.CancellationToken));
 * [`WriteContentAsync`](xref:Melanchall.DryWetMidi.Core.MetaEvent.WriteContentAsync(Melanchall.DryWetMidi.Core.MidiWriter,Melanchall.DryWetMidi.Core.WritingSettings,System.Threading.CancellationToken));
-* [GetContentSize](xref:Melanchall.DryWetMidi.Core.MetaEvent.GetContentSize(Melanchall.DryWetMidi.Core.WritingSettings));
-* [CloneEvent](xref:Melanchall.DryWetMidi.Core.MidiEvent.CloneEvent).
+* [`GetContentSize`](xref:Melanchall.DryWetMidi.Core.MetaEvent.GetContentSize(Melanchall.DryWetMidi.Core.WritingSettings));
+* [`CloneEvent`](xref:Melanchall.DryWetMidi.Core.MidiEvent.CloneEvent).
 
 Also a class must have a parameterless constructor:
 
@@ -182,9 +182,7 @@ protected override async Task WriteContentAsync(
 and asynchronous event operations on
 [`MidiTokensReader`](xref:Melanchall.DryWetMidi.Core.MidiTokensReader) and
 [`MidiTokensWriter`](xref:Melanchall.DryWetMidi.Core.MidiTokensWriter), use these
-overrides. They receive the original reader or writer and settings, not a
-payload-only reader or writer. The library does not stage custom event content
-before invoking them. The byte array above is needed by `ImageConverter`; other
+overrides. The byte array above is needed by `ImageConverter`; other
 custom events can read and write individual fields directly.
 
 Read and write only the content, not the status bytes or length prefix. `size`

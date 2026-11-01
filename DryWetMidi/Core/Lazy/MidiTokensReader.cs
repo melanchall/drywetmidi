@@ -14,6 +14,30 @@ namespace Melanchall.DryWetMidi.Core
     /// <seealso cref="MidiTokensWriter"/>
     public sealed partial class MidiTokensReader : IDisposable, IAsyncDisposable
     {
+        #region Nested classes
+
+        private sealed class Instruction
+        {
+            public static readonly Instruction Read = new Instruction(InstructionType.Read, null);
+
+            public InstructionType InstructionType { get; }
+
+            public MidiToken? Token { get; }
+
+            public static Instruction ReturnToken(MidiToken? midiToken)
+            {
+                return new Instruction(InstructionType.ReturnToken, midiToken);
+            }
+
+            private Instruction(InstructionType instructionType, MidiToken? midiToken)
+            {
+                InstructionType = instructionType;
+                Token = midiToken;
+            }
+        }
+
+        #endregion
+
         #region Enums
 
         private enum State
@@ -31,31 +55,10 @@ namespace Melanchall.DryWetMidi.Core
 
         #endregion
 
-        #region Nested classes
-
-        private sealed class Instruction
-        {
-            public static readonly Instruction Read = new Instruction(InstructionType.Read, null);
-
-            private Instruction(InstructionType instructionType, MidiToken? midiToken)
-            {
-                InstructionType = instructionType;
-                Token = midiToken;
-            }
-
-            public InstructionType InstructionType { get; }
-
-            public MidiToken? Token { get; }
-
-            public static Instruction ReturnToken(MidiToken? midiToken)
-            {
-                return new Instruction(InstructionType.ReturnToken, midiToken);
-            }
-        }
-
-        #endregion
-
         #region Constants
+
+        private const int NoOperation = 0;
+        private const int OperationInProgress = 1;
 
         private static readonly Dictionary<State, State> StatesTransitions = new Dictionary<State, State>
         {
@@ -102,12 +105,6 @@ namespace Melanchall.DryWetMidi.Core
             _reader = new MidiReader(_stream, _settings.ReaderSettings);
 
             _disposeStream = disposeStream;
-        }
-
-        internal void Initialize()
-        {
-            if (_reader.EndReached)
-                throw new ArgumentException("Stream is already read.", "stream");
         }
 
         #endregion
@@ -162,7 +159,7 @@ namespace Melanchall.DryWetMidi.Core
             }
             finally
             {
-                Volatile.Write(ref _operation, 0);
+                Volatile.Write(ref _operation, NoOperation);
             }
         }
 
@@ -204,8 +201,75 @@ namespace Melanchall.DryWetMidi.Core
             }
             finally
             {
-                Volatile.Write(ref _operation, 0);
+                Volatile.Write(ref _operation, NoOperation);
             }
+        }
+
+        #endregion
+
+        #region IDisposable
+
+        /// <summary>
+        /// Releases all resources used by the current <see cref="MidiTokensReader"/>.
+        /// </summary>
+        public void Dispose()
+        {
+            if (_disposed)
+                return;
+
+            EnterOperation();
+
+            try
+            {
+                Dispose(true);
+            }
+            finally
+            {
+                Volatile.Write(ref _operation, NoOperation);
+            }
+        }
+
+        /// <summary>
+        /// Releases the reader and asynchronously disposes an owned stream.
+        /// </summary>
+        /// <returns>A task representing disposal.</returns>
+        /// <exception cref="InvalidOperationException">Another reader operation is in progress.</exception>
+        /// <exception cref="IOException">An I/O error occurred while disposing the owned stream.</exception>
+        public async ValueTask DisposeAsync()
+        {
+            if (_disposed)
+                return;
+
+            EnterOperation();
+
+            try
+            {
+                try
+                {
+                    _reader.Dispose();
+
+                    if (_disposeStream)
+                        await _stream.DisposeAsync().ConfigureAwait(false);
+                }
+                finally
+                {
+                    _disposed = true;
+                }
+            }
+            finally
+            {
+                Volatile.Write(ref _operation, NoOperation);
+            }
+        }
+
+        #endregion
+
+        #region Methods
+
+        internal void Initialize()
+        {
+            if (_reader.EndReached)
+                throw new ArgumentException("Stream is already read.", "stream");
         }
 
         private void EnterOperation()
@@ -213,7 +277,7 @@ namespace Melanchall.DryWetMidi.Core
             if (_disposed)
                 throw new ObjectDisposedException(nameof(MidiTokensReader));
 
-            if (Interlocked.CompareExchange(ref _operation, 1, 0) != 0)
+            if (Interlocked.CompareExchange(ref _operation, OperationInProgress, NoOperation) != NoOperation)
                 throw new InvalidOperationException("Another reader operation is already in progress.");
         }
 
@@ -356,60 +420,6 @@ namespace Melanchall.DryWetMidi.Core
         private void GoToNextState()
         {
             _state = StatesTransitions[_state];
-        }
-
-        #endregion
-
-        #region IDisposable
-
-        /// <summary>
-        /// Releases all resources used by the current <see cref="MidiTokensReader"/>.
-        /// </summary>
-        public void Dispose()
-        {
-            if (_disposed)
-                return;
-
-            EnterOperation();
-            try
-            {
-                Dispose(true);
-            }
-            finally
-            {
-                Volatile.Write(ref _operation, 0);
-            }
-        }
-
-        /// <summary>
-        /// Releases the reader and asynchronously disposes an owned stream.
-        /// </summary>
-        /// <returns>A task representing disposal.</returns>
-        /// <exception cref="InvalidOperationException">Another reader operation is in progress.</exception>
-        /// <exception cref="IOException">An I/O error occurred while disposing the owned stream.</exception>
-        public async ValueTask DisposeAsync()
-        {
-            if (_disposed)
-                return;
-
-            EnterOperation();
-            try
-            {
-                try
-                {
-                    _reader.Dispose();
-                    if (_disposeStream)
-                        await _stream.DisposeAsync().ConfigureAwait(false);
-                }
-                finally
-                {
-                    _disposed = true;
-                }
-            }
-            finally
-            {
-                Volatile.Write(ref _operation, 0);
-            }
         }
 
         private void Dispose(bool disposing)

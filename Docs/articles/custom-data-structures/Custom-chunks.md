@@ -32,7 +32,7 @@ Now we are going to implement a custom chunk. Custom chunk class must be derived
 * [`GetContentSize`](xref:Melanchall.DryWetMidi.Core.MidiChunk.GetContentSize(Melanchall.DryWetMidi.Core.WritingSettings));
 * [`Clone`](xref:Melanchall.DryWetMidi.Core.MidiChunk.Clone).
 
-Also, the class must have a parameterless constructor which calls the constructor of the base class ([`MidiChunk`](xref:Melanchall.DryWetMidi.Core.MidiChunk)) passing chunk's ID to it. ID is a 4-character string which will be `Hstr` for our chunk. The ID of a custom chunk should not be the same as one of standard chunks IDs.
+Also, the class must have a parameterless constructor which calls the constructor of the base class ([`MidiChunk`](xref:Melanchall.DryWetMidi.Core.MidiChunk)) passing chunk's ID to it. ID is a 4-character string which will be `Hstr` for our chunk. The ID of a custom chunk must not be `MThd` (the standard header chunk ID) or `MTrk` (the standard track chunk ID).
 
 The class will look like this:
 
@@ -247,7 +247,7 @@ calls `ReadContent` or `WriteContent`.
 [`MidiFile.WriteAsync`](xref:Melanchall.DryWetMidi.Core.MidiFile.WriteAsync*)
 call the corresponding asynchronous override.
 [`MidiTokensWriter.WriteChunkAsync`](xref:Melanchall.DryWetMidi.Core.MidiTokensWriter.WriteChunkAsync*)
-also uses the asynchronous content override. Lazy token reading instead returns
+also uses the asynchronous content override. [Lazy token reading](xref:a_file_lazy_reading_writing) instead returns
 custom-chunk bytes as tokens; it does not instantiate custom chunks or invoke
 their content overrides.
 
@@ -353,7 +353,7 @@ protected override Task WriteContentAsync(
 Synchronous file operations continue to use `ReadContent` and `WriteContent`.
 Asynchronous file operations fail with `NotSupportedException` when they reach
 this chunk. `MidiTokensWriter.WriteChunkAsync` also fails when it invokes this
-chunk's `WriteContentAsync`. Lazy token reading does not invoke custom chunk
+chunk's `WriteContentAsync`. [Lazy token reading](xref:a_file_lazy_reading_writing) does not invoke custom chunk
 content methods.
 
 ### Synchronous execution and completed tasks

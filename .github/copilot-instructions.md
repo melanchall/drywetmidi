@@ -1,9 +1,9 @@
 DryWetMIDI code style
 ====================
 
-Use this file as the single source of repository coding rules for this PR and
-future contributions. Read the surrounding code before editing; preserve existing
-public API behavior and naming.
+Use this file as the single source of repository coding rules for all Copilot
+pull requests and contributions. Read the surrounding code before editing;
+preserve existing public API behavior and naming.
 
 Layout
 ------
@@ -23,9 +23,10 @@ Always put loop bodies in braces, including single-statement bodies.
 Follow surrounding code for single-statement if bodies; braces are not required
 just because a loop's braces are required.
 
-Put blank lines between properties, methods, and constructors. Place nested
-classes at the start of their parent class, before other members. Put public
-members before internal and private implementation helpers.
+Put blank lines between properties, methods, and constructors. Always place nested
+classes at the top of their parent class, before other members. Always put private
+methods after public methods; put public members before internal and private
+implementation helpers.
 
 Do not put catch bodies or multiple independent statements on the same line.
 Constructor bodies must be multiline blocks, never expression-bodied.
@@ -37,6 +38,14 @@ on one line with only the final parameter on the following line.
 
 Expand lambdas with several statements into readable multiline blocks.
 Avoid densely packed object initializers and chained operations.
+
+Identifiers
+-----------
+Use descriptive identifiers that name the object or value, not shortened or
+decorative names. For example, use expectedFile and synchronousTokensReader
+instead of expected and synchronous.
+Do not use magic constants for operation states or other domain-specific values.
+Use enums or named constants that explain their meaning.
 
 Argument validation
 -------------------

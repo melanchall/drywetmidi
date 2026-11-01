@@ -131,26 +131,6 @@ namespace Melanchall.DryWetMidi.Tests.Core
         #region Test methods
 
         [Test]
-        public async Task ReadWriteEmptyCustomChunk_CompletedTaskDelegation()
-        {
-            using var stream = new MemoryStream();
-            var file = new MidiFile(new EmptyCustomChunk());
-            var settings = new ReadingSettings
-            {
-                CustomChunkTypes = new ChunkTypesCollection { { typeof(EmptyCustomChunk), EmptyCustomChunk.Id } }
-            };
-
-            await file.WriteAsync(stream);
-            stream.Position = 0;
-            var actual = await MidiFile.ReadAsync(stream, settings);
-
-            ClassicAssert.AreEqual(1, actual.Chunks.Count, "Reading changed the number of empty custom chunks.");
-            ClassicAssert.IsInstanceOf<EmptyCustomChunk>(actual.Chunks[0], "Reading did not use the empty custom chunk implementation.");
-            ClassicAssert.AreEqual(stream.Length, stream.Position, "Reading did not consume the empty custom chunk header.");
-            ClassicAssert.IsTrue(stream.CanRead, "Reading disposed the caller-owned stream.");
-        }
-
-        [Test]
         public void ReadZeroLengthData_TextEvent_ReadAsEmptyObject()
         {
             var midiFile = WriteRead(

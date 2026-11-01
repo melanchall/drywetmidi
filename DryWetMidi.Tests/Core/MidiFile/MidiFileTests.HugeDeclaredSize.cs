@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Tests.Utilities;
 using NUnit.Framework;
@@ -14,7 +15,11 @@ namespace Melanchall.DryWetMidi.Tests.Core
 
         private sealed class NonSeekableMemoryStream : MemoryStream
         {
-            public NonSeekableMemoryStream(byte[] bytes) : base(bytes) { }
+            public NonSeekableMemoryStream(byte[] bytes)
+                : base(bytes)
+            {
+            }
+
             public override bool CanSeek => false;
         }
 
@@ -77,9 +82,31 @@ namespace Melanchall.DryWetMidi.Tests.Core
             try
             {
                 File.WriteAllBytes(path, GetFileWithHugeEvent(EventStatusBytes.Global.Meta, EventStatusBytes.Meta.Text));
+
                 Assert.Throws<NotEnoughBytesException>(() =>
-                    MidiFileTestUtilities.ReadWithAsyncChecks(path, new ReadingSettings { NotEnoughBytesPolicy = NotEnoughBytesPolicy.Abort }),
+                    MidiFile.Read(path, new ReadingSettings { NotEnoughBytesPolicy = NotEnoughBytesPolicy.Abort }),
                     "Exception not thrown.");
+
+                var asynchronousException = Assert.Throws<AggregateException>(() =>
+                    MidiFile.ReadAsync(
+                        path,
+                        new ReadingSettings { NotEnoughBytesPolicy = NotEnoughBytesPolicy.Abort },
+                        cancellationToken: CancellationToken.None).Wait(),
+                    "Async path reading did not reject the huge declared event size.");
+
+                ClassicAssert.IsInstanceOf<NotEnoughBytesException>(
+                    asynchronousException.InnerException,
+                    "Async path reading returned a different exception.");
+
+                using (var synchronousStream = File.OpenRead(path))
+                {
+                    AssertHugeDeclaredSizeAbort(synchronousStream, false);
+                }
+
+                using (var asynchronousStream = File.OpenRead(path))
+                {
+                    AssertHugeDeclaredSizeAbort(asynchronousStream, true);
+                }
             }
             finally
             {
@@ -94,27 +121,23 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 new SequenceTrackNameEvent("Name"),
                 new NormalSysExEvent(new byte[] { 1, 2, 3, 0xF7 })));
 
-            using (var ms = new MemoryStream())
+            using (var synchronousStream = new MemoryStream())
             {
-                file.Write(ms);
-                ms.Position = 0;
-                var read = MidiFile.Read(ms, new ReadingSettings { NotEnoughBytesPolicy = NotEnoughBytesPolicy.Abort });
-                var events = read.GetTrackChunks().Single().Events;
-                ClassicAssert.AreEqual("Name", ((SequenceTrackNameEvent)events[0]).Text, "Track name is invalid.");
-                CollectionAssert.AreEqual(new byte[] { 1, 2, 3, 0xF7 }, ((NormalSysExEvent)events[1]).Data, "SysEx data is invalid.");
+                file.Write(synchronousStream);
+                synchronousStream.Position = 0;
+                var synchronousFile = MidiFile.Read(synchronousStream, new ReadingSettings { NotEnoughBytesPolicy = NotEnoughBytesPolicy.Abort });
 
-                using (var asyncStream = new MemoryStream(ms.ToArray()))
+                AssertValidSizedEvents(synchronousFile);
+
+                using (var asynchronousStream = new MemoryStream(synchronousStream.ToArray()))
                 {
-                    var asyncFile = MidiFile.ReadAsync(
-                        asyncStream,
+                    var asynchronousFile = MidiFile.ReadAsync(
+                        asynchronousStream,
                         new ReadingSettings { NotEnoughBytesPolicy = NotEnoughBytesPolicy.Abort },
-                        cancellationToken: System.Threading.CancellationToken.None).Result;
+                        cancellationToken: CancellationToken.None).Result;
 
-                    var asyncEvents = asyncFile.GetTrackChunks().Single().Events;
-
-                    ClassicAssert.AreEqual("Name", ((SequenceTrackNameEvent)asyncEvents[0]).Text, "Async track name is invalid.");
-                    CollectionAssert.AreEqual(new byte[] { 1, 2, 3, 0xF7 }, ((NormalSysExEvent)asyncEvents[1]).Data, "Async SysEx data is invalid.");
-                    MidiAsserts.AreEqual(read, asyncFile, true, "Async valid event reading differs.");
+                    AssertValidSizedEvents(asynchronousFile);
+                    MidiAsserts.AreEqual(synchronousFile, asynchronousFile, true, "Async valid event reading differs.");
                 }
             }
         }
@@ -172,6 +195,38 @@ namespace Melanchall.DryWetMidi.Tests.Core
 
         #region Private methods
 
+        private static void AssertValidSizedEvents(MidiFile file)
+        {
+            var events = file.GetTrackChunks().Single().Events;
+
+            ClassicAssert.AreEqual("Name", ((SequenceTrackNameEvent)events[0]).Text, "Track name is invalid.");
+            CollectionAssert.AreEqual(new byte[] { 1, 2, 3, 0xF7 }, ((NormalSysExEvent)events[1]).Data, "SysEx data is invalid.");
+        }
+
+        private static void AssertHugeDeclaredSizeAbort(Stream stream, bool asynchronous)
+        {
+            var settings = new ReadingSettings { NotEnoughBytesPolicy = NotEnoughBytesPolicy.Abort };
+            TestDelegate read = () =>
+            {
+                if (!asynchronous)
+                {
+                    MidiFile.Read(stream, settings);
+                    return;
+                }
+
+                try
+                {
+                    MidiFile.ReadAsync(stream, settings, CancellationToken.None).Wait();
+                }
+                catch (AggregateException exception)
+                {
+                    throw exception.InnerException;
+                }
+            };
+
+            Assert.Throws<NotEnoughBytesException>(read, "Reading did not reject the huge declared event size.");
+        }
+
         private static MidiFile ReadFromBytes(byte[] bytes, NotEnoughBytesPolicy policy, bool nonSeekable)
         {
             var settings = new ReadingSettings
@@ -183,17 +238,18 @@ namespace Melanchall.DryWetMidi.Tests.Core
 
             using (var stream = nonSeekable ? (Stream)new NonSeekableMemoryStream(bytes) : new MemoryStream(bytes))
             {
-                MidiFile expected;
+                MidiFile expectedFile;
+
                 try
                 {
-                    expected = MidiFile.Read(stream, settings);
+                    expectedFile = MidiFile.Read(stream, settings);
                 }
                 catch (Exception exception)
                 {
-                    using (var asyncStream = nonSeekable ? (Stream)new NonSeekableMemoryStream(bytes) : new MemoryStream(bytes))
+                    using (var asynchronousStream = nonSeekable ? (Stream)new NonSeekableMemoryStream(bytes) : new MemoryStream(bytes))
                     {
                         var aggregate = Assert.Throws<AggregateException>(() => MidiFile.ReadAsync(
-                            asyncStream,
+                            asynchronousStream,
                             settings,
                             cancellationToken: System.Threading.CancellationToken.None).Wait(), "Async reading did not reject the huge declared event size.");
 
@@ -203,17 +259,17 @@ namespace Melanchall.DryWetMidi.Tests.Core
                     throw;
                 }
 
-                using (var asyncStream = nonSeekable ? (Stream)new NonSeekableMemoryStream(bytes) : new MemoryStream(bytes))
+                using (var asynchronousStream = nonSeekable ? (Stream)new NonSeekableMemoryStream(bytes) : new MemoryStream(bytes))
                 {
-                    var actual = MidiFile.ReadAsync(
-                        asyncStream,
+                    var actualFile = MidiFile.ReadAsync(
+                        asynchronousStream,
                         settings,
                         cancellationToken: System.Threading.CancellationToken.None).Result;
 
-                    MidiAsserts.AreEqual(expected, actual, true, "Async huge declared size reading differs.");
+                    MidiAsserts.AreEqual(expectedFile, actualFile, true, "Async huge declared size reading differs.");
                 }
 
-                return expected;
+                return expectedFile;
             }
         }
 

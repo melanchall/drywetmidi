@@ -297,56 +297,48 @@ namespace Melanchall.DryWetMidi.Core
             CancellationToken cancellationToken = default)
         {
             byte? runningStatus = null;
-            var skipTempo = true;
-            var skipKey = true;
-            var skipTime = true;
-            var additionalDelta = 0L;
-            var lastEnd = false;
+            var skipSetTempo = true;
+            var skipKeySignature = true;
+            var skipTimeSignature = true;
+            var additionalDeltaTime = 0L;
+            var lastEventIsEndOfTrack = false;
 
             foreach (var midiEvent in Events)
             {
                 cancellationToken.ThrowIfCancellationRequested();
+
                 IEventWriter? eventWriter = null;
                 MidiEvent? eventToWrite = null;
-                var writeStatus = true;
+                var writeStatusByte = true;
                 ProcessEvent(
                     midiEvent,
                     settings,
-                    (w, e, s) =>
+                    (currentEventWriter, currentEvent, currentWriteStatusByte) =>
                     {
-                        eventWriter = w;
-                        eventToWrite = e;
-                        writeStatus = s;
+                        eventWriter = currentEventWriter;
+                        eventToWrite = currentEvent;
+                        writeStatusByte = currentWriteStatusByte;
                     },
-                    ref lastEnd,
-                    ref additionalDelta,
+                    ref lastEventIsEndOfTrack,
+                    ref additionalDeltaTime,
                     ref runningStatus,
-                    ref skipTempo,
-                    ref skipKey,
-                    ref skipTime);
+                    ref skipSetTempo,
+                    ref skipKeySignature,
+                    ref skipTimeSignature);
 
                 if (eventToWrite != null && eventWriter != null)
                 {
                     await writer.WriteVlqNumberAsync(eventToWrite.DeltaTime, cancellationToken).ConfigureAwait(false);
-                    await eventWriter.WriteAsync(eventToWrite, writer, settings, writeStatus, cancellationToken).ConfigureAwait(false);
+                    await eventWriter.WriteAsync(eventToWrite, writer, settings, writeStatusByte, cancellationToken).ConfigureAwait(false);
                 }
             }
 
-            var end = new EndOfTrackEvent { DeltaTime = lastEnd ? additionalDelta : 0 };
-            await writer.WriteVlqNumberAsync(end.DeltaTime, cancellationToken).ConfigureAwait(false);
-            await EventWriterFactory.GetWriter(end).WriteAsync(end, writer, settings, true, cancellationToken).ConfigureAwait(false);
-        }
-
-        internal uint GetContentSize(WritingSettings settings, CancellationToken cancellationToken)
-        {
-            uint size = 0;
-            ProcessEvents(
-                settings,
-                (writer, midiEvent, writeStatus) =>
-                    size += (uint)(midiEvent.DeltaTime.GetVlqLength() + writer.CalculateSize(midiEvent, settings, writeStatus)),
-                cancellationToken);
-
-            return size;
+            var endOfTrackEvent = new EndOfTrackEvent
+            {
+                DeltaTime = lastEventIsEndOfTrack ? additionalDeltaTime : 0
+            };
+            await writer.WriteVlqNumberAsync(endOfTrackEvent.DeltaTime, cancellationToken).ConfigureAwait(false);
+            await EventWriterFactory.GetWriter(endOfTrackEvent).WriteAsync(endOfTrackEvent, writer, settings, true, cancellationToken).ConfigureAwait(false);
         }
 
         internal static void ProcessEvent(
@@ -428,8 +420,7 @@ namespace Melanchall.DryWetMidi.Core
 
         private void ProcessEvents(
             WritingSettings settings,
-            Action<IEventWriter, MidiEvent, bool> eventHandler,
-            CancellationToken cancellationToken = default)
+            Action<IEventWriter, MidiEvent, bool> eventHandler)
         {
             byte? runningStatus = null;
 
@@ -441,7 +432,6 @@ namespace Melanchall.DryWetMidi.Core
 
             foreach (var midiEvent in Events)
             {
-                cancellationToken.ThrowIfCancellationRequested();
                 ProcessEvent(
                     midiEvent,
                     settings,

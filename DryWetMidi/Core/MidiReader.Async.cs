@@ -10,20 +10,13 @@ namespace Melanchall.DryWetMidi.Core
 {
     public sealed partial class MidiReader
     {
+        #region Fields
+
         private readonly byte[] _asyncByte = new byte[1];
 
-        private async ValueTask PrepareBufferAsync(CancellationToken cancellationToken)
-        {
-            if (_useBuffering && _buffer == null)
-            {
-                using var memory = new MemoryStream();
-                await _stream.CopyToAsync(memory, 81920, cancellationToken).ConfigureAwait(false);
+        #endregion
 
-                _buffer = memory.ToArray();
-                _bufferStart = 0;
-                _bufferSize = _buffer.Length;
-            }
-        }
+        #region Methods
 
         /// <summary>
         /// Asynchronously determines whether the end of the underlying stream is reached.
@@ -143,46 +136,6 @@ namespace Melanchall.DryWetMidi.Core
             return await ReadBytesInternalAsync(count, cancellationToken).ConfigureAwait(false);
         }
 
-        private async Task<byte[]> ReadBytesInternalAsync(int count, CancellationToken cancellationToken)
-        {
-            if (count == 0)
-                return EmptyByteArray;
-
-            var result = new byte[count];
-            var bytesRead = 0;
-
-            while (bytesRead < count)
-            {
-                cancellationToken.ThrowIfCancellationRequested();
-
-                int read;
-                if (_useBuffering)
-                {
-                    if (!await EnsureBufferAsync(cancellationToken).ConfigureAwait(false))
-                        break;
-
-                    read = Math.Min(count - bytesRead, _bufferSize - _bufferPosition);
-                    Buffer.BlockCopy(_buffer!, _bufferPosition, result, bytesRead, read);
-                    Position += read;
-                }
-                else
-                    read = await _stream.ReadAsync(result, bytesRead, count - bytesRead, cancellationToken).ConfigureAwait(false);
-
-                if (read == 0)
-                    break;
-
-                bytesRead += read;
-            }
-
-            if (bytesRead == result.Length)
-                return result;
-
-            var copy = new byte[bytesRead];
-            Buffer.BlockCopy(result, 0, copy, 0, bytesRead);
-
-            return copy;
-        }
-
         /// <summary>
         /// Asynchronously reads a big-endian 32-bit unsigned integer.
         /// </summary>
@@ -256,6 +209,7 @@ namespace Melanchall.DryWetMidi.Core
             ThrowIfArgument.IsNegative(nameof(count), count, "Count is negative.");
 
             var bytes = await ReadBytesAsync(count, cancellationToken).ConfigureAwait(false);
+
             return SmfConstants.DefaultTextEncoding.GetString(bytes);
         }
 
@@ -285,13 +239,75 @@ namespace Melanchall.DryWetMidi.Core
             return ReadVlqNumberCoreAsync(VlqLongMaxBytes, VlqLongLastCheckReference, cancellationToken);
         }
 
+        private async ValueTask PrepareBufferAsync(CancellationToken cancellationToken)
+        {
+            if (_useBuffering && _buffer == null)
+            {
+                using var memoryStream = new MemoryStream();
+                await _stream.CopyToAsync(memoryStream, 81920, cancellationToken).ConfigureAwait(false);
+
+                _buffer = memoryStream.ToArray();
+                _bufferStart = 0;
+                _bufferSize = _buffer.Length;
+            }
+        }
+
+        private async Task<byte[]> ReadBytesInternalAsync(
+            int count,
+            CancellationToken cancellationToken)
+        {
+            if (count == 0)
+                return EmptyByteArray;
+
+            var result = new byte[count];
+            var readBytesCount = 0;
+
+            while (readBytesCount < count)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+
+                int currentReadBytesCount;
+                if (_useBuffering)
+                {
+                    if (!await EnsureBufferAsync(cancellationToken).ConfigureAwait(false))
+                        break;
+
+                    currentReadBytesCount = Math.Min(count - readBytesCount, _bufferSize - _bufferPosition);
+                    Buffer.BlockCopy(_buffer!, _bufferPosition, result, readBytesCount, currentReadBytesCount);
+                    Position += currentReadBytesCount;
+                }
+                else
+                    currentReadBytesCount = await _stream.ReadAsync(
+                        result,
+                        readBytesCount,
+                        count - readBytesCount,
+                        cancellationToken).ConfigureAwait(false);
+
+                if (currentReadBytesCount == 0)
+                    break;
+
+                readBytesCount += currentReadBytesCount;
+            }
+
+            if (readBytesCount == result.Length)
+                return result;
+
+            var readBytes = new byte[readBytesCount];
+            Buffer.BlockCopy(result, 0, readBytes, 0, readBytesCount);
+
+            return readBytes;
+        }
+
         private void ThrowIfDisposed()
         {
             if (_disposed)
                 throw new ObjectDisposedException(nameof(MidiReader));
         }
 
-        private async ValueTask<uint> ReadNumberAsync(int size, string name, CancellationToken cancellationToken)
+        private async ValueTask<uint> ReadNumberAsync(
+            int size,
+            string name,
+            CancellationToken cancellationToken)
         {
             var bytes = await ReadBytesAsync(size, cancellationToken).ConfigureAwait(false);
             if (bytes.Length < size)
@@ -348,24 +364,30 @@ namespace Melanchall.DryWetMidi.Core
             {
                 _stream.Position = (_position / _buffer!.Length) * _buffer.Length;
                 _bufferStart = _stream.Position;
-                var count = 0;
+                var readBytesCount = 0;
 
-                while (count < _buffer.Length)
+                while (readBytesCount < _buffer.Length)
                 {
-                    var read = await _stream.ReadAsync(_buffer, count, _buffer.Length - count, cancellationToken).ConfigureAwait(false);
-                    if (read == 0)
+                    var currentReadBytesCount = await _stream.ReadAsync(
+                        _buffer,
+                        readBytesCount,
+                        _buffer.Length - readBytesCount,
+                        cancellationToken).ConfigureAwait(false);
+                    if (currentReadBytesCount == 0)
                         break;
 
-                    count += read;
+                    readBytesCount += currentReadBytesCount;
                 }
 
                 _bufferPosition = (int)(_position % _buffer.Length);
-                _bufferSize = count;
-                if (count == 0)
+                _bufferSize = readBytesCount;
+                if (readBytesCount == 0)
                     return false;
             }
 
             return _bufferSize > 0;
         }
+
+        #endregion
     }
 }

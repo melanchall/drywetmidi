@@ -12,23 +12,23 @@ using NUnit.Framework.Legacy;
 
 namespace Melanchall.DryWetMidi.Tests.Interaction
 {
-    [TestFixture]
-    public sealed class TimedObjectsWriterAsyncTests
+    public sealed partial class TimedObjectsWriterTests
     {
         [Test]
         public async Task WriteObjectsAsync_PreservesDeferredNoteOffs()
         {
             using var stream = new MemoryStream();
-            var tokens = MidiFile.WriteLazy(stream);
-            await tokens.StartTrackChunkAsync();
-            var writer = new TimedObjectsWriter(tokens);
+            var tokensWriter = MidiFile.WriteLazy(stream);
+            await tokensWriter.StartTrackChunkAsync();
+            var writer = new TimedObjectsWriter(tokensWriter);
+
             await writer.WriteObjectsAsync(new ITimedObject[]
             {
                 new Note((SevenBitNumber)60, 100, 0),
                 new Note((SevenBitNumber)64, 50, 10)
             });
             await writer.DisposeAsync();
-            await tokens.DisposeAsync();
+            await tokensWriter.DisposeAsync();
 
             ClassicAssert.IsTrue(stream.CanRead, "Async object writing disposed the caller-owned stream.");
 
@@ -44,13 +44,14 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         public async Task EndTrackChunkAsync_FlushesObjectWriter()
         {
             using var stream = new MemoryStream();
-            var tokens = MidiFile.WriteLazy(stream);
-            await tokens.StartTrackChunkAsync();
-            var writer = new TimedObjectsWriter(tokens);
+            var tokensWriter = MidiFile.WriteLazy(stream);
+            await tokensWriter.StartTrackChunkAsync();
+            var writer = new TimedObjectsWriter(tokensWriter);
+
             await writer.WriteObjectAsync(new Note((SevenBitNumber)60, 100, 0));
-            await tokens.EndTrackChunkAsync();
+            await tokensWriter.EndTrackChunkAsync();
             await writer.DisposeAsync();
-            await tokens.DisposeAsync();
+            await tokensWriter.DisposeAsync();
 
             stream.Position = 0;
 
@@ -61,12 +62,12 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         public async Task WriteObjectsAsync_AsyncProducerIsDisposed()
         {
             using var stream = new MemoryStream();
-            var tokens = MidiFile.WriteLazy(stream);
-            await tokens.StartTrackChunkAsync();
-            var writer = new TimedObjectsWriter(tokens);
-            var disposed = false;
+            var tokensWriter = MidiFile.WriteLazy(stream);
+            await tokensWriter.StartTrackChunkAsync();
+            var writer = new TimedObjectsWriter(tokensWriter);
+            var producerDisposed = false;
 
-            async IAsyncEnumerable<ITimedObject> Produce()
+            async IAsyncEnumerable<ITimedObject> ProduceObjects()
             {
                 try
                 {
@@ -76,42 +77,43 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 }
                 finally
                 {
-                    disposed = true;
+                    producerDisposed = true;
                 }
             }
 
-            Assert.ThrowsAsync<InvalidOperationException>(async () => await writer.WriteObjectsAsync(Produce()), "Async object writing did not propagate producer failure.");
-            ClassicAssert.IsTrue(disposed, "Failed async producer was not disposed.");
+            Assert.ThrowsAsync<InvalidOperationException>(async () => await writer.WriteObjectsAsync(ProduceObjects()), "Async object writing did not propagate producer failure.");
+            ClassicAssert.IsTrue(producerDisposed, "Failed async producer was not disposed.");
 
             await writer.DisposeAsync();
-            await tokens.DisposeAsync();
+            await tokensWriter.DisposeAsync();
         }
 
         [Test]
         public async Task WriteObjectAsync_Canceled_DoesNotAdvance()
         {
             using var stream = new MemoryStream();
-            var tokens = MidiFile.WriteLazy(stream);
-            await tokens.StartTrackChunkAsync();
-            var writer = new TimedObjectsWriter(tokens);
-            using var source = new CancellationTokenSource();
-            source.Cancel();
+            var tokensWriter = MidiFile.WriteLazy(stream);
+            await tokensWriter.StartTrackChunkAsync();
+            var writer = new TimedObjectsWriter(tokensWriter);
+            using var cancellation = new CancellationTokenSource();
+            cancellation.Cancel();
 
             Assert.ThrowsAsync<OperationCanceledException>(async () =>
-                await writer.WriteObjectAsync(new Note((SevenBitNumber)60, 20, 100), source.Token), "Pre-canceled object writing did not throw.");
-            ClassicAssert.AreEqual(0, tokens.CurrentTime, "Canceled object writing advanced the token writer.");
+                await writer.WriteObjectAsync(new Note((SevenBitNumber)60, 20, 100), cancellation.Token), "Pre-canceled object writing did not throw.");
+            ClassicAssert.AreEqual(0, tokensWriter.CurrentTime, "Canceled object writing advanced the token writer.");
 
             await writer.DisposeAsync();
-            await tokens.DisposeAsync();
+            await tokensWriter.DisposeAsync();
         }
 
         [Test]
         public async Task DisposeAsync_RejectsSubsequentWrites()
         {
             using var stream = new MemoryStream();
-            var tokens = MidiFile.WriteLazy(stream);
-            await tokens.StartTrackChunkAsync();
-            var writer = new TimedObjectsWriter(tokens);
+            var tokensWriter = MidiFile.WriteLazy(stream);
+            await tokensWriter.StartTrackChunkAsync();
+            var writer = new TimedObjectsWriter(tokensWriter);
+
             await writer.DisposeAsync();
 
             Assert.Throws<ObjectDisposedException>(() => writer.WriteObject(new Note((SevenBitNumber)60)), "Disposed writer accepted an object.");
@@ -119,38 +121,38 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             Assert.ThrowsAsync<ObjectDisposedException>(async () =>
                 await writer.WriteObjectAsync(new Note((SevenBitNumber)60)), "Disposed writer accepted an async write.");
 
-            await tokens.DisposeAsync();
+            await tokensWriter.DisposeAsync();
         }
 
         [Test]
         public async Task WriteObjectsAsync_RejectsOverlappingOperations()
         {
             using var stream = new MemoryStream();
-            var tokens = MidiFile.WriteLazy(stream);
-            await tokens.StartTrackChunkAsync();
-            var writer = new TimedObjectsWriter(tokens);
-            var started = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
-            var release = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+            var tokensWriter = MidiFile.WriteLazy(stream);
+            await tokensWriter.StartTrackChunkAsync();
+            var writer = new TimedObjectsWriter(tokensWriter);
+            var producerStarted = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+            var releaseProducer = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
 
-            async IAsyncEnumerable<ITimedObject> Produce()
+            async IAsyncEnumerable<ITimedObject> ProduceObjects()
             {
-                started.SetResult(true);
-                await release.Task;
+                producerStarted.SetResult(true);
+                await releaseProducer.Task;
                 yield return new Note((SevenBitNumber)60, 20, 0);
             }
 
-            var pending = writer.WriteObjectsAsync(Produce());
-            await started.Task;
+            var pendingWrite = writer.WriteObjectsAsync(ProduceObjects());
+            await producerStarted.Task;
 
             Assert.Throws<InvalidOperationException>(() => writer.WriteObject(new Note((SevenBitNumber)60)), "Object writer accepted an overlapping synchronous write.");
-            Assert.Throws<InvalidOperationException>(() => tokens.EndTrackChunk(), "Track ending overlapped object writing.");
+            Assert.Throws<InvalidOperationException>(() => tokensWriter.EndTrackChunk(), "Track ending overlapped object writing.");
             Assert.ThrowsAsync<InvalidOperationException>(async () =>
                 await writer.WriteObjectAsync(new Note((SevenBitNumber)60)), "Object writer accepted an overlapping async write.");
 
-            release.SetResult(true);
-            await pending;
+            releaseProducer.SetResult(true);
+            await pendingWrite;
             await writer.DisposeAsync();
-            await tokens.DisposeAsync();
+            await tokensWriter.DisposeAsync();
         }
     }
 }

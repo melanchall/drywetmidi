@@ -15,7 +15,7 @@ namespace Melanchall.DryWetMidi.Core
 
         private async Task<MidiToken?> ReadTokenCoreAsync(CancellationToken cancellationToken)
         {
-            var start = _reader.Position;
+            var readerPosition = _reader.Position;
 
             while (true)
             {
@@ -101,8 +101,8 @@ namespace Melanchall.DryWetMidi.Core
                     return null;
                 }
 
-                token.Position = start;
-                token.Length = _reader.Position - start;
+                token.Position = readerPosition;
+                token.Length = _reader.Position - readerPosition;
 
                 return token;
             }

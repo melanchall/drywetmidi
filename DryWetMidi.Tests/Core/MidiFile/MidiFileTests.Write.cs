@@ -9,6 +9,7 @@ using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Tests.Utilities;
 using NUnit.Framework;
 using NUnit.Framework.Legacy;
+using CustomChunk = Melanchall.DryWetMidi.Tests.Core.MidiChunkTests.CustomChunk;
 
 namespace Melanchall.DryWetMidi.Tests.Core
 {
@@ -26,7 +27,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 WritePrimitivePayload(writer);
             }
 
-            using var output = new MidiFileAsyncTests.AsyncOnlyStream(seekable: false);
+            using var output = new AsyncOnlyStream(seekable: false);
             var asynchronous = new MidiWriter(output, new WriterSettings { UseBuffering = buffering, BufferSize = 3 });
 
             await asynchronous.WriteByteAsync(0xAB, CancellationToken.None);
@@ -47,14 +48,14 @@ namespace Melanchall.DryWetMidi.Tests.Core
 
             ClassicAssert.AreEqual(synchronousOutput.ToArray(), output.ToArray(), "Async primitive bytes differ from synchronous output.");
             ClassicAssert.AreEqual(synchronousOutput.Length, asynchronous.Length, "Async writer length differs from the serialized length.");
-            ClassicAssert.Greater(output.AsyncWrites, 0, "Async primitives did not use async stream IO.");
+            ClassicAssert.Greater(output.AsyncWritesCount, 0, "Async primitives did not use async stream IO.");
             ClassicAssert.IsFalse(output.IsDisposed, "Async primitive writer disposal closed the caller-owned stream.");
         }
 
         [Test]
         public async Task WritePrimitives_AsyncArgumentValidation()
         {
-            using var output = new MidiFileAsyncTests.AsyncOnlyStream();
+            using var output = new AsyncOnlyStream();
             await using var writer = new MidiWriter(output, new WriterSettings { UseBuffering = false });
 
             var nullException = Assert.ThrowsAsync<ArgumentNullException>(
@@ -70,14 +71,14 @@ namespace Melanchall.DryWetMidi.Tests.Core
             ClassicAssert.AreEqual("bytes", nullException.ParamName, "Null-byte validation reported an invalid parameter name.");
             ClassicAssert.AreEqual("offset", offsetException.ParamName, "Offset validation reported an invalid parameter name.");
             ClassicAssert.AreEqual("length", lengthException.ParamName, "Length validation reported an invalid parameter name.");
-            ClassicAssert.AreEqual(0, output.AsyncWrites, "Invalid primitive writes touched the stream.");
+            ClassicAssert.AreEqual(0, output.AsyncWritesCount, "Invalid primitive writes touched the stream.");
             ClassicAssert.AreEqual(0, writer.Length, "Invalid primitive writes changed the writer length.");
         }
 
         [Test]
         public async Task WritePrimitives_AsyncCancellationAndDisposal()
         {
-            using var output = new MidiFileAsyncTests.AsyncOnlyStream();
+            using var output = new AsyncOnlyStream();
             var writer = new MidiWriter(output, new WriterSettings { UseBuffering = false });
             using var cancellation = new CancellationTokenSource();
             cancellation.Cancel();
@@ -91,7 +92,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
             Assert.CatchAsync<OperationCanceledException>(
                 async () => await writer.WriteVlqNumberAsync(42, cancellation.Token),
                 "A pre-canceled primitive VLQ write did not fail.");
-            ClassicAssert.AreEqual(0, output.AsyncWrites, "Pre-canceled primitives touched the stream.");
+            ClassicAssert.AreEqual(0, output.AsyncWritesCount, "Pre-canceled primitives touched the stream.");
             ClassicAssert.AreEqual(0, writer.Length, "Pre-canceled primitives changed the writer length.");
 
             await writer.DisposeAsync();

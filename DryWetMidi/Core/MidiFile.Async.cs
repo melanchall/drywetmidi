@@ -1,5 +1,6 @@
 using Melanchall.DryWetMidi.Common;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
@@ -10,6 +11,8 @@ namespace Melanchall.DryWetMidi.Core
 {
     public sealed partial class MidiFile
     {
+        #region Methods
+
         /// <summary>
         /// Reads a MIDI file using asynchronous stream I/O.
         /// </summary>
@@ -105,48 +108,6 @@ namespace Melanchall.DryWetMidi.Core
             await WriteCoreAsync(stream, format, settings, cancellationToken).ConfigureAwait(false);
 
             cancellationToken.ThrowIfCancellationRequested();
-        }
-
-        private async Task WriteCoreAsync(
-            Stream stream,
-            MidiFileFormat format,
-            WritingSettings? settings,
-            CancellationToken cancellationToken)
-        {
-            cancellationToken.ThrowIfCancellationRequested();
-            if (TimeDivision == null)
-                throw new InvalidOperationException("Time division is null.");
-
-            settings ??= new WritingSettings();
-            settings.WriterSettings ??= new WriterSettings();
-            var writer = new MidiWriter(stream, settings.WriterSettings);
-
-            await using (writer.ConfigureAwait(false))
-            {
-                var chunks = ChunksConverterFactory.GetConverter(format).Convert(Chunks);
-                if (settings.WriteHeaderChunk)
-                {
-                    var count = chunks.Count(c => c is TrackChunk);
-                    if (count > ushort.MaxValue)
-                        throw new TooManyTrackChunksException(count);
-
-                    await new HeaderChunk
-                    {
-                        FileFormat = (ushort)format,
-                        TimeDivision = TimeDivision,
-                        TracksNumber = (ushort)count
-                    }.WriteAsync(writer, settings, cancellationToken).ConfigureAwait(false);
-                }
-
-                foreach (var chunk in chunks)
-                {
-                    cancellationToken.ThrowIfCancellationRequested();
-                    if (chunk is UnknownChunk && settings.DeleteUnknownChunks)
-                        continue;
-
-                    await chunk.WriteAsync(writer, settings, cancellationToken).ConfigureAwait(false);
-                }
-            }
         }
 
         /// <summary>
@@ -336,5 +297,232 @@ namespace Melanchall.DryWetMidi.Core
                 throw;
             }
         }
+
+        private async Task WriteCoreAsync(
+            Stream stream,
+            MidiFileFormat format,
+            WritingSettings? settings,
+            CancellationToken cancellationToken)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            if (TimeDivision == null)
+                throw new InvalidOperationException("Time division is null.");
+
+            settings ??= new WritingSettings();
+            settings.WriterSettings ??= new WriterSettings();
+            var writer = new MidiWriter(stream, settings.WriterSettings);
+
+            await using (writer.ConfigureAwait(false))
+            {
+                var chunks = ChunksConverterFactory.GetConverter(format).Convert(Chunks);
+                if (settings.WriteHeaderChunk)
+                {
+                    var trackChunksCount = chunks.Count(chunk => chunk is TrackChunk);
+                    if (trackChunksCount > ushort.MaxValue)
+                        throw new TooManyTrackChunksException(trackChunksCount);
+
+                    var headerChunk = new HeaderChunk
+                    {
+                        FileFormat = (ushort)format,
+                        TimeDivision = TimeDivision,
+                        TracksNumber = (ushort)trackChunksCount
+                    };
+                    await headerChunk.WriteAsync(writer, settings, cancellationToken).ConfigureAwait(false);
+                }
+
+                foreach (var chunk in chunks)
+                {
+                    cancellationToken.ThrowIfCancellationRequested();
+
+                    if (chunk is UnknownChunk && settings.DeleteUnknownChunks)
+                        continue;
+
+                    await chunk.WriteAsync(writer, settings, cancellationToken).ConfigureAwait(false);
+                }
+            }
+        }
+
+        private static async Task<MidiFile> ReadCoreAsync(
+            Stream stream,
+            ReadingSettings settings,
+            CancellationToken cancellationToken)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            if (!stream.CanRead)
+                throw new ArgumentException("Stream doesn't support reading.", nameof(stream));
+
+            settings.ReaderSettings ??= new ReaderSettings();
+            var file = new MidiFile();
+            int? expectedTrackChunksCount = null;
+            var actualTrackChunksCount = 0;
+            var hasHeaderChunk = false;
+            using var reader = new MidiReader(stream, settings.ReaderSettings);
+
+            try
+            {
+                if (await reader.EndReachedAsync(cancellationToken).ConfigureAwait(false))
+                    throw new ArgumentException("Stream is already read.", nameof(stream));
+
+                if (settings.MaxMemorySize != null)
+                    reader.AddEstimatedMemory(
+                        MemorySizeEstimator.EstimateShallow(file) +
+                        MemorySizeEstimator.EstimateShallow(file.Chunks) +
+                        MemorySizeEstimator.EstimateShallow(new List<MidiChunk>()),
+                        settings);
+
+                var smfEndPosition = await MidiFileReadingUtilities.ReadRmidPreambleAsync(reader, cancellationToken).ConfigureAwait(false);
+
+                while (!await reader.EndReachedAsync(cancellationToken).ConfigureAwait(false) &&
+                    (smfEndPosition == null || reader.Position < smfEndPosition))
+                {
+                    if (expectedTrackChunksCount != null &&
+                        actualTrackChunksCount == expectedTrackChunksCount &&
+                        settings.StopReadingOnExpectedTrackChunksCountReached)
+                        return file;
+
+                    var chunk = await ReadChunkAsync(
+                        reader,
+                        settings,
+                        actualTrackChunksCount,
+                        expectedTrackChunksCount,
+                        cancellationToken).ConfigureAwait(false);
+                    if (chunk == null)
+                        continue;
+
+                    if (chunk is HeaderChunk headerChunk)
+                    {
+                        if (!hasHeaderChunk)
+                        {
+                            expectedTrackChunksCount = headerChunk.TracksNumber;
+                            file.TimeDivision = headerChunk.TimeDivision;
+                            file._originalFormat = headerChunk.FileFormat;
+
+                            if (settings.MaxMemorySize != null)
+                                reader.AddEstimatedMemory(MemorySizeEstimator.EstimateShallow(headerChunk.TimeDivision), settings);
+                        }
+
+                        hasHeaderChunk = true;
+                        continue;
+                    }
+
+                    if (chunk is TrackChunk)
+                        actualTrackChunksCount++;
+
+                    var chunksCapacity = file.Chunks.Capacity;
+                    file.Chunks.Add(chunk);
+
+                    if (settings.MaxMemorySize != null)
+                    {
+                        if (chunksCapacity != file.Chunks.Capacity)
+                            reader.AddEstimatedMemory(
+                                MemorySizeEstimator.EstimateReferencesArray(file.Chunks.Capacity) -
+                                MemorySizeEstimator.EstimateReferencesArray(chunksCapacity),
+                                settings);
+
+                        file.EstimatedMemorySize = reader.EstimatedMemorySize;
+                    }
+                }
+
+                if (expectedTrackChunksCount != null && actualTrackChunksCount != expectedTrackChunksCount)
+                    ReactOnUnexpectedTrackChunksCount(
+                        settings.UnexpectedTrackChunksCountPolicy,
+                        actualTrackChunksCount,
+                        expectedTrackChunksCount.Value);
+
+                if (!hasHeaderChunk)
+                {
+                    file.TimeDivision = null;
+
+                    if (settings.NoHeaderChunkPolicy == NoHeaderChunkPolicy.Abort)
+                        throw new NoHeaderChunkException();
+                }
+            }
+            catch (NotEnoughBytesException exception)
+            {
+                ReactOnNotEnoughBytes(settings.NotEnoughBytesPolicy, exception);
+            }
+            catch (EndOfStreamException exception)
+            {
+                ReactOnNotEnoughBytes(settings.NotEnoughBytesPolicy, exception);
+            }
+
+            return file;
+        }
+
+        private static async Task<MidiChunk?> ReadChunkAsync(
+            MidiReader reader,
+            ReadingSettings settings,
+            int actualTrackChunksCount,
+            int? expectedTrackChunksCount,
+            CancellationToken cancellationToken)
+        {
+            var chunkIdBytes = await reader.ReadBytesAsync(4, cancellationToken).ConfigureAwait(false);
+            if (chunkIdBytes.Length < 4)
+            {
+                if (settings.NotEnoughBytesPolicy == NotEnoughBytesPolicy.Abort)
+                    throw new NotEnoughBytesException("Not enough bytes to read a chunk ID.", 4, chunkIdBytes.Length);
+
+                return null;
+            }
+
+            var chunkId = SmfConstants.DefaultTextEncoding.GetString(chunkIdBytes);
+            MidiChunk? chunk = chunkId == HeaderChunk.Id ? new HeaderChunk() :
+                chunkId == TrackChunk.Id ? new TrackChunk() : MidiFileReadingUtilities.TryCreateChunk(chunkId, settings.CustomChunkTypes);
+            if (chunk == null && settings.UnknownChunkIdPolicy == UnknownChunkIdPolicy.Abort)
+                throw new UnknownChunkException(chunkId);
+
+            if (chunk == null && settings.UnknownChunkIdPolicy == UnknownChunkIdPolicy.ReadAsUnknownChunk)
+                chunk = new UnknownChunk(chunkId);
+
+            uint chunkSize;
+
+            try
+            {
+                chunkSize = await reader.ReadDwordAsync(cancellationToken).ConfigureAwait(false);
+            }
+            catch (NotEnoughBytesException exception)
+            {
+                ReactOnNotEnoughBytes(settings.NotEnoughBytesPolicy, exception);
+                return chunk;
+            }
+            catch (EndOfStreamException exception)
+            {
+                ReactOnNotEnoughBytes(settings.NotEnoughBytesPolicy, exception);
+                return chunk;
+            }
+
+            var readerPosition = reader.Position;
+            if ((chunk == null && settings.UnknownChunkIdPolicy == UnknownChunkIdPolicy.Skip) ||
+                (chunk is TrackChunk &&
+                 expectedTrackChunksCount != null &&
+                 actualTrackChunksCount >= expectedTrackChunksCount &&
+                 settings.ExtraTrackChunkPolicy == ExtraTrackChunkPolicy.Skip))
+            {
+                await reader.SetPositionAsync(Math.Min(readerPosition + chunkSize, reader.Length), cancellationToken).ConfigureAwait(false);
+
+                return null;
+            }
+
+            chunk ??= new UnknownChunk(chunkId);
+
+            try
+            {
+                await chunk.ReadAsync(reader, settings, chunkSize, cancellationToken).ConfigureAwait(false);
+            }
+            catch (NotEnoughBytesException exception)
+            {
+                ReactOnNotEnoughBytes(settings.NotEnoughBytesPolicy, exception);
+            }
+            catch (EndOfStreamException exception)
+            {
+                ReactOnNotEnoughBytes(settings.NotEnoughBytesPolicy, exception);
+            }
+
+            return chunk;
+        }
+
+        #endregion
     }
 }

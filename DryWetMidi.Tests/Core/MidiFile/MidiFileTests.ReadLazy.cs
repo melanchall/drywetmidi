@@ -6,6 +6,8 @@ using System.Linq;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
+using System.Threading.Tasks;
+using System;
 
 namespace Melanchall.DryWetMidi.Tests.Core
 {
@@ -13,6 +15,117 @@ namespace Melanchall.DryWetMidi.Tests.Core
     public sealed partial class MidiFileTests
     {
         #region Test methods
+
+        [Test]
+        public async Task LazyReaders_ContinueAfterSkippedEvent()
+        {
+            var bytes = new byte[]
+            {
+                // MThd header: six-byte payload, format 0, one track, 96 ticks per quarter note.
+                0x4D, 0x54, 0x68, 0x64, 0x00, 0x00, 0x00, 0x06,
+                0x00, 0x00, 0x00, 0x01, 0x00, 0x60,
+                // MTrk header: ten bytes of track data follow.
+                0x4D, 0x54, 0x72, 0x6B, 0x00, 0x00, 0x00, 0x0A,
+                // Zero delta-time and unknown F1 status; SkipStatusByte skips only F1.
+                0x00, 0xF1,
+                // Zero delta-time, Note On on channel 0, middle C, velocity 64.
+                0x00, 0x90, 0x3C, 0x40,
+                // Zero delta-time and End Of Track meta-event with an empty payload.
+                0x00, 0xFF, 0x2F, 0x00
+            };
+            var settings = new ReadingSettings { UnknownChannelEventPolicy = UnknownChannelEventPolicy.SkipStatusByte };
+            using var synchronousInputStream = new MemoryStream(bytes);
+            using var synchronousTokensReader = MidiFile.ReadLazy(synchronousInputStream, settings);
+            var expectedEventTypes = synchronousTokensReader.EnumerateTokens().OfType<MidiEventToken>().Select(t => t.Event.EventType).ToArray();
+            ClassicAssert.AreEqual(new[] { MidiEventType.NoteOn, MidiEventType.EndOfTrack }, expectedEventTypes, "Synchronous lazy reader did not skip the unknown status byte.");
+
+            using var inputStream = new AsyncOnlyStream(bytes, false, 1);
+            await using var asynchronousTokensReader = await MidiFile.ReadLazyAsync(inputStream, settings);
+            var actualEventTypes = new List<MidiEventType>();
+
+            await foreach (var token in asynchronousTokensReader.EnumerateTokensAsync())
+            {
+                if (token is MidiEventToken midiEvent)
+                    actualEventTypes.Add(midiEvent.Event.EventType);
+            }
+
+            ClassicAssert.AreEqual(expectedEventTypes, actualEventTypes, "Async lazy reader returned different events after the skipped status byte.");
+        }
+
+        [Test]
+        public async Task Reader_RejectsOverlappingOperations()
+        {
+            using var bytes = new MemoryStream();
+            new MidiFile(new TrackChunk(
+                new NoteOnEvent { Velocity = (SevenBitNumber)100 },
+                new NoteOffEvent { DeltaTime = 100 })).Write(bytes);
+            using var input = new AsyncOnlyStream(bytes.ToArray());
+            await using var reader = await MidiFile.ReadLazyAsync(input);
+            input.ReadGate = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+            var pendingRead = reader.ReadTokenAsync();
+            await input.ReadStarted.Task;
+
+            Assert.Throws<InvalidOperationException>(() => reader.ReadToken(), "Synchronous reading accepted an overlapping operation.");
+            Assert.ThrowsAsync<InvalidOperationException>(async () => await reader.ReadTokenAsync(), "Async reading accepted an overlapping operation.");
+
+            input.ReadGate.SetResult(true);
+
+            ClassicAssert.IsNotNull(await pendingRead, "The original pending read did not return a token.");
+        }
+
+        [Test]
+        public async Task UndersizedTimeSignature_PreservesSynchronousFraming()
+        {
+            var data = new byte[]
+            {
+                0x4D, 0x54, 0x68, 0x64, 0, 0, 0, 6, 0, 1, 0, 1, 0, 96,
+                0x4D, 0x54, 0x72, 0x6B, 0, 0, 0, 10,
+                0, 0xFF, 0x58, 1, 4, 2, 0, 0xFF, 0x2F, 0
+            };
+            using var synchronousInput = new MemoryStream(data);
+            var expectedFile = MidiFile.Read(synchronousInput);
+            using var asynchronousInput = new AsyncOnlyStream(data, false, 2);
+            var actualFile = await MidiFile.ReadAsync(asynchronousInput);
+
+            ClassicAssert.AreEqual(
+                expectedFile.GetTrackChunks().Single().Events.OfType<TimeSignatureEvent>().Single().Denominator,
+                actualFile.GetTrackChunks().Single().Events.OfType<TimeSignatureEvent>().Single().Denominator,
+                "Async reading changed undersized time-signature framing.");
+
+            using var lazyInput = new AsyncOnlyStream(data, false, 2);
+            await using var reader = await MidiFile.ReadLazyAsync(lazyInput);
+            var timeSignatureCount = 0;
+
+            while (await reader.ReadTokenAsync() is MidiToken token)
+            {
+                if (token is MidiEventToken eventToken && eventToken.Event is TimeSignatureEvent)
+                    timeSignatureCount++;
+            }
+
+            ClassicAssert.AreEqual(1, timeSignatureCount, "Lazy async reading returned an invalid time-signature count.");
+        }
+
+        [Test]
+        public async Task LazyReader_DoesNotReadWholeInput_AndWritesUseBoundedPackets()
+        {
+            const int maximumWritePacketSize = 65536;
+
+            var file = new MidiFile(new UnknownChunk("Test") { Data = new byte[200000] });
+            using var output = new AsyncOnlyStream();
+
+            await file.WriteAsync(output, settings: new WritingSettings
+            {
+                WriterSettings = new WriterSettings { UseBuffering = false }
+            });
+
+            ClassicAssert.LessOrEqual(output.MaximumWriteSize, maximumWritePacketSize, "Async writing exceeded the packet size bound.");
+
+            using var input = new AsyncOnlyStream(output.ToArray(), false);
+            await using var reader = await MidiFile.ReadLazyAsync(input);
+
+            ClassicAssert.IsInstanceOf<ChunkHeaderToken>(await reader.ReadTokenAsync(), "Lazy reading did not return the first chunk header.");
+            ClassicAssert.Less(input.BytesRead, 100, "Lazy reading buffered the whole payload before returning a token.");
+        }
 
         [Test]
         public void ReadLazy_EmptyFile([Values] MidiFileFormat format) => ReadLazy(

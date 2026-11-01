@@ -214,9 +214,7 @@ namespace Melanchall.DryWetMidi.Core
         internal async Task WriteAsync(MidiWriter writer, WritingSettings settings, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            var size = this is TrackChunk track
-                ? track.GetContentSize(settings, cancellationToken)
-                : GetContentSize(settings);
+            var size = GetContentSize(settings);
 
             await WriteHeaderAsync(ChunkId, size, writer, cancellationToken).ConfigureAwait(false);
             await WriteContentAsync(writer, settings, cancellationToken).ConfigureAwait(false);
@@ -229,12 +227,12 @@ namespace Melanchall.DryWetMidi.Core
             CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            var start = reader.Position;
+            var readerPosition = reader.Position;
             var estimateMemory = settings.MaxMemorySize != null;
             var isCustomChunk = !(this is HeaderChunk || this is TrackChunk || this is UnknownChunk);
 
             if (estimateMemory && isCustomChunk)
-                reader.ThrowIfMemoryLimitExceeded(Math.Min(size, Math.Max(0, reader.Length - start)), settings);
+                reader.ThrowIfMemoryLimitExceeded(Math.Min(size, Math.Max(0, reader.Length - readerPosition)), settings);
 
             var initialSize = 0L;
             if (estimateMemory && !(this is HeaderChunk))
@@ -248,12 +246,12 @@ namespace Melanchall.DryWetMidi.Core
             if (estimateMemory && isCustomChunk)
                 reader.AddEstimatedMemory(Math.Max(0, MemorySizeEstimator.EstimateDeep(this) - initialSize), settings);
 
-            var consumed = reader.Position - start;
-            if (settings.InvalidChunkSizePolicy == InvalidChunkSizePolicy.Abort && consumed != size)
-                throw new InvalidChunkSizeException(ChunkId, size, consumed);
+            var readBytesCount = reader.Position - readerPosition;
+            if (settings.InvalidChunkSizePolicy == InvalidChunkSizePolicy.Abort && readBytesCount != size)
+                throw new InvalidChunkSizeException(ChunkId, size, readBytesCount);
 
-            if (consumed < size)
-                await reader.SetPositionAsync(Math.Min(start + size, reader.Length), cancellationToken).ConfigureAwait(false);
+            if (readBytesCount < size)
+                await reader.SetPositionAsync(Math.Min(readerPosition + size, reader.Length), cancellationToken).ConfigureAwait(false);
         }
 
         internal static uint ReadSize(MidiReader reader, out long readerPosition)

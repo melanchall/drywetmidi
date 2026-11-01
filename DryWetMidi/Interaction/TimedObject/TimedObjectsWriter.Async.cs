@@ -8,7 +8,20 @@ namespace Melanchall.DryWetMidi.Interaction
 {
     public sealed partial class TimedObjectsWriter
     {
+        #region Constants
+
+        private const int NoAsyncOperation = 0;
+        private const int AsyncOperationInProgress = 1;
+
+        #endregion
+
+        #region Fields
+
         private int _asyncOperation;
+
+        #endregion
+
+        #region Methods
 
         /// <inheritdoc cref="WriteObject" path="/member/exception" />
         /// <summary>
@@ -35,7 +48,7 @@ namespace Melanchall.DryWetMidi.Interaction
             }
             finally
             {
-                Volatile.Write(ref _asyncOperation, 0);
+                Volatile.Write(ref _asyncOperation, NoAsyncOperation);
             }
         }
 
@@ -74,7 +87,7 @@ namespace Melanchall.DryWetMidi.Interaction
             }
             finally
             {
-                Volatile.Write(ref _asyncOperation, 0);
+                Volatile.Write(ref _asyncOperation, NoAsyncOperation);
             }
         }
 
@@ -113,7 +126,7 @@ namespace Melanchall.DryWetMidi.Interaction
             }
             finally
             {
-                Volatile.Write(ref _asyncOperation, 0);
+                Volatile.Write(ref _asyncOperation, NoAsyncOperation);
             }
         }
 
@@ -140,7 +153,7 @@ namespace Melanchall.DryWetMidi.Interaction
             }
             finally
             {
-                Volatile.Write(ref _asyncOperation, 0);
+                Volatile.Write(ref _asyncOperation, NoAsyncOperation);
             }
         }
 
@@ -197,7 +210,7 @@ namespace Melanchall.DryWetMidi.Interaction
             }
             finally
             {
-                Volatile.Write(ref _asyncOperation, 0);
+                Volatile.Write(ref _asyncOperation, NoAsyncOperation);
             }
         }
 
@@ -215,14 +228,16 @@ namespace Melanchall.DryWetMidi.Interaction
             if (_disposed)
                 throw new ObjectDisposedException(nameof(TimedObjectsWriter));
 
-            if (Interlocked.CompareExchange(ref _asyncOperation, 1, 0) != 0)
+            if (Interlocked.CompareExchange(ref _asyncOperation, AsyncOperationInProgress, NoAsyncOperation) != NoAsyncOperation)
                 throw new InvalidOperationException("Another asynchronous operation is already in progress.");
         }
 
         private void EnsureNoAsyncOperation()
         {
-            if (Volatile.Read(ref _asyncOperation) != 0)
+            if (Volatile.Read(ref _asyncOperation) != NoAsyncOperation)
                 throw new InvalidOperationException("An asynchronous operation is already in progress.");
         }
+
+        #endregion
     }
 }

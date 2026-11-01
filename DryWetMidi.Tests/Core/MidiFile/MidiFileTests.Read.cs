@@ -21,7 +21,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
         [Test]
         public async Task ReadPosition_AsyncNonseekableSkipRewindAndEnd()
         {
-            using var input = new MidiFileAsyncTests.AsyncOnlyStream(new byte[] { 10, 20, 30, 40, 50, 60 }, false, 1);
+            using var input = new AsyncOnlyStream(new byte[] { 10, 20, 30, 40, 50, 60 }, false, 1);
             using var reader = new MidiReader(input, new ReaderSettings
             {
                 BufferingPolicy = BufferingPolicy.DontUseBuffering,
@@ -51,14 +51,14 @@ namespace Melanchall.DryWetMidi.Tests.Core
             Assert.ThrowsAsync<InvalidOperationException>(
                 async () => await reader.SetPositionAsync(0, CancellationToken.None),
                 "Rewinding from the nonseekable EOF sentinel did not reject an unrepresentable replay distance.");
-            ClassicAssert.Greater(input.AsyncReads, 0, "Positioning did not use async stream IO.");
+            ClassicAssert.Greater(input.AsyncReadsCount, 0, "Positioning did not use async stream IO.");
             ClassicAssert.IsFalse(input.IsDisposed, "Positioning disposed the caller-owned stream.");
         }
 
         [Test]
         public void ReadPosition_AsyncValidationCancellationAndDisposal()
         {
-            using var input = new MidiFileAsyncTests.AsyncOnlyStream(new byte[] { 42 }, false, 1);
+            using var input = new AsyncOnlyStream(new byte[] { 42 }, false, 1);
             var reader = new MidiReader(input, new ReaderSettings { BufferingPolicy = BufferingPolicy.DontUseBuffering });
             using var cancellation = new CancellationTokenSource();
             cancellation.Cancel();
@@ -73,7 +73,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
             Assert.CatchAsync<OperationCanceledException>(
                 async () => await reader.EndReachedAsync(cancellation.Token),
                 "Pre-canceled async EOF peeking did not fail.");
-            ClassicAssert.AreEqual(0, input.AsyncReads, "Invalid or pre-canceled positioning touched the stream.");
+            ClassicAssert.AreEqual(0, input.AsyncReadsCount, "Invalid or pre-canceled positioning touched the stream.");
             ClassicAssert.AreEqual(0, reader.Position, "Invalid or pre-canceled positioning changed the logical position.");
 
             reader.Dispose();
@@ -109,7 +109,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
             };
             using var synchronousInput = new MemoryStream(bytes.ToArray());
             using var synchronous = new MidiReader(synchronousInput, settings);
-            using var asynchronousInput = new MidiFileAsyncTests.AsyncOnlyStream(bytes.ToArray(), seekable, 1);
+            using var asynchronousInput = new AsyncOnlyStream(bytes.ToArray(), seekable, 1);
             using var asynchronous = new MidiReader(asynchronousInput, settings);
 
             ClassicAssert.AreEqual(synchronous.ReadByte(), await asynchronous.ReadByteAsync(CancellationToken.None), "Async unsigned-byte reading differs.");
@@ -128,14 +128,14 @@ namespace Melanchall.DryWetMidi.Tests.Core
             else
                 ClassicAssert.IsTrue(await asynchronous.EndReachedAsync(CancellationToken.None), "Async nonseekable primitive reading did not reach the end of the stream.");
 
-            ClassicAssert.Greater(asynchronousInput.AsyncReads, 0, "Async primitives did not use async stream IO.");
+            ClassicAssert.Greater(asynchronousInput.AsyncReadsCount, 0, "Async primitives did not use async stream IO.");
             ClassicAssert.IsFalse(asynchronousInput.IsDisposed, "Async primitive reading disposed the caller-owned stream.");
         }
 
         [Test]
         public async Task ReadPrimitives_AsyncEmptyAndInvalidCounts()
         {
-            using var input = new MidiFileAsyncTests.AsyncOnlyStream(new byte[] { 42 });
+            using var input = new AsyncOnlyStream(new byte[] { 42 });
             using var reader = new MidiReader(input, new ReaderSettings { BufferingPolicy = BufferingPolicy.DontUseBuffering });
 
             ClassicAssert.IsEmpty(await reader.ReadBytesAsync(0), "Reading zero bytes returned data.");
@@ -149,13 +149,13 @@ namespace Melanchall.DryWetMidi.Tests.Core
 
             ClassicAssert.AreEqual("count", bytesException.ParamName, "Byte reading reported an invalid parameter name.");
             ClassicAssert.AreEqual("count", stringException.ParamName, "String reading reported an invalid parameter name.");
-            ClassicAssert.AreEqual(0, input.AsyncReads, "Empty or invalid reads touched the stream.");
+            ClassicAssert.AreEqual(0, input.AsyncReadsCount, "Empty or invalid reads touched the stream.");
         }
 
         [Test]
         public void ReadPrimitives_AsyncTruncation([Values(2, 3, 4)] int size)
         {
-            using var input = new MidiFileAsyncTests.AsyncOnlyStream(new byte[size - 1], false, 1);
+            using var input = new AsyncOnlyStream(new byte[size - 1], false, 1);
             using var reader = new MidiReader(input, new ReaderSettings { BufferingPolicy = BufferingPolicy.DontUseBuffering });
 
             Assert.ThrowsAsync<NotEnoughBytesException>(
@@ -176,7 +176,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
         public void ReadPrimitives_AsyncVlqOverflow([Values] bool longNumber)
         {
             var bytes = Enumerable.Repeat((byte)0xFF, longNumber ? 9 : 5).ToArray();
-            using var input = new MidiFileAsyncTests.AsyncOnlyStream(bytes, false, 1);
+            using var input = new AsyncOnlyStream(bytes, false, 1);
             using var reader = new MidiReader(input, new ReaderSettings { BufferingPolicy = BufferingPolicy.DontUseBuffering });
 
             Assert.ThrowsAsync<VlqNumberOverflowException>(
@@ -193,7 +193,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
         [Test]
         public void ReadPrimitives_AsyncCancellationAndDisposal()
         {
-            using var input = new MidiFileAsyncTests.AsyncOnlyStream(new byte[] { 42, 43 });
+            using var input = new AsyncOnlyStream(new byte[] { 42, 43 });
             var reader = new MidiReader(input, new ReaderSettings { BufferingPolicy = BufferingPolicy.DontUseBuffering });
             using var cancellation = new CancellationTokenSource();
             cancellation.Cancel();
@@ -207,7 +207,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
             Assert.CatchAsync<OperationCanceledException>(
                 async () => await reader.ReadVlqNumberAsync(cancellation.Token),
                 "A pre-canceled primitive VLQ read did not fail.");
-            ClassicAssert.AreEqual(0, input.AsyncReads, "Pre-canceled primitives touched the stream.");
+            ClassicAssert.AreEqual(0, input.AsyncReadsCount, "Pre-canceled primitives touched the stream.");
 
             reader.Dispose();
 

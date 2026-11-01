@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 namespace Melanchall.DryWetMidi.Tests.Interaction
 {
     [TestFixture]
-    public sealed class TimedObjectsWriterTests
+    public sealed partial class TimedObjectsWriterTests
     {
         #region Nested classes
 
