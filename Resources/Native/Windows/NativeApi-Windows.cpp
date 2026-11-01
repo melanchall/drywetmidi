@@ -2418,16 +2418,33 @@ API_EXPORT OUT_CLOSERESULT API_CALL CloseOutputEndpoint(void* handle, int* error
         return OUT_CLOSERESULT_RESET_UNKNOWNERROR;
     }
 
+    // Pending buffers can still be returned by the driver right after reset, so closing is retried
+    // a bounded number of times instead of waiting indefinitely
+    const int maxCloseRetries = 50;
+    const int closeRetryDelayMs = 10;
+
     result = midiOutClose(outputEndpointHandle->handle);
+    for (int retry = 0; retry < maxCloseRetries && result == MIDIERR_STILLPLAYING; retry++)
+    {
+        Sleep(closeRetryDelayMs);
+
+        midiOutReset(outputEndpointHandle->handle);
+        result = midiOutClose(outputEndpointHandle->handle);
+    }
+
     if (result != MMSYSERR_NOERROR)
     {
         *errorCode = result;
+
+        // The device is still open and the driver can invoke the callback later,
+        // so the handle is intentionally kept alive in this case
+        if (result == MIDIERR_STILLPLAYING)
+            return OUT_CLOSERESULT_CLOSE_STILLPLAYING;
 
         delete outputEndpointHandle;
 
         switch (result)
         {
-            case MIDIERR_STILLPLAYING: return OUT_CLOSERESULT_CLOSE_STILLPLAYING;
             case MMSYSERR_INVALHANDLE: return OUT_CLOSERESULT_CLOSE_INVALIDHANDLE;
             case MMSYSERR_NOMEM: return OUT_CLOSERESULT_CLOSE_NOMEMORY;
         }
@@ -2614,9 +2631,19 @@ API_EXPORT OUT_GETSYSEXDATARESULT API_CALL GetOutputEndpointSysExBufferData(void
     {
         *errorCode = result;
 
+        // The buffer is still owned by the driver, so it must not be released
+        if (result == MIDIERR_STILLPLAYING)
+            return OUT_GETSYSEXDATARESULT_STILLPLAYING;
+
+        // The header can't be unprepared anymore. Hand the data buffer over to the caller
+        // (it frees the buffer) and release the header to avoid leaking them
+        *data = header->lpData;
+        *size = header->dwBytesRecorded;
+
+        delete header;
+
         switch (result)
         {
-            case MIDIERR_STILLPLAYING: return OUT_GETSYSEXDATARESULT_STILLPLAYING;
             case MMSYSERR_INVALPARAM: return OUT_GETSYSEXDATARESULT_INVALIDSTRUCTURE;
             case MMSYSERR_INVALHANDLE: return OUT_GETSYSEXDATARESULT_INVALIDHANDLE;
         }

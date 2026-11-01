@@ -419,12 +419,17 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         private void OnSysExEventSent(IntPtr sysExHeaderPointer)
         {
+            // The handle can be released concurrently, so it is read once and checked
+            var endpointHandle = Handle.OpenedEndpointHandle;
+            if (endpointHandle == IntPtr.Zero)
+                return;
+
             byte[]? data = null;
             IntPtr dataPointer = IntPtr.Zero;
 
             try
             {
-                var result = OutputEndpointApi.Api_GetSysExBufferData(Handle.OpenedEndpointHandle, sysExHeaderPointer, out dataPointer, out var size, out var errorCode);
+                var result = OutputEndpointApi.Api_GetSysExBufferData(endpointHandle, sysExHeaderPointer, out dataPointer, out var size, out var errorCode);
                 NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
             }
             catch (Exception ex)
