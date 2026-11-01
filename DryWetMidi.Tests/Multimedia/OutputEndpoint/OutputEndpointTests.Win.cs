@@ -96,10 +96,10 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
         [Test]
         [WinOnly]
-        public void DisposeOutputEndpoint_SysExInFlight_Stress()
+        public void DisposeOutputEndpoint_SysExInFlight_Stress([Values(100, 1000, 20000)] int dataSize)
         {
             var bytes = Enumerable
-                .Range(0, 20000)
+                .Range(0, dataSize)
                 .Select(_ => (byte)DryWetMidi.Common.Random.Instance.Next(127))
                 .Concat(new byte[] { 0xF7 })
                 .ToArray();
@@ -111,14 +111,19 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 var outputEndpoint = DevicesUtilities.GetOutputEndpoint(MicrosoftGsWavetableSynth);
                 outputEndpoint.ErrorOccurred += (_, e) => errors.Add(e.Exception);
 
+#if TEST
+                var checkpoints = new TestCheckpoints();
+                outputEndpoint.TestCheckpoints = checkpoints;
+#endif
+
                 try
                 {
-                    outputEndpoint.PrepareForEventsSending();
-                    outputEndpoint.SendEvent(new NormalSysExEvent(bytes));
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Failed to send SysEx on iteration {i}: {ex.Message}");
+                    ClassicAssert.DoesNotThrow(
+                        () => outputEndpoint.PrepareForEventsSending(),
+                        $"Failed to open endpoint on iteration {i} (data size {dataSize}).");
+                    ClassicAssert.DoesNotThrow(
+                        () => outputEndpoint.SendEvent(new NormalSysExEvent(bytes)),
+                        $"Failed to send SysEx on iteration {i} (data size {dataSize}).");
                 }
                 finally
                 {
@@ -126,9 +131,18 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                         System.Threading.Tasks.Task.Run(() => outputEndpoint.Dispose()).Wait(TimeSpan.FromSeconds(30)),
                         $"Dispose hung on iteration {i}.");
                 }
-            }
 
-            CollectionAssert.IsEmpty(errors, "Errors occurred while disposing endpoints with SysEx in flight.");
+#if TEST
+                CollectionAssert.IsEmpty(
+                    checkpoints.GetErrors(),
+                    $"Native cleanup failed on iteration {i} (data size {dataSize}).");
+                checkpoints.CheckCheckpointsReached(OutputEndpointCheckpointsNames.CloseEndpointSuccessInReleaseHandle);
+#endif
+
+                CollectionAssert.IsEmpty(
+                    errors,
+                    $"Errors occurred while disposing endpoint on iteration {i} (data size {dataSize}).");
+            }
         }
 
         #endregion
