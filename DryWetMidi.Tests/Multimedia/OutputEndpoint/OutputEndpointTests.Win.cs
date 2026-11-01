@@ -108,7 +108,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
             for (var i = 0; i < 100; i++)
             {
-                var outputEndpoint = DevicesUtilities.GetOutputEndpoint(MidiEndpoints.A);
+                var outputEndpoint = OutputEndpoint.GetByName(MidiEndpoints.A, forceWinMM: true);
                 outputEndpoint.ErrorOccurred += (_, e) => errors.Add(e.Exception);
 
 #if TEST
