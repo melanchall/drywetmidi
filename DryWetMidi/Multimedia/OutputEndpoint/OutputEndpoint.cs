@@ -255,10 +255,8 @@ namespace Melanchall.DryWetMidi.Multimedia
             var bufferPointer = Marshal.AllocHGlobal(bufferLength);
             Marshal.Copy(data, 0, bufferPointer, data.Length);
 
-            var configurationHandle = MidiConfiguration.GetConfigurationHandle();
-
-            var result = OutputEndpointApi.Api_SendSysExEvent_Win(Handle.OpenedEndpointHandle, MidiDevicesSession.GetSessionHandle(), bufferPointer, bufferLength, out var errorCode);
-            if (result != OutputEndpointApi.OUT_SENDSYSEXRESULT.OUT_SENDSYSEXRESULT_OK)
+            var result = OutputEndpointApi.Api_SendSysExEvent_Win(Handle.OpenedEndpointHandle, MidiDevicesSession.GetSessionHandle(), bufferPointer, bufferLength, out var dataTransferred, out var errorCode);
+            if (result != OutputEndpointApi.OUT_SENDSYSEXRESULT.OUT_SENDSYSEXRESULT_OK || dataTransferred == 0)
                 Marshal.FreeHGlobal(bufferPointer);
             
             NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
@@ -361,11 +359,8 @@ namespace Melanchall.DryWetMidi.Multimedia
                 hasStartByte ? bufferPointer : IntPtr.Add(bufferPointer, 1),
                 data.Length);
 
-            var configurationHandle = MidiConfiguration.GetConfigurationHandle();
-
-            var result = OutputEndpointApi.Api_SendSysExEvent_Win(Handle.OpenedEndpointHandle, MidiDevicesSession.GetSessionHandle(), bufferPointer, bufferLength, out var errorCode);
-            if (result != OutputEndpointApi.OUT_SENDSYSEXRESULT.OUT_SENDSYSEXRESULT_OK ||
-                MidiConfigurationApi.Api_IsWmsInitialized(configurationHandle))
+            var result = OutputEndpointApi.Api_SendSysExEvent_Win(Handle.OpenedEndpointHandle, MidiDevicesSession.GetSessionHandle(), bufferPointer, bufferLength, out var dataTransferred, out var errorCode);
+            if (result != OutputEndpointApi.OUT_SENDSYSEXRESULT.OUT_SENDSYSEXRESULT_OK || dataTransferred == 0)
                 Marshal.FreeHGlobal(bufferPointer);
             
             NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);

@@ -2519,8 +2519,9 @@ API_EXPORT OUT_SENDSHORTRESULT API_CALL SendShortEventToOutputEndpoint(void* han
     return OUT_SENDSHORTRESULT_OK;
 }
 
-API_EXPORT OUT_SENDSYSEXRESULT API_CALL SendSysExEventToOutputEndpoint_Win(void* handle, SessionHandle* sessionHandle, LPSTR data, int size, int* errorCode)
+API_EXPORT OUT_SENDSYSEXRESULT API_CALL SendSysExEventToOutputEndpoint_Win(void* handle, SessionHandle* sessionHandle, LPSTR data, int size, int* dataTransferred, int* errorCode)
 {
+    *dataTransferred = 0;
     *errorCode = 0;
 
     OutputEndpointHandle* outputEndpointHandle = static_cast<OutputEndpointHandle*>(handle);
@@ -2617,6 +2618,7 @@ API_EXPORT OUT_SENDSYSEXRESULT API_CALL SendSysExEventToOutputEndpoint_Win(void*
         return OUT_SENDSYSEXRESULT_UNKNOWNERROR;
     }
 
+    *dataTransferred = 1;
     return OUT_SENDSYSEXRESULT_OK;
 }
 
