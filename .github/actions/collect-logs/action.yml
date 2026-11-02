@@ -11,15 +11,16 @@ runs:
   using: 'composite'
   steps:
     - name: Collect crash dump
-      if: failure() && runner.os == 'Windows'
+      if: always() && runner.os == 'Windows'
       id: crash-dump
       shell: pwsh
       run: |
         Write-Host "Checking if a crash dump created..."
-        Start-Sleep -s 10
         
         $paths = @("${{ github.workspace }}")
         if ($env:VSTEST_DUMP_PATH -and (Test-Path $env:VSTEST_DUMP_PATH)) {
+          Write-Host "Dump directory contents:"
+          Get-ChildItem -Path $env:VSTEST_DUMP_PATH -Force -ErrorAction SilentlyContinue
           $paths += $env:VSTEST_DUMP_PATH
         }
 
@@ -60,7 +61,7 @@ runs:
         }
     
     - name: Upload CrashDump artifact
-      if: failure() && runner.os == 'Windows' && steps.crash-dump.outputs.crash-dump-found == 'true'
+      if: always() && runner.os == 'Windows' && steps.crash-dump.outputs.crash-dump-found == 'true'
       uses:  actions/upload-artifact@v4
       with:
         name:  CrashDump${{ inputs.suffix }}_Attempt${{ github.run_attempt }}
