@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Melanchall.DryWetMidi.Common
 {
@@ -12,7 +10,7 @@ namespace Melanchall.DryWetMidi.Common
         private readonly T[] _buffer;
 
         private int _start;
-        private int _index = -1;
+        private int _count;
         private int _position;
 
         #endregion
@@ -29,7 +27,9 @@ namespace Melanchall.DryWetMidi.Common
 
         #region Properties
 
-        public bool IsFull { get; private set; }
+        public int AvailableCount => _count - _position;
+
+        public int RewindCount => _position;
 
         #endregion
 
@@ -37,24 +37,41 @@ namespace Melanchall.DryWetMidi.Common
 
         public void Add(T value)
         {
-            if (_position >= GetItemsCount())
-                _position = Math.Min(_position + 1, _capacity);
-
-            if (IsFull || _index == _capacity - 1)
+            if (_count == _capacity)
             {
+                _buffer[_start] = value;
                 _start = (_start + 1) % _capacity;
-                IsFull = true;
+            }
+            else
+            {
+                _buffer[(_start + _count) % _capacity] = value;
+                _count++;
             }
 
-            _index = (_index + 1) % _capacity;
-            _buffer[_index] = value;
+            _position = _count;
         }
 
-        public T[] MovePositionForward(int offset)
+        public void Add(ReadOnlySpan<T> values)
         {
-            var items = GetItems().Skip(_position).Take(offset).ToArray();
-            _position += items.Length;
-            return items;
+            foreach (var value in values)
+            {
+                Add(value);
+            }
+        }
+
+        public int MovePositionForward(Span<T> destination)
+        {
+            var count = Math.Min(destination.Length, AvailableCount);
+            if (count == 0)
+                return 0;
+
+            var start = (int)(((long)_start + _position) % _capacity);
+            var firstCount = Math.Min(count, _capacity - start);
+            _buffer.AsSpan(start, firstCount).CopyTo(destination);
+            _buffer.AsSpan(0, count - firstCount).CopyTo(destination.Slice(firstCount));
+            _position += count;
+
+            return count;
         }
 
         public void MovePositionBack(int offset)
@@ -63,33 +80,6 @@ namespace Melanchall.DryWetMidi.Common
                 throw new InvalidOperationException("Failed to move position back beyond the start of the buffer.");
 
             _position -= offset;
-        }
-
-        private int GetItemsCount()
-        {
-            return IsFull ? _capacity : _index + 1;
-        }
-
-        private IEnumerable<T> GetItems()
-        {
-            var items = Enumerable.Empty<T>();
-            if (IsFull)
-            {
-                if (_start == 0)
-                    return _buffer;
-
-                items = GetItems(_start, _capacity - 1);
-            }
-
-            return items.Concat(GetItems(0, _index));
-        }
-
-        private IEnumerable<T> GetItems(int start, int end)
-        {
-            for (int i = start; i <= end; i++)
-            {
-                yield return _buffer[i];
-            }
         }
 
         #endregion

@@ -48,9 +48,10 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 async () => await reader.SetPositionAsync(0, CancellationToken.None),
                 "Rewinding outside the replay buffer did not fail.");
             ClassicAssert.IsTrue(await reader.EndReachedAsync(CancellationToken.None), "EOF peeking did not detect the end of the stream.");
+            ClassicAssert.AreEqual(6, reader.Position, "EOF detection changed the logical position.");
             Assert.ThrowsAsync<InvalidOperationException>(
                 async () => await reader.SetPositionAsync(0, CancellationToken.None),
-                "Rewinding from the nonseekable EOF sentinel did not reject an unrepresentable replay distance.");
+                "Rewinding outside the retained history after EOF did not fail.");
             ClassicAssert.Greater(input.AsyncReadsCount, 0, "Positioning did not use async stream IO.");
             ClassicAssert.IsFalse(input.IsDisposed, "Positioning disposed the caller-owned stream.");
         }

@@ -7,6 +7,12 @@ namespace Melanchall.DryWetMidi.Common
 {
     internal sealed class StreamWrapper : Stream
     {
+        #region Constants
+
+        private const int MinimumBufferCapacity = 4;
+
+        #endregion
+
         #region Fields
 
         private readonly Stream _stream;
@@ -16,6 +22,8 @@ namespace Melanchall.DryWetMidi.Common
         private readonly byte[] _skipBytesBuffer = new byte[1024];
 
         private long _position;
+        private bool _hasPeekedByte;
+        private bool _endReached;
 
         #endregion
 
@@ -24,7 +32,9 @@ namespace Melanchall.DryWetMidi.Common
         public StreamWrapper(Stream stream, int bufferCapacity)
         {
             _stream = stream;
-            _buffer = new CircularBuffer<byte>(bufferCapacity);
+
+            // Detecting a non-RIFF file requires replaying its four-byte chunk ID.
+            _buffer = new CircularBuffer<byte>(Math.Max(MinimumBufferCapacity, bufferCapacity));
         }
 
         #endregion
@@ -39,7 +49,6 @@ namespace Melanchall.DryWetMidi.Common
 
         public override long Length => long.MaxValue;
 
-
         public override long Position
         {
             get { return _position; }
@@ -47,18 +56,24 @@ namespace Melanchall.DryWetMidi.Common
             {
                 ThrowIfArgument.IsNegative(nameof(value), value, "Position is negative.");
 
-                var offset = (int)(value - _position);
+                var offset = value - _position;
                 if (offset == 0)
                     return;
 
                 if (offset > 0)
                     SkipBytes(offset);
                 else
-                    _buffer.MovePositionBack(-offset);
+                {
+                    if (-offset > _buffer.RewindCount)
+                        throw new InvalidOperationException("Failed to move position back beyond the start of the buffer.");
 
-                _position = value;
+                    _buffer.MovePositionBack((int)-offset);
+                    _position = value;
+                }
             }
         }
+
+        internal long? KnownLength { get; private set; }
 
         #endregion
 
@@ -66,22 +81,34 @@ namespace Melanchall.DryWetMidi.Common
 
         public bool IsEndReached()
         {
-            var readBytesCount = Read(_peekBuffer, 0, 1);
-            if (readBytesCount == 0)
+            if (_buffer.AvailableCount > 0 || _hasPeekedByte)
+                return false;
+
+            if (_endReached)
                 return true;
 
-            Position--;
-            return false;
+            var count = _stream.Read(_peekBuffer, 0, 1);
+            _hasPeekedByte = count > 0;
+            RecordRead(count);
+
+            return _endReached;
         }
 
         internal async ValueTask<bool> IsEndReachedAsync(CancellationToken cancellationToken)
         {
-            var count = await ReadAsync(_peekBuffer, 0, 1, cancellationToken).ConfigureAwait(false);
-            if (count == 0)
+            cancellationToken.ThrowIfCancellationRequested();
+
+            if (_buffer.AvailableCount > 0 || _hasPeekedByte)
+                return false;
+
+            if (_endReached)
                 return true;
 
-            Position--;
-            return false;
+            var count = await _stream.ReadAsync(_peekBuffer, 0, 1, cancellationToken).ConfigureAwait(false);
+            _hasPeekedByte = count > 0;
+            RecordRead(count);
+
+            return _endReached;
         }
 
         internal async ValueTask SetPositionAsync(long position, CancellationToken cancellationToken)
@@ -110,22 +137,16 @@ namespace Melanchall.DryWetMidi.Common
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            var buffered = _buffer.MovePositionForward(count);
-            Buffer.BlockCopy(buffered, 0, buffer, offset, buffered.Length);
-            var read = count == buffered.Length ? 0 :
-                await _stream.ReadAsync(buffer, offset + buffered.Length, count - buffered.Length, cancellationToken).ConfigureAwait(false);
+            var bufferedCount = ReadBuffered(buffer.AsSpan(offset, count));
+            if (bufferedCount > 0 || count == 0 || _endReached)
+                return bufferedCount;
 
-            for (var i = 0; i < read; i++)
-            {
-                _buffer.Add(buffer[offset + buffered.Length + i]);
-            }
+            var read = await _stream.ReadAsync(buffer, offset, count, cancellationToken).ConfigureAwait(false);
+            _buffer.Add(buffer.AsSpan(offset, read));
+            _position += read;
+            RecordRead(read);
 
-            var total = buffered.Length + read;
-            _position += total;
-            if (count > 0 && total == 0)
-                _position = long.MaxValue;
-
-            return total;
+            return read;
         }
 
         public override void Flush()
@@ -135,23 +156,28 @@ namespace Melanchall.DryWetMidi.Common
 
         public override int Read(byte[] buffer, int offset, int count)
         {
-            var bufferedData = _buffer.MovePositionForward(count);
-            Buffer.BlockCopy(bufferedData, 0, buffer, offset, bufferedData.Length);
+            return Read(buffer.AsSpan(offset, count));
+        }
 
-            offset += bufferedData.Length;
-            var readBytesCount = _stream.Read(buffer, offset, count - bufferedData.Length);
+        public override int Read(Span<byte> buffer)
+        {
+            var bufferedCount = ReadBuffered(buffer);
+            if (bufferedCount > 0 || buffer.IsEmpty || _endReached)
+                return bufferedCount;
 
-            for (int i = 0; i < readBytesCount; i++)
-            {
-                _buffer.Add(buffer[offset + i]);
-            }
+            var read = _stream.Read(buffer);
+            _buffer.Add(buffer.Slice(0, read));
+            _position += read;
+            RecordRead(read);
 
-            var totalBytesCount = bufferedData.Length + readBytesCount;
-            _position += totalBytesCount;
-            if (count > 0 && totalBytesCount == 0)
-                _position = long.MaxValue;
+            return read;
+        }
 
-            return totalBytesCount;
+        public override int ReadByte()
+        {
+            Span<byte> buffer = stackalloc byte[1];
+
+            return Read(buffer) == 0 ? -1 : buffer[0];
         }
 
         public override long Seek(long offset, SeekOrigin origin)
@@ -169,11 +195,40 @@ namespace Melanchall.DryWetMidi.Common
             throw new NotSupportedException();
         }
 
-        private void SkipBytes(int count)
+        private int ReadBuffered(Span<byte> destination)
+        {
+            var count = _buffer.MovePositionForward(destination);
+            if (count > 0)
+            {
+                _position += count;
+                return count;
+            }
+
+            if (destination.IsEmpty || !_hasPeekedByte)
+                return 0;
+
+            destination[0] = _peekBuffer[0];
+            _buffer.Add(_peekBuffer[0]);
+            _hasPeekedByte = false;
+            _position++;
+
+            return 1;
+        }
+
+        private void RecordRead(int count)
+        {
+            if (count != 0)
+                return;
+
+            _endReached = true;
+            KnownLength = _position;
+        }
+
+        private void SkipBytes(long count)
         {
             while (count > 0)
             {
-                var readBytesCount = Read(_skipBytesBuffer, 0, Math.Min(count, _skipBytesBuffer.Length));
+                var readBytesCount = Read(_skipBytesBuffer, 0, (int)Math.Min(count, _skipBytesBuffer.Length));
                 if (readBytesCount == 0)
                     break;
 

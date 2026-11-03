@@ -289,7 +289,7 @@ namespace Melanchall.DryWetMidi.Core
 
             do
             {
-                if (_reader.EndReached || (_smfEndPosition != null && _reader.Position >= _smfEndPosition))
+                if ((_smfEndPosition != null && _reader.Position >= _smfEndPosition) || _reader.EndReached)
                     return null;
 
                 try
@@ -400,8 +400,8 @@ namespace Melanchall.DryWetMidi.Core
                         if (CanReadChunkData())
                         {
                             var packetSize = _settings.ReaderSettings.BytesPacketMaxLength;
-                            var remainingBytesCount = (int)(_endReaderPosition - _reader.Position);
-                            var data = _reader.ReadBytes(remainingBytesCount < packetSize ? remainingBytesCount : packetSize);
+                            var remainingBytesCount = _endReaderPosition - _reader.Position;
+                            var data = _reader.ReadBytes((int)Math.Min(remainingBytesCount, packetSize));
                             return Instruction.ReturnToken(new BytesPacketToken(data));
                         }
                     }

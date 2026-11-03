@@ -25,14 +25,16 @@ namespace Melanchall.DryWetMidi.Core
         #region Properties
 
         /// <summary>
-        /// Gets or sets internal buffer for reading MIDI data from non-seekable stream.
+        /// Gets or sets the replay buffer capacity for reading MIDI data from a non-seekable stream.
         /// </summary>
         /// <exception cref="ArgumentOutOfRangeException">Value is zero or negative.</exception>
         /// <remarks>
         /// <para>During reading MIDI data there are cases when reader should move current stream's position back.
         /// If stream doesn't support seeking, it will fail. So for non-seekable stream reading engine
         /// should maintain buffer of last N bytes to have ability to jump back. That N value is controlled by
-        /// this property.</para>
+        /// this property. The effective capacity is at least four bytes, even when a smaller positive
+        /// value is specified, to support detecting the file format. An EOF look-ahead byte is stored
+        /// separately and does not reduce the retained history.</para>
         /// </remarks>
         public int NonSeekableStreamBufferSize
         {
@@ -49,12 +51,14 @@ namespace Melanchall.DryWetMidi.Core
         /// Gets or sets minimum count of bytes to read them from non-seekable stream incrementally instead of
         /// reading them all at once.
         /// </summary>
-        /// <exception cref="ArgumentOutOfRangeException">Value is zero or negative.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Value is negative.</exception>
         /// <remarks>
-        /// <para>If count of bytes to read is greater than or equal to the value of this property, reading engine
+        /// <para>If count of bytes to read is greater than the value of this property, reading engine
         /// will read data by chunks of N bytes where N is a value of <see cref="NonSeekableStreamIncrementalBytesReadingStep"/>
         /// property. This property applies for non-seekable streams only. Since there is no way to determine available count
-        /// of bytes within such streams, incremental reading can prevent <see cref="OutOfMemoryException"/>.</para>
+        /// of bytes within such streams, incremental reading avoids allocating the entire requested size
+        /// before data is available. Bulk reads still retain all returned bytes, and packet buffers and
+        /// the final result array can coexist in memory.</para>
         /// </remarks>
         public int NonSeekableStreamIncrementalBytesReadingThreshold
         {
@@ -89,6 +93,10 @@ namespace Melanchall.DryWetMidi.Core
         /// Gets or sets a rule according to which MIDI data should be buffered before reading.
         /// The default is <see cref="BufferingPolicy.UseFixedSizeBuffer"/>.
         /// </summary>
+        /// <remarks>
+        /// This policy applies to seekable streams. Non-seekable streams always use bounded replay
+        /// buffering controlled by <see cref="NonSeekableStreamBufferSize"/> instead.
+        /// </remarks>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="value"/> specified an invalid value.</exception>
         public BufferingPolicy BufferingPolicy
         {

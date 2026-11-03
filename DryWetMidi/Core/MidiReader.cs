@@ -4,7 +4,6 @@ using System.Buffers.Binary;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
-using System.Linq;
 using System.Runtime.CompilerServices;
 
 namespace Melanchall.DryWetMidi.Core
@@ -124,8 +123,14 @@ namespace Melanchall.DryWetMidi.Core
         /// <summary>
         /// Gets or sets the position within the underlying stream.
         /// </summary>
+        /// <remarks>
+        /// On non-seekable streams, forward movement consumes bytes and stops at EOF if necessary.
+        /// Backward movement is limited to retained replay history. EOF detection does not change
+        /// the position. An I/O failure can leave forward movement partially completed.
+        /// </remarks>
         /// <exception cref="IOException">An I/O error occurred on the underlying stream.</exception>
         /// <exception cref="ObjectDisposedException">Property was called after the reader was disposed.</exception>
+        /// <exception cref="InvalidOperationException">A backward position is outside the non-seekable stream's replay buffer.</exception>
         public long Position
         {
             get { return _useBuffering ? _positionBase + _position : _stream.Position; }
@@ -143,7 +148,16 @@ namespace Melanchall.DryWetMidi.Core
         /// <summary>
         /// Gets length of the underlying stream.
         /// </summary>
+        /// <remarks>
+        /// Returns <see cref="long.MaxValue"/> when the underlying stream is non-seekable.
+        /// This value represents an unknown length, not the number of available bytes.
+        /// Use <see cref="EndReached"/> to detect the end of the stream.
+        /// </remarks>
         public long Length { get; }
+
+        internal long? KnownLength => _isStreamWrapped ? ((StreamWrapper)_stream).KnownLength : Length;
+
+        internal long? RemainingBytes => KnownLength is long length ? Math.Max(0, length - Position) : (long?)null;
 
         internal long EstimatedMemorySize { get; private set; }
 
@@ -163,6 +177,11 @@ namespace Melanchall.DryWetMidi.Core
         /// <summary>
         /// Gets a value indicating whether end of the underlying stream is reached.
         /// </summary>
+        /// <remarks>
+        /// On a non-seekable stream this check can read one look-ahead byte without advancing
+        /// <see cref="Position"/>. Repeated checks reuse the byte or cached EOF. Retained replay
+        /// bytes remain readable after physical EOF.
+        /// </remarks>
         /// <exception cref="IOException">An I/O error occurred on the underlying stream.</exception>
         /// <exception cref="ObjectDisposedException">Property was called after the reader was disposed.</exception>
         public bool EndReached => Position >= Length || (_isStreamWrapped && ((StreamWrapper)_stream).IsEndReached());
@@ -224,6 +243,8 @@ namespace Melanchall.DryWetMidi.Core
         /// <exception cref="IOException">An I/O error occurred on the underlying stream.</exception>
         public byte[] ReadBytes(int count)
         {
+            ThrowIfArgument.IsNegative(nameof(count), count, "Count is negative.");
+
             if (!_isStreamWrapped && count > 0)
             {
                 // Declared size can be far greater than the actual data (malformed or malicious file),
@@ -236,6 +257,7 @@ namespace Melanchall.DryWetMidi.Core
             if (_isStreamWrapped && count > _settings.NonSeekableStreamIncrementalBytesReadingThreshold)
             {
                 var bytesList = new List<byte[]>();
+                var totalCount = 0;
 
                 while (count > 0)
                 {
@@ -244,10 +266,11 @@ namespace Melanchall.DryWetMidi.Core
                         break;
 
                     count -= bytes.Length;
+                    totalCount += bytes.Length;
                     bytesList.Add(bytes);
                 }
 
-                return bytesList.SelectMany(bytes => bytes).ToArray();
+                return CombineBytes(bytesList, totalCount);
             }
 
             return ReadBytesInternal(count);
@@ -324,7 +347,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <exception cref="IOException">An I/O error occurred on the underlying stream.</exception>
         public string ReadString(int count)
         {
-            var bytes = ReadBytesInternal(count);
+            var bytes = ReadBytes(count);
             return SmfConstants.DefaultTextEncoding.GetString(bytes);
         }
 
@@ -428,6 +451,20 @@ namespace Melanchall.DryWetMidi.Core
             var copy = new byte[bytesRead];
             result.AsSpan(0, bytesRead).CopyTo(copy);
             return copy;
+        }
+
+        private static byte[] CombineBytes(List<byte[]> packets, int count)
+        {
+            var result = new byte[count];
+            var offset = 0;
+
+            foreach (var packet in packets)
+            {
+                Buffer.BlockCopy(packet, 0, result, offset, packet.Length);
+                offset += packet.Length;
+            }
+
+            return result;
         }
 
         private int ReadBytesInternal(Span<byte> destination)

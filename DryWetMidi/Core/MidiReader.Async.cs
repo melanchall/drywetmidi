@@ -2,7 +2,6 @@ using Melanchall.DryWetMidi.Common;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -59,9 +58,6 @@ namespace Melanchall.DryWetMidi.Core
 
             if (!_useBuffering && _isStreamWrapped)
             {
-                if (position < Position && Position - position > int.MaxValue)
-                    throw new InvalidOperationException("Failed to move position back beyond the start of the buffer.");
-
                 await ((StreamWrapper)_stream).SetPositionAsync(position, cancellationToken).ConfigureAwait(false);
             }
             else
@@ -117,6 +113,7 @@ namespace Melanchall.DryWetMidi.Core
             if (_isStreamWrapped && count > _settings.NonSeekableStreamIncrementalBytesReadingThreshold)
             {
                 var bytesList = new List<byte[]>();
+                var totalCount = 0;
 
                 while (count > 0)
                 {
@@ -127,10 +124,11 @@ namespace Melanchall.DryWetMidi.Core
                         break;
 
                     count -= bytes.Length;
+                    totalCount += bytes.Length;
                     bytesList.Add(bytes);
                 }
 
-                return bytesList.SelectMany(bytes => bytes).ToArray();
+                return CombineBytes(bytesList, totalCount);
             }
 
             return await ReadBytesInternalAsync(count, cancellationToken).ConfigureAwait(false);

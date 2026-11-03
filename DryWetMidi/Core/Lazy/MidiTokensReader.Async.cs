@@ -20,8 +20,8 @@ namespace Melanchall.DryWetMidi.Core
             while (true)
             {
                 cancellationToken.ThrowIfCancellationRequested();
-                if (await _reader.EndReachedAsync(cancellationToken).ConfigureAwait(false) ||
-                    (_smfEndPosition != null && _reader.Position >= _smfEndPosition))
+                if ((_smfEndPosition != null && _reader.Position >= _smfEndPosition) ||
+                    await _reader.EndReachedAsync(cancellationToken).ConfigureAwait(false))
                     return null;
 
                 MidiToken? token = null;

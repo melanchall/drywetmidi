@@ -60,6 +60,41 @@ when that object is reached. See [Custom chunks](xref:a_custom_chunk) and
 [Custom meta events](xref:a_custom_meta_event) for asynchronous and
 synchronous-execution examples.
 
+## Non-seekable streams
+
+[`MidiFile.Read`](xref:Melanchall.DryWetMidi.Core.MidiFile.Read(System.IO.Stream,Melanchall.DryWetMidi.Core.ReadingSettings)),
+[`MidiFile.ReadAsync`](xref:Melanchall.DryWetMidi.Core.MidiFile.ReadAsync(System.IO.Stream,Melanchall.DryWetMidi.Core.ReadingSettings,System.Threading.CancellationToken)),
+and the lazy readers support readable streams without seeking or length information.
+Such streams are common with network responses; for example, a web request can
+provide a stream for downloaded MIDI data. Whether a particular response stream
+supports seeking depends on the provider.
+
+A typical example is a response stream returned by `HttpClient.GetStreamAsync`:
+
+```csharp
+using var client = new HttpClient();
+using var stream = await client.GetStreamAsync("https://example.com/song.mid");
+var midiFile = await MidiFile.ReadAsync(stream);
+```
+
+When using a non-seekable stream, only recently read bytes can be revisited.
+[`ReaderSettings.NonSeekableStreamBufferSize`](xref:Melanchall.DryWetMidi.Core.ReaderSettings.NonSeekableStreamBufferSize)
+controls how many bytes are available for this replay.
+[`ReaderSettings.BufferingPolicy`](xref:Melanchall.DryWetMidi.Core.ReaderSettings.BufferingPolicy)
+is ignored for these streams, including when set to `BufferAllData`.
+
+When using [`MidiReader`](xref:Melanchall.DryWetMidi.Core.MidiReader) directly,
+`Length` will return `long.MaxValue`, which means the length is unknown. Use
+`EndReached` or
+[`EndReachedAsync`](xref:Melanchall.DryWetMidi.Core.MidiReader.EndReachedAsync(System.Threading.CancellationToken))
+to check whether the end of stream (EOF) has been reached. This check may read one byte
+from the stream, but does not change `Position`. Moving back farther than the available
+replay data throws `InvalidOperationException`.
+
+[`MidiFile.Read`](xref:Melanchall.DryWetMidi.Core.MidiFile.Read*) loads the complete
+file into memory. To process a file without keeping the whole file in memory, use
+[lazy reading](xref:a_file_lazy_reading_writing).
+
 ## Reading corrupted files
 
 DryWetMIDI allows to read MIDI files with various violations of [SMF](https://midi.org/standard-midi-files-specification) standard. Example below shows how to read a MIDI file with different errors:
