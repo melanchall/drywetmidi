@@ -65,29 +65,35 @@ synchronous-execution examples.
 [`MidiFile.Read`](xref:Melanchall.DryWetMidi.Core.MidiFile.Read(System.IO.Stream,Melanchall.DryWetMidi.Core.ReadingSettings)),
 [`MidiFile.ReadAsync`](xref:Melanchall.DryWetMidi.Core.MidiFile.ReadAsync(System.IO.Stream,Melanchall.DryWetMidi.Core.ReadingSettings,System.Threading.CancellationToken)),
 and the lazy readers support readable streams without seeking or length information.
-They retain a bounded history for look-ahead and replay instead of buffering the
-entire input.
+Such streams are common with network responses; for example, a web request can
+provide a stream for downloaded MIDI data. Whether a particular response stream
+supports seeking depends on the provider.
 
+A typical example is a response stream returned by `HttpClient.GetStreamAsync`:
+
+```csharp
+using var client = new HttpClient();
+using var stream = await client.GetStreamAsync("https://example.com/song.mid");
+var midiFile = await MidiFile.ReadAsync(stream);
+```
+
+When using a non-seekable stream, only recently read bytes can be revisited.
 [`ReaderSettings.NonSeekableStreamBufferSize`](xref:Melanchall.DryWetMidi.Core.ReaderSettings.NonSeekableStreamBufferSize)
-controls the history capacity, with an effective minimum of four bytes for file-format
-detection. EOF look-ahead uses a separate byte and does not evict history.
+controls how many bytes are available for this replay.
 [`ReaderSettings.BufferingPolicy`](xref:Melanchall.DryWetMidi.Core.ReaderSettings.BufferingPolicy)
-does not apply to non-seekable streams, including when set to `BufferAllData`.
+is ignored for these streams, including when set to `BufferAllData`.
 
 When using [`MidiReader`](xref:Melanchall.DryWetMidi.Core.MidiReader) directly,
-`Length` remains `long.MaxValue` to indicate an unknown length; it is not an available
-byte count. Use `EndReached` or
+`Length` will return `long.MaxValue`, which means the length is unknown. Use
+`EndReached` or
 [`EndReachedAsync`](xref:Melanchall.DryWetMidi.Core.MidiReader.EndReachedAsync(System.Threading.CancellationToken))
-instead. An EOF check can read one byte from the source without advancing the logical
-`Position`. Repeated checks reuse that byte or cached EOF. EOF leaves the position at
-the actual end, and retained bytes can still be replayed. Moving forward consumes bytes
-until the requested position or EOF; moving backward beyond retained history throws
-`InvalidOperationException`.
+to check whether the end of stream (EOF) has been reached. This check may read one byte
+from the stream, but does not change `Position`. Moving back farther than the available
+replay data throws `InvalidOperationException`.
 
-Incremental byte reading avoids allocating a large declared payload before discovering
-how much data exists. It does not impose a total-memory bound: bulk reads retain the
-entire result, and packet buffers and the final array can coexist. For bounded-size
-processing, use [lazy reading](xref:a_file_lazy_reading_writing).
+[`MidiFile.Read`](xref:Melanchall.DryWetMidi.Core.MidiFile.Read*) loads the complete
+file into memory. To process a file without keeping the whole file in memory, use
+[lazy reading](xref:a_file_lazy_reading_writing).
 
 ## Reading corrupted files
 

@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 namespace Melanchall.DryWetMidi.Tests.Core
 {
     [TestFixture]
-    public sealed class NonSeekableStreamTests
+    public sealed class MidiReaderTests
     {
         private sealed class InputStream : Stream
         {
