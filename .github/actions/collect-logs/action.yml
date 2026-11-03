@@ -11,7 +11,7 @@ runs:
   using: 'composite'
   steps:
     - name: Collect crash dump
-      if: always() && runner.os == 'Windows'
+      if: failure() && runner.os == 'Windows'
       id: crash-dump
       shell: pwsh
       run: |
@@ -61,7 +61,7 @@ runs:
         }
     
     - name: Upload CrashDump artifact
-      if: always() && runner.os == 'Windows' && steps.crash-dump.outputs.crash-dump-found == 'true'
+      if: failure() && runner.os == 'Windows' && steps.crash-dump.outputs.crash-dump-found == 'true'
       uses:  actions/upload-artifact@v4
       with:
         name:  CrashDump${{ inputs.suffix }}_Attempt${{ github.run_attempt }}
