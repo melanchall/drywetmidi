@@ -255,10 +255,8 @@ namespace Melanchall.DryWetMidi.Multimedia
             var bufferPointer = Marshal.AllocHGlobal(bufferLength);
             Marshal.Copy(data, 0, bufferPointer, data.Length);
 
-            var configurationHandle = MidiConfiguration.GetConfigurationHandle();
-
-            var result = OutputEndpointApi.Api_SendSysExEvent_Win(Handle.OpenedEndpointHandle, MidiDevicesSession.GetSessionHandle(), bufferPointer, bufferLength, out var errorCode);
-            if (result != OutputEndpointApi.OUT_SENDSYSEXRESULT.OUT_SENDSYSEXRESULT_OK)
+            var result = OutputEndpointApi.Api_SendSysExEvent_Win(Handle.OpenedEndpointHandle, MidiDevicesSession.GetSessionHandle(), bufferPointer, bufferLength, out var dataTransferred, out var errorCode);
+            if (result != OutputEndpointApi.OUT_SENDSYSEXRESULT.OUT_SENDSYSEXRESULT_OK || dataTransferred == 0)
                 Marshal.FreeHGlobal(bufferPointer);
             
             NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
@@ -361,11 +359,8 @@ namespace Melanchall.DryWetMidi.Multimedia
                 hasStartByte ? bufferPointer : IntPtr.Add(bufferPointer, 1),
                 data.Length);
 
-            var configurationHandle = MidiConfiguration.GetConfigurationHandle();
-
-            var result = OutputEndpointApi.Api_SendSysExEvent_Win(Handle.OpenedEndpointHandle, MidiDevicesSession.GetSessionHandle(), bufferPointer, bufferLength, out var errorCode);
-            if (result != OutputEndpointApi.OUT_SENDSYSEXRESULT.OUT_SENDSYSEXRESULT_OK ||
-                MidiConfigurationApi.Api_IsWmsInitialized(configurationHandle))
+            var result = OutputEndpointApi.Api_SendSysExEvent_Win(Handle.OpenedEndpointHandle, MidiDevicesSession.GetSessionHandle(), bufferPointer, bufferLength, out var dataTransferred, out var errorCode);
+            if (result != OutputEndpointApi.OUT_SENDSYSEXRESULT.OUT_SENDSYSEXRESULT_OK || dataTransferred == 0)
                 Marshal.FreeHGlobal(bufferPointer);
             
             NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
@@ -419,12 +414,17 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         private void OnSysExEventSent(IntPtr sysExHeaderPointer)
         {
+            // The handle can be released concurrently, so it is read once and checked
+            var endpointHandle = Handle.OpenedEndpointHandle;
+            if (endpointHandle == IntPtr.Zero)
+                return;
+
             byte[]? data = null;
             IntPtr dataPointer = IntPtr.Zero;
 
             try
             {
-                var result = OutputEndpointApi.Api_GetSysExBufferData(Handle.OpenedEndpointHandle, sysExHeaderPointer, out dataPointer, out var size, out var errorCode);
+                var result = OutputEndpointApi.Api_GetSysExBufferData(endpointHandle, sysExHeaderPointer, out dataPointer, out var size, out var errorCode);
                 NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
             }
             catch (Exception ex)

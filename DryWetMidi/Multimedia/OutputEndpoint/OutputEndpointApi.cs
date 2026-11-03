@@ -211,7 +211,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         [LibraryImport(NativeApi.LibraryName)]
         [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-        private static partial OUT_SENDSYSEXRESULT SendSysExEventToOutputEndpoint_Win(IntPtr handle, MidiDevicesSessionHandle sessionHandle, IntPtr data, int size, out int errorCode);
+        private static partial OUT_SENDSYSEXRESULT SendSysExEventToOutputEndpoint_Win(IntPtr handle, MidiDevicesSessionHandle sessionHandle, IntPtr data, int size, out int dataTransferred, out int errorCode);
 
         [LibraryImport(NativeApi.LibraryName)]
         [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
@@ -258,7 +258,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         private static extern OUT_SENDSYSEXRESULT SendSysExEventToOutputEndpoint_Mac(IntPtr handle, byte[] data, uint dataSize, out int errorCode);
 
         [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
-        private static extern OUT_SENDSYSEXRESULT SendSysExEventToOutputEndpoint_Win(IntPtr handle, MidiDevicesSessionHandle sessionHandle, IntPtr data, int size, out int errorCode);
+        private static extern OUT_SENDSYSEXRESULT SendSysExEventToOutputEndpoint_Win(IntPtr handle, MidiDevicesSessionHandle sessionHandle, IntPtr data, int size, out int dataTransferred, out int errorCode);
 
         [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
         private static extern OUT_GETSYSEXDATARESULT GetOutputEndpointSysExBufferData(IntPtr handle, IntPtr header, out IntPtr data, out int size, out int errorCode);
@@ -375,13 +375,15 @@ namespace Melanchall.DryWetMidi.Multimedia
             return result;
         }
 
-        public static OUT_SENDSYSEXRESULT Api_SendSysExEvent_Win(IntPtr handle, MidiDevicesSessionHandle sessionHandle, IntPtr data, int size, out int errorCode)
+        public static OUT_SENDSYSEXRESULT Api_SendSysExEvent_Win(IntPtr handle, MidiDevicesSessionHandle sessionHandle, IntPtr data, int size, out int dataTransferred, out int errorCode)
         {
+            var dataTransferredLocal = 0;
             var errorCodeLocal = 0;
             
             var result = MidiOperationsExecutor.Instance.ExecuteOperation(() =>
-                SendSysExEventToOutputEndpoint_Win(handle, sessionHandle, data, size, out errorCodeLocal));
+                SendSysExEventToOutputEndpoint_Win(handle, sessionHandle, data, size, out dataTransferredLocal, out errorCodeLocal));
             
+            dataTransferred = dataTransferredLocal;
             errorCode = errorCodeLocal;
             return result;
         }

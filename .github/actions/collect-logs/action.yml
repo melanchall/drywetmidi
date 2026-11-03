@@ -16,16 +16,21 @@ runs:
       shell: pwsh
       run: |
         Write-Host "Checking if a crash dump created..."
-        Start-Sleep -s 10
         
-        $path = Resolve-Path "${{ github.workspace }}"
-        $dumpFile = Get-ChildItem -Path "$path" -Include "*.dmp" -Recurse | Select-Object -First 1
+        $paths = @("${{ github.workspace }}")
+        if ($env:VSTEST_DUMP_PATH -and (Test-Path $env:VSTEST_DUMP_PATH)) {
+          Write-Host "Dump directory contents:"
+          Get-ChildItem -Path $env:VSTEST_DUMP_PATH -Force -ErrorAction SilentlyContinue
+          $paths += $env:VSTEST_DUMP_PATH
+        }
+
+        $dumpFile = Get-ChildItem -Path $paths -Filter "*.dmp" -File -Recurse -ErrorAction SilentlyContinue | Select-Object -First 1
         
         if ($dumpFile)
         {
           Write-Host "There is a crash dump, setting variables..."
-          echo "crash-dump-path=$dumpFile" >> $env:GITHUB_OUTPUT
-          echo "crash-dump-found=true" >> $env: GITHUB_OUTPUT
+          "crash-dump-path=$($dumpFile.FullName)" >> $env:GITHUB_OUTPUT
+          "crash-dump-found=true" >> $env:GITHUB_OUTPUT
         }
         else
         {
