@@ -65,7 +65,7 @@ namespace Melanchall.DryWetMidi.Common
             if (count == 0)
                 return 0;
 
-            var start = (_start + _position) % _capacity;
+            var start = (int)(((long)_start + _position) % _capacity);
             var firstCount = Math.Min(count, _capacity - start);
             _buffer.AsSpan(start, firstCount).CopyTo(destination);
             _buffer.AsSpan(0, count - firstCount).CopyTo(destination.Slice(firstCount));
