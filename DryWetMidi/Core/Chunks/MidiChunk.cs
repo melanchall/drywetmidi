@@ -165,7 +165,7 @@ namespace Melanchall.DryWetMidi.Core
 
             // Custom chunks can allocate memory in an arbitrary way, so at least the declared size is expected
             if (estimateMemory && isCustomChunk)
-                reader.ThrowIfMemoryLimitExceeded(Math.Min(size, reader.Length - reader.Position), settings);
+                reader.ThrowIfMemoryLimitExceeded(Math.Min(size, reader.RemainingBytes ?? size), settings);
 
             // Chunk object with its initial state (e.g. empty events collection). Header chunk is not stored in the file
             var initialSize = 0L;
@@ -189,7 +189,7 @@ namespace Melanchall.DryWetMidi.Core
 
             var bytesUnread = size - bytesReadCount;
             if (bytesUnread > 0)
-                reader.Position += Math.Min(bytesUnread, reader.Length);
+                reader.Position = Math.Min(readerPosition + size, reader.KnownLength ?? reader.Length);
         }
 
         /// <summary>
@@ -232,7 +232,7 @@ namespace Melanchall.DryWetMidi.Core
             var isCustomChunk = !(this is HeaderChunk || this is TrackChunk || this is UnknownChunk);
 
             if (estimateMemory && isCustomChunk)
-                reader.ThrowIfMemoryLimitExceeded(Math.Min(size, Math.Max(0, reader.Length - readerPosition)), settings);
+                reader.ThrowIfMemoryLimitExceeded(Math.Min(size, reader.RemainingBytes ?? size), settings);
 
             var initialSize = 0L;
             if (estimateMemory && !(this is HeaderChunk))
@@ -251,7 +251,7 @@ namespace Melanchall.DryWetMidi.Core
                 throw new InvalidChunkSizeException(ChunkId, size, readBytesCount);
 
             if (readBytesCount < size)
-                await reader.SetPositionAsync(Math.Min(readerPosition + size, reader.Length), cancellationToken).ConfigureAwait(false);
+                await reader.SetPositionAsync(Math.Min(readerPosition + size, reader.KnownLength ?? reader.Length), cancellationToken).ConfigureAwait(false);
         }
 
         internal static uint ReadSize(MidiReader reader, out long readerPosition)

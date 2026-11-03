@@ -374,13 +374,15 @@ namespace Melanchall.DryWetMidi.Core
 
                 var smfEndPosition = await MidiFileReadingUtilities.ReadRmidPreambleAsync(reader, cancellationToken).ConfigureAwait(false);
 
-                while (!await reader.EndReachedAsync(cancellationToken).ConfigureAwait(false) &&
-                    (smfEndPosition == null || reader.Position < smfEndPosition))
+                while (smfEndPosition == null || reader.Position < smfEndPosition)
                 {
                     if (expectedTrackChunksCount != null &&
                         actualTrackChunksCount == expectedTrackChunksCount &&
                         settings.StopReadingOnExpectedTrackChunksCountReached)
                         return file;
+
+                    if (await reader.EndReachedAsync(cancellationToken).ConfigureAwait(false))
+                        break;
 
                     var chunk = await ReadChunkAsync(
                         reader,

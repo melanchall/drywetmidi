@@ -19,6 +19,12 @@ namespace Melanchall.DryWetMidi.Core
     /// </remarks>
     public sealed class UnknownChunk : MidiChunk
     {
+        #region Constants
+
+        private const int DataPacketSize = 4096;
+
+        #endregion
+
         #region Constructor
 
         /// <summary>
@@ -76,11 +82,37 @@ namespace Melanchall.DryWetMidi.Core
                 return;
             }
 
-            var availableSize = reader.Length - reader.Position;
-            var bytesCount = availableSize < size ? availableSize : size;
-            if (settings.MaxMemorySize != null)
-                reader.AddEstimatedMemory(MemorySizeEstimator.EstimateArray(typeof(byte), bytesCount), settings);
-            var bytes = reader.ReadBytes((int)Math.Min(bytesCount, int.MaxValue));
+            byte[] bytes;
+            if (reader.KnownLength == null && settings.MaxMemorySize != null)
+            {
+                using var memory = new MemoryStream();
+                long remaining = Math.Min(size, int.MaxValue);
+
+                while (remaining > 0)
+                {
+                    var packet = reader.ReadBytes((int)Math.Min(remaining, DataPacketSize));
+                    if (packet.Length == 0)
+                        break;
+
+                    reader.ThrowIfMemoryLimitExceeded(
+                        MemorySizeEstimator.EstimateArray(typeof(byte), memory.Length + packet.Length),
+                        settings);
+                    memory.Write(packet, 0, packet.Length);
+                    remaining -= packet.Length;
+                }
+
+                bytes = memory.ToArray();
+                reader.AddEstimatedMemory(MemorySizeEstimator.EstimateArray(typeof(byte), bytes.Length), settings);
+            }
+            else
+            {
+                var bytesCount = Math.Min(size, reader.RemainingBytes ?? size);
+                if (settings.MaxMemorySize != null)
+                    reader.AddEstimatedMemory(MemorySizeEstimator.EstimateArray(typeof(byte), bytesCount), settings);
+
+                bytes = reader.ReadBytes((int)Math.Min(bytesCount, int.MaxValue));
+            }
+
             if (bytes.Length < size && settings.NotEnoughBytesPolicy == NotEnoughBytesPolicy.Abort)
                 throw new NotEnoughBytesException(
                     "Unknown chunk's data cannot be read since the reader's underlying stream doesn't have enough bytes.",
@@ -116,14 +148,14 @@ namespace Melanchall.DryWetMidi.Core
             }
 
             byte[] bytes;
-            if (reader.Length == long.MaxValue && settings.MaxMemorySize != null)
+            if (reader.KnownLength == null && settings.MaxMemorySize != null)
             {
                 using var memory = new MemoryStream();
                 long remaining = Math.Min(size, int.MaxValue);
 
                 while (remaining > 0)
                 {
-                    var packet = await reader.ReadBytesAsync((int)Math.Min(remaining, 4096), cancellationToken).ConfigureAwait(false);
+                    var packet = await reader.ReadBytesAsync((int)Math.Min(remaining, DataPacketSize), cancellationToken).ConfigureAwait(false);
                     if (packet.Length == 0)
                         break;
 
@@ -135,12 +167,11 @@ namespace Melanchall.DryWetMidi.Core
                 }
 
                 bytes = memory.ToArray();
-                if (settings.MaxMemorySize != null)
-                    reader.AddEstimatedMemory(MemorySizeEstimator.EstimateArray(typeof(byte), bytes.Length), settings);
+                reader.AddEstimatedMemory(MemorySizeEstimator.EstimateArray(typeof(byte), bytes.Length), settings);
             }
             else
             {
-                var bytesCount = Math.Min(size, Math.Max(0, reader.Length - reader.Position));
+                var bytesCount = Math.Min(size, reader.RemainingBytes ?? size);
                 if (settings.MaxMemorySize != null)
                     reader.AddEstimatedMemory(MemorySizeEstimator.EstimateArray(typeof(byte), bytesCount), settings);
 

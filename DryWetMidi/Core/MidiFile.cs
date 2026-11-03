@@ -391,8 +391,9 @@ namespace Melanchall.DryWetMidi.Core
         /// default settings.</param>
         /// <returns>An instance of the <see cref="MidiFile"/> representing a MIDI file was read from the stream.</returns>
         /// <remarks>
-        /// Stream must be readable, seekable and be able to provide its position and length via <see cref="Stream.Position"/>
-        /// and <see cref="Stream.Length"/> properties.
+        /// The stream must be readable. Non-seekable streams use a bounded replay buffer for look-ahead.
+        /// Seekable streams must provide their position and length via <see cref="Stream.Position"/>
+        /// and <see cref="Stream.Length"/>.
         /// </remarks>
         /// <seealso cref="ReadLazy(Stream, ReadingSettings)"/>
         /// <exception cref="ArgumentNullException"><paramref name="stream"/> is <c>null</c>.</exception>
@@ -500,12 +501,15 @@ namespace Melanchall.DryWetMidi.Core
 
                     // Read SMF
 
-                    while (!reader.EndReached && (smfEndPosition == null || reader.Position < smfEndPosition))
+                    while (smfEndPosition == null || reader.Position < smfEndPosition)
                     {
                         if (expectedTrackChunksCount != null &&
                             actualTrackChunksCount == expectedTrackChunksCount &&
                             settings.StopReadingOnExpectedTrackChunksCountReached)
                             return file;
+
+                        if (reader.EndReached)
+                            break;
 
                         // Read chunk
 
@@ -587,8 +591,9 @@ namespace Melanchall.DryWetMidi.Core
         /// default settings.</param>
         /// <returns>An instance of the <see cref="MidiTokensReader"/> wrapped around the <paramref name="stream"/>.</returns>
         /// <remarks>
-        /// Stream must be readable, seekable and be able to provide its position and length via <see cref="Stream.Position"/>
-        /// and <see cref="Stream.Length"/> properties.
+        /// The stream must be readable. Non-seekable streams use a bounded replay buffer for look-ahead.
+        /// Seekable streams must provide their position and length via <see cref="Stream.Position"/>
+        /// and <see cref="Stream.Length"/>.
         /// </remarks>
         /// <seealso cref="Read(Stream, ReadingSettings)"/>
         /// <exception cref="ArgumentNullException"><paramref name="stream"/> is <c>null</c>.</exception>

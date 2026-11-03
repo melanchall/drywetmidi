@@ -60,6 +60,35 @@ when that object is reached. See [Custom chunks](xref:a_custom_chunk) and
 [Custom meta events](xref:a_custom_meta_event) for asynchronous and
 synchronous-execution examples.
 
+## Non-seekable streams
+
+[`MidiFile.Read`](xref:Melanchall.DryWetMidi.Core.MidiFile.Read(System.IO.Stream,Melanchall.DryWetMidi.Core.ReadingSettings)),
+[`MidiFile.ReadAsync`](xref:Melanchall.DryWetMidi.Core.MidiFile.ReadAsync(System.IO.Stream,Melanchall.DryWetMidi.Core.ReadingSettings,System.Threading.CancellationToken)),
+and the lazy readers support readable streams without seeking or length information.
+They retain a bounded history for look-ahead and replay instead of buffering the
+entire input.
+
+[`ReaderSettings.NonSeekableStreamBufferSize`](xref:Melanchall.DryWetMidi.Core.ReaderSettings.NonSeekableStreamBufferSize)
+controls the history capacity, with an effective minimum of four bytes for file-format
+detection. EOF look-ahead uses a separate byte and does not evict history.
+[`ReaderSettings.BufferingPolicy`](xref:Melanchall.DryWetMidi.Core.ReaderSettings.BufferingPolicy)
+does not apply to non-seekable streams, including when set to `BufferAllData`.
+
+When using [`MidiReader`](xref:Melanchall.DryWetMidi.Core.MidiReader) directly,
+`Length` remains `long.MaxValue` to indicate an unknown length; it is not an available
+byte count. Use `EndReached` or
+[`EndReachedAsync`](xref:Melanchall.DryWetMidi.Core.MidiReader.EndReachedAsync(System.Threading.CancellationToken))
+instead. An EOF check can read one byte from the source without advancing the logical
+`Position`. Repeated checks reuse that byte or cached EOF. EOF leaves the position at
+the actual end, and retained bytes can still be replayed. Moving forward consumes bytes
+until the requested position or EOF; moving backward beyond retained history throws
+`InvalidOperationException`.
+
+Incremental byte reading avoids allocating a large declared payload before discovering
+how much data exists. It does not impose a total-memory bound: bulk reads retain the
+entire result, and packet buffers and the final array can coexist. For bounded-size
+processing, use [lazy reading](xref:a_file_lazy_reading_writing).
+
 ## Reading corrupted files
 
 DryWetMIDI allows to read MIDI files with various violations of [SMF](https://midi.org/standard-midi-files-specification) standard. Example below shows how to read a MIDI file with different errors:
