@@ -128,6 +128,43 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             ratio: 2.0,
             expectedEvents: Array.Empty<MidiEvent>());
 
+        [TestCase(double.NaN)]
+        [TestCase(double.PositiveInfinity)]
+        public void Resize_ByRatio_TrackChunk_NonFiniteRatio(double ratio)
+        {
+            var trackChunk = new TrackChunk(new TextEvent("A") { DeltaTime = 10 });
+
+            var exception = Assert.Throws<ArgumentOutOfRangeException>(() => trackChunk.Resize(ratio));
+
+            Assert.That(exception!.ParamName, Is.EqualTo("ratio"), "Invalid ratio should be reported.");
+            Assert.That(trackChunk.Events[0].DeltaTime, Is.EqualTo(10), "Track events should remain unchanged.");
+        }
+
+        [TestCase(double.NaN)]
+        [TestCase(double.PositiveInfinity)]
+        public void Resize_ByRatio_TrackChunks_NonFiniteRatio(double ratio)
+        {
+            var trackChunk = new TrackChunk(new TextEvent("A") { DeltaTime = 10 });
+
+            var exception = Assert.Throws<ArgumentOutOfRangeException>(() => new[] { trackChunk }.Resize(ratio));
+
+            Assert.That(exception!.ParamName, Is.EqualTo("ratio"), "Invalid ratio should be reported.");
+            Assert.That(trackChunk.Events[0].DeltaTime, Is.EqualTo(10), "Track events should remain unchanged.");
+        }
+
+        [TestCase(double.NaN)]
+        [TestCase(double.PositiveInfinity)]
+        public void Resize_ByRatio_MidiFile_NonFiniteRatio(double ratio)
+        {
+            var trackChunk = new TrackChunk(new TextEvent("A") { DeltaTime = 10 });
+            var midiFile = new MidiFile(trackChunk);
+
+            var exception = Assert.Throws<ArgumentOutOfRangeException>(() => midiFile.Resize(ratio));
+
+            Assert.That(exception!.ParamName, Is.EqualTo("ratio"), "Invalid ratio should be reported.");
+            Assert.That(trackChunk.Events[0].DeltaTime, Is.EqualTo(10), "Track events should remain unchanged.");
+        }
+
         [Test]
         public void Resize_ByRatio_EventsCollection_OneEvent_Midi([Values(0, 50, 100)] long deltaTime, [Values(0.5, 2.0)] double ratio) => Resize_ByRatio_EventsCollection(
             midiEvents: new[]

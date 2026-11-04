@@ -128,6 +128,12 @@ namespace Melanchall.DryWetMidi.Common
             IsLessThan(parameterName, value, MinNonnegativeValue, message);
         }
 
+        internal static void IsNotFinite(string parameterName, double value, string message)
+        {
+            if (double.IsNaN(value) || double.IsInfinity(value))
+                throw new ArgumentOutOfRangeException(parameterName, value, message);
+        }
+
         internal static void IsNonpositive(string parameterName, int value, string message)
         {
             IsLessThan(parameterName, value, MinPositiveValue, message);

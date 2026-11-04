@@ -231,6 +231,19 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             settings: null,
             expectedObjects: Array.Empty<ITimedObject>());
 
+        [TestCase(double.NaN)]
+        [TestCase(double.PositiveInfinity)]
+        public void ResizeObjectsGroup_ByRatio_NonFiniteRatio(double ratio)
+        {
+            var timedEvent = new TimedEvent(new TextEvent("A"), 10);
+
+            var exception = Assert.Throws<ArgumentOutOfRangeException>(() =>
+                new[] { timedEvent }.ResizeObjectsGroup(ratio, TempoMap.Default));
+
+            Assert.That(exception!.ParamName, Is.EqualTo("ratio"), "Invalid ratio should be reported.");
+            Assert.That(timedEvent.Time, Is.EqualTo(10), "Timed objects should remain unchanged.");
+        }
+
         [Test]
         public void ResizeObjectsGroup_ByRatio_TimedEvents_Single_1() => ResizeObjectsGroup(
             timedObjects: new[]
