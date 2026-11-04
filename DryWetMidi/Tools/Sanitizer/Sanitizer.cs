@@ -72,22 +72,30 @@ namespace Melanchall.DryWetMidi.Tools
                 return;
             }
 
-            CompleteOrphanedNotes(midiFile, settings);
             var eventPorts = GetEventPorts(midiFile);
+            var originalNotesAndTimedEvents = settings.OrphanedNoteOnEventsPolicy == OrphanedNoteOnEventsPolicy.CompleteNote
+                ? midiFile.GetTrackChunks()
+                    .SelectMany(trackChunk => trackChunk.GetNotesAndTimedEventsByPort(settings, eventPorts))
+                    .ToArray()
+                : null;
+            var completedNotes = CompleteOrphanedNotes(midiFile, settings);
+            eventPorts = GetEventPorts(midiFile);
 
-            RemoveNoteData(midiFile, settings, eventPorts);
+            RemoveNoteData(midiFile, settings, eventPorts, originalNotesAndTimedEvents, completedNotes);
             var usedChannels = RemoveDuplicatedEventsCollectingUsedChannels(midiFile, settings, eventPorts);
             RemoveEventsOnUnusedChannels(midiFile, settings, usedChannels, eventPorts);
             RemoveEmptyTrackChunks(midiFile, settings);
             TrimFile(midiFile, settings);
         }
 
-        private static void CompleteOrphanedNotes(
+        private static Dictionary<NoteOnEvent, Note> CompleteOrphanedNotes(
             MidiFile midiFile,
             SanitizingSettings settings)
         {
+            var completedNotes = new Dictionary<NoteOnEvent, Note>();
+
             if (settings.OrphanedNoteOnEventsPolicy != OrphanedNoteOnEventsPolicy.CompleteNote)
-                return;
+                return completedNotes;
 
             var maxNoteDuration = settings.NoteMaxLengthForOrphanedNoteOnEvent;
             var trackChunks = midiFile.GetTrackChunks().ToArray();
@@ -152,6 +160,7 @@ namespace Melanchall.DryWetMidi.Tools
                     {
                         TrackChunkIndex = d.Item1.TrackChunkIndex,
                         NoteOnEvent = noteOnEvent,
+                        NoteOnTimedEvent = (TimedEvent)d.Item1.Object,
                         IsZeroLength = noteOffTime == d.Item1.Object.Time,
                         NoteOffTimedEvent = new TimedEvent(
                             new NoteOffEvent(noteOnEvent.NoteNumber, SevenBitNumber.MinValue) { Channel = noteOnEvent.Channel },
@@ -160,6 +169,13 @@ namespace Melanchall.DryWetMidi.Tools
                 })
                 .GroupBy(d => d.TrackChunkIndex)
                 .ToArray();
+
+            foreach (var noteOffEventData in noteOffEvents.SelectMany(group => group))
+            {
+                completedNotes.Add(
+                    noteOffEventData.NoteOnEvent,
+                    new Note(noteOffEventData.NoteOnTimedEvent, noteOffEventData.NoteOffTimedEvent));
+            }
 
             foreach (var noteOffEventsGroup in noteOffEvents)
             {
@@ -242,6 +258,8 @@ namespace Melanchall.DryWetMidi.Tools
                     eventIndex += 2;
                 }
             }
+
+            return completedNotes;
         }
 
         private static Dictionary<MidiEvent, byte> GetEventPorts(MidiFile midiFile)
@@ -474,7 +492,9 @@ namespace Melanchall.DryWetMidi.Tools
         private static void RemoveNoteData(
             MidiFile midiFile,
             SanitizingSettings settings,
-            Dictionary<MidiEvent, byte> eventPorts)
+            Dictionary<MidiEvent, byte> eventPorts,
+            IEnumerable<ITimedObject>? originalNotesAndTimedEvents,
+            Dictionary<NoteOnEvent, Note> completedNotes)
         {
             var noteMinLength = settings.NoteMinLength;
             var removeShortNotes = noteMinLength != null && !noteMinLength.IsZeroTimeSpan();
@@ -543,22 +563,32 @@ namespace Melanchall.DryWetMidi.Tools
                 return false;
             }
 
-            foreach (var trackChunk in midiFile.GetTrackChunks())
-            {
-                foreach (var obj in trackChunk.GetNotesAndTimedEventsByPort(settings, eventPorts))
-                {
-                    if (!ShouldRemoveObject(obj))
-                        continue;
+            var notesAndTimedEvents = originalNotesAndTimedEvents ??
+                midiFile.GetTrackChunks()
+                    .SelectMany(trackChunk => trackChunk.GetNotesAndTimedEventsByPort(settings, eventPorts));
 
-                    if (obj is Note note)
-                    {
-                        note.TimedNoteOnEvent.Event.MustBeRemoved = true;
-                        note.TimedNoteOffEvent.Event.MustBeRemoved = true;
-                    }
-                    else
-                    {
-                        ((TimedEvent)obj).Event.MustBeRemoved = true;
-                    }
+            foreach (var objAt in notesAndTimedEvents)
+            {
+                var obj = objAt;
+
+                if (obj is TimedEvent timedEvent &&
+                    timedEvent.Event is NoteOnEvent noteOnEvent &&
+                    completedNotes.TryGetValue(noteOnEvent, out var completedNote))
+                {
+                    obj = completedNote;
+                }
+
+                if (!ShouldRemoveObject(obj))
+                    continue;
+
+                if (obj is Note note)
+                {
+                    note.TimedNoteOnEvent.Event.MustBeRemoved = true;
+                    note.TimedNoteOffEvent.Event.MustBeRemoved = true;
+                }
+                else
+                {
+                    ((TimedEvent)obj).Event.MustBeRemoved = true;
                 }
             }
 

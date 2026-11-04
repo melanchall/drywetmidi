@@ -549,6 +549,29 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 new MidiFile(expectedTrack));
         }
 
+        [Test]
+        public void Sanitize_CompleteZeroLengthOrphans_PreservesOverlappingNotePairing()
+        {
+            Sanitize(
+                new MidiFile(new TrackChunk(
+                    new NoteOnEvent((SevenBitNumber)70, (SevenBitNumber)100),
+                    new NoteOnEvent((SevenBitNumber)70, (SevenBitNumber)20) { DeltaTime = 10 },
+                    new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue) { DeltaTime = 10 })),
+                new SanitizingSettings
+                {
+                    OrphanedNoteOnEventsPolicy = OrphanedNoteOnEventsPolicy.CompleteNote,
+                    NoteMaxLengthForOrphanedNoteOnEvent = new MidiTimeSpan(0),
+                    NoteMinVelocity = (SevenBitNumber)50,
+                    NoteDetectionSettings = new NoteDetectionSettings
+                    {
+                        NoteStartDetectionPolicy = NoteStartDetectionPolicy.FirstNoteOn
+                    }
+                },
+                new MidiFile(new TrackChunk(
+                    new NoteOnEvent((SevenBitNumber)70, (SevenBitNumber)100),
+                    new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue) { DeltaTime = 20 })));
+        }
+
         #endregion
 
         #region Private methods
