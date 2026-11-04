@@ -22,7 +22,7 @@ midiFile.Sanitize(new SanitizingSettings
 
 Here we're removing all notes that are shorter than `1/4` leaving track chunks without events untouched. Please see detailed descriptions of settings below.
 
-For files read in format 2 (`MultiSequence`), each track is sanitized independently, using its own tempo map and channel state. For other formats, simultaneous tracks share channel state only when they target the same MIDI output port. A track without a `PortPrefixEvent` initially targets port 0; subsequent port prefixes change the destination of following events.
+For files read in format 2 ([`MultiSequence`](xref:Melanchall.DryWetMidi.Core.MidiFileFormat.MultiSequence)), each track is sanitized independently, using its own tempo map and channel state. For other formats, simultaneous tracks share channel state only when they target the same MIDI output port. A track without a [`PortPrefixEvent`](xref:Melanchall.DryWetMidi.Core.PortPrefixEvent) initially targets port 0; subsequent port prefixes change the destination of following events.
 
 ## Settings
 
@@ -73,9 +73,10 @@ Notes are considered duplicated when they meet all the following conditions:
 * same note number;
 * same channel;
 * same time;
-* same length.
+* same length;
+* same MIDI output port.
 
-The notes must also target the same MIDI output port. Notes rejected by `NoteMinLength` or `NoteMinVelocity` do not prevent an otherwise matching note from being retained.
+Notes rejected by `NoteMinLength` or `NoteMinVelocity` do not prevent an otherwise matching note from being retained.
 
 For example, if we have such a file with two notes (with number of `70` and length of `20`):
 
@@ -187,7 +188,7 @@ _Pitch Bend_ events are considered duplicated when they meet all the following c
 * same pitch value;
 * same channel.
 
-Pitch-bend values are tracked independently for each channel and MIDI output port. `ResetAllControllers` invalidates the remembered pitch-bend value for its destination.
+Pitch-bend values are tracked independently for each channel and MIDI output port. [`ResetAllControllers`](xref:Melanchall.DryWetMidi.Common.ControlName.ResetAllControllers) invalidates the remembered pitch-bend value for its destination.
 
 ### RemoveDuplicatedSequenceTrackNameEvents
 
@@ -205,9 +206,9 @@ _Control Change_ events are considered duplicated when they meet all the followi
 * same control value;
 * same channel.
 
-Values are tracked independently for each controller, channel, and MIDI output port. `ResetAllControllers` invalidates the remembered values for its destination.
+Values are tracked independently for each controller, channel, and MIDI output port. [`ResetAllControllers`](xref:Melanchall.DryWetMidi.Common.ControlName.ResetAllControllers) invalidates the remembered values for its destination.
 
-RPN/NRPN selection, Data Entry, Data Increment, Data Decrement, and channel-mode messages (controllers 120 through 127) are preserved rather than deduplicated. Repeated commands can have effects even when their numeric values match.
+RPN/NRPN selection, Data Entry, Data Increment, Data Decrement, and channel-mode messages (controllers `120` through `127`) are preserved rather than deduplicated. Repeated commands can have effects even when their numeric values match.
 
 ### RemoveEventsOnUnusedChannels
 
