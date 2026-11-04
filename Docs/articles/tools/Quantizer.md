@@ -12,16 +12,6 @@ Also, the [QuantizerUtilities](xref:Melanchall.DryWetMidi.Tools.QuantizerUtiliti
 
 Please note that the article doesn't cover all settings and use cases so please read API documentation on [Quantizer](xref:Melanchall.DryWetMidi.Tools.Quantizer) to get complete information.
 
-## Grid and enumeration requirements
-
-[`Quantizer.Quantize`](xref:Melanchall.DryWetMidi.Tools.Quantizer.Quantize*) enumerates the input objects once and evaluates [`QuantizingSettings.Filter`](xref:Melanchall.DryWetMidi.Tools.QuantizingSettings.Filter) once per non-null object before modifying any selected objects. The selected objects are retained for the operation, so an input enumerable can be single-pass; the operation is not lazy.
-
-Grid times must be nonnegative and strictly increasing after conversion to MIDI ticks. Quantization throws `InvalidOperationException` if an encountered time is negative, repeated, or decreasing. This also rejects [`SteppedGrid`](xref:Melanchall.DryWetMidi.Interaction.SteppedGrid) steps that convert to zero MIDI ticks. Supply [`ArbitraryGrid`](xref:Melanchall.DryWetMidi.Interaction.ArbitraryGrid) points in increasing order; the quantizer does not sort them.
-
-For each quantization operation, grid times are enumerated once, up to and including the first point at or beyond the latest selected object's end time (or time for an object without a length). Only this consumed prefix is validated, so invalid points beyond it are not inspected. The [`QuantizerUtilities.QuantizeObjects`](xref:Melanchall.DryWetMidi.Tools.QuantizerUtilities.QuantizeObjects*) overloads process tracks individually, requesting a grid sequence for each track.
-
-Optional randomization supports inclusive bounds across the full nonnegative MIDI tick range, including `long.MaxValue`. Negative lower bounds are clamped to zero. Bounds whose upper limit is below the clamped lower limit throw `InvalidOperationException`.
-
 ## General information
 
 First of all, let's see how arbitrary [timed objects](xref:Melanchall.DryWetMidi.Interaction.ITimedObject) are quantized:

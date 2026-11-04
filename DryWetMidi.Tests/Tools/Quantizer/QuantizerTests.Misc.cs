@@ -14,7 +14,7 @@ using System.Linq;
 namespace Melanchall.DryWetMidi.Tests.Tools
 {
     [TestFixture]
-    public sealed class QuantizerRegressionTests
+    public sealed partial class QuantizerTests
     {
         #region Nested classes
 

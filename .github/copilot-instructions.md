@@ -116,6 +116,13 @@ equivalent assertion exists. Give every assertion an informative failure message
 Use MidiAsserts for MIDI equality instead of manual comparisons or calling
 Equals, except when Equals itself is the behavior under test.
 
+Prefer adding tests to an existing fixture for the tested entity, using its
+partial files when appropriate. Name test fixtures after the entity or behavior
+they test; avoid vague labels such as "Regression".
+
+Document supported public behavior and contracts, not internal implementation
+details.
+
 Pull requests
 -------------
 Always open pull requests as drafts.
