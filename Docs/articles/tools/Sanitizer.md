@@ -22,6 +22,8 @@ midiFile.Sanitize(new SanitizingSettings
 
 Here we're removing all notes that are shorter than `1/4` leaving track chunks without events untouched. Please see detailed descriptions of settings below.
 
+For files read in format 2 (`MultiSequence`), each track is sanitized independently, using its own tempo map and channel state. For other formats, simultaneous tracks share channel state only when they target the same MIDI output port. A track without a `PortPrefixEvent` initially targets port 0; subsequent port prefixes change the destination of following events.
+
 ## Settings
 
 The [Sanitizer](xref:Melanchall.DryWetMidi.Tools.Sanitizer) class provides a rich set of options you can manage sanitizing of a MIDI file with.
@@ -73,6 +75,8 @@ Notes are considered duplicated when they meet all the following conditions:
 * same time;
 * same length.
 
+The notes must also target the same MIDI output port. Notes rejected by `NoteMinLength` or `NoteMinVelocity` do not prevent an otherwise matching note from being retained.
+
 For example, if we have such a file with two notes (with number of `70` and length of `20`):
 
 ```csharp
@@ -120,6 +124,8 @@ But what if such orphaned Note On events are just a result of the corresponding 
 As you can see from the name of the property, it's the **maximum** length of a note. If Note On event with the same channel and note number is encountered during the new note, the note's length will be reduced so its end will be at the start of a next note:
 
 ![SanitizingSettings.NoteMaxLengthForOrphanedNoteOnEvent](images/Sanitizer/NoteMaxLengthForOrphanedNoteOnEvent.png)
+
+Only notes targeting the same MIDI output port limit the restored note's length. A zero maximum length creates a zero-length note, with its Note Off immediately after its Note On. If a port prefix changes during a restored note, additional port prefixes route its generated Note Off to the original port and then restore the track's destination.
 
 ### RemoveOrphanedNoteOffEvents
 
@@ -181,6 +187,8 @@ _Pitch Bend_ events are considered duplicated when they meet all the following c
 * same pitch value;
 * same channel.
 
+Pitch-bend values are tracked independently for each channel and MIDI output port. `ResetAllControllers` invalidates the remembered pitch-bend value for its destination.
+
 ### RemoveDuplicatedSequenceTrackNameEvents
 
 [RemoveDuplicatedSequenceTrackNameEvents](xref:Melanchall.DryWetMidi.Tools.SanitizingSettings.RemoveDuplicatedSequenceTrackNameEvents) does the same actions as the [RemoveDuplicatedSetTempoEvents](#removeduplicatedsettempoevents) or [RemoveDuplicatedTimeSignatureEvents](#removeduplicatedtimesignatureevents) one but for duplicated [Sequence/Track Name](xref:Melanchall.DryWetMidi.Core.SequenceTrackNameEvent) events.
@@ -196,6 +204,10 @@ _Control Change_ events are considered duplicated when they meet all the followi
 * same control number;
 * same control value;
 * same channel.
+
+Values are tracked independently for each controller, channel, and MIDI output port. `ResetAllControllers` invalidates the remembered values for its destination.
+
+RPN/NRPN selection, Data Entry, Data Increment, Data Decrement, and channel-mode messages (controllers 120 through 127) are preserved rather than deduplicated. Repeated commands can have effects even when their numeric values match.
 
 ### RemoveEventsOnUnusedChannels
 
@@ -213,6 +225,8 @@ var midiFile = new MidiFile(
 [RemoveEventsOnUnusedChannels](xref:Melanchall.DryWetMidi.Tools.SanitizingSettings.RemoveEventsOnUnusedChannels) property turns on or off removing such channel events that have no effect since there are no notes on those channels:
 
 ![SanitizingSettings.RemoveEventsOnUnusedChannels](images/Sanitizer/RemoveEventsOnUnusedChannels.png)
+
+Channel usage is evaluated separately for each MIDI output port. Notes on channel 0 of one port do not keep channel events on channel 0 of another port.
 
 ### Trim
 

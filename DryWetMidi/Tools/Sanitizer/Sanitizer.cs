@@ -13,7 +13,16 @@ namespace Melanchall.DryWetMidi.Tools
     /// </summary>
     public static class Sanitizer
     {
+        private sealed class ChannelState
+        {
+            public ushort? PitchValue { get; set; }
+
+            public SevenBitNumber?[] ControlValues { get; } = new SevenBitNumber?[SevenBitNumber.MaxValue + 1];
+        }
+
         #region Constants
+
+        private const byte DefaultPort = 0;
 
         private static readonly ControlName[] ControlsToSkip = new[]
         {
@@ -23,6 +32,8 @@ namespace Melanchall.DryWetMidi.Tools
             ControlName.RegisteredParameterNumberMsb,
             ControlName.DataEntryMsb,
             ControlName.LsbForDataEntry,
+            ControlName.DataIncrement,
+            ControlName.DataDecrement,
         };
 
         #endregion
@@ -46,10 +57,27 @@ namespace Melanchall.DryWetMidi.Tools
 
             settings = settings ?? new SanitizingSettings();
 
+            if (settings.OrphanedNoteOnEventsPolicy == OrphanedNoteOnEventsPolicy.CompleteNote &&
+                settings.NoteMaxLengthForOrphanedNoteOnEvent == null)
+                throw new InvalidOperationException($"{nameof(SanitizingSettings.NoteMaxLengthForOrphanedNoteOnEvent)} must be set to complete notes from orphaned Note On events.");
+
+            if (midiFile._originalFormat == (ushort)MidiFileFormat.MultiSequence)
+            {
+                foreach (var trackChunk in midiFile.GetTrackChunks().ToArray())
+                {
+                    new MidiFile(trackChunk) { TimeDivision = midiFile.TimeDivision }.Sanitize(settings);
+                }
+
+                RemoveEmptyTrackChunks(midiFile, settings);
+                return;
+            }
+
             CompleteOrphanedNotes(midiFile, settings);
-            RemoveNoteData(midiFile, settings);
-            var usedChannels = RemoveDuplicatedEventsCollectingUsedChannels(midiFile, settings);
-            RemoveEventsOnUnusedChannels(midiFile, settings, usedChannels);
+            var eventPorts = GetEventPorts(midiFile);
+
+            RemoveNoteData(midiFile, settings, eventPorts);
+            var usedChannels = RemoveDuplicatedEventsCollectingUsedChannels(midiFile, settings, eventPorts);
+            RemoveEventsOnUnusedChannels(midiFile, settings, usedChannels, eventPorts);
             RemoveEmptyTrackChunks(midiFile, settings);
             TrimFile(midiFile, settings);
         }
@@ -62,20 +90,16 @@ namespace Melanchall.DryWetMidi.Tools
                 return;
 
             var maxNoteDuration = settings.NoteMaxLengthForOrphanedNoteOnEvent;
-            if (maxNoteDuration == null)
-                throw new InvalidOperationException($"{nameof(SanitizingSettings.NoteMaxLengthForOrphanedNoteOnEvent)} must be set to complete notes from orphaned Note On events.");
-
             var trackChunks = midiFile.GetTrackChunks().ToArray();
 
-            var noteOnLastObjects = new Dictionary<int, (ITimedObject Object, int TrackChunkIndex)>();
+            var eventPorts = GetEventPorts(midiFile);
+            var noteOnLastObjects = new Dictionary<(byte Port, int NoteId), (ITimedObject Object, int TrackChunkIndex)>();
             var data = new List<((ITimedObject Object, int TrackChunkIndex), long? Time)>();
 
             // TODO: simplify
             var notesAndTimedEvents = trackChunks
                 .SelectMany((trackChunk, i) => trackChunk
-                    .Events
-                    .GetTimedEventsLazy(new TimedEventDetectionSettings(), i, false)
-                    .GetNotesAndTimedEventsLazy(settings.NoteDetectionSettings ?? new NoteDetectionSettings())
+                    .GetNotesAndTimedEventsByPort(settings, eventPorts)
                     .Select(obj => (Object: obj, TrackChunkIndex: i)))
                 .OrderBy(t => t.Object.Time);
 
@@ -86,7 +110,7 @@ namespace Melanchall.DryWetMidi.Tools
                 var note = obj as Note;
                 if (note != null)
                 {
-                    var noteId = note.GetNoteId();
+                    var noteId = (eventPorts[note.TimedNoteOnEvent.Event], note.GetNoteId());
 
                     if (noteOnLastObjects.TryGetValue(noteId, out var noteOnObject))
                         data.Add((noteOnObject, obj.Time));
@@ -99,7 +123,7 @@ namespace Melanchall.DryWetMidi.Tools
                     if (noteOnEvent == null)
                         continue;
 
-                    var noteId = noteOnEvent.GetNoteId();
+                    var noteId = (eventPorts[noteOnEvent], noteOnEvent.GetNoteId());
 
                     if (noteOnLastObjects.TryGetValue(noteId, out var noteOnObject))
                         data.Add((noteOnObject, obj.Time));
@@ -127,6 +151,8 @@ namespace Melanchall.DryWetMidi.Tools
                     return new
                     {
                         TrackChunkIndex = d.Item1.TrackChunkIndex,
+                        NoteOnEvent = noteOnEvent,
+                        IsZeroLength = noteOffTime == d.Item1.Object.Time,
                         NoteOffTimedEvent = new TimedEvent(
                             new NoteOffEvent(noteOnEvent.NoteNumber, SevenBitNumber.MinValue) { Channel = noteOnEvent.Channel },
                             noteOffTime)
@@ -140,9 +166,19 @@ namespace Melanchall.DryWetMidi.Tools
                 var events = trackChunks[noteOffEventsGroup.Key].Events;
                 var lastTime = 0L;
                 var noteOffEventsProcessed = false;
-                
-                var noteOffEventsEnumerator = noteOffEventsGroup.OrderBy(e => e.NoteOffTimedEvent.Time).GetEnumerator();
-                noteOffEventsEnumerator.MoveNext();
+
+                foreach (var noteOffEventData in noteOffEventsGroup.Where(e => e.IsZeroLength))
+                {
+                    events.Insert(events.IndexOf(noteOffEventData.NoteOnEvent) + 1, noteOffEventData.NoteOffTimedEvent.Event);
+                }
+
+                using var noteOffEventsEnumerator = noteOffEventsGroup
+                    .Where(e => !e.IsZeroLength)
+                    .OrderBy(e => e.NoteOffTimedEvent.Time)
+                    .GetEnumerator();
+
+                if (!noteOffEventsEnumerator.MoveNext())
+                    continue;
 
                 for (var i = 0; i < events.Count; i++)
                 {
@@ -179,9 +215,65 @@ namespace Melanchall.DryWetMidi.Tools
                     lastTime = noteOffTimedEvent.Time;
                 }
                 while (noteOffEventsEnumerator.MoveNext());
-
-                noteOffEventsEnumerator.Dispose();
             }
+
+            var noteOffPorts = noteOffEvents
+                .SelectMany(group => group)
+                .ToDictionary(e => e.NoteOffTimedEvent.Event, e => eventPorts[e.NoteOnEvent]);
+
+            foreach (var trackChunk in trackChunks)
+            {
+                var port = DefaultPort;
+                var events = trackChunk.Events;
+
+                for (var eventIndex = 0; eventIndex < events.Count; eventIndex++)
+                {
+                    var midiEvent = events[eventIndex];
+
+                    if (midiEvent is PortPrefixEvent portPrefixEvent)
+                        port = portPrefixEvent.Port;
+
+                    if (!noteOffPorts.TryGetValue(midiEvent, out var noteOffPort) || noteOffPort == port)
+                        continue;
+
+                    events.Insert(eventIndex, new PortPrefixEvent(noteOffPort) { DeltaTime = midiEvent.DeltaTime });
+                    midiEvent.DeltaTime = 0;
+                    events.Insert(eventIndex + 2, new PortPrefixEvent(port));
+                    eventIndex += 2;
+                }
+            }
+        }
+
+        private static Dictionary<MidiEvent, byte> GetEventPorts(MidiFile midiFile)
+        {
+            var eventPorts = new Dictionary<MidiEvent, byte>();
+
+            foreach (var trackChunk in midiFile.GetTrackChunks())
+            {
+                var port = DefaultPort;
+
+                foreach (var midiEvent in trackChunk.Events)
+                {
+                    if (midiEvent is PortPrefixEvent portPrefixEvent)
+                        port = portPrefixEvent.Port;
+
+                    eventPorts[midiEvent] = port;
+                }
+            }
+
+            return eventPorts;
+        }
+
+        private static IEnumerable<ITimedObject> GetNotesAndTimedEventsByPort(
+            this TrackChunk trackChunk,
+            SanitizingSettings settings,
+            Dictionary<MidiEvent, byte> eventPorts)
+        {
+            return trackChunk.Events
+                .GetTimedEventsLazy(null, 0, false)
+                .GroupBy(e => eventPorts[e.Event])
+                .SelectMany(events => events.GetNotesAndTimedEventsLazy(settings.NoteDetectionSettings))
+                .OrderBy(obj => obj.Time);
         }
 
         private static void TrimFile(
@@ -221,7 +313,8 @@ namespace Melanchall.DryWetMidi.Tools
         private static void RemoveEventsOnUnusedChannels(
             MidiFile midiFile,
             SanitizingSettings settings,
-            bool[] usedChannels)
+            HashSet<(byte Port, FourBitNumber Channel)> usedChannels,
+            Dictionary<MidiEvent, byte> eventPorts)
         {
             if (!settings.RemoveEventsOnUnusedChannels)
                 return;
@@ -236,17 +329,18 @@ namespace Melanchall.DryWetMidi.Tools
 
                 var channelEvent = midiEvent as ChannelEvent;
                 if (channelEvent != null)
-                    return !usedChannels[channelEvent.Channel];
+                    return !usedChannels.Contains((eventPorts[midiEvent], channelEvent.Channel));
 
                 return false;
             });
         }
 
-        private static bool[] RemoveDuplicatedEventsCollectingUsedChannels(
+        private static HashSet<(byte Port, FourBitNumber Channel)> RemoveDuplicatedEventsCollectingUsedChannels(
             MidiFile midiFile,
-            SanitizingSettings settings)
+            SanitizingSettings settings,
+            Dictionary<MidiEvent, byte> eventPorts)
         {
-            var usedChannels = new bool[FourBitNumber.MaxValue + 1];
+            var usedChannels = new HashSet<(byte Port, FourBitNumber Channel)>();
 
             if (!settings.RemoveEventsOnUnusedChannels &&
                 !settings.RemoveDuplicatedPitchBendEvents &&
@@ -263,10 +357,7 @@ namespace Melanchall.DryWetMidi.Tools
             var timeSignatureThirtySecondNotesPerBeat = TimeSignatureEvent.DefaultThirtySecondNotesPerBeat;
             var timeSignatureClocksPerClick = TimeSignatureEvent.DefaultClocksPerClick;
 
-            ushort? pitchValue = null;
-            FourBitNumber? pitchBendChannel = null;
-
-            var controlValues = new SevenBitNumber?[FourBitNumber.MaxValue + 1, SevenBitNumber.MaxValue + 1];
+            var channelStates = new Dictionary<(byte Port, FourBitNumber Channel), ChannelState>();
 
             midiFile.RemoveTimedEvents(e =>
             {
@@ -275,7 +366,27 @@ namespace Melanchall.DryWetMidi.Tools
 
                 var noteEvent = midiEvent as NoteEvent;
                 if (noteEvent != null)
-                    usedChannels[noteEvent.Channel] = true;
+                    usedChannels.Add((eventPorts[midiEvent], noteEvent.Channel));
+
+                ChannelState? channelState = null;
+
+                if (midiEvent is ChannelEvent channelEvent)
+                {
+                    var channelKey = (eventPorts[midiEvent], channelEvent.Channel);
+
+                    if (!channelStates.TryGetValue(channelKey, out channelState))
+                    {
+                        channelState = new ChannelState();
+                        channelStates.Add(channelKey, channelState);
+                    }
+
+                    if (midiEvent is ControlChangeEvent resetEvent &&
+                        resetEvent.GetControlName() == ControlName.ResetAllControllers)
+                    {
+                        Array.Clear(channelState.ControlValues, 0, channelState.ControlValues.Length);
+                        channelState.PitchValue = null;
+                    }
+                }
 
                 if (midiEventType == MidiEventType.SetTempo && settings.RemoveDuplicatedSetTempoEvents)
                 {
@@ -301,28 +412,31 @@ namespace Melanchall.DryWetMidi.Tools
                     return result;
                 }
 
-                if (midiEventType == MidiEventType.PitchBend && settings.RemoveDuplicatedPitchBendEvents)
+                if (midiEventType == MidiEventType.PitchBend &&
+                    settings.RemoveDuplicatedPitchBendEvents &&
+                    channelState != null)
                 {
                     var pitchBendEvent = (PitchBendEvent)midiEvent;
-                    var result = pitchBendEvent.PitchValue == pitchValue &&
-                                 pitchBendEvent.Channel == pitchBendChannel;
+                    var result = pitchBendEvent.PitchValue == channelState.PitchValue;
 
-                    pitchValue = pitchBendEvent.PitchValue;
-                    pitchBendChannel = pitchBendEvent.Channel;
+                    channelState.PitchValue = pitchBendEvent.PitchValue;
                     return result;
                 }
 
-                if (midiEventType == MidiEventType.ControlChange && settings.RemoveDuplicatedControlChangeEvents)
+                if (midiEventType == MidiEventType.ControlChange &&
+                    settings.RemoveDuplicatedControlChangeEvents &&
+                    channelState != null)
                 {
                     var controlChangeEvent = (ControlChangeEvent)midiEvent;
-                    if (ControlsToSkip.Contains(controlChangeEvent.GetControlName()))
+                    if (controlChangeEvent.ControlNumber >= ControlName.AllSoundOff.AsSevenBitNumber() ||
+                        ControlsToSkip.Contains(controlChangeEvent.GetControlName()))
                     {
                         return false;
                     }
 
-                    var result = controlChangeEvent.ControlValue == controlValues[controlChangeEvent.Channel, controlChangeEvent.ControlNumber];
+                    var result = controlChangeEvent.ControlValue == channelState.ControlValues[controlChangeEvent.ControlNumber];
 
-                    controlValues[controlChangeEvent.Channel, controlChangeEvent.ControlNumber] = controlChangeEvent.ControlValue;
+                    channelState.ControlValues[controlChangeEvent.ControlNumber] = controlChangeEvent.ControlValue;
                     return result;
                 }
 
@@ -359,7 +473,8 @@ namespace Melanchall.DryWetMidi.Tools
 
         private static void RemoveNoteData(
             MidiFile midiFile,
-            SanitizingSettings settings)
+            SanitizingSettings settings,
+            Dictionary<MidiEvent, byte> eventPorts)
         {
             var noteMinLength = settings.NoteMinLength;
             var removeShortNotes = noteMinLength != null && !noteMinLength.IsZeroTimeSpan();
@@ -377,54 +492,77 @@ namespace Melanchall.DryWetMidi.Tools
             var tempoMap = midiFile.GetTempoMap();
             var timeSpanType = noteMinLength?.GetType();
 
-            var lastNotes = new Note[FourBitNumber.MaxValue + 1, SevenBitNumber.MaxValue + 1];
+            var retainedNotes = new Dictionary<(byte Port, int NoteId), HashSet<(long Time, long Length)>>();
 
-            midiFile.RemoveObjects(
-                ObjectType.TimedEvent | ObjectType.Note,
-                obj =>
+            bool ShouldRemoveObject(ITimedObject obj)
+            {
+                var note = obj as Note;
+                if (note != null)
                 {
-                    var note = obj as Note;
-                    if (note != null)
+                    if (removeShortNotes &&
+                        timeSpanType != null &&
+                        LengthConverter.ConvertTo((MidiTimeSpan)note.Length, timeSpanType, note.Time, tempoMap).CompareTo(noteMinLength) < 0)
+                        return true;
+
+                    if (removeSilentNotes &&
+                        note.Velocity < noteMinVelocity)
+                        return true;
+
+                    if (settings.RemoveDuplicatedNotes)
                     {
-                        var lastNote = lastNotes[note.Channel, note.NoteNumber];
-                        lastNotes[note.Channel, note.NoteNumber] = note;
+                        var noteKey = (eventPorts[note.TimedNoteOnEvent.Event], note.GetNoteId());
 
-                        if (settings.RemoveDuplicatedNotes &&
-                            lastNote?.Time == note.Time &&
-                            lastNote?.Length == note.Length)
-                            return true;
+                        if (!retainedNotes.TryGetValue(noteKey, out var noteTimes))
+                        {
+                            noteTimes = new HashSet<(long Time, long Length)>();
+                            retainedNotes.Add(noteKey, noteTimes);
+                        }
 
-                        if (removeShortNotes &&
-                            timeSpanType != null &&
-                            LengthConverter.ConvertTo((MidiTimeSpan)note.Length, timeSpanType, note.Time, tempoMap).CompareTo(noteMinLength) < 0)
-                            return true;
+                        return !noteTimes.Add((note.Time, note.Length));
+                    }
+                }
+                else
+                {
+                    var timedEvent = (TimedEvent)obj;
 
-                        if (removeSilentNotes &&
-                            note.Velocity < noteMinVelocity)
-                            return true;
+                    if (timedEvent.Event.EventType == MidiEventType.NoteOn)
+                    {
+                        switch (settings.OrphanedNoteOnEventsPolicy)
+                        {
+                            case OrphanedNoteOnEventsPolicy.Remove:
+                                return true;
+                            case OrphanedNoteOnEventsPolicy.CompleteNote:
+                                return false;
+                        }
+                    }
+
+                    if (settings.RemoveOrphanedNoteOffEvents && timedEvent.Event.EventType == MidiEventType.NoteOff)
+                        return true;
+                }
+
+                return false;
+            }
+
+            foreach (var trackChunk in midiFile.GetTrackChunks())
+            {
+                foreach (var obj in trackChunk.GetNotesAndTimedEventsByPort(settings, eventPorts))
+                {
+                    if (!ShouldRemoveObject(obj))
+                        continue;
+
+                    if (obj is Note note)
+                    {
+                        note.TimedNoteOnEvent.Event.MustBeRemoved = true;
+                        note.TimedNoteOffEvent.Event.MustBeRemoved = true;
                     }
                     else
                     {
-                        var timedEvent = (TimedEvent)obj;
-
-                        if (timedEvent.Event.EventType == MidiEventType.NoteOn)
-                        {
-                            switch (settings.OrphanedNoteOnEventsPolicy)
-                            {
-                                case OrphanedNoteOnEventsPolicy.Remove:
-                                    return true;
-                                case OrphanedNoteOnEventsPolicy.CompleteNote:
-                                    return false;
-                            }
-                        }
-
-                        if (settings.RemoveOrphanedNoteOffEvents && timedEvent.Event.EventType == MidiEventType.NoteOff)
-                            return true;
+                        ((TimedEvent)obj).Event.MustBeRemoved = true;
                     }
+                }
+            }
 
-                    return false;
-                },
-                new ObjectDetectionSettings { NoteDetectionSettings = settings.NoteDetectionSettings });
+            midiFile.RemoveTimedEvents(e => e.Event.MustBeRemoved);
         }
 
         #endregion
