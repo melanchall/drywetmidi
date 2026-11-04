@@ -8,7 +8,7 @@ With DryWetMIDI you can easily repeat groups of objects or entire MIDI files usi
 
 ![Objects repeating](images/Repeater/Repeat.png)
 
-When repeating a MIDI file a positive number of times, only its track chunks are repeated. All non-track chunks are discarded; if you need them in the result, add them to the new file manually.
+When repeating a MIDI file with a positive repeat count, only its track chunks are repeated. All non-track chunks are discarded; if you need them in the result, add them to the new file manually. A repeat count of `0` returns a clone of the entire file, including non-track chunks.
 
 It's a simple case. To calculate the distance to move each new part by, the tool looks at the value of the [ShiftPolicy](xref:Melanchall.DryWetMidi.Tools.RepeatingSettings.ShiftPolicy) property of the settings passed to [Repeat](xref:Melanchall.DryWetMidi.Tools.Repeater.Repeat*) methods. The default value is [ShiftPolicy.ShiftByMaxTime](xref:Melanchall.DryWetMidi.Tools.ShiftPolicy.ShiftByMaxTime) and you can see how this option works on the image above – the tool takes maximum time among all objects and shifts objects within each new part by this value.
 
