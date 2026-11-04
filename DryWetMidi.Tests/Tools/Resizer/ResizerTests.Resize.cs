@@ -3,6 +3,7 @@ using Melanchall.DryWetMidi.Interaction;
 using Melanchall.DryWetMidi.Tests.Utilities;
 using Melanchall.DryWetMidi.Tools;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -128,41 +129,38 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             ratio: 2.0,
             expectedEvents: Array.Empty<MidiEvent>());
 
-        [TestCase(double.NaN)]
-        [TestCase(double.PositiveInfinity)]
-        public void Resize_ByRatio_TrackChunk_NonFiniteRatio(double ratio)
+        [Test]
+        public void Resize_ByRatio_TrackChunk_NonFiniteRatio([Values(double.NaN, double.PositiveInfinity)] double ratio)
         {
             var trackChunk = new TrackChunk(new TextEvent("A") { DeltaTime = 10 });
 
-            var exception = Assert.Throws<ArgumentOutOfRangeException>(() => trackChunk.Resize(ratio));
+            var exception = ClassicAssert.Throws<ArgumentOutOfRangeException>(() => trackChunk.Resize(ratio));
 
-            Assert.That(exception!.ParamName, Is.EqualTo("ratio"), "Invalid ratio should be reported.");
-            Assert.That(trackChunk.Events[0].DeltaTime, Is.EqualTo(10), "Track events should remain unchanged.");
+            ClassicAssert.AreEqual("ratio", exception!.ParamName, "Invalid ratio should be reported.");
+            ClassicAssert.AreEqual(10, trackChunk.Events[0].DeltaTime, "Track events should remain unchanged.");
         }
 
-        [TestCase(double.NaN)]
-        [TestCase(double.PositiveInfinity)]
-        public void Resize_ByRatio_TrackChunks_NonFiniteRatio(double ratio)
+        [Test]
+        public void Resize_ByRatio_TrackChunks_NonFiniteRatio([Values(double.NaN, double.PositiveInfinity)] double ratio)
         {
             var trackChunk = new TrackChunk(new TextEvent("A") { DeltaTime = 10 });
 
-            var exception = Assert.Throws<ArgumentOutOfRangeException>(() => new[] { trackChunk }.Resize(ratio));
+            var exception = ClassicAssert.Throws<ArgumentOutOfRangeException>(() => new[] { trackChunk }.Resize(ratio));
 
-            Assert.That(exception!.ParamName, Is.EqualTo("ratio"), "Invalid ratio should be reported.");
-            Assert.That(trackChunk.Events[0].DeltaTime, Is.EqualTo(10), "Track events should remain unchanged.");
+            ClassicAssert.AreEqual("ratio", exception!.ParamName, "Invalid ratio should be reported.");
+            ClassicAssert.AreEqual(10, trackChunk.Events[0].DeltaTime, "Track events should remain unchanged.");
         }
 
-        [TestCase(double.NaN)]
-        [TestCase(double.PositiveInfinity)]
-        public void Resize_ByRatio_MidiFile_NonFiniteRatio(double ratio)
+        [Test]
+        public void Resize_ByRatio_MidiFile_NonFiniteRatio([Values(double.NaN, double.PositiveInfinity)] double ratio)
         {
             var trackChunk = new TrackChunk(new TextEvent("A") { DeltaTime = 10 });
             var midiFile = new MidiFile(trackChunk);
 
-            var exception = Assert.Throws<ArgumentOutOfRangeException>(() => midiFile.Resize(ratio));
+            var exception = ClassicAssert.Throws<ArgumentOutOfRangeException>(() => midiFile.Resize(ratio));
 
-            Assert.That(exception!.ParamName, Is.EqualTo("ratio"), "Invalid ratio should be reported.");
-            Assert.That(trackChunk.Events[0].DeltaTime, Is.EqualTo(10), "Track events should remain unchanged.");
+            ClassicAssert.AreEqual("ratio", exception!.ParamName, "Invalid ratio should be reported.");
+            ClassicAssert.AreEqual(10, trackChunk.Events[0].DeltaTime, "Track events should remain unchanged.");
         }
 
         [Test]

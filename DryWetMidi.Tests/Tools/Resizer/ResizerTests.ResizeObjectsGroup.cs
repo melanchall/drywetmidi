@@ -3,6 +3,7 @@ using Melanchall.DryWetMidi.Interaction;
 using Melanchall.DryWetMidi.Tests.Utilities;
 using Melanchall.DryWetMidi.Tools;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using System;
 using System.Collections.Generic;
 
@@ -231,17 +232,16 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             settings: null,
             expectedObjects: Array.Empty<ITimedObject>());
 
-        [TestCase(double.NaN)]
-        [TestCase(double.PositiveInfinity)]
-        public void ResizeObjectsGroup_ByRatio_NonFiniteRatio(double ratio)
+        [Test]
+        public void ResizeObjectsGroup_ByRatio_NonFiniteRatio([Values(double.NaN, double.PositiveInfinity)] double ratio)
         {
             var timedEvent = new TimedEvent(new TextEvent("A"), 10);
 
-            var exception = Assert.Throws<ArgumentOutOfRangeException>(() =>
+            var exception = ClassicAssert.Throws<ArgumentOutOfRangeException>(() =>
                 new[] { timedEvent }.ResizeObjectsGroup(ratio, TempoMap.Default));
 
-            Assert.That(exception!.ParamName, Is.EqualTo("ratio"), "Invalid ratio should be reported.");
-            Assert.That(timedEvent.Time, Is.EqualTo(10), "Timed objects should remain unchanged.");
+            ClassicAssert.AreEqual("ratio", exception!.ParamName, "Invalid ratio should be reported.");
+            ClassicAssert.AreEqual(10, timedEvent.Time, "Timed objects should remain unchanged.");
         }
 
         [Test]
