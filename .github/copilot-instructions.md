@@ -122,6 +122,13 @@ Equals, except when Equals itself is the behavior under test.
 Name tests after the scenario they exercise; do not use generic terms such as
 "Regression" in test names.
 
+Prefer adding tests to an existing fixture for the tested entity, using its
+partial files when appropriate. Name test fixtures after the entity or behavior
+they test; avoid vague labels such as "Regression".
+
+Document supported public behavior and contracts, not internal implementation
+details.
+
 Pull requests
 -------------
 Always open pull requests as drafts.
