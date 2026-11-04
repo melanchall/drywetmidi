@@ -44,8 +44,12 @@ Identifiers
 Use descriptive identifiers that name the object or value, not shortened or
 decorative names. For example, use expectedFile and synchronousTokensReader
 instead of expected and synchronous.
+Include the object's role in boolean identifiers and event identifiers, such as
+isGlobalEvent and noteOnEvent.
 Do not use magic constants for operation states or other domain-specific values.
 Use enums or named constants that explain their meaning.
+Use a named type instead of a tuple with several fields when the values represent
+a distinct concept.
 
 Argument validation
 -------------------
@@ -115,6 +119,8 @@ are correlated cases that must stay together. Use ClassicAssert when an
 equivalent assertion exists. Give every assertion an informative failure message.
 Use MidiAsserts for MIDI equality instead of manual comparisons or calling
 Equals, except when Equals itself is the behavior under test.
+Name tests after the scenario they exercise; do not use generic terms such as
+"Regression" in test names.
 
 Pull requests
 -------------

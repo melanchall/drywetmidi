@@ -10,6 +10,33 @@ namespace Melanchall.DryWetMidi.Tools
     {
         #region Nested classes
 
+        private sealed record ContextEventKey
+        {
+            public ContextEventKey(
+                MidiEventType eventType,
+                int channel,
+                int secondaryKey,
+                int port,
+                int trackIndex)
+            {
+                EventType = eventType;
+                Channel = channel;
+                SecondaryKey = secondaryKey;
+                Port = port;
+                TrackIndex = trackIndex;
+            }
+
+            public MidiEventType EventType { get; }
+
+            public int Channel { get; }
+
+            public int SecondaryKey { get; }
+
+            public int Port { get; }
+
+            public int TrackIndex { get; }
+        }
+
         private sealed class ContextEvent
         {
             public ContextEvent(
@@ -36,6 +63,8 @@ namespace Melanchall.DryWetMidi.Tools
         #endregion
 
         #region Fields
+
+        private const int ControlNumberOffsetToLeastSignificantByte = 32;
 
         private readonly List<ContextEvent> _contextEvents = new();
         private readonly Dictionary<int, int> _firstTrackByPort = new();
@@ -72,7 +101,7 @@ namespace Melanchall.DryWetMidi.Tools
         {
             var previousEvents = _contextEvents.TakeWhile(e => e.TimedEvent.Time < time).ToArray();
             var replayChannels = GetChannelsRequiringHistory(previousEvents);
-            var snapshots = new Dictionary<(MidiEventType Type, int Channel, int Detail, int Port, int Track), ContextEvent>();
+            var snapshots = new Dictionary<ContextEventKey, ContextEvent>();
             var selectedEvents = new List<ContextEvent>();
 
             foreach (var contextEvent in previousEvents)
@@ -88,18 +117,18 @@ namespace Melanchall.DryWetMidi.Tools
                     continue;
                 }
 
-                var detail = midiEvent is ControlChangeEvent controlChange
+                var secondaryKey = midiEvent is ControlChangeEvent controlChange
                     ? (int)controlChange.ControlNumber
                     : midiEvent is NoteAftertouchEvent noteAftertouch
                         ? (int)noteAftertouch.NoteNumber
                         : 0;
-                var isGlobal = midiEvent is SetTempoEvent || midiEvent is TimeSignatureEvent;
-                var key = (
+                var isGlobalEvent = midiEvent is SetTempoEvent || midiEvent is TimeSignatureEvent;
+                var key = new ContextEventKey(
                     midiEvent.EventType,
                     channelEvent == null ? 0 : (int)channelEvent.Channel,
-                    detail,
+                    secondaryKey,
                     channelEvent == null ? 0 : contextEvent.Port,
-                    channelEvent != null || isGlobal ? -1 : contextEvent.TrackIndex);
+                    channelEvent != null || isGlobalEvent ? -1 : contextEvent.TrackIndex);
                 snapshots[key] = contextEvent;
             }
 
@@ -178,7 +207,8 @@ namespace Melanchall.DryWetMidi.Tools
 
             foreach (var control in controls)
             {
-                if (control.Number < 32 && controls.Contains((control.Port, control.Channel, control.Number + 32)))
+                if (control.Number < ControlNumberOffsetToLeastSignificantByte &&
+                    controls.Contains((control.Port, control.Channel, control.Number + ControlNumberOffsetToLeastSignificantByte)))
                     result.Add((control.Port, control.Channel));
             }
 

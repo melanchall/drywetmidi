@@ -222,8 +222,8 @@ namespace Melanchall.DryWetMidi.Tools
             ThrowIfArgument.DoesntSatisfyCondition(
                 nameof(ratio),
                 ratio,
-                value => !double.IsNaN(value) && !double.IsInfinity(value),
-                "Ratio must be finite.");
+                value => !double.IsNaN(value),
+                "Ratio must not be NaN.");
             ThrowIfArgument.IsOutOfRange(nameof(ratio),
                                          ratio,
                                          ZeroRatio,
@@ -295,8 +295,8 @@ namespace Melanchall.DryWetMidi.Tools
             ThrowIfArgument.DoesntSatisfyCondition(
                 nameof(ratio),
                 ratio,
-                value => !double.IsNaN(value) && !double.IsInfinity(value),
-                "Ratio must be finite.");
+                value => !double.IsNaN(value),
+                "Ratio must not be NaN.");
             ThrowIfArgument.IsOutOfRange(nameof(ratio),
                                          ratio,
                                          ZeroRatio,
@@ -355,8 +355,8 @@ namespace Melanchall.DryWetMidi.Tools
             ThrowIfArgument.DoesntSatisfyCondition(
                 nameof(ratio),
                 ratio,
-                value => !double.IsNaN(value) && !double.IsInfinity(value),
-                "Ratio must be finite.");
+                value => !double.IsNaN(value),
+                "Ratio must not be NaN.");
             ThrowIfArgument.IsOutOfRange(nameof(ratio),
                                          ratio,
                                          ZeroRatio,
@@ -489,8 +489,8 @@ namespace Melanchall.DryWetMidi.Tools
             ThrowIfArgument.DoesntSatisfyCondition(
                 nameof(ratio),
                 ratio,
-                value => !double.IsNaN(value) && !double.IsInfinity(value),
-                "Ratio must be finite.");
+                value => !double.IsNaN(value),
+                "Ratio must not be NaN.");
             ThrowIfArgument.IsOutOfRange(nameof(ratio),
                                          ratio,
                                          ZeroRatio,

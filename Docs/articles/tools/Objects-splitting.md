@@ -37,8 +37,6 @@ The image below illustrates splitting notes and chord into `4` parts:
 
 Grid times must be nonnegative and in ascending order without duplication. If splitting encounters a repeated or decreasing grid time, it throws `InvalidOperationException`. This includes steps that become zero after conversion to MIDI ticks.
 
-The object-collection overload enumerates the objects and grid times once, yielding fragments as they are processed. Encountered grid times are cached so input objects do not need to be ordered by time.
-
 The image below illustrates splitting notes and chord by the same grid:
 
 ![Split by grid](images/Splitter/SplitByGrid.png)

@@ -58,8 +58,8 @@ namespace Melanchall.DryWetMidi.Tools
                     return false;
 
                 var noteId = noteEvent.GetNoteId();
-                var noteOn = noteEvent as NoteOnEvent;
-                var isNoteOn = noteOn != null && noteOn.Velocity > 0;
+                var noteOnEvent = noteEvent as NoteOnEvent;
+                var isNoteOn = noteOnEvent != null && noteOnEvent.Velocity > 0;
 
                 if (!_noteStartTimes.TryGetValue(noteId, out var startTimes))
                 {

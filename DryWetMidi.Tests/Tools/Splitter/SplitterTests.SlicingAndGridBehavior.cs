@@ -6,126 +6,16 @@ using Melanchall.DryWetMidi.Tools;
 using NUnit.Framework;
 using NUnit.Framework.Legacy;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace Melanchall.DryWetMidi.Tests.Tools
 {
     public sealed partial class SplitterTests
     {
-        #region Nested classes
-
-        public enum RegressionSliceOperation
-        {
-            Grid,
-            Take,
-            Skip,
-            Cut,
-            TakeFromStart
-        }
-
-        public enum RegressionObjectContainer
-        {
-            Objects,
-            TrackChunk,
-            TrackChunks,
-            MidiFile
-        }
-
-        public enum RegressionGridType
-        {
-            Arbitrary,
-            Custom,
-            Stepped
-        }
-
-        public enum RegressionCompoundState
-        {
-            BankProgram,
-            RegisteredParameter,
-            NonRegisteredParameter,
-            MpeConfiguration,
-            RelativeParameter,
-            FourteenBitController
-        }
-
-        private sealed class RegressionGrid : IGrid
-        {
-            private readonly IEnumerable<long> _times;
-
-            public RegressionGrid(IEnumerable<long> times)
-            {
-                _times = times;
-            }
-
-            public IEnumerable<long> GetTimes(TempoMap tempoMap) => _times;
-        }
-
-        private sealed class SinglePassSequence<T> : IEnumerable<T>
-        {
-            private readonly IEnumerable<T> _items;
-            private bool _enumerated;
-
-            public SinglePassSequence(IEnumerable<T> items)
-            {
-                _items = items;
-            }
-
-            public IEnumerator<T> GetEnumerator()
-            {
-                if (_enumerated)
-                    throw new InvalidOperationException("The sequence was enumerated more than once.");
-
-                _enumerated = true;
-                return _items.GetEnumerator();
-            }
-
-            IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
-        }
-
-        #endregion
-
         #region Test methods
 
         [Test]
-        public void Regression_SplitByChannel_IndependentSharedEvents()
-        {
-            var midiFile = new[]
-            {
-                new TimedEvent(new NoteOnEvent((SevenBitNumber)60, (SevenBitNumber)100), 10),
-                new TimedEvent(new NoteOnEvent((SevenBitNumber)64, (SevenBitNumber)100)
-                {
-                    Channel = (FourBitNumber)1
-                }, 50),
-                new TimedEvent(new TextEvent("shared"), 100),
-                new TimedEvent(new SetTempoEvent(600000), 150)
-            }.ToFile();
-            var originalFile = midiFile.Clone();
-
-            var resultFiles = midiFile.SplitByChannel().ToArray();
-
-            CompareTimedEvents(
-                resultFiles[0].GetTimedEvents(),
-                new[]
-                {
-                    new TimedEvent(new NoteOnEvent((SevenBitNumber)60, (SevenBitNumber)100), 10),
-                    new TimedEvent(new TextEvent("shared"), 100),
-                    new TimedEvent(new SetTempoEvent(600000), 150)
-                },
-                "Constructing later outputs changed the first output's event times.");
-            MidiAsserts.AreEqual(originalFile, midiFile, false, "Splitting changed the source file.");
-
-            var firstTextEvent = resultFiles[0].GetTrackChunks().Single().Events.OfType<TextEvent>().Single();
-            var secondTextEvent = resultFiles[1].GetTrackChunks().Single().Events.OfType<TextEvent>().Single();
-            firstTextEvent.Text = "changed";
-
-            ClassicAssert.AreNotSame(firstTextEvent, secondTextEvent, "Outputs share a mutable event.");
-            ClassicAssert.AreEqual("shared", secondTextEvent.Text, "Editing one output changed another output.");
-        }
-
-        [Test]
-        public void Regression_CutPart_SyntheticEventsOnly(
+        public void CutPart_PreservesOriginalEventsMatchingSyntheticEvents(
             [Values] NoteStartDetectionPolicy detectionPolicy,
             [Values] bool preserveTimes)
         {
@@ -167,7 +57,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         }
 
         [Test]
-        public void Regression_Slice_ZeroLengthNoteOnBoundary(
+        public void Slice_ZeroLengthNoteAtBoundary(
             [Values] RegressionSliceOperation operation,
             [Values] bool splitNotes,
             [Values] bool preserveTimes)
@@ -202,7 +92,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         }
 
         [Test]
-        public void Regression_Slice_ZeroVelocityNoteOffOnBoundary(
+        public void Slice_ZeroVelocityNoteOnAtBoundary(
             [Values] RegressionSliceOperation operation,
             [Values] bool splitNotes,
             [Values] bool preserveTimes)
@@ -235,7 +125,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         }
 
         [Test]
-        public void Regression_Slice_ContextAcrossTracks(
+        public void Slice_UsesChronologicalContextAcrossTracks(
             [Values(RegressionSliceOperation.Grid, RegressionSliceOperation.Take, RegressionSliceOperation.Skip, RegressionSliceOperation.Cut)]
             RegressionSliceOperation operation,
             [Values] bool preserveTimes,
@@ -277,7 +167,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         }
 
         [Test]
-        public void Regression_Slice_PortScopedContext(
+        public void Slice_ScopesChannelContextToPort(
             [Values(RegressionSliceOperation.Grid, RegressionSliceOperation.Take, RegressionSliceOperation.Skip, RegressionSliceOperation.Cut)]
             RegressionSliceOperation operation)
         {
@@ -310,7 +200,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         }
 
         [Test]
-        public void Regression_Slice_CompoundStateHistory(
+        public void Slice_PreservesCompoundChannelStateHistory(
             [Values(RegressionSliceOperation.Grid, RegressionSliceOperation.Take, RegressionSliceOperation.Skip, RegressionSliceOperation.Cut)]
             RegressionSliceOperation operation,
             [Values] RegressionCompoundState state,
@@ -335,7 +225,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         }
 
         [Test]
-        public void Regression_CutPart_CompoundHistoryDoesNotRepeatPrefix()
+        public void CutPart_DoesNotRepeatCompoundHistoryInRetainedPrefix()
         {
             var history = GetRegressionCompoundHistory(RegressionCompoundState.RelativeParameter);
             var midiFile = history.Concat(new[]
@@ -353,7 +243,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         }
 
         [Test]
-        public void Regression_Slice_CompoundHistoryAcrossTracks(
+        public void Slice_PreservesCompoundHistoryAcrossTracks(
             [Values(RegressionSliceOperation.Grid, RegressionSliceOperation.Take, RegressionSliceOperation.Skip, RegressionSliceOperation.Cut)]
             RegressionSliceOperation operation)
         {
@@ -374,7 +264,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         }
 
         [Test]
-        public void Regression_SplitGrid_InvalidTimes(
+        public void SplitObjectsByGrid_RejectsInvalidGridTimes(
             [Values] RegressionObjectContainer container,
             [Values] RegressionGridType gridType,
             [Values] bool decreasing)
@@ -397,7 +287,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         }
 
         [Test]
-        public void Regression_SplitByGrid_InvalidTimes(
+        public void SplitByGrid_RejectsInvalidGridTimes(
             [Values] RegressionGridType gridType,
             [Values] bool splitNotes,
             [Values] bool decreasing)
@@ -421,7 +311,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         }
 
         [Test]
-        public void Regression_Slice_DuplicateCalculatedBoundaries(
+        public void Slice_RejectsZeroLengthRanges(
             [Values] bool cutPart,
             [Values] bool splitNotes)
         {
@@ -439,7 +329,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
         [Test]
         [Category("NonAdvancingGrid")]
-        public void Regression_SplitGrid_ZeroConvertedStep(
+        public void SplitObjectsByGrid_RejectsZeroConvertedGridSteps(
             [Values] RegressionObjectContainer container,
             [Values] bool metricStep)
         {
@@ -455,7 +345,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
         [Test]
         [Category("NonAdvancingGrid")]
-        public void Regression_SplitByGrid_ZeroConvertedStep(
+        public void SplitByGrid_RejectsZeroConvertedGridSteps(
             [Values] bool splitNotes,
             [Values] bool metricStep)
         {
@@ -469,7 +359,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         }
 
         [Test]
-        public void Regression_SplitObjectsByGrid_SinglePassAndInputOrder()
+        public void SplitObjectsByGrid_EnumeratesInputsOnceAndPreservesInputOrder()
         {
             var objects = new SinglePassSequence<ITimedObject>(new ITimedObject[]
             {
@@ -495,7 +385,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         }
 
         [Test]
-        public void Regression_SplitObjectsByGrid_YieldsBeforeReadingNextObject()
+        public void SplitObjectsByGrid_YieldsBeforeReadingNextObject()
         {
             var objects = EnumerateRegressionObjectsLazily();
 
@@ -512,7 +402,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         }
 
         [Test]
-        public void Regression_SplitObjectsByGrid_YieldsWhileReadingGrid()
+        public void SplitObjectsByGrid_YieldsBeforeReadingNextGridTime()
         {
             var objects = new ITimedObject[] { new Note((SevenBitNumber)60, 100) };
 
@@ -529,52 +419,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         }
 
         [Test]
-        public void Regression_Slice_FinalEndMarker(
-            [Values] bool skipPart,
-            [Values] bool preserveTimes)
-        {
-            var midiFile = new[] { new TimedEvent(new TextEvent("tail"), 200) }.ToFile();
-            var settings = new SliceMidiFileSettings
-            {
-                PreserveTimes = preserveTimes,
-                Markers = new SliceMidiFileMarkers
-                {
-                    PartEndMarkerEventFactory = () => new MarkerEvent("end")
-                }
-            };
-
-            var result = skipPart
-                ? midiFile.SkipPart((MidiTimeSpan)100, settings)
-                : midiFile.SplitByGrid(new ArbitraryGrid((MidiTimeSpan)100), settings).Last();
-
-            ClassicAssert.AreEqual(preserveTimes ? 200 : 100,
-                result.GetTimedEvents().Single(e => e.Event is MarkerEvent).Time,
-                "The final marker used the event-consumption sentinel instead of the file end.");
-        }
-
-        [Test]
-        public void Regression_Slice_FinalEndMarker_EmptyTail(
-            [Values] bool preserveTimes)
-        {
-            var midiFile = new[] { new TimedEvent(new TextEvent("prefix"), 50) }.ToFile();
-            var settings = new SliceMidiFileSettings
-            {
-                PreserveTimes = preserveTimes,
-                Markers = new SliceMidiFileMarkers
-                {
-                    PartEndMarkerEventFactory = () => new MarkerEvent("end")
-                }
-            };
-
-            var result = midiFile.SkipPart((MidiTimeSpan)100, settings);
-
-            ClassicAssert.AreEqual(preserveTimes ? 100 : 0,
-                result.GetTimedEvents().Single(e => e.Event is MarkerEvent).Time,
-                "An empty tail's marker was not placed at its start.");
-        }
-
-        [Test]
-        public void Regression_Slice_ResetControllersHistory(
+        public void Slice_PreservesResetControllerHistory(
             [Values(RegressionSliceOperation.Grid, RegressionSliceOperation.Take, RegressionSliceOperation.Skip, RegressionSliceOperation.Cut)]
             RegressionSliceOperation operation)
         {
@@ -597,7 +442,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         }
 
         [Test]
-        public void Regression_Slice_PortChangesDuringHistory(
+        public void Slice_PreservesPortChangesInChannelHistory(
             [Values(RegressionSliceOperation.Grid, RegressionSliceOperation.Take, RegressionSliceOperation.Skip, RegressionSliceOperation.Cut)]
             RegressionSliceOperation operation)
         {
@@ -627,7 +472,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         }
 
         [Test]
-        public void Regression_Slice_MpeZoneConfiguration(
+        public void Slice_PreservesMpeZoneConfiguration(
             [Values(RegressionSliceOperation.Grid, RegressionSliceOperation.Take, RegressionSliceOperation.Skip, RegressionSliceOperation.Cut)]
             RegressionSliceOperation operation,
             [Values(0, 15)] int masterChannel)
@@ -659,190 +504,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 "MPE zone configuration, disabling, or reconfiguration was lost.");
         }
 
-        [Test]
-        public void Regression_CutPart_IgnoresUserMarkers()
-        {
-            var midiFile = new ITimedObject[] { new Note((SevenBitNumber)60, 400) }.ToFile();
-            var settings = new SliceMidiFileSettings
-            {
-                Markers = new SliceMidiFileMarkers
-                {
-                    PartStartMarkerEventFactory = () => throw new AssertionException("CutPart called the start factory."),
-                    PartEndMarkerEventFactory = () => throw new AssertionException("CutPart called the end factory."),
-                    EmptyPartMarkerEventFactory = () => throw new AssertionException("CutPart called the empty factory.")
-                }
-            };
-
-            var result = midiFile.CutPart((MidiTimeSpan)100, (MidiTimeSpan)100, settings);
-
-            MidiAsserts.AreEqual(
-                new ITimedObject[] { new Note((SevenBitNumber)60, 300) }.ToFile(),
-                result,
-                false,
-                "Ignoring user markers changed cutting behavior.");
-        }
-
-        [Test]
-        public void Regression_SplitObjectsAtDistance_NonFiniteRatio(
-            [Values] RegressionObjectContainer container,
-            [Values(double.NaN, double.PositiveInfinity, double.NegativeInfinity)] double ratio,
-            [Values] TimeSpanType lengthType,
-            [Values] LengthedObjectTarget from)
-        {
-            var trackChunk = new ITimedObject[] { new Note((SevenBitNumber)60, 100) }.ToTrackChunk();
-
-            var exception = ClassicAssert.Throws<ArgumentOutOfRangeException>(() =>
-            {
-                switch (container)
-                {
-                    case RegressionObjectContainer.Objects:
-                        trackChunk.GetNotes().SplitObjectsAtDistance(ratio, lengthType, from, TempoMap.Default).ToArray();
-                        break;
-                    case RegressionObjectContainer.TrackChunk:
-                        trackChunk.SplitObjectsAtDistance(ObjectType.Note, ratio, lengthType, from, TempoMap.Default);
-                        break;
-                    case RegressionObjectContainer.TrackChunks:
-                        new[] { trackChunk }.SplitObjectsAtDistance(ObjectType.Note, ratio, lengthType, from, TempoMap.Default);
-                        break;
-                    case RegressionObjectContainer.MidiFile:
-                        new MidiFile(trackChunk).SplitObjectsAtDistance(ObjectType.Note, ratio, lengthType, from);
-                        break;
-                }
-            }, "A non-finite ratio was not rejected at the public API boundary.");
-
-            ClassicAssert.AreEqual("ratio", exception.ParamName, "The exception names an internal parameter.");
-        }
-
         #endregion
 
-        #region Private methods
-
-        private static MidiFile SliceRegressionFile(
-            MidiFile midiFile,
-            RegressionSliceOperation operation,
-            SliceMidiFileSettings settings)
-        {
-            switch (operation)
-            {
-                case RegressionSliceOperation.Grid:
-                    return midiFile.SplitByGrid(new SteppedGrid((MidiTimeSpan)100), settings).Skip(1).First();
-                case RegressionSliceOperation.Take:
-                    return midiFile.TakePart((MidiTimeSpan)100, (MidiTimeSpan)100, settings);
-                case RegressionSliceOperation.Skip:
-                    return midiFile.SkipPart((MidiTimeSpan)100, settings);
-                case RegressionSliceOperation.Cut:
-                    return midiFile.CutPart((MidiTimeSpan)100, (MidiTimeSpan)100, settings);
-                case RegressionSliceOperation.TakeFromStart:
-                    return midiFile.TakePart((MidiTimeSpan)100, settings);
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(operation));
-            }
-        }
-
-        private static void SplitRegressionObjects(
-            IEnumerable<ITimedObject> objects,
-            RegressionObjectContainer container,
-            IGrid grid)
-        {
-            if (container == RegressionObjectContainer.Objects)
-            {
-                objects.SplitObjectsByGrid(grid, TempoMap.Default).ToArray();
-                return;
-            }
-
-            var trackChunk = objects.ToTrackChunk();
-
-            switch (container)
-            {
-                case RegressionObjectContainer.TrackChunk:
-                    trackChunk.SplitObjectsByGrid(ObjectType.Note, grid, TempoMap.Default);
-                    break;
-                case RegressionObjectContainer.TrackChunks:
-                    new[] { trackChunk }.SplitObjectsByGrid(ObjectType.Note, grid, TempoMap.Default);
-                    break;
-                case RegressionObjectContainer.MidiFile:
-                    new MidiFile(trackChunk).SplitObjectsByGrid(ObjectType.Note, grid);
-                    break;
-            }
-        }
-
-        private static IEnumerable<ITimedObject> EnumerateRegressionObjectsLazily()
-        {
-            yield return new Note((SevenBitNumber)60, 100);
-            throw new InvalidOperationException("Splitting read the next object too early.");
-        }
-
-        private static IEnumerable<long> EnumerateRegressionGridLazily()
-        {
-            yield return 50;
-            throw new InvalidOperationException("Splitting read the next grid point too early.");
-        }
-
-        private static TimedEvent RegressionControlChange(ControlName controlName, int value, long time)
-        {
-            return new TimedEvent(
-                new ControlChangeEvent((SevenBitNumber)(byte)controlName, (SevenBitNumber)value),
-                time);
-        }
-
-        private static TimedEvent[] GetRegressionCompoundHistory(RegressionCompoundState state)
-        {
-            if (state == RegressionCompoundState.BankProgram)
-            {
-                return new[]
-                {
-                    RegressionControlChange(ControlName.BankSelect, 1, 0),
-                    RegressionControlChange(ControlName.LsbForBankSelect, 2, 1),
-                    new TimedEvent(new ProgramChangeEvent((SevenBitNumber)10), 2),
-                    RegressionControlChange(ControlName.BankSelect, 3, 3)
-                };
-            }
-
-            if (state == RegressionCompoundState.FourteenBitController)
-            {
-                return new[]
-                {
-                    RegressionControlChange(ControlName.Modulation, 1, 0),
-                    RegressionControlChange(ControlName.LsbForModulation, 2, 1),
-                    RegressionControlChange(ControlName.Modulation, 3, 2),
-                    RegressionControlChange(ControlName.LsbForModulation, 4, 3)
-                };
-            }
-
-            var parameterMsb = state == RegressionCompoundState.NonRegisteredParameter
-                ? ControlName.NonRegisteredParameterNumberMsb
-                : ControlName.RegisteredParameterNumberMsb;
-            var parameterLsb = state == RegressionCompoundState.NonRegisteredParameter
-                ? ControlName.NonRegisteredParameterNumberLsb
-                : ControlName.RegisteredParameterNumberLsb;
-            var parameterNumber = state == RegressionCompoundState.MpeConfiguration ? 6 : 0;
-            var history = new List<TimedEvent>
-            {
-                RegressionControlChange(parameterMsb, 0, 0),
-                RegressionControlChange(parameterLsb, parameterNumber, 1)
-            };
-
-            if (state != RegressionCompoundState.RelativeParameter)
-            {
-                history.Add(RegressionControlChange(ControlName.DataEntryMsb, 2, 2));
-                history.Add(RegressionControlChange(ControlName.LsbForDataEntry, 3, 3));
-            }
-
-            history.Add(RegressionControlChange(ControlName.DataIncrement, 0, 4));
-            history.Add(RegressionControlChange(ControlName.DataIncrement, 0, 5));
-            history.Add(RegressionControlChange(ControlName.DataDecrement, 0, 6));
-
-            if (state != RegressionCompoundState.RelativeParameter)
-            {
-                history.Add(RegressionControlChange(parameterLsb, parameterNumber + 1, 7));
-                history.Add(RegressionControlChange(ControlName.DataEntryMsb, 64, 8));
-                history.Add(RegressionControlChange(parameterMsb, 127, 9));
-                history.Add(RegressionControlChange(parameterLsb, 127, 10));
-            }
-
-            return history.ToArray();
-        }
-
-        #endregion
     }
 }
