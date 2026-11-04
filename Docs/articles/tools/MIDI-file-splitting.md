@@ -89,11 +89,19 @@ Please see documentation on [SplitByObjectsSettings](xref:Melanchall.DryWetMidi.
 
 ## SplitByGrid
 
-[SplitByGrid](xref:Melanchall.DryWetMidi.Tools.Splitter.SplitByGrid*) method splits a MIDI file by the specified grid. Each file will preserve the original tempo map and all parameters changes (like a control value or program changes). The image below shows general case of splitting a MIDI file by grid:
+[`SplitByGrid`](xref:Melanchall.DryWetMidi.Tools.Splitter.SplitByGrid*) method splits a MIDI file by the specified grid. Each file carries the tempo, time signature, and supported MIDI state in effect at its start, followed by changes within the slice. Tempo and channel state are resolved chronologically across tracks, with channel state scoped to its MIDI port.
+
+Compound state, such as bank/program selection, RPN/NRPN parameters (including MPE configuration), paired 14-bit controllers, and controller resets, is preserved by replaying the channel's initialization history in order. This retains increment/decrement messages without assuming device-specific initial values. Initialization events can therefore be more numerous than a snapshot of the latest individual controller values.
+
+Grid times must be nonnegative and in ascending order without duplication. Splitting throws `InvalidOperationException` when it encounters a repeated or decreasing time, including a step that becomes zero after conversion to MIDI ticks.
+
+The image below shows the general case of splitting a MIDI file by grid:
 
 ![Split MIDI file by grid](images/Splitter/SplitFileByGrid.png)
 
 Splitting can be adjusted via the `settings` parameter of the [SliceMidiFileSettings](xref:Melanchall.DryWetMidi.Tools.SliceMidiFileSettings) type. The [SplitNotes](xref:Melanchall.DryWetMidi.Tools.SliceMidiFileSettings.SplitNotes) and [PreserveTimes](xref:Melanchall.DryWetMidi.Tools.SliceMidiFileSettings.PreserveTimes) properties are described below. Please see all available properties in the documentation for [SliceMidiFileSettings](xref:Melanchall.DryWetMidi.Tools.SliceMidiFileSettings).
+
+[`Markers`](xref:Melanchall.DryWetMidi.Tools.SliceMidiFileSettings.Markers) applies to [`SplitByGrid`](xref:Melanchall.DryWetMidi.Tools.Splitter.SplitByGrid*), [`TakePart`](xref:Melanchall.DryWetMidi.Tools.Splitter.TakePart*), and [`SkipPart`](xref:Melanchall.DryWetMidi.Tools.Splitter.SkipPart*), but not to [`CutPart`](xref:Melanchall.DryWetMidi.Tools.Splitter.CutPart*). For the final remainder of a finite grid or `SkipPart`, the end marker is placed at the source file's end if that end is after the remainder starts. For example, if the file ends at tick 200 and the remainder starts at tick 100, the marker is at tick 200; if the file ends at tick 50 and the remainder starts at tick 100, the marker is at tick 100.
 
 ### SplitNotes
 
@@ -126,3 +134,5 @@ Splitting can be adjusted via the `settings` parameter of the [SliceMidiFileSett
 [CutPart](xref:Melanchall.DryWetMidi.Tools.Splitter.CutPart*) method cuts a part of the specified length from a MIDI file (starting at the specified time within the file) and returns a new instance of [MidiFile](xref:Melanchall.DryWetMidi.Core.MidiFile) which is the original file without the part. The image below shows how the method works:
 
 ![Cut part from a MIDI file](images/Splitter/CutPart.png)
+
+For [`CutPart`](xref:Melanchall.DryWetMidi.Tools.Splitter.CutPart*) and the [`TakePart`](xref:Melanchall.DryWetMidi.Tools.Splitter.TakePart(Melanchall.DryWetMidi.Core.MidiFile,Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Interaction.ITimeSpan,Melanchall.DryWetMidi.Tools.SliceMidiFileSettings)) overload with an explicit start, the calculated end must be later than the start in MIDI ticks. A zero-length range, including one rounded to zero ticks, throws `InvalidOperationException`.

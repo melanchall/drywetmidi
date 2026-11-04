@@ -120,12 +120,7 @@ namespace Melanchall.DryWetMidi.Interaction
 
         #region IGrid
 
-        /// <summary>
-        /// Gets points in time of the current grid.
-        /// </summary>
-        /// <param name="tempoMap">Tempo map used to get grid's times.</param>
-        /// <returns>Collection of points in time of the current grid.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="tempoMap"/> is <c>null</c>.</exception>
+        /// <inheritdoc/>
         public IEnumerable<long> GetTimes(TempoMap tempoMap)
         {
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);

@@ -13,6 +13,51 @@ namespace Melanchall.DryWetMidi.Tests.Tools
     {
         #region Test methods
 
+        [Test]
+        public void Slice_FinalEndMarkerUsesSourceFileEnd(
+            [Values] bool skipPart,
+            [Values] bool preserveTimes)
+        {
+            var midiFile = new[] { new TimedEvent(new TextEvent("tail"), 200) }.ToFile();
+            var settings = new SliceMidiFileSettings
+            {
+                PreserveTimes = preserveTimes,
+                Markers = new SliceMidiFileMarkers
+                {
+                    PartEndMarkerEventFactory = () => new MarkerEvent("end")
+                }
+            };
+
+            var result = skipPart
+                ? midiFile.SkipPart((MidiTimeSpan)100, settings)
+                : midiFile.SplitByGrid(new ArbitraryGrid((MidiTimeSpan)100), settings).Last();
+
+            ClassicAssert.AreEqual(preserveTimes ? 200 : 100,
+                result.GetTimedEvents().Single(e => e.Event is MarkerEvent).Time,
+                "The final marker used the event-consumption sentinel instead of the file end.");
+        }
+
+        [Test]
+        public void Slice_EmptyTailEndMarkerUsesRemainderStart(
+            [Values] bool preserveTimes)
+        {
+            var midiFile = new[] { new TimedEvent(new TextEvent("prefix"), 50) }.ToFile();
+            var settings = new SliceMidiFileSettings
+            {
+                PreserveTimes = preserveTimes,
+                Markers = new SliceMidiFileMarkers
+                {
+                    PartEndMarkerEventFactory = () => new MarkerEvent("end")
+                }
+            };
+
+            var result = midiFile.SkipPart((MidiTimeSpan)100, settings);
+
+            ClassicAssert.AreEqual(preserveTimes ? 100 : 0,
+                result.GetTimedEvents().Single(e => e.Event is MarkerEvent).Time,
+                "An empty tail's marker was not placed at its start.");
+        }
+
         [TestCase(0)]
         [TestCase(5)]
         public void PartStartMarkerEventFactory_PreserveTimes(long firstEventTime)

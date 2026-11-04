@@ -36,6 +36,11 @@ namespace Melanchall.DryWetMidi.Tools
         /// Gets or sets <see cref="SliceMidiFileMarkers"/> that holds factory methods to create events
         /// to mark parts of split file.
         /// </summary>
+        /// <remarks>
+        /// Applies to <see cref="Splitter.SplitByGrid"/>, <see cref="Splitter.TakePart(MidiFile, ITimeSpan, SliceMidiFileSettings)"/>,
+        /// <see cref="Splitter.TakePart(MidiFile, ITimeSpan, ITimeSpan, SliceMidiFileSettings)"/>
+        /// and <see cref="Splitter.SkipPart"/>. Does not apply to <see cref="Splitter.CutPart"/>.
+        /// </remarks>
         public SliceMidiFileMarkers? Markers { get; set; }
 
         /// <summary>

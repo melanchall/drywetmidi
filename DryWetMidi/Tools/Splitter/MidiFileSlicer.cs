@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace Melanchall.DryWetMidi.Tools
 {
-    internal sealed class MidiFileSlicer : IDisposable
+    internal sealed partial class MidiFileSlicer : IDisposable
     {
         #region Nested classes
 
@@ -16,6 +16,7 @@ namespace Melanchall.DryWetMidi.Tools
             #region Fields
 
             private readonly IEnumerator<TimedEvent> _enumerator;
+            private readonly Dictionary<int, LinkedList<long>> _noteStartTimes = new();
 
             private bool _disposed = false;
 
@@ -35,8 +36,6 @@ namespace Melanchall.DryWetMidi.Tools
 
             public bool CanBeEnumerated { get; private set; }
 
-            public List<TimedEvent> EventsToCopyToNextPart { get; } = new List<TimedEvent>();
-
             public List<TimedEvent> EventsToStartNextPart { get; } = new List<TimedEvent>();
 
             #endregion
@@ -51,6 +50,41 @@ namespace Melanchall.DryWetMidi.Tools
             public TimedEvent GetCurrentEvent()
             {
                 return _enumerator.Current;
+            }
+
+            public bool IsNoteEndingBeforeBoundary(TimedEvent timedEvent, NoteStartDetectionPolicy detectionPolicy)
+            {
+                if (!(timedEvent.Event is NoteEvent noteEvent))
+                    return false;
+
+                var noteId = noteEvent.GetNoteId();
+                var noteOnEvent = noteEvent as NoteOnEvent;
+                var isNoteOn = noteOnEvent != null && noteOnEvent.Velocity > 0;
+
+                if (!_noteStartTimes.TryGetValue(noteId, out var startTimes))
+                {
+                    if (!isNoteOn)
+                        return noteEvent is NoteOffEvent;
+
+                    _noteStartTimes.Add(noteId, startTimes = new LinkedList<long>());
+                }
+
+                if (isNoteOn)
+                {
+                    startTimes.AddLast(timedEvent.Time);
+                    return false;
+                }
+
+                if (startTimes.Count == 0)
+                    return noteEvent is NoteOffEvent;
+
+                var start = detectionPolicy == NoteStartDetectionPolicy.FirstNoteOn
+                    ? startTimes.First!
+                    : startTimes.Last!;
+                var startsBeforeBoundary = start.Value < timedEvent.Time;
+                startTimes.Remove(start);
+
+                return startsBeforeBoundary;
             }
 
             #endregion
@@ -80,56 +114,26 @@ namespace Melanchall.DryWetMidi.Tools
 
         #region Constants
 
-        private static readonly EnumBasedLookup<MidiEventType, Func<MidiEvent, MidiEvent, bool>> DefaultUpdatePredicates = new(
-            (MidiEventType.ChannelAftertouch, (midiEvent, existingMidiEvent) =>
-            {
-                var currentChannel = ((ChannelAftertouchEvent)midiEvent).Channel;
-                return ((ChannelAftertouchEvent)existingMidiEvent).Channel == currentChannel;
-            }),
-            (MidiEventType.ControlChange, (midiEvent, existingMidiEvent) =>
-            {
-                var currentControlChangeEvent = (ControlChangeEvent)midiEvent;
-                var currentControlNumber = currentControlChangeEvent.ControlNumber;
-                var currentChannel = currentControlChangeEvent.Channel;
-
-                var existingControlChangeEvent = (ControlChangeEvent)existingMidiEvent;
-
-                return existingControlChangeEvent.ControlNumber == currentControlNumber &&
-                        existingControlChangeEvent.Channel == currentChannel;
-            }),
-            (MidiEventType.NoteAftertouch, (midiEvent, existingMidiEvent) =>
-            {
-                var currentNoteAftertouchEvent = (NoteAftertouchEvent)midiEvent;
-                var currentNoteNumber = currentNoteAftertouchEvent.NoteNumber;
-                var currentChannel = currentNoteAftertouchEvent.Channel;
-
-                var existingNoteAftertouchEvent = (NoteAftertouchEvent)existingMidiEvent;
-
-                return existingNoteAftertouchEvent.NoteNumber == currentNoteNumber &&
-                        existingNoteAftertouchEvent.Channel == currentChannel;
-            }),
-            (MidiEventType.PitchBend, (midiEvent, existingMidiEvent) =>
-            {
-                var currentChannel = ((PitchBendEvent)midiEvent).Channel;
-                return ((PitchBendEvent)existingMidiEvent).Channel == currentChannel;
-            }),
-            (MidiEventType.ProgramChange, (midiEvent, existingMidiEvent) =>
-            {
-                var currentChannel = ((ProgramChangeEvent)midiEvent).Channel;
-                return ((ProgramChangeEvent)existingMidiEvent).Channel == currentChannel;
-            }),
-            (MidiEventType.CopyrightNotice, (midiEvent, existingMidiEvent) => true),
-            (MidiEventType.InstrumentName, (midiEvent, existingMidiEvent) => true),
-            (MidiEventType.ProgramName, (midiEvent, existingMidiEvent) => true),
-            (MidiEventType.SequenceTrackName, (midiEvent, existingMidiEvent) => true),
-            (MidiEventType.DeviceName, (midiEvent, existingMidiEvent) => true),
-            (MidiEventType.PortPrefix, (midiEvent, existingMidiEvent) => true),
-            (MidiEventType.SetTempo, (midiEvent, existingMidiEvent) => true),
-            (MidiEventType.ChannelPrefix, (midiEvent, existingMidiEvent) => true),
-            (MidiEventType.SequenceNumber, (midiEvent, existingMidiEvent) => true),
-            (MidiEventType.KeySignature, (midiEvent, existingMidiEvent) => true),
-            (MidiEventType.SmpteOffset, (midiEvent, existingMidiEvent) => true),
-            (MidiEventType.TimeSignature, (midiEvent, existingMidiEvent) => true));
+        private static readonly HashSet<MidiEventType> ContextEventTypes = new()
+        {
+            MidiEventType.ChannelAftertouch,
+            MidiEventType.ControlChange,
+            MidiEventType.NoteAftertouch,
+            MidiEventType.PitchBend,
+            MidiEventType.ProgramChange,
+            MidiEventType.CopyrightNotice,
+            MidiEventType.InstrumentName,
+            MidiEventType.ProgramName,
+            MidiEventType.SequenceTrackName,
+            MidiEventType.DeviceName,
+            MidiEventType.PortPrefix,
+            MidiEventType.SetTempo,
+            MidiEventType.ChannelPrefix,
+            MidiEventType.SequenceNumber,
+            MidiEventType.KeySignature,
+            MidiEventType.SmpteOffset,
+            MidiEventType.TimeSignature
+        };
 
         #endregion
 
@@ -137,6 +141,7 @@ namespace Melanchall.DryWetMidi.Tools
 
         private readonly TimedEventsHolder[] _timedEventsHolders;
         private readonly TimeDivision _timeDivision;
+        private readonly long _endTime;
 
         private long _lastTime;
 
@@ -146,10 +151,15 @@ namespace Melanchall.DryWetMidi.Tools
 
         #region Constructor
 
-        private MidiFileSlicer(TimeDivision timeDivision, IEnumerator<TimedEvent>[] timedEventsEnumerators)
+        private MidiFileSlicer(
+            TimeDivision timeDivision,
+            TimedEvent[][] timedEvents,
+            long endTime)
         {
-            _timedEventsHolders = timedEventsEnumerators.Select(e => new TimedEventsHolder(e)).ToArray();
+            _timedEventsHolders = timedEvents.Select(e => new TimedEventsHolder(((IEnumerable<TimedEvent>)e).GetEnumerator())).ToArray();
             _timeDivision = timeDivision;
+            _endTime = endTime;
+            InitializeContext(timedEvents);
         }
 
         #endregion
@@ -162,11 +172,17 @@ namespace Melanchall.DryWetMidi.Tools
 
         #region Methods
 
-        public MidiFile GetNextSlice(long endTime, SliceMidiFileSettings settings)
+        public MidiFile GetNextSlice(
+            long endTime,
+            SliceMidiFileSettings settings,
+            long compoundHistoryStartTime = 0)
         {
             var timedEvents = GetNextTimedEvents(
                 endTime,
+                endTime == long.MaxValue ? Math.Max(_lastTime, _endTime) : endTime,
                 settings.PreserveTimes,
+                settings.NoteDetectionSettings?.NoteStartDetectionPolicy ?? NoteStartDetectionPolicy.FirstNoteOn,
+                compoundHistoryStartTime,
                 settings.Markers?.PartStartMarkerEventFactory,
                 settings.Markers?.PartEndMarkerEventFactory,
                 settings.Markers?.EmptyPartMarkerEventFactory);
@@ -185,35 +201,40 @@ namespace Melanchall.DryWetMidi.Tools
 
         public static MidiFileSlicer CreateFromFile(MidiFile midiFile)
         {
-            var timedEventsEnumerators = midiFile.GetTrackChunks()
-                                                 .Select(c => c.Events.GetTimedEvents().GetEnumerator())
-                                                 .ToArray();
+            var timedEvents = midiFile.GetTrackChunks()
+                .Select(c => c.Events.GetTimedEvents().ToArray())
+                .ToArray();
 
             // TODO: what if td is null
-            return new MidiFileSlicer(midiFile.TimeDivision!, timedEventsEnumerators);
+            return new MidiFileSlicer(
+                midiFile.TimeDivision!,
+                timedEvents,
+                midiFile.GetDuration<MidiTimeSpan>());
         }
 
         private IEnumerable<IEnumerable<TimedEvent>> GetNextTimedEvents(
             long endTime,
+            long markerEndTime,
             bool preserveTimes,
+            NoteStartDetectionPolicy detectionPolicy,
+            long compoundHistoryStartTime,
             Func<MidiEvent>? partStartMarkerEventFactory,
             Func<MidiEvent>? partEndMarkerEventFactory,
             Func<MidiEvent>? emptyPartMarkerEventFactory)
         {
             var isPartEmpty = true;
+            var contextEvents = GetContextEvents(_lastTime, preserveTimes, compoundHistoryStartTime);
 
             for (int i = 0; i < _timedEventsHolders.Length; i++)
             {
                 var timedEventsHolder = _timedEventsHolders[i];
 
-                var eventsToCopyToNextPart = timedEventsHolder.EventsToCopyToNextPart;
                 var eventsToStartNextPart = timedEventsHolder.EventsToStartNextPart;
 
-                var takenTimedEvents = PrepareTakenTimedEvents(
-                    eventsToCopyToNextPart,
-                    preserveTimes,
-                    eventsToStartNextPart,
-                    out var newEventsStartIndex);
+                var takenTimedEvents = contextEvents[i];
+                var newEventsStartIndex = takenTimedEvents.Count;
+                takenTimedEvents.AddRange(eventsToStartNextPart);
+                eventsToStartNextPart.Clear();
 
                 if (timedEventsHolder.CanBeEnumerated)
                 {
@@ -227,15 +248,17 @@ namespace Melanchall.DryWetMidi.Tools
                         if (time > endTime)
                             break;
 
+                        var isNoteEndingBeforeBoundary = timedEventsHolder.IsNoteEndingBeforeBoundary(timedEvent, detectionPolicy);
+
                         if (time == endTime)
                         {
-                            if (!TryToMoveEdgeNoteOffsToPreviousPart(timedEvent, takenTimedEvents))
+                            if (isNoteEndingBeforeBoundary)
+                                takenTimedEvents.Add(timedEvent);
+                            else
                                 eventsToStartNextPart.Add(timedEvent);
 
                             continue;
                         }
-
-                        UpdateEventsToCopyToNextPart(eventsToCopyToNextPart, timedEvent);
 
                         takenTimedEvents.Add(timedEvent);
                     }
@@ -258,7 +281,7 @@ namespace Melanchall.DryWetMidi.Tools
                     takenTimedEvents.Insert(0, new TimedEvent(partStartMarkerEventFactory(), preserveTimes ? _lastTime : 0));
 
                 if (partEndMarkerEventFactory != null)
-                    takenTimedEvents.Add(new TimedEvent(partEndMarkerEventFactory(), preserveTimes ? endTime : endTime - _lastTime));
+                    takenTimedEvents.Add(new TimedEvent(partEndMarkerEventFactory(), preserveTimes ? markerEndTime : markerEndTime - _lastTime));
 
                 //
 
@@ -268,72 +291,12 @@ namespace Melanchall.DryWetMidi.Tools
             _lastTime = endTime;
         }
 
-        private static bool TryToMoveEdgeNoteOffsToPreviousPart(
-            TimedEvent timedEvent,
-            List<TimedEvent> takenTimedEvents)
-        {
-            var noteOffEvent = timedEvent.Event as NoteOffEvent;
-            if (noteOffEvent != null)
-            {
-                takenTimedEvents.Add(timedEvent);
-                return true;
-            }
-
-            return false;
-        }
-
         private static void MoveEventsToStart(List<TimedEvent> takenTimedEvents, int startIndex, long partStartTime)
         {
             for (int j = startIndex; j < takenTimedEvents.Count; j++)
             {
                 takenTimedEvents[j].Time -= partStartTime;
             }
-        }
-
-        private List<TimedEvent> PrepareTakenTimedEvents(
-            List<TimedEvent> eventsToCopyToNextPart,
-            bool preserveTimes,
-            List<TimedEvent> eventsToStartNextPart,
-            out int newEventsStartIndex)
-        {
-            var takenTimedEvents = new List<TimedEvent>(eventsToCopyToNextPart);
-            takenTimedEvents.ForEach(e => e.Time = preserveTimes ? _lastTime : 0);
-
-            newEventsStartIndex = takenTimedEvents.Count;
-
-            takenTimedEvents.AddRange(eventsToStartNextPart);
-            eventsToStartNextPart.Clear();
-
-            foreach (var timedEvent in takenTimedEvents)
-            {
-                UpdateEventsToCopyToNextPart(eventsToCopyToNextPart, timedEvent);
-            }
-
-            return takenTimedEvents;
-        }
-
-        private static void UpdateEventsToCopyToNextPart(List<TimedEvent> eventsToCopyToNextPart, TimedEvent timedEvent)
-        {
-            var eventType = timedEvent.Event.EventType;
-            var matched = false;
-
-            for (var i = 0; i < eventsToCopyToNextPart.Count && !matched; i++)
-            {
-                var existingTimedEvent = eventsToCopyToNextPart[i];
-                if (existingTimedEvent.Event.EventType != eventType)
-                    continue;
-
-                matched = DefaultUpdatePredicates[eventType](timedEvent.Event, existingTimedEvent.Event);
-                if (matched)
-                {
-                    eventsToCopyToNextPart.RemoveAt(i);
-                    eventsToCopyToNextPart.Add((TimedEvent)timedEvent.Clone());
-                    return;
-                }
-            }
-
-            if (!matched && DefaultUpdatePredicates.ContainsKey(eventType))
-                eventsToCopyToNextPart.Add((TimedEvent)timedEvent.Clone());
         }
 
         #endregion

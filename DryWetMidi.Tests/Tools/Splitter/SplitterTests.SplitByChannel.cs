@@ -17,6 +17,42 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         #region Test methods
 
         [Test]
+        public void SplitByChannel_SharedEventsAreIndependent()
+        {
+            var midiFile = new[]
+            {
+                new TimedEvent(new NoteOnEvent((SevenBitNumber)60, (SevenBitNumber)100), 10),
+                new TimedEvent(new NoteOnEvent((SevenBitNumber)64, (SevenBitNumber)100)
+                {
+                    Channel = (FourBitNumber)1
+                }, 50),
+                new TimedEvent(new TextEvent("shared"), 100),
+                new TimedEvent(new SetTempoEvent(600000), 150)
+            }.ToFile();
+            var originalFile = midiFile.Clone();
+
+            var resultFiles = midiFile.SplitByChannel().ToArray();
+
+            CompareTimedEvents(
+                resultFiles[0].GetTimedEvents(),
+                new[]
+                {
+                    new TimedEvent(new NoteOnEvent((SevenBitNumber)60, (SevenBitNumber)100), 10),
+                    new TimedEvent(new TextEvent("shared"), 100),
+                    new TimedEvent(new SetTempoEvent(600000), 150)
+                },
+                "Constructing later outputs changed the first output's event times.");
+            MidiAsserts.AreEqual(originalFile, midiFile, false, "Splitting changed the source file.");
+
+            var firstTextEvent = resultFiles[0].GetTrackChunks().Single().Events.OfType<TextEvent>().Single();
+            var secondTextEvent = resultFiles[1].GetTrackChunks().Single().Events.OfType<TextEvent>().Single();
+            firstTextEvent.Text = "changed";
+
+            ClassicAssert.AreNotSame(firstTextEvent, secondTextEvent, "Outputs share a mutable event.");
+            ClassicAssert.AreEqual("shared", secondTextEvent.Text, "Editing one output changed another output.");
+        }
+
+        [Test]
         public void SplitByChannel_ValidFiles()
         {
             foreach (var filePath in TestFilesProvider.GetValidFilesPaths())

@@ -56,7 +56,7 @@ namespace Melanchall.DryWetMidi.Tools
                 {
                     foreach (var channel in FourBitNumber.Values)
                     {
-                        timedEventsByChannel[channel].Add(timedEvent);
+                        timedEventsByChannel[channel].Add((TimedEvent)timedEvent.Clone());
                     }
                 }
             }

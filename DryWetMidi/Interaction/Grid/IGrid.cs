@@ -11,6 +11,10 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <summary>
         /// Gets times produced by the current grid.
         /// </summary>
+        /// <remarks>
+        /// Times must be nonnegative and in ascending order without duplication.
+        /// Each subsequent time must advance after conversion to MIDI ticks.
+        /// </remarks>
         /// <param name="tempoMap">Tempo map used to get grid's times.</param>
         /// <returns>Collection of times (in MIDI ticks) of the current grid.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="tempoMap"/> is <c>null</c>.</exception>

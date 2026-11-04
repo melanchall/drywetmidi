@@ -14,7 +14,25 @@ namespace Melanchall.DryWetMidi.Tools
     {
         #region Methods
 
-        private static MidiFile PrepareMidiFileForSlicing(MidiFile midiFile, IGrid grid, SliceMidiFileSettings settings)
+        private static IEnumerable<long> GetValidatedGridTimes(IGrid grid, TempoMap tempoMap)
+        {
+            long? previousTime = null;
+
+            foreach (var time in grid.GetTimes(tempoMap))
+            {
+                if (time < 0 || previousTime.HasValue && time <= previousTime.Value)
+                    throw new InvalidOperationException("Grid times must be in ascending order without duplication.");
+
+                previousTime = time;
+                yield return time;
+            }
+        }
+
+        private static MidiFile PrepareMidiFileForSlicing(
+            MidiFile midiFile,
+            IGrid grid,
+            SliceMidiFileSettings settings,
+            Predicate<ITimedObject>? filter = null)
         {
             if (settings.SplitNotes)
             {
@@ -25,7 +43,8 @@ namespace Melanchall.DryWetMidi.Tools
                     new ObjectDetectionSettings
                     {
                         NoteDetectionSettings = settings.NoteDetectionSettings
-                    });
+                    },
+                    filter);
             }
 
             return midiFile;

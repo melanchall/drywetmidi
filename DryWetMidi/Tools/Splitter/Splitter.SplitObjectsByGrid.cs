@@ -42,6 +42,8 @@ namespace Melanchall.DryWetMidi.Tools
         /// </item>
         /// </list>
         /// </exception>
+        /// <exception cref="InvalidOperationException">An encountered grid time is negative,
+        /// equal to or less than the preceding grid time.</exception>
         public static void SplitObjectsByGrid(
             this TrackChunk trackChunk,
             ObjectType objectType,
@@ -92,6 +94,8 @@ namespace Melanchall.DryWetMidi.Tools
         /// </item>
         /// </list>
         /// </exception>
+        /// <exception cref="InvalidOperationException">An encountered grid time is negative,
+        /// equal to or less than the preceding grid time.</exception>
         public static void SplitObjectsByGrid(
             this IEnumerable<TrackChunk?> trackChunks,
             ObjectType objectType,
@@ -137,6 +141,8 @@ namespace Melanchall.DryWetMidi.Tools
         /// </item>
         /// </list>
         /// </exception>
+        /// <exception cref="InvalidOperationException">An encountered grid time is negative,
+        /// equal to or less than the preceding grid time.</exception>
         public static void SplitObjectsByGrid(
             this MidiFile midiFile,
             ObjectType objectType,
@@ -182,6 +188,8 @@ namespace Melanchall.DryWetMidi.Tools
         /// </item>
         /// </list>
         /// </exception>
+        /// <exception cref="InvalidOperationException">An encountered grid time is negative,
+        /// equal to or less than the preceding grid time.</exception>
         public static IEnumerable<ITimedObject?> SplitObjectsByGrid(
             this IEnumerable<ITimedObject?> objects,
             IGrid grid,
@@ -192,49 +200,64 @@ namespace Melanchall.DryWetMidi.Tools
             ThrowIfArgument.IsNull(nameof(grid), grid);
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
-            var lastObjectEndTime = objects.OfType<ITimedObject>()
-                                           .Select(o => o.Time + ((o as ILengthedObject)?.Length ?? 0))
-                                           .DefaultIfEmpty()
-                                           .Max();
-            var times = grid.GetTimes(tempoMap)
-                            .TakeWhile(t => t < lastObjectEndTime)
-                            .Distinct()
-                            .ToList();
-            times.Sort();
+            var times = new List<long>();
+            var gridExhausted = false;
 
-            foreach (var obj in objects)
+            using (var timesEnumerator = GetValidatedGridTimes(grid, tempoMap).GetEnumerator())
             {
-                if (obj == null)
+                foreach (var obj in objects)
                 {
-                    yield return null;
-                    continue;
+                    if (obj == null)
+                    {
+                        yield return null;
+                        continue;
+                    }
+
+                    var lengthedObject = obj as ILengthedObject;
+                    if (lengthedObject == null || filter?.Invoke(obj) == false)
+                    {
+                        yield return obj;
+                        continue;
+                    }
+
+                    var startTime = obj.Time;
+                    var endTime = lengthedObject.EndTime;
+
+                    var tail = (ILengthedObject)obj.Clone();
+                    var timeIndex = 0;
+
+                    while (tail != null)
+                    {
+                        if (timeIndex == times.Count)
+                        {
+                            if (gridExhausted)
+                                break;
+
+                            if (!timesEnumerator.MoveNext())
+                            {
+                                gridExhausted = true;
+                                break;
+                            }
+
+                            times.Add(timesEnumerator.Current);
+                        }
+
+                        var time = times[timeIndex++];
+                        if (time >= endTime)
+                            break;
+
+                        if (time <= startTime)
+                            continue;
+
+                        var parts = tail.Split(time);
+                        yield return parts.LeftPart;
+
+                        tail = parts.RightPart;
+                    }
+
+                    if (tail != null)
+                        yield return tail;
                 }
-
-                var lengthedObject = obj as ILengthedObject;
-                if (lengthedObject == null || filter?.Invoke(obj) == false)
-                {
-                    yield return obj;
-                    continue;
-                }
-
-                var startTime = obj.Time;
-                var endTime = startTime + lengthedObject.Length;
-
-                var intersectedTimes = times.SkipWhile(t => t <= startTime).TakeWhile(t => t < endTime);
-                var tail = (ILengthedObject)obj.Clone();
-
-                foreach (var time in intersectedTimes)
-                {
-                    var parts = tail.Split(time);
-                    yield return parts.LeftPart;
-
-                    tail = parts.RightPart;
-                    if (tail == null)
-                        break;
-                }
-
-                if (tail != null)
-                    yield return tail;
             }
         }
 

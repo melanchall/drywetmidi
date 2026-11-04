@@ -4,6 +4,7 @@ using Melanchall.DryWetMidi.Interaction;
 using Melanchall.DryWetMidi.Tests.Utilities;
 using Melanchall.DryWetMidi.Tools;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +15,37 @@ namespace Melanchall.DryWetMidi.Tests.Tools
     public sealed partial class SplitterTests
     {
         #region Test methods
+
+        [Test]
+        public void SplitObjectsAtDistance_RejectsNonFiniteRatio(
+            [Values] RegressionObjectContainer container,
+            [Values(double.NaN, double.PositiveInfinity, double.NegativeInfinity)] double ratio,
+            [Values] TimeSpanType lengthType,
+            [Values] LengthedObjectTarget from)
+        {
+            var trackChunk = new ITimedObject[] { new Note((SevenBitNumber)60, 100) }.ToTrackChunk();
+
+            var exception = ClassicAssert.Throws<ArgumentOutOfRangeException>(() =>
+            {
+                switch (container)
+                {
+                    case RegressionObjectContainer.Objects:
+                        trackChunk.GetNotes().SplitObjectsAtDistance(ratio, lengthType, from, TempoMap.Default).ToArray();
+                        break;
+                    case RegressionObjectContainer.TrackChunk:
+                        trackChunk.SplitObjectsAtDistance(ObjectType.Note, ratio, lengthType, from, TempoMap.Default);
+                        break;
+                    case RegressionObjectContainer.TrackChunks:
+                        new[] { trackChunk }.SplitObjectsAtDistance(ObjectType.Note, ratio, lengthType, from, TempoMap.Default);
+                        break;
+                    case RegressionObjectContainer.MidiFile:
+                        new MidiFile(trackChunk).SplitObjectsAtDistance(ObjectType.Note, ratio, lengthType, from);
+                        break;
+                }
+            }, "A non-finite ratio was not rejected at the public API boundary.");
+
+            ClassicAssert.AreEqual("ratio", exception.ParamName, "The exception names an internal parameter.");
+        }
 
         [Test]
         public void SplitObjectsAtDistance_Notes_EmptyCollection([Values] LengthedObjectTarget from) => SplitObjectsAtDistance(

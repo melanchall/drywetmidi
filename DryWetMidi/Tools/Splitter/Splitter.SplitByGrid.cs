@@ -33,6 +33,8 @@ namespace Melanchall.DryWetMidi.Tools
         /// </item>
         /// </list>
         /// </exception>
+        /// <exception cref="InvalidOperationException">An encountered grid time is negative,
+        /// equal to or less than the preceding grid time.</exception>
         public static IEnumerable<MidiFile> SplitByGrid(this MidiFile midiFile, IGrid grid, SliceMidiFileSettings? settings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
@@ -48,7 +50,7 @@ namespace Melanchall.DryWetMidi.Tools
 
             using (var slicer = MidiFileSlicer.CreateFromFile(midiFile))
             {
-                foreach (var time in grid.GetTimes(tempoMap))
+                foreach (var time in GetValidatedGridTimes(grid, tempoMap))
                 {
                     if (time == 0)
                         continue;

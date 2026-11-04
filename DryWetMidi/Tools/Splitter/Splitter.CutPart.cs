@@ -2,7 +2,6 @@
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace Melanchall.DryWetMidi.Tools
@@ -37,6 +36,8 @@ namespace Melanchall.DryWetMidi.Tools
         /// </item>
         /// </list>
         /// </exception>
+        /// <exception cref="InvalidOperationException">The calculated end of the part is
+        /// equal to or less than its start.</exception>
         public static MidiFile CutPart(this MidiFile midiFile, ITimeSpan partStart, ITimeSpan partLength, SliceMidiFileSettings? settings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
@@ -64,42 +65,14 @@ namespace Melanchall.DryWetMidi.Tools
             };
 
             var tempoMap = midiFile.GetTempoMap();
-            var times = grid.GetTimes(tempoMap).ToArray();
+            var times = GetValidatedGridTimes(grid, tempoMap).ToArray();
 
-            //
-
-            var notesToSplitDescriptors = settings.SplitNotes
-                ? midiFile
-                    .GetTrackChunks()
-                    .Select(c =>
-                    {
-                        var notes = c.Events
-                            .GetTimedEventsLazy(null, 0)
-                            .GetNotesAndTimedEventsLazy(settings.NoteDetectionSettings)
-                            .OfType<Note>();
-
-                        var descriptors = new List<(int NoteId, SevenBitNumber Velocity, SevenBitNumber OffVelocity)>();
-
-                        foreach (var note in notes)
-                        {
-                            if (note.EndTime <= times[0])
-                                continue;
-
-                            if (note.Time >= times[1])
-                                break;
-
-                            if (note.Time < times[0] && note.EndTime > times[1])
-                                descriptors.Add((note.GetNoteId(), note.Velocity, note.OffVelocity));
-                        }
-
-                        return descriptors;
-                    })
-                    .ToList()
-                : midiFile.GetTrackChunks().Select(c => new List<(int NoteId, SevenBitNumber Velocity, SevenBitNumber OffVelocity)>());
-
-            //
-
-            midiFile = PrepareMidiFileForSlicing(midiFile, grid, internalSettings);
+            // A note spanning the whole cut needs no synthetic events at the splice.
+            midiFile = PrepareMidiFileForSlicing(
+                midiFile,
+                grid,
+                internalSettings,
+                obj => !(obj is Note note && note.Time < times[0] && note.EndTime > times[1]));
 
             var result = new MidiFile
             {
@@ -110,7 +83,7 @@ namespace Melanchall.DryWetMidi.Tools
             {
                 var startPart = slicer.GetNextSlice(times[0], internalSettings);
                 slicer.GetNextSlice(times[1], internalSettings);
-                var endPart = slicer.GetNextSlice(Math.Max(times.Last(), midiFile.GetDuration<MidiTimeSpan>()) + 1, internalSettings);
+                var endPart = slicer.GetNextSlice(long.MaxValue, internalSettings, times[0]);
 
                 if (internalSettings.PreserveTimes)
                 {
@@ -120,11 +93,9 @@ namespace Melanchall.DryWetMidi.Tools
 
                 using (var startPartTrackChunksEnumerator = startPart.GetTrackChunks().GetEnumerator())
                 using (var endPartTrackChunksEnumerator = endPart.GetTrackChunks().GetEnumerator())
-                using (var notesToSplitDescriptorsEnumerator = notesToSplitDescriptors.GetEnumerator())
                 {
                     while (startPartTrackChunksEnumerator.MoveNext() &&
-                           endPartTrackChunksEnumerator.MoveNext() &&
-                           notesToSplitDescriptorsEnumerator.MoveNext())
+                           endPartTrackChunksEnumerator.MoveNext())
                     {
                         var newTrackChunk = new TrackChunk();
                         var eventsCollection = newTrackChunk.Events;
@@ -139,46 +110,6 @@ namespace Melanchall.DryWetMidi.Tools
 
                             return markerEvent.Text == partStartId || markerEvent.Text == partEndId;
                         });
-
-                        if (settings.SplitNotes && notesToSplitDescriptorsEnumerator.Current.Any())
-                        {
-                            var timedEvents = eventsCollection
-                                .GetTimedEventsLazy(null, 0, false)
-                                .SkipWhile(e => e.Time < times[0])
-                                .TakeWhile(e => e.Time == times[0])
-                                .ToList();
-
-                            var eventsToRemove = new List<MidiEvent>();
-
-                            foreach (var notesDescriptor in notesToSplitDescriptorsEnumerator.Current)
-                            {
-                                var timedEventsToRemove = timedEvents
-                                    .Where(e =>
-                                    {
-                                        var noteEvent = e.Event as NoteEvent;
-                                        if (noteEvent == null)
-                                            return false;
-
-                                        if (!noteEvent.GetNoteId().Equals(notesDescriptor.NoteId))
-                                            return false;
-
-                                        var noteOnEvent = noteEvent as NoteOnEvent;
-                                        if (noteOnEvent != null)
-                                            return noteOnEvent.Velocity == notesDescriptor.Velocity;
-
-                                        return ((NoteOffEvent)noteEvent).Velocity == notesDescriptor.OffVelocity;
-                                    })
-                                    .ToArray();
-
-                                foreach (var timedEvent in timedEventsToRemove)
-                                {
-                                    timedEvents.Remove(timedEvent);
-                                    eventsToRemove.Add(timedEvent.Event);
-                                }
-                            }
-
-                            eventsCollection.RemoveTimedEvents(e => eventsToRemove.Contains(e.Event));
-                        }
 
                         if (!settings.PreserveTrackChunks && !eventsCollection.Any())
                             continue;

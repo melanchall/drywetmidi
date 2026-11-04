@@ -196,7 +196,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// </item>
         /// </list>
         /// </exception>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="ratio"/> is out of valid range.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="ratio"/> is not finite or is out of valid range.</exception>
         /// <exception cref="InvalidEnumArgumentException">
         /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
@@ -219,6 +219,11 @@ namespace Melanchall.DryWetMidi.Tools
             Predicate<ITimedObject>? filter = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
+            ThrowIfArgument.DoesntSatisfyCondition(
+                nameof(ratio),
+                ratio,
+                value => !double.IsNaN(value),
+                "Ratio must not be NaN.");
             ThrowIfArgument.IsOutOfRange(nameof(ratio),
                                          ratio,
                                          ZeroRatio,
@@ -264,7 +269,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// </item>
         /// </list>
         /// </exception>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="ratio"/> is out of valid range.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="ratio"/> is not finite or is out of valid range.</exception>
         /// <exception cref="InvalidEnumArgumentException">
         /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
@@ -287,6 +292,11 @@ namespace Melanchall.DryWetMidi.Tools
             Predicate<ITimedObject>? filter = null)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
+            ThrowIfArgument.DoesntSatisfyCondition(
+                nameof(ratio),
+                ratio,
+                value => !double.IsNaN(value),
+                "Ratio must not be NaN.");
             ThrowIfArgument.IsOutOfRange(nameof(ratio),
                                          ratio,
                                          ZeroRatio,
@@ -320,7 +330,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// means don't split it. <c>null</c> (the default value) can be passed to the parameter
         /// to process all objects.</param>
         /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="ratio"/> is out of valid range.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="ratio"/> is not finite or is out of valid range.</exception>
         /// <exception cref="InvalidEnumArgumentException">
         /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
@@ -342,6 +352,11 @@ namespace Melanchall.DryWetMidi.Tools
             Predicate<ITimedObject>? filter = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
+            ThrowIfArgument.DoesntSatisfyCondition(
+                nameof(ratio),
+                ratio,
+                value => !double.IsNaN(value),
+                "Ratio must not be NaN.");
             ThrowIfArgument.IsOutOfRange(nameof(ratio),
                                          ratio,
                                          ZeroRatio,
@@ -450,7 +465,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// </item>
         /// </list>
         /// </exception>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="ratio"/> is out of valid range.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="ratio"/> is not finite or is out of valid range.</exception>
         /// <exception cref="InvalidEnumArgumentException">
         /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
@@ -471,6 +486,11 @@ namespace Melanchall.DryWetMidi.Tools
             Predicate<ITimedObject>? filter = null)
         {
             ThrowIfArgument.IsNull(nameof(objects), objects);
+            ThrowIfArgument.DoesntSatisfyCondition(
+                nameof(ratio),
+                ratio,
+                value => !double.IsNaN(value),
+                "Ratio must not be NaN.");
             ThrowIfArgument.IsOutOfRange(nameof(ratio),
                                          ratio,
                                          ZeroRatio,

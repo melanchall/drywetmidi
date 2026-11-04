@@ -1,4 +1,5 @@
-﻿using Melanchall.DryWetMidi.Core;
+using Melanchall.DryWetMidi.Common;
+using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
 using Melanchall.DryWetMidi.Tests.Utilities;
 using Melanchall.DryWetMidi.Tools;
@@ -10,6 +11,29 @@ namespace Melanchall.DryWetMidi.Tests.Tools
     public sealed partial class SplitterTests
     {
         #region Test methods
+
+        [Test]
+        public void CutPart_IgnoresUserMarkers()
+        {
+            var midiFile = new ITimedObject[] { new Note((SevenBitNumber)60, 400) }.ToFile();
+            var settings = new SliceMidiFileSettings
+            {
+                Markers = new SliceMidiFileMarkers
+                {
+                    PartStartMarkerEventFactory = () => throw new AssertionException("CutPart called the start factory."),
+                    PartEndMarkerEventFactory = () => throw new AssertionException("CutPart called the end factory."),
+                    EmptyPartMarkerEventFactory = () => throw new AssertionException("CutPart called the empty factory.")
+                }
+            };
+
+            var result = midiFile.CutPart((MidiTimeSpan)100, (MidiTimeSpan)100, settings);
+
+            MidiAsserts.AreEqual(
+                new ITimedObject[] { new Note((SevenBitNumber)60, 300) }.ToFile(),
+                result,
+                false,
+                "Ignoring user markers changed cutting behavior.");
+        }
 
         [Test]
         public void CutPart_EmptyFile() => CutPart(

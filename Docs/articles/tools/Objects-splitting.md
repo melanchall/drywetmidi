@@ -35,6 +35,8 @@ The image below illustrates splitting notes and chord into `4` parts:
 
 [SplitObjectsByGrid](xref:Melanchall.DryWetMidi.Tools.Splitter.SplitObjectsByGrid*) methods split each object by the specified grid. Objects will be split at points of crossing the grid.
 
+Grid times must be nonnegative and in ascending order without duplication. If splitting encounters a repeated or decreasing grid time, it throws `InvalidOperationException`. This includes steps that become zero after conversion to MIDI ticks.
+
 The image below illustrates splitting notes and chord by the same grid:
 
 ![Split by grid](images/Splitter/SplitByGrid.png)
