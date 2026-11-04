@@ -23,6 +23,12 @@ namespace Melanchall.DryWetMidi.Tools
         /// <summary>
         /// Quantizes objects using the specified grid.
         /// </summary>
+        /// <remarks>
+        /// Objects are enumerated once and the filter is evaluated once per non-null object before
+        /// quantization starts. Grid times are enumerated once, up to and including the first time
+        /// at or beyond the latest selected object's end time (or time for objects without a length).
+        /// Only encountered grid times are validated.
+        /// </remarks>
         /// <param name="objects">Objects to quantize.</param>
         /// <param name="grid">Grid to use for quantization.</param>
         /// <param name="tempoMap">Tempo map used to perform time and length conversions.</param>
@@ -41,6 +47,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// </item>
         /// </list>
         /// </exception>
+        /// <exception cref="InvalidOperationException">
+        /// An encountered grid time is negative, repeated, or less than the previous time, or
+        /// randomization bounds contain no nonnegative times in ascending order.
+        /// </exception>
         public void Quantize(IEnumerable<ITimedObject?> objects, IGrid grid, TempoMap tempoMap, QuantizingSettings? settings = null)
         {
             ThrowIfArgument.IsNull(nameof(objects), objects);
@@ -50,12 +60,14 @@ namespace Melanchall.DryWetMidi.Tools
             settings = settings ?? new QuantizingSettings();
             settings.RandomizingSettings = settings.RandomizingSettings ?? new RandomizingSettings();
 
-            Func<ITimedObject, bool> filter = obj =>
-                obj != null && settings.Filter?.Invoke(obj) != false;
+            var selectedObjects = objects
+                .OfType<ITimedObject>()
+                .Where(obj => settings.Filter?.Invoke(obj) != false)
+                .ToArray();
 
-            var times = GetGridTimes(objects, filter, grid, tempoMap);
+            var times = GetGridTimes(selectedObjects, grid, tempoMap);
 
-            foreach (var obj in objects.OfType<ITimedObject>().Where(filter))
+            foreach (var obj in selectedObjects)
             {
                 QuantizeObject(obj, grid, times, tempoMap, settings);
             }
@@ -293,29 +305,50 @@ namespace Melanchall.DryWetMidi.Tools
         {
             var timeBounds = bounds.GetBounds(time, tempoMap);
 
-            var minTime = Math.Max(0, timeBounds.Item1) - 1;
+            var minTime = Math.Max(0, timeBounds.Item1);
             var maxTime = timeBounds.Item2;
+            if (maxTime < minTime)
+                throw new InvalidOperationException("Randomization bounds must contain nonnegative times in ascending order.");
 
-            var difference = (int)Math.Abs(maxTime - minTime);
+            var range = (ulong)(maxTime - minTime) + 1;
 
             var result = time;
+
             for (var i = 0; i < RandomizeMaxAttempts && result == time; i++)
             {
-                result = minTime + Common.Random.Instance.Next(difference) + 1;
+                result = minTime + GetRandomOffset(range);
             }
 
             return result;
         }
 
+        private static long GetRandomOffset(ulong range)
+        {
+            if (range <= int.MaxValue)
+                return Common.Random.Instance.Next((int)range);
+
+            const ulong sampleRange = 1UL << 63;
+            var limit = sampleRange - sampleRange % range;
+            Span<byte> bytes = stackalloc byte[sizeof(ulong)];
+            ulong sample;
+
+            // Reject the incomplete final interval to avoid bias when taking the remainder.
+            do
+            {
+                Common.Random.Instance.NextBytes(bytes);
+                sample = BitConverter.ToUInt64(bytes) & (sampleRange - 1);
+            }
+            while (sample >= limit);
+
+            return (long)(sample % range);
+        }
+
         private static long[] GetGridTimes(
-            IEnumerable<ITimedObject?> objects,
-            Func<ITimedObject, bool> filter,
+            IEnumerable<ITimedObject> objects,
             IGrid grid,
             TempoMap tempoMap)
         {
             var lastTime = objects
-                .OfType<ITimedObject>()
-                .Where(filter)
                 .Select(obj =>
                 {
                     var lengthedObject = obj as ILengthedObject;
@@ -331,19 +364,18 @@ namespace Melanchall.DryWetMidi.Tools
 
         private static IEnumerable<long> GetGridTimes(IGrid grid, long lastTime, TempoMap tempoMap)
         {
-            var times = grid.GetTimes(tempoMap);
-            if (!times.Any())
-                yield break;
+            long? previousTime = null;
 
-            using (var enumerator = times.GetEnumerator())
+            foreach (var time in grid.GetTimes(tempoMap))
             {
-                var timesAvailable = true;
+                if (time < 0 || previousTime.HasValue && time <= previousTime.Value)
+                    throw new InvalidOperationException("Grid times must be nonnegative and in ascending order without duplication.");
 
-                while ((timesAvailable = enumerator.MoveNext()) && enumerator.Current < lastTime)
-                    yield return enumerator.Current;
+                previousTime = time;
+                yield return time;
 
-                if (timesAvailable)
-                    yield return enumerator.Current;
+                if (time >= lastTime)
+                    yield break;
             }
         }
 

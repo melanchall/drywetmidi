@@ -40,6 +40,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// </item>
         /// </list>
         /// </exception>
+        /// <exception cref="InvalidOperationException">
+        /// An encountered grid time is negative, repeated, or less than the previous time, or
+        /// randomization bounds contain no nonnegative times in ascending order.
+        /// </exception>
         public static void QuantizeObjects(
             this TrackChunk trackChunk,
             ObjectType objectType,
@@ -90,6 +94,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// </item>
         /// </list>
         /// </exception>
+        /// <exception cref="InvalidOperationException">
+        /// An encountered grid time is negative, repeated, or less than the previous time, or
+        /// randomization bounds contain no nonnegative times in ascending order.
+        /// </exception>
         public static void QuantizeObjects(
             this TrackChunk trackChunk,
             Quantizer quantizer,
@@ -133,6 +141,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <description><paramref name="tempoMap"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
+        /// </exception>
+        /// <exception cref="InvalidOperationException">
+        /// An encountered grid time is negative, repeated, or less than the previous time, or
+        /// randomization bounds contain no nonnegative times in ascending order.
         /// </exception>
         public static void QuantizeObjects(
             this IEnumerable<TrackChunk?> trackChunks,
@@ -184,6 +196,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// </item>
         /// </list>
         /// </exception>
+        /// <exception cref="InvalidOperationException">
+        /// An encountered grid time is negative, repeated, or less than the previous time, or
+        /// randomization bounds contain no nonnegative times in ascending order.
+        /// </exception>
         public static void QuantizeObjects(
             this IEnumerable<TrackChunk?> trackChunks,
             Quantizer quantizer,
@@ -223,6 +239,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <description><paramref name="grid"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
+        /// </exception>
+        /// <exception cref="InvalidOperationException">
+        /// An encountered grid time is negative, repeated, or less than the previous time, or
+        /// randomization bounds contain no nonnegative times in ascending order.
         /// </exception>
         public static void QuantizeObjects(
             this MidiFile midiFile,
@@ -266,6 +286,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <description><paramref name="grid"/> is <c>null</c>.</description>
         /// </item>
         /// </list>
+        /// </exception>
+        /// <exception cref="InvalidOperationException">
+        /// An encountered grid time is negative, repeated, or less than the previous time, or
+        /// randomization bounds contain no nonnegative times in ascending order.
         /// </exception>
         public static void QuantizeObjects(
             this MidiFile midiFile,
