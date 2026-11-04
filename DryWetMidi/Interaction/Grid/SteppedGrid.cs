@@ -123,6 +123,10 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <summary>
         /// Gets points in time of the current grid.
         /// </summary>
+        /// <remarks>
+        /// Times must be nonnegative and in ascending order without duplication.
+        /// Each step must advance the time after conversion to MIDI ticks.
+        /// </remarks>
         /// <param name="tempoMap">Tempo map used to get grid's times.</param>
         /// <returns>Collection of points in time of the current grid.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="tempoMap"/> is <c>null</c>.</exception>
