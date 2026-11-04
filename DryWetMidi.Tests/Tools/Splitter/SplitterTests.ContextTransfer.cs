@@ -296,6 +296,8 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 return new TimedEvent(result, time);
             }
 
+            var isGlobal = typeof(TEvent) == typeof(SetTempoEvent) || typeof(TEvent) == typeof(TimeSignatureEvent);
+
             CheckContextTransfer(
                 inputTimedEvents: new[]
                 {
@@ -336,20 +338,36 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                         CreateTimedEvent(value5, 170),
                         CreateTimedEvent(value6, 180),
                     },
-                    new[] // 200-300
+                    isGlobal ? new[] // 200-300
+                    {
+                        CreateTimedEvent(value6, 200),
+                        CreateTimedEvent(value4, 250),
+                    } : new[]
                     {
                         CreateTimedEvent(value3, 200),
                         CreateTimedEvent(value6, 200),
                         CreateTimedEvent(value4, 250),
                     },
-                    new[] // 300-400
+                    isGlobal ? new[] // 300-400
+                    {
+                        CreateTimedEvent(value4, 300),
+                        CreateTimedEvent(value7, 300),
+                        CreateTimedEvent(value8, 310),
+                    } : new[]
                     {
                         CreateTimedEvent(value4, 300),
                         CreateTimedEvent(value6, 300),
                         CreateTimedEvent(value7, 300),
                         CreateTimedEvent(value8, 310),
                     },
-                    new[] // 400-500
+                    isGlobal ? new[] // 400-500
+                    {
+                        CreateTimedEvent(value8, 400),
+                        new TimedEvent(new TextEvent("X"), 400),
+                        CreateTimedEvent(value9, 410),
+                        CreateTimedEvent(value10, 410),
+                        CreateTimedEvent(value11, 420),
+                    } : new[]
                     {
                         CreateTimedEvent(value4, 400),
                         CreateTimedEvent(value8, 400),
@@ -358,7 +376,11 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                         CreateTimedEvent(value10, 410),
                         CreateTimedEvent(value11, 420),
                     },
-                    new[] // 500-600
+                    isGlobal ? new[] // 500-600
+                    {
+                        CreateTimedEvent(value11, 500),
+                        new TimedEvent(new TextEvent("Y"), 500),
+                    } : new[]
                     {
                         CreateTimedEvent(value4, 500),
                         CreateTimedEvent(value9, 500),
@@ -422,22 +444,18 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                     new[] // 200-300
                     {
                         CreateTimedEvent(75,  3, 200),
-                        CreateTimedEvent(25,  0, 200),
                         CreateTimedEvent(125, 0, 200),
                         CreateTimedEvent(105, 3, 250),
                     },
                     new[] // 300-400
                     {
-                        CreateTimedEvent(25,  0, 300),
-                        CreateTimedEvent(105, 3, 300),
                         CreateTimedEvent(125, 0, 300),
+                        CreateTimedEvent(105, 3, 300),
                         CreateTimedEvent(15,  3, 300),
                         CreateTimedEvent(5,   3, 310),
                     },
                     new[] // 400-500
                     {
-                        CreateTimedEvent(25,  0, 400),
-                        CreateTimedEvent(105, 3, 400),
                         CreateTimedEvent(125, 0, 400),
                         CreateTimedEvent(5,   3, 400),
                         new TimedEvent(new TextEvent("A"), 400),
@@ -447,11 +465,8 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                     },
                     new[] // 500-600
                     {
-                        CreateTimedEvent(25,  0, 500),
-                        CreateTimedEvent(105, 3, 500),
                         CreateTimedEvent(125, 0, 500),
                         CreateTimedEvent(5,   3, 500),
-                        CreateTimedEvent(20,  5, 500),
                         CreateTimedEvent(40,  5, 500),
                         new TimedEvent(new TextEvent("B"), 500),
                     }

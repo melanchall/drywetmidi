@@ -35,6 +35,8 @@ namespace Melanchall.DryWetMidi.Tools
         /// </item>
         /// </list>
         /// </exception>
+        /// <exception cref="InvalidOperationException">The calculated end of the part is
+        /// equal to or less than its start.</exception>
         public static MidiFile TakePart(this MidiFile midiFile, ITimeSpan partStart, ITimeSpan partLength, SliceMidiFileSettings? settings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
@@ -47,7 +49,7 @@ namespace Melanchall.DryWetMidi.Tools
             midiFile = PrepareMidiFileForSlicing(midiFile, grid, settings);
 
             var tempoMap = midiFile.GetTempoMap();
-            var times = grid.GetTimes(tempoMap).ToArray();
+            var times = GetValidatedGridTimes(grid, tempoMap).ToArray();
 
             using (var slicer = MidiFileSlicer.CreateFromFile(midiFile))
             {
