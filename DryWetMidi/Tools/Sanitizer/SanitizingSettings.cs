@@ -36,6 +36,8 @@ namespace Melanchall.DryWetMidi.Tools
 
         /// <summary>
         /// Gets or sets a value indicating whether duplicated notes should be removed or not.
+        /// Notes must have the same MIDI output port, channel, note number, start time, and length.
+        /// Notes removed by minimum length or velocity filtering are not used to detect duplicates.
         /// The default value is <c>true</c>. More info in the
         /// <see href="xref:a_sanitizer#removeduplicatednotes">Sanitizer: RemoveDuplicatedNotes</see> article.
         /// </summary>
@@ -77,6 +79,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// Gets or sets a maximum length for a new note restored by an orphaned Note On event.
         /// This property is used only when <see cref="OrphanedNoteOnEventsPolicy"/> is set to
         /// <see cref="OrphanedNoteOnEventsPolicy.CompleteNote"/>. The default value is 1/4 (<see cref="MusicalTimeSpan.Quarter"/>).
+        /// A zero value creates a zero-length note with Note Off placed immediately after Note On.
         /// More info in the <see href="xref:a_sanitizer#orphanednoteoneventspolicy">Sanitizer: OrphanedNoteOnEventsPolicy</see>
         /// article.
         /// </summary>
@@ -107,7 +110,8 @@ namespace Melanchall.DryWetMidi.Tools
 
         /// <summary>
         /// Gets or sets a value indicating whether duplicated Pitch Bend (see <see cref="PitchBendEvent"/>)
-        /// events should be removed or not. The default value is <c>true</c>. More info in the
+        /// events should be removed or not. Values are tracked per MIDI output port and channel,
+        /// and invalidated by Reset All Controllers. The default value is <c>true</c>. More info in the
         /// <see href="xref:a_sanitizer#removeduplicatedpitchbendevents">Sanitizer: RemoveDuplicatedPitchBendEvents</see> article.
         /// </summary>
         public bool RemoveDuplicatedPitchBendEvents { get; set; } = true;
@@ -121,14 +125,17 @@ namespace Melanchall.DryWetMidi.Tools
 
         /// <summary>
         /// Gets or sets a value indicating whether duplicated Control Change (see <see cref="ControlChangeEvent"/>)
-        /// events should be removed or not. The default value is <c>true</c>. More info in the
+        /// events should be removed or not. Values are tracked per MIDI output port, channel, and controller,
+        /// and invalidated by Reset All Controllers. Parameter selection, data entry, data increment/decrement,
+        /// and channel-mode messages are preserved. The default value is <c>true</c>. More info in the
         /// <see href="xref:a_sanitizer#removeduplicatedcontrolchangeevents">Sanitizer: RemoveDuplicatedControlChangeEvents</see> article.
         /// </summary>
         public bool RemoveDuplicatedControlChangeEvents { get; set; } = true;
 
         /// <summary>
         /// Gets or sets a value indicating whether events on unused channels should be removed or not.
-        /// Unused channel means there are no notes on this channel. The default value is <c>true</c>.
+        /// Unused channel means there are no notes on this channel at its MIDI output port.
+        /// The default value is <c>true</c>.
         /// More info in the <see href="xref:a_sanitizer#removeeventsonunusedchannels">Sanitizer: RemoveEventsOnUnusedChannels</see> article.
         /// </summary>
         public bool RemoveEventsOnUnusedChannels { get; set; } = true;
