@@ -142,6 +142,7 @@ namespace Melanchall.DryWetMidi.Tools
             var notesArray = notes.ToArray();
             var result = (Note)notesArray.First().Clone();
 
+            result.Time = notesArray.Min(note => note.Time);
             result.Length = notesArray.Max(note => note.EndTime) - result.Time;
             result.Velocity = MergeVelocities(notesArray.Select(note => note.Velocity), settings.VelocityMergingPolicy);
             result.OffVelocity = MergeVelocities(notesArray.Select(note => note.OffVelocity), settings.OffVelocityMergingPolicy);

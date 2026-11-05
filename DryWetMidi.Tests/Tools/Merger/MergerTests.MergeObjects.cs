@@ -431,6 +431,55 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         }
 
         [Test]
+        public void MergeObjects_Objects_ChordsWithDuplicateNotesAndDifferentPitches() => MergeObjects_Objects(
+            timedObjects: new ITimedObject[]
+            {
+                new Chord(
+                    new Note((SevenBitNumber)60, 10, 0),
+                    new Note((SevenBitNumber)60, 10, 0),
+                    new Note((SevenBitNumber)64, 10, 0),
+                    new Note((SevenBitNumber)64, 10, 0)),
+                new Chord(
+                    new Note((SevenBitNumber)62, 10, 5),
+                    new Note((SevenBitNumber)62, 10, 5),
+                    new Note((SevenBitNumber)62, 10, 5),
+                    new Note((SevenBitNumber)62, 10, 5)),
+            },
+            settings: null,
+            expectedObjects: new ITimedObject[]
+            {
+                new Chord(
+                    new Note((SevenBitNumber)60, 10, 0),
+                    new Note((SevenBitNumber)60, 10, 0),
+                    new Note((SevenBitNumber)64, 10, 0),
+                    new Note((SevenBitNumber)64, 10, 0)),
+                new Chord(
+                    new Note((SevenBitNumber)62, 10, 5),
+                    new Note((SevenBitNumber)62, 10, 5),
+                    new Note((SevenBitNumber)62, 10, 5),
+                    new Note((SevenBitNumber)62, 10, 5)),
+            });
+
+        [Test]
+        public void MergeObjects_Objects_ArpeggiatedChordsWithReorderedNotes() => MergeObjects_Objects(
+            timedObjects: new ITimedObject[]
+            {
+                new Chord(
+                    new Note((SevenBitNumber)60, 20, 0),
+                    new Note((SevenBitNumber)64, 10, 10)),
+                new Chord(
+                    new Note((SevenBitNumber)64, 10, 5),
+                    new Note((SevenBitNumber)60, 10, 5)),
+            },
+            settings: null,
+            expectedObjects: new ITimedObject[]
+            {
+                new Chord(
+                    new Note((SevenBitNumber)60, 20, 0),
+                    new Note((SevenBitNumber)64, 15, 5)),
+            });
+
+        [Test]
         public void MergeObjects_TrackChunkOrFile_ChordsWithReorderedNotes() => MergeObjects_TrackChunkOrFile(
             timedObjects: new ITimedObject[]
             {
