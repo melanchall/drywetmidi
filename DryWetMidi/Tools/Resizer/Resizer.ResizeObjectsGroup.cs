@@ -107,7 +107,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// </item>
         /// </list>
         /// </exception>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="ratio"/> is negative.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="ratio"/> is negative or not finite.</exception>
         /// <exception cref="ArgumentException"><see cref="TimeSpanType.BarBeatTicks"/> or <see cref="TimeSpanType.BarBeatFraction"/>
         /// is used for <see cref="ObjectsGroupResizingSettings.DistanceCalculationType"/> of the <paramref name="settings"/>
         /// which is unsupported.</exception>
@@ -119,6 +119,7 @@ namespace Melanchall.DryWetMidi.Tools
         {
             ThrowIfArgument.IsNull(nameof(objects), objects);
             ThrowIfArgument.IsNegative(nameof(ratio), ratio, "Ratio is negative");
+            ThrowIfArgument.IsNotFinite(nameof(ratio), ratio, "Ratio is not finite");
             ThrowIfArgument.IsNull(nameof(tempoMap), tempoMap);
 
             settings = settings ?? new ObjectsGroupResizingSettings();

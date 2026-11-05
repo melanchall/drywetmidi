@@ -61,11 +61,12 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="trackChunk"><see cref="TrackChunk"/> to resize.</param>
         /// <param name="ratio">Ratio to resize <paramref name="trackChunk"/> by.</param>
         /// <exception cref="ArgumentNullException"><paramref name="trackChunk"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="ratio"/> is negative.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="ratio"/> is negative or not finite.</exception>
         public static void Resize(this TrackChunk trackChunk, double ratio)
         {
             ThrowIfArgument.IsNull(nameof(trackChunk), trackChunk);
             ThrowIfArgument.IsNegative(nameof(ratio), ratio, "Ratio is negative.");
+            ThrowIfArgument.IsNotFinite(nameof(ratio), ratio, "Ratio is not finite.");
 
             trackChunk.ProcessTimedEvents(timedEvent => timedEvent.Time = MathUtilities.RoundToLong(timedEvent.Time * ratio));
         }
@@ -116,11 +117,12 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="trackChunks">Collection of <see cref="TrackChunk"/> to resize.</param>
         /// <param name="ratio">Ratio to resize <paramref name="trackChunks"/> by.</param>
         /// <exception cref="ArgumentNullException"><paramref name="trackChunks"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="ratio"/> is negative.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="ratio"/> is negative or not finite.</exception>
         public static void Resize(this IEnumerable<TrackChunk?> trackChunks, double ratio)
         {
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
             ThrowIfArgument.IsNegative(nameof(ratio), ratio, "Ratio is negative.");
+            ThrowIfArgument.IsNotFinite(nameof(ratio), ratio, "Ratio is not finite.");
 
             foreach (var trackChunk in trackChunks.OfType<TrackChunk>())
             {
@@ -161,11 +163,12 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="midiFile"><see cref="MidiFile"/> to resize.</param>
         /// <param name="ratio">Ratio to resize <paramref name="midiFile"/> by.</param>
         /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="ratio"/> is negative.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="ratio"/> is negative or not finite.</exception>
         public static void Resize(this MidiFile midiFile, double ratio)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
             ThrowIfArgument.IsNegative(nameof(ratio), ratio, "Ratio is negative.");
+            ThrowIfArgument.IsNotFinite(nameof(ratio), ratio, "Ratio is not finite.");
 
             midiFile.GetTrackChunks().Resize(ratio);
         }
