@@ -240,10 +240,16 @@ namespace
         if (programFilesPathSize > 0 && programFilesPathSize < ARRAYSIZE(programFilesPath))
         {
             const auto installedToolsCandidate =
-                CombinePath(std::wstring(programFilesPath) + L"\\Windows MIDI Services\\Tools\\Console", L"Windows.Devices.Midi2.dll");
+                CombinePath(std::wstring(programFilesPath) + L"\\Windows MIDI Services\\Tools", L"Windows.Devices.Midi2.dll");
 
             if (std::find(candidates.cbegin(), candidates.cend(), installedToolsCandidate) == candidates.cend())
                 candidates.push_back(installedToolsCandidate);
+
+            const auto installedConsoleCandidate =
+                CombinePath(std::wstring(programFilesPath) + L"\\Windows MIDI Services\\Tools\\Console", L"Windows.Devices.Midi2.dll");
+
+            if (std::find(candidates.cbegin(), candidates.cend(), installedConsoleCandidate) == candidates.cend())
+                candidates.push_back(installedConsoleCandidate);
         }
 
         return candidates;
