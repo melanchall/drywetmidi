@@ -114,9 +114,14 @@ async coverage. Verify output, state changes, settings, and failure behavior,
 not just task completion. Do not add async calls for APIs without an async
 counterpart.
 
-Prefer NUnit Values for independent parameter values; use TestCase when values
-are correlated cases that must stay together. Use ClassicAssert when an
-equivalent assertion exists. Give every assertion an informative failure message.
+For independent parameter values, use `[Test]` with NUnit `[Values(...)]` on
+the parameter; do not use `[TestCase]` to enumerate independent values. Use
+`[TestCase]` only when the values in each case are correlated and must stay
+together.
+
+Use `ClassicAssert` whenever it provides an equivalent assertion; use other
+assertion APIs only when `ClassicAssert` has no equivalent. Give every assertion
+an informative failure message.
 Use MidiAsserts for MIDI equality instead of manual comparisons or calling
 Equals, except when Equals itself is the behavior under test.
 Name tests after the scenario they exercise; do not use generic terms such as

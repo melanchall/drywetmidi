@@ -28,6 +28,12 @@ namespace Melanchall.DryWetMidi.Common
                 throw new ArgumentException($"'{invalidValue}' is the prohibted value for this parameter.", parameterName);
         }
 
+        internal static void IsProhibitedChar(string parameterName, char argument, params char[] prohibitedChars)
+        {
+            if (prohibitedChars.Contains(argument))
+                throw new ArgumentException($"'{argument}' is a prohibited character for this parameter.", parameterName);
+        }
+
         internal static void IsNull(string parameterName, object? argument)
         {
             if (argument == null)

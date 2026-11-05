@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -44,6 +45,52 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
             Assert.ThrowsAsync<InvalidOperationException>(async () =>
                 await Source().SerializeToCsvAsync(output, TempoMap.Default).WaitAsync(TimeSpan.FromSeconds(10)), "CSV source failure did not propagate without deadlock.");
+        }
+
+        [TestCase('"')]
+        [TestCase('\r')]
+        [TestCase('\n')]
+        public void Serialize_Settings_Delimiter_ProhibitedCharacter(char delimiter)
+        {
+            var settings = new CsvSerializationSettings();
+
+            Assert.Throws<ArgumentException>(() => settings.Delimiter = delimiter, "CSV serialization accepted a prohibited delimiter.");
+        }
+
+        [Test]
+        public async Task Serialize_UsesRfc4180RecordSeparators()
+        {
+            var file = new MidiFile(new TrackChunk(new TextEvent("A"), new TextEvent("B")));
+            using var syncOutput = new MemoryStream();
+            using var asyncOutput = new MemoryStream();
+            using var syncObjectsOutput = new MemoryStream();
+            using var asyncObjectsOutput = new MemoryStream();
+
+            var objects = new ITimedObject[]
+            {
+                new TimedEvent(new TextEvent("A")),
+                new TimedEvent(new TextEvent("B"), 10)
+            };
+
+            file.SerializeToCsv(syncOutput);
+            await file.SerializeToCsvAsync(asyncOutput);
+            objects.SerializeToCsv(syncObjectsOutput, TempoMap.Default);
+            await objects.SerializeToCsvAsync(asyncObjectsOutput, TempoMap.Default);
+
+            var syncCsv = Encoding.UTF8.GetString(syncOutput.ToArray());
+            var asyncCsv = Encoding.UTF8.GetString(asyncOutput.ToArray());
+            var syncObjectsCsv = Encoding.UTF8.GetString(syncObjectsOutput.ToArray());
+            var asyncObjectsCsv = Encoding.UTF8.GetString(asyncObjectsOutput.ToArray());
+
+            ClassicAssert.AreEqual(syncCsv, asyncCsv, "Synchronous and asynchronous CSV line endings differ.");
+            ClassicAssert.AreEqual(syncObjectsCsv, asyncObjectsCsv, "Synchronous and asynchronous CSV object line endings differ.");
+
+            foreach (var csv in new[] { syncCsv, syncObjectsCsv })
+            {
+                ClassicAssert.IsTrue(csv.Contains("\r\n"), "CSV records are not separated by CRLF.");
+                ClassicAssert.IsFalse(csv.Replace("\r\n", string.Empty).Contains('\n'), "CSV output contains a bare LF line ending.");
+                ClassicAssert.IsFalse(csv.Replace("\r\n", string.Empty).Contains('\r'), "CSV output contains a bare CR line ending.");
+            }
         }
 
         [Test]

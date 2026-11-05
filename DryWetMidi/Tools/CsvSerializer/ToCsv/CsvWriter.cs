@@ -12,6 +12,8 @@ namespace Melanchall.DryWetMidi.Tools
     {
         #region Fields
 
+        private const string RecordSeparator = "\r\n";
+
         private readonly StreamWriter? _streamWriter;
         private readonly List<string>? _records;
         private readonly Encoding _asyncEncoding = new UTF8Encoding(false, true);
@@ -28,6 +30,7 @@ namespace Melanchall.DryWetMidi.Tools
         public CsvWriter(Stream stream, CsvSerializationSettings settings)
         {
             _streamWriter = new StreamWriter(stream, new UTF8Encoding(false, true), settings.BufferSize, true);
+            _streamWriter.NewLine = RecordSeparator;
             _delimiterString = settings.Delimiter.ToString();
             _byteFormatter = GetByteFormatter(settings.BytesArrayFormat);
             _bytesArrayDelimiter = settings.BytesArrayDelimiter.ToString();
@@ -60,7 +63,7 @@ namespace Melanchall.DryWetMidi.Tools
             foreach (var record in _records!)
             {
                 cancellationToken.ThrowIfCancellationRequested();
-                var bytes = _asyncEncoding.GetBytes(record + Environment.NewLine);
+                var bytes = _asyncEncoding.GetBytes(record + RecordSeparator);
                 await stream.WriteAsync(bytes, 0, bytes.Length, cancellationToken).ConfigureAwait(false);
             }
 

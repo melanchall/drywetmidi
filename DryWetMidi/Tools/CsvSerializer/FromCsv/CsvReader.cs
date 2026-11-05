@@ -241,17 +241,36 @@ namespace Melanchall.DryWetMidi.Tools
 
         private static string CreateValue(string input, int startIndex, int endIndex)
         {
-            while (startIndex < endIndex && char.IsWhiteSpace(input[startIndex]))
-                startIndex++;
+            var valueStartIndex = startIndex;
+            var valueEndIndex = endIndex;
 
-            while (endIndex > startIndex && char.IsWhiteSpace(input[endIndex - 1]))
-                endIndex--;
+            if (valueEndIndex == input.Length)
+            {
+                while (valueEndIndex > valueStartIndex &&
+                       (input[valueEndIndex - 1] == '\r' || input[valueEndIndex - 1] == '\n'))
+                {
+                    valueEndIndex--;
+                }
+            }
 
-            if (endIndex - startIndex <= 1 || input[startIndex] != Quote || input[endIndex - 1] != Quote)
-                return input.AsSpan(startIndex, endIndex - startIndex).ToString();
+            var trimmedStartIndex = valueStartIndex;
+            var trimmedEndIndex = valueEndIndex;
 
-            startIndex++;
-            endIndex--;
+            while (trimmedStartIndex < trimmedEndIndex && char.IsWhiteSpace(input[trimmedStartIndex]))
+                trimmedStartIndex++;
+
+            while (trimmedEndIndex > trimmedStartIndex && char.IsWhiteSpace(input[trimmedEndIndex - 1]))
+                trimmedEndIndex--;
+
+            if (trimmedEndIndex - trimmedStartIndex <= 1 ||
+                input[trimmedStartIndex] != Quote ||
+                input[trimmedEndIndex - 1] != Quote)
+            {
+                return input.AsSpan(valueStartIndex, valueEndIndex - valueStartIndex).ToString();
+            }
+
+            startIndex = trimmedStartIndex + 1;
+            endIndex = trimmedEndIndex - 1;
 
             var escapedQuotesCount = 0;
             for (var i = startIndex; i < endIndex; i++)
