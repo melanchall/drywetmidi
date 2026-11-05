@@ -6,7 +6,6 @@ using Melanchall.DryWetMidi.Tools;
 using NUnit.Framework;
 using NUnit.Framework.Legacy;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -95,31 +94,6 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 A.GetHashCode();
 
             #endregion
-        }
-
-        private sealed class SinglePassEnumerable<T> : IEnumerable<T>
-        {
-            private readonly T[] _items;
-            private bool _enumerated;
-
-            public SinglePassEnumerable(params T[] items)
-            {
-                _items = items;
-            }
-
-            public IEnumerator<T> GetEnumerator()
-            {
-                if (_enumerated)
-                    throw new InvalidOperationException("The sequence can only be enumerated once.");
-
-                _enumerated = true;
-                return ((IEnumerable<T>)_items).GetEnumerator();
-            }
-
-            IEnumerator IEnumerable.GetEnumerator()
-            {
-                return GetEnumerator();
-            }
         }
 
         #endregion

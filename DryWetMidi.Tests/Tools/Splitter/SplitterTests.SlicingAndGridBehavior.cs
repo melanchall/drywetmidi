@@ -361,12 +361,12 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         [Test]
         public void SplitObjectsByGrid_EnumeratesInputsOnceAndPreservesInputOrder()
         {
-            var objects = new SinglePassSequence<ITimedObject>(new ITimedObject[]
+            var objects = new SinglePassEnumerable<ITimedObject>(new ITimedObject[]
             {
                 new Note((SevenBitNumber)60, 100, 100),
                 new Note((SevenBitNumber)64, 100, 0)
             });
-            var times = new SinglePassSequence<long>(new long[] { 50, 150, 250 });
+            var times = new SinglePassEnumerable<long>(new long[] { 50, 150, 250 });
 
             var result = objects.SplitObjectsByGrid(new RegressionGrid(times), TempoMap.Default).ToArray();
 
