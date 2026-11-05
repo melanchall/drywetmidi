@@ -83,6 +83,9 @@ namespace Melanchall.DryWetMidi.Tools
             settings = settings ?? new RepeatingSettings();
 
             var timedEventsCollections = trackChunks.OfType<TrackChunk>().Select(trackChunk => trackChunk.GetTimedEvents()).ToArray();
+            if (timedEventsCollections.Length == 0)
+                return Array.Empty<TrackChunk>();
+
             var maxTime = timedEventsCollections.Max(events => events.LastOrDefault()?.Time ?? 0);
 
             var shift = CalculateShift(maxTime, tempoMap, settings);
@@ -168,10 +171,11 @@ namespace Melanchall.DryWetMidi.Tools
 
             settings = settings ?? new RepeatingSettings();
 
-            var maxTime = timedObjects.Select(obj => (obj?.Time ?? 0) + ((obj as ILengthedObject)?.Length ?? 0)).DefaultIfEmpty(0).Max();
+            var source = timedObjects.OfType<ITimedObject>().ToArray();
+            var maxTime = source.Select(obj => obj.Time + ((obj as ILengthedObject)?.Length ?? 0)).DefaultIfEmpty(0).Max();
             var shift = CalculateShift(maxTime, tempoMap, settings);
 
-            return Repeat(timedObjects, shift, repeatsNumber, tempoMap, settings);
+            return Repeat(source, shift, repeatsNumber, tempoMap, settings);
         }
 
         /// <summary>
@@ -217,11 +221,14 @@ namespace Melanchall.DryWetMidi.Tools
             settings = settings ?? new RepeatingSettings();
 
             var source = timedObjects.OfType<ITimedObject>().Select(obj => obj.Clone()).ToArray();
+            if (source.Length == 0)
+                return Array.Empty<ITimedObject>();
+
             var result = new List<ITimedObject>(source);
 
-            for (var i = 1; i <= repeatsNumber; i++)
+            for (var partIndex = 0; partIndex < repeatsNumber; partIndex++)
             {
-                var part = GetPart(source, shift, i - 1, tempoMap, settings);
+                var part = GetPart(source, shift, partIndex, tempoMap, settings);
                 result.AddRange(part);
             }
 
