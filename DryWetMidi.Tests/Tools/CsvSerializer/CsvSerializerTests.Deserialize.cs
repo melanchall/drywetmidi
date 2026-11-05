@@ -514,6 +514,16 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                     new TextEvent("B") { DeltaTime = TicksPerQuarterNoteTimeDivision.DefaultTicksPerQuarterNote },
                     new NormalSysExEvent(new byte[] { 9, 10, 15, 255 }))));
 
+        [TestCase('"')]
+        [TestCase('\r')]
+        [TestCase('\n')]
+        public void Deserialize_Settings_Delimiter_ProhibitedCharacter(char delimiter)
+        {
+            var settings = new CsvDeserializationSettings();
+
+            Assert.Throws<ArgumentException>(() => settings.Delimiter = delimiter, "CSV deserialization accepted a prohibited delimiter.");
+        }
+
         [Test]
         public void Deserialize_File_BytesArrayFormat() => DeserializeFileAndChunksAndSeparateChunks(
             csvLines: new[]
@@ -598,6 +608,30 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                     new TextEvent($"B{Environment.NewLine}bb\"in quotes\""),
                     new TextEvent("C"))),
             checkSeparateChunks: false);
+
+        [Test]
+        public void Deserialize_File_UnquotedTextPreservesSurroundingWhitespace() =>
+            DeserializeFileAndChunksAndSeparateChunks(
+                csvLines: new[]
+                {
+                    $"0,\"MThd\",0,\"Header\",{TicksPerQuarterNoteTimeDivision.DefaultTicksPerQuarterNote}",
+                    "1,\"MTrk\",0,\"Text\",0,  A  ",
+                },
+                settings: null,
+                expectedMidiFile: new MidiFile(new TrackChunk(new TextEvent("  A  "))));
+
+        [Test]
+        public void Deserialize_Objects_UnquotedTextPreservesSurroundingWhitespace() =>
+            DeserializeObjects(
+                csvLines: new[]
+                {
+                    "0,\"Text\",0,  A  ",
+                },
+                settings: null,
+                expectedObjects: new ITimedObject[]
+                {
+                    new TimedEvent(new TextEvent("  A  "))
+                });
 
         [Test]
         public void Deserialize_File_DelimiterInString() => DeserializeFileAndChunksAndSeparateChunks(

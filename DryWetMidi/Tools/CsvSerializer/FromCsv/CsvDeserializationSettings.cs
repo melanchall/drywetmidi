@@ -20,6 +20,8 @@ namespace Melanchall.DryWetMidi.Tools
         private CsvBytesArrayFormat _bytesArrayFormat = CsvBytesArrayFormat.Decimal;
         private UnknownRecordPolicy _unknownRecordPolicy = UnknownRecordPolicy.Abort;
 
+        private char _delimiter = ',';
+
         private int _bufferSize = 1024;
 
         #endregion
@@ -123,7 +125,17 @@ namespace Melanchall.DryWetMidi.Tools
         /// Gets or sets the character used as the values delimiter in CSV records. The default value
         /// is comma (<c>','</c>).
         /// </summary>
-        public char Delimiter { get; set; } = ',';
+        /// <exception cref="ArgumentException"><paramref name="value"/> is a quotation mark, carriage return, or line feed.</exception>
+        public char Delimiter
+        {
+            get { return _delimiter; }
+            set
+            {
+                ThrowIfArgument.IsProhibitedChar(nameof(value), value, '"', '\r', '\n');
+
+                _delimiter = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the size in bytes of the internal buffer for reading data within
