@@ -129,7 +129,7 @@ jobs:
         run: |
           $path = Resolve-Path 'Resources/PackageIntegrationTestUtilities/DwmNetConsoleApp/DwmNetConsoleApp/DwmNetConsoleApp.csproj'
           if ("${{ matrix.os }}" -eq "windows-11-arm") {
-            dotnet run --project "$path" --configuration ${{ vars.BUILD_CONFIGURATION }} -p:None="${{ runner.temp }}\Windows.Devices.Midi2.dll" -p:None="${{ runner.temp }}\Windows.Devices.Midi2.pri" -p:CopyToOutputDirectory=Always
+            dotnet run --project "$path" --configuration ${{ vars.BUILD_CONFIGURATION }} -p:WmsBinariesLocation="${{ runner.temp }}"
           }
           else {
             dotnet run --project "$path" --configuration ${{ vars.BUILD_CONFIGURATION }}
