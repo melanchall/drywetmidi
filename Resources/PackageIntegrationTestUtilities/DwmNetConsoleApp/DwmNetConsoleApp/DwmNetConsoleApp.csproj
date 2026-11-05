@@ -5,15 +5,4 @@
     <TargetFramework>net10.0</TargetFramework>
   </PropertyGroup>
 
-  <ItemGroup Condition="'$(WmsBinariesLocation)' != ''">
-    <None Include="$(WmsBinariesLocation)\Windows.Devices.Midi2.dll">
-      <Link>Windows.Devices.Midi2.dll</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="$(WmsBinariesLocation)\Windows.Devices.Midi2.pri">
-      <Link>Windows.Devices.Midi2.pri</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
 </Project>
