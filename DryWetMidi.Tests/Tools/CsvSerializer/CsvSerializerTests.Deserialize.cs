@@ -514,14 +514,12 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                     new TextEvent("B") { DeltaTime = TicksPerQuarterNoteTimeDivision.DefaultTicksPerQuarterNote },
                     new NormalSysExEvent(new byte[] { 9, 10, 15, 255 }))));
 
-        [TestCase('"')]
-        [TestCase('\r')]
-        [TestCase('\n')]
-        public void Deserialize_Settings_Delimiter_ProhibitedCharacter(char delimiter)
+        [Test]
+        public void Deserialize_Settings_Delimiter_ProhibitedCharacter([Values('"', '\r', '\n')] char delimiter)
         {
             var settings = new CsvDeserializationSettings();
 
-            Assert.Throws<ArgumentException>(() => settings.Delimiter = delimiter, "CSV deserialization accepted a prohibited delimiter.");
+            ClassicAssert.Throws<ArgumentException>(() => settings.Delimiter = delimiter, "CSV deserialization accepted a prohibited delimiter.");
         }
 
         [Test]
