@@ -107,6 +107,24 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             expectedMidiFile: null));
 
         [Test]
+        public void MergeSequentially_SinglePassEnumerable()
+        {
+            var midiFiles = new SinglePassEnumerable<MidiFile>(
+                new MidiFile(new TrackChunk(new TextEvent("A"))),
+                new MidiFile(new TrackChunk(new TextEvent("B"))));
+
+            var result = midiFiles.MergeSequentially();
+
+            MidiAsserts.AreEqual(
+                new MidiFile(
+                    new TrackChunk(new TextEvent("A")),
+                    new TrackChunk(new TextEvent("B"))),
+                result,
+                false,
+                "Single-pass input should be merged successfully.");
+        }
+
+        [Test]
         public void MergeSequentially_EmptyFiles() => MergeSequentially(
             midiFiles: new[]
             {

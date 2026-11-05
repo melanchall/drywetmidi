@@ -90,28 +90,6 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             public IEnumerable<long> GetTimes(TempoMap tempoMap) => _times;
         }
 
-        private sealed class SinglePassSequence<T> : IEnumerable<T>
-        {
-            private readonly IEnumerable<T> _items;
-            private bool _enumerated;
-
-            public SinglePassSequence(IEnumerable<T> items)
-            {
-                _items = items;
-            }
-
-            public IEnumerator<T> GetEnumerator()
-            {
-                if (_enumerated)
-                    throw new InvalidOperationException("The sequence was enumerated more than once.");
-
-                _enumerated = true;
-                return _items.GetEnumerator();
-            }
-
-            IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
-        }
-
         #endregion
 
         #region Constants

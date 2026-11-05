@@ -112,29 +112,40 @@ namespace Melanchall.DryWetMidi.Tools
         private Rest MergeRests()
         {
             var result = (Rest)_objects.First().Clone();
-            var lastRest = _objects.Last();
+            var lastRestEndTime = _objects.Max(obj => obj.EndTime);
             
-            result.Length = lastRest.EndTime - result.Time;
+            result.Length = lastRestEndTime - result.Time;
             return result;
         }
 
         private Chord MergeChords(ObjectsMergingSettings settings)
         {
-            var notesCount = ((Chord)_objects.First()).Notes.Count;
+            var firstChordNotes = ((Chord)_objects.First()).Notes.ToArray();
+            var chordNotesById = _objects
+                .Cast<Chord>()
+                .Select(chord => chord.Notes
+                    .GroupBy(note => note.GetObjectId())
+                    .ToDictionary(group => group.Key, group => new Queue<Note>(group)))
+                .ToArray();
 
-            return new Chord(Enumerable
-                .Range(0, notesCount)
-                .Select(i => MergeNotes(_objects.Select(o => ((Chord)o).Notes.ElementAt(i)), settings)));
+            return new Chord(firstChordNotes.Select(note =>
+            {
+                var objectId = note.GetObjectId();
+                return MergeNotes(
+                    chordNotesById.Select(notesById => notesById[objectId].Dequeue()),
+                    settings);
+            }));
         }
 
         private static Note MergeNotes(IEnumerable<Note> notes, ObjectsMergingSettings settings)
         {
-            var result = (Note)notes.First().Clone();
-            var lastNote = notes.Last();
+            var notesArray = notes.ToArray();
+            var result = (Note)notesArray.First().Clone();
 
-            result.Length = lastNote.EndTime - result.Time;
-            result.Velocity = MergeVelocities(notes.Select(n => n.Velocity), settings.VelocityMergingPolicy);
-            result.OffVelocity = MergeVelocities(notes.Select(n => n.OffVelocity), settings.OffVelocityMergingPolicy);
+            result.Time = notesArray.Min(note => note.Time);
+            result.Length = notesArray.Max(note => note.EndTime) - result.Time;
+            result.Velocity = MergeVelocities(notesArray.Select(note => note.Velocity), settings.VelocityMergingPolicy);
+            result.OffVelocity = MergeVelocities(notesArray.Select(note => note.OffVelocity), settings.OffVelocityMergingPolicy);
 
             return result;
         }

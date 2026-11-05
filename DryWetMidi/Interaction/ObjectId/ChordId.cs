@@ -35,21 +35,28 @@ namespace Melanchall.DryWetMidi.Interaction
             if (length != chordId.NotesIds.Length)
                 return false;
 
-            var set = new HashSet<NoteId>();
+            var notesIdsCounts = new Dictionary<NoteId, int>();
 
             for (var i = 0; i < length; i++)
             {
-                var x = NotesIds[i];
-                var y = chordId.NotesIds[i];
-
-                if (!set.Add(x))
-                    set.Remove(x);
-
-                if (!set.Add(y))
-                    set.Remove(y);
+                var noteId = NotesIds[i];
+                notesIdsCounts.TryGetValue(noteId, out var count);
+                notesIdsCounts[noteId] = count + 1;
             }
 
-            return !set.Any();
+            for (var i = 0; i < length; i++)
+            {
+                var noteId = chordId.NotesIds[i];
+                if (!notesIdsCounts.TryGetValue(noteId, out var count))
+                    return false;
+
+                if (count == 1)
+                    notesIdsCounts.Remove(noteId);
+                else
+                    notesIdsCounts[noteId] = count - 1;
+            }
+
+            return notesIdsCounts.Count == 0;
         }
 
         public override int GetHashCode()

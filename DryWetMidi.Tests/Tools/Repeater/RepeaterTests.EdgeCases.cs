@@ -1,10 +1,9 @@
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
+using Melanchall.DryWetMidi.Tests.Utilities;
 using Melanchall.DryWetMidi.Tools;
 using NUnit.Framework;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace Melanchall.DryWetMidi.Tests.Tools
@@ -12,36 +11,6 @@ namespace Melanchall.DryWetMidi.Tests.Tools
     [TestFixture]
     public sealed partial class RepeaterTests
     {
-        #region Nested classes
-
-        private sealed class SinglePassEnumerable<T> : IEnumerable<T>
-        {
-            private readonly IEnumerable<T> _items;
-
-            public SinglePassEnumerable(IEnumerable<T> items)
-            {
-                _items = items;
-            }
-
-            public int EnumerationCount { get; private set; }
-
-            public IEnumerator<T> GetEnumerator()
-            {
-                EnumerationCount++;
-                if (EnumerationCount > 1)
-                    throw new InvalidOperationException("The collection can only be enumerated once.");
-
-                return _items.GetEnumerator();
-            }
-
-            IEnumerator IEnumerable.GetEnumerator()
-            {
-                return GetEnumerator();
-            }
-        }
-
-        #endregion
-
         #region Test methods
 
         [Test]
@@ -102,7 +71,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
             var actualObjects = new Repeater().Repeat(timedObjects, 1, TempoMap.Default);
 
-            Assert.That(timedObjects.EnumerationCount, Is.EqualTo(1), "The source collection should be enumerated once.");
+            Assert.That(timedObjects.EnumerationsCount, Is.EqualTo(1), "The source collection should be enumerated once.");
             Assert.That(actualObjects, Has.Count.EqualTo(2), "The repeated collection should contain the original and one repeated object.");
         }
 
@@ -114,7 +83,7 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
             var actualObjects = timedObjects.Repeat(1, TempoMap.Default);
 
-            Assert.That(timedObjects.EnumerationCount, Is.EqualTo(1), "The source collection should be enumerated once.");
+            Assert.That(timedObjects.EnumerationsCount, Is.EqualTo(1), "The source collection should be enumerated once.");
             Assert.That(actualObjects, Has.Count.EqualTo(2), "The repeated collection should contain the original and one repeated object.");
         }
 
