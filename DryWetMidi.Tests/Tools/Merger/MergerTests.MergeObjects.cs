@@ -4,6 +4,7 @@ using Melanchall.DryWetMidi.Interaction;
 using Melanchall.DryWetMidi.Tests.Utilities;
 using Melanchall.DryWetMidi.Tools;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -377,6 +378,101 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             {
                 new Rest(10, 60, (0, (SevenBitNumber)70)),
                 new Rest(300, 40, ((FourBitNumber)2, 0)),
+            });
+
+        [Test]
+        public void MergeObjects_Objects_OverlappingNotes()
+        {
+            var actualNote = (Note)new ITimedObject[]
+            {
+                new Note((SevenBitNumber)60, 20, 0),
+                new Note((SevenBitNumber)60, 5, 10)
+            }.MergeObjects(TempoMap.Default).Single();
+
+            ClassicAssert.AreEqual(20, actualNote.Length, "Merged note should cover the full extent of both input notes.");
+        }
+
+        [Test]
+        public void MergeObjects_Objects_OverlappingRests()
+        {
+            var actualRest = (Rest)new ITimedObject[]
+            {
+                new Rest(0, 20, ((FourBitNumber)0, 60)),
+                new Rest(10, 5, ((FourBitNumber)0, 60))
+            }.MergeObjects(TempoMap.Default).Single();
+
+            ClassicAssert.AreEqual(20, actualRest.Length, "Merged rest should cover the full extent of both input rests.");
+        }
+
+        [Test]
+        public void MergeObjects_Objects_ChordsWithReorderedNotes()
+        {
+            var firstChord = new Chord(
+                new Note((SevenBitNumber)60, 10, 0) { Velocity = (SevenBitNumber)10 },
+                new Note((SevenBitNumber)64, 10, 0) { Velocity = (SevenBitNumber)20 });
+            var secondChord = new Chord(
+                new Note((SevenBitNumber)64, 10, 5) { Velocity = (SevenBitNumber)80 },
+                new Note((SevenBitNumber)60, 10, 5) { Velocity = (SevenBitNumber)90 });
+
+            var actualChord = (Chord)new ITimedObject[] { firstChord, secondChord }
+                .MergeObjects(TempoMap.Default, new ObjectsMergingSettings
+                {
+                    VelocityMergingPolicy = VelocityMergingPolicy.Last
+                }).Single();
+
+            ClassicAssert.AreEqual(
+                (SevenBitNumber)90,
+                actualChord.Notes.Single(note => note.NoteNumber == (SevenBitNumber)60).Velocity,
+                "Pitch 60 should keep the velocity of pitch 60 from the last chord.");
+            ClassicAssert.AreEqual(
+                (SevenBitNumber)80,
+                actualChord.Notes.Single(note => note.NoteNumber == (SevenBitNumber)64).Velocity,
+                "Pitch 64 should keep the velocity of pitch 64 from the last chord.");
+        }
+
+        [Test]
+        public void MergeObjects_TrackChunkOrFile_ChordsWithReorderedNotes() => MergeObjects_TrackChunkOrFile(
+            timedObjects: new ITimedObject[]
+            {
+                new Chord(
+                    new Note((SevenBitNumber)60, 10, 0) { Velocity = (SevenBitNumber)10 },
+                    new Note((SevenBitNumber)64, 10, 0) { Velocity = (SevenBitNumber)20 }),
+                new Chord(
+                    new Note((SevenBitNumber)64, 10, 5) { Velocity = (SevenBitNumber)80 },
+                    new Note((SevenBitNumber)60, 10, 5) { Velocity = (SevenBitNumber)90 }),
+            },
+            objectType: ObjectType.Chord,
+            settings: new ObjectsMergingSettings
+            {
+                VelocityMergingPolicy = VelocityMergingPolicy.Last
+            },
+            expectedObjects: new ITimedObject[]
+            {
+                new Chord(
+                    new Note((SevenBitNumber)60, 15, 0) { Velocity = (SevenBitNumber)90 },
+                    new Note((SevenBitNumber)64, 15, 0) { Velocity = (SevenBitNumber)80 }),
+            },
+            objectDetectionSettings: new ObjectDetectionSettings
+            {
+                ChordDetectionSettings = new ChordDetectionSettings
+                {
+                    NotesMinCount = 2,
+                    NotesTolerance = 0
+                }
+            });
+
+        [Test]
+        public void MergeObjects_TrackChunkOrFile_OverlappingNotes() => MergeObjects_TrackChunkOrFile(
+            timedObjects: new ITimedObject[]
+            {
+                new Note((SevenBitNumber)60, 20, 0),
+                new Note((SevenBitNumber)60, 5, 10),
+            },
+            objectType: ObjectType.Note,
+            settings: null,
+            expectedObjects: new ITimedObject[]
+            {
+                new Note((SevenBitNumber)60, 20, 0),
             });
 
         [Test]

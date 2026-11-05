@@ -6,6 +6,7 @@ using Melanchall.DryWetMidi.Tools;
 using NUnit.Framework;
 using NUnit.Framework.Legacy;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -96,6 +97,31 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             #endregion
         }
 
+        private sealed class SinglePassEnumerable<T> : IEnumerable<T>
+        {
+            private readonly T[] _items;
+            private bool _enumerated;
+
+            public SinglePassEnumerable(params T[] items)
+            {
+                _items = items;
+            }
+
+            public IEnumerator<T> GetEnumerator()
+            {
+                if (_enumerated)
+                    throw new InvalidOperationException("The sequence can only be enumerated once.");
+
+                _enumerated = true;
+                return ((IEnumerable<T>)_items).GetEnumerator();
+            }
+
+            IEnumerator IEnumerable.GetEnumerator()
+            {
+                return GetEnumerator();
+            }
+        }
+
         #endregion
 
         #region Test methods
@@ -105,6 +131,24 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             midiFiles: new MidiFile[0],
             settings: null,
             expectedMidiFile: null));
+
+        [Test]
+        public void MergeSequentially_SinglePassEnumerable()
+        {
+            var midiFiles = new SinglePassEnumerable<MidiFile>(
+                new MidiFile(new TrackChunk(new TextEvent("A"))),
+                new MidiFile(new TrackChunk(new TextEvent("B"))));
+
+            var result = midiFiles.MergeSequentially();
+
+            MidiAsserts.AreEqual(
+                new MidiFile(
+                    new TrackChunk(new TextEvent("A")),
+                    new TrackChunk(new TextEvent("B"))),
+                result,
+                false,
+                "Single-pass input should be merged successfully.");
+        }
 
         [Test]
         public void MergeSequentially_EmptyFiles() => MergeSequentially(

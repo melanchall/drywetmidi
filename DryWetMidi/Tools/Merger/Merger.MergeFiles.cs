@@ -84,6 +84,7 @@ namespace Melanchall.DryWetMidi.Tools
             SequentialMergingSettings? settings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFiles), midiFiles);
+            midiFiles = midiFiles.ToArray();
             ThrowIfArgument.ContainsNull(nameof(midiFiles), midiFiles);
             ThrowIfArgument.IsEmptyCollection(nameof(midiFiles), midiFiles, "MIDI files collection is empty.");
 
@@ -182,6 +183,7 @@ namespace Melanchall.DryWetMidi.Tools
             SimultaneousMergingSettings? settings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFiles), midiFiles);
+            midiFiles = midiFiles.ToArray();
             ThrowIfArgument.ContainsNull(nameof(midiFiles), midiFiles);
             ThrowIfArgument.IsEmptyCollection(nameof(midiFiles), midiFiles, "MIDI files collection is empty.");
 
