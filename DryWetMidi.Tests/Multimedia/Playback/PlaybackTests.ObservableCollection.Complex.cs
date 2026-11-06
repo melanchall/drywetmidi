@@ -613,7 +613,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 .SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap)
                 .SetLength(new MetricTimeSpan(0, 0, 0, 100), TempoMap);
 
-            var tempoChange = new TimedEvent(new SetTempoEvent(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 2))
+            var tempoChange = new TimedEvent(new SetTempoEvent(SetTempoEvent.DefaultMicrosecondsPerQuarterNote * 2))
                 .SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap);
 
             CheckPlaybackDataChangesOnTheFly(
@@ -628,8 +628,8 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 },
                 expectedReceivedEvents: new[]
                 {
-                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(250)),
-                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(300)),
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(50)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(100)),
                 },
                 setupPlayback: playback => playback.TrackNotes = true);
         }
