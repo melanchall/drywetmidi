@@ -619,6 +619,14 @@ namespace Melanchall.DryWetMidi.Multimedia
                         _notesMetadata.UpdateMaxUp(node.TreeNode);
                 });
 
+            var notesStartingAtTempoChange = _notesMetadata.GetCoordinatesByKey(tempoChangeTime);
+
+            foreach (var node in notesStartingAtTempoChange)
+            {
+                if (_notesMetadata.UpdateMax(node.TreeNode))
+                    _notesMetadata.UpdateMaxUp(node.TreeNode);
+            }
+
             var intersectedNodes = _notesMetadata.Search(tempoChangeTime);
 
             foreach (var node in intersectedNodes)
