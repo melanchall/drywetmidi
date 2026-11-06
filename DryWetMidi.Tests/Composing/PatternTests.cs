@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using Melanchall.DryWetMidi.Composing;
+using Melanchall.DryWetMidi.Interaction;
 using Melanchall.DryWetMidi.MusicTheory;
 using NUnit.Framework;
 using NUnit.Framework.Legacy;
@@ -46,6 +47,32 @@ namespace Melanchall.DryWetMidi.Tests.Composing
                 ClassicAssert.AreEqual(action.GetType(), actionClone.GetType(), "Action type is invalid.");
                 ClassicAssert.AreNotSame(action, actionClone, "Actions are the same object.");
             }
+        }
+
+        [Test]
+        public void Clone_PreservesNoteActionState([Values(
+            PatternActionState.Enabled,
+            PatternActionState.Disabled,
+            PatternActionState.Excluded)] PatternActionState state)
+        {
+            var pattern = PatternTestUtilities.CreatePatternWithNoteActionState(state);
+
+            var clonedPattern = pattern.Clone();
+
+            PatternTestUtilities.TestActionStateNotes(clonedPattern, state, 1, false);
+        }
+
+        [Test]
+        public void Clone_PreservesChordActionState([Values(
+            PatternActionState.Enabled,
+            PatternActionState.Disabled,
+            PatternActionState.Excluded)] PatternActionState state)
+        {
+            var pattern = PatternTestUtilities.CreatePatternWithChordActionState(state);
+
+            var clonedPattern = pattern.Clone();
+
+            PatternTestUtilities.TestActionStateNotes(clonedPattern, state, 1, true);
         }
 
         #endregion

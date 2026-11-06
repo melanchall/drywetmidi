@@ -43,7 +43,10 @@ namespace Melanchall.DryWetMidi.Composing
 
         public override PatternAction Clone()
         {
-            return new AddNoteAction(new NoteDescriptor(NoteDescriptor.Note, NoteDescriptor.Velocity, NoteDescriptor.Length.Clone()));
+            return new AddNoteAction(new NoteDescriptor(NoteDescriptor.Note, NoteDescriptor.Velocity, NoteDescriptor.Length.Clone()))
+            {
+                State = State
+            };
         }
 
         #endregion

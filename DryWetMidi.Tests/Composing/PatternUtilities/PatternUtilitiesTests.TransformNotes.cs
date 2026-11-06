@@ -34,6 +34,19 @@ namespace Melanchall.DryWetMidi.Tests.Composing
         }
 
         [Test]
+        public void TransformNotes_PreservesNoteActionState([Values(
+            PatternActionState.Enabled,
+            PatternActionState.Disabled,
+            PatternActionState.Excluded)] PatternActionState state)
+        {
+            var pattern = PatternTestUtilities.CreatePatternWithNoteActionState(state);
+
+            var transformedPattern = pattern.TransformNotes(noteDescriptor => noteDescriptor);
+
+            PatternTestUtilities.TestActionStateNotes(transformedPattern, state, 1, false);
+        }
+
+        [Test]
         public void TransformNotes_Changed()
         {
             var noteLength = MusicalTimeSpan.Eighth;
