@@ -41,7 +41,6 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <description><paramref name="denominator"/> is not a power of two.</description>
         /// </item>
         /// </list>
-        /// <para>NaN cannot be specified for these integer parameters.</para>
         /// </exception>
         public TimeSignature(int numerator, int denominator)
         {

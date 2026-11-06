@@ -141,8 +141,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// Gets or sets the size in bytes of the internal buffer for reading data within
         /// the process of CSV deserialization. The default value is <c>1024</c>.
         /// </summary>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="value"/> is zero or negative. NaN cannot be
-        /// specified because <paramref name="value"/> is an integer.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="value"/> is zero or negative.</exception>
         public int BufferSize
         {
             get { return _bufferSize; }

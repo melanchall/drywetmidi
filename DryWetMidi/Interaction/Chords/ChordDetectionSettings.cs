@@ -40,8 +40,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <see href="xref:a_getting_objects#notesmincount">Getting objects: GetChords: Settings: NotesMinCount</see>
         /// article.
         /// </summary>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="value"/> is zero or negative. NaN cannot be
-        /// specified because <paramref name="value"/> is an integer.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="value"/> is zero or negative.</exception>
         public int NotesMinCount
         {
             get { return _notesMinCount; }

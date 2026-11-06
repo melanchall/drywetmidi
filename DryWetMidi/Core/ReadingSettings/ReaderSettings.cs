@@ -27,8 +27,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <summary>
         /// Gets or sets the replay buffer capacity for reading MIDI data from a non-seekable stream.
         /// </summary>
-        /// <exception cref="ArgumentOutOfRangeException">Value is zero or negative. NaN cannot be specified because
-        /// this property is an integer.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Value is zero or negative.</exception>
         /// <remarks>
         /// <para>During reading MIDI data there are cases when reader should move current stream's position back.
         /// If stream doesn't support seeking, it will fail. So for non-seekable stream reading engine
@@ -75,8 +74,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <summary>
         /// Gets or sets size of chunk for incremental reading of MIDI data from non-seekable stream.
         /// </summary>
-        /// <exception cref="ArgumentOutOfRangeException">Value is zero or negative. NaN cannot be specified because
-        /// this property is an integer.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Value is zero or negative.</exception>
         /// <remarks>
         /// <para>This property works in conjunction with <see cref="NonSeekableStreamIncrementalBytesReadingThreshold"/>.</para>
         /// </remarks>
@@ -115,8 +113,7 @@ namespace Melanchall.DryWetMidi.Core
         /// Gets or sets the size of a buffer that will be used by <see cref="MidiReader"/> in case of
         /// <see cref="BufferingPolicy.UseFixedSizeBuffer"/> policy used for <see cref="BufferingPolicy"/>.
         /// </summary>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="value"/> is zero or negative. NaN cannot be
-        /// specified because <paramref name="value"/> is an integer.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="value"/> is zero or negative.</exception>
         public int BufferSize
         {
             get { return _bufferSize; }
@@ -137,8 +134,7 @@ namespace Melanchall.DryWetMidi.Core
         /// <summary>
         /// Gets or sets the maximum length of a bytes packet that will be used by <see cref="MidiTokensReader"/>.
         /// </summary>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="value"/> is zero or negative. NaN cannot be
-        /// specified because <paramref name="value"/> is an integer.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="value"/> is zero or negative.</exception>
         public int BytesPacketMaxLength
         {
             get { return _bytesPacketMaxLength; }
