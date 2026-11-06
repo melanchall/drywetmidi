@@ -266,7 +266,8 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// events twice slower this property should be set to <c>0.5</c>. Value of <c>2</c> will make playback
         /// twice faster.
         /// </summary>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="value"/> is zero or negative.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="value"/> is zero, negative, or
+        /// <see cref="double.NaN"/>.</exception>
         /// <exception cref="ObjectDisposedException">The current <see cref="Playback"/> is disposed.</exception>
         /// <example>
         /// <para>
@@ -292,7 +293,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             get { return _clock.Speed; }
             set
             {
-                ThrowIfArgument.IsNonpositive(nameof(value), value, "Speed is zero or negative.");
+                ThrowIfArgument.IsNonpositive(nameof(value), value, "Speed is zero, negative, or NaN.");
                 EnsureIsNotDisposed();
 
                 _clock.Speed = value;

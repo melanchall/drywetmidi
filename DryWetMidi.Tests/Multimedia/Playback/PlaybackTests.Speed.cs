@@ -59,6 +59,20 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             }
         }
 
+        [Test]
+        public void Speed_NaN()
+        {
+            using (var playback = new Playback(Array.Empty<ITimedObject>(), TempoMap))
+            {
+                var exception = ClassicAssert.Throws<ArgumentOutOfRangeException>(
+                    () => playback.Speed = double.NaN,
+                    "NaN speed should be rejected.");
+
+                ClassicAssert.AreEqual("value", exception!.ParamName, "Invalid parameter name.");
+                ClassicAssert.AreEqual(1.0, playback.Speed, "Speed changed after invalid input.");
+            }
+        }
+
         #endregion
 
         #region Private methods

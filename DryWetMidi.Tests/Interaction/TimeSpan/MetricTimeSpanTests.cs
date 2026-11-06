@@ -936,6 +936,14 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
+        public void Divide_ByPositiveInfinity()
+        {
+            ClassicAssert.Throws<ArgumentOutOfRangeException>(
+                () => new MetricTimeSpan().Divide(double.PositiveInfinity),
+                "Positive infinity should be rejected as a divisor.");
+        }
+
+        [Test]
         [Description("Divide zero time span by one.")]
         public void Divide_6()
         {

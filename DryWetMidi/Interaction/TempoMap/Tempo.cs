@@ -90,13 +90,13 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <returns>An instance of the <see cref="Tempo"/> which represents tempo as specified
         /// number of beats per minute.</returns>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="beatsPerMinute"/>
-        /// is zero or negative.</exception>
+        /// is zero, negative, or <see cref="double.NaN"/>.</exception>
         public static Tempo FromBeatsPerMinute(double beatsPerMinute)
         {
             ThrowIfArgument.IsNonpositive(
                 nameof(beatsPerMinute),
                 beatsPerMinute,
-                "Number of beats per minute is zero or negative.");
+                "Number of beats per minute is zero, negative, or NaN.");
 
             return new Tempo(MathUtilities.RoundToLong(MicrosecondsInMinute / beatsPerMinute));
         }

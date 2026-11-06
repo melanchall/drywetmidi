@@ -675,7 +675,8 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="divisor">Divisor to shrink the time span by.</param>
         /// <returns>Time span that is the current time span shrunk by the <paramref name="divisor"/>.</returns>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="divisor"/> is zero or negative.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="divisor"/> is zero, negative, or
+        /// <see cref="double.NaN"/>.</exception>
         public ITimeSpan Divide(double divisor)
         {
             ThrowIfArgument.IsNonpositive(nameof(divisor), divisor, "Divisor is zero or negative.");

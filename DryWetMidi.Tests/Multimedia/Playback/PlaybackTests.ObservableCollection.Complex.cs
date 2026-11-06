@@ -607,6 +607,35 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
         [TimingCritical]
         [Test]
+        public void CheckPlaybackDataChangesOnTheFly_TempoChangeAtNoteStart_ExtendsTrackedNote()
+        {
+            var note = new Note((SevenBitNumber)70)
+                .SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap)
+                .SetLength(new MetricTimeSpan(0, 0, 0, 100), TempoMap);
+
+            var tempoChange = new TimedEvent(new SetTempoEvent(SetTempoEvent.DefaultMicrosecondsPerQuarterNote * 2))
+                .SetTime(new MetricTimeSpan(0, 0, 0, 100), TempoMap);
+
+            CheckPlaybackDataChangesOnTheFly(
+                initialObjects: new ITimedObject[] { note },
+                actions: new[]
+                {
+                    new DynamicPlaybackAction(50, (playback, collection) =>
+                    {
+                        collection.Add(tempoChange);
+                        playback.MoveToTime(new MetricTimeSpan(0, 0, 0, 250));
+                    }),
+                },
+                expectedReceivedEvents: new[]
+                {
+                    new TimestampedEvent(new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity), TimeSpan.FromMilliseconds(50)),
+                    new TimestampedEvent(new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity), TimeSpan.FromMilliseconds(100)),
+                },
+                setupPlayback: playback => playback.TrackNotes = true);
+        }
+
+        [TimingCritical]
+        [Test]
         public void CheckPlaybackDataChangesOnTheFly_TempoChanges_2()
         {
             var setTempoEvent = new TimedEvent(new SetTempoEvent(SetTempoEvent.DefaultMicrosecondsPerQuarterNote / 2))

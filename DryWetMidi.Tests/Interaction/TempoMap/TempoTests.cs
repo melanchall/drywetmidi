@@ -290,6 +290,16 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
+        public void CreateFromBpm_NaN()
+        {
+            var exception = ClassicAssert.Throws<ArgumentOutOfRangeException>(
+                () => Tempo.FromBeatsPerMinute(double.NaN),
+                "NaN BPM should be rejected.");
+
+            ClassicAssert.AreEqual("beatsPerMinute", exception!.ParamName, "Invalid parameter name.");
+        }
+
+        [Test]
         public void CreateFromMillisecondsPerQuarterNote_GetBpm_1()
         {
             var tempo = Tempo.FromMillisecondsPerQuarterNote(1000);
