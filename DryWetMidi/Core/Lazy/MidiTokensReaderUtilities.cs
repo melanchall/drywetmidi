@@ -88,6 +88,27 @@ namespace Melanchall.DryWetMidi.Core
             return result;
         }
 
+        /// <summary>
+        /// Returns a single-use asynchronous sequence of consecutive MIDI events.
+        /// Reading starts when the sequence is advanced, and uses asynchronous stream I/O.
+        /// </summary>
+        /// <param name="reader">Reader to enumerate. The caller retains ownership.</param>
+        /// <returns>A result containing the events and, after completion, the consumed
+        /// non-event token that follows them.</returns>
+        /// <remarks>
+        /// Supply cancellation through the returned sequence's asynchronous enumerator.
+        /// Do not interleave other reader operations with enumeration. Early disposal does
+        /// not drain the sequence or dispose the reader. After a failed or canceled read,
+        /// dispose the reader because partially advanced state cannot be rolled back.
+        /// </remarks>
+        /// <exception cref="ArgumentNullException"><paramref name="reader"/> is <c>null</c>.</exception>
+        public static EnumerateEventsAsyncResult EnumerateEventsAsync(this MidiTokensReader reader)
+        {
+            ThrowIfArgument.IsNull(nameof(reader), reader);
+
+            return new EnumerateEventsAsyncResult(reader);
+        }
+
         private static IEnumerable<MidiEvent> EnumerateEvents(MidiTokensReader reader, EnumerateEventsResult result)
         {
             foreach (var token in EnumerateTokens(reader))
@@ -98,9 +119,12 @@ namespace Melanchall.DryWetMidi.Core
                 else
                 {
                     result.NextToken = token;
+                    result.IsCompleted = true;
                     yield break;
                 }
             }
+
+            result.IsCompleted = true;
         }
 
         #endregion

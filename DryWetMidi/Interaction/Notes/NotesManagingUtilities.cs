@@ -9,7 +9,7 @@ namespace Melanchall.DryWetMidi.Interaction
     /// <summary>
     /// Extension methods for notes managing.
     /// </summary>
-    public static class NotesManagingUtilities
+    public static partial class NotesManagingUtilities
     {
         #region Nested classes
 

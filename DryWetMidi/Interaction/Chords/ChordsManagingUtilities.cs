@@ -9,7 +9,7 @@ namespace Melanchall.DryWetMidi.Interaction
     /// <summary>
     /// Extension methods for chords managing.
     /// </summary>
-    public static class ChordsManagingUtilities
+    public static partial class ChordsManagingUtilities
     {
         #region Nested classes
 
