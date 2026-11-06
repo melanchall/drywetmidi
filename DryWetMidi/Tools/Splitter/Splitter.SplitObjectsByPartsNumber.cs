@@ -43,7 +43,8 @@ namespace Melanchall.DryWetMidi.Tools
         /// </item>
         /// </list>
         /// </exception>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="partsNumber"/> is zero or negative.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="partsNumber"/> is zero or negative. NaN
+        /// cannot be specified because <paramref name="partsNumber"/> is an integer.</exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="lengthType"/> specified an invalid value.</exception>
         public static void SplitObjectsByPartsNumber(
             this TrackChunk trackChunk,
@@ -98,7 +99,8 @@ namespace Melanchall.DryWetMidi.Tools
         /// </item>
         /// </list>
         /// </exception>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="partsNumber"/> is zero or negative.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="partsNumber"/> is zero or negative. NaN
+        /// cannot be specified because <paramref name="partsNumber"/> is an integer.</exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="lengthType"/> specified an invalid value.</exception>
         public static void SplitObjectsByPartsNumber(
             this IEnumerable<TrackChunk?> trackChunks,
@@ -140,7 +142,8 @@ namespace Melanchall.DryWetMidi.Tools
         /// means don't split it. <c>null</c> (the default value) can be passed to the parameter
         /// to process all objects.</param>
         /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="partsNumber"/> is zero or negative.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="partsNumber"/> is zero or negative. NaN
+        /// cannot be specified because <paramref name="partsNumber"/> is an integer.</exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="lengthType"/> specified an invalid value.</exception>
         public static void SplitObjectsByPartsNumber(
             this MidiFile midiFile,
@@ -190,7 +193,8 @@ namespace Melanchall.DryWetMidi.Tools
         /// </item>
         /// </list>
         /// </exception>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="partsNumber"/> is zero or negative.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="partsNumber"/> is zero or negative. NaN
+        /// cannot be specified because <paramref name="partsNumber"/> is an integer.</exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="lengthType"/> specified an invalid value.</exception>
         public static IEnumerable<ITimedObject?> SplitObjectsByPartsNumber(
             this IEnumerable<ITimedObject?> objects,

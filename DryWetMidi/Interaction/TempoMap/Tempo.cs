@@ -34,7 +34,8 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="microsecondsPerQuarterNote">Number of microseconds per quarter note.</param>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="microsecondsPerQuarterNote"/>
-        /// is zero or negative.</exception>
+        /// is zero or negative. NaN cannot be specified because <paramref name="microsecondsPerQuarterNote"/>
+        /// is an integer.</exception>
         public Tempo(long microsecondsPerQuarterNote)
         {
             ThrowIfArgument.IsNonpositive(
@@ -71,7 +72,8 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <returns>An instance of the <see cref="Tempo"/> which represents tempo as specified
         /// number of milliseconds per quarter note.</returns>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="millisecondsPerQuarterNote"/>
-        /// is zero or negative.</exception>
+        /// is zero or negative. NaN cannot be specified because <paramref name="millisecondsPerQuarterNote"/>
+        /// is an integer.</exception>
         public static Tempo FromMillisecondsPerQuarterNote(long millisecondsPerQuarterNote)
         {
             ThrowIfArgument.IsNonpositive(

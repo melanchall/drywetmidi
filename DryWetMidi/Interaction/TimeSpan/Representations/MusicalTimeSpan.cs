@@ -120,6 +120,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <description><paramref name="denominator"/> is zero or negative.</description>
         /// </item>
         /// </list>
+        /// <para>NaN cannot be specified because <paramref name="denominator"/> is an integer.</para>
         /// </exception>
         public MusicalTimeSpan(long numerator, long denominator, bool simplify = true)
         {
@@ -202,6 +203,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <description><paramref name="tupletSpaceSize"/> is zero or negative.</description>
         /// </item>
         /// </list>
+        /// <para>NaN cannot be specified for these integer parameters.</para>
         /// </exception>
         public MusicalTimeSpan Tuplet(int tupletNotesCount, int tupletSpaceSize)
         {
@@ -254,7 +256,8 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="denominator">New denominator.</param>
         /// <returns>An instance of the <see cref="MusicalTimeSpan"/> which represents the same time span as
         /// the original one but with the specified denominator.</returns>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="denominator"/> is zero or negative.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="denominator"/> is zero or negative. NaN
+        /// cannot be specified because <paramref name="denominator"/> is an integer.</exception>
         public MusicalTimeSpan ChangeDenominator(long denominator)
         {
             ThrowIfArgument.IsNonpositive(nameof(denominator), denominator, "Denominator is zero or negative.");
@@ -300,7 +303,8 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="number">A number to convert to <see cref="MusicalTimeSpan"/>.</param>
         /// <returns>An instance of the <see cref="MusicalTimeSpan"/> which represents the <paramref name="number"/>.</returns>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="number"/> is negative.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="number"/> is zero or negative. NaN cannot be
+        /// specified because <paramref name="number"/> is an integer.</exception>
         /// <exception cref="InvalidOperationException">Failed to find rationalization for the specified number.
         /// Try to refine settings.</exception>
         public static MusicalTimeSpan FromDouble(double number, double epsilon = DefaultEpsilon)
@@ -675,7 +679,8 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         /// <param name="divisor">Divisor to shrink the time span by.</param>
         /// <returns>Time span that is the current time span shrunk by the <paramref name="divisor"/>.</returns>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="divisor"/> is zero or negative.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="divisor"/> is zero, negative, or
+        /// <see cref="double.NaN"/>.</exception>
         public ITimeSpan Divide(double divisor)
         {
             ThrowIfArgument.IsNonpositive(nameof(divisor), divisor, "Divisor is zero or negative.");
