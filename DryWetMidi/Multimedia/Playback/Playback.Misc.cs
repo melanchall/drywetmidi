@@ -292,10 +292,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             get { return _clock.Speed; }
             set
             {
-                if (double.IsNaN(value))
-                    throw new ArgumentOutOfRangeException(nameof(value), value, "Speed is NaN.");
-
-                ThrowIfArgument.IsNonpositive(nameof(value), value, "Speed is zero or negative.");
+                ThrowIfArgument.IsNonpositive(nameof(value), value, "Speed is zero, negative, or NaN.");
                 EnsureIsNotDisposed();
 
                 _clock.Speed = value;
