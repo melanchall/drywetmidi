@@ -152,7 +152,7 @@ namespace Melanchall.DryWetMidi.Common
 
         internal static void IsNonpositive(string parameterName, double value, string message)
         {
-            if (double.IsNaN(value) || value < double.Epsilon)
+            if (double.IsNaN(value) || value < double.Epsilon || value > double.MaxValue)
                 throw new ArgumentOutOfRangeException(parameterName, value, message);
         }
 
