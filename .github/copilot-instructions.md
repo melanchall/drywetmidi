@@ -89,6 +89,8 @@ Document actual exceptions rather than adding every exception to every method.
 In documentation articles, link methods with xref and their fully qualified
 method identifier; include the parameter signature to select an overload, or
 use the method's overload-group identifier ending in * when intended.
+Do not wrap paragraphs to a fixed width or break sentences across lines in
+Markdown documentation articles; long lines are fine.
 Decorate code-related text with backticks, including API link labels:
   [`MidiFile.ReadAsync`](xref:Melanchall.DryWetMidi.Core.MidiFile.ReadAsync*)
 End text introducing a code sample with a colon, not a period.

@@ -102,7 +102,6 @@ namespace Melanchall.DryWetMidi.Core
         /// dispose the reader because partially advanced state cannot be rolled back.
         /// </remarks>
         /// <exception cref="ArgumentNullException"><paramref name="reader"/> is <c>null</c>.</exception>
-        /// <inheritdoc cref="MidiTokensReader.ReadTokenAsync(CancellationToken)" path="/member/exception"/>
         public static EnumerateEventsAsyncResult EnumerateEventsAsync(this MidiTokensReader reader)
         {
             ThrowIfArgument.IsNull(nameof(reader), reader);

@@ -135,14 +135,7 @@ The code above writes one million notes to a MIDI file. Of course, you can combi
 
 ## Asynchronous reading
 
-[`MidiFile.ReadLazyAsync`](xref:Melanchall.DryWetMidi.Core.MidiFile.ReadLazyAsync*)
-creates a token reader using the same initialization steps as
-[`MidiFile.ReadLazy`](xref:Melanchall.DryWetMidi.Core.MidiFile.ReadLazy*), awaiting
-stream reads where needed. Subsequent tokens are requested with
-[`MidiTokensReader.ReadTokenAsync`](xref:Melanchall.DryWetMidi.Core.MidiTokensReader.ReadTokenAsync*).
-Unlike the complete-file APIs described in
-[MIDI file reading](xref:a_file_reading), this does not first construct a complete
-[`MidiFile`](xref:Melanchall.DryWetMidi.Core.MidiFile):
+[`MidiFile.ReadLazyAsync`](xref:Melanchall.DryWetMidi.Core.MidiFile.ReadLazyAsync*) creates a token reader using the same initialization steps as [`MidiFile.ReadLazy`](xref:Melanchall.DryWetMidi.Core.MidiFile.ReadLazy*), awaiting stream reads where needed. Subsequent tokens are requested with [`MidiTokensReader.ReadTokenAsync`](xref:Melanchall.DryWetMidi.Core.MidiTokensReader.ReadTokenAsync*). Unlike the complete-file APIs described in [MIDI file reading](xref:a_file_reading), this does not first construct a complete [`MidiFile`](xref:Melanchall.DryWetMidi.Core.MidiFile):
 
 ```csharp
 await using (var tokensReader = await MidiFile.ReadLazyAsync("input.mid"))
@@ -156,35 +149,15 @@ await using (var tokensReader = await MidiFile.ReadLazyAsync("input.mid"))
 }
 ```
 
-Tokens are read as requested, rather than collected into a complete file.
-Collecting tokens or applying detection algorithms can still require additional
-memory.
+Tokens are read as requested, rather than collected into a complete file. Collecting tokens or applying detection algorithms can still require additional memory.
 
 ### Consecutive events and object detection
 
-[`EnumerateEventsAsync`](xref:Melanchall.DryWetMidi.Core.MidiTokensReaderUtilities.EnumerateEventsAsync(Melanchall.DryWetMidi.Core.MidiTokensReader))
-returns an [`EnumerateEventsAsyncResult`](xref:Melanchall.DryWetMidi.Core.EnumerateEventsAsyncResult)
-without reading ahead. Its `Events` property is a single-use `IAsyncEnumerable<MidiEvent>`
-that reads consecutive events until a non-event token or EOF is encountered.
-After normal completion, `IsCompleted` is `true` and `NextToken` contains the
-already-consumed boundary token, or `null` at EOF. Process `NextToken` before
-requesting another token from the reader.
+[`EnumerateEventsAsync`](xref:Melanchall.DryWetMidi.Core.MidiTokensReaderUtilities.EnumerateEventsAsync(Melanchall.DryWetMidi.Core.MidiTokensReader)) returns an [`EnumerateEventsAsyncResult`](xref:Melanchall.DryWetMidi.Core.EnumerateEventsAsyncResult) without reading ahead. Its `Events` property is a single-use `IAsyncEnumerable<MidiEvent>` that reads consecutive events until a non-event token or EOF is encountered. After normal completion, `IsCompleted` is `true` and `NextToken` contains the already-consumed boundary token, or `null` at EOF. Process `NextToken` before requesting another token from the reader.
 
-Early disposal does not drain the events or dispose the reader, and leaves
-`IsCompleted` as `false`. Cancellation and failures also leave it `false`;
-dispose the reader after a failed or canceled read. Do not interleave other
-reader operations with event enumeration. The synchronous
-[`EnumerateEvents`](xref:Melanchall.DryWetMidi.Core.MidiTokensReaderUtilities.EnumerateEvents(Melanchall.DryWetMidi.Core.MidiTokensReader))
-result also exposes `IsCompleted`, which becomes `true` only when enumeration
-observes a boundary or EOF.
+Early disposal does not drain the events or dispose the reader, and leaves `IsCompleted` as `false`. Cancellation and failures also leave it `false`; dispose the reader after a failed or canceled read. Do not interleave other reader operations with event enumeration. The synchronous [`EnumerateEvents`](xref:Melanchall.DryWetMidi.Core.MidiTokensReaderUtilities.EnumerateEvents(Melanchall.DryWetMidi.Core.MidiTokensReader)) result also exposes `IsCompleted`, which becomes `true` only when enumeration observes a boundary or EOF.
 
-Feed the event sequence into
-[`EnumerateObjectsAsync`](xref:Melanchall.DryWetMidi.Interaction.GetObjectsUtilities.EnumerateObjectsAsync*)
-to detect timed events, notes, and chords without constructing a complete track.
-The detector awaits its source; detection itself is synchronous CPU work.
-Create a separate detection sequence for each track so that delta-time
-accumulation and pending notes do not cross track boundaries. The following
-example counts notes per track:
+Feed the event sequence into [`EnumerateObjectsAsync`](xref:Melanchall.DryWetMidi.Interaction.GetObjectsUtilities.EnumerateObjectsAsync*) to detect timed events, notes, and chords without constructing a complete track. The detector awaits its source; detection itself is synchronous CPU work. Create a separate detection sequence for each track so that delta-time accumulation and pending notes do not cross track boundaries. The following example counts notes per track:
 
 ```csharp
 await using var reader = await MidiFile.ReadLazyAsync(
@@ -221,26 +194,53 @@ while (currentToken != null)
 }
 ```
 
-Object detection can retain pending notes, chords, and later objects to preserve
-output order. A long or unmatched note can delay output until the end of the
-track; lazy enumeration does not guarantee constant memory. Cancellation or
-source failure is not treated as normal EOF and does not flush pending objects.
-Track-local sequences do not merge different tracks into global chronological
-order.
+Object detection can retain pending notes, chords, and later objects to preserve output order. A long or unmatched note can delay output until the end of the track; lazy enumeration does not guarantee constant memory. Cancellation or source failure is not treated as normal EOF and does not flush pending objects. Track-local sequences do not merge different tracks into global chronological order.
 
-The resulting `IAsyncEnumerable<ITimedObject>` can also be passed directly to
-[`TimedObjectsWriter.WriteObjectsAsync`](xref:Melanchall.DryWetMidi.Interaction.TimedObjectsWriter.WriteObjectsAsync*).
-Start an output track first, asynchronously dispose the objects writer to flush
-deferred events, and only then end that track.
+The resulting `IAsyncEnumerable<ITimedObject>` can also be passed directly to [`TimedObjectsWriter.WriteObjectsAsync`](xref:Melanchall.DryWetMidi.Interaction.TimedObjectsWriter.WriteObjectsAsync*). The following example writes detected notes and other timed events to a new file, processing each track separately:
+
+```csharp
+await using var reader = await MidiFile.ReadLazyAsync(
+    "input.mid",
+    cancellationToken: cancellationToken);
+await using var writer = await MidiFile.WriteLazyAsync(
+    "output.mid",
+    overwriteFile: true,
+    cancellationToken: cancellationToken);
+
+MidiToken currentToken = await reader.ReadTokenAsync(cancellationToken);
+
+while (currentToken != null)
+{
+    if (currentToken is ChunkHeaderToken chunkHeader &&
+        chunkHeader.ChunkId == TrackChunk.Id)
+    {
+        await writer.StartTrackChunkAsync(cancellationToken);
+        var result = reader.EnumerateEventsAsync();
+
+        await using (var objectsWriter = new TimedObjectsWriter(writer))
+        {
+            await objectsWriter.WriteObjectsAsync(
+                result.Events.EnumerateObjectsAsync(
+                    ObjectType.Note | ObjectType.TimedEvent,
+                    cancellationToken: cancellationToken),
+                cancellationToken);
+        }
+
+        await writer.EndTrackChunkAsync(cancellationToken);
+        currentToken = result.NextToken;
+    }
+    else
+    {
+        currentToken = await reader.ReadTokenAsync(cancellationToken);
+    }
+}
+```
+
+The objects writer is asynchronously disposed before ending each output track so deferred events are flushed. This example skips non-track chunks and uses the default output time division; use the input `FileHeaderToken.TimeDivision` when the output must retain the input timing.
 
 ## Asynchronous writing
 
-[`MidiFile.WriteLazyAsync`](xref:Melanchall.DryWetMidi.Core.MidiFile.WriteLazyAsync*)
-creates a [`MidiTokensWriter`](xref:Melanchall.DryWetMidi.Core.MidiTokensWriter)
-whose track and event operations can be awaited.
-[`TimedObjectsWriter.WriteObjectsAsync`](xref:Melanchall.DryWetMidi.Interaction.TimedObjectsWriter.WriteObjectsAsync*)
-accepts either `IEnumerable<ITimedObject>` or `IAsyncEnumerable<ITimedObject>`.
-Supply objects in non-descending time order:
+[`MidiFile.WriteLazyAsync`](xref:Melanchall.DryWetMidi.Core.MidiFile.WriteLazyAsync*) creates a [`MidiTokensWriter`](xref:Melanchall.DryWetMidi.Core.MidiTokensWriter) whose track and event operations can be awaited. [`TimedObjectsWriter.WriteObjectsAsync`](xref:Melanchall.DryWetMidi.Interaction.TimedObjectsWriter.WriteObjectsAsync*) accepts either `IEnumerable<ITimedObject>` or `IAsyncEnumerable<ITimedObject>`. Supply objects in non-descending time order:
 
 ```csharp
 var notes = new[]
@@ -264,19 +264,11 @@ await using (var tokensWriter = await MidiFile.WriteLazyAsync(
 }
 ```
 
-Await
-[`TimedObjectsWriter.DisposeAsync`](xref:Melanchall.DryWetMidi.Interaction.TimedObjectsWriter.DisposeAsync)
-before ending the track: it emits deferred note-offs into the open track without
-disposing the caller-owned token writer. Subsequently await
-[`MidiTokensWriter.DisposeAsync`](xref:Melanchall.DryWetMidi.Core.MidiTokensWriter.DisposeAsync)
-to finish writing and finalize MIDI headers. The nested scopes above
-enforce this order.
+Await [`TimedObjectsWriter.DisposeAsync`](xref:Melanchall.DryWetMidi.Interaction.TimedObjectsWriter.DisposeAsync) before ending the track: it emits deferred note-offs into the open track without disposing the caller-owned token writer. Subsequently await [`MidiTokensWriter.DisposeAsync`](xref:Melanchall.DryWetMidi.Core.MidiTokensWriter.DisposeAsync) to finish writing and finalize MIDI headers. The nested scopes above enforce this order.
 
 ### Sequential operations and disposal
 
-Do not overlap operations on the same reader or writer, including synchronous
-operations while an asynchronous operation is outstanding. These objects retain
-mutable state and are not made thread-safe by asynchronous I/O.
+Do not overlap operations on the same reader or writer, including synchronous operations while an asynchronous operation is outstanding. These objects retain mutable state and are not made thread-safe by asynchronous I/O.
 
 **Wrong:** the synchronous read can race with the pending asynchronous read:
 
@@ -320,19 +312,11 @@ await using (var tokensWriter = await MidiFile.WriteLazyAsync(
 
 ### Ownership, cancellation, and failures
 
-File-path operations own their streams. Stream overloads leave supplied streams
-open when the token reader or writer is disposed; the caller must dispose them.
-Asynchronous output still requires a seekable stream to patch track lengths and
-track counts during finalization.
+File-path operations own their streams. Stream overloads leave supplied streams open when the token reader or writer is disposed; the caller must dispose them. Asynchronous output still requires a seekable stream to patch track lengths and track counts during finalization.
 
-Custom meta events use their mandatory async content overrides during async
-event reading and writing. These receive the original reader or writer without
-an intermediate payload reader or writer. See
-[Custom meta events](xref:a_custom_meta_event) for implementations and ownership
-and cancellation guidance.
+Custom meta events use their mandatory async content overrides during async event reading and writing. These receive the original reader or writer without an intermediate payload reader or writer. See [Custom meta events](xref:a_custom_meta_event) for implementations and ownership and cancellation guidance.
 
-Pass cancellation tokens to both initialization and subsequent operations.
-For example, using a `CancellationToken` named `cancellationToken`:
+Pass cancellation tokens to both initialization and subsequent operations. For example, using a `CancellationToken` named `cancellationToken`:
 
 ```csharp
 await using (var tokensReader = await MidiFile.ReadLazyAsync(
@@ -348,8 +332,4 @@ await using (var tokensReader = await MidiFile.ReadLazyAsync(
 }
 ```
 
-Cancellation is cooperative and raises `OperationCanceledException`; it cannot
-interrupt arbitrary synchronous custom chunk or event code. After a canceled or
-failed token read, dispose the reader instead of resuming partially updated
-parsing state. Cancellation or failure during writing can leave partial output;
-neither rollback nor atomic replacement is implied.
+Cancellation is cooperative and raises `OperationCanceledException`; it cannot interrupt arbitrary synchronous custom chunk or event code. After a canceled or failed token read, dispose the reader instead of resuming partially updated parsing state. Cancellation or failure during writing can leave partial output; neither rollback nor atomic replacement is implied.
