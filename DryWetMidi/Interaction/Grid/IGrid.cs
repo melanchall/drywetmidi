@@ -14,6 +14,9 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <remarks>
         /// Times must be nonnegative and in ascending order without duplication.
         /// Each subsequent time must advance after conversion to MIDI ticks.
+        /// Returned values are absolute MIDI tick positions. To obtain elapsed-time positions
+        /// reflecting tempo changes, use <see cref="TimeConverter.ConvertTo{TTimeSpan}(long, TempoMap)"/>
+        /// with <see cref="MetricTimeSpan"/> and the same tempo map.
         /// </remarks>
         /// <param name="tempoMap">Tempo map used to get grid's times.</param>
         /// <returns>Collection of times (in MIDI ticks) of the current grid.</returns>

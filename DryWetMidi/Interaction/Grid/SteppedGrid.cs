@@ -9,6 +9,45 @@ namespace Melanchall.DryWetMidi.Interaction
     /// Grid where points in time are distributed with the specified step or
     /// collection of steps.
     /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <see cref="GetTimes"/> returns absolute positions in MIDI ticks, not elapsed time.
+    /// With a <see cref="Melanchall.DryWetMidi.Core.TicksPerQuarterNoteTimeDivision"/>,
+    /// the number of ticks per quarter note is fixed. A beat-based step such as
+    /// <c>new BarBeatTicksTimeSpan(0, 1)</c> therefore does not produce different tick
+    /// distances when the tempo changes.
+    /// </para>
+    /// <para>
+    /// To draw beat grid lines on an elapsed-time timeline, convert each position to
+    /// <see cref="MetricTimeSpan"/> using
+    /// <see cref="TimeConverter.ConvertTo{TTimeSpan}(long, TempoMap)"/> and the same tempo map.
+    /// Subtract adjacent converted positions to get cell widths that reflect tempo changes,
+    /// including changes within a beat. Do not convert a tick difference as an absolute time.
+    /// A metric step instead produces equal elapsed-time intervals, not beat-aligned grid lines.
+    /// </para>
+    /// </remarks>
+    /// <example>
+    /// Calculate the elapsed time between beats of a MIDI file:
+    /// <code language="csharp">
+    /// var tempoMap = midiFile.GetTempoMap();
+    /// var duration = midiFile.GetDuration&lt;MidiTimeSpan&gt;().TimeSpan;
+    /// var grid = new SteppedGrid(new BarBeatTicksTimeSpan(0, 1));
+    /// long previousMicroseconds = 0;
+    ///
+    /// foreach (var tick in grid.GetTimes(tempoMap))
+    /// {
+    ///     if (tick &gt; duration)
+    ///         break;
+    ///
+    ///     var microseconds = TimeConverter.ConvertTo&lt;MetricTimeSpan&gt;(tick, tempoMap)
+    ///         .TotalMicroseconds;
+    ///     Console.WriteLine(microseconds - previousMicroseconds);
+    ///     previousMicroseconds = microseconds;
+    /// }
+    /// </code>
+    /// The first position is zero, so the first difference is zero. Scale the subsequent
+    /// differences by pixels per microsecond to obtain cell widths.
+    /// </example>
     public sealed class SteppedGrid : IGrid
     {
         #region Constructor
