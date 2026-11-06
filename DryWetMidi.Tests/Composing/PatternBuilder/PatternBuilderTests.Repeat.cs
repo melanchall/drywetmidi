@@ -144,6 +144,36 @@ namespace Melanchall.DryWetMidi.Tests.Composing
         }
 
         [Test]
+        public void Repeat_PreservesNoteActionState([Values(
+            PatternActionState.Enabled,
+            PatternActionState.Disabled,
+            PatternActionState.Excluded)] PatternActionState state)
+        {
+            var pattern = PatternTestUtilities.CreatePatternWithNoteActionState(state);
+
+            var repeatedPattern = new PatternBuilder(pattern)
+                .Repeat()
+                .Build();
+
+            PatternTestUtilities.TestActionStateNotes(repeatedPattern, state, 2, false);
+        }
+
+        [Test]
+        public void Repeat_PreservesChordActionState([Values(
+            PatternActionState.Enabled,
+            PatternActionState.Disabled,
+            PatternActionState.Excluded)] PatternActionState state)
+        {
+            var pattern = PatternTestUtilities.CreatePatternWithChordActionState(state);
+
+            var repeatedPattern = new PatternBuilder(pattern)
+                .Repeat()
+                .Build();
+
+            PatternTestUtilities.TestActionStateNotes(repeatedPattern, state, 2, true);
+        }
+
+        [Test]
         public void Repeat_LastOne_TransformNote()
         {
             var pattern = new PatternBuilder()

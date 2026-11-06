@@ -7,6 +7,8 @@ using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
 using Melanchall.DryWetMidi.Tests.Utilities;
 using NUnit.Framework;
+using Notes = Melanchall.DryWetMidi.MusicTheory.Notes;
+using NoteName = Melanchall.DryWetMidi.MusicTheory.NoteName;
 
 namespace Melanchall.DryWetMidi.Tests.Composing
 {
@@ -19,6 +21,78 @@ namespace Melanchall.DryWetMidi.Tests.Composing
         #endregion
 
         #region Methods
+
+        public static Pattern CreatePatternWithNoteActionState(PatternActionState state)
+        {
+            var pattern = new PatternBuilder()
+                .Pattern(new PatternBuilder()
+                    .Note(Notes.A3)
+                    .Note(Notes.C4)
+                    .Build())
+                .Build();
+
+            pattern.SetNotesState((index, descriptor) => index == 0, state);
+
+            return pattern;
+        }
+
+        public static Pattern CreatePatternWithChordActionState(PatternActionState state)
+        {
+            var pattern = new PatternBuilder()
+                .Pattern(new PatternBuilder()
+                    .Chord(new[] { Notes.A3, Notes.D4 })
+                    .Note(Notes.C4)
+                    .Build())
+                .Build();
+
+            pattern.SetChordsState((index, descriptor) => index == 0, state);
+
+            return pattern;
+        }
+
+        public static void TestActionStateNotes(Pattern pattern, PatternActionState state, int repetitions, bool isChord)
+        {
+            var expectedNotes = new List<NoteInfo>();
+            var currentTime = 0;
+
+            for (var repetitionIndex = 0; repetitionIndex < repetitions; repetitionIndex++)
+            {
+                if (state == PatternActionState.Enabled)
+                {
+                    expectedNotes.Add(new NoteInfo(
+                        NoteName.A,
+                        3,
+                        GetTime(currentTime),
+                        PatternBuilder.DefaultNoteLength,
+                        PatternBuilder.DefaultVelocity));
+
+                    if (isChord)
+                    {
+                        expectedNotes.Add(new NoteInfo(
+                            NoteName.D,
+                            4,
+                            GetTime(currentTime),
+                            PatternBuilder.DefaultNoteLength,
+                            PatternBuilder.DefaultVelocity));
+                    }
+                }
+
+                if (state != PatternActionState.Excluded)
+                {
+                    currentTime++;
+                }
+
+                expectedNotes.Add(new NoteInfo(
+                    NoteName.C,
+                    4,
+                    GetTime(currentTime),
+                    PatternBuilder.DefaultNoteLength,
+                    PatternBuilder.DefaultVelocity));
+                currentTime++;
+            }
+
+            TestNotes(pattern, expectedNotes);
+        }
 
         public static MidiFile TestNotes(Pattern pattern, ICollection<NoteInfo> expectedNotesInfos, params (long Time, Tempo Tempo)[] tempoChanges)
         {
@@ -111,6 +185,17 @@ namespace Melanchall.DryWetMidi.Tests.Composing
             var actualTimedEvents = midiFile.GetTimedEvents();
 
             MidiAsserts.AreEqual(expectedTimedEvents, actualTimedEvents, false, 0, "Events have invalid order.");
+        }
+
+        #endregion
+
+        #region Private methods
+
+        private static ITimeSpan GetTime(int quarterNotes)
+        {
+            return quarterNotes == 0
+                ? null
+                : PatternBuilder.DefaultNoteLength.Multiply(quarterNotes);
         }
 
         #endregion

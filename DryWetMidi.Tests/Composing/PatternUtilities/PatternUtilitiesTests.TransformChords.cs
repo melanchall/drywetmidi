@@ -39,6 +39,19 @@ namespace Melanchall.DryWetMidi.Tests.Composing
         }
 
         [Test]
+        public void TransformChords_PreservesChordActionState([Values(
+            PatternActionState.Enabled,
+            PatternActionState.Disabled,
+            PatternActionState.Excluded)] PatternActionState state)
+        {
+            var pattern = PatternTestUtilities.CreatePatternWithChordActionState(state);
+
+            var transformedPattern = pattern.TransformChords(chordDescriptor => chordDescriptor);
+
+            PatternTestUtilities.TestActionStateNotes(transformedPattern, state, 1, true);
+        }
+
+        [Test]
         public void TransformChords_Changed()
         {
             var noteLength = MusicalTimeSpan.Eighth;
