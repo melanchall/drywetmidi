@@ -116,14 +116,20 @@ namespace Melanchall.DryWetMidi.Composing
                 var addNoteAction = action as AddNoteAction;
                 if (addNoteAction != null)
                 {
-                    yield return new AddNoteAction(processNote(addNoteAction.NoteDescriptor));
+                    yield return new AddNoteAction(processNote(addNoteAction.NoteDescriptor))
+                    {
+                        State = addNoteAction.State
+                    };
                     continue;
                 }
 
                 var addChordAction = action as AddChordAction;
                 if (addChordAction != null)
                 {
-                    yield return new AddChordAction(processChord(addChordAction.ChordDescriptor));
+                    yield return new AddChordAction(processChord(addChordAction.ChordDescriptor))
+                    {
+                        State = addChordAction.State
+                    };
                     continue;
                 }
 

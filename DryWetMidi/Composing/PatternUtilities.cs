@@ -382,7 +382,10 @@ namespace Melanchall.DryWetMidi.Composing
                 if (addNoteAction != null && noteSelection(noteIndexWrapper.Object++, addNoteAction.NoteDescriptor))
                 {
                     var noteDescriptor = noteTransformation(addNoteAction.NoteDescriptor);
-                    return new AddNoteAction(noteDescriptor);
+                    return new AddNoteAction(noteDescriptor)
+                    {
+                        State = addNoteAction.State
+                    };
                 }
 
                 var addPatternAction = a as AddPatternAction;
@@ -402,7 +405,10 @@ namespace Melanchall.DryWetMidi.Composing
                 if (addChordAction != null && chordSelection(chordIndexWrapper.Object++, addChordAction.ChordDescriptor))
                 {
                     var chordDescriptor = chordTransformation(addChordAction.ChordDescriptor);
-                    return new AddChordAction(chordDescriptor);
+                    return new AddChordAction(chordDescriptor)
+                    {
+                        State = addChordAction.State
+                    };
                 }
 
                 var addPatternAction = a as AddPatternAction;
