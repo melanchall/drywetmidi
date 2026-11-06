@@ -2,13 +2,16 @@
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Tests.Utilities;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 
 namespace Melanchall.DryWetMidi.Tests.Core
 {
     [TestFixture]
-    public sealed class MidiTokensReaderUtilitiesTests
+    public sealed partial class MidiTokensReaderUtilitiesTests
     {
         #region Test methods
 
@@ -142,8 +145,33 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 {
                     initReader(reader);
 
-                    var actualEvents = reader.EnumerateEvents().Events.ToArray();
+                    var result = reader.EnumerateEvents();
+                    var actualEvents = result.Events.ToArray();
                     MidiAsserts.AreEqual(expectedEvents, actualEvents, true, "Invalid events.");
+                    ClassicAssert.IsTrue(result.IsCompleted, "Synchronous enumeration did not complete.");
+                }
+
+                using (var reader = MidiFile.ReadLazyAsync(filePath, cancellationToken: CancellationToken.None).Result)
+                {
+                    initReader(reader);
+                    var result = reader.EnumerateEventsAsync();
+                    var enumerator = result.Events.GetAsyncEnumerator(CancellationToken.None);
+                    var actualEvents = new List<MidiEvent>();
+
+                    try
+                    {
+                        while (enumerator.MoveNextAsync().AsTask().Result)
+                        {
+                            actualEvents.Add(enumerator.Current);
+                        }
+                    }
+                    finally
+                    {
+                        enumerator.DisposeAsync().AsTask().Wait();
+                    }
+
+                    MidiAsserts.AreEqual(expectedEvents, actualEvents.ToArray(), true, "Invalid asynchronous events.");
+                    ClassicAssert.IsTrue(result.IsCompleted, "Asynchronous enumeration did not complete.");
                 }
             }
             finally

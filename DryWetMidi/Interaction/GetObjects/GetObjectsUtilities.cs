@@ -10,7 +10,7 @@ namespace Melanchall.DryWetMidi.Interaction
     /// Provides utilities to extract objects of different types at once. More info in the
     /// <see href="xref:a_getting_objects#getobjects">Getting objects: GetObjects</see> article.
     /// </summary>
-    public static class GetObjectsUtilities
+    public static partial class GetObjectsUtilities
     {
         #region Methods
 

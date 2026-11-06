@@ -160,6 +160,79 @@ Tokens are read as requested, rather than collected into a complete file.
 Collecting tokens or applying detection algorithms can still require additional
 memory.
 
+### Consecutive events and object detection
+
+[`EnumerateEventsAsync`](xref:Melanchall.DryWetMidi.Core.MidiTokensReaderUtilities.EnumerateEventsAsync(Melanchall.DryWetMidi.Core.MidiTokensReader))
+returns an [`EnumerateEventsAsyncResult`](xref:Melanchall.DryWetMidi.Core.EnumerateEventsAsyncResult)
+without reading ahead. Its `Events` property is a single-use `IAsyncEnumerable<MidiEvent>`
+that reads consecutive events until a non-event token or EOF is encountered.
+After normal completion, `IsCompleted` is `true` and `NextToken` contains the
+already-consumed boundary token, or `null` at EOF. Process `NextToken` before
+requesting another token from the reader.
+
+Early disposal does not drain the events or dispose the reader, and leaves
+`IsCompleted` as `false`. Cancellation and failures also leave it `false`;
+dispose the reader after a failed or canceled read. Do not interleave other
+reader operations with event enumeration. The synchronous
+[`EnumerateEvents`](xref:Melanchall.DryWetMidi.Core.MidiTokensReaderUtilities.EnumerateEvents(Melanchall.DryWetMidi.Core.MidiTokensReader))
+result also exposes `IsCompleted`, which becomes `true` only when enumeration
+observes a boundary or EOF.
+
+Feed the event sequence into
+[`EnumerateObjectsAsync`](xref:Melanchall.DryWetMidi.Interaction.GetObjectsUtilities.EnumerateObjectsAsync*)
+to detect timed events, notes, and chords without constructing a complete track.
+The detector awaits its source; detection itself is synchronous CPU work.
+Create a separate detection sequence for each track so that delta-time
+accumulation and pending notes do not cross track boundaries. The following
+example counts notes per track:
+
+```csharp
+await using var reader = await MidiFile.ReadLazyAsync(
+    "input.mid",
+    cancellationToken: cancellationToken);
+
+MidiToken currentToken = await reader.ReadTokenAsync(cancellationToken);
+var trackIndex = 0;
+
+while (currentToken != null)
+{
+    if (currentToken is ChunkHeaderToken chunkHeader &&
+        chunkHeader.ChunkId == TrackChunk.Id)
+    {
+        var result = reader.EnumerateEventsAsync();
+        var notesCount = 0;
+
+        await foreach (var timedObject in result.Events.EnumerateObjectsAsync(
+            ObjectType.Note,
+            cancellationToken: cancellationToken))
+        {
+            if (timedObject is Note)
+                notesCount++;
+        }
+
+        Console.WriteLine($"Track {trackIndex}: {notesCount} notes");
+        currentToken = result.NextToken;
+        trackIndex++;
+    }
+    else
+    {
+        currentToken = await reader.ReadTokenAsync(cancellationToken);
+    }
+}
+```
+
+Object detection can retain pending notes, chords, and later objects to preserve
+output order. A long or unmatched note can delay output until the end of the
+track; lazy enumeration does not guarantee constant memory. Cancellation or
+source failure is not treated as normal EOF and does not flush pending objects.
+Track-local sequences do not merge different tracks into global chronological
+order.
+
+The resulting `IAsyncEnumerable<ITimedObject>` can also be passed directly to
+[`TimedObjectsWriter.WriteObjectsAsync`](xref:Melanchall.DryWetMidi.Interaction.TimedObjectsWriter.WriteObjectsAsync*).
+Start an output track first, asynchronously dispose the objects writer to flush
+deferred events, and only then end that track.
+
 ## Asynchronous writing
 
 [`MidiFile.WriteLazyAsync`](xref:Melanchall.DryWetMidi.Core.MidiFile.WriteLazyAsync*)

@@ -22,6 +22,12 @@ namespace Melanchall.DryWetMidi.Core
         /// </summary>
         public MidiToken? NextToken { get; internal set; }
 
+        /// <summary>
+        /// Gets a value indicating whether enumeration has reached the next non-event token
+        /// or the end of the input. Early termination does not complete enumeration.
+        /// </summary>
+        public bool IsCompleted { get; internal set; }
+
         #endregion
     }
 }
