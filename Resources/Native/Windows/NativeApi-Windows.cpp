@@ -200,6 +200,23 @@ namespace
         }
     }
 
+    std::wstring GetEnvironmentVariableValue(const wchar_t* name)
+    {
+        std::vector<wchar_t> buffer(MAX_PATH);
+
+        while (true)
+        {
+            const auto size = GetEnvironmentVariableW(name, buffer.data(), static_cast<DWORD>(buffer.size()));
+            if (size == 0)
+                return {};
+
+            if (size < buffer.size())
+                return std::wstring(buffer.data(), size);
+
+            buffer.resize(size + 1);
+        }
+    }
+
     std::wstring CombinePath(const std::wstring& directoryPath, const wchar_t* fileName)
     {
         if (directoryPath.empty())
@@ -235,21 +252,13 @@ namespace
                 candidates.push_back(currentDirectoryCandidate);
         }
 
-        wchar_t programFilesPath[MAX_PATH]{};
-        const auto programFilesPathSize = GetEnvironmentVariableW(L"ProgramFiles", programFilesPath, ARRAYSIZE(programFilesPath));
-        if (programFilesPathSize > 0 && programFilesPathSize < ARRAYSIZE(programFilesPath))
+        const auto appLocalFilesLocation =
+            GetEnvironmentVariableValue(L"DRYWETMIDI_APPLOCAL_WMS_BOOTSTRAP_FILES_LOCATION");
+        if (!appLocalFilesLocation.empty())
         {
-            const auto installedToolsCandidate =
-                CombinePath(std::wstring(programFilesPath) + L"\\Windows MIDI Services\\Tools", L"Windows.Devices.Midi2.dll");
-
-            if (std::find(candidates.cbegin(), candidates.cend(), installedToolsCandidate) == candidates.cend())
-                candidates.push_back(installedToolsCandidate);
-
-            const auto installedConsoleCandidate =
-                CombinePath(std::wstring(programFilesPath) + L"\\Windows MIDI Services\\Tools\\Console", L"Windows.Devices.Midi2.dll");
-
-            if (std::find(candidates.cbegin(), candidates.cend(), installedConsoleCandidate) == candidates.cend())
-                candidates.push_back(installedConsoleCandidate);
+            const auto appLocalCandidate = CombinePath(appLocalFilesLocation, L"Windows.Devices.Midi2.dll");
+            if (std::find(candidates.cbegin(), candidates.cend(), appLocalCandidate) == candidates.cend())
+                candidates.push_back(appLocalCandidate);
         }
 
         return candidates;
