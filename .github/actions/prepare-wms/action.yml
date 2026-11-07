@@ -89,4 +89,6 @@ runs:
       shell: pwsh
       run: |
         "DRYWETMIDI_ENABLE_APPLOCAL_WMS_BOOTSTRAP=true" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+        $filesLocation = [System.IO.Path]::GetFullPath("${{ inputs.wms_binaries_location }}")
+        "DRYWETMIDI_APPLOCAL_WMS_BOOTSTRAP_FILES_LOCATION=$filesLocation" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
         "WMS_ACTIVE=true" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
