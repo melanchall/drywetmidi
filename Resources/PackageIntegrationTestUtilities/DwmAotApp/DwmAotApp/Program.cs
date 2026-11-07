@@ -11,26 +11,39 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace DwmAotApp
 {
-    internal class Program
+    internal partial class Program
     {
         private const string WmsActiveEnvironmentVariableName = "WMS_ACTIVE";
 
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
             CheckAddTextEventAction();
             CheckCustomChunk();
             CheckCustomMetaEvent();
             CheckOctave();
             CheckCsvSerializer();
-            CheckPlayback();
+            await CheckLazyIoAsync();
+            CheckJsonSerialization();
+            await CheckCsvRoundTripsAsync();
+            CheckParsing();
 
-            if (IsWmsActive())
+            if (args.Contains("--no-multimedia"))
             {
-                Console.WriteLine("WMS is active. Checking Virtual devices API...");
-                CheckVirtualDevice();
+                Console.WriteLine("Multimedia checks explicitly skipped.");
+            }
+            else
+            {
+                CheckPlayback();
+
+                if (IsWmsActive())
+                {
+                    Console.WriteLine("WMS is active. Checking Virtual devices API...");
+                    CheckVirtualDevice();
+                }
             }
 
             Console.WriteLine("All done.");
@@ -242,15 +255,33 @@ namespace DwmAotApp
             ReadingSettings readingSettings = null)
         {
             var tempFilePath = Path.GetTempFileName();
+            var asynchronousFilePath = Path.GetTempFileName();
+            var asynchronousInputFile = midiFile.Clone();
 
             try
             {
                 midiFile.Write(tempFilePath, true, settings: writingSettings);
-                return MidiFile.Read(tempFilePath, readingSettings);
+                var synchronousFile = MidiFile.Read(tempFilePath, readingSettings);
+
+                asynchronousInputFile.WriteAsync(
+                    asynchronousFilePath,
+                    true,
+                    settings: writingSettings,
+                    cancellationToken: CancellationToken.None).Wait();
+                var asynchronousFile = MidiFile.ReadAsync(
+                    asynchronousFilePath,
+                    readingSettings,
+                    CancellationToken.None).Result;
+
+                if (!MidiFile.Equals(synchronousFile, asynchronousFile))
+                    throw new InvalidOperationException("Synchronous and asynchronous MIDI file round-trips differ.");
+
+                return synchronousFile;
             }
             finally
             {
                 File.Delete(tempFilePath);
+                File.Delete(asynchronousFilePath);
             }
         }
 
