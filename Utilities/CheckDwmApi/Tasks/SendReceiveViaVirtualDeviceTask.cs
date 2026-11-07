@@ -55,11 +55,11 @@ and receive them back via the same device.";
 
             try
             {
-                inputEndpoint = InputEndpoint.GetByName(deviceName);
+                inputEndpoint = virtualDevice?.InputEndpoint ?? InputEndpoint.GetByName(deviceName);
                 SubscribeToEventReceived(reportWriter, inputEndpoint, eventsSentReceivedData);
                 inputEndpoint.StartEventsListening();
 
-                outputEndpoint = OutputEndpoint.GetByName(deviceName);
+                outputEndpoint = virtualDevice?.OutputEndpoint ?? OutputEndpoint.GetByName(deviceName);
                 SubscribeToEventSent(reportWriter, outputEndpoint, eventsSentReceivedData);
 
                 var noteOnEvent = new NoteOnEvent((SevenBitNumber)60, (SevenBitNumber)90)
