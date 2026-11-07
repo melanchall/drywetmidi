@@ -46,19 +46,22 @@ stages:
           vmImage: 'windows-latest'
           framework: 'Net'
           rid: 'win-x64'
+          appArguments: ''
         macOS_Net:
           vmImage: 'macos-latest'
           framework: 'Net'
           rid: 'osx-x64'
+          appArguments: ''
         macOS_Arm_Net:
           vmImage: 'macOS-15-arm64'
           framework: 'Net'
           rid: 'osx-arm64'
-        # TODO: check on Ubuntu without Multimedia API
-        #Ubuntu_Net:
-        #  vmImage: 'ubuntu-latest'
-        #  framework: 'Net'
-        #  rid: 'linux-x64'
+          appArguments: ''
+        Ubuntu_Net:
+          vmImage: 'ubuntu-latest'
+          framework: 'Net'
+          rid: 'linux-x64'
+          appArguments: '--no-multimedia'
     pool:
       vmImage: $(vmImage)
     steps:
@@ -116,7 +119,7 @@ stages:
       inputs:
         command: 'run'
         projects: 'Resources/PackageIntegrationTestUtilities/DwmAotApp/DwmAotApp/DwmAotApp.csproj'
-        arguments: '--configuration $(BuildConfiguration) -property:SolutionDir="$(Build.SourcesDirectory)/"'
+        arguments: '--configuration $(BuildConfiguration) -property:SolutionDir="$(Build.SourcesDirectory)/" -- $(appArguments)'
 
     - ${{ each optref in split('Size,Speed',',') }}:
       - ${{ each gensttr in split('true,false',',') }}:
@@ -171,6 +174,8 @@ stages:
                   Write-Host ""
                   if ($IsWindows) {
                     & "$(publishedAppPath)/DwmAotApp.exe"
+                  } elseif ($IsLinux) {
+                    & "$(publishedAppPath)/DwmAotApp" --no-multimedia
                   } else {
                     & "$(publishedAppPath)/DwmAotApp"
                   }
