@@ -268,6 +268,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <summary>
         /// Releases all resources used by the MIDI device class instance.
         /// </summary>
+        /// <exception cref="NativeApiException">The Windows loopback could not be removed. The device remains available for another disposal attempt.</exception>
         public void Dispose()
         {
             Dispose(true);
@@ -278,6 +279,19 @@ namespace Melanchall.DryWetMidi.Multimedia
         {
             if (_disposed)
                 return;
+
+            if (disposing && _handle != null && CommonApi.Api_GetOsType() == CommonApi.OsType.Windows)
+            {
+                var closeResult = VirtualDeviceApi.Api_CloseDevice(_handle.DangerousGetHandle(), out var errorCode);
+                NativeApiUtilities.HandleEndpointNativeApiResult(closeResult, errorCode);
+                _handle.SetHandleAsInvalid();
+
+#if TEST
+                _handle.TestCheckpoints?.SetCheckpointReached(VirtualDeviceCheckpointsNames.ReleaseHandleEntered);
+                _handle.TestCheckpoints?.SetCheckpointReached(VirtualDeviceCheckpointsNames.CloseDeviceExecutedInReleaseHandle);
+                _handle.TestCheckpoints?.SetCheckpointReached(VirtualDeviceCheckpointsNames.CloseDeviceSuccessInReleaseHandle);
+#endif
+            }
 
             _handle?.Dispose();
             _handle = null!;

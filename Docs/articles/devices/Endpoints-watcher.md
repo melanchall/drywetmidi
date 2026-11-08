@@ -62,7 +62,9 @@ Endpoint removed: InputEndpoint
 Endpoint removed: OutputEndpoint
 ```
 
-When an endpoint is added you can immediately interact with it using an instance from the `EndpointAdded` event's arguments. But an instance from the `EndpointRemoved` event's arguments is non-interactable, because the endpoint is removed and doesn't exist in the system anymore. Any attempt to use its properties on that instance will throw an exception:
+Handlers can enumerate endpoints and open available input or output endpoints directly. With Windows MIDI Services, protocol changes can also cause these notifications when an endpoint becomes available or unavailable for MIDI 1.0.
+
+When an endpoint is added you can immediately interact with it using an instance from the `EndpointAdded` event's arguments. But an instance from the `EndpointRemoved` event's arguments is non-interactable, because the endpoint is no longer available. Any attempt to use its properties on that instance will throw an exception:
 
 ```csharp
 using System;

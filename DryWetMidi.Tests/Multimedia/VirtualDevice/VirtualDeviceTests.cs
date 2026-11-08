@@ -15,7 +15,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 {
     [TestFixture]
     [VirtualDeviceApiRequired]
-    public sealed class VirtualDeviceTests
+    public sealed partial class VirtualDeviceTests
     {
         #region Fields
 

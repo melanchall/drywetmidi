@@ -24,6 +24,9 @@ namespace Melanchall.DryWetMidi.Multimedia
             var closeResult = VirtualDeviceApi.Api_CloseDevice(handle, out var errorCode);
             var closed = closeResult == VirtualDeviceApi.VIRTUAL_CLOSERESULT.VIRTUAL_CLOSERESULT_OK;
 
+            if (!closed && CommonApi.Api_GetOsType() == CommonApi.OsType.Windows)
+                VirtualDeviceApi.Api_AbandonDevice_Win(handle);
+
 #if TEST
             TestCheckpoints?.SetCheckpointReached(VirtualDeviceCheckpointsNames.CloseDeviceExecutedInReleaseHandle);
 

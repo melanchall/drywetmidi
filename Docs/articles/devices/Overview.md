@@ -18,6 +18,10 @@ So, as you can see, although a MIDI port is _MIDI IN_ for a MIDI device, it will
 
 The library provides implementations for both `IInputEndpoint` and `IOutputEndpoint`: [`InputEndpoint`](xref:Melanchall.DryWetMidi.Multimedia.InputEndpoint) and [`OutputEndpoint`](xref:Melanchall.DryWetMidi.Multimedia.OutputEndpoint) correspondingly which represent endpoints of MIDI devices visible by the operating system. Both classes implement [`IDisposable`](xref:System.IDisposable) interface so you should always dispose them to free ports for use by other applications.
 
+Windows MIDI Services support is limited to MIDI 1.0. Native MIDI 1.0 byte-stream endpoints are available immediately. Native UMP endpoints are exposed only after MIDI 1.0 support and a negotiated MIDI 1.0 protocol are confirmed; MIDI 2.0-only endpoints, endpoints negotiated to MIDI 2.0, and endpoints with unknown protocol information are excluded. Protocol changes can add or remove endpoints from the available list. Cached output endpoints reject sending when MIDI 1.0 is no longer available, and input endpoints stop delivering events until MIDI 1.0 is available again.
+
+Windows MIDI Services endpoint IDs identify the endpoint, direction, and zero-based group index, independently of the group terminal block number. Group numbers shown in endpoint names are one-based.
+
 > [!WARNING]
 > <os-specific-api `InputEndpoint`;`OutputEndpoint`/> Of course you can create your own implementations of `IInputEndpoint` and `IOutputEndpoint` (see below).
 
