@@ -254,10 +254,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     () => virtualDevice.Dispose(),
                     "Public Dispose suppressed the native loopback-removal error.");
 
+                checkpoints.CheckCheckpointsReached(
+                    VirtualDeviceCheckpointsNames.DisposeEntered,
+                    VirtualDeviceCheckpointsNames.CloseDeviceExecutedInDispose);
                 checkpoints.CheckCheckpointsAreNotReached(
-                    VirtualDeviceCheckpointsNames.ReleaseHandleEntered,
-                    VirtualDeviceCheckpointsNames.CloseDeviceExecutedInReleaseHandle,
-                    VirtualDeviceCheckpointsNames.CloseDeviceSuccessInReleaseHandle);
+                    VirtualDeviceCheckpointsNames.CloseDeviceSuccessInDispose);
                 ClassicAssert.AreEqual(name, virtualDevice.Name, "Failed Dispose made the virtual device name inaccessible.");
                 ClassicAssert.AreSame(inputEndpoint, virtualDevice.InputEndpoint, "Failed Dispose replaced or invalidated the input endpoint.");
                 ClassicAssert.AreSame(outputEndpoint, virtualDevice.OutputEndpoint, "Failed Dispose replaced or invalidated the output endpoint.");
@@ -279,12 +280,12 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
                 ClassicAssert.AreEqual(
                     1,
-                    checkpoints.GetCheckpointDataList(VirtualDeviceCheckpointsNames.CloseDeviceExecutedInReleaseHandle).Count,
+                    checkpoints.GetCheckpointDataList(VirtualDeviceCheckpointsNames.CloseDeviceExecutedInDispose).Count,
                     "Successful public Dispose closed the native device more than once.");
                 virtualDevice.Dispose();
                 ClassicAssert.AreEqual(
                     1,
-                    checkpoints.GetCheckpointDataList(VirtualDeviceCheckpointsNames.CloseDeviceExecutedInReleaseHandle).Count,
+                    checkpoints.GetCheckpointDataList(VirtualDeviceCheckpointsNames.CloseDeviceExecutedInDispose).Count,
                     "Repeated public Dispose attempted another native close.");
                 ClassicAssert.Throws<ObjectDisposedException>(
                     () => { var endpoint = virtualDevice.InputEndpoint; },

@@ -87,9 +87,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             ClassicAssert.IsTrue(outputEndpointFound, $"Output endpoint is not found for [{timeout}].");
 
             checkpoints.CheckCheckpointsAreNotReached(
-                VirtualDeviceCheckpointsNames.ReleaseHandleEntered,
-                VirtualDeviceCheckpointsNames.CloseDeviceExecutedInReleaseHandle,
-                VirtualDeviceCheckpointsNames.CloseDeviceSuccessInReleaseHandle,
+                VirtualDeviceCheckpointsNames.DisposeEntered,
+                VirtualDeviceCheckpointsNames.CloseDeviceExecutedInDispose,
+                VirtualDeviceCheckpointsNames.CloseDeviceSuccessInDispose,
                 InputEndpointCheckpointsNames.ReleaseInfoHandleEntered,
                 InputEndpointCheckpointsNames.InfoDeletedInReleaseInfoHandle,
                 OutputEndpointCheckpointsNames.ReleaseInfoHandleEntered,
@@ -104,9 +104,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             ClassicAssert.IsFalse(outputEndpointFound, $"Output endpoint is found after virtual device disposed after [{timeout}].");
 
             checkpoints.CheckCheckpointsReached(
-                VirtualDeviceCheckpointsNames.ReleaseHandleEntered,
-                VirtualDeviceCheckpointsNames.CloseDeviceExecutedInReleaseHandle,
-                VirtualDeviceCheckpointsNames.CloseDeviceSuccessInReleaseHandle,
+                VirtualDeviceCheckpointsNames.DisposeEntered,
+                VirtualDeviceCheckpointsNames.CloseDeviceExecutedInDispose,
+                VirtualDeviceCheckpointsNames.CloseDeviceSuccessInDispose,
                 InputEndpointCheckpointsNames.ReleaseInfoHandleEntered,
                 InputEndpointCheckpointsNames.InfoDeletedInReleaseInfoHandle,
                 OutputEndpointCheckpointsNames.ReleaseInfoHandleEntered,

@@ -122,4 +122,4 @@ Event Note On [5] (70, 60) received on endpoint Leaf2.
 
 You must not explicitly dispose of endpoints of a virtual device. More than that, calling `Dispose` on `virtualDevice.InputEndpoint` and `virtualDevice.OutputEndpoint` will throw an exception. But if you got references to the endpoints by regular methods (for example, by [`InputEndpoint.GetByName`](xref:Melanchall.DryWetMidi.Multimedia.InputEndpoint.GetByName*)), you can call `Dispose` on those references of course.
 
-On Windows, if [`VirtualDevice.Dispose`](xref:Melanchall.DryWetMidi.Multimedia.VirtualDevice.Dispose) cannot remove the loopback, it throws `NativeApiException` and keeps the device usable so you can retry disposal.
+If [`VirtualDevice.Dispose`](xref:Melanchall.DryWetMidi.Multimedia.VirtualDevice.Dispose) cannot remove the loopback, it throws `NativeApiException` and keeps the device usable so you can retry disposal.

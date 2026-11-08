@@ -28,7 +28,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         private VirtualDeviceHandle _handle;
         private bool _disposed = false;
-        private bool _enabled = true;
+        private volatile bool _enabled = true;
 
         private VirtualDeviceApi.Callback_Mac? _callbackMac;
 
@@ -87,13 +87,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         public bool IsEnabled
         {
-            get
-            {
-                lock (_disposeLock)
-                {
-                    return _enabled;
-                }
-            }
+            get { return _enabled; }
             set
             {
                 lock (_disposeLock)
@@ -304,7 +298,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <summary>
         /// Releases all resources used by the MIDI device class instance.
         /// </summary>
-        /// <exception cref="NativeApiException">The Windows loopback could not be removed. The device remains available for another disposal attempt.</exception>
+        /// <exception cref="NativeApiException">The loopback could not be removed. The device remains available for another disposal attempt.</exception>
         public void Dispose()
         {
             Dispose(true);
@@ -318,17 +312,24 @@ namespace Melanchall.DryWetMidi.Multimedia
                 if (_disposed)
                     return;
 
-                if (disposing && _handle != null && CommonApi.Api_GetOsType() == CommonApi.OsType.Windows)
+                if (disposing && _handle != null)
                 {
+#if TEST
+                    _handle.TestCheckpoints?.SetCheckpointReached(VirtualDeviceCheckpointsNames.DisposeEntered);
+#endif
+
                     var closeResult = VirtualDeviceApi.Api_CloseDevice(_handle.DangerousGetHandle(), out var errorCode);
+
+#if TEST
+                    _handle.TestCheckpoints?.SetCheckpointReached(VirtualDeviceCheckpointsNames.CloseDeviceExecutedInDispose);
+#endif
+
                     NativeApiUtilities.HandleEndpointNativeApiResult(closeResult, errorCode);
                     _handle.SetHandleAsInvalid();
                     _handle.ReleaseConfigurationReference();
 
 #if TEST
-                    _handle.TestCheckpoints?.SetCheckpointReached(VirtualDeviceCheckpointsNames.ReleaseHandleEntered);
-                    _handle.TestCheckpoints?.SetCheckpointReached(VirtualDeviceCheckpointsNames.CloseDeviceExecutedInReleaseHandle);
-                    _handle.TestCheckpoints?.SetCheckpointReached(VirtualDeviceCheckpointsNames.CloseDeviceSuccessInReleaseHandle);
+                    _handle.TestCheckpoints?.SetCheckpointReached(VirtualDeviceCheckpointsNames.CloseDeviceSuccessInDispose);
 #endif
 
                 }
