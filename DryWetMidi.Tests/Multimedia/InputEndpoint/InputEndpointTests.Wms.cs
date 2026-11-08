@@ -16,7 +16,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         [WinOnly]
         [VirtualDeviceApiRequired]
-        public void WmsInputCloseReleasesHandleAndListenerWhileSharedOutputSurvives()
+        public void InputCloseReleasesHandleAndListenerWhileSharedOutputSurvives()
         {
             using (var context = new WmsTestContext())
             using (var virtualDevice = context.CreateVirtualDevice())

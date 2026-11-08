@@ -1,4 +1,3 @@
-#if TEST
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Multimedia;
 using Melanchall.DryWetMidi.Tests.Attributes;
@@ -107,10 +106,10 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 creationTask = Task.Run(() => watchedDevice = VirtualDevice.Create(watchedName));
 
                 ClassicAssert.IsTrue(
-                    creationTask.Wait(WmsTestContext.Timeout),
+                    creationTask.Wait(TimeSpan.FromSeconds(10)),
                     "Virtual creation blocked while a public Added handler reentered the native API.");
                 ClassicAssert.IsTrue(
-                    WaitOperations.Wait(() => addedIds.Count == 2 || !callbackExceptions.IsEmpty, WmsTestContext.Timeout),
+                    WaitOperations.Wait(() => addedIds.Count == 2 || !callbackExceptions.IsEmpty, TimeSpan.FromSeconds(10)),
                     "Added handlers did not finish enumeration, open, send and disposal within the bounded wait.");
                 ClassicAssert.IsTrue(callbackExceptions.IsEmpty, $"Added callback failed: {string.Join("; ", callbackExceptions)}.");
                 ClassicAssert.AreEqual(2, addedIds.Count, "Added callback did not exercise both input and output endpoints.");
@@ -118,10 +117,10 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 removalTask = Task.Run(() => watchedDevice.Dispose());
 
                 ClassicAssert.IsTrue(
-                    removalTask.Wait(WmsTestContext.Timeout),
+                    removalTask.Wait(TimeSpan.FromSeconds(10)),
                     "Virtual removal blocked while a public Removed handler reentered the native API.");
                 ClassicAssert.IsTrue(
-                    WaitOperations.Wait(() => removedIds.Count == 2 || !callbackExceptions.IsEmpty, WmsTestContext.Timeout),
+                    WaitOperations.Wait(() => removedIds.Count == 2 || !callbackExceptions.IsEmpty, TimeSpan.FromSeconds(10)),
                     "Removed handlers did not finish enumeration and surviving-endpoint operations within the bounded wait.");
                 ClassicAssert.IsTrue(callbackExceptions.IsEmpty, $"Removed callback failed: {string.Join("; ", callbackExceptions)}.");
                 ClassicAssert.AreEqual(2, removedIds.Count, "Removed callback did not exercise both endpoint directions.");
@@ -142,7 +141,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     });
 
                     ClassicAssert.IsTrue(
-                        cleanupTask.Wait(WmsTestContext.Timeout),
+                        cleanupTask.Wait(TimeSpan.FromSeconds(10)),
                         "Watcher cleanup blocked after handlers were detached.");
                 }
                 else
@@ -189,4 +188,3 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         #endregion
     }
 }
-#endif
