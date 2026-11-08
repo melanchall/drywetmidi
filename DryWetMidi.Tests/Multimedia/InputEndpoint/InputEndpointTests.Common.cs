@@ -143,6 +143,23 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void GetAllInputEndpoints()
         {
+            WaitOperations.Wait(() =>
+            {
+                var endpoints = InputEndpoint.GetAll();
+
+                try
+                {
+                    return InputEndpoint.GetEndpointsCount() == endpoints.Count;
+                }
+                finally
+                {
+                    foreach (var endpoint in endpoints)
+                    {
+                        endpoint.Dispose();
+                    }
+                }
+            }, TimeSpan.FromSeconds(5));
+
             var inputEndpoints = InputEndpoint.GetAll();
 
             try

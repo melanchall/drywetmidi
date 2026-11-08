@@ -24,6 +24,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         #region Fields
 
         private readonly string _name;
+        private readonly object _disposeLock = new();
 
         private VirtualDeviceHandle _handle;
         private bool _disposed = false;
@@ -86,20 +87,31 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         public bool IsEnabled
         {
-            get { return _enabled; }
+            get
+            {
+                lock (_disposeLock)
+                {
+                    return _enabled;
+                }
+            }
             set
             {
-                if (_enabled == value)
-                    return;
+                lock (_disposeLock)
+                {
+                    EnsureDeviceIsNotDisposed();
 
-                _enabled = value;
+                    if (_enabled == value)
+                        return;
 
-                var configuration = MidiConfiguration.GetConfigurationHandle();
+                    _enabled = value;
 
-                if (_enabled)
-                    VirtualDeviceApi.Api_UnmuteDevice(_handle, configuration);
-                else
-                    VirtualDeviceApi.Api_MuteDevice(_handle, configuration);
+                    var configuration = MidiConfiguration.GetConfigurationHandle();
+
+                    if (_enabled)
+                        VirtualDeviceApi.Api_UnmuteDevice(_handle, configuration);
+                    else
+                        VirtualDeviceApi.Api_MuteDevice(_handle, configuration);
+                }
             }
         }
 
@@ -212,13 +224,25 @@ namespace Melanchall.DryWetMidi.Multimedia
         {
             var sessionHandle = MidiDevicesSession.GetSessionHandle();
             var configuration = MidiConfiguration.GetConfigurationHandle();
+            var configurationReferenceAdded = false;
 
             _callbackMac = OnMessage_Mac;
 
-            var result = VirtualDeviceApi.Api_OpenDevice_Mac(Name, configuration, sessionHandle, _callbackMac, out var deviceInfo, out var errorCode);
-            NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
+            configuration.DangerousAddRef(ref configurationReferenceAdded);
 
-            InitializeDevice(deviceInfo);
+            try
+            {
+                var result = VirtualDeviceApi.Api_OpenDevice_Mac(Name, configuration, sessionHandle, _callbackMac, out var deviceInfo, out var errorCode);
+                NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
+
+                InitializeDevice(deviceInfo, configuration);
+                configurationReferenceAdded = false;
+            }
+            finally
+            {
+                if (configurationReferenceAdded)
+                    configuration.DangerousRelease();
+            }
         }
 
         [MemberNotNull(nameof(_handle), nameof(InputEndpoint), nameof(OutputEndpoint))]
@@ -226,15 +250,27 @@ namespace Melanchall.DryWetMidi.Multimedia
         {
             var sessionHandle = MidiDevicesSession.GetSessionHandle();
             var configuration = MidiConfiguration.GetConfigurationHandle();
+            var configurationReferenceAdded = false;
 
-            var result = VirtualDeviceApi.Api_OpenDevice_Win(Name, configuration, sessionHandle, out var deviceInfo, out var errorCode);
-            NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
+            configuration.DangerousAddRef(ref configurationReferenceAdded);
 
-            InitializeDevice(deviceInfo);
+            try
+            {
+                var result = VirtualDeviceApi.Api_OpenDevice_Win(Name, configuration, sessionHandle, out var deviceInfo, out var errorCode);
+                NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
+
+                InitializeDevice(deviceInfo, configuration);
+                configurationReferenceAdded = false;
+            }
+            finally
+            {
+                if (configurationReferenceAdded)
+                    configuration.DangerousRelease();
+            }
         }
 
         [MemberNotNull(nameof(_handle), nameof(InputEndpoint), nameof(OutputEndpoint))]
-        private void InitializeDevice(IntPtr deviceInfo)
+        private void InitializeDevice(IntPtr deviceInfo, MidiConfigurationHandle configuration)
         {
             var inputEndpointInfo = VirtualDeviceApi.Api_GetInputEndpointInfo(deviceInfo);
             InputEndpoint = new InputEndpoint(inputEndpointInfo, MidiEndpoint.CreationContext.VirtualDevice);
@@ -242,7 +278,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             var outputEndpointInfo = VirtualDeviceApi.Api_GetOutputEndpointInfo(deviceInfo);
             OutputEndpoint = new OutputEndpoint(outputEndpointInfo, MidiEndpoint.CreationContext.VirtualDevice);
 
-            _handle = new VirtualDeviceHandle(deviceInfo);
+            _handle = new VirtualDeviceHandle(deviceInfo, configuration);
 
 #if TEST
             _handle.TestCheckpoints = TestCheckpoints;
@@ -277,32 +313,37 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         private void Dispose(bool disposing)
         {
-            if (_disposed)
-                return;
-
-            if (disposing && _handle != null && CommonApi.Api_GetOsType() == CommonApi.OsType.Windows)
+            lock (_disposeLock)
             {
-                var closeResult = VirtualDeviceApi.Api_CloseDevice(_handle.DangerousGetHandle(), out var errorCode);
-                NativeApiUtilities.HandleEndpointNativeApiResult(closeResult, errorCode);
-                _handle.SetHandleAsInvalid();
+                if (_disposed)
+                    return;
+
+                if (disposing && _handle != null && CommonApi.Api_GetOsType() == CommonApi.OsType.Windows)
+                {
+                    var closeResult = VirtualDeviceApi.Api_CloseDevice(_handle.DangerousGetHandle(), out var errorCode);
+                    NativeApiUtilities.HandleEndpointNativeApiResult(closeResult, errorCode);
+                    _handle.SetHandleAsInvalid();
+                    _handle.ReleaseConfigurationReference();
 
 #if TEST
-                _handle.TestCheckpoints?.SetCheckpointReached(VirtualDeviceCheckpointsNames.ReleaseHandleEntered);
-                _handle.TestCheckpoints?.SetCheckpointReached(VirtualDeviceCheckpointsNames.CloseDeviceExecutedInReleaseHandle);
-                _handle.TestCheckpoints?.SetCheckpointReached(VirtualDeviceCheckpointsNames.CloseDeviceSuccessInReleaseHandle);
+                    _handle.TestCheckpoints?.SetCheckpointReached(VirtualDeviceCheckpointsNames.ReleaseHandleEntered);
+                    _handle.TestCheckpoints?.SetCheckpointReached(VirtualDeviceCheckpointsNames.CloseDeviceExecutedInReleaseHandle);
+                    _handle.TestCheckpoints?.SetCheckpointReached(VirtualDeviceCheckpointsNames.CloseDeviceSuccessInReleaseHandle);
 #endif
+
+                }
+
+                _handle?.Dispose();
+                _handle = null!;
+
+                if (disposing)
+                {
+                    InputEndpoint?.Dispose(true);
+                    OutputEndpoint?.Dispose(true);
+                }
+
+                _disposed = true;
             }
-
-            _handle?.Dispose();
-            _handle = null!;
-
-            if (disposing)
-            {
-                InputEndpoint?.Dispose(true);
-                OutputEndpoint?.Dispose(true);
-            }
-
-            _disposed = true;
         }
 
         #endregion

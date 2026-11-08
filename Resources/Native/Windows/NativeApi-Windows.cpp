@@ -32,6 +32,7 @@
 #include <new>
 #include <vector>
 #include <unordered_map>
+#include <unordered_set>
 #include <mutex>
 #include <atomic>
 #include <memory>
@@ -1293,6 +1294,7 @@ struct SessionHandle
     std::mutex endpointDevicesLock;
     std::unordered_map<std::wstring, EndpointDevicesInfo> endpointDevicesById;
     std::unordered_map<std::wstring, std::shared_ptr<std::atomic<bool>>> midi1SupportById;
+    std::unordered_set<std::wstring> removedEndpointIds;
     winrt::Windows::Foundation::Collections::IMap<winrt::hstring, midi2::MidiEndpointConnection> endpointConnectionsById =
         winrt::single_threaded_map<winrt::hstring, midi2::MidiEndpointConnection>();
     std::unordered_map<winrt::guid, int> endpointConnectionsUsersCounts;
@@ -1305,7 +1307,24 @@ struct EndpointHandleBase
     SessionHandle* sessionHandle{ nullptr };
     midi2::MidiEndpointConnection connection{ nullptr };
     std::shared_ptr<WmsTestState> testState;
+    std::shared_ptr<std::atomic<bool>> midi1Support;
 };
+
+void PruneRemovedMidi1Support(SessionHandle* sessionHandle, const std::wstring& endpointId)
+{
+    auto removedEndpoint = sessionHandle->removedEndpointIds.find(endpointId);
+    if (removedEndpoint == sessionHandle->removedEndpointIds.end())
+        return;
+
+    auto support = sessionHandle->midi1SupportById.find(endpointId);
+    if (support != sessionHandle->midi1SupportById.end() && support->second.use_count() > 1)
+        return;
+
+    if (support != sessionHandle->midi1SupportById.end())
+        sessionHandle->midi1SupportById.erase(support);
+
+    sessionHandle->removedEndpointIds.erase(removedEndpoint);
+}
 
 bool SupportsMidi1(SessionHandle* sessionHandle, const EndpointInfoBase* info)
 {
@@ -1396,6 +1415,7 @@ API_EXPORT SESSION_OPENRESULT API_CALL OpenSession_Win(
                     EnsureWinMmPortsAvailable();
 
                     auto endpointId = endpointInformation.EndpointDeviceId();
+                    sessionHandle->removedEndpointIds.erase(endpointId.c_str());
                     auto isSupported = SupportsMidi1(sessionHandle->configuration->testState, endpointInformation);
                     auto& support = sessionHandle->midi1SupportById[endpointId.c_str()];
                     if (support == nullptr)
@@ -1406,8 +1426,13 @@ API_EXPORT SESSION_OPENRESULT API_CALL OpenSession_Win(
                     if (!isSupported)
                         return;
 
-                    if (sessionHandle->endpointDevicesById.contains(endpointId.c_str()))
+                    auto existingEndpoint = sessionHandle->endpointDevicesById.find(endpointId.c_str());
+                    if (existingEndpoint != sessionHandle->endpointDevicesById.end() &&
+                        (!existingEndpoint->second.inputEndpointsInfo.empty() ||
+                            !existingEndpoint->second.outputEndpointsInfo.empty()))
+                    {
                         return;
+                    }
 
                     auto addOutputEndpoints = [&](const midi2::Enumeration::MidiGroupTerminalBlock& gtb)
                     {
@@ -1547,7 +1572,11 @@ API_EXPORT SESSION_OPENRESULT API_CALL OpenSession_Win(
                     std::wstring endpointKey = endpointId.c_str();
                     auto support = sessionHandle->midi1SupportById.find(endpointKey);
                     if (support != sessionHandle->midi1SupportById.end())
+                    {
                         *support->second = false;
+                        sessionHandle->removedEndpointIds.insert(endpointKey);
+                        PruneRemovedMidi1Support(sessionHandle, endpointKey);
+                    }
 
                     EndpointDevicesInfo endpointDevicesInfo;
 
@@ -1737,12 +1766,24 @@ typedef int GETCONNECTIONRESULT;
 #define GETCONNECTIONRESULT_UNKNOWNERROR 2
 #define GETCONNECTIONRESULT_PLUGINADDFAILED 3
 
+void AppendActivityMessage(std::wstring* activityMessage, const std::wstring& message)
+{
+    if (activityMessage == nullptr)
+        return;
+
+    if (!activityMessage->empty())
+        activityMessage->append(L"\n");
+
+    activityMessage->append(message);
+}
+
 GETCONNECTIONRESULT GetConnection(
     SessionHandle* sessionHandle,
     EndpointInfoBase* info,
     midi2::MidiEndpointConnection* connection,
     const MidiGroupEndpointListener& groupListener = nullptr,
-    int* errorCode = nullptr)
+    int* errorCode = nullptr,
+    std::wstring* activityMessage = nullptr)
 {
     midi2::MidiEndpointConnection newConnection{ nullptr };
     midi2::MidiEndpointConnection listenerConnection{ nullptr };
@@ -1762,15 +1803,19 @@ GETCONNECTIONRESULT GetConnection(
         }
         catch (const winrt::hresult_error& exception)
         {
-            sessionHandle->configuration->activityCallback(FormatError(exception, L"Failed to clean up endpoint connection"));
+            AppendActivityMessage(
+                activityMessage,
+                FormatError(exception, L"Failed to clean up endpoint connection"));
         }
         catch (const std::exception& exception)
         {
-            sessionHandle->configuration->activityCallback(FormatError(exception, L"Failed to clean up endpoint connection"));
+            AppendActivityMessage(
+                activityMessage,
+                FormatError(exception, L"Failed to clean up endpoint connection"));
         }
         catch (...)
         {
-            sessionHandle->configuration->activityCallback(L"Failed to clean up endpoint connection");
+            AppendActivityMessage(activityMessage, L"Failed to clean up endpoint connection");
         }
     });
 
@@ -1802,7 +1847,7 @@ GETCONNECTIONRESULT GetConnection(
                 if (errorCode != nullptr)
                     *errorCode = static_cast<int>(pluginResult);
 
-                sessionHandle->configuration->activityCallback(L"Failed to add input group listener");
+                AppendActivityMessage(activityMessage, L"Failed to add input group listener");
                 return GETCONNECTIONRESULT_PLUGINADDFAILED;
             }
         }
@@ -1819,7 +1864,7 @@ GETCONNECTIONRESULT GetConnection(
                 sessionHandle->configuration->testState->failOpenConnection) ||
                 !endpointConnection.Open())
             {
-                sessionHandle->configuration->activityCallback(L"Failed to open endpoint connection");
+                AppendActivityMessage(activityMessage, L"Failed to open endpoint connection");
                 return GETCONNECTIONRESULT_OPENFAILED;
             }
 
@@ -1835,17 +1880,17 @@ GETCONNECTIONRESULT GetConnection(
         if (errorCode != nullptr)
             *errorCode = e.code();
 
-        sessionHandle->configuration->activityCallback(FormatError(e, L"Failed to get endpoint connection"));
+        AppendActivityMessage(activityMessage, FormatError(e, L"Failed to get endpoint connection"));
         return GETCONNECTIONRESULT_UNKNOWNERROR;
     }
     catch (const std::exception& e)
     {
-        sessionHandle->configuration->activityCallback(FormatError(e, L"Failed to get endpoint connection"));
+        AppendActivityMessage(activityMessage, FormatError(e, L"Failed to get endpoint connection"));
         return GETCONNECTIONRESULT_UNKNOWNERROR;
     }
     catch (...)
     {
-        sessionHandle->configuration->activityCallback(L"Failed to get endpoint connection");
+        AppendActivityMessage(activityMessage, L"Failed to get endpoint connection");
         return GETCONNECTIONRESULT_UNKNOWNERROR;
     }
 }
@@ -2165,13 +2210,16 @@ API_EXPORT IN_OPENRESULT API_CALL OpenInputEndpoint_Win(InputEndpointInfo* info,
 
     if (!info->endpointDeviceId.empty() && info->gtb != nullptr && info->group != nullptr)
     {
-        std::lock_guard<std::mutex> lock(sessionHandle->endpointDevicesLock);
+        std::wstring activityMessage;
+        auto openResult = IN_OPENRESULT_GETCONNECTION_UNKNOWNERROR;
+        std::unique_lock<std::mutex> lock(sessionHandle->endpointDevicesLock);
 
         try
         {
             if (!SupportsMidi1(sessionHandle, info))
             {
                 delete inputEndpointHandle;
+                inputEndpointHandle = nullptr;
                 return IN_OPENRESULT_UNSUPPORTEDPROTOCOL;
             }
 
@@ -2183,6 +2231,7 @@ API_EXPORT IN_OPENRESULT API_CALL OpenInputEndpoint_Win(InputEndpointInfo* info,
             inputEndpointHandle->groupListener.IsEnabled(false);
 
             auto protocolSupport = sessionHandle->midi1SupportById[info->endpointDeviceId];
+            inputEndpointHandle->midi1Support = protocolSupport;
             auto MessageReceivedHandler = [bytesReceivedCallback, protocolSupport](midi2::IMidiMessageReceivedEventSource const& sender, midi2::MidiMessageReceivedEventArgs const& args)
             {
                 if (!protocolSupport->load())
@@ -2210,44 +2259,67 @@ API_EXPORT IN_OPENRESULT API_CALL OpenInputEndpoint_Win(InputEndpointInfo* info,
                 info,
                 &connection,
                 inputEndpointHandle->groupListener,
-                errorCode);
+                errorCode,
+                &activityMessage);
             if (getConnectionResult != GETCONNECTIONRESULT_OK)
             {
                 delete inputEndpointHandle;
+                inputEndpointHandle = nullptr;
 
                 switch (getConnectionResult)
                 {
-                    case GETCONNECTIONRESULT_OPENFAILED: return IN_OPENRESULT_GETCONNECTION_OPENFAILED;
-                    case GETCONNECTIONRESULT_PLUGINADDFAILED: return IN_OPENRESULT_PLUGINADDFAILED;
-                    default: return IN_OPENRESULT_GETCONNECTION_UNKNOWNERROR;
+                    case GETCONNECTIONRESULT_OPENFAILED:
+                        openResult = IN_OPENRESULT_GETCONNECTION_OPENFAILED;
+                        break;
+                    case GETCONNECTIONRESULT_PLUGINADDFAILED:
+                        openResult = IN_OPENRESULT_PLUGINADDFAILED;
+                        break;
+                    default:
+                        openResult = IN_OPENRESULT_GETCONNECTION_UNKNOWNERROR;
+                        break;
                 }
             }
+            else
+            {
+                sessionHandle->endpointConnectionsUsersCounts[connection.ConnectionId()]++;
+                inputEndpointHandle->connection = connection;
 
-            sessionHandle->endpointConnectionsUsersCounts[connection.ConnectionId()]++;
-            inputEndpointHandle->connection = connection;
-
-            *handle = inputEndpointHandle;
-            return IN_OPENRESULT_OK;
+                *handle = inputEndpointHandle;
+                return IN_OPENRESULT_OK;
+            }
         }
         catch (const winrt::hresult_error& e)
         {
             *errorCode = e.code();
-            sessionHandle->configuration->activityCallback(FormatError(e, L"Failed to open input endpoint"));
             delete inputEndpointHandle;
+            inputEndpointHandle = nullptr;
+            lock.unlock();
+            sessionHandle->configuration->activityCallback(FormatError(e, L"Failed to open input endpoint"));
             return IN_OPENRESULT_UNKNOWNWMSERROR;
         }
         catch (const std::exception& e)
         {
-            sessionHandle->configuration->activityCallback(FormatError(e, L"Failed to open input endpoint"));
             delete inputEndpointHandle;
+            inputEndpointHandle = nullptr;
+            lock.unlock();
+            sessionHandle->configuration->activityCallback(FormatError(e, L"Failed to open input endpoint"));
             return IN_OPENRESULT_UNKNOWNWMSERROR;
         }
         catch (...)
         {
-            sessionHandle->configuration->activityCallback(L"Failed to open input endpoint");
             delete inputEndpointHandle;
+            inputEndpointHandle = nullptr;
+            lock.unlock();
+            sessionHandle->configuration->activityCallback(L"Failed to open input endpoint");
             return IN_OPENRESULT_UNKNOWNWMSERROR;
         }
+
+        lock.unlock();
+
+        if (!activityMessage.empty())
+            sessionHandle->configuration->activityCallback(activityMessage.c_str());
+
+        return openResult;
     }
 
     inputEndpointHandle->sysExBufferSize = sysExBufferSize;
@@ -2328,6 +2400,7 @@ API_EXPORT IN_CLOSERESULT API_CALL CloseInputEndpoint(void* handle, int* errorCo
 
     InputEndpointHandle* inputEndpointHandle = static_cast<InputEndpointHandle*>(handle);
     auto sessionHandle = inputEndpointHandle->sessionHandle;
+    auto endpointId = inputEndpointHandle->info->endpointDeviceId;
 
     if (inputEndpointHandle->groupListener != nullptr)
     {
@@ -2349,22 +2422,26 @@ API_EXPORT IN_CLOSERESULT API_CALL CloseInputEndpoint(void* handle, int* errorCo
                 sessionHandle->endpointConnectionsById.Remove(inputEndpointHandle->info->endpointDeviceId);
                 sessionHandle->endpointConnectionsUsersCounts.erase(connectionId);
             }
+
+            delete inputEndpointHandle;
+            PruneRemovedMidi1Support(sessionHandle, endpointId);
         }
         catch (const winrt::hresult_error& exception)
         {
             *errorCode = exception.code();
             sessionHandle->configuration->activityCallback(FormatError(exception, L"Failed to close input endpoint"));
             delete inputEndpointHandle;
+            PruneRemovedMidi1Support(sessionHandle, endpointId);
             return IN_CLOSERESULT_UNKNOWNWMSERROR;
         }
         catch (...)
         {
             sessionHandle->configuration->activityCallback(L"Failed to close input endpoint");
             delete inputEndpointHandle;
+            PruneRemovedMidi1Support(sessionHandle, endpointId);
             return IN_CLOSERESULT_UNKNOWNWMSERROR;
         }
 
-        delete inputEndpointHandle;
         return IN_CLOSERESULT_OK;
     }
 
@@ -2771,7 +2848,9 @@ API_EXPORT OUT_OPENRESULT API_CALL OpenOutputEndpoint_Win(OutputEndpointInfo* in
 
     if (!info->endpointDeviceId.empty() && info->gtb != nullptr && info->group != nullptr)
     {
-        std::lock_guard<std::mutex> lock(sessionHandle->endpointDevicesLock);
+        std::wstring activityMessage;
+        auto openResult = OUT_OPENRESULT_GETCONNECTION_UNKNOWNERROR;
+        std::unique_lock<std::mutex> lock(sessionHandle->endpointDevicesLock);
 
         try
         {
@@ -2781,44 +2860,72 @@ API_EXPORT OUT_OPENRESULT API_CALL OpenOutputEndpoint_Win(OutputEndpointInfo* in
                 return OUT_OPENRESULT_UNSUPPORTEDPROTOCOL;
             }
 
+            outputEndpointHandle->midi1Support = sessionHandle->midi1SupportById[info->endpointDeviceId];
+
             midi2::MidiEndpointConnection connection{ nullptr };
-            auto getConnectionResult = GetConnection(sessionHandle, info, &connection);
+            auto getConnectionResult = GetConnection(
+                sessionHandle,
+                info,
+                &connection,
+                nullptr,
+                nullptr,
+                &activityMessage);
             if (getConnectionResult != GETCONNECTIONRESULT_OK)
             {
                 delete outputEndpointHandle;
+                outputEndpointHandle = nullptr;
 
                 switch (getConnectionResult)
                 {
-                    case GETCONNECTIONRESULT_OPENFAILED: return OUT_OPENRESULT_GETCONNECTION_OPENFAILED;
-                    default: return OUT_OPENRESULT_GETCONNECTION_UNKNOWNERROR;
+                    case GETCONNECTIONRESULT_OPENFAILED:
+                        openResult = OUT_OPENRESULT_GETCONNECTION_OPENFAILED;
+                        break;
+                    default:
+                        openResult = OUT_OPENRESULT_GETCONNECTION_UNKNOWNERROR;
+                        break;
                 }
             }
+            else
+            {
+                sessionHandle->endpointConnectionsUsersCounts[connection.ConnectionId()]++;
+                outputEndpointHandle->connection = connection;
 
-            sessionHandle->endpointConnectionsUsersCounts[connection.ConnectionId()]++;
-            outputEndpointHandle->connection = connection;
-
-            *handle = outputEndpointHandle;
-            return OUT_OPENRESULT_OK;
+                *handle = outputEndpointHandle;
+                return OUT_OPENRESULT_OK;
+            }
         }
         catch (const winrt::hresult_error& e)
         {
             *errorCode = e.code();
-            sessionHandle->configuration->activityCallback(FormatError(e, L"Failed to open output endpoint"));
             delete outputEndpointHandle;
+            outputEndpointHandle = nullptr;
+            lock.unlock();
+            sessionHandle->configuration->activityCallback(FormatError(e, L"Failed to open output endpoint"));
             return OUT_OPENRESULT_UNKNOWNWMSERROR;
         }
         catch (const std::exception& e)
         {
-            sessionHandle->configuration->activityCallback(FormatError(e, L"Failed to open output endpoint"));
             delete outputEndpointHandle;
+            outputEndpointHandle = nullptr;
+            lock.unlock();
+            sessionHandle->configuration->activityCallback(FormatError(e, L"Failed to open output endpoint"));
             return OUT_OPENRESULT_UNKNOWNWMSERROR;
         }
         catch (...)
         {
-            sessionHandle->configuration->activityCallback(L"Failed to open output endpoint");
             delete outputEndpointHandle;
+            outputEndpointHandle = nullptr;
+            lock.unlock();
+            sessionHandle->configuration->activityCallback(L"Failed to open output endpoint");
             return OUT_OPENRESULT_UNKNOWNWMSERROR;
         }
+
+        lock.unlock();
+
+        if (!activityMessage.empty())
+            sessionHandle->configuration->activityCallback(activityMessage.c_str());
+
+        return openResult;
     }
 
     auto deviceIndex = info->deviceIndex;
@@ -2855,16 +2962,16 @@ API_EXPORT OUT_CLOSERESULT API_CALL CloseOutputEndpoint(void* handle, int* error
     *errorCode = 0;
 
     OutputEndpointHandle* outputEndpointHandle = static_cast<OutputEndpointHandle*>(handle);
+    auto sessionHandle = outputEndpointHandle->sessionHandle;
+    auto endpointId = outputEndpointHandle->info->endpointDeviceId;
 
     if (outputEndpointHandle->connection != nullptr)
     {
-        std::lock_guard<std::mutex> lock(outputEndpointHandle->sessionHandle->endpointDevicesLock);
+        std::lock_guard<std::mutex> lock(sessionHandle->endpointDevicesLock);
 
         try
         {
             auto connectionId = outputEndpointHandle->connection.ConnectionId();
-            auto sessionHandle = outputEndpointHandle->sessionHandle;
-
             sessionHandle->endpointConnectionsUsersCounts[connectionId]--;
             if (sessionHandle->endpointConnectionsUsersCounts[connectionId] == 0)
             {
@@ -2872,22 +2979,26 @@ API_EXPORT OUT_CLOSERESULT API_CALL CloseOutputEndpoint(void* handle, int* error
                 sessionHandle->endpointConnectionsById.Remove(outputEndpointHandle->info->endpointDeviceId);
                 sessionHandle->endpointConnectionsUsersCounts.erase(connectionId);
             }
+
+            delete outputEndpointHandle;
+            PruneRemovedMidi1Support(sessionHandle, endpointId);
         }
         catch (const winrt::hresult_error& exception)
         {
             *errorCode = exception.code();
             outputEndpointHandle->sessionHandle->configuration->activityCallback(FormatError(exception, L"Failed to close output endpoint"));
             delete outputEndpointHandle;
+            PruneRemovedMidi1Support(sessionHandle, endpointId);
             return OUT_CLOSERESULT_UNKNOWNWMSERROR;
         }
         catch (...)
         {
             outputEndpointHandle->sessionHandle->configuration->activityCallback(L"Failed to close output endpoint");
             delete outputEndpointHandle;
+            PruneRemovedMidi1Support(sessionHandle, endpointId);
             return OUT_CLOSERESULT_UNKNOWNWMSERROR;
         }
 
-        delete outputEndpointHandle;
         return OUT_CLOSERESULT_OK;
     }
 
@@ -2958,7 +3069,7 @@ API_EXPORT OUT_SENDSHORTRESULT API_CALL SendShortEventToOutputEndpoint(void* han
 
         try
         {
-            if (!SupportsMidi1(sessionHandle, outputEndpointHandle->info))
+            if (!outputEndpointHandle->midi1Support->load())
                 return OUT_SENDSHORTRESULT_UNSUPPORTEDPROTOCOL;
 
             auto connection = sessionHandle->endpointConnectionsById.Lookup(outputEndpointHandle->info->endpointDeviceId);
@@ -3024,7 +3135,7 @@ API_EXPORT OUT_SENDSYSEXRESULT API_CALL SendSysExEventToOutputEndpoint_Win(void*
 
         try
         {
-            if (!SupportsMidi1(sessionHandle, outputEndpointHandle->info))
+            if (!outputEndpointHandle->midi1Support->load())
                 return OUT_SENDSYSEXRESULT_UNSUPPORTEDPROTOCOL;
 
             auto connection = sessionHandle->endpointConnectionsById.Lookup(outputEndpointHandle->info->endpointDeviceId);

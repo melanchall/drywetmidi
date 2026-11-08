@@ -307,25 +307,23 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         public void CloseInput(IntPtr handle)
         {
             var result = InputEndpointApi.Api_CloseEndpoint(handle, out var errorCode);
+            _inputHandles.Remove(handle);
 
             ClassicAssert.AreEqual(
                 InputEndpointApi.IN_CLOSERESULT.IN_CLOSERESULT_OK,
                 result,
                 $"Input endpoint did not close; SDK error: {errorCode}.");
-
-            _inputHandles.Remove(handle);
         }
 
         public void CloseOutput(IntPtr handle)
         {
             var result = OutputEndpointApi.Api_CloseEndpoint(handle, out var errorCode);
+            _outputHandles.Remove(handle);
 
             ClassicAssert.AreEqual(
                 OutputEndpointApi.OUT_CLOSERESULT.OUT_CLOSERESULT_OK,
                 result,
                 $"Output endpoint did not close; SDK error: {errorCode}.");
-
-            _outputHandles.Remove(handle);
         }
 
         public void StartListening(IntPtr handle)
@@ -726,10 +724,22 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
         public VirtualDeviceHandle TransferHandle()
         {
-            var handle = new VirtualDeviceHandle(Info);
-            Info = IntPtr.Zero;
+            var configurationReferenceAdded = false;
+            _context.Configuration.DangerousAddRef(ref configurationReferenceAdded);
 
-            return handle;
+            try
+            {
+                var handle = new VirtualDeviceHandle(Info, _context.Configuration);
+                configurationReferenceAdded = false;
+                Info = IntPtr.Zero;
+
+                return handle;
+            }
+            finally
+            {
+                if (configurationReferenceAdded)
+                    _context.Configuration.DangerousRelease();
+            }
         }
 
         public void Dispose()

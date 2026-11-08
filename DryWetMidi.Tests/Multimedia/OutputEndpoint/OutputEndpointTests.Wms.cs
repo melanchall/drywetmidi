@@ -57,10 +57,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 }
                 finally
                 {
+                    context.ClosePorts();
                     OutputEndpointApi.Api_DeleteEndpointInfo(outputInfo);
                 }
-
-                context.CloseInput(inputHandle);
 
                 ClassicAssert.AreEqual(baselineHandles, context.GetCounter(WmsTestCounter.LiveOutputHandles), "Repeated output opens and closes leaked a handle.");
                 ClassicAssert.AreEqual(0, context.GetSessionCounter(WmsTestSessionCounter.CachedConnections), "Last port close left a cached connection.");

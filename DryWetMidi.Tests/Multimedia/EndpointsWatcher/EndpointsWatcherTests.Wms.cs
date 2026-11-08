@@ -17,7 +17,6 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
         [Test]
         [WinOnly]
-        [VirtualDeviceApiRequired]
         public void WmsPublicWatcherCallbacksCanEnumerateOpenSendAndDisposeEndpoints()
         {
             WaitPreviousNotifications();

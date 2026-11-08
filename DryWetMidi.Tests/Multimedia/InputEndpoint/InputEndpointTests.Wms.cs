@@ -57,10 +57,10 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 }
                 finally
                 {
+                    context.ClosePorts();
                     InputEndpointApi.Api_DeleteEndpointInfo(inputInfo);
                 }
 
-                context.CloseOutput(outputHandle);
                 ClassicAssert.AreEqual(0, context.GetSessionCounter(WmsTestSessionCounter.CachedConnections), "Last port close left a cached connection.");
                 context.AssertCallbacksSucceeded();
             }
