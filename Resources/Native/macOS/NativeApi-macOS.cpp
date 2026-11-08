@@ -13,6 +13,7 @@
 #include <thread>
 #include <unordered_map>
 #include <mutex>
+#include <condition_variable>
 #include <limits>
 
 #include "../Common/NativeApi-Constants.h"
@@ -126,6 +127,14 @@ struct TickGeneratorInfo
 {
     void (*callback)(void);
     CFRunLoopTimerRef timerRef;
+};
+
+struct TickGeneratorStopInfo
+{
+    TickGeneratorInfo* tickGeneratorInfo;
+    std::mutex mutex;
+    std::condition_variable condition;
+    bool completed = false;
 };
 
 void SessionCallback(CFRunLoopTimerRef timer, void* info)
@@ -289,6 +298,20 @@ void TimerCallback(CFRunLoopTimerRef timer, void* info)
     tickGeneratorInfo->callback();
 }
 
+void StopTickGeneratorCallback(void* info)
+{
+    TickGeneratorStopInfo* stopInfo = static_cast<TickGeneratorStopInfo*>(info);
+    CFRelease(stopInfo->tickGeneratorInfo->timerRef);
+    delete stopInfo->tickGeneratorInfo;
+
+    {
+        std::lock_guard<std::mutex> lock(stopInfo->mutex);
+        stopInfo->completed = true;
+    }
+
+    stopInfo->condition.notify_one();
+}
+
 API_EXPORT TG_STARTRESULT StartHighPrecisionTickGenerator_Mac(int interval, void* sessionHandle, void (*callback)(void), TickGeneratorInfo** info, int* errorCode)
 {
     *errorCode = 0;
@@ -323,9 +346,33 @@ API_EXPORT TG_STOPRESULT StopHighPrecisionTickGenerator(TickGeneratorSessionHand
     *errorCode = 0;
 
     CFRunLoopRemoveTimer(sessionHandle->runLoopRef, tickGeneratorInfo->timerRef, kCFRunLoopDefaultMode);
-    CFRelease(tickGeneratorInfo->timerRef);
 
-    delete tickGeneratorInfo;
+    if (pthread_equal(pthread_self(), sessionHandle->thread))
+    {
+        CFRelease(tickGeneratorInfo->timerRef);
+        delete tickGeneratorInfo;
+        return TG_STOPRESULT_OK;
+    }
+
+    TickGeneratorStopInfo stopInfo;
+    stopInfo.tickGeneratorInfo = tickGeneratorInfo;
+
+    CFRunLoopSourceContext sourceContext = { 0, &stopInfo, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, StopTickGeneratorCallback };
+    CFRunLoopSourceRef source = CFRunLoopSourceCreate(nullptr, 0, &sourceContext);
+    CFRunLoopAddSource(sessionHandle->runLoopRef, source, kCFRunLoopDefaultMode);
+    CFRunLoopWakeUp(sessionHandle->runLoopRef);
+
+    {
+        std::unique_lock<std::mutex> lock(stopInfo.mutex);
+        stopInfo.condition.wait(lock, [&stopInfo]()
+        {
+            return stopInfo.completed;
+        });
+    }
+
+    CFRunLoopRemoveSource(sessionHandle->runLoopRef, source, kCFRunLoopDefaultMode);
+    CFRelease(source);
+
     return TG_STOPRESULT_OK;
 }
 
