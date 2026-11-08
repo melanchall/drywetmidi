@@ -273,7 +273,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     "Failed Dispose left the virtual device unable to receive MIDI.");
                 ClassicAssert.IsTrue(callbackExceptions.IsEmpty, $"Public input callback failed: {string.Join("; ", callbackExceptions)}.");
                 ClassicAssert.IsTrue(receivedEvents.TryDequeue(out var receivedEvent), "No MIDI event is available after failed Dispose.");
-                MidiAsserts.AreEqual(noteOnEvent, receivedEvent, "Failed Dispose changed loopback MIDI.");
+                MidiAsserts.AreEqual(noteOnEvent, receivedEvent, false, "Failed Dispose changed loopback MIDI.");
                 WmsTestContext.SetFailure(configuration, WmsTestFailure.RemoveLoopback, false);
                 virtualDevice.Dispose();
 
