@@ -134,15 +134,27 @@ namespace Melanchall.DryWetMidi.Multimedia
             if (_tickGeneratorInfo == IntPtr.Zero)
                 return TickGeneratorApi.TG_STOPRESULT.TG_STOPRESULT_OK;
 
+            IntPtr tickGeneratorInfo;
+            IntPtr sessionHandle;
+
             lock (_lockObject)
             {
                 if (_tickGeneratorInfo == IntPtr.Zero)
                     return TickGeneratorApi.TG_STOPRESULT.TG_STOPRESULT_OK;
 
-                var result = TickGeneratorApi.Api_StopHighPrecisionTickGenerator(TickGeneratorSession.GetSessionHandle().DangerousGetHandle(), _tickGeneratorInfo, out errorCode);
+                tickGeneratorInfo = _tickGeneratorInfo;
                 _tickGeneratorInfo = IntPtr.Zero;
-                return result;
+                sessionHandle = TickGeneratorSession.GetSessionHandle().DangerousGetHandle();
             }
+
+            var tickCallback_Win = _tickCallback_Win;
+            var tickCallback_Mac = _tickCallback_Mac;
+            var result = TickGeneratorApi.Api_StopHighPrecisionTickGenerator(sessionHandle, tickGeneratorInfo, out errorCode);
+
+            GC.KeepAlive(tickCallback_Win);
+            GC.KeepAlive(tickCallback_Mac);
+
+            return result;
         }
 
         private TickGeneratorApi.TG_STARTRESULT StartHighPrecisionTickGenerator_Win(int intervalInMilliseconds, out IntPtr tickGeneratorInfo, out int errorCode)

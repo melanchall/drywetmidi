@@ -2404,7 +2404,7 @@ API_EXPORT IN_CLOSERESULT API_CALL CloseInputEndpoint(void* handle, int* errorCo
 
     if (inputEndpointHandle->groupListener != nullptr)
     {
-        std::lock_guard<std::mutex> lock(inputEndpointHandle->sessionHandle->endpointDevicesLock);
+        std::unique_lock<std::mutex> lock(sessionHandle->endpointDevicesLock);
 
         try
         {
@@ -2429,16 +2429,19 @@ API_EXPORT IN_CLOSERESULT API_CALL CloseInputEndpoint(void* handle, int* errorCo
         catch (const winrt::hresult_error& exception)
         {
             *errorCode = exception.code();
-            sessionHandle->configuration->activityCallback(FormatError(exception, L"Failed to close input endpoint"));
+            auto message = FormatError(exception, L"Failed to close input endpoint");
             delete inputEndpointHandle;
             PruneRemovedMidi1Support(sessionHandle, endpointId);
+            lock.unlock();
+            sessionHandle->configuration->activityCallback(message);
             return IN_CLOSERESULT_UNKNOWNWMSERROR;
         }
         catch (...)
         {
-            sessionHandle->configuration->activityCallback(L"Failed to close input endpoint");
             delete inputEndpointHandle;
             PruneRemovedMidi1Support(sessionHandle, endpointId);
+            lock.unlock();
+            sessionHandle->configuration->activityCallback(L"Failed to close input endpoint");
             return IN_CLOSERESULT_UNKNOWNWMSERROR;
         }
 
@@ -2967,7 +2970,7 @@ API_EXPORT OUT_CLOSERESULT API_CALL CloseOutputEndpoint(void* handle, int* error
 
     if (outputEndpointHandle->connection != nullptr)
     {
-        std::lock_guard<std::mutex> lock(sessionHandle->endpointDevicesLock);
+        std::unique_lock<std::mutex> lock(sessionHandle->endpointDevicesLock);
 
         try
         {
@@ -2986,16 +2989,19 @@ API_EXPORT OUT_CLOSERESULT API_CALL CloseOutputEndpoint(void* handle, int* error
         catch (const winrt::hresult_error& exception)
         {
             *errorCode = exception.code();
-            outputEndpointHandle->sessionHandle->configuration->activityCallback(FormatError(exception, L"Failed to close output endpoint"));
+            auto message = FormatError(exception, L"Failed to close output endpoint");
             delete outputEndpointHandle;
             PruneRemovedMidi1Support(sessionHandle, endpointId);
+            lock.unlock();
+            sessionHandle->configuration->activityCallback(message);
             return OUT_CLOSERESULT_UNKNOWNWMSERROR;
         }
         catch (...)
         {
-            outputEndpointHandle->sessionHandle->configuration->activityCallback(L"Failed to close output endpoint");
             delete outputEndpointHandle;
             PruneRemovedMidi1Support(sessionHandle, endpointId);
+            lock.unlock();
+            sessionHandle->configuration->activityCallback(L"Failed to close output endpoint");
             return OUT_CLOSERESULT_UNKNOWNWMSERROR;
         }
 
