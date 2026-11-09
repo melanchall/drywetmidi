@@ -378,6 +378,7 @@ API_EXPORT TG_STOPRESULT StopHighPrecisionTickGenerator(TickGeneratorSessionHand
     }
 
     CFRunLoopAddSource(sessionHandle->runLoopRef, source, kCFRunLoopDefaultMode);
+    CFRunLoopSourceSignal(source);
     CFRunLoopWakeUp(sessionHandle->runLoopRef);
 
     {

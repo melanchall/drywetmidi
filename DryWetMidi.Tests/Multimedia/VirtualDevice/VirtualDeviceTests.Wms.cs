@@ -279,12 +279,16 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 virtualDevice.Dispose();
 
                 ClassicAssert.AreEqual(
-                    1,
+                    2,
                     checkpoints.GetCheckpointDataList(VirtualDeviceCheckpointsNames.CloseDeviceExecutedInDispose).Count,
-                    "Successful public Dispose closed the native device more than once.");
-                virtualDevice.Dispose();
+                    "Public Dispose did not attempt the expected failed close and retry.");
                 ClassicAssert.AreEqual(
                     1,
+                    checkpoints.GetCheckpointDataList(VirtualDeviceCheckpointsNames.CloseDeviceSuccessInDispose).Count,
+                    "Successful public Dispose did not close the native device exactly once.");
+                virtualDevice.Dispose();
+                ClassicAssert.AreEqual(
+                    2,
                     checkpoints.GetCheckpointDataList(VirtualDeviceCheckpointsNames.CloseDeviceExecutedInDispose).Count,
                     "Repeated public Dispose attempted another native close.");
                 ClassicAssert.Throws<ObjectDisposedException>(
