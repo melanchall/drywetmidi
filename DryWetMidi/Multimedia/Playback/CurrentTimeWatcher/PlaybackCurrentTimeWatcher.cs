@@ -233,16 +233,13 @@ namespace Melanchall.DryWetMidi.Multimedia
             ThrowIfArgument.IsNull(nameof(playback), playback);
             EnsureIsNotDisposed();
 
-            bool recreateClock;
-
             lock (_playbacksLock)
             {
                 _playbacks.Remove(playback);
-                recreateClock = !_playbacks.Any();
-            }
 
-            if (recreateClock)
-                RecreateClock();
+                if (!_playbacks.Any())
+                    RecreateClock();
+            }
         }
 
         /// <summary>
