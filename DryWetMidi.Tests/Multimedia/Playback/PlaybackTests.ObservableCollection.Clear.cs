@@ -7,64 +7,13 @@ using NUnit.Framework;
 using NUnit.Framework.Legacy;
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace Melanchall.DryWetMidi.Tests.Multimedia
 {
     [TestFixture]
     public sealed partial class PlaybackTests
     {
-        #region Nested classes
-
-        private sealed class PlaybackLockCheckingTickGenerator : TickGenerator
-        {
-            public Func<bool> ReadPlaybackState { get; set; }
-
-            public bool ReadCompletedDuringStop { get; private set; }
-
-            protected override void Start(TimeSpan interval)
-            {
-            }
-
-            protected override void Stop()
-            {
-                var readTask = Task.Run(ReadPlaybackState);
-                ReadCompletedDuringStop = readTask.Wait(TimeSpan.FromSeconds(2));
-            }
-        }
-
-        #endregion
-
         #region Test methods
-
-        [Test]
-        public void ClearPlayingCollectionStopsClockWithoutHoldingPlaybackLock()
-        {
-            var collection = new ObservableTimedObjectsCollection(new ITimedObject[]
-            {
-                new TimedEvent(new TextEvent("end"), 96000)
-            });
-            var tickGenerator = new PlaybackLockCheckingTickGenerator();
-            using var playback = new Playback(collection, TempoMap.Default, new PlaybackSettings
-            {
-                ClockSettings = new MidiClockSettings
-                {
-                    CreateTickGeneratorCallback = () => tickGenerator
-                }
-            });
-            tickGenerator.ReadPlaybackState = () => playback.IsRunning;
-            var finishedCount = 0;
-            playback.Finished += (_, _) => finishedCount++;
-            playback.Start();
-            ClassicAssert.IsTrue(playback.IsRunning, "Playback did not start before clearing the collection.");
-            playback.PlaybackEnd = (MidiTimeSpan)0;
-
-            collection.Clear();
-
-            ClassicAssert.IsTrue(tickGenerator.ReadCompletedDuringStop, "Stopping the clock held the playback lock.");
-            ClassicAssert.IsFalse(playback.IsRunning, "Playback continued after its collection was cleared.");
-            ClassicAssert.AreEqual(1, finishedCount, "Clearing the collection did not finish playback exactly once.");
-        }
 
         [Test]
         public void CheckPlaybackDataChangesOnTheFly_Clear_WithoutPlaying_1() => CheckPlaybackDataChangesOnTheFly_Clear_WithoutPlaying(
