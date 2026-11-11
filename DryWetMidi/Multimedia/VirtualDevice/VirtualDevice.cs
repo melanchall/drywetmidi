@@ -1,6 +1,7 @@
 ﻿using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Configuration;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
 namespace Melanchall.DryWetMidi.Multimedia
@@ -90,21 +91,32 @@ namespace Melanchall.DryWetMidi.Multimedia
             get { return _enabled; }
             set
             {
-                lock (_disposeLock)
+                var deferredActivityMessages = new List<string>();
+                var previousActivityMessages = MidiConfiguration.DeferredActivityMessages;
+                MidiConfiguration.DeferredActivityMessages = deferredActivityMessages;
+
+                try
                 {
-                    EnsureDeviceIsNotDisposed();
+                    lock (_disposeLock)
+                    {
+                        EnsureDeviceIsNotDisposed();
 
-                    if (_enabled == value)
-                        return;
+                        if (_enabled == value)
+                            return;
 
-                    _enabled = value;
+                        _enabled = value;
 
-                    var configuration = MidiConfiguration.GetConfigurationHandle();
+                        var configuration = MidiConfiguration.GetConfigurationHandle();
 
-                    if (_enabled)
-                        VirtualDeviceApi.Api_UnmuteDevice(_handle, configuration);
-                    else
-                        VirtualDeviceApi.Api_MuteDevice(_handle, configuration);
+                        if (_enabled)
+                            VirtualDeviceApi.Api_UnmuteDevice(_handle, configuration);
+                        else
+                            VirtualDeviceApi.Api_MuteDevice(_handle, configuration);
+                    }
+                }
+                finally
+                {
+                    MidiConfiguration.ReportDeferredActivityMessages(deferredActivityMessages, previousActivityMessages);
                 }
             }
         }
@@ -307,43 +319,54 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         private void Dispose(bool disposing)
         {
-            lock (_disposeLock)
+            var deferredActivityMessages = new List<string>();
+            var previousActivityMessages = MidiConfiguration.DeferredActivityMessages;
+            MidiConfiguration.DeferredActivityMessages = deferredActivityMessages;
+
+            try
             {
-                if (_disposed)
-                    return;
-
-                if (disposing && _handle != null)
+                lock (_disposeLock)
                 {
+                    if (_disposed)
+                        return;
+
+                    if (disposing && _handle != null)
+                    {
 #if TEST
-                    _handle.TestCheckpoints?.SetCheckpointReached(VirtualDeviceCheckpointsNames.DisposeEntered);
+                        _handle.TestCheckpoints?.SetCheckpointReached(VirtualDeviceCheckpointsNames.DisposeEntered);
 #endif
 
-                    var closeResult = VirtualDeviceApi.Api_CloseDevice(_handle.DangerousGetHandle(), out var errorCode);
+                        var closeResult = VirtualDeviceApi.Api_CloseDevice(_handle.DangerousGetHandle(), out var errorCode);
 
 #if TEST
-                    _handle.TestCheckpoints?.SetCheckpointReached(VirtualDeviceCheckpointsNames.CloseDeviceExecutedInDispose);
+                        _handle.TestCheckpoints?.SetCheckpointReached(VirtualDeviceCheckpointsNames.CloseDeviceExecutedInDispose);
 #endif
 
-                    NativeApiUtilities.HandleEndpointNativeApiResult(closeResult, errorCode);
-                    _handle.SetHandleAsInvalid();
-                    _handle.ReleaseConfigurationReference();
+                        NativeApiUtilities.HandleEndpointNativeApiResult(closeResult, errorCode);
+                        _handle.SetHandleAsInvalid();
+                        _handle.ReleaseConfigurationReference();
 
 #if TEST
-                    _handle.TestCheckpoints?.SetCheckpointReached(VirtualDeviceCheckpointsNames.CloseDeviceSuccessInDispose);
+                        _handle.TestCheckpoints?.SetCheckpointReached(VirtualDeviceCheckpointsNames.CloseDeviceSuccessInDispose);
 #endif
 
+                    }
+
+                    _handle?.Dispose();
+                    _handle = null!;
+
+                    if (disposing)
+                    {
+                        InputEndpoint?.Dispose(true);
+                        OutputEndpoint?.Dispose(true);
+                    }
+
+                    _disposed = true;
                 }
-
-                _handle?.Dispose();
-                _handle = null!;
-
-                if (disposing)
-                {
-                    InputEndpoint?.Dispose(true);
-                    OutputEndpoint?.Dispose(true);
-                }
-
-                _disposed = true;
+            }
+            finally
+            {
+                MidiConfiguration.ReportDeferredActivityMessages(deferredActivityMessages, previousActivityMessages);
             }
         }
 

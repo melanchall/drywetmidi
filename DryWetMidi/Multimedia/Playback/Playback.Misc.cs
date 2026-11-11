@@ -1080,7 +1080,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
             lock (_playbackLockObject)
             {
-                if (_tickHandling)
+                if (_tickHandling || !IsRunning)
                     return;
 
                 _tickHandling = true;

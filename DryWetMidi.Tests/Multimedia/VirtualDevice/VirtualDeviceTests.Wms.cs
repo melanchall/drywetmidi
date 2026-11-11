@@ -308,6 +308,51 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             }
         }
 
+        [Test]
+        [WinOnly]
+        [VirtualDeviceApiRequired]
+        [Timeout(15000)]
+        public void DisposeFailureActivityHandlerCanChangeDeviceState()
+        {
+            var configuration = MidiConfiguration.GetConfigurationHandle();
+            WmsTestContext.Enable(configuration);
+            var virtualDevice = VirtualDevice.Create("DisposeActivity-" + Guid.NewGuid());
+            var activityReceived = false;
+            EventHandler<LibraryActivityMessageReceivedEventArgs> activityHandler = (_, eventArgs) =>
+            {
+                if (eventArgs.Message != "Injected loopback removal failure")
+                    return;
+
+                virtualDevice.IsEnabled = false;
+                activityReceived = true;
+            };
+
+            try
+            {
+                WmsTestContext.SetFailure(configuration, WmsTestFailure.RemoveLoopback, true);
+                LibraryConfiguration.LibraryActivityMessageReceived += activityHandler;
+
+                ClassicAssert.Throws<NativeApiException>(
+                    () => virtualDevice.Dispose(),
+                    "The failed close did not report the native error.");
+                ClassicAssert.IsTrue(activityReceived, "The close-failure activity handler was not invoked.");
+                ClassicAssert.IsFalse(virtualDevice.IsEnabled, "The activity handler did not change the device state.");
+
+                WmsTestContext.SetFailure(configuration, WmsTestFailure.RemoveLoopback, false);
+                virtualDevice.Dispose();
+
+                ClassicAssert.Throws<ObjectDisposedException>(
+                    () => { var endpoint = virtualDevice.InputEndpoint; },
+                    "The retry did not dispose the virtual device.");
+            }
+            finally
+            {
+                LibraryConfiguration.LibraryActivityMessageReceived -= activityHandler;
+                WmsTestContext.SetFailure(configuration, WmsTestFailure.RemoveLoopback, false);
+                virtualDevice.Dispose();
+            }
+        }
+
         #endregion
 
         #region Private methods

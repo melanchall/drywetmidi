@@ -69,6 +69,8 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         private void OnObservableTimedObjectsCollectionChanged(object? sender, ObservableTimedObjectsCollectionChangedEventArgs e)
         {
+            MidiClock? clockToStop = null;
+
             lock (_playbackLockObject)
             {
                 TraceAction("processing observable collection changed...");
@@ -142,12 +144,18 @@ namespace Melanchall.DryWetMidi.Multimedia
                     var currentTime = _clock.CurrentTime;
                     if (!Loop && currentTime >= _playbackEndMetric)
                     {
-                        _clock.StopInternally();
-                        OnFinished();
+                        _clock.StopShortly();
+                        clockToStop = _clock;
                     }
                 }
 
                 TraceAction("processed observable collection changed");
+            }
+
+            if (clockToStop != null)
+            {
+                clockToStop.StopInternally();
+                OnFinished();
             }
         }
 

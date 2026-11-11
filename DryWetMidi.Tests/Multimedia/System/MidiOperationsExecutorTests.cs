@@ -1,4 +1,5 @@
 ﻿using Melanchall.DryWetMidi.Common;
+using Melanchall.DryWetMidi.Configuration;
 using Melanchall.DryWetMidi.Multimedia;
 using NUnit.Framework;
 using NUnit.Framework.Legacy;
@@ -96,6 +97,35 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 outerThreadId,
                 innerThreadId,
                 "A nested operation was queued instead of executing inline on the worker.");
+        }
+
+        [Test]
+        public void ExecuteOperation_PropagatesDeferredActivityMessages([Values(false, true)] bool useWorkerThread)
+        {
+            using var executor = MidiOperationsExecutor.CreateForTests(useWorkerThread);
+            var messages = new List<string>();
+            var previousMessages = MidiConfiguration.DeferredActivityMessages;
+            MidiConfiguration.DeferredActivityMessages = messages;
+
+            try
+            {
+                executor.ExecuteOperation(() =>
+                {
+                    ClassicAssert.AreSame(messages, MidiConfiguration.DeferredActivityMessages, "The operation did not receive the caller's activity buffer.");
+
+                    executor.ExecuteOperation(() =>
+                        MidiConfiguration.DeferredActivityMessages.Add("nested activity"));
+                });
+            }
+            finally
+            {
+                MidiConfiguration.DeferredActivityMessages = previousMessages;
+            }
+
+            ClassicAssert.AreEqual(1, messages.Count, "The nested operation did not retain the deferred message.");
+            ClassicAssert.AreEqual("nested activity", messages[0], "The deferred message was changed.");
+            executor.ExecuteOperation(() =>
+                ClassicAssert.IsNull(MidiConfiguration.DeferredActivityMessages, "The activity buffer leaked into a later operation."));
         }
 
         [Test]
