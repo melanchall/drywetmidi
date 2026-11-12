@@ -53,6 +53,10 @@ namespace Melanchall.DryWetMidi.Multimedia
             IN_OPENRESULT_GETCONNECTION_UNKNOWNERROR = 8,
             [NativeApi.NativeErrorType(NativeApi.NativeErrorType.WmsError)]
             IN_OPENRESULT_UNKNOWNWMSERROR = 9,
+            [NativeApi.NativeErrorType(NativeApi.NativeErrorType.WmsError)]
+            IN_OPENRESULT_PLUGINADDFAILED = 10,
+            [NativeApi.NativeErrorType(NativeApi.NativeErrorType.WmsError)]
+            IN_OPENRESULT_UNSUPPORTEDPROTOCOL = 11,
 
             IN_OPENRESULT_INVALIDCLIENT = 101,
             IN_OPENRESULT_INVALIDPORT = 102,

@@ -16,7 +16,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
     [TestFixture]
     [EndpointsWatcherApiRequired]
     [VirtualDeviceApiRequired]
-    public sealed class EndpointsWatcherTests
+    public sealed partial class EndpointsWatcherTests
     {
         #region Test methods
 

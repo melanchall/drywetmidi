@@ -316,10 +316,27 @@ namespace Melanchall.DryWetMidi.Multimedia
             NativeApiUtilities.EnsureOsIsSupported();
             EnsureSessionIsCreated();
 
-            var result = InputEndpointApi.Api_GetEndpointsCount(out var count);
-            NativeApiUtilities.HandleEndpointNativeApiResult(result, 0);
-            
-            return count;
+            var result = InputEndpointApi.Api_GetEndpointsInfo(
+                MidiConfiguration.GetConfigurationHandle(),
+                MidiDevicesSession.GetSessionHandle(),
+                out var endpointsInfo,
+                out var endpointsCount,
+                out var errorCode);
+            NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
+
+            try
+            {
+                for (var index = 0; index < endpointsCount; index++)
+                {
+                    InputEndpointApi.Api_DeleteEndpointInfo(Marshal.ReadIntPtr(endpointsInfo, index * IntPtr.Size));
+                }
+            }
+            finally
+            {
+                InputEndpointApi.Api_FreeEndpointsInfo(endpointsInfo, endpointsCount);
+            }
+
+            return endpointsCount;
         }
 
         /// <summary>
