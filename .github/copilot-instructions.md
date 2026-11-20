@@ -119,7 +119,8 @@ counterpart.
 For independent parameter values, use `[Test]` with NUnit `[Values(...)]` on
 the parameter; do not use `[TestCase]` to enumerate independent values. Use
 `[TestCase]` only when the values in each case are correlated and must stay
-together.
+together. When `[Values]` should cover every possible value of a parameter type,
+use bare `[Values]` instead of listing all values.
 
 Use `ClassicAssert` whenever it provides an equivalent assertion; use other
 assertion APIs only when `ClassicAssert` has no equivalent. Give every assertion

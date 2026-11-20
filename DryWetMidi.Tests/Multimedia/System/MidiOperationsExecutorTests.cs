@@ -100,7 +100,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         [Test]
-        public void ExecuteOperation_PropagatesDeferredActivityMessages([Values(false, true)] bool useWorkerThread)
+        public void ExecuteOperation_PropagatesDeferredActivityMessages([Values] bool useWorkerThread)
         {
             using var executor = MidiOperationsExecutor.CreateForTests(useWorkerThread);
             var messages = new List<string>();
