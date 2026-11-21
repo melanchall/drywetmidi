@@ -52,6 +52,8 @@ namespace Melanchall.DryWetMidi.Multimedia
             OUT_OPENRESULT_GETCONNECTION_UNKNOWNERROR = 7,
             [NativeApi.NativeErrorType(NativeApi.NativeErrorType.WmsError)]
             OUT_OPENRESULT_UNKNOWNWMSERROR = 8,
+            [NativeApi.NativeErrorType(NativeApi.NativeErrorType.WmsError)]
+            OUT_OPENRESULT_UNSUPPORTEDPROTOCOL = 9,
 
             OUT_OPENRESULT_INVALIDCLIENT = 101,
             OUT_OPENRESULT_INVALIDPORT = 102,
@@ -86,6 +88,8 @@ namespace Melanchall.DryWetMidi.Multimedia
             OUT_SENDSHORTRESULT_SENDERROR = 4,
             [NativeApi.NativeErrorType(NativeApi.NativeErrorType.WmsError)]
             OUT_SENDSHORTRESULT_UNKNOWNWMSERROR = 5,
+            [NativeApi.NativeErrorType(NativeApi.NativeErrorType.WmsError)]
+            OUT_SENDSHORTRESULT_UNSUPPORTEDPROTOCOL = 6,
 
             OUT_SENDSHORTRESULT_INVALIDCLIENT = 101,
             OUT_SENDSHORTRESULT_INVALIDPORT = 102,
@@ -115,6 +119,8 @@ namespace Melanchall.DryWetMidi.Multimedia
             OUT_SENDSYSEXRESULT_INVALIDSTRUCTURE = 7,
             OUT_SENDSYSEXRESULT_SENDERROR = 8,
             OUT_SENDSYSEXRESULT_UNKNOWNWMSERROR = 9,
+            [NativeApi.NativeErrorType(NativeApi.NativeErrorType.WmsError)]
+            OUT_SENDSYSEXRESULT_UNSUPPORTEDPROTOCOL = 10,
 
             OUT_SENDSYSEXRESULT_INVALIDCLIENT = 101,
             OUT_SENDSYSEXRESULT_INVALIDPORT = 102,

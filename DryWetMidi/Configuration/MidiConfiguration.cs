@@ -1,6 +1,7 @@
 ﻿using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Multimedia;
 using System;
+using System.Collections.Generic;
 
 namespace Melanchall.DryWetMidi.Configuration
 {
@@ -25,11 +26,20 @@ namespace Melanchall.DryWetMidi.Configuration
         private static MidiConfigurationHandle? _handle;
         private static MidiConfigurationApi.NativeApiActivityCallback? _nativeApiActivityCallback;
 
+        [ThreadStatic]
+        private static List<string>? _deferredActivityMessages;
+
         #endregion
 
         #region Properties
 
         public static bool UseWindowsMidiServices { get; set; } = true;
+
+        internal static List<string>? DeferredActivityMessages
+        {
+            get { return _deferredActivityMessages; }
+            set { _deferredActivityMessages = value; }
+        }
 
 #if TEST
         internal static TestCheckpoints? TestCheckpoints { get; set; }
@@ -104,10 +114,48 @@ namespace Melanchall.DryWetMidi.Configuration
             }
         }
 
+        internal static TResult ExecuteWithDeferredActivityMessages<TResult>(Func<TResult> operation, List<string>? messages)
+        {
+            if (messages == null)
+                return operation();
+
+            var previousMessages = _deferredActivityMessages;
+            _deferredActivityMessages = messages;
+
+            try
+            {
+                return operation();
+            }
+            finally
+            {
+                _deferredActivityMessages = previousMessages;
+            }
+        }
+
+        internal static void ReportDeferredActivityMessages(List<string> messages, List<string>? previousMessages)
+        {
+            _deferredActivityMessages = previousMessages;
+
+            if (previousMessages != null)
+            {
+                previousMessages.AddRange(messages);
+                return;
+            }
+
+            foreach (var message in messages)
+            {
+                NativeApiMessageReceived?.Invoke(null, message);
+            }
+        }
+
         private static void NativeApiActivityCallback(IntPtr record)
         {
             var text = NativeApi.GetStringFromPointer(record);
-            NativeApiMessageReceived?.Invoke(null, text);
+
+            if (_deferredActivityMessages != null)
+                _deferredActivityMessages.Add(text);
+            else
+                NativeApiMessageReceived?.Invoke(null, text);
         }
 
         private static bool IsAppLocalWmsBootstrapEnabled()

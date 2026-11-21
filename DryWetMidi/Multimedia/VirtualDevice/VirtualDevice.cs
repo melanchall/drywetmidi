@@ -1,6 +1,7 @@
 ﻿using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Configuration;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
 namespace Melanchall.DryWetMidi.Multimedia
@@ -24,10 +25,11 @@ namespace Melanchall.DryWetMidi.Multimedia
         #region Fields
 
         private readonly string _name;
+        private readonly object _disposeLock = new();
 
         private VirtualDeviceHandle _handle;
         private bool _disposed = false;
-        private bool _enabled = true;
+        private volatile bool _enabled = true;
 
         private VirtualDeviceApi.Callback_Mac? _callbackMac;
 
@@ -89,17 +91,33 @@ namespace Melanchall.DryWetMidi.Multimedia
             get { return _enabled; }
             set
             {
-                if (_enabled == value)
-                    return;
+                var deferredActivityMessages = new List<string>();
+                var previousActivityMessages = MidiConfiguration.DeferredActivityMessages;
+                MidiConfiguration.DeferredActivityMessages = deferredActivityMessages;
 
-                _enabled = value;
+                try
+                {
+                    lock (_disposeLock)
+                    {
+                        EnsureDeviceIsNotDisposed();
 
-                var configuration = MidiConfiguration.GetConfigurationHandle();
+                        if (_enabled == value)
+                            return;
 
-                if (_enabled)
-                    VirtualDeviceApi.Api_UnmuteDevice(_handle, configuration);
-                else
-                    VirtualDeviceApi.Api_MuteDevice(_handle, configuration);
+                        _enabled = value;
+
+                        var configuration = MidiConfiguration.GetConfigurationHandle();
+
+                        if (_enabled)
+                            VirtualDeviceApi.Api_UnmuteDevice(_handle, configuration);
+                        else
+                            VirtualDeviceApi.Api_MuteDevice(_handle, configuration);
+                    }
+                }
+                finally
+                {
+                    MidiConfiguration.ReportDeferredActivityMessages(deferredActivityMessages, previousActivityMessages);
+                }
             }
         }
 
@@ -212,13 +230,25 @@ namespace Melanchall.DryWetMidi.Multimedia
         {
             var sessionHandle = MidiDevicesSession.GetSessionHandle();
             var configuration = MidiConfiguration.GetConfigurationHandle();
+            var configurationReferenceAdded = false;
 
             _callbackMac = OnMessage_Mac;
 
-            var result = VirtualDeviceApi.Api_OpenDevice_Mac(Name, configuration, sessionHandle, _callbackMac, out var deviceInfo, out var errorCode);
-            NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
+            configuration.DangerousAddRef(ref configurationReferenceAdded);
 
-            InitializeDevice(deviceInfo);
+            try
+            {
+                var result = VirtualDeviceApi.Api_OpenDevice_Mac(Name, configuration, sessionHandle, _callbackMac, out var deviceInfo, out var errorCode);
+                NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
+
+                InitializeDevice(deviceInfo, configuration);
+                configurationReferenceAdded = false;
+            }
+            finally
+            {
+                if (configurationReferenceAdded)
+                    configuration.DangerousRelease();
+            }
         }
 
         [MemberNotNull(nameof(_handle), nameof(InputEndpoint), nameof(OutputEndpoint))]
@@ -226,15 +256,27 @@ namespace Melanchall.DryWetMidi.Multimedia
         {
             var sessionHandle = MidiDevicesSession.GetSessionHandle();
             var configuration = MidiConfiguration.GetConfigurationHandle();
+            var configurationReferenceAdded = false;
 
-            var result = VirtualDeviceApi.Api_OpenDevice_Win(Name, configuration, sessionHandle, out var deviceInfo, out var errorCode);
-            NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
+            configuration.DangerousAddRef(ref configurationReferenceAdded);
 
-            InitializeDevice(deviceInfo);
+            try
+            {
+                var result = VirtualDeviceApi.Api_OpenDevice_Win(Name, configuration, sessionHandle, out var deviceInfo, out var errorCode);
+                NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
+
+                InitializeDevice(deviceInfo, configuration);
+                configurationReferenceAdded = false;
+            }
+            finally
+            {
+                if (configurationReferenceAdded)
+                    configuration.DangerousRelease();
+            }
         }
 
         [MemberNotNull(nameof(_handle), nameof(InputEndpoint), nameof(OutputEndpoint))]
-        private void InitializeDevice(IntPtr deviceInfo)
+        private void InitializeDevice(IntPtr deviceInfo, MidiConfigurationHandle configuration)
         {
             var inputEndpointInfo = VirtualDeviceApi.Api_GetInputEndpointInfo(deviceInfo);
             InputEndpoint = new InputEndpoint(inputEndpointInfo, MidiEndpoint.CreationContext.VirtualDevice);
@@ -242,7 +284,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             var outputEndpointInfo = VirtualDeviceApi.Api_GetOutputEndpointInfo(deviceInfo);
             OutputEndpoint = new OutputEndpoint(outputEndpointInfo, MidiEndpoint.CreationContext.VirtualDevice);
 
-            _handle = new VirtualDeviceHandle(deviceInfo);
+            _handle = new VirtualDeviceHandle(deviceInfo, configuration);
 
 #if TEST
             _handle.TestCheckpoints = TestCheckpoints;
@@ -268,6 +310,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <summary>
         /// Releases all resources used by the MIDI device class instance.
         /// </summary>
+        /// <exception cref="NativeApiException">The loopback could not be removed. The device remains available for another disposal attempt.</exception>
         public void Dispose()
         {
             Dispose(true);
@@ -276,19 +319,55 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         private void Dispose(bool disposing)
         {
-            if (_disposed)
-                return;
+            var deferredActivityMessages = new List<string>();
+            var previousActivityMessages = MidiConfiguration.DeferredActivityMessages;
+            MidiConfiguration.DeferredActivityMessages = deferredActivityMessages;
 
-            _handle?.Dispose();
-            _handle = null!;
-
-            if (disposing)
+            try
             {
-                InputEndpoint?.Dispose(true);
-                OutputEndpoint?.Dispose(true);
-            }
+                lock (_disposeLock)
+                {
+                    if (_disposed)
+                        return;
 
-            _disposed = true;
+                    if (disposing && _handle != null)
+                    {
+#if TEST
+                        _handle.TestCheckpoints?.SetCheckpointReached(VirtualDeviceCheckpointsNames.DisposeEntered);
+#endif
+
+                        var closeResult = VirtualDeviceApi.Api_CloseDevice(_handle.DangerousGetHandle(), out var errorCode);
+
+#if TEST
+                        _handle.TestCheckpoints?.SetCheckpointReached(VirtualDeviceCheckpointsNames.CloseDeviceExecutedInDispose);
+#endif
+
+                        NativeApiUtilities.HandleEndpointNativeApiResult(closeResult, errorCode);
+                        _handle.SetHandleAsInvalid();
+                        _handle.ReleaseConfigurationReference();
+
+#if TEST
+                        _handle.TestCheckpoints?.SetCheckpointReached(VirtualDeviceCheckpointsNames.CloseDeviceSuccessInDispose);
+#endif
+
+                    }
+
+                    _handle?.Dispose();
+                    _handle = null!;
+
+                    if (disposing)
+                    {
+                        InputEndpoint?.Dispose(true);
+                        OutputEndpoint?.Dispose(true);
+                    }
+
+                    _disposed = true;
+                }
+            }
+            finally
+            {
+                MidiConfiguration.ReportDeferredActivityMessages(deferredActivityMessages, previousActivityMessages);
+            }
         }
 
         #endregion

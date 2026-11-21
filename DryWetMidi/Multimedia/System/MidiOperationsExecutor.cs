@@ -145,6 +145,13 @@ namespace Melanchall.DryWetMidi.Multimedia
         public TResult ExecuteOperation<TResult>(Func<TResult> nativeAction)
             where TResult : struct
         {
+            var deferredActivityMessages = MidiConfiguration.DeferredActivityMessages;
+            if (deferredActivityMessages != null)
+            {
+                var operation = nativeAction;
+                nativeAction = () => MidiConfiguration.ExecuteWithDeferredActivityMessages(operation, deferredActivityMessages);
+            }
+
             if (Thread.CurrentThread.ManagedThreadId == _workerThreadId)
                 return nativeAction();
 

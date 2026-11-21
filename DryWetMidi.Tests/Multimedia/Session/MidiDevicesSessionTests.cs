@@ -12,7 +12,7 @@ using System.Threading;
 namespace Melanchall.DryWetMidi.Tests.Multimedia
 {
     [TestFixture]
-    public sealed class MidiDevicesSessionTests
+    public sealed partial class MidiDevicesSessionTests
     {
         #region Delegates
 

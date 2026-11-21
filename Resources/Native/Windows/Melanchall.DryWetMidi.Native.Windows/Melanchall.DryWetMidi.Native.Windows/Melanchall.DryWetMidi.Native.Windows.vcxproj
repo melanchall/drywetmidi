@@ -38,6 +38,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\NativeApi-Windows.cpp" />
+    <ClInclude Include="..\..\NativeApi-Windows.Tests.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

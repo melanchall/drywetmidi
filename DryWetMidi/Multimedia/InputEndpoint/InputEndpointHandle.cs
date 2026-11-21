@@ -40,6 +40,7 @@ namespace Melanchall.DryWetMidi.Multimedia
 
                     var closeResult = InputEndpointApi.Api_CloseEndpoint(OpenedEndpointHandle, out errorCode);
                     closed = closeResult == InputEndpointApi.IN_CLOSERESULT.IN_CLOSERESULT_OK && disconnected;
+                    OpenedEndpointHandle = IntPtr.Zero;
 
 #if TEST
                     TestCheckpoints?.SetCheckpointReached(InputEndpointCheckpointsNames.CloseEndpointExecutedInReleaseHandle);

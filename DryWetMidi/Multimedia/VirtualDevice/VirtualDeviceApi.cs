@@ -139,6 +139,10 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         [LibraryImport(NativeApi.LibraryName)]
         [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
+        private static partial void AbandonVirtualDevice_Win(IntPtr info);
+
+        [LibraryImport(NativeApi.LibraryName)]
+        [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
         private static partial VIRTUAL_SENDBACKRESULT SendDataBackFromVirtualDevice(IntPtr pktlist, IntPtr readProcRefCon, out int errorCode);
 
         [LibraryImport(NativeApi.LibraryName)]
@@ -165,6 +169,9 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
         private static extern VIRTUAL_CLOSERESULT CloseVirtualDevice(IntPtr info, out int errorCode);
+
+        [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
+        private static extern void AbandonVirtualDevice_Win(IntPtr info);
 
         [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
         private static extern VIRTUAL_SENDBACKRESULT SendDataBackFromVirtualDevice(IntPtr pktlist, IntPtr readProcRefCon, out int errorCode);
@@ -223,6 +230,11 @@ namespace Melanchall.DryWetMidi.Multimedia
             
             errorCode = errorCodeLocal;
             return result;
+        }
+
+        public static void Api_AbandonDevice_Win(IntPtr info)
+        {
+            MidiOperationsExecutor.Instance.ExecuteOperation(() => AbandonVirtualDevice_Win(info));
         }
 
         public static VIRTUAL_SENDBACKRESULT Api_SendDataBack(IntPtr pktlist, IntPtr readProcRefCon, out int errorCode)
