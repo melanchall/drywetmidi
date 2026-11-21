@@ -11,7 +11,7 @@
       "dest": "obj/api",
       "shouldSkipMarkup": true,
       "properties": {
-        "TargetFramework": "net8.0"
+        "TargetFramework": "net9.0"
       }
     }
   ],

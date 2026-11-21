@@ -70,7 +70,7 @@ jobs:
         uses: ./.github/actions/setup-framework
         with: 
           framework: ${{ matrix.framework }}
-          net-tfm: ${{ vars.BUILD_FRAMEWORK_NET_TFM || 'net8.0' }}
+          net-tfm: ${{ vars.BUILD_FRAMEWORK_NET_TFM }}
           net-sdk-version:  ${{ vars.BUILD_FRAMEWORK_NET_SDK_VERSION }}
           netframework-tfm: ${{ vars.BUILD_FRAMEWORK_NETFRAMEWORK_TFM }}
           netframework-sdk-version: ${{ vars.BUILD_FRAMEWORK_NETFRAMEWORK_SDK_VERSION }}
