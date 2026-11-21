@@ -42,6 +42,19 @@ namespace Melanchall.DryWetMidi.Multimedia
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         public delegate void TimerCallback_Mac();
 
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        private delegate void TimerCallbackWithContext_Mac(IntPtr context);
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        private delegate void ReleaseTimerCallbackContext_Mac(IntPtr context);
+
+        #endregion
+
+        #region Fields
+
+        private static readonly TimerCallbackWithContext_Mac CallbackWithContextMac = InvokeTimerCallbackMac;
+        private static readonly ReleaseTimerCallbackContext_Mac ReleaseCallbackContextMac = ReleaseTimerCallbackContextMac;
+
         #endregion
 
         #region Extern functions
@@ -53,7 +66,14 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         [LibraryImport(NativeApi.LibraryName)]
         [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-        private static partial TG_STARTRESULT StartHighPrecisionTickGenerator_Mac(int interval, IntPtr sessionHandle, TimerCallback_Mac callback, out IntPtr info, out int errorCode);
+        private static partial TG_STARTRESULT StartHighPrecisionTickGenerator_Mac(
+            int interval,
+            IntPtr sessionHandle,
+            TimerCallbackWithContext_Mac callback,
+            ReleaseTimerCallbackContext_Mac releaseCallback,
+            IntPtr callbackContext,
+            out IntPtr info,
+            out int errorCode);
 
         [LibraryImport(NativeApi.LibraryName)]
         [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
@@ -63,7 +83,14 @@ namespace Melanchall.DryWetMidi.Multimedia
         public static extern TG_STARTRESULT StartHighPrecisionTickGenerator_Win(int interval, IntPtr sessionHandle, TimerCallback_Win callback, out IntPtr info, out int errorCode);
 
         [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
-        public static extern TG_STARTRESULT StartHighPrecisionTickGenerator_Mac(int interval, IntPtr sessionHandle, TimerCallback_Mac callback, out IntPtr info, out int errorCode);
+        private static extern TG_STARTRESULT StartHighPrecisionTickGenerator_Mac(
+            int interval,
+            IntPtr sessionHandle,
+            TimerCallbackWithContext_Mac callback,
+            ReleaseTimerCallbackContext_Mac releaseCallback,
+            IntPtr callbackContext,
+            out IntPtr info,
+            out int errorCode);
 
         [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
         public static extern TG_STOPRESULT StopHighPrecisionTickGenerator(IntPtr sessionHandle, IntPtr info, out int errorCode);
@@ -80,12 +107,46 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         public static TG_STARTRESULT Api_StartHighPrecisionTickGenerator_Mac(int interval, IntPtr sessionHandle, TimerCallback_Mac callback, out IntPtr info, out int errorCode)
         {
-            return StartHighPrecisionTickGenerator_Mac(interval, sessionHandle, callback, out info, out errorCode);
+            // The weak handle keeps the native context valid without preventing generator finalization.
+            var callbackHandle = GCHandle.Alloc(callback, GCHandleType.Weak);
+
+            try
+            {
+                var result = StartHighPrecisionTickGenerator_Mac(
+                    interval,
+                    sessionHandle,
+                    CallbackWithContextMac,
+                    ReleaseCallbackContextMac,
+                    GCHandle.ToIntPtr(callbackHandle),
+                    out info,
+                    out errorCode);
+
+                if (result != TG_STARTRESULT.TG_STARTRESULT_OK)
+                    callbackHandle.Free();
+
+                return result;
+            }
+            catch
+            {
+                callbackHandle.Free();
+                throw;
+            }
         }
 
         public static TG_STOPRESULT Api_StopHighPrecisionTickGenerator(IntPtr sessionHandle, IntPtr info, out int errorCode)
         {
             return StopHighPrecisionTickGenerator(sessionHandle, info, out errorCode);
+        }
+
+        private static void InvokeTimerCallbackMac(IntPtr context)
+        {
+            var callback = GCHandle.FromIntPtr(context).Target as TimerCallback_Mac;
+            callback?.Invoke();
+        }
+
+        private static void ReleaseTimerCallbackContextMac(IntPtr context)
+        {
+            GCHandle.FromIntPtr(context).Free();
         }
 
         #endregion
