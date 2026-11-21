@@ -13,11 +13,6 @@ namespace Melanchall.DryWetMidi.Multimedia
     {
         #region Nested enums
 
-        public enum OUT_GETCOUNTRESULT
-        {
-            OUT_GETCOUNTRESULT_OK = 0
-        }
-
         public enum OUT_GETALLINFORESULT
         {
             OUT_GETALLINFORESULT_OK = 0,
@@ -169,10 +164,6 @@ namespace Melanchall.DryWetMidi.Multimedia
 #if NET7_0_OR_GREATER
         [LibraryImport(NativeApi.LibraryName)]
         [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
-        private static partial OUT_GETCOUNTRESULT GetOutputEndpointsCount(out int count);
-
-        [LibraryImport(NativeApi.LibraryName)]
-        [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
         private static partial OUT_GETALLINFORESULT GetOutputEndpointsInfo_Win(MidiConfigurationHandle configuration, MidiDevicesSessionHandle sessionHandle, [MarshalAs(UnmanagedType.U1)] bool forceWinMM, out IntPtr devicesInfo, out int devicesCount, out int errorCode);
 
         [LibraryImport(NativeApi.LibraryName)]
@@ -228,9 +219,6 @@ namespace Melanchall.DryWetMidi.Multimedia
         private static partial void DeleteOutputEndpointInfo(IntPtr info);
 #else
         [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
-        private static extern OUT_GETCOUNTRESULT GetOutputEndpointsCount(out int count);
-
-        [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
         private static extern OUT_GETALLINFORESULT GetOutputEndpointsInfo_Win(MidiConfigurationHandle configuration, MidiDevicesSessionHandle sessionHandle, [MarshalAs(UnmanagedType.U1)] bool forceWinMM, out IntPtr devicesInfo, out int devicesCount, out int errorCode);
 
         [DllImport(NativeApi.LibraryName, ExactSpelling = true, CallingConvention = CallingConvention.Cdecl)]
@@ -276,17 +264,6 @@ namespace Melanchall.DryWetMidi.Multimedia
         #endregion
 
         #region Methods
-
-        public static OUT_GETCOUNTRESULT Api_GetEndpointsCount(out int count)
-        {
-            var countLocal = 0;
-            
-            var result = MidiOperationsExecutor.Instance.ExecuteOperation(() =>
-                GetOutputEndpointsCount(out countLocal));
-            
-            count = countLocal;
-            return result;
-        }
 
         public static OUT_GETALLINFORESULT Api_GetEndpointsInfo(MidiConfigurationHandle configuration, MidiDevicesSessionHandle sessionHandle, bool forceWinMM, out IntPtr devicesInfo, out int devicesCount, out int errorCode)
         {

@@ -108,28 +108,14 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         public void GetAllOutputEndpoints()
         {
-            WaitOperations.Wait(() =>
-            {
-                var endpoints = OutputEndpoint.GetAll();
-
-                try
-                {
-                    return OutputEndpoint.GetEndpointsCount() == endpoints.Count;
-                }
-                finally
-                {
-                    foreach (var endpoint in endpoints)
-                    {
-                        endpoint.Dispose();
-                    }
-                }
-            }, TimeSpan.FromSeconds(5));
-
             var outputEndpoints = OutputEndpoint.GetAll();
 
             try
             {
-                ClassicAssert.AreEqual(OutputEndpoint.GetEndpointsCount(), outputEndpoints.Count, "Output endpoints count is invalid.");
+                ClassicAssert.GreaterOrEqual(
+                    outputEndpoints.Count,
+                    MidiEndpoints.GetAllEndpointsNames().Length,
+                    "Output endpoints count is invalid.");
             }
             finally
             {
@@ -138,16 +124,6 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     outputEndpoint.Dispose();
                 }
             }
-        }
-
-        [Test]
-        public void GetOutputEndpointsCount()
-        {
-            var outputEndpointsCount = OutputEndpoint.GetEndpointsCount();
-            ClassicAssert.GreaterOrEqual(
-                outputEndpointsCount,
-                MidiEndpoints.GetAllEndpointsNames().Length,
-                "Output endpoints count is invalid.");
         }
 
         [Test]

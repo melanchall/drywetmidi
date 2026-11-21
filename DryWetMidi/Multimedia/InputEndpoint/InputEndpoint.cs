@@ -307,39 +307,6 @@ namespace Melanchall.DryWetMidi.Multimedia
         }
 
         /// <summary>
-        /// Retrieves the number of input MIDI endpoints presented in the system.
-        /// </summary>
-        /// <returns>Number of input MIDI endpoints presented in the system.</returns>
-        /// <exception cref="NativeApiException">An error occurred.</exception>
-        public static int GetEndpointsCount()
-        {
-            NativeApiUtilities.EnsureOsIsSupported();
-            EnsureSessionIsCreated();
-
-            var result = InputEndpointApi.Api_GetEndpointsInfo(
-                MidiConfiguration.GetConfigurationHandle(),
-                MidiDevicesSession.GetSessionHandle(),
-                out var endpointsInfo,
-                out var endpointsCount,
-                out var errorCode);
-            NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
-
-            try
-            {
-                for (var index = 0; index < endpointsCount; index++)
-                {
-                    InputEndpointApi.Api_DeleteEndpointInfo(Marshal.ReadIntPtr(endpointsInfo, index * IntPtr.Size));
-                }
-            }
-            finally
-            {
-                InputEndpointApi.Api_FreeEndpointsInfo(endpointsInfo, endpointsCount);
-            }
-
-            return endpointsCount;
-        }
-
-        /// <summary>
         /// Retrieves all input MIDI endpoints presented in the system.
         /// </summary>
         /// <returns>All input MIDI endpoints presented in the system.</returns>
