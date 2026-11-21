@@ -1,3 +1,9 @@
+parameters:
+- name: suffix
+  displayName: 'Artifacts suffix'
+  type: string
+  default: ''
+
 steps:
 - task: PowerShell@2
   displayName: Build test data sending utility
@@ -20,5 +26,5 @@ steps:
   condition: contains(variables.VmImage, 'macos')
   inputs:
     targetPath: 'DryWetMidi.Tests/SendTestData.dylib'
-    artifactName: 'SendTestData'
+    artifactName: 'SendTestData${{ parameters.suffix }}_Attempt$(System.JobAttempt)'
     artifactType: pipeline
