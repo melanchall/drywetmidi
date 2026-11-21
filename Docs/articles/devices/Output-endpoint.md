@@ -6,7 +6,7 @@ uid: a_dev_output
 
 In DryWetMIDI an output MIDI endpoint is represented by the [`IOutputEndpoint`](xref:Melanchall.DryWetMidi.Multimedia.IOutputEndpoint) interface. It allows to send events to a MIDI device. To understand what an output MIDI endpoint is in DryWetMIDI, please read the [Overview](Overview.md) article.
 
-The library provides built-in implementation of `IOutputEndpoint`: [`OutputEndpoint`](xref:Melanchall.DryWetMidi.Multimedia.OutputEndpoint). To get an instance of `OutputEndpoint` you should use [`GetByName`](xref:Melanchall.DryWetMidi.Multimedia.OutputEndpoint.GetByName(System.String)) static method. To retrieve the count of output MIDI endpoints presented in the system there is the [`GetEndpointsCount`](xref:Melanchall.DryWetMidi.Multimedia.OutputEndpoint.GetEndpointsCount) method. You can get all output MIDI endpoints with [`GetAll`](xref:Melanchall.DryWetMidi.Multimedia.OutputEndpoint.GetAll) method:
+The library provides built-in implementation of `IOutputEndpoint`: [`OutputEndpoint`](xref:Melanchall.DryWetMidi.Multimedia.OutputEndpoint). To get an instance of `OutputEndpoint` you should use [`GetByName`](xref:Melanchall.DryWetMidi.Multimedia.OutputEndpoint.GetByName(System.String)) static method. You can get all output MIDI endpoints with [`GetAll`](xref:Melanchall.DryWetMidi.Multimedia.OutputEndpoint.GetAll) method:
 
 ```csharp
 using System;

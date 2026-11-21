@@ -6,7 +6,7 @@ uid: a_dev_input
 
 In DryWetMIDI an input MIDI endpoint is represented by the [`IInputEndpoint`](xref:Melanchall.DryWetMidi.Multimedia.IInputEndpoint) interface. It allows to receive events from a MIDI device. To understand what an input MIDI endpoint is in DryWetMIDI, please read the [Overview](Overview.md) article.
 
-The library provides built-in implementation of `IInputEndpoint`: [`InputEndpoint`](xref:Melanchall.DryWetMidi.Multimedia.InputEndpoint) class. To get an instance of `InputEndpoint` you should use [`GetByName`](xref:Melanchall.DryWetMidi.Multimedia.InputEndpoint.GetByName*) static method. To get count of input MIDI endpoints presented in the system there is the [`GetEndpointsCount`](xref:Melanchall.DryWetMidi.Multimedia.InputEndpoint.GetEndpointsCount) method. You can get all input MIDI endpoints with the [`GetAll`](xref:Melanchall.DryWetMidi.Multimedia.InputEndpoint.GetAll) method.
+The library provides built-in implementation of `IInputEndpoint`: [`InputEndpoint`](xref:Melanchall.DryWetMidi.Multimedia.InputEndpoint) class. To get an instance of `InputEndpoint` you should use [`GetByName`](xref:Melanchall.DryWetMidi.Multimedia.InputEndpoint.GetByName*) static method. You can get all input MIDI endpoints with the [`GetAll`](xref:Melanchall.DryWetMidi.Multimedia.InputEndpoint.GetAll) method.
 
 > [!WARNING]
 > <os-specific-api `InputEndpoint`/> Of course you can create your own implementation of `IInputEndpoint` as described in the [Custom input endpoint](#custom-input-endpoint) section below.
