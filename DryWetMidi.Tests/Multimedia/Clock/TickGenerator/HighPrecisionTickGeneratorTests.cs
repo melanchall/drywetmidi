@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using Melanchall.DryWetMidi.Multimedia;
 using Melanchall.DryWetMidi.Tests.Attributes;
 using NUnit.Framework;
@@ -83,9 +84,92 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             StopTickGeneratorAndCheckIntervals(runInfo3);
         }
 
+        [MacOnly]
+        [Test]
+        public void TicksContinueAfterGarbageCollectionAndRestart()
+        {
+            var runInfo = PrepareRunInfo(1);
+            StartTickGenerator(runInfo);
+
+            try
+            {
+                CheckTicksContinueAfterGarbageCollection(runInfo, "while running");
+
+                runInfo.Stopwatch.Stop();
+                runInfo.TickGenerator.TryStop();
+
+                lock (_lockObject)
+                {
+                    runInfo.Times.Clear();
+                }
+
+                runInfo.Stopwatch.Reset();
+                runInfo.TickGenerator.TryStart(TimeSpan.FromMilliseconds(runInfo.IntervalInMs));
+                runInfo.Stopwatch.Start();
+
+                CheckTicksContinueAfterGarbageCollection(runInfo, "after restarting");
+            }
+            finally
+            {
+                runInfo.Stopwatch.Stop();
+                runInfo.TickGenerator.TryStop();
+                runInfo.TickGenerator.Dispose();
+            }
+        }
+
+        [MacOnly]
+        [Test]
+        public void AbandonedRunningTickGeneratorIsFinalizedSafely()
+        {
+            var tickGeneratorReference = CreateAndAbandonRunningTickGenerator();
+
+            ForceGarbageCollection();
+
+            ClassicAssert.IsFalse(
+                tickGeneratorReference.TryGetTarget(out _),
+                "Abandoned running tick generator was not finalized.");
+        }
+
         #endregion
 
         #region Private methods
+
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        private static WeakReference<HighPrecisionTickGenerator> CreateAndAbandonRunningTickGenerator()
+        {
+            var tickGenerator = new HighPrecisionTickGenerator();
+            tickGenerator.TryStart(TimeSpan.FromMilliseconds(1));
+
+            return new WeakReference<HighPrecisionTickGenerator>(tickGenerator, true);
+        }
+
+        private void CheckTicksContinueAfterGarbageCollection(RunInfo runInfo, string scenario)
+        {
+            var tickCountBeforeGarbageCollection = GetTickCount(runInfo);
+
+            ForceGarbageCollection();
+
+            var tickGenerated = WaitOperations.Wait(
+                () => GetTickCount(runInfo) > tickCountBeforeGarbageCollection,
+                WaitTime);
+
+            ClassicAssert.IsTrue(tickGenerated, $"No ticks were generated {scenario} forced garbage collection.");
+        }
+
+        private int GetTickCount(RunInfo runInfo)
+        {
+            lock (_lockObject)
+            {
+                return runInfo.Times.Count;
+            }
+        }
+
+        private static void ForceGarbageCollection()
+        {
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+            GC.Collect();
+        }
 
         private static RunInfo PrepareRunInfo(int intervalInMs)
         {
