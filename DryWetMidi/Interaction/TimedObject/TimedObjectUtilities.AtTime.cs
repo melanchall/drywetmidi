@@ -20,7 +20,11 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <returns>The objects that occur at <paramref name="time"/>.</returns>
         /// <exception cref="ArgumentNullException">An argument is <c>null</c>.</exception>
         /// <example>
-        /// An event at tick 120 is returned by <c>timedObjects.AtTime(new MidiTimeSpan(120), tempoMap)</c>.
+        /// <para>
+        /// For <c>timedObjects.AtTime(new MidiTimeSpan(120), tempoMap)</c>, a timed event is returned if its
+        /// <see cref="ITimedObject.Time"/> is 120. A <see cref="Note"/> is returned if it spans tick 120; for
+        /// example, a note starting at tick 100 with length 40 is returned because it ends at tick 140.
+        /// </para>
         /// </example>
         public static IEnumerable<TObject> AtTime<TObject>(
             this IEnumerable<TObject?> timedObjects,
@@ -47,8 +51,12 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <exception cref="ArgumentNullException">An argument is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="endTime"/> is earlier than <paramref name="startTime"/>.</exception>
         /// <example>
-        /// An event at tick 120 is returned by <c>timedObjects.AtTimeRange(new MidiTimeSpan(100), new MidiTimeSpan(240), tempoMap)</c>;
-        /// the range includes both its start and end times.
+        /// <para>
+        /// For <c>timedObjects.AtTimeRange(new MidiTimeSpan(100), new MidiTimeSpan(200), tempoMap)</c>, a timed event
+        /// is returned if its time is between ticks 100 and 200, inclusive. A <see cref="Note"/> is returned if any
+        /// part of it overlaps that range; for example, a note starting at tick 80 with length 30 is returned because
+        /// it ends at tick 110, within the range. A note ending before tick 100 or starting after tick 200 is not returned.
+        /// </para>
         /// </example>
         public static IEnumerable<TObject> AtTimeRange<TObject>(
             this IEnumerable<TObject?> timedObjects,
