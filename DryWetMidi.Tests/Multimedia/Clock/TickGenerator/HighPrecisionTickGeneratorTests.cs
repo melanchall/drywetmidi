@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading;
 using Melanchall.DryWetMidi.Multimedia;
 using Melanchall.DryWetMidi.Tests.Attributes;
 using NUnit.Framework;
@@ -30,6 +31,15 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             public Stopwatch Stopwatch { get; } = new Stopwatch();
 
             public List<long> Times { get; } = new List<long>(100000);
+        }
+
+        private sealed class CallbackTickGeneratorRun
+        {
+            public IntPtr TickGeneratorInfo { get; set; }
+
+            public TickGeneratorApi.TimerCallback_Win? WindowsCallback { get; set; }
+
+            public TickGeneratorApi.TimerCallback_Mac? MacCallback { get; set; }
         }
 
         #endregion
@@ -84,7 +94,6 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             StopTickGeneratorAndCheckIntervals(runInfo3);
         }
 
-        [MacOnly]
         [Test]
         public void TicksContinueAfterGarbageCollectionAndRestart()
         {
@@ -117,7 +126,6 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             }
         }
 
-        [MacOnly]
         [Test]
         public void AbandonedRunningTickGeneratorIsFinalizedSafely()
         {
@@ -130,9 +138,235 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 "Abandoned running tick generator was not finalized.");
         }
 
+        [Test]
+        public void StopAndCloseWhileTickCallbackIsRunning()
+        {
+            using (var callbackEntered = new ManualResetEventSlim())
+            using (var releaseCallback = new ManualResetEventSlim())
+            using (var callbackExited = new ManualResetEventSlim())
+            {
+                var callbackTickGeneratorRun = new CallbackTickGeneratorRun();
+                Action callback = () =>
+                {
+                    callbackEntered.Set();
+                    releaseCallback.Wait(TimeSpan.FromSeconds(10));
+                    callbackExited.Set();
+                };
+
+                var sessionHandle = OpenTickGeneratorSession();
+                var startResult = StartCallbackTickGenerator(
+                    1,
+                    sessionHandle,
+                    callback,
+                    callbackTickGeneratorRun,
+                    out var errorCode);
+
+                if (startResult != TickGeneratorApi.TG_STARTRESULT.TG_STARTRESULT_OK)
+                {
+                    TickGeneratorSessionApi.Api_CloseSession(sessionHandle, out _);
+                    ClassicAssert.Fail($"Tick generator was not started; result: {startResult}, error code: {errorCode}.");
+                }
+
+                var sessionClosed = false;
+                var generatorStopped = false;
+
+                try
+                {
+                    ClassicAssert.IsTrue(callbackEntered.Wait(WaitTime), "Tick callback did not start.");
+
+                    var stopResult = TickGeneratorApi.Api_StopHighPrecisionTickGenerator(
+                        sessionHandle,
+                        callbackTickGeneratorRun.TickGeneratorInfo,
+                        out errorCode);
+                    generatorStopped = true;
+                    ClassicAssert.AreEqual(
+                        TickGeneratorApi.TG_STOPRESULT.TG_STOPRESULT_OK,
+                        stopResult,
+                        $"Tick generator was not stopped; error code: {errorCode}.");
+
+                    var closeResult = TickGeneratorSessionApi.Api_CloseSession(sessionHandle, out errorCode);
+                    sessionClosed = true;
+
+                    var expectedCloseResult = CommonApi.Api_GetOsType() == CommonApi.OsType.MacOS
+                        ? TickGeneratorSessionApi.TGSESSION_CLOSERESULT.TGSESSION_CLOSERESULT_THREADEXITTIMEOUT
+                        : TickGeneratorSessionApi.TGSESSION_CLOSERESULT.TGSESSION_CLOSERESULT_OK;
+                    ClassicAssert.AreEqual(
+                        expectedCloseResult,
+                        closeResult,
+                        $"Session close result was unexpected; error code: {errorCode}.");
+                }
+                finally
+                {
+                    releaseCallback.Set();
+
+                    if (!generatorStopped)
+                    {
+                        TickGeneratorApi.Api_StopHighPrecisionTickGenerator(
+                            sessionHandle,
+                            callbackTickGeneratorRun.TickGeneratorInfo,
+                            out _);
+                    }
+
+                    if (!sessionClosed)
+                        TickGeneratorSessionApi.Api_CloseSession(sessionHandle, out _);
+
+                    if (callbackEntered.IsSet)
+                    {
+                        ClassicAssert.IsTrue(
+                            callbackExited.Wait(WaitTime),
+                            "Tick callback did not finish.");
+                    }
+
+                    GC.KeepAlive(callbackTickGeneratorRun.WindowsCallback);
+                    GC.KeepAlive(callbackTickGeneratorRun.MacCallback);
+                }
+            }
+        }
+
+        [Test]
+        public void StopTickGeneratorFromItsCallback()
+        {
+            using (var allowStop = new ManualResetEventSlim())
+            using (var callbackFinished = new ManualResetEventSlim())
+            {
+                var callbackTickGeneratorRun = new CallbackTickGeneratorRun();
+                var stopResult = TickGeneratorApi.TG_STOPRESULT.TG_STOPRESULT_CANTKILLEVENT;
+                var stopErrorCode = 0;
+                var stopStarted = 0;
+                var sessionHandle = OpenTickGeneratorSession();
+
+                Action callback = () =>
+                {
+                    if (allowStop.Wait(WaitTime) &&
+                        Interlocked.CompareExchange(ref stopStarted, 1, 0) == 0)
+                    {
+                        stopResult = TickGeneratorApi.Api_StopHighPrecisionTickGenerator(
+                            sessionHandle,
+                            callbackTickGeneratorRun.TickGeneratorInfo,
+                            out stopErrorCode);
+                    }
+
+                    callbackFinished.Set();
+                };
+
+                var startResult = StartCallbackTickGenerator(
+                    1,
+                    sessionHandle,
+                    callback,
+                    callbackTickGeneratorRun,
+                    out var errorCode);
+
+                if (startResult != TickGeneratorApi.TG_STARTRESULT.TG_STARTRESULT_OK)
+                {
+                    TickGeneratorSessionApi.Api_CloseSession(sessionHandle, out _);
+                    ClassicAssert.Fail($"Tick generator was not started; result: {startResult}, error code: {errorCode}.");
+                }
+
+                var sessionClosed = false;
+
+                try
+                {
+                    allowStop.Set();
+
+                    var callbackCompleted = callbackFinished.Wait(WaitTime);
+                    if (!callbackCompleted &&
+                        Interlocked.CompareExchange(ref stopStarted, 1, 0) == 0)
+                    {
+                        stopResult = TickGeneratorApi.Api_StopHighPrecisionTickGenerator(
+                            sessionHandle,
+                            callbackTickGeneratorRun.TickGeneratorInfo,
+                            out stopErrorCode);
+                        callbackCompleted = callbackFinished.Wait(WaitTime);
+                    }
+
+                    ClassicAssert.IsTrue(callbackCompleted, "Tick callback did not finish after stopping its generator.");
+                    ClassicAssert.AreEqual(
+                        TickGeneratorApi.TG_STOPRESULT.TG_STOPRESULT_OK,
+                        stopResult,
+                        $"Tick generator was not stopped by its callback; error code: {stopErrorCode}.");
+
+                    var closeResult = TickGeneratorSessionApi.Api_CloseSession(sessionHandle, out errorCode);
+                    sessionClosed = true;
+
+                    ClassicAssert.AreEqual(
+                        TickGeneratorSessionApi.TGSESSION_CLOSERESULT.TGSESSION_CLOSERESULT_OK,
+                        closeResult,
+                        $"Session was not closed successfully; error code: {errorCode}.");
+                }
+                finally
+                {
+                    allowStop.Set();
+
+                    if (Interlocked.CompareExchange(ref stopStarted, 1, 0) == 0)
+                    {
+                        TickGeneratorApi.Api_StopHighPrecisionTickGenerator(
+                            sessionHandle,
+                            callbackTickGeneratorRun.TickGeneratorInfo,
+                            out _);
+                    }
+
+                    callbackFinished.Wait(WaitTime);
+
+                    if (!sessionClosed)
+                        TickGeneratorSessionApi.Api_CloseSession(sessionHandle, out _);
+
+                    GC.KeepAlive(callbackTickGeneratorRun.WindowsCallback);
+                    GC.KeepAlive(callbackTickGeneratorRun.MacCallback);
+                }
+            }
+        }
+
         #endregion
 
         #region Private methods
+
+        private static IntPtr OpenTickGeneratorSession()
+        {
+            var openResult = TickGeneratorSessionApi.Api_OpenSession(out var sessionHandle, out var errorCode);
+            ClassicAssert.AreEqual(
+                TickGeneratorSessionApi.TGSESSION_OPENRESULT.TGSESSION_OPENRESULT_OK,
+                openResult,
+                $"Tick generator session was not opened; error code: {errorCode}.");
+
+            return sessionHandle;
+        }
+
+        private static TickGeneratorApi.TG_STARTRESULT StartCallbackTickGenerator(
+            int intervalInMs,
+            IntPtr sessionHandle,
+            Action callback,
+            CallbackTickGeneratorRun callbackTickGeneratorRun,
+            out int errorCode)
+        {
+            if (CommonApi.Api_GetOsType() == CommonApi.OsType.Windows)
+            {
+                var windowsCallback = (TickGeneratorApi.TimerCallback_Win)((uID, uMsg, dwUser, dw1, dw2) => callback());
+                callbackTickGeneratorRun.WindowsCallback = windowsCallback;
+
+                var result = TickGeneratorApi.Api_StartHighPrecisionTickGenerator_Win(
+                    intervalInMs,
+                    sessionHandle,
+                    windowsCallback,
+                    out var tickGeneratorInfo,
+                    out errorCode);
+
+                callbackTickGeneratorRun.TickGeneratorInfo = tickGeneratorInfo;
+                return result;
+            }
+
+            TickGeneratorApi.TimerCallback_Mac macCallback = () => callback();
+            callbackTickGeneratorRun.MacCallback = macCallback;
+
+            var macResult = TickGeneratorApi.Api_StartHighPrecisionTickGenerator_Mac(
+                intervalInMs,
+                sessionHandle,
+                macCallback,
+                out var macTickGeneratorInfo,
+                out errorCode);
+
+            callbackTickGeneratorRun.TickGeneratorInfo = macTickGeneratorInfo;
+            return macResult;
+        }
 
         [MethodImpl(MethodImplOptions.NoInlining)]
         private static WeakReference<HighPrecisionTickGenerator> CreateAndAbandonRunningTickGenerator()
