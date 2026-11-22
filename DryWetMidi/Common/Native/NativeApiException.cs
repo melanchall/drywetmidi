@@ -45,6 +45,7 @@ namespace Melanchall.DryWetMidi.Common
         /// </summary>
         /// <param name="message">The error message that explains the reason for the exception.</param>
         /// <param name="mainErrorCode">The error code.</param>
+        /// <param name="additionalErrorCode">An additional error code.</param>
         public NativeApiException(string message, int mainErrorCode, int additionalErrorCode)
             : this(message)
         {
@@ -61,6 +62,9 @@ namespace Melanchall.DryWetMidi.Common
         /// </summary>
         public int? MainErrorCode { get; }
 
+        /// <summary>
+        /// Gets the additional error code associated with the current <see cref="NativeApiException"/>.
+        /// </summary>
         public int? AdditionalErrorCode { get; }
 
         #endregion

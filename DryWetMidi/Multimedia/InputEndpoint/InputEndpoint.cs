@@ -113,6 +113,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             }
         }
 
+        /// <inheritdoc/>
         public override string Id
         {
             get
@@ -201,6 +202,16 @@ namespace Melanchall.DryWetMidi.Multimedia
             }
         }
 
+        /// <summary>
+        /// Gets or sets the size, in bytes, of each buffer used to receive system exclusive events.
+        /// The default value is 2048 bytes.
+        /// </summary>
+        /// <remarks>
+        /// This property is applicable only on Windows when <see cref="LibraryConfiguration.GetApiType"/> returns
+        /// <see cref="ApiType.WinMM"/>.
+        /// </remarks>
+        /// <exception cref="ArgumentOutOfRangeException">The value is less than 32.</exception>
+        /// <exception cref="InvalidOperationException">The value is changed after event listening has started.</exception>
         public int SysExBufferSize
         {
             get { return _sysExBufferSize; }
@@ -222,6 +233,16 @@ namespace Melanchall.DryWetMidi.Multimedia
             }
         }
 
+        /// <summary>
+        /// Gets or sets the number of buffers used to receive system exclusive events.
+        /// The default value is 5.
+        /// </summary>
+        /// <remarks>
+        /// This property is applicable only on Windows when <see cref="LibraryConfiguration.GetApiType"/> returns
+        /// <see cref="ApiType.WinMM"/>.
+        /// </remarks>
+        /// <exception cref="ArgumentOutOfRangeException">The value is less than 2.</exception>
+        /// <exception cref="InvalidOperationException">The value is changed after event listening has started.</exception>
         public int SysExBuffersCount
         {
             get { return _sysExBuffersCount; }
@@ -295,6 +316,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
         }
 
+        /// <inheritdoc/>
         public long GetCurrentTimestamp()
         {
             NativeApiUtilities.EnsureOsIsSupported();
@@ -821,6 +843,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             return $"Input endpoint{(string.IsNullOrWhiteSpace(baseDescription) ? string.Empty : $" ({baseDescription})")}";
         }
 
+        /// <inheritdoc/>
         protected override void OnDisposing()
         {
             base.OnDisposing();

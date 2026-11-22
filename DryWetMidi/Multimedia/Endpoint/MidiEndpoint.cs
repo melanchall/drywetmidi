@@ -50,7 +50,15 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// Flag to detect redundant disposing.
         /// </summary>
         protected bool _disposed = false;
+
+        /// <summary>
+        /// Indicates that disposal of the endpoint is in progress.
+        /// </summary>
         protected volatile bool _disposing;
+
+        /// <summary>
+        /// Indicates whether the endpoint is enabled.
+        /// </summary>
         protected bool _enabled = true;
 
 #if TEST
@@ -104,6 +112,9 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// </summary>
         public abstract string Name { get; }
 
+        /// <summary>
+        /// Gets the identifier of the current MIDI endpoint.
+        /// </summary>
         public abstract string Id { get; }
 
         internal CreationContext Context { get; }
@@ -128,6 +139,11 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         #region Methods
 
+        /// <summary>
+        /// Gets information about the MIDI device to which this endpoint is associated.
+        /// </summary>
+        /// <returns>The device information, or <c>null</c> if the native API did not provide a device identifier or name.</returns>
+        /// <exception cref="NativeApiException">An error occurred while retrieving device information.</exception>
         public DeviceInformation? GetDeviceInformation()
         {
             NativeApiUtilities.EnsureOsIsSupported();
@@ -141,6 +157,9 @@ namespace Melanchall.DryWetMidi.Multimedia
             return DeviceInformation.Get(id, name, manufacturer, model, deviceDriver);
         }
 
+        /// <summary>
+        /// Performs cleanup before the endpoint handle is disposed.
+        /// </summary>
         protected virtual void OnDisposing()
         {
         }

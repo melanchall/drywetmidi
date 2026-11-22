@@ -17,6 +17,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// </summary>
         /// <param name="message">The error message that explains the reason for the exception.</param>
         /// <param name="mainErrorCode">The error code.</param>
+        /// <param name="additionalErrorCode">An additional error code.</param>
         public TickGeneratorException(
             string message,
             int mainErrorCode,
@@ -36,6 +37,9 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// </summary>
         public int MainErrorCode { get; }
 
+        /// <summary>
+        /// Gets the additional error code associated with the current <see cref="TickGeneratorException"/>.
+        /// </summary>
         public int AdditionalErrorCode { get; }
 
         #endregion

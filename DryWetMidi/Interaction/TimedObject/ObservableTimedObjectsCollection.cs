@@ -205,6 +205,15 @@ namespace Melanchall.DryWetMidi.Interaction
             return Remove((IEnumerable<ITimedObject>)objects);
         }
 
+        /// <summary>
+        /// Removes all objects that match the specified predicate from the current collection.
+        /// </summary>
+        /// <remarks>If the method is executed within the <see cref="ChangeCollection(Action)"/>,
+        /// the <see cref="CollectionChanged"/> event will be fired when you're done with
+        /// the <see cref="ChangeCollection(Action)"/> method.</remarks>
+        /// <param name="match">A predicate that determines which objects to remove.</param>
+        /// <returns><c>true</c> if one or more objects were removed; otherwise, <c>false</c>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="match"/> is <c>null</c>.</exception>
         public bool Remove(Predicate<ITimedObject> match)
         {
             ThrowIfArgument.IsNull(nameof(match), match);

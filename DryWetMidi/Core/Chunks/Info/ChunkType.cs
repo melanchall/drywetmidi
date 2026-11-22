@@ -45,6 +45,7 @@ namespace Melanchall.DryWetMidi.Core
 
         #region Overrides
 
+        /// <inheritdoc/>
         override public string ToString()
         {
             return $"{Id} -> {Type.Name}";

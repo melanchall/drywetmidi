@@ -1,6 +1,8 @@
 ﻿namespace Melanchall.DryWetMidi.Common
 {
-    // TODO: triple-slash comments in usages
+    /// <summary>
+    /// The exception that is thrown when a feature is not available on the current system.
+    /// </summary>
     public sealed class FeatureNotAvailableException : MidiException
     {
         #region Constructor

@@ -78,6 +78,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             }
         }
 
+        /// <inheritdoc/>
         public override string Id
         {
             get
@@ -488,6 +489,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             return $"Output endpoint{(string.IsNullOrWhiteSpace(baseDescription) ? string.Empty : $" ({baseDescription})")}";
         }
 
+        /// <inheritdoc/>
         protected override void OnDisposing()
         {
             base.OnDisposing();

@@ -43,6 +43,7 @@ namespace Melanchall.DryWetMidi.Core
 
         #region Overrides
 
+        /// <inheritdoc/>
         override public string ToString()
         {
             return $"{StatusByte} ({Convert.ToString(StatusByte, 16).ToUpperInvariant().PadLeft(2, '0')}) -> {Type.Name}";

@@ -4,7 +4,7 @@ using System.Linq;
 namespace Melanchall.DryWetMidi.Multimedia
 {
     /// <summary>
-    /// // TODO
+    /// Provides information about a MIDI device.
     /// </summary>
     /// <remarks>
     /// <os-specific-api/>
@@ -32,14 +32,29 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         #region Properties
 
+        /// <summary>
+        /// Gets the identifier of the device.
+        /// </summary>
         public string Id { get; }
 
+        /// <summary>
+        /// Gets the name of the device.
+        /// </summary>
         public string Name { get; }
 
+        /// <summary>
+        /// Gets the device manufacturer, if available.
+        /// </summary>
         public string? Manufacturer { get; }
 
+        /// <summary>
+        /// Gets the device model, if available.
+        /// </summary>
         public string? Model { get; }
 
+        /// <summary>
+        /// Gets the device driver version, if available.
+        /// </summary>
         public string? DriverVersion { get; }
 
         #endregion
@@ -58,6 +73,12 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         #region Operators
 
+        /// <summary>
+        /// Determines whether two device information objects identify the same device.
+        /// </summary>
+        /// <param name="deviceInformation1">The first device information object.</param>
+        /// <param name="deviceInformation2">The second device information object.</param>
+        /// <returns><c>true</c> if both objects are <c>null</c> or have the same device identifier; otherwise, <c>false</c>.</returns>
         public static bool operator ==(DeviceInformation? deviceInformation1, DeviceInformation? deviceInformation2)
         {
             if (ReferenceEquals(deviceInformation1, deviceInformation2))
@@ -69,6 +90,12 @@ namespace Melanchall.DryWetMidi.Multimedia
             return deviceInformation1.Id == deviceInformation2.Id;
         }
 
+        /// <summary>
+        /// Determines whether two device information objects identify different devices.
+        /// </summary>
+        /// <param name="deviceInformation1">The first device information object.</param>
+        /// <param name="deviceInformation2">The second device information object.</param>
+        /// <returns><c>true</c> if the objects have different device identifiers; otherwise, <c>false</c>.</returns>
         public static bool operator !=(DeviceInformation? deviceInformation1, DeviceInformation? deviceInformation2)
         {
             return !(deviceInformation1 == deviceInformation2);
@@ -78,13 +105,16 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         #region Overrides
 
+        /// <inheritdoc/>
         public override int GetHashCode() =>
             Id.GetHashCode();
 
+        /// <inheritdoc/>
         public override bool Equals(object? obj) =>
             obj is DeviceInformation device &&
             Id.Equals(device.Id);
 
+        /// <inheritdoc/>
         public override string ToString()
         {
             var manufacturerPart = string.IsNullOrEmpty(Manufacturer) ? string.Empty : $"manufacturer = {Manufacturer}";
