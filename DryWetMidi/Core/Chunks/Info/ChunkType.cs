@@ -45,6 +45,10 @@ namespace Melanchall.DryWetMidi.Core
 
         #region Overrides
 
+        /// <summary>
+        /// Returns a string that represents this chunk type.
+        /// </summary>
+        /// <returns>A string containing the chunk ID and type name.</returns>
         override public string ToString()
         {
             return $"{Id} -> {Type.Name}";

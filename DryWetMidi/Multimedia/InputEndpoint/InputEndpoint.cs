@@ -113,6 +113,9 @@ namespace Melanchall.DryWetMidi.Multimedia
             }
         }
 
+        /// <summary>
+        /// Gets the identifier of the current input endpoint.
+        /// </summary>
         public override string Id
         {
             get
@@ -201,6 +204,12 @@ namespace Melanchall.DryWetMidi.Multimedia
             }
         }
 
+        /// <summary>
+        /// Gets or sets the size, in bytes, of each buffer used to receive system exclusive events.
+        /// The default value is 2048 bytes.
+        /// </summary>
+        /// <exception cref="ArgumentOutOfRangeException">The value is less than 32.</exception>
+        /// <exception cref="InvalidOperationException">The value is changed after event listening has started.</exception>
         public int SysExBufferSize
         {
             get { return _sysExBufferSize; }
@@ -222,6 +231,12 @@ namespace Melanchall.DryWetMidi.Multimedia
             }
         }
 
+        /// <summary>
+        /// Gets or sets the number of buffers used to receive system exclusive events.
+        /// The default value is 5.
+        /// </summary>
+        /// <exception cref="ArgumentOutOfRangeException">The value is less than 2.</exception>
+        /// <exception cref="InvalidOperationException">The value is changed after event listening has started.</exception>
         public int SysExBuffersCount
         {
             get { return _sysExBuffersCount; }
@@ -295,6 +310,11 @@ namespace Melanchall.DryWetMidi.Multimedia
             NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
         }
 
+        /// <summary>
+        /// Gets the current system timestamp in nanoseconds.
+        /// </summary>
+        /// <returns>The current system timestamp in nanoseconds.</returns>
+        /// <exception cref="NativeApiException">An error occurred while retrieving the timestamp.</exception>
         public long GetCurrentTimestamp()
         {
             NativeApiUtilities.EnsureOsIsSupported();
@@ -821,6 +841,9 @@ namespace Melanchall.DryWetMidi.Multimedia
             return $"Input endpoint{(string.IsNullOrWhiteSpace(baseDescription) ? string.Empty : $" ({baseDescription})")}";
         }
 
+        /// <summary>
+        /// Releases resources used by the input endpoint.
+        /// </summary>
         protected override void OnDisposing()
         {
             base.OnDisposing();

@@ -299,6 +299,7 @@ namespace Melanchall.DryWetMidi.Interaction
         /// will be returned for the input number <c>1.5</c>.
         /// </summary>
         /// <param name="number">A number to convert to <see cref="MusicalTimeSpan"/>.</param>
+        /// <param name="epsilon">The maximum difference used when matching the number to a rational value.</param>
         /// <returns>An instance of the <see cref="MusicalTimeSpan"/> which represents the <paramref name="number"/>.</returns>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="number"/> is negative.</exception>
         /// <exception cref="InvalidOperationException">Failed to find rationalization for the specified number.

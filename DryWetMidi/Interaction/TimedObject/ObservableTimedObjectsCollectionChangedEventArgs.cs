@@ -26,6 +26,9 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         public ICollection<ChangedTimedObject>? ChangedObjects { get; set; }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether all data was removed from the collection.
+        /// </summary>
         public bool AllDataRemoved { get; set; }
 
         internal bool HasData

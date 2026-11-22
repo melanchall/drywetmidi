@@ -18,6 +18,9 @@ namespace Melanchall.DryWetMidi.Multimedia
     {
         #region Events
 
+        /// <summary>
+        /// Occurs when an error occurs while using the virtual device.
+        /// </summary>
         public event EventHandler<ErrorOccurredEventArgs>? ErrorOccurred;
 
         #endregion
@@ -86,6 +89,9 @@ namespace Melanchall.DryWetMidi.Multimedia
             get { return _name; }
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether the virtual device is enabled.
+        /// </summary>
         public bool IsEnabled
         {
             get { return _enabled; }

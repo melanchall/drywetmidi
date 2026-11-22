@@ -43,6 +43,10 @@ namespace Melanchall.DryWetMidi.Core
 
         #region Overrides
 
+        /// <summary>
+        /// Returns a string that represents this event type.
+        /// </summary>
+        /// <returns>A string containing the status byte and event type name.</returns>
         override public string ToString()
         {
             return $"{StatusByte} ({Convert.ToString(StatusByte, 16).ToUpperInvariant().PadLeft(2, '0')}) -> {Type.Name}";

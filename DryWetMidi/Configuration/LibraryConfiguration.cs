@@ -7,11 +7,17 @@ using System.Runtime.InteropServices;
 
 namespace Melanchall.DryWetMidi.Configuration
 {
+    /// <summary>
+    /// Provides access to library-wide configuration and native MIDI API capabilities.
+    /// </summary>
     public static class LibraryConfiguration
     {
         #region Events
 
 #if !NATIVELESS
+        /// <summary>
+        /// Occurs when an activity message is received from the native MIDI API.
+        /// </summary>
         public static event EventHandler<LibraryActivityMessageReceivedEventArgs>? LibraryActivityMessageReceived;
 #endif
 
@@ -40,14 +46,25 @@ namespace Melanchall.DryWetMidi.Configuration
         #region Properties
 
 #if !NATIVELESS
+        /// <summary>
+        /// Gets or sets whether Windows MIDI Services is preferred as the native MIDI API on Windows.
+        /// The default value is <c>true</c>.
+        /// </summary>
         public static bool UseWindowsMidiServices
         {
             get => MidiConfiguration.UseWindowsMidiServices;
             set => MidiConfiguration.UseWindowsMidiServices = value;
         }
 
+        /// <summary>
+        /// Gets or sets whether native MIDI API operations are executed on a worker thread.
+        /// The default value is <c>true</c>.
+        /// </summary>
         public static bool UseWorkerThread { get; set; } = true;
 
+        /// <summary>
+        /// Gets a value indicating whether native MIDI API operations are currently executed on a worker thread.
+        /// </summary>
         public static bool IsWorkerThreadUsed
         {
             get
@@ -64,6 +81,10 @@ namespace Melanchall.DryWetMidi.Configuration
         #region Methods
 
 #if !NATIVELESS
+        /// <summary>
+        /// Determines whether the endpoints watcher API is available on the current system.
+        /// </summary>
+        /// <returns><c>true</c> if the endpoints watcher API is available; otherwise, <c>false</c>.</returns>
         public static bool IsEndpointsWatcherApiAvailable()
         {
             if (!NativeApiUtilities.IsOsSupported())
@@ -72,6 +93,10 @@ namespace Melanchall.DryWetMidi.Configuration
             return MidiConfigurationApi.Api_IsDevicesWatcherApiAvailable(MidiConfiguration.GetConfigurationHandle());
         }
 
+        /// <summary>
+        /// Determines whether the current system supports access to an endpoint by multiple clients.
+        /// </summary>
+        /// <returns><c>true</c> if multi-client endpoint access is available; otherwise, <c>false</c>.</returns>
         public static bool IsEndpointsMultiClientAccessAvailable()
         {
             if (!NativeApiUtilities.IsOsSupported())
@@ -80,6 +105,10 @@ namespace Melanchall.DryWetMidi.Configuration
             return IsAdvancedApiAvailable();
         }
 
+        /// <summary>
+        /// Determines whether the virtual device API is available on the current system.
+        /// </summary>
+        /// <returns><c>true</c> if the virtual device API is available; otherwise, <c>false</c>.</returns>
         public static bool IsVirtualDeviceApiAvailable()
         {
             if (!NativeApiUtilities.IsOsSupported())
@@ -88,6 +117,10 @@ namespace Melanchall.DryWetMidi.Configuration
             return MidiConfigurationApi.Api_IsVirtualDeviceApiAvailable(MidiConfiguration.GetConfigurationHandle());
         }
 
+        /// <summary>
+        /// Gets the native MIDI API used by DryWetMIDI on the current system.
+        /// </summary>
+        /// <returns>The type of native MIDI API in use.</returns>
         public static ApiType GetApiType()
         {
             NativeApiUtilities.EnsureOsIsSupported();
@@ -95,6 +128,10 @@ namespace Melanchall.DryWetMidi.Configuration
         }
 #endif
 
+        /// <summary>
+        /// Gets a summary of the DryWetMIDI version, native backend, and available capabilities.
+        /// </summary>
+        /// <returns>A multiline summary of the current library configuration.</returns>
         public static string GetConfigurationSummary()
         {
             var resultLines = new List<string>

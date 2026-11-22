@@ -2,6 +2,9 @@
 
 namespace Melanchall.DryWetMidi.Configuration
 {
+    /// <summary>
+    /// Provides data for the <see cref="LibraryConfiguration.LibraryActivityMessageReceived"/> event.
+    /// </summary>
     public sealed class LibraryActivityMessageReceivedEventArgs : EventArgs
     {
         #region Constructor
@@ -15,12 +18,19 @@ namespace Melanchall.DryWetMidi.Configuration
 
         #region Properties
 
+        /// <summary>
+        /// Gets or sets the activity message received from the native MIDI API.
+        /// </summary>
         public string Message { get; set; }
 
         #endregion
 
         #region Overrides
 
+        /// <summary>
+        /// Returns the activity message.
+        /// </summary>
+        /// <returns>The value of <see cref="Message"/>.</returns>
         public override string ToString() =>
             Message;
 

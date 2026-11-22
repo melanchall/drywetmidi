@@ -374,6 +374,10 @@ namespace Melanchall.DryWetMidi.Multimedia
             }
         }
 
+        /// <summary>
+        /// Gets or sets whether channel aftertouch values are tracked when playback time changes.
+        /// The default value is <c>true</c>.
+        /// </summary>
         public bool TrackChannelAftertouch
         {
             get { return _channelAftertouchChangesManager.IsEnabled; }
@@ -389,6 +393,10 @@ namespace Melanchall.DryWetMidi.Multimedia
             }
         }
 
+        /// <summary>
+        /// Gets or sets whether note aftertouch values are tracked when playback time changes.
+        /// The default value is <c>true</c>.
+        /// </summary>
         public bool TrackNoteAftertouch
         {
             get { return _noteAftertouchChangesManager.IsEnabled; }

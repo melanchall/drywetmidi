@@ -36,6 +36,7 @@ namespace Melanchall.DryWetMidi.Core
         /// Initializes a new instance of the <see cref="SysExEvent"/> with the specified event type.
         /// </summary>
         /// <param name="eventType">The type of event.</param>
+        /// <param name="statusByte">The status byte that identifies this system exclusive event.</param>
         protected SysExEvent(MidiEventType eventType, byte statusByte)
             : base(eventType)
         {
@@ -152,6 +153,10 @@ namespace Melanchall.DryWetMidi.Core
             return result;
         }
 
+        /// <summary>
+        /// Returns a string that describes the data of this system exclusive event.
+        /// </summary>
+        /// <returns>A description of the event data, or <c>"no data"</c> if the event has no data.</returns>
         public override string ToString()
         {
             const int margin = 3;

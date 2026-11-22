@@ -1,4 +1,5 @@
 ﻿using Melanchall.DryWetMidi.Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -9,6 +10,15 @@ namespace Melanchall.DryWetMidi.Interaction
     {
         #region Methods
 
+        /// <summary>
+        /// Gets timed objects that occur at the specified time.
+        /// </summary>
+        /// <typeparam name="TObject">The type of timed objects to return.</typeparam>
+        /// <param name="timedObjects">The collection of timed objects to search.</param>
+        /// <param name="time">The time at which to find objects.</param>
+        /// <param name="tempoMap">The tempo map used to convert <paramref name="time"/> to MIDI ticks.</param>
+        /// <returns>The objects that occur at <paramref name="time"/>.</returns>
+        /// <exception cref="ArgumentNullException">An argument is <c>null</c>.</exception>
         public static IEnumerable<TObject> AtTime<TObject>(
             this IEnumerable<TObject?> timedObjects,
             ITimeSpan time,
@@ -22,6 +32,17 @@ namespace Melanchall.DryWetMidi.Interaction
             return timedObjects.AtTimeRange(time, time, tempoMap);
         }
 
+        /// <summary>
+        /// Gets timed objects that occur within the specified time range.
+        /// </summary>
+        /// <typeparam name="TObject">The type of timed objects to return.</typeparam>
+        /// <param name="timedObjects">The collection of timed objects to search.</param>
+        /// <param name="startTime">The inclusive start of the time range.</param>
+        /// <param name="endTime">The inclusive end of the time range.</param>
+        /// <param name="tempoMap">The tempo map used to convert the time range to MIDI ticks.</param>
+        /// <returns>The objects that occur within the specified time range.</returns>
+        /// <exception cref="ArgumentNullException">An argument is <c>null</c>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="endTime"/> is earlier than <paramref name="startTime"/>.</exception>
         public static IEnumerable<TObject> AtTimeRange<TObject>(
             this IEnumerable<TObject?> timedObjects,
             ITimeSpan startTime,

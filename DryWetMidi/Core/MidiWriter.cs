@@ -117,6 +117,15 @@ namespace Melanchall.DryWetMidi.Core
             WriteBytes(bytes, 0, bytes.Length);
         }
 
+        /// <summary>
+        /// Writes a range of bytes from an array to the underlying stream.
+        /// </summary>
+        /// <param name="bytes">The byte array containing the data to write.</param>
+        /// <param name="offset">The zero-based index of the first byte to write.</param>
+        /// <param name="length">The number of bytes to write.</param>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="offset"/> or <paramref name="length"/> specifies a range outside the array.</exception>
+        /// <exception cref="ObjectDisposedException">The method was called after the writer was disposed.</exception>
+        /// <exception cref="IOException">An I/O error occurred on the underlying stream.</exception>
         public void WriteBytes(byte[] bytes, int offset, int length)
         {
             WriteBytes(bytes.AsSpan(offset, length));

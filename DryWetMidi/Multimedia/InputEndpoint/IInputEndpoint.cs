@@ -30,6 +30,10 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// </summary>
         void StopEventsListening();
 
+        /// <summary>
+        /// Gets the current system timestamp in nanoseconds.
+        /// </summary>
+        /// <returns>The current system timestamp in nanoseconds.</returns>
         long GetCurrentTimestamp();
     }
 }
