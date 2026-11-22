@@ -14,6 +14,7 @@
 #include <unordered_map>
 #include <mutex>
 #include <limits>
+#include <cerrno>
 
 #include "../Common/NativeApi-Constants.h"
 
@@ -113,43 +114,52 @@ API_EXPORT void CheckNativeApiActivityCallback(Configuration* configuration)
 struct TickGeneratorSessionHandle
 {
     pthread_t thread;
-    std::atomic<bool> active;
-    std::atomic<bool> sessionClosed;
-    std::atomic<bool> threadExited;
-    CFRunLoopRef runLoopRef;
-    TGSESSION_OPENRESULT threadStartResult;
-    int threadStartError;
-    CFRunLoopTimerRef timerRef = nullptr;
+    // The opener and the worker each own one reference.
+    std::atomic<int> references{2};
+    std::atomic<bool> threadStartCompleted{false};
+    std::atomic<bool> sessionClosed{false};
+    std::atomic<bool> threadExited{false};
+    CFRunLoopRef runLoopRef = nullptr;
+    CFRunLoopSourceRef runLoopSource = nullptr;
+    TGSESSION_OPENRESULT threadStartResult = TGSESSION_OPENRESULT_OK;
+    int threadStartError = 0;
 };
 
 struct TickGeneratorInfo
 {
-    void (*callback)(void);
+    std::atomic<int> references{1};
+    std::atomic<bool> stopped{false};
+    void (*callback)(void*);
+    void (*releaseCallback)(void*) = nullptr;
+    void* callbackContext;
     CFRunLoopTimerRef timerRef;
 };
 
-void SessionCallback(CFRunLoopTimerRef timer, void* info)
-{}
+void ReleaseTickGeneratorSession(TickGeneratorSessionHandle* sessionHandle)
+{
+    if (sessionHandle->references.fetch_sub(1) != 1)
+        return;
+
+    if (sessionHandle->runLoopSource != nullptr)
+    {
+        CFRunLoopSourceInvalidate(sessionHandle->runLoopSource);
+        CFRelease(sessionHandle->runLoopSource);
+    }
+
+    if (sessionHandle->runLoopRef != nullptr)
+        CFRelease(sessionHandle->runLoopRef);
+
+    delete sessionHandle;
+}
+
+void StopTickGeneratorRunLoop(void*)
+{
+    CFRunLoopStop(CFRunLoopGetCurrent());
+}
 
 void* TickGeneratorSessionThreadRoutine(void* data)
 {
     TickGeneratorSessionHandle* sessionHandle = static_cast<TickGeneratorSessionHandle*>(data);
-
-    CFRunLoopTimerContext context = { 0, nullptr, nullptr, nullptr, nullptr };
-    CFRunLoopTimerRef timerRef = CFRunLoopTimerCreate(
-        nullptr,
-        CFAbsoluteTimeGetCurrent() + 60,
-        60,
-        0,
-        0,
-        SessionCallback,
-        &context);
-
-    sessionHandle->timerRef = timerRef;
-
-    CFRunLoopRef runLoopRef = CFRunLoopGetCurrent();
-    CFRunLoopAddTimer(runLoopRef, timerRef, kCFRunLoopDefaultMode);
-    CFRelease(timerRef);
 
     // Set realtime priority
     // (thanks to https://stackoverflow.com/a/44310370/2975589)
@@ -158,10 +168,10 @@ void* TickGeneratorSessionThreadRoutine(void* data)
     kern_return_t kr = mach_timebase_info(&timebase);
     if (kr != KERN_SUCCESS)
     {
-        CFRunLoopRemoveTimer(runLoopRef, timerRef, kCFRunLoopDefaultMode);
-        sessionHandle->timerRef = nullptr;
         sessionHandle->threadStartError = kr;
         sessionHandle->threadStartResult = TGSESSION_OPENRESULT_FAILEDTOGETTIMEBASEINFO;
+        sessionHandle->threadStartCompleted.store(true);
+        ReleaseTickGeneratorSession(sessionHandle);
         return nullptr;
     }
 
@@ -176,27 +186,33 @@ void* TickGeneratorSessionThreadRoutine(void* data)
     kr = thread_policy_set(threadId, THREAD_TIME_CONSTRAINT_POLICY, (thread_policy_t)&constraintPolicy, THREAD_TIME_CONSTRAINT_POLICY_COUNT);
     if (kr != KERN_SUCCESS)
     {
-        CFRunLoopRemoveTimer(runLoopRef, timerRef, kCFRunLoopDefaultMode);
-        sessionHandle->timerRef = nullptr;
         sessionHandle->threadStartError = kr;
         sessionHandle->threadStartResult = TGSESSION_OPENRESULT_FAILEDTOSETREALTIMEPRIORITY;
+        sessionHandle->threadStartCompleted.store(true);
+        ReleaseTickGeneratorSession(sessionHandle);
         return nullptr;
     }
 
-    //
+    sessionHandle->runLoopRef = (CFRunLoopRef)CFRetain(CFRunLoopGetCurrent());
+    CFRunLoopSourceContext context{};
+    context.perform = StopTickGeneratorRunLoop;
+    sessionHandle->runLoopSource = CFRunLoopSourceCreate(kCFAllocatorDefault, 0, &context);
+    if (sessionHandle->runLoopSource == nullptr)
+    {
+        sessionHandle->threadStartError = ENOMEM;
+        sessionHandle->threadStartResult = TGSESSION_OPENRESULT_THREADSTARTERROR;
+        sessionHandle->threadStartCompleted.store(true);
+        ReleaseTickGeneratorSession(sessionHandle);
+        return nullptr;
+    }
 
-    sessionHandle->runLoopRef = (CFRunLoopRef)CFRetain(runLoopRef);
-    sessionHandle->active.store(true);
+    CFRunLoopAddSource(sessionHandle->runLoopRef, sessionHandle->runLoopSource, kCFRunLoopDefaultMode);
+    sessionHandle->threadStartCompleted.store(true);
 
     CFRunLoopRun();
 
-    if (sessionHandle->runLoopRef != nullptr)
-    {
-        CFRelease(sessionHandle->runLoopRef);
-        sessionHandle->runLoopRef = nullptr;
-    }
-
     sessionHandle->threadExited.store(true);
+    ReleaseTickGeneratorSession(sessionHandle);
 
     return nullptr;
 }
@@ -207,11 +223,6 @@ API_EXPORT TGSESSION_OPENRESULT OpenTickGeneratorSession(void** handle, int* err
 
     TickGeneratorSessionHandle* sessionHandle = new TickGeneratorSessionHandle();
 
-    sessionHandle->threadStartResult = TGSESSION_OPENRESULT_OK;
-    sessionHandle->active.store(false);
-    sessionHandle->sessionClosed.store(false);
-    sessionHandle->threadExited.store(false);
-
     int pthreadCreateResult;
     if ((pthreadCreateResult = pthread_create(&sessionHandle->thread, nullptr, TickGeneratorSessionThreadRoutine, sessionHandle)) != 0)
     {
@@ -220,18 +231,19 @@ API_EXPORT TGSESSION_OPENRESULT OpenTickGeneratorSession(void** handle, int* err
         return TGSESSION_OPENRESULT_THREADSTARTERROR;
     }
 
-    while (sessionHandle->active.load() == false)
+    while (sessionHandle->threadStartCompleted.load() == false)
     {
-        if (sessionHandle->threadStartResult != TGSESSION_OPENRESULT_OK)
-        {
-            TGSESSION_OPENRESULT res = sessionHandle->threadStartResult;
-            *errorCode = sessionHandle->threadStartError;
-            delete sessionHandle;
-            return res;
-        }
-
         struct timespec ts = { 0, 1000000 }; // 1ms
         nanosleep(&ts, nullptr);
+    }
+
+    if (sessionHandle->threadStartResult != TGSESSION_OPENRESULT_OK)
+    {
+        TGSESSION_OPENRESULT result = sessionHandle->threadStartResult;
+        *errorCode = sessionHandle->threadStartError;
+        pthread_join(sessionHandle->thread, nullptr);
+        ReleaseTickGeneratorSession(sessionHandle);
+        return result;
     }
 
     *handle = sessionHandle;
@@ -246,22 +258,18 @@ API_EXPORT TGSESSION_CLOSERESULT CloseTickGeneratorSession(void* handle, int* er
     TickGeneratorSessionHandle* sessionHandle = static_cast<TickGeneratorSessionHandle*>(handle);
 
     if (sessionHandle->sessionClosed.exchange(true) == true)
-        return SESSION_CLOSERESULT_OK;
+        return TGSESSION_CLOSERESULT_OK;
 
-    if (sessionHandle->runLoopRef == nullptr)
+    // A signaled source also stops a run loop that has not started running yet.
+    CFRunLoopSourceSignal(sessionHandle->runLoopSource);
+    CFRunLoopWakeUp(sessionHandle->runLoopRef);
+
+    if (pthread_equal(pthread_self(), sessionHandle->thread) != 0)
     {
-        delete sessionHandle;
-        return SESSION_CLOSERESULT_OK;
+        pthread_detach(sessionHandle->thread);
+        ReleaseTickGeneratorSession(sessionHandle);
+        return TGSESSION_CLOSERESULT_THREADEXITTIMEOUT;
     }
-
-    if (sessionHandle->timerRef != nullptr)
-    {
-        CFRunLoopRemoveTimer(sessionHandle->runLoopRef, sessionHandle->timerRef, kCFRunLoopDefaultMode);
-        sessionHandle->timerRef = nullptr;
-    }
-
-    if (sessionHandle->runLoopRef != nullptr)
-        CFRunLoopStop(sessionHandle->runLoopRef);
 
     const int maxWaitMs = 500;
     const int pollIntervalMs = 10;
@@ -274,22 +282,64 @@ API_EXPORT TGSESSION_CLOSERESULT CloseTickGeneratorSession(void* handle, int* er
         waitedMs += pollIntervalMs;
     }
 
-    TGSESSION_CLOSERESULT result = sessionHandle->threadExited.load() == true
-        ? TGSESSION_CLOSERESULT_OK
-        : TGSESSION_CLOSERESULT_THREADEXITTIMEOUT;
+    TGSESSION_CLOSERESULT result;
+    if (sessionHandle->threadExited.load())
+    {
+        int joinResult = pthread_join(sessionHandle->thread, nullptr);
+        if (joinResult == 0)
+            result = TGSESSION_CLOSERESULT_OK;
+        else
+        {
+            *errorCode = joinResult;
+            pthread_detach(sessionHandle->thread);
+            result = TGSESSION_CLOSERESULT_THREADEXITTIMEOUT;
+        }
+    }
+    else
+    {
+        pthread_detach(sessionHandle->thread);
+        result = TGSESSION_CLOSERESULT_THREADEXITTIMEOUT;
+    }
 
-    delete sessionHandle;
+    ReleaseTickGeneratorSession(sessionHandle);
 
-    return TGSESSION_CLOSERESULT_OK;
+    return result;
+}
+
+const void* RetainTickGeneratorInfo(const void* info)
+{
+    TickGeneratorInfo* tickGeneratorInfo = (TickGeneratorInfo*)info;
+    tickGeneratorInfo->references.fetch_add(1);
+    return info;
+}
+
+void ReleaseTickGeneratorInfo(const void* info)
+{
+    TickGeneratorInfo* tickGeneratorInfo = (TickGeneratorInfo*)info;
+    if (tickGeneratorInfo->references.fetch_sub(1) == 1)
+    {
+        if (tickGeneratorInfo->releaseCallback != nullptr)
+            tickGeneratorInfo->releaseCallback(tickGeneratorInfo->callbackContext);
+
+        delete tickGeneratorInfo;
+    }
 }
 
 void TimerCallback(CFRunLoopTimerRef timer, void* info)
 {
     TickGeneratorInfo* tickGeneratorInfo = static_cast<TickGeneratorInfo*>(info);
-    tickGeneratorInfo->callback();
+    if (!tickGeneratorInfo->stopped.load())
+        tickGeneratorInfo->callback(tickGeneratorInfo->callbackContext);
 }
 
-API_EXPORT TG_STARTRESULT StartHighPrecisionTickGenerator_Mac(int interval, void* sessionHandle, void (*callback)(void), TickGeneratorInfo** info, int* errorCode)
+API_EXPORT TG_STARTRESULT StartHighPrecisionTickGenerator_Mac(
+    int interval,
+    void* sessionHandle,
+    void (*callback)(void*),
+    void (*releaseCallback)(void*),
+    void* callbackContext,
+    TickGeneratorInfo** info,
+    int* errorCode)
 {
     *errorCode = 0;
 
@@ -297,10 +347,11 @@ API_EXPORT TG_STARTRESULT StartHighPrecisionTickGenerator_Mac(int interval, void
     TickGeneratorInfo* tickGeneratorInfo = new TickGeneratorInfo();
 
     tickGeneratorInfo->callback = callback;
+    tickGeneratorInfo->callbackContext = callbackContext;
 
     double seconds = static_cast<double>(interval) / 1000.0;
 
-    CFRunLoopTimerContext context = { 0, tickGeneratorInfo, nullptr, nullptr, nullptr };
+    CFRunLoopTimerContext context = { 0, tickGeneratorInfo, RetainTickGeneratorInfo, ReleaseTickGeneratorInfo, nullptr };
     CFRunLoopTimerRef timerRef = CFRunLoopTimerCreate(
         nullptr,
         CFAbsoluteTimeGetCurrent() + seconds,
@@ -310,6 +361,14 @@ API_EXPORT TG_STARTRESULT StartHighPrecisionTickGenerator_Mac(int interval, void
         TimerCallback,
         &context);
 
+    if (timerRef == nullptr)
+    {
+        ReleaseTickGeneratorInfo(tickGeneratorInfo);
+        *errorCode = ENOMEM;
+        return TG_STARTRESULT_NORESOURCES;
+    }
+
+    tickGeneratorInfo->releaseCallback = releaseCallback;
     tickGeneratorInfo->timerRef = timerRef;
     CFRunLoopAddTimer(pSessionHandle->runLoopRef, timerRef, kCFRunLoopDefaultMode);
 
@@ -322,10 +381,10 @@ API_EXPORT TG_STOPRESULT StopHighPrecisionTickGenerator(TickGeneratorSessionHand
 {
     *errorCode = 0;
 
-    CFRunLoopRemoveTimer(sessionHandle->runLoopRef, tickGeneratorInfo->timerRef, kCFRunLoopDefaultMode);
+    tickGeneratorInfo->stopped.store(true);
+    CFRunLoopTimerInvalidate(tickGeneratorInfo->timerRef);
     CFRelease(tickGeneratorInfo->timerRef);
-
-    delete tickGeneratorInfo;
+    ReleaseTickGeneratorInfo(tickGeneratorInfo);
     return TG_STOPRESULT_OK;
 }
 
@@ -1590,7 +1649,7 @@ struct VirtualDeviceInfo
     bool inputEndpointDisposed = false;
     bool outputEndpointDisposed = false;
     const char* name;
-    bool isMuted = false;
+    std::atomic<bool> isMuted{false};
 };
 
 API_EXPORT VIRTUAL_OPENRESULT OpenVirtualDevice_Mac(
@@ -1730,7 +1789,7 @@ API_EXPORT VIRTUAL_SENDBACKRESULT SendDataBackFromVirtualDevice(const MIDIPacket
     *errorCode = 0;
 
     VirtualDeviceInfo* virtualDeviceInfo = static_cast<VirtualDeviceInfo*>(readProcRefCon);
-    if (virtualDeviceInfo->isMuted)
+    if (virtualDeviceInfo->isMuted.load())
         return VIRTUAL_SENDBACKRESULT_OK;
 
     OSStatus status = MIDIReceived(virtualDeviceInfo->inputEndpointInfo->endpointRef, pktlist);
@@ -1768,7 +1827,7 @@ API_EXPORT VIRTUAL_MUTERESULT MuteVirtualDevice(
     VirtualDeviceInfo* info,
     Configuration* configuration)
 {
-    info->isMuted = true;
+    info->isMuted.store(true);
 
     return VIRTUAL_MUTERESULT_OK;
 }
@@ -1777,7 +1836,7 @@ API_EXPORT VIRTUAL_UNMUTERESULT UnmuteVirtualDevice(
     VirtualDeviceInfo* info,
     Configuration* configuration)
 {
-    info->isMuted = false;
+    info->isMuted.store(false);
 
     return VIRTUAL_UNMUTERESULT_OK;
 }

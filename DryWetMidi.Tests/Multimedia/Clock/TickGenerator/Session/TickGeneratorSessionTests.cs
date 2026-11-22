@@ -1,4 +1,4 @@
-﻿using Melanchall.DryWetMidi.Common;
+using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Multimedia;
 using Melanchall.DryWetMidi.Tests.Utilities;
 using NUnit.Framework;
@@ -18,6 +18,26 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         #endregion
 
         #region Test methods
+
+        [Test]
+        public void CloseImmediatelyAfterOpening()
+        {
+            for (var i = 0; i < 20; i++)
+            {
+                var openResult = TickGeneratorSessionApi.Api_OpenSession(out var sessionHandle, out var errorCode);
+                ClassicAssert.AreEqual(
+                    TickGeneratorSessionApi.TGSESSION_OPENRESULT.TGSESSION_OPENRESULT_OK,
+                    openResult,
+                    $"Session {i} was not opened successfully; error code: {errorCode}.");
+
+                var closeResult = TickGeneratorSessionApi.Api_CloseSession(sessionHandle, out errorCode);
+
+                ClassicAssert.AreEqual(
+                    TickGeneratorSessionApi.TGSESSION_CLOSERESULT.TGSESSION_CLOSERESULT_OK,
+                    closeResult,
+                    $"Session {i} was not closed successfully; error code: {errorCode}.");
+            }
+        }
 
 #if TEST
         [Test]

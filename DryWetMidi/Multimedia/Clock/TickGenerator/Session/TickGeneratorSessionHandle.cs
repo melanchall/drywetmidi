@@ -30,7 +30,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             TestCheckpoints?.SetCheckpointReached(TickGeneratorSessionCheckpointNames.SessionClosedInHandleFinalizer);
 #endif
 
-            return true;
+            return result == TickGeneratorSessionApi.TGSESSION_CLOSERESULT.TGSESSION_CLOSERESULT_OK;
         }
     }
 }
