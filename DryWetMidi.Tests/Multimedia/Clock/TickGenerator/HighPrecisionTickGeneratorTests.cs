@@ -379,12 +379,11 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
         private void CheckTicksContinueAfterGarbageCollection(RunInfo runInfo, string scenario)
         {
-            var tickCountBeforeGarbageCollection = GetTickCount(runInfo);
-
             ForceGarbageCollection();
 
+            var tickCountAfterGarbageCollection = GetTickCount(runInfo);
             var tickGenerated = WaitOperations.Wait(
-                () => GetTickCount(runInfo) > tickCountBeforeGarbageCollection,
+                () => GetTickCount(runInfo) > tickCountAfterGarbageCollection,
                 WaitTime);
 
             ClassicAssert.IsTrue(tickGenerated, $"No ticks were generated {scenario} forced garbage collection.");
