@@ -27,10 +27,7 @@ namespace Melanchall.DryWetMidi.Configuration
 
         #region Overrides
 
-        /// <summary>
-        /// Returns the activity message.
-        /// </summary>
-        /// <returns>The value of <see cref="Message"/>.</returns>
+        /// <inheritdoc/>
         public override string ToString() =>
             Message;
 

@@ -105,26 +105,16 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         #region Overrides
 
-        /// <summary>
-        /// Returns a hash code for this device information object.
-        /// </summary>
-        /// <returns>A hash code based on the device identifier.</returns>
+        /// <inheritdoc/>
         public override int GetHashCode() =>
             Id.GetHashCode();
 
-        /// <summary>
-        /// Determines whether this object and another object identify the same device.
-        /// </summary>
-        /// <param name="obj">The object to compare with this instance.</param>
-        /// <returns><c>true</c> if <paramref name="obj"/> is a <see cref="DeviceInformation"/> with the same device identifier; otherwise, <c>false</c>.</returns>
+        /// <inheritdoc/>
         public override bool Equals(object? obj) =>
             obj is DeviceInformation device &&
             Id.Equals(device.Id);
 
-        /// <summary>
-        /// Returns a string that describes this device information object.
-        /// </summary>
-        /// <returns>A string containing the device name, identifier, and any available additional information.</returns>
+        /// <inheritdoc/>
         public override string ToString()
         {
             var manufacturerPart = string.IsNullOrEmpty(Manufacturer) ? string.Empty : $"manufacturer = {Manufacturer}";

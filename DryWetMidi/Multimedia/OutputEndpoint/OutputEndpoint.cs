@@ -78,9 +78,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             }
         }
 
-        /// <summary>
-        /// Gets the identifier of the current output endpoint.
-        /// </summary>
+        /// <inheritdoc/>
         public override string Id
         {
             get
@@ -491,9 +489,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             return $"Output endpoint{(string.IsNullOrWhiteSpace(baseDescription) ? string.Empty : $" ({baseDescription})")}";
         }
 
-        /// <summary>
-        /// Releases resources used by the output endpoint.
-        /// </summary>
+        /// <inheritdoc/>
         protected override void OnDisposing()
         {
             base.OnDisposing();

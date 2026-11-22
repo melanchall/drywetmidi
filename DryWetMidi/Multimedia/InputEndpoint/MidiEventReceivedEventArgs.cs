@@ -32,12 +32,14 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <summary>
         /// Gets the timestamp of the MIDI event in nanoseconds.
         /// </summary>
+        /// <remarks>
+        /// This value uses the system monotonic clock and the same time base as
+        /// <see cref="IInputEndpoint.GetCurrentTimestamp"/>. It can be compared directly with timestamps from other
+        /// input endpoints to synchronize their received events.
+        /// </remarks>
         public long Timestamp { get; }
 
-        /// <summary>
-        /// Returns a string that describes the received MIDI event and its timestamp.
-        /// </summary>
-        /// <returns>A string containing the event and timestamp.</returns>
+        /// <inheritdoc/>
         public override string ToString() =>
             $"{Event} received at {Timestamp}";
     }

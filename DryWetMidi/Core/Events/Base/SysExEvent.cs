@@ -153,10 +153,7 @@ namespace Melanchall.DryWetMidi.Core
             return result;
         }
 
-        /// <summary>
-        /// Returns a string that describes the data of this system exclusive event.
-        /// </summary>
-        /// <returns>A description of the event data, or <c>"no data"</c> if the event has no data.</returns>
+        /// <inheritdoc/>
         public override string ToString()
         {
             const int margin = 3;

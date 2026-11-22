@@ -50,6 +50,10 @@ namespace Melanchall.DryWetMidi.Configuration
         /// Gets or sets whether Windows MIDI Services is preferred as the native MIDI API on Windows.
         /// The default value is <c>true</c>.
         /// </summary>
+        /// <remarks>
+        /// Setting this property to <c>true</c> does not guarantee that Windows MIDI Services will be used.
+        /// It is used only when the API is available on the current system; see <see cref="GetApiType"/>.
+        /// </remarks>
         public static bool UseWindowsMidiServices
         {
             get => MidiConfiguration.UseWindowsMidiServices;
@@ -60,6 +64,13 @@ namespace Melanchall.DryWetMidi.Configuration
         /// Gets or sets whether native MIDI API operations are executed on a worker thread.
         /// The default value is <c>true</c>.
         /// </summary>
+        /// <remarks>
+        /// When Windows MIDI Services is used, enabling this property runs native API operations on a dedicated
+        /// background thread initialized with a Windows multithreaded apartment. This keeps those calls off the
+        /// calling application's threads and provides the threading context expected by Windows MIDI Services.
+        /// See <see href="https://microsoft.github.io/MIDI/kb/moving-from-winmm-to-wms">Windows MIDI Services threading guidance</see>.
+        /// The worker thread is not used when another native MIDI API is selected.
+        /// </remarks>
         public static bool UseWorkerThread { get; set; } = true;
 
         /// <summary>
@@ -85,6 +96,7 @@ namespace Melanchall.DryWetMidi.Configuration
         /// Determines whether the endpoints watcher API is available on the current system.
         /// </summary>
         /// <returns><c>true</c> if the endpoints watcher API is available; otherwise, <c>false</c>.</returns>
+        /// <remarks>A <c>true</c> result indicates that <see cref="EndpointsWatcher"/> can be used on this system.</remarks>
         public static bool IsEndpointsWatcherApiAvailable()
         {
             if (!NativeApiUtilities.IsOsSupported())
@@ -97,6 +109,10 @@ namespace Melanchall.DryWetMidi.Configuration
         /// Determines whether the current system supports access to an endpoint by multiple clients.
         /// </summary>
         /// <returns><c>true</c> if multi-client endpoint access is available; otherwise, <c>false</c>.</returns>
+        /// <remarks>
+        /// A <c>true</c> result indicates that multiple instances of an <see cref="InputEndpoint"/> or
+        /// <see cref="OutputEndpoint"/> can access the same endpoint at the same time.
+        /// </remarks>
         public static bool IsEndpointsMultiClientAccessAvailable()
         {
             if (!NativeApiUtilities.IsOsSupported())
@@ -109,6 +125,7 @@ namespace Melanchall.DryWetMidi.Configuration
         /// Determines whether the virtual device API is available on the current system.
         /// </summary>
         /// <returns><c>true</c> if the virtual device API is available; otherwise, <c>false</c>.</returns>
+        /// <remarks>A <c>true</c> result indicates that <see cref="VirtualDevice"/> can be used on this system.</remarks>
         public static bool IsVirtualDeviceApiAvailable()
         {
             if (!NativeApiUtilities.IsOsSupported())

@@ -29,6 +29,10 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <summary>
         /// Gets or sets a value indicating whether all data was removed from the collection.
         /// </summary>
+        /// <remarks>
+        /// In a batch operation, when this is <c>true</c>, a consumer can treat the collection as empty without
+        /// checking the added, removed, or changed objects individually.
+        /// </remarks>
         public bool AllDataRemoved { get; set; }
 
         internal bool HasData

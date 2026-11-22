@@ -19,6 +19,9 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="tempoMap">The tempo map used to convert <paramref name="time"/> to MIDI ticks.</param>
         /// <returns>The objects that occur at <paramref name="time"/>.</returns>
         /// <exception cref="ArgumentNullException">An argument is <c>null</c>.</exception>
+        /// <example>
+        /// An event at tick 120 is returned by <c>timedObjects.AtTime(new MidiTimeSpan(120), tempoMap)</c>.
+        /// </example>
         public static IEnumerable<TObject> AtTime<TObject>(
             this IEnumerable<TObject?> timedObjects,
             ITimeSpan time,
@@ -43,6 +46,10 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <returns>The objects that occur within the specified time range.</returns>
         /// <exception cref="ArgumentNullException">An argument is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="endTime"/> is earlier than <paramref name="startTime"/>.</exception>
+        /// <example>
+        /// An event at tick 120 is returned by <c>timedObjects.AtTimeRange(new MidiTimeSpan(100), new MidiTimeSpan(240), tempoMap)</c>;
+        /// the range includes both its start and end times.
+        /// </example>
         public static IEnumerable<TObject> AtTimeRange<TObject>(
             this IEnumerable<TObject?> timedObjects,
             ITimeSpan startTime,

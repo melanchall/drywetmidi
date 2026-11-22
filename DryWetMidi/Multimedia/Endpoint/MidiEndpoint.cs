@@ -140,7 +140,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         #region Methods
 
         /// <summary>
-        /// Gets information about the device associated with this endpoint.
+        /// Gets information about the MIDI device to which this endpoint is associated.
         /// </summary>
         /// <returns>The device information, or <c>null</c> if the native API did not provide a device identifier or name.</returns>
         /// <exception cref="NativeApiException">An error occurred while retrieving device information.</exception>
