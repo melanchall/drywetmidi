@@ -435,7 +435,10 @@ enum class WmsTestProtocol
     UmpMidi1,
     UmpMidi2Only,
     UmpNegotiatedMidi2,
-    UnknownUmp
+    UnknownUmp,
+    UmpLoopback,
+    UmpSynth,
+    UmpLoopbackMidi2Only
 };
 
 struct WmsTestState
@@ -784,15 +787,23 @@ struct EndpointInfoBase
     std::wstring deviceDriverInformation;
 };
 
+constexpr wchar_t WmsMidi2LoopbackTransportCode[] = L"LOOP";
+constexpr wchar_t WmsGeneralMidiSynthTransportCode[] = L"GMSYNTH";
+
 bool SupportsMidi1(
     const midi2::Enumeration::MidiEndpointNativeDataFormat nativeDataFormat,
     const bool supportsMidi1,
-    const midi2::Enumeration::MidiProtocol protocol)
+    const midi2::Enumeration::MidiProtocol protocol,
+    const winrt::hstring& transportCode)
 {
+    // These Windows transports accept MIDI 1.0 UMP even without MIDI 1.0 stream negotiation.
+    const bool acceptsBothProtocols = transportCode == WmsMidi2LoopbackTransportCode ||
+        transportCode == WmsGeneralMidiSynthTransportCode;
+
     return nativeDataFormat == midi2::Enumeration::MidiEndpointNativeDataFormat::Midi1ByteFormat ||
         (nativeDataFormat == midi2::Enumeration::MidiEndpointNativeDataFormat::UniversalMidiPacketFormat &&
             supportsMidi1 &&
-            protocol == midi2::Enumeration::MidiProtocol::Midi1);
+            (protocol == midi2::Enumeration::MidiProtocol::Midi1 || acceptsBothProtocols));
 }
 
 bool SupportsMidi1(const midi2::Enumeration::MidiEndpointDeviceInformation& endpointInformation)
@@ -816,7 +827,8 @@ bool SupportsMidi1(const midi2::Enumeration::MidiEndpointDeviceInformation& endp
         declaredInformation != nullptr && declaredInformation.SupportsMidi10Protocol(),
         streamConfiguration != nullptr
             ? streamConfiguration.Protocol()
-            : midi2::Enumeration::MidiProtocol::Default);
+            : midi2::Enumeration::MidiProtocol::Default,
+        transportInformation.TransportCode());
 }
 
 bool SupportsMidi1(
@@ -831,27 +843,50 @@ bool SupportsMidi1(
                 return SupportsMidi1(
                     midi2::Enumeration::MidiEndpointNativeDataFormat::Midi1ByteFormat,
                     false,
-                    midi2::Enumeration::MidiProtocol::Default);
+                    midi2::Enumeration::MidiProtocol::Default,
+                    L"");
             case WmsTestProtocol::UmpMidi1:
                 return SupportsMidi1(
                     midi2::Enumeration::MidiEndpointNativeDataFormat::UniversalMidiPacketFormat,
                     true,
-                    midi2::Enumeration::MidiProtocol::Midi1);
+                    midi2::Enumeration::MidiProtocol::Midi1,
+                    L"");
             case WmsTestProtocol::UmpMidi2Only:
                 return SupportsMidi1(
                     midi2::Enumeration::MidiEndpointNativeDataFormat::UniversalMidiPacketFormat,
                     false,
-                    midi2::Enumeration::MidiProtocol::Midi2);
+                    midi2::Enumeration::MidiProtocol::Midi2,
+                    L"");
             case WmsTestProtocol::UmpNegotiatedMidi2:
                 return SupportsMidi1(
                     midi2::Enumeration::MidiEndpointNativeDataFormat::UniversalMidiPacketFormat,
                     true,
-                    midi2::Enumeration::MidiProtocol::Midi2);
+                    midi2::Enumeration::MidiProtocol::Midi2,
+                    L"");
             case WmsTestProtocol::UnknownUmp:
                 return SupportsMidi1(
                     midi2::Enumeration::MidiEndpointNativeDataFormat::UniversalMidiPacketFormat,
                     true,
-                    midi2::Enumeration::MidiProtocol::Default);
+                    midi2::Enumeration::MidiProtocol::Default,
+                    L"");
+            case WmsTestProtocol::UmpLoopback:
+                return SupportsMidi1(
+                    midi2::Enumeration::MidiEndpointNativeDataFormat::UniversalMidiPacketFormat,
+                    true,
+                    midi2::Enumeration::MidiProtocol::Default,
+                    WmsMidi2LoopbackTransportCode);
+            case WmsTestProtocol::UmpSynth:
+                return SupportsMidi1(
+                    midi2::Enumeration::MidiEndpointNativeDataFormat::UniversalMidiPacketFormat,
+                    true,
+                    midi2::Enumeration::MidiProtocol::Midi2,
+                    WmsGeneralMidiSynthTransportCode);
+            case WmsTestProtocol::UmpLoopbackMidi2Only:
+                return SupportsMidi1(
+                    midi2::Enumeration::MidiEndpointNativeDataFormat::UniversalMidiPacketFormat,
+                    false,
+                    midi2::Enumeration::MidiProtocol::Midi2,
+                    WmsMidi2LoopbackTransportCode);
             default:
                 break;
         }

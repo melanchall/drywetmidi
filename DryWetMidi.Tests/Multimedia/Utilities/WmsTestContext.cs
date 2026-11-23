@@ -18,7 +18,10 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         UmpMidi1 = 2,
         UmpMidi2Only = 3,
         UmpNegotiatedMidi2 = 4,
-        UnknownUmp = 5
+        UnknownUmp = 5,
+        UmpLoopback = 6,
+        UmpSynth = 7,
+        UmpLoopbackMidi2Only = 8
     }
 
     internal enum WmsTestFailure
@@ -72,7 +75,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
         #region Constructor
 
-        public WmsTestContext()
+        public WmsTestContext(WmsTestProtocol protocol = WmsTestProtocol.UmpMidi1)
         {
             _activityCallback = _ => { };
             _inputEndpointCallback = (info, _) => CaptureCallback(() => InputEndpointApi.Api_DeleteEndpointInfo(info));
@@ -103,7 +106,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             try
             {
                 Enable(Configuration);
-                SetProtocol(WmsTestProtocol.UmpMidi1);
+                SetProtocol(protocol);
 
                 var sessionResult = MidiDevicesSessionApi.Api_OpenSession(
                     Guid.NewGuid().ToString(),
@@ -367,7 +370,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             ClassicAssert.AreEqual(new byte[] { 0x90, 0x3C, 0x40 }, receivedMessage, "Loopback MIDI bytes differ.");
         }
 
-        public IntPtr GetOutputInfo(string endpointId)
+        public IntPtr GetOutputInfo(string endpointIdentifier, bool matchName = false)
         {
             var result = OutputEndpointApi.Api_GetEndpointsInfo(
                 Configuration,
@@ -387,14 +390,16 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 for (var index = 0; index < count; index++)
                 {
                     var info = Marshal.ReadIntPtr(infos, index * IntPtr.Size);
-                    var propertyResult = OutputEndpointApi.Api_GetEndpointId(info, out var id, out errorCode);
+                    var propertyResult = matchName
+                        ? OutputEndpointApi.Api_GetEndpointName(info, out var property, out errorCode)
+                        : OutputEndpointApi.Api_GetEndpointId(info, out property, out errorCode);
 
                     ClassicAssert.AreEqual(
                         OutputEndpointApi.OUT_GETPROPERTYRESULT.OUT_GETPROPERTYRESULT_OK,
                         propertyResult,
-                        $"Output ID lookup failed; SDK error: {errorCode}.");
+                        $"Output property lookup failed; SDK error: {errorCode}.");
 
-                    if (id == endpointId)
+                    if (property == endpointIdentifier)
                         return CloneOutputInfo(info);
                 }
             }
@@ -408,12 +413,12 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 OutputEndpointApi.Api_FreeEndpointsInfo(infos, count);
             }
 
-            ClassicAssert.Fail($"Output endpoint '{endpointId}' was not found in the unaffected session.");
+            ClassicAssert.Fail($"Output endpoint '{endpointIdentifier}' was not found in the session.");
 
             return IntPtr.Zero;
         }
 
-        public IntPtr GetInputInfo(string endpointId)
+        public IntPtr GetInputInfo(string endpointIdentifier, bool matchName = false)
         {
             var result = InputEndpointApi.Api_GetEndpointsInfo(
                 Configuration,
@@ -432,14 +437,16 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 for (var index = 0; index < count; index++)
                 {
                     var info = Marshal.ReadIntPtr(infos, index * IntPtr.Size);
-                    var propertyResult = InputEndpointApi.Api_GetEndpointId(info, out var id, out errorCode);
+                    var propertyResult = matchName
+                        ? InputEndpointApi.Api_GetEndpointName(info, out var property, out errorCode)
+                        : InputEndpointApi.Api_GetEndpointId(info, out property, out errorCode);
 
                     ClassicAssert.AreEqual(
                         InputEndpointApi.IN_GETPROPERTYRESULT.IN_GETPROPERTYRESULT_OK,
                         propertyResult,
-                        $"Input ID lookup failed; SDK error: {errorCode}.");
+                        $"Input property lookup failed; SDK error: {errorCode}.");
 
-                    if (id == endpointId)
+                    if (property == endpointIdentifier)
                     {
                         InputEndpointApi.Api_CloneInputEndpointInfo(info, out var clonedInfo);
 
@@ -459,7 +466,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 InputEndpointApi.Api_FreeEndpointsInfo(infos, count);
             }
 
-            ClassicAssert.Fail($"Input endpoint '{endpointId}' was not found in the unaffected session.");
+            ClassicAssert.Fail($"Input endpoint '{endpointIdentifier}' was not found in the session.");
 
             return IntPtr.Zero;
         }

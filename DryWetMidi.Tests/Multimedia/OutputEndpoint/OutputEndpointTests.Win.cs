@@ -150,6 +150,84 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [Test]
         [WinOnly]
         [VirtualDeviceApiRequired]
+        public void WmsDefaultMidi2LoopbackEnumeratesAndTransfersMidi1()
+        {
+            const string outputName = "Default App Loopback (A)";
+            const string inputName = "Default App Loopback (B)";
+
+            using (var unfilteredContext = new WmsTestContext())
+            {
+                if (!unfilteredContext.GetOutputProperties(true).Contains(outputName) ||
+                    !unfilteredContext.GetInputProperties(true).Contains(inputName))
+                {
+                    Assert.Ignore("The default MIDI 2.0 loopback is not available.");
+                }
+
+                using (var context = new WmsTestContext(WmsTestProtocol.Actual))
+                {
+                    ClassicAssert.Contains(outputName, context.GetOutputProperties(true), "MIDI 2.0 loopback output was filtered out.");
+                    ClassicAssert.Contains(inputName, context.GetInputProperties(true), "MIDI 2.0 loopback input was filtered out.");
+
+                    var outputInfo = IntPtr.Zero;
+                    var inputInfo = IntPtr.Zero;
+
+                    try
+                    {
+                        outputInfo = context.GetOutputInfo(outputName, matchName: true);
+                        inputInfo = context.GetInputInfo(inputName, matchName: true);
+
+                        var inputHandle = context.OpenInput(inputInfo);
+                        context.StartListening(inputHandle);
+                        var outputHandle = context.OpenOutput(outputInfo);
+                        context.SendAndReceive(outputHandle);
+                        context.CloseOutput(outputHandle);
+                        context.CloseInput(inputHandle);
+                    }
+                    finally
+                    {
+                        context.ClosePorts();
+                        InputEndpointApi.Api_DeleteEndpointInfo(inputInfo);
+                        OutputEndpointApi.Api_DeleteEndpointInfo(outputInfo);
+                    }
+                }
+            }
+        }
+
+        [Test]
+        [WinOnly]
+        [VirtualDeviceApiRequired]
+        public void WmsGeneralMidiSynthIsListedAndCanBeOpened()
+        {
+            const string synthName = "General MIDI Synth";
+
+            using (var unfilteredContext = new WmsTestContext())
+            {
+                if (!unfilteredContext.GetOutputProperties(true).Contains(synthName))
+                    Assert.Ignore("The Windows General MIDI Synth is not available.");
+
+                using (var context = new WmsTestContext(WmsTestProtocol.Actual))
+                {
+                    ClassicAssert.Contains(synthName, context.GetOutputProperties(true), "General MIDI Synth was filtered out.");
+
+                    var outputInfo = context.GetOutputInfo(synthName, matchName: true);
+
+                    try
+                    {
+                        var outputHandle = context.OpenOutput(outputInfo);
+                        context.CloseOutput(outputHandle);
+                    }
+                    finally
+                    {
+                        context.ClosePorts();
+                        OutputEndpointApi.Api_DeleteEndpointInfo(outputInfo);
+                    }
+                }
+            }
+        }
+
+        [Test]
+        [WinOnly]
+        [VirtualDeviceApiRequired]
         public void WmsOutputCloseReleasesHandleWhileSharedInputSurvives()
         {
             using (var context = new WmsTestContext())
@@ -238,7 +316,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [WinOnly]
         [VirtualDeviceApiRequired]
         public void WmsOutputUnsupportedProtocolIsNotListedOrOpenedAndRejectsRetainedSends(
-            [Values(WmsTestProtocol.UmpMidi2Only, WmsTestProtocol.UmpNegotiatedMidi2, WmsTestProtocol.UnknownUmp)] WmsTestProtocol protocol)
+            [Values(WmsTestProtocol.UmpMidi2Only, WmsTestProtocol.UmpNegotiatedMidi2, WmsTestProtocol.UnknownUmp, WmsTestProtocol.UmpLoopbackMidi2Only)] WmsTestProtocol protocol)
         {
             using (var context = new WmsTestContext())
             using (var receiverContext = new WmsTestContext())
@@ -327,7 +405,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [WinOnly]
         [VirtualDeviceApiRequired]
         public void WmsOutputProtocolTransitionAddsAndRemovesCachedEndpoint(
-            [Values(WmsTestProtocol.NativeMidi1, WmsTestProtocol.UmpMidi1)] WmsTestProtocol supportedProtocol)
+            [Values(WmsTestProtocol.NativeMidi1, WmsTestProtocol.UmpMidi1, WmsTestProtocol.UmpLoopback, WmsTestProtocol.UmpSynth)] WmsTestProtocol supportedProtocol)
         {
             using (var context = new WmsTestContext())
             using (var virtualDevice = context.CreateVirtualDevice())

@@ -247,7 +247,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [WinOnly]
         [VirtualDeviceApiRequired]
         public void WmsInputUnsupportedProtocolIsNotListedOrOpened(
-            [Values(WmsTestProtocol.UmpMidi2Only, WmsTestProtocol.UmpNegotiatedMidi2, WmsTestProtocol.UnknownUmp)] WmsTestProtocol protocol)
+            [Values(WmsTestProtocol.UmpMidi2Only, WmsTestProtocol.UmpNegotiatedMidi2, WmsTestProtocol.UnknownUmp, WmsTestProtocol.UmpLoopbackMidi2Only)] WmsTestProtocol protocol)
         {
             using (var context = new WmsTestContext())
             using (var virtualDevice = context.CreateVirtualDevice())
@@ -276,7 +276,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         [WinOnly]
         [VirtualDeviceApiRequired]
         public void WmsInputProtocolTransitionAddsAndRemovesCachedEndpoint(
-            [Values(WmsTestProtocol.NativeMidi1, WmsTestProtocol.UmpMidi1)] WmsTestProtocol supportedProtocol)
+            [Values(WmsTestProtocol.NativeMidi1, WmsTestProtocol.UmpMidi1, WmsTestProtocol.UmpLoopback, WmsTestProtocol.UmpSynth)] WmsTestProtocol supportedProtocol)
         {
             using (var context = new WmsTestContext())
             using (var virtualDevice = context.CreateVirtualDevice())
