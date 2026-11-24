@@ -2702,7 +2702,6 @@ API_EXPORT OUT_CLOSERESULT API_CALL CloseOutputEndpoint(void* handle, int* error
                 sessionHandle->endpointConnectionsUsersCounts.erase(connectionId);
             }
             delete outputEndpointHandle;
-            delete outputEndpointHandle;
         }
         catch (const winrt::hresult_error& exception)
         {
