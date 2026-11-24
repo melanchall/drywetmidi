@@ -32,7 +32,6 @@
 #include <new>
 #include <vector>
 #include <unordered_map>
-#include <unordered_set>
 #include <mutex>
 #include <atomic>
 #include <memory>
@@ -420,40 +419,6 @@ API_EXPORT void API_CALL UninitializeWindowsApartment()
 
 typedef void (*NativeApiActivityCallback)(const wchar_t* record);
 
-enum class WmsTestFailure
-{
-    OpenConnection,
-    AddPlugin,
-    AfterLoopbackCreation,
-    RemoveLoopback
-};
-
-enum class WmsTestProtocol
-{
-    Actual,
-    NativeMidi1,
-    UmpMidi1,
-    UmpMidi2Only,
-    UmpNegotiatedMidi2,
-    UnknownUmp,
-    UmpLoopback,
-    UmpSynth,
-    UmpLoopbackMidi2Only
-};
-
-struct WmsTestState
-{
-    std::atomic<bool> failOpenConnection{ false };
-    std::atomic<bool> failAddPlugin{ false };
-    std::atomic<bool> failAfterLoopbackCreation{ false };
-    std::atomic<bool> failRemoveLoopback{ false };
-    std::atomic<WmsTestProtocol> protocol{ WmsTestProtocol::Actual };
-    std::atomic<int> liveInputHandles{ 0 };
-    std::atomic<int> liveOutputHandles{ 0 };
-    std::atomic<int> liveEndpointInfos{ 0 };
-    std::atomic<int> pluginsPresentBeforeOpen{ 0 };
-};
-
 struct Configuration
 {
     NativeApiActivityCallback activityCallback;
@@ -463,7 +428,6 @@ struct Configuration
     bool basicLoopbackAvailable{ 0 };
     std::mutex pendingLoopbacksLock;
     std::vector<winrt::guid> pendingLoopbacks;
-    std::shared_ptr<WmsTestState> testState;
 };
 
 void RetryPendingLoopbacks(Configuration* configuration)
@@ -477,9 +441,6 @@ void RetryPendingLoopbacks(Configuration* configuration)
         {
             try
             {
-                if (configuration->testState != nullptr && configuration->testState->failRemoveLoopback)
-                    throw winrt::hresult_error(E_FAIL, L"Injected loopback removal failure");
-
                 auto result = basicLoopback::MidiBasicLoopbackManager::RemoveTransientLoopback(
                     basicLoopback::MidiBasicLoopbackRemovalConfig{ *iterator });
                 if (result.Success() || result.ErrorCode() == basicLoopback::MidiBasicLoopbackErrorCode::EndpointNotFound)
@@ -756,20 +717,6 @@ void EnsureWinMmPortsAvailable()
 
 struct EndpointInfoBase
 {
-    ~EndpointInfoBase()
-    {
-        if (testState != nullptr)
-            --testState->liveEndpointInfos;
-    }
-
-    void SetTestState(const std::shared_ptr<WmsTestState>& state)
-    {
-        testState = state;
-        if (testState != nullptr)
-            ++testState->liveEndpointInfos;
-    }
-
-    std::shared_ptr<WmsTestState> testState;
     std::wstring name;
 
     std::wstring endpointId;
@@ -787,114 +734,6 @@ struct EndpointInfoBase
     std::wstring deviceDriverInformation;
 };
 
-constexpr wchar_t WmsMidi2LoopbackTransportCode[] = L"LOOP";
-constexpr wchar_t WmsGeneralMidiSynthTransportCode[] = L"GMSYNTH";
-
-bool SupportsMidi1(
-    const midi2::Enumeration::MidiEndpointNativeDataFormat nativeDataFormat,
-    const bool supportsMidi1,
-    const midi2::Enumeration::MidiProtocol protocol,
-    const winrt::hstring& transportCode)
-{
-    // These Windows transports accept MIDI 1.0 UMP even without MIDI 1.0 stream negotiation.
-    const bool acceptsBothProtocols = transportCode == WmsMidi2LoopbackTransportCode ||
-        transportCode == WmsGeneralMidiSynthTransportCode;
-
-    return nativeDataFormat == midi2::Enumeration::MidiEndpointNativeDataFormat::Midi1ByteFormat ||
-        (nativeDataFormat == midi2::Enumeration::MidiEndpointNativeDataFormat::UniversalMidiPacketFormat &&
-            supportsMidi1 &&
-            (protocol == midi2::Enumeration::MidiProtocol::Midi1 || acceptsBothProtocols));
-}
-
-bool SupportsMidi1(const midi2::Enumeration::MidiEndpointDeviceInformation& endpointInformation)
-{
-    if (endpointInformation == nullptr)
-        return false;
-
-    auto transportInformation = endpointInformation.GetTransportSuppliedInfo();
-    if (transportInformation == nullptr)
-        return false;
-
-    auto nativeDataFormat = transportInformation.NativeDataFormat();
-    if (nativeDataFormat == midi2::Enumeration::MidiEndpointNativeDataFormat::Midi1ByteFormat)
-        return true;
-
-    auto declaredInformation = endpointInformation.GetDeclaredEndpointInfo();
-    auto streamConfiguration = endpointInformation.GetDeclaredStreamConfiguration();
-
-    return SupportsMidi1(
-        nativeDataFormat,
-        declaredInformation != nullptr && declaredInformation.SupportsMidi10Protocol(),
-        streamConfiguration != nullptr
-            ? streamConfiguration.Protocol()
-            : midi2::Enumeration::MidiProtocol::Default,
-        transportInformation.TransportCode());
-}
-
-bool SupportsMidi1(
-    const std::shared_ptr<WmsTestState>& testState,
-    const midi2::Enumeration::MidiEndpointDeviceInformation& endpointInformation)
-{
-    if (testState != nullptr)
-    {
-        switch (testState->protocol.load())
-        {
-            case WmsTestProtocol::NativeMidi1:
-                return SupportsMidi1(
-                    midi2::Enumeration::MidiEndpointNativeDataFormat::Midi1ByteFormat,
-                    false,
-                    midi2::Enumeration::MidiProtocol::Default,
-                    L"");
-            case WmsTestProtocol::UmpMidi1:
-                return SupportsMidi1(
-                    midi2::Enumeration::MidiEndpointNativeDataFormat::UniversalMidiPacketFormat,
-                    true,
-                    midi2::Enumeration::MidiProtocol::Midi1,
-                    L"");
-            case WmsTestProtocol::UmpMidi2Only:
-                return SupportsMidi1(
-                    midi2::Enumeration::MidiEndpointNativeDataFormat::UniversalMidiPacketFormat,
-                    false,
-                    midi2::Enumeration::MidiProtocol::Midi2,
-                    L"");
-            case WmsTestProtocol::UmpNegotiatedMidi2:
-                return SupportsMidi1(
-                    midi2::Enumeration::MidiEndpointNativeDataFormat::UniversalMidiPacketFormat,
-                    true,
-                    midi2::Enumeration::MidiProtocol::Midi2,
-                    L"");
-            case WmsTestProtocol::UnknownUmp:
-                return SupportsMidi1(
-                    midi2::Enumeration::MidiEndpointNativeDataFormat::UniversalMidiPacketFormat,
-                    true,
-                    midi2::Enumeration::MidiProtocol::Default,
-                    L"");
-            case WmsTestProtocol::UmpLoopback:
-                return SupportsMidi1(
-                    midi2::Enumeration::MidiEndpointNativeDataFormat::UniversalMidiPacketFormat,
-                    true,
-                    midi2::Enumeration::MidiProtocol::Default,
-                    WmsMidi2LoopbackTransportCode);
-            case WmsTestProtocol::UmpSynth:
-                return SupportsMidi1(
-                    midi2::Enumeration::MidiEndpointNativeDataFormat::UniversalMidiPacketFormat,
-                    true,
-                    midi2::Enumeration::MidiProtocol::Midi2,
-                    WmsGeneralMidiSynthTransportCode);
-            case WmsTestProtocol::UmpLoopbackMidi2Only:
-                return SupportsMidi1(
-                    midi2::Enumeration::MidiEndpointNativeDataFormat::UniversalMidiPacketFormat,
-                    false,
-                    midi2::Enumeration::MidiProtocol::Midi2,
-                    WmsMidi2LoopbackTransportCode);
-            default:
-                break;
-        }
-    }
-
-    return SupportsMidi1(endpointInformation);
-}
-
 struct InputEndpointInfo : EndpointInfoBase
 {
     int deviceIndex;
@@ -906,7 +745,6 @@ API_EXPORT void API_CALL CloneInputEndpointInfo(InputEndpointInfo* source, Input
     InputEndpointInfo* result = new InputEndpointInfo();
 
     result->deviceIndex = source->deviceIndex;
-    result->SetTestState(source->testState);
     if (source->caps)
         result->caps = new MIDIINCAPSW(*source->caps);
     result->devicePath = source->devicePath;
@@ -1006,7 +844,6 @@ API_EXPORT void API_CALL CloneOutputEndpointInfo(OutputEndpointInfo* source, Out
     OutputEndpointInfo* result = new OutputEndpointInfo();
 
     result->deviceIndex = source->deviceIndex;
-    result->SetTestState(source->testState);
     if (source->caps)
         result->caps = new MIDIOUTCAPSW(*source->caps);
     result->devicePath = source->devicePath;
@@ -1321,70 +1158,22 @@ struct SessionHandle
     midi2::Enumeration::MidiEndpointDeviceWatcher watcher{ nullptr };
     winrt::event_token revokeOnWatcherDeviceRemoved;
     winrt::event_token revokeOnWatcherDeviceAdded;
-    winrt::event_token revokeOnWatcherDeviceUpdated;
     winrt::event_token revokeOnWatcherEnumerationCompleted;
     std::atomic<char> initialEnumerationCompleted{ 0 };
 
     midi2::MidiSession session{ nullptr };
     std::mutex endpointDevicesLock;
     std::unordered_map<std::wstring, EndpointDevicesInfo> endpointDevicesById;
-    std::unordered_map<std::wstring, std::shared_ptr<std::atomic<bool>>> midi1SupportById;
-    std::unordered_set<std::wstring> removedEndpointIds;
     winrt::Windows::Foundation::Collections::IMap<winrt::hstring, midi2::MidiEndpointConnection> endpointConnectionsById =
         winrt::single_threaded_map<winrt::hstring, midi2::MidiEndpointConnection>();
     std::unordered_map<winrt::guid, int> endpointConnectionsUsersCounts;
-    std::function<void(const midi2::Enumeration::MidiEndpointDeviceInformation&)> processEndpointAdded;
-    std::function<void(const winrt::hstring&)> processEndpointRemoved;
 };
 
 struct EndpointHandleBase
 {
     SessionHandle* sessionHandle{ nullptr };
     midi2::MidiEndpointConnection connection{ nullptr };
-    std::shared_ptr<WmsTestState> testState;
-    std::shared_ptr<std::atomic<bool>> midi1Support;
 };
-
-void PruneRemovedMidi1Support(SessionHandle* sessionHandle, const std::wstring& endpointId)
-{
-    auto removedEndpoint = sessionHandle->removedEndpointIds.find(endpointId);
-    if (removedEndpoint == sessionHandle->removedEndpointIds.end())
-        return;
-
-    auto support = sessionHandle->midi1SupportById.find(endpointId);
-    if (support != sessionHandle->midi1SupportById.end() && support->second.use_count() > 1)
-        return;
-
-    if (support != sessionHandle->midi1SupportById.end())
-        sessionHandle->midi1SupportById.erase(support);
-
-    sessionHandle->removedEndpointIds.erase(removedEndpoint);
-}
-
-bool SupportsMidi1(SessionHandle* sessionHandle, const EndpointInfoBase* info)
-{
-    auto& support = sessionHandle->midi1SupportById[info->endpointDeviceId];
-    const auto testState = sessionHandle->configuration->testState;
-    if (testState != nullptr && testState->protocol != WmsTestProtocol::Actual)
-    {
-        auto isSupported = SupportsMidi1(testState, nullptr);
-        if (support == nullptr)
-            support = std::make_shared<std::atomic<bool>>(isSupported);
-        else
-            *support = isSupported;
-
-        return isSupported;
-    }
-
-    if (support != nullptr)
-        return support->load();
-
-    auto endpointInformation = midi2::Enumeration::MidiEndpointDeviceInformation::CreateFromEndpointDeviceId(
-        winrt::hstring{ info->endpointDeviceId });
-    auto isSupported = SupportsMidi1(testState, endpointInformation);
-    support = std::make_shared<std::atomic<bool>>(isSupported);
-    return isSupported;
-}
 
 void DeleteInputEndpointInfos(std::vector<InputEndpointInfo*>& deviceInfos)
 {
@@ -1450,16 +1239,6 @@ API_EXPORT SESSION_OPENRESULT API_CALL OpenSession_Win(
                     EnsureWinMmPortsAvailable();
 
                     auto endpointId = endpointInformation.EndpointDeviceId();
-                    sessionHandle->removedEndpointIds.erase(endpointId.c_str());
-                    auto isSupported = SupportsMidi1(sessionHandle->configuration->testState, endpointInformation);
-                    auto& support = sessionHandle->midi1SupportById[endpointId.c_str()];
-                    if (support == nullptr)
-                        support = std::make_shared<std::atomic<bool>>(isSupported);
-                    else
-                        *support = isSupported;
-
-                    if (!isSupported)
-                        return;
 
                     auto existingEndpoint = sessionHandle->endpointDevicesById.find(endpointId.c_str());
                     if (existingEndpoint != sessionHandle->endpointDevicesById.end() &&
@@ -1486,7 +1265,6 @@ API_EXPORT SESSION_OPENRESULT API_CALL OpenSession_Win(
                             }
 
                             std::unique_ptr<OutputEndpointInfo> outputInfoOwner(outputEndpointInfo);
-                            outputEndpointInfo->SetTestState(sessionHandle->configuration->testState);
                             outputEndpointsInfo.push_back(outputInfoOwner.get());
                             outputInfoOwner.release();
 
@@ -1499,7 +1277,6 @@ API_EXPORT SESSION_OPENRESULT API_CALL OpenSession_Win(
                             }
 
                             std::unique_ptr<OutputEndpointInfo> persistentInfoOwner(persistentOutputEndpointInfo);
-                            persistentOutputEndpointInfo->SetTestState(sessionHandle->configuration->testState);
                             endpointDevicesInfo.outputEndpointsInfo.push_back(persistentInfoOwner.get());
                             persistentInfoOwner.release();
                         }
@@ -1522,7 +1299,6 @@ API_EXPORT SESSION_OPENRESULT API_CALL OpenSession_Win(
                             }
 
                             std::unique_ptr<InputEndpointInfo> inputInfoOwner(inputEndpointInfo);
-                            inputEndpointInfo->SetTestState(sessionHandle->configuration->testState);
                             inputEndpointsInfo.push_back(inputInfoOwner.get());
                             inputInfoOwner.release();
 
@@ -1535,7 +1311,6 @@ API_EXPORT SESSION_OPENRESULT API_CALL OpenSession_Win(
                             }
 
                             std::unique_ptr<InputEndpointInfo> persistentInfoOwner(persistentInputEndpointInfo);
-                            persistentInputEndpointInfo->SetTestState(sessionHandle->configuration->testState);
                             endpointDevicesInfo.inputEndpointsInfo.push_back(persistentInfoOwner.get());
                             persistentInfoOwner.release();
                         }
@@ -1605,14 +1380,6 @@ API_EXPORT SESSION_OPENRESULT API_CALL OpenSession_Win(
                 try
                 {
                     std::wstring endpointKey = endpointId.c_str();
-                    auto support = sessionHandle->midi1SupportById.find(endpointKey);
-                    if (support != sessionHandle->midi1SupportById.end())
-                    {
-                        *support->second = false;
-                        sessionHandle->removedEndpointIds.insert(endpointKey);
-                        PruneRemovedMidi1Support(sessionHandle, endpointKey);
-                    }
-
                     EndpointDevicesInfo endpointDevicesInfo;
 
                     auto it = sessionHandle->endpointDevicesById.find(endpointKey);
@@ -1674,27 +1441,6 @@ API_EXPORT SESSION_OPENRESULT API_CALL OpenSession_Win(
                 ProcessEndpointRemoved(args.RemovedDevice().EndpointDeviceId());
             };
 
-            auto OnWatcherDeviceUpdated = [sessionHandle, ProcessEndpointAdded, ProcessEndpointRemoved](
-                midi2::Enumeration::MidiEndpointDeviceWatcher const&,
-                midi2::Enumeration::MidiEndpointDeviceInformationUpdatedEventArgs const& args)
-            {
-                try
-                {
-                    auto endpointInformation = args.UpdatedDevice();
-                    if (SupportsMidi1(sessionHandle->configuration->testState, endpointInformation))
-                        ProcessEndpointAdded(endpointInformation);
-                    else
-                        ProcessEndpointRemoved(endpointInformation.EndpointDeviceId());
-                }
-                catch (const winrt::hresult_error& exception)
-                {
-                    sessionHandle->configuration->activityCallback(FormatError(exception, L"Failed to update endpoint protocol"));
-                }
-            };
-
-            sessionHandle->processEndpointAdded = ProcessEndpointAdded;
-            sessionHandle->processEndpointRemoved = ProcessEndpointRemoved;
-
             auto OnWatcherEnumerationCompleted = [sessionHandle](midi2::Enumeration::MidiEndpointDeviceWatcher const&, winrt::Windows::Foundation::IInspectable const&)
             {
                 sessionHandle->initialEnumerationCompleted.store(1);
@@ -1703,7 +1449,6 @@ API_EXPORT SESSION_OPENRESULT API_CALL OpenSession_Win(
             sessionHandle->revokeOnWatcherEnumerationCompleted = sessionHandle->watcher.EnumerationCompleted(OnWatcherEnumerationCompleted);
             sessionHandle->revokeOnWatcherDeviceRemoved = sessionHandle->watcher.Removed(OnWatcherDeviceRemoved);
             sessionHandle->revokeOnWatcherDeviceAdded = sessionHandle->watcher.Added(OnWatcherDeviceAdded);
-            sessionHandle->revokeOnWatcherDeviceUpdated = sessionHandle->watcher.Updated(OnWatcherDeviceUpdated);
 
             sessionHandle->watcher.Start();
         }
@@ -1748,9 +1493,6 @@ API_EXPORT SESSION_CLOSERESULT API_CALL CloseSession(SessionHandle* sessionHandl
 
             if (sessionHandle->revokeOnWatcherDeviceAdded)
                 sessionHandle->watcher.Added(sessionHandle->revokeOnWatcherDeviceAdded);
-
-            if (sessionHandle->revokeOnWatcherDeviceUpdated)
-                sessionHandle->watcher.Updated(sessionHandle->revokeOnWatcherDeviceUpdated);
 
             sessionHandle->watcher = nullptr;
         }
@@ -1870,13 +1612,6 @@ GETCONNECTIONRESULT GetConnection(
         {
             listenerConnection = endpointConnection;
             auto pluginResult = endpointConnection.AddMessageProcessingPlugin(groupListener);
-            if (pluginResult == midi2::MidiMessageProcessingPluginAddResult::Succeeded &&
-                sessionHandle->configuration->testState != nullptr &&
-                sessionHandle->configuration->testState->failAddPlugin)
-            {
-                pluginResult = midi2::MidiMessageProcessingPluginAddResult::FailedPluginInitializationError;
-            }
-
             if (pluginResult != midi2::MidiMessageProcessingPluginAddResult::Succeeded)
             {
                 if (errorCode != nullptr)
@@ -1889,15 +1624,7 @@ GETCONNECTIONRESULT GetConnection(
 
         if (isNewConnection)
         {
-            if (sessionHandle->configuration->testState != nullptr)
-            {
-                sessionHandle->configuration->testState->pluginsPresentBeforeOpen =
-                    static_cast<int>(endpointConnection.MessageProcessingPlugins().Size());
-            }
-
-            if ((sessionHandle->configuration->testState != nullptr &&
-                sessionHandle->configuration->testState->failOpenConnection) ||
-                !endpointConnection.Open())
+            if (!endpointConnection.Open())
             {
                 AppendActivityMessage(activityMessage, L"Failed to open endpoint connection");
                 return GETCONNECTIONRESULT_OPENFAILED;
@@ -1936,12 +1663,6 @@ GETCONNECTIONRESULT GetConnection(
 
 struct InputEndpointHandle : EndpointHandleBase
 {
-    ~InputEndpointHandle()
-    {
-        if (testState != nullptr)
-            --testState->liveInputHandles;
-    }
-
     InputEndpointInfo* info;
     HMIDIIN handle;
     LPMIDIHDR* sysExHeaders;
@@ -2239,9 +1960,6 @@ API_EXPORT IN_OPENRESULT API_CALL OpenInputEndpoint_Win(InputEndpointInfo* info,
     InputEndpointHandle* inputEndpointHandle = new InputEndpointHandle();
     inputEndpointHandle->info = inputEndpointInfo;
     inputEndpointHandle->sessionHandle = sessionHandle;
-    inputEndpointHandle->testState = sessionHandle->configuration->testState;
-    if (inputEndpointHandle->testState != nullptr)
-        ++inputEndpointHandle->testState->liveInputHandles;
 
     if (!info->endpointDeviceId.empty() && info->gtb != nullptr && info->group != nullptr)
     {
@@ -2251,13 +1969,6 @@ API_EXPORT IN_OPENRESULT API_CALL OpenInputEndpoint_Win(InputEndpointInfo* info,
 
         try
         {
-            if (!SupportsMidi1(sessionHandle, info))
-            {
-                delete inputEndpointHandle;
-                inputEndpointHandle = nullptr;
-                return IN_OPENRESULT_UNSUPPORTEDPROTOCOL;
-            }
-
             inputEndpointHandle->groupListener = MidiGroupEndpointListener();
             inputEndpointHandle->groupListener.IncludedGroups().Append(midi2::MidiGroup(static_cast<uint8_t>(info->group.Index())));
             inputEndpointHandle->groupListener.PreventCallingFurtherListeners(false);
@@ -2265,13 +1976,8 @@ API_EXPORT IN_OPENRESULT API_CALL OpenInputEndpoint_Win(InputEndpointInfo* info,
             inputEndpointHandle->groupListener.PluginName(L"Group listener " + std::to_wstring(info->group.Index()));
             inputEndpointHandle->groupListener.IsEnabled(false);
 
-            auto protocolSupport = sessionHandle->midi1SupportById[info->endpointDeviceId];
-            inputEndpointHandle->midi1Support = protocolSupport;
-            auto MessageReceivedHandler = [bytesReceivedCallback, protocolSupport](midi2::IMidiMessageReceivedEventSource const& sender, midi2::MidiMessageReceivedEventArgs const& args)
+            auto MessageReceivedHandler = [bytesReceivedCallback](midi2::IMidiMessageReceivedEventSource const& sender, midi2::MidiMessageReceivedEventArgs const& args)
             {
-                if (!protocolSupport->load())
-                    return;
-
                 auto ump = args.GetMessagePacket();
                 auto words = messages::MidiMessageConverter::ConvertSingleGroupCompleteMessageUmpWordsToMidi1Bytes(ump.GetAllWords());
 
@@ -2435,7 +2141,6 @@ API_EXPORT IN_CLOSERESULT API_CALL CloseInputEndpoint(void* handle, int* errorCo
 
     InputEndpointHandle* inputEndpointHandle = static_cast<InputEndpointHandle*>(handle);
     auto sessionHandle = inputEndpointHandle->sessionHandle;
-    auto endpointId = inputEndpointHandle->info->endpointDeviceId;
 
     if (inputEndpointHandle->groupListener != nullptr)
     {
@@ -2459,14 +2164,12 @@ API_EXPORT IN_CLOSERESULT API_CALL CloseInputEndpoint(void* handle, int* errorCo
             }
 
             delete inputEndpointHandle;
-            PruneRemovedMidi1Support(sessionHandle, endpointId);
         }
         catch (const winrt::hresult_error& exception)
         {
             *errorCode = exception.code();
             auto message = FormatError(exception, L"Failed to close input endpoint");
             delete inputEndpointHandle;
-            PruneRemovedMidi1Support(sessionHandle, endpointId);
             lock.unlock();
             sessionHandle->configuration->activityCallback(message);
             return IN_CLOSERESULT_UNKNOWNWMSERROR;
@@ -2474,7 +2177,6 @@ API_EXPORT IN_CLOSERESULT API_CALL CloseInputEndpoint(void* handle, int* errorCo
         catch (...)
         {
             delete inputEndpointHandle;
-            PruneRemovedMidi1Support(sessionHandle, endpointId);
             lock.unlock();
             sessionHandle->configuration->activityCallback(L"Failed to close input endpoint");
             return IN_CLOSERESULT_UNKNOWNWMSERROR;
@@ -2658,12 +2360,6 @@ API_EXPORT IN_GETSYSEXDATARESULT API_CALL GetInputEndpointSysExBufferData(LPMIDI
 
 struct OutputEndpointHandle : EndpointHandleBase
 {
-    ~OutputEndpointHandle()
-    {
-        if (testState != nullptr)
-            --testState->liveOutputHandles;
-    }
-
     OutputEndpointInfo* info;
     HMIDIOUT handle;
 };
@@ -2880,9 +2576,6 @@ API_EXPORT OUT_OPENRESULT API_CALL OpenOutputEndpoint_Win(OutputEndpointInfo* in
     OutputEndpointHandle* outputEndpointHandle = new OutputEndpointHandle();
     outputEndpointHandle->info = info;
     outputEndpointHandle->sessionHandle = sessionHandle;
-    outputEndpointHandle->testState = sessionHandle->configuration->testState;
-    if (outputEndpointHandle->testState != nullptr)
-        ++outputEndpointHandle->testState->liveOutputHandles;
 
     if (!info->endpointDeviceId.empty() && info->gtb != nullptr && info->group != nullptr)
     {
@@ -2892,14 +2585,6 @@ API_EXPORT OUT_OPENRESULT API_CALL OpenOutputEndpoint_Win(OutputEndpointInfo* in
 
         try
         {
-            if (!SupportsMidi1(sessionHandle, info))
-            {
-                delete outputEndpointHandle;
-                return OUT_OPENRESULT_UNSUPPORTEDPROTOCOL;
-            }
-
-            outputEndpointHandle->midi1Support = sessionHandle->midi1SupportById[info->endpointDeviceId];
-
             midi2::MidiEndpointConnection connection{ nullptr };
             auto getConnectionResult = GetConnection(
                 sessionHandle,
@@ -3001,7 +2686,6 @@ API_EXPORT OUT_CLOSERESULT API_CALL CloseOutputEndpoint(void* handle, int* error
 
     OutputEndpointHandle* outputEndpointHandle = static_cast<OutputEndpointHandle*>(handle);
     auto sessionHandle = outputEndpointHandle->sessionHandle;
-    auto endpointId = outputEndpointHandle->info->endpointDeviceId;
 
     if (outputEndpointHandle->connection != nullptr)
     {
@@ -3017,16 +2701,14 @@ API_EXPORT OUT_CLOSERESULT API_CALL CloseOutputEndpoint(void* handle, int* error
                 sessionHandle->endpointConnectionsById.Remove(outputEndpointHandle->info->endpointDeviceId);
                 sessionHandle->endpointConnectionsUsersCounts.erase(connectionId);
             }
-
             delete outputEndpointHandle;
-            PruneRemovedMidi1Support(sessionHandle, endpointId);
+            delete outputEndpointHandle;
         }
         catch (const winrt::hresult_error& exception)
         {
             *errorCode = exception.code();
             auto message = FormatError(exception, L"Failed to close output endpoint");
             delete outputEndpointHandle;
-            PruneRemovedMidi1Support(sessionHandle, endpointId);
             lock.unlock();
             sessionHandle->configuration->activityCallback(message);
             return OUT_CLOSERESULT_UNKNOWNWMSERROR;
@@ -3034,7 +2716,6 @@ API_EXPORT OUT_CLOSERESULT API_CALL CloseOutputEndpoint(void* handle, int* error
         catch (...)
         {
             delete outputEndpointHandle;
-            PruneRemovedMidi1Support(sessionHandle, endpointId);
             lock.unlock();
             sessionHandle->configuration->activityCallback(L"Failed to close output endpoint");
             return OUT_CLOSERESULT_UNKNOWNWMSERROR;
@@ -3110,9 +2791,6 @@ API_EXPORT OUT_SENDSHORTRESULT API_CALL SendShortEventToOutputEndpoint(void* han
 
         try
         {
-            if (!outputEndpointHandle->midi1Support->load())
-                return OUT_SENDSHORTRESULT_UNSUPPORTEDPROTOCOL;
-
             auto connection = sessionHandle->endpointConnectionsById.Lookup(outputEndpointHandle->info->endpointDeviceId);
 
             auto ump = messages::MidiMessageConverter::ConvertMidi1Message(
@@ -3176,9 +2854,6 @@ API_EXPORT OUT_SENDSYSEXRESULT API_CALL SendSysExEventToOutputEndpoint_Win(void*
 
         try
         {
-            if (!outputEndpointHandle->midi1Support->load())
-                return OUT_SENDSYSEXRESULT_UNSUPPORTEDPROTOCOL;
-
             auto connection = sessionHandle->endpointConnectionsById.Lookup(outputEndpointHandle->info->endpointDeviceId);
 
             std::vector<uint8_t> bytes(
@@ -3420,8 +3095,6 @@ API_EXPORT VIRTUAL_OPENRESULT API_CALL OpenVirtualDevice_Win(
 
         loopbackCreated = true;
         virtualDeviceInfo->endpointDeviceId = result.CreatedLoopbackEntry().EndpointDeviceId().c_str();
-        if (configuration->testState != nullptr && configuration->testState->failAfterLoopbackCreation)
-            throw winrt::hresult_error(E_FAIL, L"Injected failure after loopback creation");
 
         EnsureWinMmPortsAvailable();
 
@@ -3480,8 +3153,6 @@ API_EXPORT VIRTUAL_OPENRESULT API_CALL OpenVirtualDevice_Win(
             throw winrt::hresult_error(E_FAIL, L"Created loopback has no output group terminal block");
         }
 
-        virtualDeviceInfo->inputEndpointInfo->SetTestState(configuration->testState);
-        virtualDeviceInfo->outputEndpointInfo->SetTestState(configuration->testState);
     }
     catch (const winrt::hresult_error& e)
     {
@@ -3513,13 +3184,6 @@ API_EXPORT VIRTUAL_CLOSERESULT API_CALL CloseVirtualDevice(VirtualDeviceInfo* in
 
     try
     {
-        if (info->configuration->testState != nullptr && info->configuration->testState->failRemoveLoopback)
-        {
-            *errorCode = E_FAIL;
-            info->configuration->activityCallback(L"Injected loopback removal failure");
-            return VIRTUAL_CLOSERESULT_FAILED;
-        }
-
         auto result = basicLoopback::MidiBasicLoopbackManager::RemoveTransientLoopback(
             basicLoopback::MidiBasicLoopbackRemovalConfig{ info->associationId });
 
@@ -3624,5 +3288,3 @@ API_EXPORT VIRTUAL_UNMUTERESULT API_CALL UnmuteVirtualDevice(
 
     return VIRTUAL_UNMUTERESULT_OK;
 }
-
-#include "NativeApi-Windows.Tests.h"
