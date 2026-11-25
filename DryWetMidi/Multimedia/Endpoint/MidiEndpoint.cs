@@ -143,6 +143,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// Gets information about the MIDI device to which this endpoint is associated.
         /// </summary>
         /// <returns>The device information, or <c>null</c> if the native API did not provide a device identifier or name.</returns>
+        /// <exception cref="FeatureNotAvailableException">The current operating system is not supported.</exception>
         /// <exception cref="NativeApiException">An error occurred while retrieving device information.</exception>
         public DeviceInformation? GetDeviceInformation()
         {

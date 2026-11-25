@@ -92,6 +92,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <summary>
         /// Gets or sets a value indicating whether the virtual device is enabled.
         /// </summary>
+        /// <exception cref="FeatureNotAvailableException">The current operating system is not supported.</exception>
         public bool IsEnabled
         {
             get { return _enabled; }
@@ -193,6 +194,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// </para>
         /// </remarks>
         /// <exception cref="ArgumentException"><paramref name="name"/> is <c>null</c> or contains white-spaces only.</exception>
+        /// <exception cref="FeatureNotAvailableException">The current operating system is not supported.</exception>
         /// <exception cref="NativeApiException">An error occurred on device creation.</exception>
         public static VirtualDevice Create(string name)
         {
