@@ -194,7 +194,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// </para>
         /// </remarks>
         /// <exception cref="ArgumentException"><paramref name="name"/> is <c>null</c> or contains white-spaces only.</exception>
-        /// <exception cref="FeatureNotAvailableException">The current operating system is not supported.</exception>
+        /// <exception cref="FeatureNotAvailableException">The current operating system is not supported, or the virtual device API is not available.</exception>
         /// <exception cref="NativeApiException">An error occurred on device creation.</exception>
         public static VirtualDevice Create(string name)
         {
