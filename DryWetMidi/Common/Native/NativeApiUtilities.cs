@@ -12,7 +12,6 @@ namespace Melanchall.DryWetMidi.Common
             RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ||
             RuntimeInformation.IsOSPlatform(OSPlatform.OSX);
 
-        // TODO: add exception info in triple-slash comments
         public static void EnsureOsIsSupported()
         {
             if (IsOsSupported())

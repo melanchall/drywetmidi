@@ -76,6 +76,7 @@ namespace Melanchall.DryWetMidi.Configuration
         /// <summary>
         /// Gets a value indicating whether native MIDI API operations are currently executed on a worker thread.
         /// </summary>
+        /// <exception cref="FeatureNotAvailableException">The current operating system is not supported.</exception>
         public static bool IsWorkerThreadUsed
         {
             get
@@ -138,6 +139,7 @@ namespace Melanchall.DryWetMidi.Configuration
         /// Gets the native MIDI API used by DryWetMIDI on the current system.
         /// </summary>
         /// <returns>The type of native MIDI API in use.</returns>
+        /// <exception cref="FeatureNotAvailableException">The current operating system is not supported.</exception>
         public static ApiType GetApiType()
         {
             NativeApiUtilities.EnsureOsIsSupported();

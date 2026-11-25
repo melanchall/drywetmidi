@@ -98,6 +98,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <summary>
         /// Gets the name of the current MIDI endpoint.
         /// </summary>
+        /// <exception cref="FeatureNotAvailableException">The current operating system is not supported.</exception>
         public override string Name
         {
             get
@@ -278,6 +279,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <exception cref="NativeApiException">An error occurred on endpoint.</exception>
         /// <exception cref="InvalidOperationException">The current <see cref="InputEndpoint"/> instance is created by
         /// <see cref="EndpointsWatcher.EndpointRemoved"/> event and thus considered as removed so you cannot interact with it.</exception>
+        /// <exception cref="FeatureNotAvailableException">The current operating system is not supported.</exception>
         public void StartEventsListening()
         {
             if (IsListeningForEvents)
@@ -303,6 +305,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <exception cref="NativeApiException">An error occurred on endpoint.</exception>
         /// <exception cref="InvalidOperationException">The current <see cref="InputEndpoint"/> instance is created by
         /// <see cref="EndpointsWatcher.EndpointRemoved"/> event and thus considered as removed so you cannot interact with it.</exception>
+        /// <exception cref="FeatureNotAvailableException">The current operating system is not supported.</exception>
         public void StopEventsListening()
         {
             if (!IsListeningForEvents || Handle.OpenedEndpointHandle == IntPtr.Zero)
@@ -317,6 +320,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         }
 
         /// <inheritdoc/>
+        /// <exception cref="FeatureNotAvailableException">The current operating system is not supported.</exception>
         public long GetCurrentTimestamp()
         {
             NativeApiUtilities.EnsureOsIsSupported();
@@ -332,6 +336,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// Retrieves all input MIDI endpoints presented in the system.
         /// </summary>
         /// <returns>All input MIDI endpoints presented in the system.</returns>
+        /// <exception cref="FeatureNotAvailableException">The current operating system is not supported.</exception>
         /// <exception cref="NativeApiException">An error occurred.</exception>
         public static ICollection<InputEndpoint> GetAll()
         {
@@ -370,6 +375,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// </item>
         /// </list>
         /// </exception>
+        /// <exception cref="FeatureNotAvailableException">The current operating system is not supported.</exception>
         /// <exception cref="NativeApiException">An error occurred.</exception>
         public static InputEndpoint GetByName(string name)
         {

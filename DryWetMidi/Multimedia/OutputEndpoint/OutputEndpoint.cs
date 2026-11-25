@@ -64,6 +64,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <summary>
         /// Gets the name of the current MIDI endpoint.
         /// </summary>
+        /// <exception cref="FeatureNotAvailableException">The current operating system is not supported.</exception>
         public override string Name
         {
             get
@@ -105,6 +106,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <exception cref="ArgumentNullException"><paramref name="midiEvent"/> is <c>null</c>.</exception>
         /// <exception cref="NativeApiException">An error occurred on endpoint.</exception>
         /// <exception cref="ArgumentException"><c>EscapeSysExEvent</c> is prohibited. Use <c>NormalSysExEvent</c> instead.</exception>
+        /// <exception cref="FeatureNotAvailableException">The current operating system is not supported.</exception>
         public void SendEvent(MidiEvent midiEvent)
         {
             ThrowIfArgument.IsNull(nameof(midiEvent), midiEvent);
@@ -143,6 +145,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// </summary>
         /// <exception cref="ObjectDisposedException">The current <see cref="OutputEndpoint"/> is disposed.</exception>
         /// <exception cref="NativeApiException">An error occurred on endpoint.</exception>
+        /// <exception cref="FeatureNotAvailableException">The current operating system is not supported.</exception>
         public void TurnAllNotesOff()
         {
             EnsureEndpointIsNotDisposed();
@@ -169,6 +172,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// the endpoint automatically. But it can take some time so you may decide
         /// to call <see cref="PrepareForEventsSending"/> before working with endpoint.</remarks>
         /// <exception cref="NativeApiException">An error occurred on endpoint.</exception>
+        /// <exception cref="FeatureNotAvailableException">The current operating system is not supported.</exception>
         public void PrepareForEventsSending()
         {
             EnsureSessionIsCreated();
@@ -179,6 +183,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// Retrieves all output MIDI endpoints presented in the system.
         /// </summary>
         /// <returns>All output MIDI endpoints presented in the system.</returns>
+        /// <exception cref="FeatureNotAvailableException">The current operating system is not supported.</exception>
         /// <exception cref="NativeApiException">An error occurred.</exception>
         public static ICollection<OutputEndpoint> GetAll()
         {
@@ -204,6 +209,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// </item>
         /// </list>
         /// </exception>
+        /// <exception cref="FeatureNotAvailableException">The current operating system is not supported.</exception>
         /// <exception cref="NativeApiException">An error occurred.</exception>
         public static OutputEndpoint GetByName(string name)
         {
