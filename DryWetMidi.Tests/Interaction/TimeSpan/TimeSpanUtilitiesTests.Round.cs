@@ -153,6 +153,58 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             new ITimeSpan[] { new BarBeatFractionTimeSpan(0, 2.25), new BarBeatFractionTimeSpan(0, 0.25), new BarBeatFractionTimeSpan(0, 2.25) },
         };
 
+        private static readonly object[] TimeSpans_RoundToNearest = new[]
+        {
+            new ITimeSpan[] { new MidiTimeSpan(0), new MidiTimeSpan(0), new MidiTimeSpan(0) },
+            new ITimeSpan[] { new MidiTimeSpan(10), new MidiTimeSpan(0), new MidiTimeSpan(10) },
+            new ITimeSpan[] { new MidiTimeSpan(10), new MidiTimeSpan(15), new MidiTimeSpan(15) },
+            new ITimeSpan[] { new MidiTimeSpan(20), new MidiTimeSpan(15), new MidiTimeSpan(15) },
+            new ITimeSpan[] { new MidiTimeSpan(22), new MidiTimeSpan(15), new MidiTimeSpan(15) },
+            new ITimeSpan[] { new MidiTimeSpan(23), new MidiTimeSpan(15), new MidiTimeSpan(30) },
+            new ITimeSpan[] { new MidiTimeSpan(15), new MidiTimeSpan(10), new MidiTimeSpan(20) },
+            new ITimeSpan[] { new MidiTimeSpan(4), new MidiTimeSpan(10), new MidiTimeSpan(0) },
+
+            new ITimeSpan[] { new MetricTimeSpan(0), new MetricTimeSpan(0), new MetricTimeSpan(0) },
+            new ITimeSpan[] { new MetricTimeSpan(100), new MetricTimeSpan(0), new MetricTimeSpan(100) },
+            new ITimeSpan[] { new MetricTimeSpan(0, 0, 2, 500), new MetricTimeSpan(0, 0, 2), new MetricTimeSpan(0, 0, 2) },
+            new ITimeSpan[] { new MetricTimeSpan(0, 0, 2, 500), new MetricTimeSpan(0, 0, 3), new MetricTimeSpan(0, 0, 3) },
+            new ITimeSpan[] { new MetricTimeSpan(0, 0, 2, 500), new MetricTimeSpan(0, 0, 1), new MetricTimeSpan(0, 0, 3) },
+            new ITimeSpan[] { new MetricTimeSpan(0, 0, 5), new MetricTimeSpan(0, 0, 4), new MetricTimeSpan(0, 0, 4) },
+            new ITimeSpan[] { new MetricTimeSpan(0, 0, 6), new MetricTimeSpan(0, 0, 4), new MetricTimeSpan(0, 0, 8) },
+            new ITimeSpan[] { new MetricTimeSpan(0, 0, 10), new MetricTimeSpan(0, 0, 25), new MetricTimeSpan(0, 0, 0) },
+
+            new ITimeSpan[] { new MusicalTimeSpan(0, 1), new MusicalTimeSpan(0, 1), new MusicalTimeSpan(0, 1) },
+            new ITimeSpan[] { new MusicalTimeSpan(3, 8), new MusicalTimeSpan(0, 1), new MusicalTimeSpan(3, 8) },
+            new ITimeSpan[] { MusicalTimeSpan.Half, MusicalTimeSpan.Whole * 2, new MusicalTimeSpan(0, 1) },
+            new ITimeSpan[] { MusicalTimeSpan.Half, new MusicalTimeSpan(3, 8), new MusicalTimeSpan(3, 8) },
+            new ITimeSpan[] { new MusicalTimeSpan(5, 8), MusicalTimeSpan.Quarter, new MusicalTimeSpan(3, 4) },
+            new ITimeSpan[] { new MusicalTimeSpan(3, 4), MusicalTimeSpan.Half, MusicalTimeSpan.Whole },
+
+            new ITimeSpan[] { new BarBeatTicksTimeSpan(0), new BarBeatTicksTimeSpan(0), new BarBeatTicksTimeSpan(0) },
+            new ITimeSpan[] { new BarBeatTicksTimeSpan(10), new BarBeatTicksTimeSpan(0), new BarBeatTicksTimeSpan(10) },
+            new ITimeSpan[] { new BarBeatTicksTimeSpan(1, 2, 3), new BarBeatTicksTimeSpan(0), new BarBeatTicksTimeSpan(1, 2, 3) },
+            new ITimeSpan[] { new BarBeatTicksTimeSpan(1, 0, 0), new BarBeatTicksTimeSpan(1, 0, 0), new BarBeatTicksTimeSpan(1, 0, 0) },
+            new ITimeSpan[] { new BarBeatTicksTimeSpan(1, 0, 10), new BarBeatTicksTimeSpan(1, 0, 0), new BarBeatTicksTimeSpan(1, 0, 0) },
+            new ITimeSpan[] { new BarBeatTicksTimeSpan(1, 2, 0), new BarBeatTicksTimeSpan(1, 0, 0), new BarBeatTicksTimeSpan(2, 0, 0) },
+            new ITimeSpan[] { new BarBeatTicksTimeSpan(1, 2, 3), new BarBeatTicksTimeSpan(1, 0, 0), new BarBeatTicksTimeSpan(2, 0, 0) },
+            new ITimeSpan[] { new BarBeatTicksTimeSpan(0, 1, 47), new BarBeatTicksTimeSpan(0, 1, 0), new BarBeatTicksTimeSpan(0, 1, 0) },
+            new ITimeSpan[] { new BarBeatTicksTimeSpan(0, 1, 48), new BarBeatTicksTimeSpan(0, 1, 0), new BarBeatTicksTimeSpan(0, 2, 0) },
+            new ITimeSpan[] { new BarBeatTicksTimeSpan(1, 0, 10), new BarBeatTicksTimeSpan(0, 0, 15), new BarBeatTicksTimeSpan(1, 0, 6) },
+            new ITimeSpan[] { new BarBeatTicksTimeSpan(1, 0, 17), new BarBeatTicksTimeSpan(0, 0, 15), new BarBeatTicksTimeSpan(1, 0, 21) },
+            new ITimeSpan[] { new BarBeatTicksTimeSpan(5, 3, 17), new BarBeatTicksTimeSpan(4, 1, 15), new BarBeatTicksTimeSpan(4, 1, 15) },
+
+            new ITimeSpan[] { new BarBeatFractionTimeSpan(0), new BarBeatFractionTimeSpan(0), new BarBeatFractionTimeSpan(0) },
+            new ITimeSpan[] { new BarBeatFractionTimeSpan(10), new BarBeatFractionTimeSpan(0), new BarBeatFractionTimeSpan(10) },
+            new ITimeSpan[] { new BarBeatFractionTimeSpan(1, 0), new BarBeatFractionTimeSpan(1, 0), new BarBeatFractionTimeSpan(1, 0) },
+            new ITimeSpan[] { new BarBeatFractionTimeSpan(1, 0.1), new BarBeatFractionTimeSpan(1, 0), new BarBeatFractionTimeSpan(1, 0) },
+            new ITimeSpan[] { new BarBeatFractionTimeSpan(1, 2), new BarBeatFractionTimeSpan(1, 0), new BarBeatFractionTimeSpan(2, 0) },
+            new ITimeSpan[] { new BarBeatFractionTimeSpan(0, 1.2), new BarBeatFractionTimeSpan(0, 1), new BarBeatFractionTimeSpan(0, 1) },
+            new ITimeSpan[] { new BarBeatFractionTimeSpan(0, 1.5), new BarBeatFractionTimeSpan(0, 1), new BarBeatFractionTimeSpan(0, 2) },
+            new ITimeSpan[] { new BarBeatFractionTimeSpan(0, 2.3), new BarBeatFractionTimeSpan(0, 0.25), new BarBeatFractionTimeSpan(0, 2.25) },
+            new ITimeSpan[] { new BarBeatFractionTimeSpan(0, 2.4), new BarBeatFractionTimeSpan(0, 0.25), new BarBeatFractionTimeSpan(0, 2.5) },
+            new ITimeSpan[] { new BarBeatFractionTimeSpan(0, 2.25), new BarBeatFractionTimeSpan(0, 0.25), new BarBeatFractionTimeSpan(0, 2.25) },
+        };
+
         #endregion
 
         #region Test methods
@@ -354,6 +406,141 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 (new BarBeatTicksTimeSpan(2, 0, 0), new TimeSignature(5, 8))),
             expectedTimeSpan: new BarBeatFractionTimeSpan(0, 1));
 
+        [TestCaseSource(nameof(TimeSpans_RoundToNearest))]
+        public void Round_RoundToNearest_Simple(ITimeSpan timeSpan, ITimeSpan step, ITimeSpan expectedTimeSpan)
+        {
+            foreach (var time in SimpleCaseTimes)
+            {
+                var result = timeSpan.Round(TimeSpanRoundingPolicy.RoundToNearest, (MidiTimeSpan)time, step, TempoMap.Default);
+                ClassicAssert.AreEqual(expectedTimeSpan, result, $"Invalid result time span (time = {time}).");
+                ClassicAssert.AreNotSame(timeSpan, result, $"Result refers to the same object (time = {time}).");
+            }
+        }
+
+        [Test]
+        public void Round_RoundToNearest_BarBeatTicks_CloserToLower([Values(0, 1, 2)] long beats) => RoundToNearest_FromZero(
+            timeSpan: new BarBeatTicksTimeSpan(5, beats, 1),
+            step: new BarBeatTicksTimeSpan(0, 0, 4),
+            tempoMap: GetTempoMap(
+                (new BarBeatTicksTimeSpan(1, 0, 0), new TimeSignature(3, 4))),
+            expectedTimeSpan: new BarBeatTicksTimeSpan(5, beats, 0));
+
+        [Test]
+        public void Round_RoundToNearest_BarBeatTicks_Midpoint([Values(0, 1, 2)] long beats) => RoundToNearest_FromZero(
+            timeSpan: new BarBeatTicksTimeSpan(5, beats, 1),
+            step: new BarBeatTicksTimeSpan(0, 0, 2),
+            tempoMap: GetTempoMap(
+                (new BarBeatTicksTimeSpan(1, 0, 0), new TimeSignature(3, 4))),
+            expectedTimeSpan: new BarBeatTicksTimeSpan(5, beats, 2));
+
+        [Test]
+        public void Round_RoundToNearest_BarBeatTicks_CloserToUpper() => RoundToNearest_FromZero(
+            timeSpan: new BarBeatTicksTimeSpan(2, 2, 0),
+            step: new BarBeatTicksTimeSpan(1, 0, 0),
+            tempoMap: GetTempoMap(
+                (new BarBeatTicksTimeSpan(1, 0, 0), new TimeSignature(3, 4))),
+            expectedTimeSpan: new BarBeatTicksTimeSpan(3, 0, 0));
+
+        [Test]
+        public void Round_RoundToNearest_BarBeatTicks_TimeSignatureChange_AfterTimeSpan()
+        {
+            RoundToNearest(
+                timeSpan: new MidiTimeSpan(1120),
+                time: (MidiTimeSpan)0,
+                step: new BarBeatTicksTimeSpan(2, 0, 0),
+                tempoMap: GetTempoMap(
+                    (new MidiTimeSpan(1152), new TimeSignature(3, 4))),
+                expectedTimeSpan: new BarBeatTicksTimeSpan(4, 0, 0));
+        }
+
+        [Test]
+        public void Round_RoundToNearest_BarBeatTicks_TimeSignatureChange_Bars_Lower() => RoundToNearest(
+            timeSpan: new MusicalTimeSpan(7, 8),
+            time: new MusicalTimeSpan(6, 4),
+            step: new BarBeatTicksTimeSpan(1, 0, 0),
+            tempoMap: GetTempoMap(
+                (new BarBeatTicksTimeSpan(2, 0, 0), new TimeSignature(5, 8))),
+            expectedTimeSpan: new BarBeatTicksTimeSpan(1, 0, 0));
+
+        [Test]
+        public void Round_RoundToNearest_BarBeatTicks_TimeSignatureChange_Bars_Midpoint() => RoundToNearest(
+            timeSpan: new MusicalTimeSpan(17, 16),
+            time: new MusicalTimeSpan(6, 4),
+            step: new BarBeatTicksTimeSpan(1, 0, 0),
+            tempoMap: GetTempoMap(
+                (new BarBeatTicksTimeSpan(2, 0, 0), new TimeSignature(5, 8))),
+            expectedTimeSpan: new BarBeatTicksTimeSpan(2, 0, 0));
+
+        [Test]
+        public void Round_RoundToNearest_BarBeatTicks_TimeSignatureChange_Beats_Lower() => RoundToNearest(
+            timeSpan: new MusicalTimeSpan(5, 16),
+            time: new MusicalTimeSpan(6, 4),
+            step: new BarBeatTicksTimeSpan(0, 1, 0),
+            tempoMap: GetTempoMap(
+                (new BarBeatTicksTimeSpan(2, 0, 0), new TimeSignature(5, 8))),
+            expectedTimeSpan: new BarBeatTicksTimeSpan(0, 1, 0));
+
+        [Test]
+        public void Round_RoundToNearest_BarBeatTicks_TimeSignatureChange_Beats_Midpoint() => RoundToNearest(
+            timeSpan: new MusicalTimeSpan(3, 8),
+            time: new MusicalTimeSpan(6, 4),
+            step: new BarBeatTicksTimeSpan(0, 1, 0),
+            tempoMap: GetTempoMap(
+                (new BarBeatTicksTimeSpan(2, 0, 0), new TimeSignature(5, 8))),
+            expectedTimeSpan: new BarBeatTicksTimeSpan(0, 2, 0));
+
+        [Test]
+        public void Round_RoundToNearest_BarBeatFraction_CloserToLower([Values(0, 1, 2)] long beats) => RoundToNearest_FromZero(
+            timeSpan: new BarBeatFractionTimeSpan(5, beats + 0.2),
+            step: new BarBeatFractionTimeSpan(0, 0.5),
+            tempoMap: GetTempoMap(
+                (new BarBeatTicksTimeSpan(1, 0, 0), new TimeSignature(3, 4))),
+            expectedTimeSpan: new BarBeatFractionTimeSpan(5, beats));
+
+        [Test]
+        public void Round_RoundToNearest_BarBeatFraction_CloserToUpper([Values(0, 1, 2)] long beats) => RoundToNearest_FromZero(
+            timeSpan: new BarBeatFractionTimeSpan(5, beats + 0.3),
+            step: new BarBeatFractionTimeSpan(0, 0.5),
+            tempoMap: GetTempoMap(
+                (new BarBeatTicksTimeSpan(1, 0, 0), new TimeSignature(3, 4))),
+            expectedTimeSpan: new BarBeatFractionTimeSpan(5, beats + 0.5));
+
+        [Test]
+        public void Round_RoundToNearest_BarBeatFraction_TimeSignatureChange_Bars_Lower() => RoundToNearest(
+            timeSpan: new MusicalTimeSpan(7, 8),
+            time: new MusicalTimeSpan(6, 4),
+            step: new BarBeatFractionTimeSpan(1, 0),
+            tempoMap: GetTempoMap(
+                (new BarBeatTicksTimeSpan(2, 0, 0), new TimeSignature(5, 8))),
+            expectedTimeSpan: new BarBeatFractionTimeSpan(1, 0));
+
+        [Test]
+        public void Round_RoundToNearest_BarBeatFraction_TimeSignatureChange_Bars_Midpoint() => RoundToNearest(
+            timeSpan: new MusicalTimeSpan(17, 16),
+            time: new MusicalTimeSpan(6, 4),
+            step: new BarBeatFractionTimeSpan(1, 0),
+            tempoMap: GetTempoMap(
+                (new BarBeatTicksTimeSpan(2, 0, 0), new TimeSignature(5, 8))),
+            expectedTimeSpan: new BarBeatFractionTimeSpan(2, 0));
+
+        [Test]
+        public void Round_RoundToNearest_BarBeatFraction_TimeSignatureChange_Beats_Lower() => RoundToNearest(
+            timeSpan: new MusicalTimeSpan(5, 16),
+            time: new MusicalTimeSpan(6, 4),
+            step: new BarBeatFractionTimeSpan(0, 1),
+            tempoMap: GetTempoMap(
+                (new BarBeatTicksTimeSpan(2, 0, 0), new TimeSignature(5, 8))),
+            expectedTimeSpan: new BarBeatFractionTimeSpan(0, 1));
+
+        [Test]
+        public void Round_RoundToNearest_BarBeatFraction_TimeSignatureChange_Beats_Midpoint() => RoundToNearest(
+            timeSpan: new MusicalTimeSpan(3, 8),
+            time: new MusicalTimeSpan(6, 4),
+            step: new BarBeatFractionTimeSpan(0, 1),
+            tempoMap: GetTempoMap(
+                (new BarBeatTicksTimeSpan(2, 0, 0), new TimeSignature(5, 8))),
+            expectedTimeSpan: new BarBeatFractionTimeSpan(0, 2));
+
         #endregion
 
         #region Private methods
@@ -413,6 +600,30 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             TempoMap tempoMap,
             ITimeSpan expectedTimeSpan) => Round(
                 TimeSpanRoundingPolicy.RoundDown,
+                timeSpan,
+                time,
+                step,
+                tempoMap,
+                expectedTimeSpan);
+
+        private void RoundToNearest_FromZero(
+            ITimeSpan timeSpan,
+            ITimeSpan step,
+            TempoMap tempoMap,
+            ITimeSpan expectedTimeSpan) => Round_FromZero(
+                TimeSpanRoundingPolicy.RoundToNearest,
+                timeSpan,
+                step,
+                tempoMap,
+                expectedTimeSpan);
+
+        private void RoundToNearest(
+            ITimeSpan timeSpan,
+            ITimeSpan time,
+            ITimeSpan step,
+            TempoMap tempoMap,
+            ITimeSpan expectedTimeSpan) => Round(
+                TimeSpanRoundingPolicy.RoundToNearest,
                 timeSpan,
                 time,
                 step,

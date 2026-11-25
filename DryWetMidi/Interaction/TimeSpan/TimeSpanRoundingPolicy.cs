@@ -2,7 +2,6 @@
 
 namespace Melanchall.DryWetMidi.Interaction
 {
-    // TODO: add nearest!
     /// <summary>
     /// Specifies how a time span should be rounded.
     /// </summary>
@@ -66,6 +65,39 @@ namespace Melanchall.DryWetMidi.Interaction
     /// </item>
     /// </list>
     /// </para>
+    /// <para>
+    /// <see cref="RoundToNearest"/> used to round a time span to the closest one that is a multiple of the step.
+    /// If the time span is exactly halfway between two such time spans, it will be rounded up. Following table
+    /// shows how time span <see href="xref:a_time_length#metric">0:0:10</see> will be rounded using different steps:
+    /// </para>
+    /// <para>
+    /// <list type="table">
+    /// <listheader>
+    /// <term>Step</term>
+    /// <term>Result</term>
+    /// </listheader>
+    /// <item>
+    /// <term>0:0:3</term>
+    /// <term>0:0:9</term>
+    /// </item>
+    /// <item>
+    /// <term>0:0:4</term>
+    /// <term>0:0:12</term>
+    /// </item>
+    /// <item>
+    /// <term>0:0:10</term>
+    /// <term>0:0:10</term>
+    /// </item>
+    /// <item>
+    /// <term>0:0:15</term>
+    /// <term>0:0:15</term>
+    /// </item>
+    /// <item>
+    /// <term>0:0:25</term>
+    /// <term>0:0:0</term>
+    /// </item>
+    /// </list>
+    /// </para>
     /// </remarks>
     public enum TimeSpanRoundingPolicy
     {
@@ -82,6 +114,12 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <summary>
         /// Round time span down (like, for example, <see cref="Math.Floor(double)"/>).
         /// </summary>
-        RoundDown
+        RoundDown,
+
+        /// <summary>
+        /// Round time span to the nearest multiple of the step. A time span that is exactly halfway
+        /// between two multiples of the step is rounded up.
+        /// </summary>
+        RoundToNearest
     }
 }

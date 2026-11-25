@@ -58,10 +58,6 @@ namespace Melanchall.DryWetMidi.Interaction
             if (roundingPolicy == TimeSpanRoundingPolicy.NoRounding || step.IsZeroTimeSpan())
                 return timeSpan.Clone();
 
-            var gridShift = roundingPolicy == TimeSpanRoundingPolicy.RoundUp
-                ? 1
-                : 0;
-
             var midiTime = TimeConverter.ConvertFrom(time, tempoMap);
 
             var metricStep = step as MetricTimeSpan;
@@ -72,7 +68,8 @@ namespace Melanchall.DryWetMidi.Interaction
                     timeSpan,
                     metricTimeSpan.TotalMicroseconds,
                     metricStep.TotalMicroseconds,
-                    quotient => new MetricTimeSpan((quotient + gridShift) * metricStep.TotalMicroseconds));
+                    roundingPolicy,
+                    factor => new MetricTimeSpan(factor * metricStep.TotalMicroseconds));
             }
 
             var barBeatTicksStep = step as BarBeatTicksTimeSpan;
@@ -99,7 +96,8 @@ namespace Melanchall.DryWetMidi.Interaction
                 timeSpan,
                 midiTimeSpan.TimeSpan,
                 midiStep.TimeSpan,
-                quotient => TimeSpanConverter.ConvertTo(new MidiTimeSpan((quotient + gridShift) * midiStep.TimeSpan), step.GetType(), midiTime, tempoMap));
+                roundingPolicy,
+                factor => TimeSpanConverter.ConvertTo(new MidiTimeSpan(factor * midiStep.TimeSpan), step.GetType(), midiTime, tempoMap));
         }
 
         private static ITimeSpan RoundBarBeatFractionTimeSpan(
@@ -135,21 +133,26 @@ namespace Melanchall.DryWetMidi.Interaction
             where TTimeSpan : ITimeSpan
         {
             var ticks = TimeSpanConverter.ConvertFrom(timeSpan, time, tempoMap);
-            var gridShift = roundingPolicy == TimeSpanRoundingPolicy.RoundUp ? 1 : 0;
 
             // Simple case: there are no time signature changes
 
             if (typeof(TTimeSpan) != typeof(BarBeatFractionTimeSpan))
             {
+                var stepTicks = TimeSpanConverter.ConvertFrom(step, time, tempoMap);
+                var upperCandidateTicks = ticks;
+                var reminder = ticks % stepTicks;
+                if (reminder != 0)
+                    upperCandidateTicks += stepTicks - reminder;
+
                 var timeSignatureChanges = tempoMap.GetTimeSignatureChanges();
-                if (!timeSignatureChanges.Any() || !timeSignatureChanges.SkipWhile(c => c.Time <= time).TakeWhile(c => c.Time < time + ticks).Any())
+                if (!timeSignatureChanges.Any() || !timeSignatureChanges.SkipWhile(c => c.Time <= time).TakeWhile(c => c.Time <= time + upperCandidateTicks).Any())
                 {
-                    var stepTicks = TimeSpanConverter.ConvertFrom(step, time, tempoMap);
                     return Round(
                         timeSpan,
                         ticks,
                         stepTicks,
-                        quotient => TimeSpanConverter.ConvertTo<TTimeSpan>((ITimeSpan)new MidiTimeSpan((quotient + gridShift) * stepTicks), time, tempoMap));
+                        roundingPolicy,
+                        factor => TimeSpanConverter.ConvertTo<TTimeSpan>((ITimeSpan)new MidiTimeSpan(factor * stepTicks), time, tempoMap));
                 }
             }
 
@@ -187,9 +190,21 @@ namespace Melanchall.DryWetMidi.Interaction
 
             // Step 3: calculate the result
 
-            var resultTicks = startFactor > 0
-                ? TimeSpanConverter.ConvertFrom(step.Multiply(startFactor - 1 + gridShift), time, tempoMap)
-                : 0;
+            var resultTicks = 0L;
+
+            if (startFactor > 0)
+            {
+                var lowerTicks = TimeSpanConverter.ConvertFrom(step.Multiply(startFactor - 1), time, tempoMap);
+                var upperTicks = TimeSpanConverter.ConvertFrom(step.Multiply(startFactor), time, tempoMap);
+                var gridShift = GetGridShift(
+                    roundingPolicy,
+                    ticks - lowerTicks,
+                    upperTicks - ticks);
+
+                resultTicks = gridShift > 0
+                    ? upperTicks
+                    : lowerTicks;
+            }
 
             var result = (ITimeSpan)TimeSpanConverter.ConvertTo<TTimeSpan>(
                 resultTicks,
@@ -217,13 +232,36 @@ namespace Melanchall.DryWetMidi.Interaction
             ITimeSpan timeSpan,
             long x,
             long y,
+            TimeSpanRoundingPolicy roundingPolicy,
             Func<long, TTimeSpan> createTimeSpan)
             where TTimeSpan : ITimeSpan
         {
             var quotient = Math.DivRem(x, y, out var reminder);
-            return reminder == 0
-                ? timeSpan.Clone()
-                : createTimeSpan(quotient);
+            if (reminder == 0)
+                return timeSpan.Clone();
+
+            var gridShift = GetGridShift(
+                roundingPolicy,
+                reminder,
+                y - reminder);
+
+            return createTimeSpan(quotient + gridShift);
+        }
+
+        private static int GetGridShift(
+            TimeSpanRoundingPolicy roundingPolicy,
+            long distanceToLowerGridPoint,
+            long distanceToUpperGridPoint)
+        {
+            switch (roundingPolicy)
+            {
+                case TimeSpanRoundingPolicy.RoundUp:
+                    return 1;
+                case TimeSpanRoundingPolicy.RoundToNearest:
+                    return distanceToUpperGridPoint <= distanceToLowerGridPoint ? 1 : 0;
+                default:
+                    return 0;
+            }
         }
 
         #endregion

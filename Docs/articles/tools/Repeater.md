@@ -39,7 +39,7 @@ var newFile = midiFile.Repeat(2, new RepeatingSettings
 });
 ```
 
-We tell the tool here to round the calculated shift value up using the step of `1` bar. By default, the [ShiftRoundingPolicy](xref:Melanchall.DryWetMidi.Tools.RepeatingSettings.ShiftRoundingPolicy) property is set to [TimeSpanRoundingPolicy.NoRounding](xref:Melanchall.DryWetMidi.Interaction.TimeSpanRoundingPolicy.NoRounding), but you can also set it to [TimeSpanRoundingPolicy.RoundDown](xref:Melanchall.DryWetMidi.Interaction.TimeSpanRoundingPolicy.RoundDown) or [TimeSpanRoundingPolicy.RoundUp](xref:Melanchall.DryWetMidi.Interaction.TimeSpanRoundingPolicy.RoundUp), as shown above. Please see the documentation on [TimeSpanRoundingPolicy](xref:Melanchall.DryWetMidi.Interaction.TimeSpanRoundingPolicy) to learn more about rounding.
+We tell the tool here to round the calculated shift value up using the step of `1` bar. By default, the [ShiftRoundingPolicy](xref:Melanchall.DryWetMidi.Tools.RepeatingSettings.ShiftRoundingPolicy) property is set to [TimeSpanRoundingPolicy.NoRounding](xref:Melanchall.DryWetMidi.Interaction.TimeSpanRoundingPolicy.NoRounding), but you can also set it to [`TimeSpanRoundingPolicy.RoundDown`](xref:Melanchall.DryWetMidi.Interaction.TimeSpanRoundingPolicy.RoundDown), [`TimeSpanRoundingPolicy.RoundUp`](xref:Melanchall.DryWetMidi.Interaction.TimeSpanRoundingPolicy.RoundUp), as shown above, or [`TimeSpanRoundingPolicy.RoundToNearest`](xref:Melanchall.DryWetMidi.Interaction.TimeSpanRoundingPolicy.RoundToNearest). Please see the documentation on [TimeSpanRoundingPolicy](xref:Melanchall.DryWetMidi.Interaction.TimeSpanRoundingPolicy) to learn more about rounding.
 
 ## Custom repeater
 
