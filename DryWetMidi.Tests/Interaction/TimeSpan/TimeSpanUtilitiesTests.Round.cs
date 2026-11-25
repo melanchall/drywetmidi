@@ -442,6 +442,18 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             expectedTimeSpan: new BarBeatTicksTimeSpan(3, 0, 0));
 
         [Test]
+        public void Round_RoundToNearest_BarBeatTicks_TimeSignatureChange_AfterTimeSpan()
+        {
+            RoundToNearest(
+                timeSpan: new MidiTimeSpan(1120),
+                time: (MidiTimeSpan)0,
+                step: new BarBeatTicksTimeSpan(2, 0, 0),
+                tempoMap: GetTempoMap(
+                    (new MidiTimeSpan(1152), new TimeSignature(3, 4))),
+                expectedTimeSpan: new BarBeatTicksTimeSpan(4, 0, 0));
+        }
+
+        [Test]
         public void Round_RoundToNearest_BarBeatTicks_TimeSignatureChange_Bars_Lower() => RoundToNearest(
             timeSpan: new MusicalTimeSpan(7, 8),
             time: new MusicalTimeSpan(6, 4),

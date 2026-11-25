@@ -138,10 +138,15 @@ namespace Melanchall.DryWetMidi.Interaction
 
             if (typeof(TTimeSpan) != typeof(BarBeatFractionTimeSpan))
             {
+                var stepTicks = TimeSpanConverter.ConvertFrom(step, time, tempoMap);
+                var upperCandidateTicks = ticks;
+                var reminder = ticks % stepTicks;
+                if (reminder != 0)
+                    upperCandidateTicks += stepTicks - reminder;
+
                 var timeSignatureChanges = tempoMap.GetTimeSignatureChanges();
-                if (!timeSignatureChanges.Any() || !timeSignatureChanges.SkipWhile(c => c.Time <= time).TakeWhile(c => c.Time < time + ticks).Any())
+                if (!timeSignatureChanges.Any() || !timeSignatureChanges.SkipWhile(c => c.Time <= time).TakeWhile(c => c.Time <= time + upperCandidateTicks).Any())
                 {
-                    var stepTicks = TimeSpanConverter.ConvertFrom(step, time, tempoMap);
                     return Round(
                         timeSpan,
                         ticks,
