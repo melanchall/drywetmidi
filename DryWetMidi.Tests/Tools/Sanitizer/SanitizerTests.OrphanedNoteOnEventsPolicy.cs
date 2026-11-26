@@ -530,22 +530,28 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 }.ToTrackChunk()));
 
         [Test]
-        public void Sanitize_OrphanedNoteOnEventsPolicy_CompleteNote_7() => Assert.Throws<InvalidOperationException>(
-            () => new MidiFile(
+        public void Sanitize_OrphanedNoteOnEventsPolicy_CompleteNote_NullNoteMaxLength() => Sanitize(
+            midiFile: new MidiFile(
                 new ITimedObject[]
                 {
                     new TimedEvent(new NoteOnEvent() { Channel = (FourBitNumber)4 }, 100),
-                    new TimedEvent(new NoteOnEvent() { Channel = (FourBitNumber)2 }, 200),
-                    new TimedEvent(new NoteOnEvent() { Channel = (FourBitNumber)4 }, 300),
-                    new TimedEvent(new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue) { Channel = (FourBitNumber)4 }, 400),
-                    new TimedEvent(new NoteOnEvent() { Channel = (FourBitNumber)2 }, 500),
-                }.ToTrackChunk())
-                .Sanitize(new SanitizingSettings
+                    new TimedEvent(new NoteOnEvent() { Channel = (FourBitNumber)2 }, 150),
+                    new TimedEvent(new TextEvent("A"), 500),
+                }.ToTrackChunk()),
+            settings: new SanitizingSettings
+            {
+                OrphanedNoteOnEventsPolicy = OrphanedNoteOnEventsPolicy.CompleteNote,
+                NoteMaxLengthForOrphanedNoteOnEvent = null,
+            },
+            expectedMidiFile: new MidiFile(
+                new ITimedObject[]
                 {
-                    OrphanedNoteOnEventsPolicy = OrphanedNoteOnEventsPolicy.CompleteNote,
-                    NoteMaxLengthForOrphanedNoteOnEvent = null,
-                }),
-            "No exception thrown.");
+                    new TimedEvent(new NoteOnEvent() { Channel = (FourBitNumber)4 }, 100),
+                    new TimedEvent(new NoteOnEvent() { Channel = (FourBitNumber)2 }, 150),
+                    new TimedEvent(new NoteOffEvent() { Channel = (FourBitNumber)4 }, 196),
+                    new TimedEvent(new NoteOffEvent() { Channel = (FourBitNumber)2 }, 246),
+                    new TimedEvent(new TextEvent("A"), 500),
+                }.ToTrackChunk()));
 
         [Test]
         public void Sanitize_OrphanedNoteOnEventsPolicy_CompleteNote_8() => Sanitize(

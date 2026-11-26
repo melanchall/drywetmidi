@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Tests.Utilities;
@@ -625,6 +626,22 @@ namespace Melanchall.DryWetMidi.Tests.Core
                     bytesToMidiEventConverter,
                     new byte[] { 0xFF, 0x2F, 0x00 },
                     new EndOfTrackEvent());
+            }
+        }
+
+        [Test]
+        public void Convert_Bytes_NullTextEncoding()
+        {
+            using (var bytesToMidiEventConverter = new BytesToMidiEventConverter())
+            {
+                bytesToMidiEventConverter.BytesFormat = BytesFormat.File;
+                bytesToMidiEventConverter.TextEncoding = null;
+
+                var textBytes = Encoding.UTF8.GetBytes("Test▶▶▶");
+                Convert_Bytes(
+                    bytesToMidiEventConverter,
+                    new byte[] { 0xFF, 0x01, (byte)textBytes.Length }.Concat(textBytes).ToArray(),
+                    new TextEvent(Encoding.ASCII.GetString(textBytes)));
             }
         }
 

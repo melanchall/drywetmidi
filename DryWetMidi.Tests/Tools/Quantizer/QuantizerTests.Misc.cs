@@ -356,6 +356,35 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 "Randomization bounds must contain a nonnegative time in ascending order.");
         }
 
+        [Test]
+        public void Quantize_NullRandomizingSettings([Values] EntryPoint entryPoint)
+        {
+            var grid = new SteppedGrid((MidiTimeSpan)15);
+
+            var expectedEvents = Quantize(
+                entryPoint,
+                CreateNotes(),
+                grid,
+                new QuantizingSettings());
+            var actualEvents = Quantize(
+                entryPoint,
+                CreateNotes(),
+                grid,
+                new QuantizingSettings { RandomizingSettings = null });
+
+            MidiAsserts.AreEqual(expectedEvents, actualEvents, "Null randomizing settings produced objects different from default randomizing settings.");
+            ClassicAssert.AreEqual(
+                new long[] { 15, 35, 45, 55 },
+                actualEvents.Select(timedEvent => timedEvent.Time).ToArray(),
+                "Null randomizing settings produced invalid times.");
+
+            ITimedObject[] CreateNotes() => new ITimedObject[]
+            {
+                _factory.GetNote(60, "10", "20"),
+                _factory.GetNote(70, "52", "10")
+            };
+        }
+
         #endregion
 
         #region Private methods

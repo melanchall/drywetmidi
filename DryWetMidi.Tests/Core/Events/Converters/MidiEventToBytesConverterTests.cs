@@ -227,6 +227,22 @@ namespace Melanchall.DryWetMidi.Tests.Core
         }
 
         [Test]
+        public void Convert_NullTextEncoding()
+        {
+            using (var midiEventToBytesConverter = new MidiEventToBytesConverter())
+            {
+                midiEventToBytesConverter.TextEncoding = null;
+
+                var text = "Test▶▶▶";
+                var bytes = Encoding.ASCII.GetBytes(text);
+                Convert(
+                    midiEventToBytesConverter,
+                    new TextEvent(text),
+                    new byte[] { 0xFF, 0x01 }.Concat(DataTypesUtilities.GetVlqBytes(bytes.Length)).Concat(bytes).ToArray());
+            }
+        }
+
+        [Test]
         public void Convert_WriteDeltaTimes_SingleByte([Values(0, 127)] long deltaTime)
         {
             using (var midiEventToBytesConverter = new MidiEventToBytesConverter())

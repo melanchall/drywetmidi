@@ -10,6 +10,12 @@ namespace Melanchall.DryWetMidi.Tools
     /// </summary>
     public sealed class SanitizingSettings
     {
+        #region Constants
+
+        internal static readonly ITimeSpan DefaultNoteMaxLengthForOrphanedNoteOnEvent = MusicalTimeSpan.Quarter;
+
+        #endregion
+
         #region Fields
 
         private OrphanedNoteOnEventsPolicy _orphanedNoteOnEventsPolicy = OrphanedNoteOnEventsPolicy.Remove;
@@ -74,16 +80,16 @@ namespace Melanchall.DryWetMidi.Tools
             }
         }
 
-        // TODO: check setting null
         /// <summary>
         /// Gets or sets a maximum length for a new note restored by an orphaned Note On event.
         /// This property is used only when <see cref="OrphanedNoteOnEventsPolicy"/> is set to
         /// <see cref="OrphanedNoteOnEventsPolicy.CompleteNote"/>. The default value is 1/4 (<see cref="MusicalTimeSpan.Quarter"/>).
         /// A zero value creates a zero-length note with Note Off placed immediately after Note On.
+        /// If the property is set to <c>null</c>, the default value will be used.
         /// More info in the <see href="xref:a_sanitizer#orphanednoteoneventspolicy">Sanitizer: OrphanedNoteOnEventsPolicy</see>
         /// article.
         /// </summary>
-        public ITimeSpan NoteMaxLengthForOrphanedNoteOnEvent { get; set; } = MusicalTimeSpan.Quarter;
+        public ITimeSpan NoteMaxLengthForOrphanedNoteOnEvent { get; set; } = DefaultNoteMaxLengthForOrphanedNoteOnEvent;
 
         /// <summary>
         /// Gets or sets a value indicating whether Note Off (see <see cref="NoteOffEvent"/>) events without

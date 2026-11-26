@@ -158,6 +158,28 @@ namespace Melanchall.DryWetMidi.Tests.Core
             ClassicAssert.IsNull(message, "Message isn't null.");
         }
 
+        [TestCase(100, 100, true)]
+        [TestCase(100, 1000, false)]
+        public void NullChunkEqualityCheckSettings(long firstDeltaTime, long secondDeltaTime, bool expectedAreEqual)
+        {
+            var midiFile1 = new MidiFile(new TrackChunk(new NoteOnEvent { DeltaTime = firstDeltaTime }));
+            var midiFile2 = new MidiFile(new TrackChunk(new NoteOnEvent { DeltaTime = secondDeltaTime }));
+
+            var areEqual = MidiFile.Equals(
+                midiFile1,
+                midiFile2,
+                new MidiFileEqualityCheckSettings { ChunkEqualityCheckSettings = null },
+                out var message);
+            MidiFile.Equals(
+                midiFile1,
+                midiFile2,
+                new MidiFileEqualityCheckSettings(),
+                out var defaultSettingsMessage);
+
+            ClassicAssert.AreEqual(expectedAreEqual, areEqual, "Files equality is invalid.");
+            ClassicAssert.AreEqual(defaultSettingsMessage, message, "Message differs from the one produced with default chunk equality check settings.");
+        }
+
         #endregion
     }
 }
