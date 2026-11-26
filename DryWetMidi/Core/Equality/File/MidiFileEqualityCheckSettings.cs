@@ -20,10 +20,10 @@
         /// </remarks>
         public bool CompareOriginalFormat { get; set; } = true;
 
-        // TODO: check setting null
         /// <summary>
         /// Gets or sets settings according to which <see cref="MidiChunk"/> objects should
         /// be compared for equality.
+        /// If the property is set to <c>null</c>, the default value will be used.
         /// </summary>
         public MidiChunkEqualityCheckSettings? ChunkEqualityCheckSettings { get; set; } = new MidiChunkEqualityCheckSettings();
 

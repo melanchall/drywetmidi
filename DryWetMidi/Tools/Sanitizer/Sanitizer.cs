@@ -48,18 +48,11 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="settings">Settings which control how the <paramref name="midiFile"/>
         /// should be sanitized.</param>
         /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is <c>null</c>.</exception>
-        /// <exception cref="InvalidOperationException"><see cref="SanitizingSettings.NoteMaxLengthForOrphanedNoteOnEvent"/>
-        /// is <c>null</c> while <see cref="SanitizingSettings.OrphanedNoteOnEventsPolicy"/> is set to
-        /// <see cref="OrphanedNoteOnEventsPolicy.CompleteNote"/>.</exception>
         public static void Sanitize(this MidiFile midiFile, SanitizingSettings? settings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
 
             settings = settings ?? new SanitizingSettings();
-
-            if (settings.OrphanedNoteOnEventsPolicy == OrphanedNoteOnEventsPolicy.CompleteNote &&
-                settings.NoteMaxLengthForOrphanedNoteOnEvent == null)
-                throw new InvalidOperationException($"{nameof(SanitizingSettings.NoteMaxLengthForOrphanedNoteOnEvent)} must be set to complete notes from orphaned Note On events.");
 
             if (midiFile._originalFormat == (ushort)MidiFileFormat.MultiSequence)
             {
@@ -97,7 +90,7 @@ namespace Melanchall.DryWetMidi.Tools
             if (settings.OrphanedNoteOnEventsPolicy != OrphanedNoteOnEventsPolicy.CompleteNote)
                 return completedNotes;
 
-            var maxNoteDuration = settings.NoteMaxLengthForOrphanedNoteOnEvent;
+            var maxNoteDuration = settings.NoteMaxLengthForOrphanedNoteOnEvent ?? SanitizingSettings.DefaultNoteMaxLengthForOrphanedNoteOnEvent;
             var trackChunks = midiFile.GetTrackChunks().ToArray();
 
             var eventPorts = GetEventPorts(midiFile);

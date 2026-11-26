@@ -31,9 +31,9 @@ namespace Melanchall.DryWetMidi.Tools
 
         #region Properties
 
-        // TODO: check setting null
         /// <summary>
         /// Gets or sets settings according to which randomizing should be performed.
+        /// If the property is set to <c>null</c>, the default value will be used.
         /// </summary>
         public RandomizingSettings RandomizingSettings { get; set; } = new RandomizingSettings();
 

@@ -336,6 +336,28 @@ namespace Melanchall.DryWetMidi.Tests.Core
             ClassicAssert.IsNull(message, "Message isn't null.");
         }
 
+        [TestCase(100, 100, true)]
+        [TestCase(100, 1000, false)]
+        public void CompareTrackChunks_NullEventEqualityCheckSettings(long firstDeltaTime, long secondDeltaTime, bool expectedAreEqual)
+        {
+            var trackChunk1 = new TrackChunk(new NoteOnEvent { DeltaTime = firstDeltaTime });
+            var trackChunk2 = new TrackChunk(new NoteOnEvent { DeltaTime = secondDeltaTime });
+
+            var areEqual = MidiChunk.Equals(
+                trackChunk1,
+                trackChunk2,
+                new MidiChunkEqualityCheckSettings { EventEqualityCheckSettings = null },
+                out var message);
+            MidiChunk.Equals(
+                trackChunk1,
+                trackChunk2,
+                new MidiChunkEqualityCheckSettings(),
+                out var defaultSettingsMessage);
+
+            ClassicAssert.AreEqual(expectedAreEqual, areEqual, "Chunks equality is invalid.");
+            ClassicAssert.AreEqual(defaultSettingsMessage, message, "Message differs from the one produced with default event equality check settings.");
+        }
+
         #endregion
     }
 }

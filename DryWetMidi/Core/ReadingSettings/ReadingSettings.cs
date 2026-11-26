@@ -360,10 +360,10 @@ namespace Melanchall.DryWetMidi.Core
         /// </remarks>
         public long? MaxMemorySize { get; set; }
 
-        // TODO: check setting null
         /// <summary>
         /// Gets or sets an <see cref="Encoding"/> that will be used to read the text of a
         /// text-based meta event. The default is <see cref="Encoding.ASCII"/>.
+        /// If the property is set to <c>null</c>, the default value will be used.
         /// </summary>
         /// <remarks>
         /// <para>Value of this property will be used only if <see cref="DecodeTextCallback"/> is not set.</para>
@@ -411,9 +411,9 @@ namespace Melanchall.DryWetMidi.Core
             }
         }
 
-        // TODO: check setting null
         /// <summary>
         /// Gets or sets settings according to which <see cref="MidiReader"/> should read MIDI data.
+        /// If the property is set to <c>null</c>, the default value will be used.
         /// </summary>
         /// <remarks>
         /// <para>These settings specify reading binary data without knowledge of MIDI data structures.</para>

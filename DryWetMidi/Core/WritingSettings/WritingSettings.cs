@@ -72,16 +72,16 @@ namespace Melanchall.DryWetMidi.Core
         /// </remarks>
         public EventTypesCollection? CustomMetaEventTypes { get; set; }
 
-        // TODO: check setting null
         /// <summary>
         /// Gets or sets an <see cref="Encoding"/> that will be used to write the text of a
         /// text-based meta event. The default is <see cref="Encoding.ASCII"/>.
+        /// If the property is set to <c>null</c>, the default value will be used.
         /// </summary>
         public Encoding TextEncoding { get; set; } = SmfConstants.DefaultTextEncoding;
 
-        // TODO: check setting null
         /// <summary>
         /// Gets or sets settings according to which <see cref="MidiWriter"/> should write MIDI data.
+        /// If the property is set to <c>null</c>, the default value will be used.
         /// </summary>
         /// <remarks>
         /// <para>These settings specify writing binary data without knowledge of MIDI data structures.</para>
