@@ -89,7 +89,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// More info in the <see href="xref:a_sanitizer#orphanednoteoneventspolicy">Sanitizer: OrphanedNoteOnEventsPolicy</see>
         /// article.
         /// </summary>
-        public ITimeSpan NoteMaxLengthForOrphanedNoteOnEvent { get; set; } = DefaultNoteMaxLengthForOrphanedNoteOnEvent;
+        public ITimeSpan? NoteMaxLengthForOrphanedNoteOnEvent { get; set; } = DefaultNoteMaxLengthForOrphanedNoteOnEvent;
 
         /// <summary>
         /// Gets or sets a value indicating whether Note Off (see <see cref="NoteOffEvent"/>) events without
