@@ -25,15 +25,21 @@ namespace Melanchall.DryWetMidi.Core
             return midiFile.Chunks.OfType<TrackChunk>();
         }
 
-        // TODO: check
         /// <summary>
         /// Merges multiple track chunks into one that corresponds to <see cref="MidiFileFormat.SingleTrack"/>.
         /// </summary>
         /// <param name="trackChunks">Track chunks to merge into one.</param>
         /// <returns>Track chunk that contains all events from the <paramref name="trackChunks"/>.</returns>
         /// <remarks>
+        /// <para>
         /// Note that events will be cloned so events in the result track chunk will not be equal
-        /// by reference to events in the <paramref name="trackChunks"/>.
+        /// by reference to events in the <paramref name="trackChunks"/>. The result track chunk is
+        /// always a new instance even if <paramref name="trackChunks"/> contains a single track chunk.
+        /// </para>
+        /// <para>
+        /// <c>null</c> elements of the <paramref name="trackChunks"/> are ignored. If there are no events
+        /// to merge, an empty track chunk is returned.
+        /// </para>
         /// </remarks>
         /// <exception cref="ArgumentNullException"><paramref name="trackChunks"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException"><paramref name="trackChunks"/> is an empty collection.</exception>
@@ -42,7 +48,11 @@ namespace Melanchall.DryWetMidi.Core
             ThrowIfArgument.IsNull(nameof(trackChunks), trackChunks);
             ThrowIfArgument.IsEmptyCollection(nameof(trackChunks), trackChunks, "Track chunks collection is empty.");
 
-            return ConvertTrackChunks(trackChunks, MidiFileFormat.SingleTrack).First();
+            var nonNullTrackChunks = trackChunks.Where(c => c != null).ToArray();
+            if (nonNullTrackChunks.Length == 1)
+                return (TrackChunk)nonNullTrackChunks[0].Clone();
+
+            return ConvertTrackChunks(nonNullTrackChunks, MidiFileFormat.SingleTrack).FirstOrDefault() ?? new TrackChunk();
         }
 
         /// <summary>
