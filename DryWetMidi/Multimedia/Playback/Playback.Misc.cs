@@ -177,19 +177,6 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         #endregion
 
-        #region Finalizer
-
-        // TODO: need it?? or must be removed??
-        /// <summary>
-        /// Finalizes the current instance of the <see cref="Playback"/>.
-        /// </summary>
-        ~Playback()
-        {
-            Dispose(false);
-        }
-
-        #endregion
-
         #region Properties
 
         /// <summary>

@@ -73,19 +73,6 @@ namespace Melanchall.DryWetMidi.Multimedia
 
         #endregion
 
-        #region Finalizer
-
-        // TODO: looks like need to be removed
-        /// <summary>
-        /// Finalizes the current instance of the <see cref="MidiClock"/>.
-        /// </summary>
-        ~MidiClock()
-        {
-            Dispose(false);
-        }
-
-        #endregion
-
         #region Properties
 
         /// <summary>
