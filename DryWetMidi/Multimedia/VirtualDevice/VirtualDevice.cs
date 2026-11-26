@@ -60,7 +60,7 @@ namespace Melanchall.DryWetMidi.Multimedia
                 case CommonApi.OsType.Windows:
                     InitializeDevice_Win();
                     break;
-                default: // TODO: proper exception
+                default:
                     throw new InvalidOperationException($"Virtual device API is not available on {osType}.");
             }
         }
@@ -200,7 +200,6 @@ namespace Melanchall.DryWetMidi.Multimedia
         {
             NativeApiUtilities.EnsureOsIsSupported();
 
-            // TODO: choose exception type and document it above
             if (!LibraryConfiguration.IsVirtualDeviceApiAvailable())
                 throw new FeatureNotAvailableException("Virtual device API is not available.");
 

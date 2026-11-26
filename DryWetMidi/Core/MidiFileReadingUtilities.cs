@@ -34,13 +34,11 @@ namespace Melanchall.DryWetMidi.Core
 
         public static MidiChunk? TryCreateChunk(string chunkId, ChunkTypesCollection? chunksTypes)
         {
-            // TODO: get rid of Activator
             if (chunksTypes?.TryGetType(chunkId, out var type) == true && type != null && IsChunkType(type))
             {
-                // TODO: proper exception
                 var chunkObject = Activator.CreateInstance(type);
                 if (chunkObject == null)
-                    throw new InvalidOperationException($"Cannot create an instance of '{type.FullName}' type.");
+                    throw new InvalidOperationException($"Cannot create an instance of the '{type.FullName}' type.");
 
                 return (MidiChunk)chunkObject;
             }

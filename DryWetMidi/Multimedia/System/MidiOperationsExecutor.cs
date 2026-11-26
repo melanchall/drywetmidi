@@ -214,11 +214,7 @@ namespace Melanchall.DryWetMidi.Multimedia
         public void UseDirectExecution()
         {
             if (Thread.CurrentThread.ManagedThreadId == _workerThreadId)
-            {
-                // TODO: use unexpected exception type
-                throw new InvalidOperationException(
-                    "Direct execution cannot be enabled from the MIDI worker thread.");
-            }
+                throw new InvalidOperationException("Direct execution cannot be enabled from the MIDI worker thread.");
 
             Thread? workerThread;
 

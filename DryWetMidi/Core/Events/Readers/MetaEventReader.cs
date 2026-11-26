@@ -120,12 +120,9 @@ namespace Melanchall.DryWetMidi.Core
                     {
                         if (settings.CustomMetaEventTypes?.TryGetType(statusByte, out var eventType) == true && IsMetaEventType(eventType))
                         {
-                            // TODO: get rid of Activator and reflection at all
                             var metaEventObject = Activator.CreateInstance(eventType);
-
-                            // TODO: exception class
                             if (metaEventObject == null)
-                                throw new InvalidOperationException("AAA");
+                                throw new InvalidOperationException($"Cannot create an instance of the '{eventType.FullName}' type.");
 
                             metaEvent = (MetaEvent)metaEventObject;
                         }

@@ -32,10 +32,8 @@ namespace Melanchall.DryWetMidi.Composing
                 return PatternActionResult.DoNothing;
 
             var textEventObject = Activator.CreateInstance(typeof(TEvent), Text);
-            
-            // TODO: proper exception
             if (textEventObject == null)
-                throw new InvalidOperationException($"Failed to create an instance of '{typeof(TEvent)}'.");
+                throw new InvalidOperationException($"Cannot create an instance of the '{typeof(TEvent).FullName}' type.");
 
             var textEvent = (BaseTextEvent)textEventObject;
             var timedEvent = new TimedEvent(textEvent, time);

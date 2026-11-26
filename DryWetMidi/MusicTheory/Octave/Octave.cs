@@ -2,7 +2,6 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Linq;
 using Melanchall.DryWetMidi.Common;
 
@@ -47,16 +46,8 @@ namespace Melanchall.DryWetMidi.MusicTheory
 
         #region Constructor
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Octave"/> with the
-        /// specified octave number.
-        /// </summary>
-        /// <param name="octave">The number of an octave.</param>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="octave"/> is out of valid range.</exception>
         private Octave(int octave)
         {
-            // TODO: check octave number
-
             Number = octave;
 
             _notes = EnumHelper

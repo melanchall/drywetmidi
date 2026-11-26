@@ -152,7 +152,6 @@ namespace Melanchall.DryWetMidi.Interaction
             Time = time;
         }
 
-        // TODO: maybe internal?? what about off before on??
         /// <summary>
         /// Initializes a new instance of the <see cref="Note"/> with the specified pair of
         /// timed events holding corresponding <see cref="NoteOnEvent"/> and <see cref="NoteOffEvent"/> events.

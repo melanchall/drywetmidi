@@ -141,7 +141,6 @@ namespace Melanchall.DryWetMidi.Composing
                     note = MusicTheory.Note.Get(noteNumber);
             }
 
-            // TODO: proper exception
             if (note == null)
                 throw new InvalidOperationException($"Failed to parse a note from '{notePart.ToString()}' (line {lineIndex}).");
 

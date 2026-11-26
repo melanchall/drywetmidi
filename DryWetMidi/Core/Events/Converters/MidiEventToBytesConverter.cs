@@ -178,11 +178,10 @@ namespace Melanchall.DryWetMidi.Core
             return GetBytes(minSize);
         }
 
-        // TODO: check midiEvents containing nulls
         /// <summary>
         /// Converts collection of <see cref="MidiEvent"/> to bytes array.
         /// </summary>
-        /// <param name="midiEvents">MIDI events to convert.</param>
+        /// <param name="midiEvents">MIDI events to convert. <c>null</c> events are ignored.</param>
         /// <returns>Array of bytes representing <paramref name="midiEvents"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="midiEvents"/> is <c>null</c>.</exception>
         public byte[] Convert(IEnumerable<MidiEvent> midiEvents)
@@ -195,6 +194,9 @@ namespace Melanchall.DryWetMidi.Core
 
             foreach (var midiEvent in midiEvents)
             {
+                if (midiEvent == null)
+                    continue;
+
                 var eventToWrite = midiEvent;
 
                 if (NoteOffAsSilentNoteOn)

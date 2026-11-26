@@ -43,8 +43,7 @@ namespace Melanchall.DryWetMidi.Core
                 case EventStatusBytes.Global.EscapeSysEx:
                     return new EscapeSysExEvent();
                 default:
-                    // TODO: proper exception
-                    throw new InvalidOperationException($"Unexpected status byte: {currentStatusByte}");
+                    throw new InvalidOperationException($"Unexpected status byte on SysEx event reading: {currentStatusByte}.");
             }
         }
 

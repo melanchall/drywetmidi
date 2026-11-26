@@ -306,8 +306,7 @@ namespace Melanchall.DryWetMidi.Core
                             instruction = ProcessChunkContentState();
                             break;
                         default:
-                            // TODO: proper exception
-                            throw new InvalidOperationException($"Unexpected state: {_state}");
+                            throw new InvalidOperationException($"Unexpected state: {_state}.");
                     }
                 }
                 catch (NotEnoughBytesException ex)
