@@ -57,7 +57,58 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             },
             expectedEvents: new MidiEvent[]
             {
-                new NormalSysExEvent(new byte[] { 0x7F, 0x60, 0x90, 0x75, 0x56, 0x40, 0xF7 })
+                new NormalSysExEvent(new byte[] { 0x7F, 0x60 }),
+                new NoteOnEvent((SevenBitNumber)0x75, (SevenBitNumber)0x56),
+            });
+
+        [Test]
+        [MacOnly]
+        public void ReceiveData_NotTerminatedSysExAndNoteOnInMultiplePackages_Mac() => ReceiveData_Mac(
+            packages: new[]
+            {
+                new DataPackage(
+                    new DataPacket(0xF0, 0x7F, 0x60)),
+                new DataPackage(
+                    new DataPacket(0x90, 0x75, 0x56)),
+            },
+            expectedEvents: new MidiEvent[]
+            {
+                new NormalSysExEvent(new byte[] { 0x7F, 0x60 }),
+                new NoteOnEvent((SevenBitNumber)0x75, (SevenBitNumber)0x56),
+            });
+
+        [Test]
+        [MacOnly]
+        public void ReceiveData_NotTerminatedSysExAndCompleteSysExInMultiplePackages_Mac() => ReceiveData_Mac(
+            packages: new[]
+            {
+                new DataPackage(
+                    new DataPacket(0xF0, 0x7F, 0x60)),
+                new DataPackage(
+                    new DataPacket(0xF0, 0x5D, 0x6E, 0x7F, 0xF7)),
+            },
+            expectedEvents: new MidiEvent[]
+            {
+                new NormalSysExEvent(new byte[] { 0x7F, 0x60 }),
+                new NormalSysExEvent(new byte[] { 0x5D, 0x6E, 0x7F, 0xF7 }),
+            });
+
+        [Test]
+        [MacOnly]
+        public void ReceiveData_SystemRealTimeEventInsideMultipartSysEx_Mac() => ReceiveData_Mac(
+            packages: new[]
+            {
+                new DataPackage(
+                    new DataPacket(0xF0, 0x7F, 0x60)),
+                new DataPackage(
+                    new DataPacket(0xF8)),
+                new DataPackage(
+                    new DataPacket(0x40, 0xF7)),
+            },
+            expectedEvents: new MidiEvent[]
+            {
+                new TimingClockEvent(),
+                new NormalSysExEvent(new byte[] { 0x7F, 0x60, 0x40, 0xF7 }),
             });
 
         [Test]
