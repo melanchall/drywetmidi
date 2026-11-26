@@ -45,9 +45,6 @@ namespace Melanchall.DryWetMidi.Multimedia
             MidiDevicesSession.InputEndpointRemoved += OnInputEndpointRemoved;
             MidiDevicesSession.OutputEndpointAdded += OnOutputEndpointAdded;
             MidiDevicesSession.OutputEndpointRemoved += OnOutputEndpointRemoved;
-
-            AppDomain.CurrentDomain.DomainUnload += OnDomainUnloadOrExit;
-            AppDomain.CurrentDomain.ProcessExit += OnDomainUnloadOrExit;
         }
 
         #endregion
@@ -72,18 +69,6 @@ namespace Melanchall.DryWetMidi.Multimedia
         #endregion
 
         #region Methods
-
-
-        // TODO: need it?
-        private void OnDomainUnloadOrExit(object? sender, EventArgs e)
-        {
-            // TODO: remove all event handlers of the instance?
-
-            MidiDevicesSession.InputEndpointAdded -= OnInputEndpointAdded;
-            MidiDevicesSession.InputEndpointRemoved -= OnInputEndpointRemoved;
-            MidiDevicesSession.OutputEndpointAdded -= OnOutputEndpointAdded;
-            MidiDevicesSession.OutputEndpointRemoved -= OnOutputEndpointRemoved;
-        }
 
         private void OnInputEndpointAdded(object? sender, IntPtr info)
         {

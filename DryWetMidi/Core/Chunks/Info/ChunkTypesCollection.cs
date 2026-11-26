@@ -61,7 +61,6 @@ namespace Melanchall.DryWetMidi.Core
             _idsToTypes.Add(id, type);
         }
 
-        // TODO: maybe internal?
         /// <summary>
         /// Gets the chunk type associated with the specified ID.
         /// </summary>
@@ -72,12 +71,11 @@ namespace Melanchall.DryWetMidi.Core
         /// <returns><c>true</c> if the <see cref="ChunkTypesCollection"/> contains a chunk type with the
         /// specified ID; otherwise, <c>false</c>.</returns>
         [UnconditionalSuppressMessage("Trimming", "IL2067", Justification = "All types stored in this collection are guaranteed to have public parameterless constructors via the Add method's annotation.")]
-        public bool TryGetType(string id, [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor)] out Type? type)
+        internal bool TryGetType(string id, [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor)] out Type? type)
         {
             return _idsToTypes.TryGetValue(id, out type);
         }
 
-        // TODO: maybe internal?
         /// <summary>
         /// Gets the ID associated with the specified chunk type.
         /// </summary>
@@ -86,7 +84,7 @@ namespace Melanchall.DryWetMidi.Core
         /// chunk type, if the type is found; otherwise, <c>null</c>. This parameter is passed uninitialized.</param>
         /// <returns><c>true</c> if the <see cref="ChunkTypesCollection"/> contains an ID for the
         /// specified chunk type; otherwise, <c>false</c>.</returns>
-        public bool TryGetId([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor)] Type type, out string? id)
+        internal bool TryGetId([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor)] Type type, out string? id)
         {
             return _typesToIds.TryGetValue(type, out id);
         }

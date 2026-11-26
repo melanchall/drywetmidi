@@ -40,7 +40,6 @@ namespace Melanchall.DryWetMidi.Core
             _statusBytesToTypes.Add(statusByte, type);
         }
 
-        // TODO: maybe internal?
         /// <summary>
         /// Gets the event type associated with the specified status byte.
         /// </summary>
@@ -51,12 +50,11 @@ namespace Melanchall.DryWetMidi.Core
         /// <returns><c>true</c> if the <see cref="EventTypesCollection"/> contains an event type with the
         /// specified status byte; otherwise, <c>false</c>.</returns>
         [UnconditionalSuppressMessage("Trimming", "IL2067", Justification = "All types stored in this collection are guaranteed to have public parameterless constructors via the Add method's annotation.")]
-        public bool TryGetType(byte statusByte, [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor)][NotNullWhen(true)] out Type? type)
+        internal bool TryGetType(byte statusByte, [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor)][NotNullWhen(true)] out Type? type)
         {
             return _statusBytesToTypes.TryGetValue(statusByte, out type);
         }
 
-        // TODO: maybe internal?
         /// <summary>
         /// Gets the status byte associated with the specified event type.
         /// </summary>
@@ -66,7 +64,7 @@ namespace Melanchall.DryWetMidi.Core
         /// uninitialized.</param>
         /// <returns><c>true</c> if the <see cref="EventTypesCollection"/> contains a status byte for the
         /// specified event type; otherwise, <c>false</c>.</returns>
-        public bool TryGetStatusByte([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor)] Type type, out byte statusByte)
+        internal bool TryGetStatusByte([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor)] Type type, out byte statusByte)
         {
             return _typesToStatusBytes.TryGetValue(type, out statusByte);
         }
