@@ -201,6 +201,7 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
         }
 
         [TimingCritical]
+        [MacOnly]
         [Test]
         public void SendEventToVirtualDevice_SysEx_NotTerminated()
         {
