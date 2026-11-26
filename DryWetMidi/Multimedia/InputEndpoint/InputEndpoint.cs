@@ -31,6 +31,8 @@ namespace Melanchall.DryWetMidi.Multimedia
         private const int ChannelParametersBufferSize = 2;
         private static readonly int MidiTimeCodeComponentsCount = EnumHelper.GetValues<MidiTimeCodeComponent>().Length;
 
+        private const byte SystemRealTimeStatusBytesStart = 0xF8;
+
         #endregion
 
         #region Events
@@ -168,6 +170,12 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <para>
         /// With the property set to <c>false</c> you'll be notified with <see cref="EventReceived"/> event
         /// two times, so every part will be considered as a MIDI event.
+        /// </para>
+        /// <para>
+        /// If a status byte other than a system real-time one (for example, a Note On event or the start of
+        /// a new system exclusive event) is received before <c>F7</c>, the pending system exclusive event
+        /// is considered terminated, so the <see cref="EventReceived"/> event will be fired for its
+        /// received parts combined (without <c>F7</c>), and then for the new data.
         /// </para>
         /// </remarks>
         public bool WaitForCompleteSysExEvent { get; set; } = true;
@@ -498,18 +506,7 @@ namespace Melanchall.DryWetMidi.Multimedia
                 TestCheckpoints?.SetCheckpointReached(InputEndpointCheckpointsNames.MessageDataReceived, data);
 #endif
 
-                if (data[0] == EventStatusBytes.Global.NormalSysEx)
-                {
-                    HandleSysExStartPart(data, timestamp);
-                    return;
-                }
-                else if (_sysExParts.Any())
-                {
-                    HandleSysExSubsequentPart(data, timestamp);
-                    return;
-                }
-
-                HandleEvents(data, timestamp);
+                HandleData(data, timestamp);
             }
         }
 
@@ -550,18 +547,7 @@ namespace Melanchall.DryWetMidi.Multimedia
                 TestCheckpoints?.SetCheckpointReached(InputEndpointCheckpointsNames.MessageDataReceived, data);
 #endif
 
-                if (data[0] == EventStatusBytes.Global.NormalSysEx)
-                {
-                    HandleSysExStartPart(data, timestamp);
-                    return;
-                }
-                else if (_sysExParts.Any())
-                {
-                    HandleSysExSubsequentPart(data, timestamp);
-                    return;
-                }
-
-                HandleEvents(data, timestamp);
+                HandleData(data, timestamp);
             }
             catch (Exception ex)
             {
@@ -571,8 +557,36 @@ namespace Melanchall.DryWetMidi.Multimedia
             }
         }
 
+        private void HandleData(byte[] data, long timestamp)
+        {
+            var firstByte = data[0];
+
+            if (firstByte == EventStatusBytes.Global.NormalSysEx)
+            {
+                HandleSysExStartPart(data, timestamp);
+                return;
+            }
+
+            if (_sysExParts.Any())
+            {
+                if (firstByte <= SevenBitNumber.MaxValue || firstByte == SysExEvent.EndOfEventByte)
+                {
+                    HandleSysExSubsequentPart(data, timestamp);
+                    return;
+                }
+
+                // Per MIDI 1.0, any status byte except system real-time ones terminates a system exclusive message
+                if (firstByte < SystemRealTimeStatusBytesStart)
+                    CompletePendingSysExEvent(timestamp);
+            }
+
+            HandleEvents(data, timestamp);
+        }
+
         private void HandleSysExStartPart(byte[] data, long timestamp)
         {
+            CompletePendingSysExEvent(timestamp);
+
             var sysExData = new byte[data.Length - 1];
             Buffer.BlockCopy(data, 1, sysExData, 0, sysExData.Length);
 
@@ -590,21 +604,27 @@ namespace Melanchall.DryWetMidi.Multimedia
             _sysExParts.Add(data);
 
             if (data[data.Length - 1] == SysExEvent.EndOfEventByte)
+                CompletePendingSysExEvent(timestamp);
+        }
+
+        private void CompletePendingSysExEvent(long timestamp)
+        {
+            if (!_sysExParts.Any())
+                return;
+
+            var sysExData = new byte[_sysExParts.Sum(p => p.Length)];
+            var i = 0;
+
+            foreach (var p in _sysExParts)
             {
-                var sysExData = new byte[_sysExParts.Sum(p => p.Length)];
-                var i = 0;
-
-                foreach (var p in _sysExParts)
-                {
-                    Buffer.BlockCopy(p, 0, sysExData, i, p.Length);
-                    i += p.Length;
-                }
-
-                _sysExParts.Clear();
-
-                var midiEvent = new NormalSysExEvent(sysExData);
-                OnEventReceived(midiEvent, timestamp);
+                Buffer.BlockCopy(p, 0, sysExData, i, p.Length);
+                i += p.Length;
             }
+
+            _sysExParts.Clear();
+
+            var midiEvent = new NormalSysExEvent(sysExData);
+            OnEventReceived(midiEvent, timestamp);
         }
 
         private void HandleEvents(byte[] data, long timestamp)

@@ -200,18 +200,27 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                     .ToArray()) });
         }
 
-        // TODO: failed
         [TimingCritical]
-        // [Test]
+        [MacOnly]
+        [Test]
         public void SendEventToVirtualDevice_SysEx_NotTerminated()
         {
-            var bytes = new byte[] { 0xF0, 0x50 };
+            var noteOnEvent = new NoteOnEvent((SevenBitNumber)0x75, (SevenBitNumber)0x56);
+
             SendEvents(
-                new[] { new NormalSysExEvent(bytes) },
+                new MidiEvent[]
+                {
+                    new NormalSysExEvent(new byte[] { 0xF0, 0x50 }),
+                    noteOnEvent
+                },
                 receivedEvents =>
                 {
-                    var midiEvent = receivedEvents.Single().Event;
-                    CollectionAssert.AreEqual(bytes, ((NormalSysExEvent)midiEvent).Data, "Received SysEx data is invalid.");
+                    var sysExEvent = receivedEvents
+                        .Select(e => e.Event)
+                        .OfType<NormalSysExEvent>()
+                        .Single();
+
+                    CollectionAssert.AreEqual(new byte[] { 0x50 }, sysExEvent.Data, "Received SysEx data is invalid.");
                 });
         }
 
