@@ -326,6 +326,29 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
+        public void Remove_ByPredicate_PredicateCalledOncePerObject()
+        {
+            var initialObjects = new ITimedObject[]
+            {
+                new TimedEvent(new TextEvent("B"), 20),
+                new Note((SevenBitNumber)90, 100, 10),
+                new TimedEvent(new TextEvent("A"), 5),
+            };
+            var collection = new ObservableTimedObjectsCollection(initialObjects);
+            var checkedObjects = new List<ITimedObject>();
+
+            var removed = collection.Remove(obj =>
+            {
+                checkedObjects.Add(obj);
+                return obj is Note;
+            });
+
+            ClassicAssert.IsTrue(removed, "Objects weren't removed.");
+            CollectionAssert.AreEqual(initialObjects, checkedObjects, "Predicate was called improperly.");
+            CollectionAssert.AreEquivalent(new[] { initialObjects[0], initialObjects[2] }, collection, "Invalid collection content.");
+        }
+
+        [Test]
         public void ChangeObject_Single()
         {
             var objectToChange = new TimedEvent(new TextEvent("A"), 5);

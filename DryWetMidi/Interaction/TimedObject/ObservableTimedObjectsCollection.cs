@@ -220,18 +220,18 @@ namespace Melanchall.DryWetMidi.Interaction
 
             var objectsToRemove = new List<ITimedObject>();
 
-            // TODO: eliminate double pass
-
-            foreach (var obj in _objects)
+            _objects.RemoveAll(obj =>
             {
-                if (match(obj))
-                    objectsToRemove.Add(obj);
-            }
+                if (!match(obj))
+                    return false;
 
-            _objects.RemoveAll(match);
+                objectsToRemove.Add(obj);
+                return true;
+            });
+
             HandleObjectsRemoved(objectsToRemove);
 
-            return objectsToRemove.Any();
+            return objectsToRemove.Count > 0;
         }
 
         /// <summary>
