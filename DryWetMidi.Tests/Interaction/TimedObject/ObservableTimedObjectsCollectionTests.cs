@@ -349,6 +349,36 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         }
 
         [Test]
+        public void Remove_ByPredicate_PredicateThrows_CollectionRemainsUnchanged()
+        {
+            var initialObjects = new ITimedObject[]
+            {
+                new TimedEvent(new TextEvent("A"), 5),
+                new Note((SevenBitNumber)90, 100, 10),
+                new TimedEvent(new TextEvent("C"), 30),
+            };
+            var collection = new ObservableTimedObjectsCollection(initialObjects);
+            var checkedObjects = new List<ITimedObject>();
+            var eventsArgs = new List<ObservableTimedObjectsCollectionChangedEventArgs>();
+            collection.CollectionChanged += (_, e) => eventsArgs.Add(e);
+
+            ClassicAssert.Throws<InvalidOperationException>(
+                () => collection.Remove(obj =>
+                {
+                    checkedObjects.Add(obj);
+                    if (ReferenceEquals(obj, initialObjects[2]))
+                        throw new InvalidOperationException();
+
+                    return ReferenceEquals(obj, initialObjects[0]);
+                }),
+                "The predicate exception wasn't propagated.");
+
+            CollectionAssert.AreEqual(initialObjects, checkedObjects, "Predicate was called improperly.");
+            CollectionAssert.AreEqual(initialObjects, collection, "Collection content changed after the predicate threw.");
+            ClassicAssert.IsEmpty(eventsArgs, "Collection changed notifications were raised.");
+        }
+
+        [Test]
         public void ChangeObject_Single()
         {
             var objectToChange = new TimedEvent(new TextEvent("A"), 5);

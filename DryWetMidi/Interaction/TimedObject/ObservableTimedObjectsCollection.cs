@@ -219,15 +219,18 @@ namespace Melanchall.DryWetMidi.Interaction
             ThrowIfArgument.IsNull(nameof(match), match);
 
             var objectsToRemove = new List<ITimedObject>();
+            var objectsToKeep = new List<ITimedObject>();
 
-            _objects.RemoveAll(obj =>
+            foreach (var obj in _objects)
             {
-                if (!match(obj))
-                    return false;
+                if (match(obj))
+                    objectsToRemove.Add(obj);
+                else
+                    objectsToKeep.Add(obj);
+            }
 
-                objectsToRemove.Add(obj);
-                return true;
-            });
+            _objects.Clear();
+            _objects.AddRange(objectsToKeep);
 
             HandleObjectsRemoved(objectsToRemove);
 
