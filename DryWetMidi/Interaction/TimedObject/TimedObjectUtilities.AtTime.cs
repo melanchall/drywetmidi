@@ -75,6 +75,15 @@ namespace Melanchall.DryWetMidi.Interaction
 
             ThrowIfArgument.IsLessThan(nameof(endTime), endTimeInTicks, startTimeInTicks, "End time is less than start time.");
 
+            return GetObjectsAtTimeRange(timedObjects, startTimeInTicks, endTimeInTicks);
+        }
+
+        private static IEnumerable<TObject> GetObjectsAtTimeRange<TObject>(
+            IEnumerable<TObject?> timedObjects,
+            long startTimeInTicks,
+            long endTimeInTicks)
+            where TObject : ITimedObject
+        {
             if (timedObjects is ISortedCollection)
             {
                 foreach (var obj in timedObjects)
