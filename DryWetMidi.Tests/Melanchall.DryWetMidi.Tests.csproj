@@ -57,6 +57,7 @@
     <Compile Remove="Attributes\VirtualDeviceApiRequiredAttribute.cs" />
     <Compile Remove="Attributes\MultiClientEndpointsAccessSupportRequiredAttribute.cs" />
     <Compile Remove="Attributes\AdvancedApiRequiredAttribute.cs" />
+    <Compile Remove="Attributes\SimpleApiRequiredAttribute.cs" />
     <Compile Remove="Attributes\NativeApiRequiredAttribute.cs" />
     <Compile Remove="Utilities\DevicesUtilities.cs" />
   </ItemGroup>

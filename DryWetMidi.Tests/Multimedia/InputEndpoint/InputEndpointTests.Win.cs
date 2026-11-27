@@ -69,9 +69,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 new NormalSysExEvent(new byte[] { 0x5D, 0x6E, 0x7F, 0xF7 }),
             });
 
-        // TODO: failed on WMS enabled
-        // [Test]
+        [Test]
         [WinOnly]
+        [SimpleApiRequired]
         public void InputEndpointIsInUse()
         {
             using (var inputEndpoint1 = InputEndpoint.GetByName(MidiEndpoints.A))

@@ -479,7 +479,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             }
             else
             {
-                // TODO
+                throw new NotImplementedException($"Getting input endpoint ID is not implemented for {osType}.");
             }
 
             return result;

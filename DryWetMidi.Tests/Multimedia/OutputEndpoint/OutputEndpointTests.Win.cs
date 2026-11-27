@@ -21,9 +21,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
         #region Test methods
 
-        // TODO: failed on WMS enabled
-        // [Test]
+        [Test]
         [WinOnly]
+        [SimpleApiRequired]
         public void OutputEndpointIsInUse()
         {
             using (var outputEndpoint1 = OutputEndpoint.GetByName(MidiEndpoints.A))

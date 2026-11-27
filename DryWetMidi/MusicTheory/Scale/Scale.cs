@@ -22,10 +22,10 @@ namespace Melanchall.DryWetMidi.MusicTheory
         /// <exception cref="ArgumentNullException"><paramref name="intervals"/> is <c>null</c>.</exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="rootNote"/> specified an
         /// invalid value.</exception>
+        /// <exception cref="ArgumentException"><paramref name="intervals"/> contains <c>null</c> values.</exception>
         public Scale(IEnumerable<Interval> intervals, NoteName rootNote)
         {
             ThrowIfArgument.IsNull(nameof(intervals), intervals);
-            // TODO: doc exception
             ThrowIfArgument.ContainsNull(nameof(intervals), intervals);
             ThrowIfArgument.IsInvalidEnumValue(nameof(rootNote), rootNote);
 

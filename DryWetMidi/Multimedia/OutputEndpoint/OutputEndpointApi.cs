@@ -267,7 +267,8 @@ namespace Melanchall.DryWetMidi.Multimedia
             
             var result = MidiOperationsExecutor.Instance.ExecuteOperation(() =>
             {
-                switch (CommonApi.Api_GetOsType())
+                var osType = CommonApi.Api_GetOsType();
+                switch (osType)
                 {
                     case CommonApi.OsType.Windows:
                         return GetOutputEndpointsInfo_Win(configuration, sessionHandle, forceWinMM, out devicesInfoLocal, out devicesCountLocal, out errorCodeLocal);
@@ -275,8 +276,7 @@ namespace Melanchall.DryWetMidi.Multimedia
                         return GetOutputEndpointsInfo_Mac(configuration, sessionHandle, out devicesInfoLocal, out devicesCountLocal, out errorCodeLocal);
                 }
 
-                // TODO
-                throw new NotImplementedException();
+                throw new NotImplementedException($"Getting output endpoints info is not implemented for {osType}.");
             });
             
             devicesInfo = devicesInfoLocal;
@@ -437,7 +437,7 @@ namespace Melanchall.DryWetMidi.Multimedia
             }
             else
             {
-                // TODO
+                throw new NotImplementedException($"Getting output endpoints info is not implemented for {osType}.");
             }
 
             return result;
