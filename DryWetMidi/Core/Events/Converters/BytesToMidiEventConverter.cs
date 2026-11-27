@@ -467,8 +467,6 @@ namespace Melanchall.DryWetMidi.Core
                 eventReader = MetaEventReader;
 
             var midiEvent = eventReader.Read(_midiReader, ReadingSettings, statusByte);
-
-            // TODO: proper exception
             if (midiEvent == null)
                 throw new InvalidOperationException($"MIDI event with status byte '{statusByte}' cannot be read.");
             

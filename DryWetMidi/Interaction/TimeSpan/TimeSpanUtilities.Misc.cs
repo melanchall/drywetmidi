@@ -190,7 +190,9 @@ namespace Melanchall.DryWetMidi.Interaction
         public static TTimeSpan GetZeroTimeSpan<TTimeSpan>()
             where TTimeSpan : ITimeSpan
         {
-            // TODO: math time span???
+            var type = typeof(TTimeSpan);
+            if (type == typeof(MathTimeSpan) || type.IsInterface)
+                throw new NotSupportedException($"'{type}' is not supported.");
 
             return ZeroTimeSpans.Values.OfType<TTimeSpan>().First();
         }
@@ -206,11 +208,11 @@ namespace Melanchall.DryWetMidi.Interaction
         {
             ThrowIfArgument.IsNull(nameof(timeSpan), timeSpan);
 
-            // TODO: what about math / divide by zero?
-            var mathTimeSpan = timeSpan as MathTimeSpan;
-            return mathTimeSpan == null
-                ? ZeroTimeSpans.Values.Contains(timeSpan)
-                : (mathTimeSpan.TimeSpan1.IsZeroTimeSpan() && mathTimeSpan.TimeSpan2.IsZeroTimeSpan());
+            var type = timeSpan.GetType();
+            if (type == typeof(MathTimeSpan) || type.IsInterface)
+                throw new NotSupportedException($"'{type}' is not supported.");
+
+            return ZeroTimeSpans.Values.Contains(timeSpan);
         }
 
         internal static double Divide(ITimeSpan timeSpan1, ITimeSpan timeSpan2)

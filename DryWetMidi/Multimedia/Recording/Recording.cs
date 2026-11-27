@@ -116,7 +116,6 @@ namespace Melanchall.DryWetMidi.Multimedia
             return TimeConverter.ConvertTo((MetricTimeSpan)GetTimeSpanFromNanoseconds(_events.Last().TimeNs), durationType, TempoMap);
         }
 
-        // TODO: check with MathTimeSpan; and all <TTimeSpan>
         /// <summary>
         /// Retrieves the duration of the recording in the specified format.
         /// </summary>
@@ -126,6 +125,10 @@ namespace Melanchall.DryWetMidi.Multimedia
         public TTimeSpan GetDuration<TTimeSpan>()
             where TTimeSpan : ITimeSpan
         {
+            var type = typeof(TTimeSpan);
+            if (type == typeof(MathTimeSpan) || type.IsInterface)
+                throw new NotSupportedException($"'{type}' is not supported.");
+
             if (_events.Count == 0)
                 return TimeSpanUtilities.GetZeroTimeSpan<TTimeSpan>();
 
