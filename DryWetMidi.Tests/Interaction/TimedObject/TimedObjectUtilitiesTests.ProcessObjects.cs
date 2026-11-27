@@ -1123,7 +1123,7 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         [Test]
         public void ProcessObjects_Chords_Hint_NoteTimeOrLengthCanBeChanged_AddNote([Values] ContainerType containerType) => ProcessObjects(
             containerType: containerType,
-            objectType: ObjectType.Chord,
+            objectType: ObjectType.TimedEvent | ObjectType.Chord,
             midiEvents: new MidiEvent[]
             {
                 new NoteOnEvent(),
