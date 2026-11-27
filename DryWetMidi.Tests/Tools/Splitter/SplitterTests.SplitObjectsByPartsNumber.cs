@@ -10,7 +10,6 @@ using System.Linq;
 
 namespace Melanchall.DryWetMidi.Tests.Tools
 {
-    // TODO: check metric length type
     [TestFixture]
     public sealed partial class SplitterTests
     {
@@ -146,6 +145,145 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                         20 + oneAndHalfBeatLength),
                 });
         }
+
+        [Test]
+        public void SplitObjectsByPartsNumber_EqualDivision_SingleNote_Metric() => CheckSplitObjectsByPartsNumber(
+            inputObjects: new ITimedObject[]
+            {
+                new Note((SevenBitNumber)70, 96, 20),
+            },
+            partsNumber: 4,
+            lengthType: TimeSpanType.Metric,
+            expectedObjects: new ITimedObject[]
+            {
+                new Note((SevenBitNumber)70, 24, 20),
+                new Note((SevenBitNumber)70, 24, 44),
+                new Note((SevenBitNumber)70, 24, 68),
+                new Note((SevenBitNumber)70, 24, 92),
+            });
+
+        [Test]
+        public void SplitObjectsByPartsNumber_SingleNote_Metric_TempoChange_TwoParts() => CheckSplitObjectsByPartsNumber(
+            inputObjects: new ITimedObject[]
+            {
+                new Note((SevenBitNumber)70, 400, 0),
+            },
+            partsNumber: 2,
+            lengthType: TimeSpanType.Metric,
+            expectedObjects: new ITimedObject[]
+            {
+                new Note((SevenBitNumber)70, 150, 0),
+                new Note((SevenBitNumber)70, 250, 150),
+            },
+            tempoMap: CreateTempoMapWithTempoChanges());
+
+        [Test]
+        public void SplitObjectsByPartsNumber_SingleNote_Midi_TempoChange_TwoParts() => CheckSplitObjectsByPartsNumber(
+            inputObjects: new ITimedObject[]
+            {
+                new Note((SevenBitNumber)70, 400, 0),
+            },
+            partsNumber: 2,
+            lengthType: TimeSpanType.Midi,
+            expectedObjects: new ITimedObject[]
+            {
+                new Note((SevenBitNumber)70, 200, 0),
+                new Note((SevenBitNumber)70, 200, 200),
+            },
+            tempoMap: CreateTempoMapWithTempoChanges());
+
+        [Test]
+        public void SplitObjectsByPartsNumber_SingleNote_Metric_TempoChange_ThreeParts() => CheckSplitObjectsByPartsNumber(
+            inputObjects: new ITimedObject[]
+            {
+                new Note((SevenBitNumber)70, 400, 0),
+            },
+            partsNumber: 3,
+            lengthType: TimeSpanType.Metric,
+            expectedObjects: new ITimedObject[]
+            {
+                new Note((SevenBitNumber)70, 100, 0),
+                new Note((SevenBitNumber)70, 100, 100),
+                new Note((SevenBitNumber)70, 200, 200),
+            },
+            tempoMap: CreateTempoMapWithTempoChanges());
+
+        [Test]
+        public void SplitObjectsByPartsNumber_SingleNote_Metric_MultipleTempoChanges() => CheckSplitObjectsByPartsNumber(
+            inputObjects: new ITimedObject[]
+            {
+                new Note((SevenBitNumber)70, 600, 100),
+            },
+            partsNumber: 5,
+            lengthType: TimeSpanType.Metric,
+            expectedObjects: new ITimedObject[]
+            {
+                new Note((SevenBitNumber)70, 100, 100),
+                new Note((SevenBitNumber)70, 200, 200),
+                new Note((SevenBitNumber)70, 200, 400),
+                new Note((SevenBitNumber)70, 50, 600),
+                new Note((SevenBitNumber)70, 50, 650),
+            },
+            tempoMap: CreateTempoMapWithTempoChanges());
+
+        [Test]
+        public void SplitObjectsByPartsNumber_SingleNote_Metric_AfterTempoChanges() => CheckSplitObjectsByPartsNumber(
+            inputObjects: new ITimedObject[]
+            {
+                new Note((SevenBitNumber)70, 90, 700),
+            },
+            partsNumber: 3,
+            lengthType: TimeSpanType.Metric,
+            expectedObjects: new ITimedObject[]
+            {
+                new Note((SevenBitNumber)70, 30, 700),
+                new Note((SevenBitNumber)70, 30, 730),
+                new Note((SevenBitNumber)70, 30, 760),
+            },
+            tempoMap: CreateTempoMapWithTempoChanges());
+
+        [Test]
+        public void SplitObjectsByPartsNumber_Chord_Metric_TempoChange() => CheckSplitObjectsByPartsNumber(
+            inputObjects: new ITimedObject[]
+            {
+                new Chord(
+                    new Note((SevenBitNumber)80, 400, 0),
+                    new Note((SevenBitNumber)90, 200, 100))
+            },
+            partsNumber: 2,
+            lengthType: TimeSpanType.Metric,
+            expectedObjects: new ITimedObject[]
+            {
+                new Chord(
+                    new Note((SevenBitNumber)80, 150, 0),
+                    new Note((SevenBitNumber)90, 50, 100)),
+                new Chord(
+                    new Note((SevenBitNumber)80, 250, 150),
+                    new Note((SevenBitNumber)90, 150, 150))
+            },
+            tempoMap: CreateTempoMapWithTempoChanges());
+
+        [Test]
+        public void SplitObjectsByPartsNumber_TimedEventsAndNotes_Metric_TempoChanges() => CheckSplitObjectsByPartsNumber(
+            inputObjects: new ITimedObject[]
+            {
+                new TimedEvent(new TextEvent("A"), 0),
+                new Note((SevenBitNumber)70, 400, 0),
+                new Note((SevenBitNumber)50, 600, 100),
+                new TimedEvent(new TextEvent("B"), 800),
+            },
+            partsNumber: 2,
+            lengthType: TimeSpanType.Metric,
+            expectedObjects: new ITimedObject[]
+            {
+                new TimedEvent(new TextEvent("A"), 0),
+                new Note((SevenBitNumber)70, 150, 0),
+                new Note((SevenBitNumber)70, 250, 150),
+                new Note((SevenBitNumber)50, 400, 100),
+                new Note((SevenBitNumber)50, 200, 500),
+                new TimedEvent(new TextEvent("B"), 800),
+            },
+            tempoMap: CreateTempoMapWithTempoChanges());
 
         [Test]
         public void SplitObjectsByPartsNumber_UnequalDivision_SingleNote_Midi() => CheckSplitObjectsByPartsNumber(
@@ -360,6 +498,59 @@ namespace Melanchall.DryWetMidi.Tests.Tools
         }
 
         [Test]
+        public void CheckSplitObjectsByPartsNumber_TrackChunk_Metric_TempoChanges() => CheckSplitObjectsByPartsNumber_TrackChunk(
+            inputObjects: new ITimedObject[]
+            {
+                new TimedEvent(new TextEvent("A"), 0),
+                new Note((SevenBitNumber)70, 400, 0),
+                new Note((SevenBitNumber)50, 600, 100),
+                new TimedEvent(new TextEvent("B"), 800),
+            },
+            objectType: ObjectType.Note,
+            partsNumber: 2,
+            lengthType: TimeSpanType.Metric,
+            expectedObjects: new ITimedObject[]
+            {
+                new TimedEvent(new TextEvent("A"), 0),
+                new Note((SevenBitNumber)70, 150, 0),
+                new Note((SevenBitNumber)70, 250, 150),
+                new Note((SevenBitNumber)50, 400, 100),
+                new Note((SevenBitNumber)50, 200, 500),
+                new TimedEvent(new TextEvent("B"), 800),
+            },
+            tempoMap: CreateTempoMapWithTempoChanges());
+
+        [Test]
+        public void CheckSplitObjectsByPartsNumber_TrackChunk_Chord_Metric_TempoChange() => CheckSplitObjectsByPartsNumber_TrackChunk(
+            inputObjects: new ITimedObject[]
+            {
+                new Note((SevenBitNumber)80, 400, 0),
+                new Note((SevenBitNumber)90, 400, 0),
+            },
+            objectType: ObjectType.Chord,
+            partsNumber: 5,
+            lengthType: TimeSpanType.Metric,
+            expectedObjects: new ITimedObject[]
+            {
+                new Chord(
+                    new Note((SevenBitNumber)80, 60, 0),
+                    new Note((SevenBitNumber)90, 60, 0)),
+                new Chord(
+                    new Note((SevenBitNumber)80, 60, 60),
+                    new Note((SevenBitNumber)90, 60, 60)),
+                new Chord(
+                    new Note((SevenBitNumber)80, 60, 120),
+                    new Note((SevenBitNumber)90, 60, 120)),
+                new Chord(
+                    new Note((SevenBitNumber)80, 100, 180),
+                    new Note((SevenBitNumber)90, 100, 180)),
+                new Chord(
+                    new Note((SevenBitNumber)80, 120, 280),
+                    new Note((SevenBitNumber)90, 120, 280)),
+            },
+            tempoMap: CreateTempoMapWithTempoChanges());
+
+        [Test]
         public void CheckSplitObjectsByPartsNumber_TrackChunk_Settings_1() => CheckSplitObjectsByPartsNumber_TrackChunk(
             inputObjects: new ITimedObject[]
             {
@@ -568,9 +759,12 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             ICollection<ITimedObject> inputObjects,
             int partsNumber,
             TimeSpanType lengthType,
-            ICollection<ITimedObject> expectedObjects)
+            ICollection<ITimedObject> expectedObjects,
+            TempoMap tempoMap = null)
         {
-            var actualObjects = inputObjects.SplitObjectsByPartsNumber(partsNumber, lengthType, TempoMap.Default).ToArray();
+            tempoMap = tempoMap ?? TempoMap.Default;
+
+            var actualObjects = inputObjects.SplitObjectsByPartsNumber(partsNumber, lengthType, tempoMap).ToArray();
             MidiAsserts.AreEqual(
                 expectedObjects,
                 actualObjects,
@@ -607,9 +801,14 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 "Invalid result track chunks.");
 
             var midiFile = inputObjects.ToFile();
+            midiFile.ReplaceTempoMap(tempoMap);
             midiFile.SplitObjectsByPartsNumber(objectType, partsNumber, lengthType, settings);
+
+            var expectedFile = expectedObjects.ToFile();
+            expectedFile.ReplaceTempoMap(tempoMap);
+
             MidiAsserts.AreEqual(
-                expectedObjects.ToFile(),
+                expectedFile,
                 midiFile,
                 true,
                 "Invalid result track file.");
@@ -638,6 +837,18 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 midiFile,
                 true,
                 "Invalid result track file.");
+        }
+
+        private static TempoMap CreateTempoMapWithTempoChanges()
+        {
+            // 5 ms per tick on [0; 200), 2.5 ms per tick on [200; 600), 10 ms per tick from 600
+            using (var tempoMapManager = new TempoMapManager(new TicksPerQuarterNoteTimeDivision(100)))
+            {
+                tempoMapManager.SetTempo(200, Tempo.FromMillisecondsPerQuarterNote(250));
+                tempoMapManager.SetTempo(600, Tempo.FromMillisecondsPerQuarterNote(1000));
+
+                return tempoMapManager.TempoMap;
+            }
         }
 
         #endregion
