@@ -648,7 +648,7 @@ namespace Melanchall.DryWetMidi.Interaction
                 removedNotes?.Length > 0;
 
             var savedNotes = processingContext.NoteTimeOrLengthCanBeChanged
-                ? (processingContext.NotesCollectionCanBeChanged ? (notes?.Intersect(chord.Notes).ToArray() ?? Enumerable.Empty<Note>()) : chord.Notes)
+                ? notes?.Intersect(chord.Notes).ToArray()
                 : null;
             processingContext.NoteTimeOrLengthChanged |=
                 savedNotes?.Any(n => n.Time != notesTimes?[n]) == true ||
@@ -656,7 +656,6 @@ namespace Melanchall.DryWetMidi.Interaction
 
             if (processingContext.NotesCollectionChanged)
             {
-                // TODO: check this case
                 if (collectedTimedEvents != null && addedNotes != null)
                 {
                     foreach (var note in addedNotes)
