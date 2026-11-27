@@ -205,7 +205,6 @@ namespace Melanchall.DryWetMidi.Tools
                 .Select(c => c.Events.GetTimedEvents().ToArray())
                 .ToArray();
 
-            // TODO: what if td is null
             return new MidiFileSlicer(
                 midiFile.TimeDivision!,
                 timedEvents,

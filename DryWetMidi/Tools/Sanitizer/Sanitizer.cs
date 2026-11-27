@@ -97,7 +97,6 @@ namespace Melanchall.DryWetMidi.Tools
             var noteOnLastObjects = new Dictionary<(byte Port, int NoteId), (ITimedObject Object, int TrackChunkIndex)>();
             var data = new List<((ITimedObject Object, int TrackChunkIndex), long? Time)>();
 
-            // TODO: simplify
             var notesAndTimedEvents = trackChunks
                 .SelectMany((trackChunk, i) => trackChunk
                     .GetNotesAndTimedEventsByPort(settings, eventPorts)

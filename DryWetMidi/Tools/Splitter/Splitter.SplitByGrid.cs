@@ -35,9 +35,11 @@ namespace Melanchall.DryWetMidi.Tools
         /// </exception>
         /// <exception cref="InvalidOperationException">An encountered grid time is negative,
         /// equal to or less than the preceding grid time.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><see cref="MidiFile.TimeDivision"/> of <paramref name="midiFile"/> is <c>null</c>.</exception>"
         public static IEnumerable<MidiFile> SplitByGrid(this MidiFile midiFile, IGrid grid, SliceMidiFileSettings? settings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
+            ThrowIfArgument.DoesntSatisfyCondition(nameof(midiFile), midiFile, f => f.TimeDivision != null, "File's time division is null.");
             ThrowIfArgument.IsNull(nameof(grid), grid);
 
             if (!midiFile.GetEvents().Any())

@@ -26,7 +26,6 @@ namespace Melanchall.DryWetMidi.Tests.Utilities
             long timesEpsilon,
             string message)
         {
-            // TODO: rework on enumerators directly
             var expectedCount = expectedTimedObjects.Count();
             var actualCount = actualTimedObjects.Count();
 

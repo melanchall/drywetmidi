@@ -37,9 +37,11 @@ namespace Melanchall.DryWetMidi.Tools
         /// </exception>
         /// <exception cref="InvalidOperationException">The calculated end of the part is
         /// equal to or less than its start.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><see cref="MidiFile.TimeDivision"/> of <paramref name="midiFile"/> is <c>null</c>.</exception>"
         public static MidiFile TakePart(this MidiFile midiFile, ITimeSpan partStart, ITimeSpan partLength, SliceMidiFileSettings? settings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
+            ThrowIfArgument.DoesntSatisfyCondition(nameof(midiFile), midiFile, f => f.TimeDivision != null, "File's time division is null.");
             ThrowIfArgument.IsNull(nameof(partStart), partStart);
             ThrowIfArgument.IsNull(nameof(partLength), partLength);
 

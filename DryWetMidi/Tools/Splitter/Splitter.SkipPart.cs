@@ -29,9 +29,11 @@ namespace Melanchall.DryWetMidi.Tools
         /// </item>
         /// </list>
         /// </exception>
+        /// <exception cref="ArgumentOutOfRangeException"><see cref="MidiFile.TimeDivision"/> of <paramref name="midiFile"/> is <c>null</c>.</exception>
         public static MidiFile SkipPart(this MidiFile midiFile, ITimeSpan partLength, SliceMidiFileSettings? settings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
+            ThrowIfArgument.DoesntSatisfyCondition(nameof(midiFile), midiFile, f => f.TimeDivision != null, "File's time division is null.");
             ThrowIfArgument.IsNull(nameof(partLength), partLength);
 
             var grid = new ArbitraryGrid(partLength);

@@ -5,7 +5,6 @@ using System.Linq;
 
 namespace Melanchall.DryWetMidi.Interaction
 {
-    // TODO: write about obsolete
     public static partial class TimedObjectUtilities
     {
         #region Methods

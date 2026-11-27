@@ -2,7 +2,6 @@
 
 namespace Melanchall.DryWetMidi.Interaction
 {
-    // TODO: maybe <TKey>??
     /// <summary>
     /// Represents a musical rest. More info in the <see href="xref:a_getting_objects#rests">Getting objects: Rests</see> article.
     /// </summary>

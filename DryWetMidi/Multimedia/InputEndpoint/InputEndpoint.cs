@@ -108,7 +108,6 @@ namespace Melanchall.DryWetMidi.Multimedia
                 EnsureSessionIsCreated();
                 EnsureEndpointIsNotRemoved();
 
-                // TODO: cache the name and provide method to invalidate cache
                 var result = InputEndpointApi.Api_GetEndpointName(Handle.DangerousGetHandle(), out var name, out var errorCode);
                 NativeApiUtilities.HandleEndpointNativeApiResult(result, errorCode);
 
@@ -659,10 +658,7 @@ namespace Melanchall.DryWetMidi.Multimedia
                     {
                         var sysExEvent = midiEvent as SysExEvent;
                         if (sysExEvent?.Data == null || sysExEvent.Data.Length == 0)
-                        {
-                            // TODO: log
                             return;
-                        }
 
                         if (sysExEvent.Completed || !WaitForCompleteSysExEvent)
                             OnEventReceived(midiEvent, timestamp);

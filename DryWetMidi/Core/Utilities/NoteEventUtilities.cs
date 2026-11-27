@@ -64,38 +64,6 @@ namespace Melanchall.DryWetMidi.Core
             noteEvent.NoteNumber = NoteUtilities.GetNoteNumber(noteName, octave);
         }
 
-        // TODO: check and... maybe remove?
-        /// <summary>
-        /// Checks if the specified <see cref="NoteOnEvent"/> corresponds to the specified
-        /// <see cref="NoteOffEvent"/>.
-        /// </summary>
-        /// <remarks>
-        /// Note On event corresponds to Note Off one if it has the same note's number and channel,
-        /// i.e. those events make up a note.
-        /// </remarks>
-        /// <param name="noteOnEvent"><see cref="NoteOnEvent"/> to check <see cref="NoteOffEvent"/> for.</param>
-        /// <param name="noteOffEvent"><see cref="NoteOffEvent"/> to check <see cref="NoteOnEvent"/> for.</param>
-        /// <returns><c>true</c> if <paramref name="noteOnEvent"/> corresponds to <paramref name="noteOffEvent"/>.</returns>
-        /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occurred:</para>
-        /// <list type="bullet">
-        /// <item>
-        /// <description><paramref name="noteOnEvent"/> is <c>null</c>.</description>
-        /// </item>
-        /// <item>
-        /// <description><paramref name="noteOffEvent"/> is <c>null</c>.</description>
-        /// </item>
-        /// </list>
-        /// </exception>
-        public static bool IsNoteOnCorrespondToNoteOff(NoteOnEvent noteOnEvent, NoteOffEvent noteOffEvent)
-        {
-            ThrowIfArgument.IsNull(nameof(noteOnEvent), noteOnEvent);
-            ThrowIfArgument.IsNull(nameof(noteOffEvent), noteOffEvent);
-
-            return noteOnEvent.Channel == noteOffEvent.Channel &&
-                   noteOnEvent.NoteNumber == noteOffEvent.NoteNumber;
-        }
-
         #endregion
     }
 }
