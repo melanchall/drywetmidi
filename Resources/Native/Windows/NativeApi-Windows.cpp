@@ -1987,7 +1987,12 @@ API_EXPORT IN_OPENRESULT API_CALL OpenInputEndpoint_Win(InputEndpointInfo* info,
                 words.GetMany(0, temp);
                 std::memcpy(bytes, temp.data(), byteCount);
 
-                bytesReceivedCallback(bytes, byteCount, ump.Timestamp() * 1000000000 / midi2::MidiClock::TimestampFrequency());
+                // Zero timestamp means "send immediately" and can't be used as a moment of receiving
+                auto timestamp = ump.Timestamp();
+                if (timestamp == midi2::MidiClock::TimestampConstantSendImmediately())
+                    timestamp = midi2::MidiClock::Now();
+
+                bytesReceivedCallback(bytes, byteCount, timestamp * 1000000000 / midi2::MidiClock::TimestampFrequency());
 
                 delete[] bytes;
             };

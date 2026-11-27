@@ -41,9 +41,14 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
 
             public void RaiseEvent(MidiEvent midiEvent)
             {
+                RaiseEvent(midiEvent, CurrentTimestamp);
+            }
+
+            public void RaiseEvent(MidiEvent midiEvent, long timestamp)
+            {
                 EventReceived?.Invoke(
                     this,
-                    new MidiEventReceivedEventArgs(midiEvent, CurrentTimestamp));
+                    new MidiEventReceivedEventArgs(midiEvent, timestamp));
             }
 
             public void Dispose()
@@ -316,6 +321,43 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
                 ClassicAssert.IsTrue(
                     AreTimeSpansEqual(expectedDuration, actualDuration),
                     $"Duration is invalid. Actual is {actualDuration}. Expected is {expectedDuration}.");
+            }
+        }
+
+        [TimingCritical]
+        [Test]
+        public void RecordingUsesReceivingTimeForEventTimestampPrecedingRecordingStart(
+            [Values(0L, 900_000_000L)] long eventTimestamp)
+        {
+            const long recordingStartedAt = 1_000_000_000L;
+
+            using (var inputEndpoint = new TimestampedInputEndpoint
+            {
+                CurrentTimestamp = recordingStartedAt
+            })
+            using (var recording = new Recording(TempoMap.Default, inputEndpoint))
+            {
+                inputEndpoint.StartEventsListening();
+                recording.Start();
+
+                var stopwatch = Stopwatch.StartNew();
+                WaitOperations.Wait(TimeSpan.FromMilliseconds(200));
+
+                inputEndpoint.RaiseEvent(new NoteOnEvent(), eventTimestamp);
+                var receivingTime = stopwatch.Elapsed;
+
+                var recordedEvents = recording.GetEvents().ToArray();
+                ClassicAssert.AreEqual(1, recordedEvents.Length, "Recorded events count is invalid.");
+
+                var actualTime = (TimeSpan)recordedEvents[0].TimeAs<MetricTimeSpan>(TempoMap.Default);
+                ClassicAssert.IsTrue(
+                    AreTimeSpansEqual(receivingTime, actualTime),
+                    $"Event time is invalid. Actual is {actualTime}. Expected is {receivingTime}.");
+
+                var duration = (TimeSpan)recording.GetDuration<MetricTimeSpan>();
+                ClassicAssert.IsTrue(
+                    AreTimeSpansEqual(receivingTime, duration),
+                    $"Duration is invalid. Actual is {duration}. Expected is {receivingTime}.");
             }
         }
 
