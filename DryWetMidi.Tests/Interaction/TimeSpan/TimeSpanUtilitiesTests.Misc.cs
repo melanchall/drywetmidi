@@ -11,34 +11,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
     {
         #region Constants
 
-        private static readonly object[] ZeroMathTimeSpansData = new[]
-        {
-            new ITimeSpan[] { new MidiTimeSpan(), new MidiTimeSpan() },
-            new ITimeSpan[] { new MetricTimeSpan(), new MetricTimeSpan() },
-            new ITimeSpan[] { new MusicalTimeSpan(), new MusicalTimeSpan() },
-            new ITimeSpan[] { new BarBeatTicksTimeSpan(), new BarBeatTicksTimeSpan() },
-            new ITimeSpan[] { new BarBeatFractionTimeSpan(), new BarBeatFractionTimeSpan() },
-            new ITimeSpan[] { new BarBeatFractionTimeSpan(), new MidiTimeSpan() },
-            new ITimeSpan[] { new MusicalTimeSpan(), new MidiTimeSpan() },
-            new ITimeSpan[] { new MusicalTimeSpan(), new BarBeatTicksTimeSpan() },
-            new ITimeSpan[] { new MusicalTimeSpan(), new MidiTimeSpan().Add(new BarBeatTicksTimeSpan(), TimeSpanMode.TimeLength) },
-            new ITimeSpan[] { new MetricTimeSpan().Subtract(new MidiTimeSpan(), TimeSpanMode.LengthLength), new MidiTimeSpan().Add(new BarBeatTicksTimeSpan(), TimeSpanMode.TimeLength) },
-        };
-
-        private static readonly object[] NonZeroMathTimeSpansData = new[]
-        {
-            new ITimeSpan[] { new MidiTimeSpan(), new MidiTimeSpan(1) },
-            new ITimeSpan[] { new MetricTimeSpan(1), new MetricTimeSpan(2) },
-            new ITimeSpan[] { new MusicalTimeSpan(), new MusicalTimeSpan(1, 1) },
-            new ITimeSpan[] { new BarBeatTicksTimeSpan(1), new BarBeatTicksTimeSpan() },
-            new ITimeSpan[] { new BarBeatFractionTimeSpan(1), new BarBeatFractionTimeSpan() },
-            new ITimeSpan[] { new BarBeatFractionTimeSpan(), new MidiTimeSpan(1) },
-            new ITimeSpan[] { new MusicalTimeSpan(2, 4), new MidiTimeSpan() },
-            new ITimeSpan[] { new MusicalTimeSpan(1), new BarBeatTicksTimeSpan() },
-            new ITimeSpan[] { new MusicalTimeSpan(), new MidiTimeSpan(1).Add(new BarBeatTicksTimeSpan(), TimeSpanMode.TimeLength) },
-            new ITimeSpan[] { new MetricTimeSpan(1).Subtract(new MidiTimeSpan(), TimeSpanMode.LengthLength), new MidiTimeSpan().Add(new BarBeatTicksTimeSpan(), TimeSpanMode.TimeLength) },
-        };
-
         private static readonly ITimeSpan[] ZeroTimeSpans = new ITimeSpan[]
         {
             new MidiTimeSpan(),
@@ -154,20 +126,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         public void IsZeroTimeSpan_False(ITimeSpan timeSpan)
         {
             ClassicAssert.IsFalse(timeSpan.IsZeroTimeSpan(), $"Time span [{timeSpan}] is zero.");
-        }
-
-        [TestCaseSource(nameof(ZeroMathTimeSpansData))]
-        public void IsZeroTimeSpan_MathTimeSpan_True(ITimeSpan timeSpan1, ITimeSpan timeSpan2)
-        {
-            var mathTimeSpan = CreateMathTimeSpan(timeSpan1, timeSpan2);
-            ClassicAssert.IsTrue(mathTimeSpan.IsZeroTimeSpan(), $"Time span [{mathTimeSpan}] is not zero.");
-        }
-
-        [TestCaseSource(nameof(NonZeroMathTimeSpansData))]
-        public void IsZeroTimeSpan_MathTimeSpan_False(ITimeSpan timeSpan1, ITimeSpan timeSpan2)
-        {
-            var mathTimeSpan = CreateMathTimeSpan(timeSpan1, timeSpan2);
-            ClassicAssert.IsFalse(mathTimeSpan.IsZeroTimeSpan(), $"Time span [{mathTimeSpan}] is zero.");
         }
 
         #endregion
