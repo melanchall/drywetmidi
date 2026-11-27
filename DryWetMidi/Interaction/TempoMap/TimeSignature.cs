@@ -108,22 +108,12 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="timeSignature1">The first <see cref="TimeSignature"/> to compare.</param>
         /// <param name="timeSignature2">The second <see cref="TimeSignature"/> to compare.</param>
         /// <returns><c>true</c> if the value of <paramref name="timeSignature1"/> is less than the value of
-        /// <paramref name="timeSignature2"/>; otherwise, <c>false</c>.</returns>
-        /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occurred:</para>
-        /// <list type="bullet">
-        /// <item>
-        /// <description><paramref name="timeSignature1"/> is <c>null</c>.</description>
-        /// </item>
-        /// <item>
-        /// <description><paramref name="timeSignature2"/> is <c>null</c>.</description>
-        /// </item>
-        /// </list>
-        /// </exception>
-        public static bool operator <(TimeSignature timeSignature1, TimeSignature timeSignature2)
+        /// <paramref name="timeSignature2"/>; otherwise, <c>false</c>. If <paramref name="timeSignature1"/> or <paramref name="timeSignature2"/> is <c>null</c>,
+        /// <c>false</c> is returned.</returns>
+        public static bool operator <(TimeSignature? timeSignature1, TimeSignature? timeSignature2)
         {
-            ThrowIfArgument.IsNull(nameof(timeSignature1), timeSignature1);
-            ThrowIfArgument.IsNull(nameof(timeSignature2), timeSignature2);
+            if (timeSignature1 is null || timeSignature2 is null)
+                return false;
 
             return timeSignature1.Numerator / (double)timeSignature1.Denominator < timeSignature2.Numerator / (double)timeSignature2.Denominator;
         }
@@ -135,22 +125,12 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="timeSignature1">The first <see cref="TimeSignature"/> to compare.</param>
         /// <param name="timeSignature2">The second <see cref="TimeSignature"/> to compare.</param>
         /// <returns><c>true</c> if the value of <paramref name="timeSignature1"/> is less than or equal to the value of
-        /// <paramref name="timeSignature2"/>; otherwise, <c>false</c>.</returns>
-        /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occurred:</para>
-        /// <list type="bullet">
-        /// <item>
-        /// <description><paramref name="timeSignature1"/> is <c>null</c>.</description>
-        /// </item>
-        /// <item>
-        /// <description><paramref name="timeSignature2"/> is <c>null</c>.</description>
-        /// </item>
-        /// </list>
-        /// </exception>
-        public static bool operator <=(TimeSignature timeSignature1, TimeSignature timeSignature2)
+        /// <paramref name="timeSignature2"/>; otherwise, <c>false</c>. If <paramref name="timeSignature1"/> or <paramref name="timeSignature2"/> is <c>null</c>,
+        /// <c>false</c> is returned.</returns>
+        public static bool operator <=(TimeSignature? timeSignature1, TimeSignature? timeSignature2)
         {
-            ThrowIfArgument.IsNull(nameof(timeSignature1), timeSignature1);
-            ThrowIfArgument.IsNull(nameof(timeSignature2), timeSignature2);
+            if (timeSignature1 is null || timeSignature2 is null)
+                return false;
 
             return timeSignature1.Numerator / (double)timeSignature1.Denominator <= timeSignature2.Numerator / (double)timeSignature2.Denominator;
         }
@@ -161,22 +141,12 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="timeSignature1">The first <see cref="TimeSignature"/> to compare.</param>
         /// <param name="timeSignature2">The second <see cref="TimeSignature"/> to compare.</param>
         /// <returns><c>true</c> if the value of <paramref name="timeSignature1"/> is greater than the value of
-        /// <paramref name="timeSignature2"/>; otherwise, <c>false</c>.</returns>
-        /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occurred:</para>
-        /// <list type="bullet">
-        /// <item>
-        /// <description><paramref name="timeSignature1"/> is <c>null</c>.</description>
-        /// </item>
-        /// <item>
-        /// <description><paramref name="timeSignature2"/> is <c>null</c>.</description>
-        /// </item>
-        /// </list>
-        /// </exception>
-        public static bool operator >(TimeSignature timeSignature1, TimeSignature timeSignature2)
+        /// <paramref name="timeSignature2"/>; otherwise, <c>false</c>. If <paramref name="timeSignature1"/> or <paramref name="timeSignature2"/> is <c>null</c>,
+        /// <c>false</c> is returned.</returns>
+        public static bool operator >(TimeSignature? timeSignature1, TimeSignature? timeSignature2)
         {
-            ThrowIfArgument.IsNull(nameof(timeSignature1), timeSignature1);
-            ThrowIfArgument.IsNull(nameof(timeSignature2), timeSignature2);
+            if (timeSignature1 is null || timeSignature2 is null)
+                return false;
 
             return timeSignature1.Numerator / (double)timeSignature1.Denominator > timeSignature2.Numerator / (double)timeSignature2.Denominator;
         }
@@ -188,22 +158,12 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="timeSignature1">The first <see cref="TimeSignature"/> to compare.</param>
         /// <param name="timeSignature2">The second <see cref="TimeSignature"/> to compare.</param>
         /// <returns><c>true</c> if the value of <paramref name="timeSignature1"/> is greater than or equal to the value of
-        /// <paramref name="timeSignature2"/>; otherwise, <c>false</c>.</returns>
-        /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occurred:</para>
-        /// <list type="bullet">
-        /// <item>
-        /// <description><paramref name="timeSignature1"/> is <c>null</c>.</description>
-        /// </item>
-        /// <item>
-        /// <description><paramref name="timeSignature2"/> is <c>null</c>.</description>
-        /// </item>
-        /// </list>
-        /// </exception>
-        public static bool operator >=(TimeSignature timeSignature1, TimeSignature timeSignature2)
+        /// <paramref name="timeSignature2"/>; otherwise, <c>false</c>. If <paramref name="timeSignature1"/> or <paramref name="timeSignature2"/> is <c>null</c>,
+        /// <c>false</c> is returned.</returns>
+        public static bool operator >=(TimeSignature? timeSignature1, TimeSignature? timeSignature2)
         {
-            ThrowIfArgument.IsNull(nameof(timeSignature1), timeSignature1);
-            ThrowIfArgument.IsNull(nameof(timeSignature2), timeSignature2);
+            if (timeSignature1 is null || timeSignature2 is null)
+                return false;
 
             return timeSignature1.Numerator / (double)timeSignature1.Denominator >= timeSignature2.Numerator / (double)timeSignature2.Denominator;
         }

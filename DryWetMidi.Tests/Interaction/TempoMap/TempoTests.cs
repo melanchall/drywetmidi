@@ -95,7 +95,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var tempo1 = default(Tempo);
             var tempo2 = new Tempo(100);
-            ClassicAssert.Throws<ArgumentNullException>(() => { var x = tempo1 < tempo2; }, "Exception not thrown for null tempo.");
+
+            ClassicAssert.IsFalse(tempo1 < tempo2, "Comparison with null tempo returned true.");
         }
 
         [Test]
@@ -103,7 +104,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var tempo1 = new Tempo(100);
             var tempo2 = default(Tempo);
-            ClassicAssert.Throws<ArgumentNullException>(() => { var x = tempo1 < tempo2; }, "Exception not thrown for null tempo.");
+
+            ClassicAssert.IsFalse(tempo1 < tempo2, "Comparison with null tempo returned true.");
         }
 
         [Test]
@@ -111,7 +113,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var tempo1 = default(Tempo);
             var tempo2 = default(Tempo);
-            ClassicAssert.Throws<ArgumentNullException>(() => { var x = tempo1 < tempo2; }, "Exception not thrown for null tempo.");
+
+            ClassicAssert.IsFalse(tempo1 < tempo2, "Comparison with null tempo returned true.");
         }
 
         [Test]
@@ -143,7 +146,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var tempo1 = default(Tempo);
             var tempo2 = new Tempo(100);
-            ClassicAssert.Throws<ArgumentNullException>(() => { var x = tempo1 <= tempo2; }, "Exception not thrown for null tempo.");
+
+            ClassicAssert.IsFalse(tempo1 <= tempo2, "Comparison with null tempo returned true.");
         }
 
         [Test]
@@ -151,7 +155,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var tempo1 = new Tempo(100);
             var tempo2 = default(Tempo);
-            ClassicAssert.Throws<ArgumentNullException>(() => { var x = tempo1 <= tempo2; }, "Exception not thrown for null tempo.");
+
+            ClassicAssert.IsFalse(tempo1 <= tempo2, "Comparison with null tempo returned true.");
         }
 
         [Test]
@@ -159,7 +164,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var tempo1 = default(Tempo);
             var tempo2 = default(Tempo);
-            ClassicAssert.Throws<ArgumentNullException>(() => { var x = tempo1 <= tempo2; }, "Exception not thrown for null tempo.");
+
+            ClassicAssert.IsFalse(tempo1 <= tempo2, "Comparison with null tempo returned true.");
         }
 
         [Test]
@@ -191,7 +197,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var tempo1 = default(Tempo);
             var tempo2 = new Tempo(100);
-            ClassicAssert.Throws<ArgumentNullException>(() => { var x = tempo1 > tempo2; }, "Exception not thrown for null tempo.");
+
+            ClassicAssert.IsFalse(tempo1 > tempo2, "Comparison with null tempo returned true.");
         }
 
         [Test]
@@ -199,7 +206,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var tempo1 = new Tempo(100);
             var tempo2 = default(Tempo);
-            ClassicAssert.Throws<ArgumentNullException>(() => { var x = tempo1 > tempo2; }, "Exception not thrown for null tempo.");
+
+            ClassicAssert.IsFalse(tempo1 > tempo2, "Comparison with null tempo returned true.");
         }
 
         [Test]
@@ -207,7 +215,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var tempo1 = default(Tempo);
             var tempo2 = default(Tempo);
-            ClassicAssert.Throws<ArgumentNullException>(() => { var x = tempo1 > tempo2; }, "Exception not thrown for null tempo.");
+
+            ClassicAssert.IsFalse(tempo1 > tempo2, "Comparison with null tempo returned true.");
         }
 
         [Test]
@@ -239,7 +248,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var tempo1 = default(Tempo);
             var tempo2 = new Tempo(100);
-            ClassicAssert.Throws<ArgumentNullException>(() => { var x = tempo1 >= tempo2; }, "Exception not thrown for null tempo.");
+
+            ClassicAssert.IsFalse(tempo1 >= tempo2, "Comparison with null tempo returned true.");
         }
 
         [Test]
@@ -247,7 +257,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var tempo1 = new Tempo(100);
             var tempo2 = default(Tempo);
-            ClassicAssert.Throws<ArgumentNullException>(() => { var x = tempo1 >= tempo2; }, "Exception not thrown for null tempo.");
+
+            ClassicAssert.IsFalse(tempo1 >= tempo2, "Comparison with null tempo returned true.");
         }
 
         [Test]
@@ -255,7 +266,8 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         {
             var tempo1 = default(Tempo);
             var tempo2 = default(Tempo);
-            ClassicAssert.Throws<ArgumentNullException>(() => { var x = tempo1 >= tempo2; }, "Exception not thrown for null tempo.");
+
+            ClassicAssert.IsFalse(tempo1 >= tempo2, "Comparison with null tempo returned true.");
         }
 
         [Test]

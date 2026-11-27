@@ -1020,6 +1020,20 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 $"{timeSpan1} isn't less than {timeSpan2} using CompareTo(object).");
         }
 
+        [TestCase(true, false)]
+        [TestCase(false, true)]
+        [TestCase(true, true)]
+        public void Compare_Null(bool isFirstNull, bool isSecondNull)
+        {
+            var timeSpan1 = isFirstNull ? null : new BarBeatFractionTimeSpan(1, 2.5);
+            var timeSpan2 = isSecondNull ? null : new BarBeatFractionTimeSpan(1, 2.5);
+
+            ClassicAssert.IsFalse(timeSpan1 < timeSpan2, "Comparison with null using < returned true.");
+            ClassicAssert.IsFalse(timeSpan1 > timeSpan2, "Comparison with null using > returned true.");
+            ClassicAssert.IsFalse(timeSpan1 <= timeSpan2, "Comparison with null using <= returned true.");
+            ClassicAssert.IsFalse(timeSpan1 >= timeSpan2, "Comparison with null using >= returned true.");
+        }
+
         [TestCaseSource(nameof(TimeSpansForComparison_Less))]
         public void Compare_Greater(BarBeatFractionTimeSpan timeSpan2, BarBeatFractionTimeSpan timeSpan1)
         {
