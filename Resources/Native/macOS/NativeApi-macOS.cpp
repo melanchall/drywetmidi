@@ -1128,6 +1128,15 @@ uint64_t GetCurrentTimestampInNanoseconds()
     return ConvertMachTimeToNanoseconds(mach_absolute_time());
 }
 
+uint64_t GetPacketTimestampInNanoseconds(MIDITimeStamp timeStamp)
+{
+    // Zero time stamp means "now" in CoreMIDI and some sources deliver packets with it
+    if (timeStamp == 0)
+        return GetCurrentTimestampInNanoseconds();
+
+    return ConvertMachTimeToNanoseconds(timeStamp);
+}
+
 /* ================================
    Input device
  ================================ */
@@ -1350,7 +1359,7 @@ API_EXPORT IN_GETEVENTDATARESULT GetEventDataFromInputEndpoint(MIDIPacketList* p
     {
         *data = packetList->packet[0].data;
         *length = packetList->packet[0].length;
-        *timestamp = ConvertMachTimeToNanoseconds(packetList->packet[0].timeStamp);
+        *timestamp = GetPacketTimestampInNanoseconds(packetList->packet[0].timeStamp);
         return IN_GETEVENTDATARESULT_OK;
     }
 
@@ -1363,7 +1372,7 @@ API_EXPORT IN_GETEVENTDATARESULT GetEventDataFromInputEndpoint(MIDIPacketList* p
 
     *data = packetPtr->data;
     *length = packetPtr->length;
-    *timestamp = ConvertMachTimeToNanoseconds(packetPtr->timeStamp);
+    *timestamp = GetPacketTimestampInNanoseconds(packetPtr->timeStamp);
 
     return IN_GETEVENTDATARESULT_OK;
 }

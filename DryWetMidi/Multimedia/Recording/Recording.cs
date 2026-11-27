@@ -196,8 +196,11 @@ namespace Melanchall.DryWetMidi.Multimedia
 
             var time = _recordedTimeNs + e.Timestamp - _timestampsBaseline;
 
-            // TODO: use _timestampsStopwatch.ElapsedTicks * 1000000000L / Stopwatch.Frequency
-            // for bad timestamps
+            // A timestamp preceding the recording start (zero, uninitialized or delivered
+            // too late) can't be placed on the recording timeline, so the moment of
+            // receiving is used instead
+            if (time < 0)
+                time = GetStopwatchElapsedNanoseconds();
 
             _events.Add(new RecordingEvent(e.Event, time));
 
@@ -207,6 +210,12 @@ namespace Melanchall.DryWetMidi.Multimedia
         private void OnEventRecorded(MidiEvent midiEvent)
         {
             EventRecorded?.Invoke(this, new MidiEventRecordedEventArgs(midiEvent));
+        }
+
+        private long GetStopwatchElapsedNanoseconds()
+        {
+            var elapsedTicks = _timestampsStopwatch.ElapsedTicks;
+            return (long)(elapsedTicks * (1000000000.0 / Stopwatch.Frequency));
         }
 
         private static TimeSpan GetTimeSpanFromNanoseconds(long nanoseconds) =>
