@@ -1152,7 +1152,7 @@ namespace Melanchall.DryWetMidi.Interaction
                         removedNotes?.Length > 0;
 
                     var savedNotes = noteTimeOrLengthCanBeChanged
-                        ? (notesCollectionCanBeChanged ? (notes?.Intersect(chord.Notes).ToArray() as IEnumerable<Note>) : chord.Notes)
+                        ? notes?.Intersect(chord.Notes).ToArray()
                         : null;
                     noteTimeOrLengthChanged |=
                         savedNotes?.Any(n => n.Time != notesTimes?[n]) == true ||

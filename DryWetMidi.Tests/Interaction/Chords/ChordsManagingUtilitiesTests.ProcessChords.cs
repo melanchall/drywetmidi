@@ -300,6 +300,114 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             newReferencesAllowed: true);
 
         [Test]
+        public void ProcessChords_EventsCollection_WithPredicate_OneChord_Matched_Processing_AddAndRemoveNote_WithHint([Values] ContainerType containerType) => ProcessChords_EventsCollection_WithPredicate(
+            containerType,
+            midiEvents: new MidiEvent[]
+            {
+                new NoteOnEvent(),
+                new NoteOffEvent(),
+                new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue),
+                new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue),
+                new TextEvent("A"),
+            },
+            action: c =>
+            {
+                c.Notes.Remove(c.Notes.First());
+                c.Notes.Add(new Note((SevenBitNumber)90, 0, 0));
+            },
+            match: c => true,
+            expectedMidiEvents: new MidiEvent[]
+            {
+                new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue),
+                new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue),
+                new TextEvent("A"),
+                new NoteOnEvent((SevenBitNumber)90, Note.DefaultVelocity),
+                new NoteOffEvent((SevenBitNumber)90, Note.DefaultOffVelocity),
+            },
+            expectedProcessedCount: 1,
+            hint: ChordProcessingHint.NotesCollectionCanBeChanged,
+            newReferencesAllowed: true);
+
+        [Test]
+        public void ProcessChords_EventsCollection_WithPredicate_OneChord_Matched_Processing_AddNote_TimeOrLengthHint([Values] ContainerType containerType) => ProcessChords_EventsCollection_WithPredicate(
+            containerType,
+            midiEvents: new MidiEvent[]
+            {
+                new NoteOnEvent(),
+                new NoteOffEvent(),
+                new TextEvent("A"),
+            },
+            action: c =>
+            {
+                c.Notes.Add(new Note((SevenBitNumber)70, 0, 0));
+                c.Time += 10;
+            },
+            match: c => true,
+            expectedMidiEvents: new MidiEvent[]
+            {
+                new TextEvent("A"),
+                new NoteOnEvent { DeltaTime = 10 },
+                new NoteOffEvent(),
+            },
+            expectedProcessedCount: 1,
+            hint: ChordProcessingHint.TimeOrLengthCanBeChanged,
+            newReferencesAllowed: true);
+
+        [Test]
+        public void ProcessChords_EventsCollection_WithPredicate_OneChord_Matched_Processing_AddNote_NoteTimeOrLengthHint([Values] ContainerType containerType) => ProcessChords_EventsCollection_WithPredicate(
+            containerType,
+            midiEvents: new MidiEvent[]
+            {
+                new NoteOnEvent(),
+                new NoteOffEvent(),
+                new TextEvent("A"),
+            },
+            action: c =>
+            {
+                c.Notes.Add(new Note((SevenBitNumber)70, 0, 0));
+                c.Notes.First().Time += 10;
+            },
+            match: c => true,
+            expectedMidiEvents: new MidiEvent[]
+            {
+                new TextEvent("A"),
+                new NoteOnEvent { DeltaTime = 10 },
+                new NoteOffEvent(),
+            },
+            expectedProcessedCount: 1,
+            hint: ChordProcessingHint.NoteTimeOrLengthCanBeChanged,
+            newReferencesAllowed: true);
+
+        [Test]
+        public void ProcessChords_EventsCollection_WithPredicate_MultipleChords_AllMatched_Processing_AddNoteToFirstChordOnly([Values] ContainerType containerType) => ProcessChords_EventsCollection_WithPredicate(
+            containerType,
+            midiEvents: new MidiEvent[]
+            {
+                new NoteOnEvent(),
+                new NoteOffEvent { DeltaTime = 10 },
+                new NoteOnEvent { DeltaTime = 90 },
+                new NoteOffEvent { DeltaTime = 10 },
+            },
+            action: c =>
+            {
+                if (c.Time == 0)
+                    c.Notes.Add(new Note((SevenBitNumber)70, 5, 0));
+            },
+            match: c => true,
+            expectedMidiEvents: new MidiEvent[]
+            {
+                new NoteOnEvent(),
+                new NoteOnEvent((SevenBitNumber)70, Note.DefaultVelocity),
+                new NoteOffEvent((SevenBitNumber)70, Note.DefaultOffVelocity) { DeltaTime = 5 },
+                new NoteOffEvent { DeltaTime = 5 },
+                new NoteOnEvent { DeltaTime = 90 },
+                new NoteOffEvent { DeltaTime = 10 },
+            },
+            expectedProcessedCount: 2,
+            hint: ChordProcessingHint.NotesCollectionCanBeChanged,
+            newReferencesAllowed: true);
+
+        [Test]
         public void ProcessChords_EventsCollection_WithPredicate_OneChord_Matched_Processing_Time([Values] ContainerType containerType) => ProcessChords_EventsCollection_WithPredicate(
             containerType,
             midiEvents: new MidiEvent[]
