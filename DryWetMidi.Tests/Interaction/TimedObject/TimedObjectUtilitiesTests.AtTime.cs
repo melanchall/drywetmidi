@@ -3,13 +3,13 @@ using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
 using Melanchall.DryWetMidi.Tests.Utilities;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Melanchall.DryWetMidi.Tests.Interaction
 {
-    // TODO: more tests
     [TestFixture]
     public sealed partial class TimedObjectUtilitiesTests
     {
@@ -584,6 +584,99 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             tempoMap: TempoMap,
             expectedObjects: Array.Empty<ITimedObject>());
 
+        [Test]
+        public void AtTime_ZeroLengthObject_AtObjectTime() => AtTime(
+            timedObjects: new[]
+            {
+                new Note((SevenBitNumber)70, 0, 10),
+            },
+            time: 10,
+            expectedObjects: new[]
+            {
+                new Note((SevenBitNumber)70, 0, 10),
+            });
+
+        [Test]
+        public void AtTime_ZeroLengthObject_OutsideObjectTime([Values(9, 11)] long time) => AtTime(
+            timedObjects: new[]
+            {
+                new Note((SevenBitNumber)70, 0, 10),
+            },
+            time: time,
+            expectedObjects: Array.Empty<Note>());
+
+        [Test]
+        public void AtTime_Chords([Values(10, 25, 40)] long time) => AtTime(
+            timedObjects: new ITimedObject[]
+            {
+                new Chord(
+                    new Note((SevenBitNumber)70, 20, 10),
+                    new Note((SevenBitNumber)80, 20, 20)),
+                GetTimedEvent("A", 50),
+            },
+            time: time,
+            expectedObjects: new ITimedObject[]
+            {
+                new Chord(
+                    new Note((SevenBitNumber)70, 20, 10),
+                    new Note((SevenBitNumber)80, 20, 20)),
+            });
+
+        [Test]
+        public void AtTime_Chords_OutsideChord([Values(9, 41)] long time) => AtTime(
+            timedObjects: new ITimedObject[]
+            {
+                new Chord(
+                    new Note((SevenBitNumber)70, 20, 10),
+                    new Note((SevenBitNumber)80, 20, 20)),
+            },
+            time: time,
+            expectedObjects: Array.Empty<ITimedObject>());
+
+        [Test]
+        public void AtTime_Metric_TempoChange() => AtTime(
+            timedObjects: new[]
+            {
+                GetTimedEvent("A", 1500),
+                GetTimedEvent("B", 2000),
+            },
+            time: new MetricTimeSpan(0, 0, 1),
+            tempoMap: GetTempoMapWithTempoChange(),
+            expectedObjects: new[]
+            {
+                GetTimedEvent("A", 1500),
+            });
+
+        [Test]
+        public void AtTime_NullObjects()
+        {
+            var timedObjects = default(IEnumerable<ITimedObject>);
+
+            ClassicAssert.Throws<ArgumentNullException>(
+                () => timedObjects.AtTime(new MidiTimeSpan(), TempoMap),
+                "Exception is not thrown for null objects collection.");
+        }
+
+        [Test]
+        public void AtTime_NullTime()
+        {
+            var timedObjects = Array.Empty<ITimedObject>();
+
+            ClassicAssert.Throws<ArgumentNullException>(
+                () => timedObjects.AtTime(null, TempoMap),
+                "Exception is not thrown for null time.");
+        }
+
+        [Test]
+        public void AtTime_NullTempoMap()
+        {
+            var timedObjects = Array.Empty<ITimedObject>();
+
+            ClassicAssert.Throws<ArgumentNullException>(
+                () => timedObjects.AtTime(new MidiTimeSpan(), null),
+                "Exception is not thrown for null tempo map.");
+        }
+
         #endregion
 
         #region AtTimeRange
@@ -881,6 +974,126 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             tempoMap: TempoMap,
             expectedObjects: Array.Empty<ITimedObject>());
 
+        [Test]
+        public void AtTimeRange_LengthedObjects_Single_OutsideRange([Values(0, 10)] long objectTime) => AtTimeRange(
+            timedObjects: new[]
+            {
+                new Note((SevenBitNumber)80, 10, objectTime),
+            },
+            startTime: objectTime + 11,
+            endTime: objectTime + 20,
+            expectedObjects: Array.Empty<Note>());
+
+        [Test]
+        public void AtTimeRange_LengthedObjects_Single_AfterRange([Values(10, 20)] long objectTime) => AtTimeRange(
+            timedObjects: new[]
+            {
+                new Note((SevenBitNumber)80, 10, objectTime),
+            },
+            startTime: objectTime - 10,
+            endTime: objectTime - 1,
+            expectedObjects: Array.Empty<Note>());
+
+        [Test]
+        public void AtTimeRange_ZeroLengthObject([Values(0, 5, 10)] long objectTime) => AtTimeRange(
+            timedObjects: new[]
+            {
+                new Note((SevenBitNumber)70, 0, objectTime),
+            },
+            startTime: 0,
+            endTime: 10,
+            expectedObjects: new[]
+            {
+                new Note((SevenBitNumber)70, 0, objectTime),
+            });
+
+        [Test]
+        public void AtTimeRange_Chords() => AtTimeRange(
+            timedObjects: new ITimedObject[]
+            {
+                new Chord(
+                    new Note((SevenBitNumber)70, 10, 0),
+                    new Note((SevenBitNumber)80, 10, 5)),
+                new Chord(
+                    new Note((SevenBitNumber)70, 10, 20),
+                    new Note((SevenBitNumber)80, 10, 40)),
+                GetTimedEvent("A", 60),
+            },
+            startTime: 16,
+            endTime: 30,
+            expectedObjects: new ITimedObject[]
+            {
+                new Chord(
+                    new Note((SevenBitNumber)70, 10, 20),
+                    new Note((SevenBitNumber)80, 10, 40)),
+            });
+
+        [Test]
+        public void AtTimeRange_Metric_TempoChange() => AtTimeRange(
+            timedObjects: new[]
+            {
+                GetTimedEvent("A", 500),
+                GetTimedEvent("B", 1500),
+                GetTimedEvent("C", 2000),
+            },
+            startTime: new MetricTimeSpan(0, 0, 0, 500),
+            endTime: new MetricTimeSpan(0, 0, 1),
+            tempoMap: GetTempoMapWithTempoChange(),
+            expectedObjects: new[]
+            {
+                GetTimedEvent("B", 1500),
+            });
+
+        [Test]
+        public void AtTimeRange_NullObjects()
+        {
+            var timedObjects = default(IEnumerable<ITimedObject>);
+
+            ClassicAssert.Throws<ArgumentNullException>(
+                () => timedObjects.AtTimeRange(new MidiTimeSpan(), new MidiTimeSpan(), TempoMap),
+                "Exception is not thrown for null objects collection.");
+        }
+
+        [Test]
+        public void AtTimeRange_NullStartTime()
+        {
+            var timedObjects = Array.Empty<ITimedObject>();
+
+            ClassicAssert.Throws<ArgumentNullException>(
+                () => timedObjects.AtTimeRange(null, new MidiTimeSpan(), TempoMap),
+                "Exception is not thrown for null start time.");
+        }
+
+        [Test]
+        public void AtTimeRange_NullEndTime()
+        {
+            var timedObjects = Array.Empty<ITimedObject>();
+
+            ClassicAssert.Throws<ArgumentNullException>(
+                () => timedObjects.AtTimeRange(new MidiTimeSpan(), null, TempoMap),
+                "Exception is not thrown for null end time.");
+        }
+
+        [Test]
+        public void AtTimeRange_NullTempoMap()
+        {
+            var timedObjects = Array.Empty<ITimedObject>();
+
+            ClassicAssert.Throws<ArgumentNullException>(
+                () => timedObjects.AtTimeRange(new MidiTimeSpan(), new MidiTimeSpan(), null),
+                "Exception is not thrown for null tempo map.");
+        }
+
+        [Test]
+        public void AtTimeRange_EndTimeLessThanStartTime()
+        {
+            var timedObjects = Array.Empty<ITimedObject>();
+
+            ClassicAssert.Throws<ArgumentOutOfRangeException>(
+                () => timedObjects.AtTimeRange(new MidiTimeSpan(10), new MidiTimeSpan(9), TempoMap),
+                "Exception is not thrown for end time less than start time.");
+        }
+
         #endregion
 
         #endregion
@@ -972,6 +1185,17 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 expectedObjects.OrderBy(obj => obj.Time).Cast<ITimedObject>(),
                 objectsAtTime.Cast<ITimedObject>(),
                 "Objects at time are invalid on sorted collection.");
+        }
+
+        // 1000 ticks (500 ms) at 120 BPM, then 1 tick per millisecond at 60 BPM
+        private static TempoMap GetTempoMapWithTempoChange()
+        {
+            using (var tempoMapManager = new TempoMapManager(new TicksPerQuarterNoteTimeDivision(1000)))
+            {
+                tempoMapManager.SetTempo(1000, Tempo.FromBeatsPerMinute(60));
+
+                return tempoMapManager.TempoMap;
+            }
         }
 
         private TimedEvent GetTimedEventMs(string text, int time) => new TimedEvent(new TextEvent(text))
