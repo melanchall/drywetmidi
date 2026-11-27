@@ -341,22 +341,12 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="timeSpan1">The first <see cref="MetricTimeSpan"/> to compare.</param>
         /// <param name="timeSpan2">The second <see cref="MetricTimeSpan"/> to compare.</param>
         /// <returns><c>true</c> if the value of <paramref name="timeSpan1"/> is less than the value of
-        /// <paramref name="timeSpan2"/>; otherwise, <c>false</c>.</returns>
-        /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occurred:</para>
-        /// <list type="bullet">
-        /// <item>
-        /// <description><paramref name="timeSpan1"/> is <c>null</c>.</description>
-        /// </item>
-        /// <item>
-        /// <description><paramref name="timeSpan2"/> is <c>null</c>.</description>
-        /// </item>
-        /// </list>
-        /// </exception>
-        public static bool operator <(MetricTimeSpan timeSpan1, MetricTimeSpan timeSpan2)
+        /// <paramref name="timeSpan2"/>; otherwise, <c>false</c>. If <paramref name="timeSpan1"/> or <paramref name="timeSpan2"/> is <c>null</c>,
+        /// <c>false</c> is returned.</returns>
+        public static bool operator <(MetricTimeSpan? timeSpan1, MetricTimeSpan? timeSpan2)
         {
-            ThrowIfArgument.IsNull(nameof(timeSpan1), timeSpan1);
-            ThrowIfArgument.IsNull(nameof(timeSpan2), timeSpan2);
+            if (timeSpan1 is null || timeSpan2 is null)
+                return false;
 
             return timeSpan1.CompareTo(timeSpan2) < 0;
         }
@@ -367,22 +357,12 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="timeSpan1">The first <see cref="MetricTimeSpan"/> to compare.</param>
         /// <param name="timeSpan2">The second <see cref="MetricTimeSpan"/> to compare.</param>
         /// <returns><c>true</c> if the value of <paramref name="timeSpan1"/> is greater than the value of
-        /// <paramref name="timeSpan2"/>; otherwise, <c>false</c>.</returns>
-        /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occurred:</para>
-        /// <list type="bullet">
-        /// <item>
-        /// <description><paramref name="timeSpan1"/> is <c>null</c>.</description>
-        /// </item>
-        /// <item>
-        /// <description><paramref name="timeSpan2"/> is <c>null</c>.</description>
-        /// </item>
-        /// </list>
-        /// </exception>
-        public static bool operator >(MetricTimeSpan timeSpan1, MetricTimeSpan timeSpan2)
+        /// <paramref name="timeSpan2"/>; otherwise, <c>false</c>. If <paramref name="timeSpan1"/> or <paramref name="timeSpan2"/> is <c>null</c>,
+        /// <c>false</c> is returned.</returns>
+        public static bool operator >(MetricTimeSpan? timeSpan1, MetricTimeSpan? timeSpan2)
         {
-            ThrowIfArgument.IsNull(nameof(timeSpan1), timeSpan1);
-            ThrowIfArgument.IsNull(nameof(timeSpan2), timeSpan2);
+            if (timeSpan1 is null || timeSpan2 is null)
+                return false;
 
             return timeSpan1.CompareTo(timeSpan2) > 0;
         }
@@ -394,22 +374,12 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="timeSpan1">The first <see cref="MetricTimeSpan"/> to compare.</param>
         /// <param name="timeSpan2">The second <see cref="MetricTimeSpan"/> to compare.</param>
         /// <returns><c>true</c> if the value of <paramref name="timeSpan1"/> is less than or equal to the value of
-        /// <paramref name="timeSpan2"/>; otherwise, <c>false</c>.</returns>
-        /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occurred:</para>
-        /// <list type="bullet">
-        /// <item>
-        /// <description><paramref name="timeSpan1"/> is <c>null</c>.</description>
-        /// </item>
-        /// <item>
-        /// <description><paramref name="timeSpan2"/> is <c>null</c>.</description>
-        /// </item>
-        /// </list>
-        /// </exception>
-        public static bool operator <=(MetricTimeSpan timeSpan1, MetricTimeSpan timeSpan2)
+        /// <paramref name="timeSpan2"/>; otherwise, <c>false</c>. If <paramref name="timeSpan1"/> or <paramref name="timeSpan2"/> is <c>null</c>,
+        /// <c>false</c> is returned.</returns>
+        public static bool operator <=(MetricTimeSpan? timeSpan1, MetricTimeSpan? timeSpan2)
         {
-            ThrowIfArgument.IsNull(nameof(timeSpan1), timeSpan1);
-            ThrowIfArgument.IsNull(nameof(timeSpan2), timeSpan2);
+            if (timeSpan1 is null || timeSpan2 is null)
+                return false;
 
             return timeSpan1.CompareTo(timeSpan2) <= 0;
         }
@@ -421,22 +391,12 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="timeSpan1">The first <see cref="MetricTimeSpan"/> to compare.</param>
         /// <param name="timeSpan2">The second <see cref="MetricTimeSpan"/> to compare.</param>
         /// <returns><c>true</c> if the value of <paramref name="timeSpan1"/> is greater than or equal to the value of
-        /// <paramref name="timeSpan2"/>; otherwise, <c>false</c>.</returns>
-        /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occurred:</para>
-        /// <list type="bullet">
-        /// <item>
-        /// <description><paramref name="timeSpan1"/> is <c>null</c>.</description>
-        /// </item>
-        /// <item>
-        /// <description><paramref name="timeSpan2"/> is <c>null</c>.</description>
-        /// </item>
-        /// </list>
-        /// </exception>
-        public static bool operator >=(MetricTimeSpan timeSpan1, MetricTimeSpan timeSpan2)
+        /// <paramref name="timeSpan2"/>; otherwise, <c>false</c>. If <paramref name="timeSpan1"/> or <paramref name="timeSpan2"/> is <c>null</c>,
+        /// <c>false</c> is returned.</returns>
+        public static bool operator >=(MetricTimeSpan? timeSpan1, MetricTimeSpan? timeSpan2)
         {
-            ThrowIfArgument.IsNull(nameof(timeSpan1), timeSpan1);
-            ThrowIfArgument.IsNull(nameof(timeSpan2), timeSpan2);
+            if (timeSpan1 is null || timeSpan2 is null)
+                return false;
 
             return timeSpan1.CompareTo(timeSpan2) >= 0;
         }

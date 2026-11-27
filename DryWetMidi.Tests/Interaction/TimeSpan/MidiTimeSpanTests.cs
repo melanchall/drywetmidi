@@ -802,6 +802,20 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             }
         }
 
+        [TestCase(true, false)]
+        [TestCase(false, true)]
+        [TestCase(true, true)]
+        public void Compare_Null(bool isFirstNull, bool isSecondNull)
+        {
+            var timeSpan1 = isFirstNull ? null : new MidiTimeSpan(100);
+            var timeSpan2 = isSecondNull ? null : new MidiTimeSpan(100);
+
+            ClassicAssert.IsFalse(timeSpan1 < timeSpan2, "Comparison with null using < returned true.");
+            ClassicAssert.IsFalse(timeSpan1 > timeSpan2, "Comparison with null using > returned true.");
+            ClassicAssert.IsFalse(timeSpan1 <= timeSpan2, "Comparison with null using <= returned true.");
+            ClassicAssert.IsFalse(timeSpan1 >= timeSpan2, "Comparison with null using >= returned true.");
+        }
+
         [Test]
         [Description("Compare two time spans where first one is greater than second one.")]
         public void Compare_Greater()

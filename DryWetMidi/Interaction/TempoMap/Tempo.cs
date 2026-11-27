@@ -133,29 +133,18 @@ namespace Melanchall.DryWetMidi.Interaction
             return !(tempo1 == tempo2);
         }
 
-        // TODO: maybe support nulls in comparisons??
         /// <summary>
         /// Indicates whether a specified <see cref="Tempo"/> is greater than another one.
         /// </summary>
         /// <param name="tempo1">The first <see cref="Tempo"/> to compare.</param>
         /// <param name="tempo2">The second <see cref="Tempo"/> to compare.</param>
         /// <returns><c>true</c> if the value of <paramref name="tempo1"/> is greater than the value of
-        /// <paramref name="tempo2"/>; otherwise, <c>false</c>.</returns>
-        /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occurred:</para>
-        /// <list type="bullet">
-        /// <item>
-        /// <description><paramref name="tempo1"/> is <c>null</c>.</description>
-        /// </item>
-        /// <item>
-        /// <description><paramref name="tempo2"/> is <c>null</c>.</description>
-        /// </item>
-        /// </list>
-        /// </exception>
-        public static bool operator >(Tempo tempo1, Tempo tempo2)
+        /// <paramref name="tempo2"/>; otherwise, <c>false</c>. If <paramref name="tempo1"/> or <paramref name="tempo2"/> is <c>null</c>,
+        /// <c>false</c> is returned.</returns>
+        public static bool operator >(Tempo? tempo1, Tempo? tempo2)
         {
-            ThrowIfArgument.IsNull(nameof(tempo1), tempo1);
-            ThrowIfArgument.IsNull(nameof(tempo2), tempo2);
+            if (tempo1 is null || tempo2 is null)
+                return false;
 
             return tempo1.MicrosecondsPerQuarterNote > tempo2.MicrosecondsPerQuarterNote;
         }
@@ -167,22 +156,12 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="tempo1">The first <see cref="Tempo"/> to compare.</param>
         /// <param name="tempo2">The second <see cref="Tempo"/> to compare.</param>
         /// <returns><c>true</c> if the value of <paramref name="tempo1"/> is greater than or equal to the value of
-        /// <paramref name="tempo2"/>; otherwise, <c>false</c>.</returns>
-        /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occurred:</para>
-        /// <list type="bullet">
-        /// <item>
-        /// <description><paramref name="tempo1"/> is <c>null</c>.</description>
-        /// </item>
-        /// <item>
-        /// <description><paramref name="tempo2"/> is <c>null</c>.</description>
-        /// </item>
-        /// </list>
-        /// </exception>
-        public static bool operator >=(Tempo tempo1, Tempo tempo2)
+        /// <paramref name="tempo2"/>; otherwise, <c>false</c>. If <paramref name="tempo1"/> or <paramref name="tempo2"/> is <c>null</c>,
+        /// <c>false</c> is returned.</returns>
+        public static bool operator >=(Tempo? tempo1, Tempo? tempo2)
         {
-            ThrowIfArgument.IsNull(nameof(tempo1), tempo1);
-            ThrowIfArgument.IsNull(nameof(tempo2), tempo2);
+            if (tempo1 is null || tempo2 is null)
+                return false;
 
             return tempo1.MicrosecondsPerQuarterNote >= tempo2.MicrosecondsPerQuarterNote;
         }
@@ -193,22 +172,12 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="tempo1">The first <see cref="Tempo"/> to compare.</param>
         /// <param name="tempo2">The second <see cref="Tempo"/> to compare.</param>
         /// <returns><c>true</c> if the value of <paramref name="tempo1"/> is less than the value of
-        /// <paramref name="tempo2"/>; otherwise, <c>false</c>.</returns>
-        /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occurred:</para>
-        /// <list type="bullet">
-        /// <item>
-        /// <description><paramref name="tempo1"/> is <c>null</c>.</description>
-        /// </item>
-        /// <item>
-        /// <description><paramref name="tempo2"/> is <c>null</c>.</description>
-        /// </item>
-        /// </list>
-        /// </exception>
-        public static bool operator <(Tempo tempo1, Tempo tempo2)
+        /// <paramref name="tempo2"/>; otherwise, <c>false</c>. If <paramref name="tempo1"/> or <paramref name="tempo2"/> is <c>null</c>,
+        /// <c>false</c> is returned.</returns>
+        public static bool operator <(Tempo? tempo1, Tempo? tempo2)
         {
-            ThrowIfArgument.IsNull(nameof(tempo1), tempo1);
-            ThrowIfArgument.IsNull(nameof(tempo2), tempo2);
+            if (tempo1 is null || tempo2 is null)
+                return false;
 
             return tempo1.MicrosecondsPerQuarterNote < tempo2.MicrosecondsPerQuarterNote;
         }
@@ -220,22 +189,12 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="tempo1">The first <see cref="Tempo"/> to compare.</param>
         /// <param name="tempo2">The second <see cref="Tempo"/> to compare.</param>
         /// <returns><c>true</c> if the value of <paramref name="tempo1"/> is less than or equal to the value of
-        /// <paramref name="tempo2"/>; otherwise, <c>false</c>.</returns>
-        /// <exception cref="ArgumentNullException">
-        /// <para>One of the following errors occurred:</para>
-        /// <list type="bullet">
-        /// <item>
-        /// <description><paramref name="tempo1"/> is <c>null</c>.</description>
-        /// </item>
-        /// <item>
-        /// <description><paramref name="tempo2"/> is <c>null</c>.</description>
-        /// </item>
-        /// </list>
-        /// </exception>
-        public static bool operator <=(Tempo tempo1, Tempo tempo2)
+        /// <paramref name="tempo2"/>; otherwise, <c>false</c>. If <paramref name="tempo1"/> or <paramref name="tempo2"/> is <c>null</c>,
+        /// <c>false</c> is returned.</returns>
+        public static bool operator <=(Tempo? tempo1, Tempo? tempo2)
         {
-            ThrowIfArgument.IsNull(nameof(tempo1), tempo1);
-            ThrowIfArgument.IsNull(nameof(tempo2), tempo2);
+            if (tempo1 is null || tempo2 is null)
+                return false;
 
             return tempo1.MicrosecondsPerQuarterNote <= tempo2.MicrosecondsPerQuarterNote;
         }
