@@ -133,7 +133,6 @@ namespace Melanchall.DryWetMidi.Interaction
             return false;
         }
 
-        // TODO: test
         /// <summary>
         /// Converts the string representation of a time span to its <see cref="ITimeSpan"/> equivalent.
         /// </summary>
