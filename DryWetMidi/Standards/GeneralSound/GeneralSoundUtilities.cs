@@ -5,7 +5,6 @@ using Melanchall.DryWetMidi.Core;
 
 namespace Melanchall.DryWetMidi.Standards
 {
-    // TODO: tests
     /// <summary>
     /// Provides utilities for General Sound.
     /// </summary>

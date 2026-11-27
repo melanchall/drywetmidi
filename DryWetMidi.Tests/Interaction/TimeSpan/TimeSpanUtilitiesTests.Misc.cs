@@ -54,6 +54,16 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             new BarBeatFractionTimeSpan(1, 0)
         };
 
+        private static readonly object[] ParseData_Valid = new object[]
+        {
+            new object[] { "100", new MidiTimeSpan(100) },
+            new object[] { "1:2:3", new MetricTimeSpan(1, 2, 3) },
+            new object[] { "1h2m3s4ms", new MetricTimeSpan(1, 2, 3, 4) },
+            new object[] { "3/8", new MusicalTimeSpan(3, 8) },
+            new object[] { "1.2.3", new BarBeatTicksTimeSpan(1, 2, 3) },
+            new object[] { "1_2.5", new BarBeatFractionTimeSpan(1, 2.5) }
+        };
+
         #endregion
 
         #region Test methods
@@ -126,6 +136,41 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         public void IsZeroTimeSpan_False(ITimeSpan timeSpan)
         {
             ClassicAssert.IsFalse(timeSpan.IsZeroTimeSpan(), $"Time span [{timeSpan}] is zero.");
+        }
+
+        [TestCaseSource(nameof(ParseData_Valid))]
+        public void Parse_Valid(string input, ITimeSpan expectedTimeSpan)
+        {
+            var actualTimeSpan = TimeSpanUtilities.Parse(input);
+
+            ClassicAssert.AreEqual(expectedTimeSpan.GetType(), actualTimeSpan.GetType(), $"Invalid type of time span parsed for '{input}'.");
+            ClassicAssert.AreEqual(expectedTimeSpan, actualTimeSpan, $"Invalid time span parsed for '{input}'.");
+        }
+
+        [Test]
+        public void Parse_SpanSlice()
+        {
+            var input = "[3/8]".AsSpan(1, 3);
+
+            var actualTimeSpan = TimeSpanUtilities.Parse(input);
+
+            ClassicAssert.AreEqual(new MusicalTimeSpan(3, 8), actualTimeSpan, "Invalid time span parsed from span slice.");
+        }
+
+        [Test]
+        public void Parse_EmptyOrWhiteSpace([Values(null, "", "  ", "\t")] string input)
+        {
+            ClassicAssert.Throws<ArgumentException>(
+                () => TimeSpanUtilities.Parse(input),
+                $"Exception is not thrown for '{input}'.");
+        }
+
+        [Test]
+        public void Parse_InvalidFormat([Values("abc", "1/", "1.2.3.4", "1h2x")] string input)
+        {
+            ClassicAssert.Throws<FormatException>(
+                () => TimeSpanUtilities.Parse(input),
+                $"Exception is not thrown for '{input}'.");
         }
 
         #endregion
