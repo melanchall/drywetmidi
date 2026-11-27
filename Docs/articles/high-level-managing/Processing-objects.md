@@ -104,6 +104,19 @@ var midiFile = new MidiFile(
 
 Looks right. In the first track chunk _Text_ and _Note Off_ events are even-indexed ones (`0` and `2`), so the time of each one will be `10`. _Note On_ event will be left untouched so its time remains `0`. As for the second track chunk, the only event is even-indexed of course and thus is processed.
 
+A custom constructor can also return `null`. In this case the default construction method will be used for the current object, i.e. an instance of the base [`TimedEvent`](xref:Melanchall.DryWetMidi.Interaction.TimedEvent) class will be created, exactly as if no custom constructor was specified. So you can build custom objects only for the data you're interested in and let the library create default objects for everything else. For example, to create `CustomTimedEvent` only for _Text_ events:
+
+```csharp
+var timedEvents = midiFile.GetTimedEvents(new TimedEventDetectionSettings
+{
+    Constructor = data => data.Event.EventType == MidiEventType.Text
+        ? new CustomTimedEvent(data.Event, data.Time, data.EventIndex)
+        : null
+});
+```
+
+Returned collection will contain all timed events of the file, but only _Text_ events will be of the `CustomTimedEvent` type. The same rule applies to the [`NoteDetectionSettings.Constructor`](xref:Melanchall.DryWetMidi.Interaction.NoteDetectionSettings.Constructor) and [`ChordDetectionSettings.Constructor`](xref:Melanchall.DryWetMidi.Interaction.ChordDetectionSettings.Constructor) properties: if the method returns `null`, a default [`Note`](xref:Melanchall.DryWetMidi.Interaction.Note) or [`Chord`](xref:Melanchall.DryWetMidi.Interaction.Chord) will be created. Returning `null` never excludes an object from the result.
+
 Optionally you can pass [TimedEventProcessingHint](xref:Melanchall.DryWetMidi.Interaction.TimedEventProcessingHint) to set a hint for the processing engine which can improve performance. Please read about available options by the specified link. For example, if you know that time of events won't be changed, you can set [TimedEventProcessingHint.None](xref:Melanchall.DryWetMidi.Interaction.TimedEventProcessingHint.None) option to eliminate events resorting (which is required if times can be changed) and to reduce the time needed to perform the processing:
 
 ```csharp

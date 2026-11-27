@@ -587,7 +587,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue, Time = 30, Length = 30 },
             });
 
-        // TODO: describe in docs
         [Test]
         public void GetNotes_Custom_Null_2() => GetNotes_DetectionSettings_EventsCollection(
             containerType: ContainerType.EventsCollection,
@@ -610,7 +609,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue, Time = 30, Length = 30 },
             });
 
-        // TODO: describe in docs
         [Test]
         public void GetNotes_Custom_Null_3() => GetNotes_DetectionSettings_EventsCollection(
             containerType: ContainerType.EventsCollection,
@@ -632,7 +630,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 new Note(SevenBitNumber.MinValue) { Velocity = SevenBitNumber.MinValue, Time = 30, Length = 30 },
             });
 
-        // TODO: describe in docs
         [Test]
         public void GetNotes_Custom_Null_4() => GetNotes_DetectionSettings_EventsCollection(
             containerType: ContainerType.EventsCollection,

@@ -2098,7 +2098,6 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 "Invalid timed events.");
         }
 
-        // TODO: describe in docs
         [Test]
         public void GetTimedEvents_Custom_Null_2()
         {
