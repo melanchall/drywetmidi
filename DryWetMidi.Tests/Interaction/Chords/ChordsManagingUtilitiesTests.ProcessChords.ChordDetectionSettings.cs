@@ -10,7 +10,6 @@ using NUnit.Framework.Legacy;
 
 namespace Melanchall.DryWetMidi.Tests.Interaction
 {
-    // TODO: tests on multiple track chunks/file
     [TestFixture]
     public sealed partial class ChordsManagingUtilitiesTests
     {
@@ -923,6 +922,279 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 new NoteOffEvent(),
             },
             expectedProcessedCount: 2);
+
+        [Test]
+        public void ProcessChords_DetectionSettings_TrackChunks_WithPredicate_EmptyCollection([Values] bool wrapToFile, [Values] bool predicateValue) => ProcessChords_DetectionSettings_TrackChunks_WithPredicate(
+            wrapToFile,
+            new ChordDetectionSettings { NotesMinCount = 2, NotesTolerance = 10 },
+            midiEvents: new MidiEvent[0][],
+            action: c => { },
+            match: c => predicateValue,
+            expectedMidiEvents: new MidiEvent[0][],
+            expectedProcessedCount: 0);
+
+        [Test]
+        public void ProcessChords_DetectionSettings_TrackChunks_WithPredicate_NotesTolerance_SeparateChunks([Values] bool wrapToFile) => ProcessChords_DetectionSettings_TrackChunks_WithPredicate(
+            wrapToFile,
+            new ChordDetectionSettings { NotesTolerance = 0 },
+            midiEvents: new[]
+            {
+                new MidiEvent[]
+                {
+                    new NoteOnEvent(),
+                    new NoteOffEvent(),
+                    new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue),
+                    new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue),
+                },
+                new MidiEvent[]
+                {
+                    new NoteOnEvent { DeltaTime = 100 },
+                    new NoteOffEvent(),
+                    new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue),
+                    new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue),
+                },
+            },
+            action: c => c.Time = 10,
+            match: c => c.Time == 0,
+            expectedMidiEvents: new[]
+            {
+                new MidiEvent[]
+                {
+                    new NoteOnEvent { DeltaTime = 10 },
+                    new NoteOffEvent(),
+                    new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue),
+                    new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue),
+                },
+                new MidiEvent[]
+                {
+                    new NoteOnEvent { DeltaTime = 100 },
+                    new NoteOffEvent(),
+                    new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue),
+                    new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue),
+                },
+            },
+            expectedProcessedCount: 1);
+
+        [Test]
+        public void ProcessChords_DetectionSettings_TrackChunks_WithPredicate_NotesTolerance_NoChordAcrossChunks([Values] bool wrapToFile) => ProcessChords_DetectionSettings_TrackChunks_WithPredicate(
+            wrapToFile,
+            new ChordDetectionSettings { NotesTolerance = 10 },
+            midiEvents: new[]
+            {
+                new MidiEvent[]
+                {
+                    new TextEvent("A"),
+                    new NoteOnEvent(),
+                    new NoteOffEvent(),
+                },
+                new MidiEvent[]
+                {
+                    new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue) { DeltaTime = 5 },
+                    new TextEvent("B"),
+                    new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue),
+                    new NoteOnEvent { DeltaTime = 100 },
+                    new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue) { DeltaTime = 5 },
+                    new NoteOffEvent(),
+                    new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue),
+                },
+            },
+            action: c => c.Time = 200,
+            match: c => c.Notes.Count == 2,
+            expectedMidiEvents: new[]
+            {
+                new MidiEvent[]
+                {
+                    new TextEvent("A"),
+                    new NoteOnEvent(),
+                    new NoteOffEvent(),
+                },
+                new MidiEvent[]
+                {
+                    new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue) { DeltaTime = 5 },
+                    new TextEvent("B"),
+                    new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue),
+                    new NoteOnEvent { DeltaTime = 195 },
+                    new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue) { DeltaTime = 5 },
+                    new NoteOffEvent(),
+                    new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue),
+                },
+            },
+            expectedProcessedCount: 1);
+
+        [Test]
+        public void ProcessChords_DetectionSettings_TrackChunks_WithPredicate_NotesMinCount_NoChordAcrossChunks([Values] bool wrapToFile) => ProcessChords_DetectionSettings_TrackChunks_WithPredicate(
+            wrapToFile,
+            new ChordDetectionSettings { NotesMinCount = 2 },
+            midiEvents: new[]
+            {
+                new MidiEvent[]
+                {
+                    new TextEvent("A"),
+                    new NoteOnEvent(),
+                    new NoteOffEvent(),
+                },
+                new MidiEvent[]
+                {
+                    new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue),
+                    new TextEvent("B"),
+                    new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue),
+                    new NoteOnEvent { DeltaTime = 100 },
+                    new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue),
+                    new NoteOffEvent(),
+                    new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue),
+                },
+            },
+            action: c => c.Time = 50,
+            match: c => true,
+            expectedMidiEvents: new[]
+            {
+                new MidiEvent[]
+                {
+                    new TextEvent("A"),
+                    new NoteOnEvent(),
+                    new NoteOffEvent(),
+                },
+                new MidiEvent[]
+                {
+                    new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue),
+                    new TextEvent("B"),
+                    new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue),
+                    new NoteOnEvent { DeltaTime = 50 },
+                    new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue),
+                    new NoteOffEvent(),
+                    new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue),
+                },
+            },
+            expectedProcessedCount: 1);
+
+        [Test]
+        public void ProcessChords_DetectionSettings_TrackChunks_WithPredicate_Custom_EventsCollectionIndex([Values] bool wrapToFile) => ProcessChords_DetectionSettings_TrackChunks_WithPredicate(
+            wrapToFile,
+            new ChordDetectionSettings
+            {
+                NotesTolerance = 0,
+                Constructor = CustomChordConstructor,
+            },
+            midiEvents: new[]
+            {
+                new MidiEvent[]
+                {
+                    new NoteOnEvent(),
+                    new NoteOffEvent(),
+                },
+                new MidiEvent[]
+                {
+                    new NoteOnEvent { DeltaTime = 100 },
+                    new NoteOffEvent(),
+                },
+            },
+            action: c => c.Time = 150,
+            match: c => ((CustomChord)c).EventsCollectionIndex == 1,
+            expectedMidiEvents: new[]
+            {
+                new MidiEvent[]
+                {
+                    new NoteOnEvent(),
+                    new NoteOffEvent(),
+                },
+                new MidiEvent[]
+                {
+                    new NoteOnEvent { DeltaTime = 150 },
+                    new NoteOffEvent(),
+                },
+            },
+            expectedProcessedCount: 1,
+            noteDetectionSettings: new NoteDetectionSettings
+            {
+                Constructor = CustomNoteConstructor,
+            },
+            timedEventDetectionSettings: CustomEventSettings);
+
+        [Test]
+        public void ProcessChords_DetectionSettings_TrackChunks_WithoutPredicate_EmptyCollection([Values] bool wrapToFile) => ProcessChords_DetectionSettings_TrackChunks_WithoutPredicate(
+            wrapToFile,
+            new ChordDetectionSettings { NotesMinCount = 2, NotesTolerance = 10 },
+            midiEvents: new MidiEvent[0][],
+            action: c => { },
+            expectedMidiEvents: new MidiEvent[0][]);
+
+        [Test]
+        public void ProcessChords_DetectionSettings_TrackChunks_WithoutPredicate_NotesTolerance([Values] bool wrapToFile) => ProcessChords_DetectionSettings_TrackChunks_WithoutPredicate(
+            wrapToFile,
+            new ChordDetectionSettings { NotesTolerance = 10 },
+            midiEvents: new[]
+            {
+                new MidiEvent[]
+                {
+                    new TextEvent("A"),
+                    new NoteOnEvent(),
+                    new NoteOffEvent(),
+                },
+                new MidiEvent[]
+                {
+                    new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue) { DeltaTime = 5 },
+                    new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue),
+                    new NoteOnEvent { DeltaTime = 100 },
+                    new NoteOffEvent(),
+                },
+            },
+            action: c => c.Time += 1000,
+            expectedMidiEvents: new[]
+            {
+                new MidiEvent[]
+                {
+                    new TextEvent("A"),
+                    new NoteOnEvent { DeltaTime = 1000 },
+                    new NoteOffEvent(),
+                },
+                new MidiEvent[]
+                {
+                    new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue) { DeltaTime = 1005 },
+                    new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue),
+                    new NoteOnEvent { DeltaTime = 100 },
+                    new NoteOffEvent(),
+                },
+            });
+
+        [Test]
+        public void ProcessChords_DetectionSettings_TrackChunks_WithoutPredicate_NotesMinCount([Values] bool wrapToFile) => ProcessChords_DetectionSettings_TrackChunks_WithoutPredicate(
+            wrapToFile,
+            new ChordDetectionSettings { NotesMinCount = 2 },
+            midiEvents: new[]
+            {
+                new MidiEvent[]
+                {
+                    new NoteOnEvent(),
+                    new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue),
+                    new NoteOffEvent(),
+                    new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue),
+                    new NoteOnEvent { DeltaTime = 100 },
+                    new NoteOffEvent(),
+                },
+                new MidiEvent[]
+                {
+                    new NoteOnEvent((SevenBitNumber)80, SevenBitNumber.MaxValue),
+                    new NoteOffEvent((SevenBitNumber)80, SevenBitNumber.MinValue),
+                },
+            },
+            action: c => c.Time = 10,
+            expectedMidiEvents: new[]
+            {
+                new MidiEvent[]
+                {
+                    new NoteOnEvent { DeltaTime = 10 },
+                    new NoteOnEvent((SevenBitNumber)70, SevenBitNumber.MaxValue),
+                    new NoteOffEvent(),
+                    new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue),
+                    new NoteOnEvent { DeltaTime = 90 },
+                    new NoteOffEvent(),
+                },
+                new MidiEvent[]
+                {
+                    new NoteOnEvent((SevenBitNumber)80, SevenBitNumber.MaxValue),
+                    new NoteOffEvent((SevenBitNumber)80, SevenBitNumber.MinValue),
+                },
+            });
 
         #endregion
 
