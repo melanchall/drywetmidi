@@ -34,7 +34,7 @@ Instruction below shows how to integrate the full version of the DryWetMIDI into
 
 Now you can use DryWetMIDI API in your Unity scripts.
 
-Following sample script (included in demo scene within the [full DryWetMIDI package](https://assetstore.unity.com/packages/tools/audio/drywetmidi-222171)) will create a MIDI file containing all possible notes with length of `1/8` and will play the file via `Microsoft GS Wavetable Synth` output device:
+Following sample script (included in demo scene within the [full DryWetMIDI package](https://assetstore.unity.com/packages/tools/audio/drywetmidi-222171)) will create a MIDI file containing all possible notes with length of `1/8` and will play the file via `Microsoft GS Wavetable Synth` output endpoint:
 
 ```csharp
 using System;
@@ -50,14 +50,14 @@ using UnityEngine;
 
 public class DemoScript : MonoBehaviour
 {
-    private const string OutputDeviceName = "Microsoft GS Wavetable Synth";
+    private const string OutputEndpointName = "Microsoft GS Wavetable Synth";
 
-    private OutputDevice _outputDevice;
+    private OutputEndpoint _outputEndpoint;
     private Playback _playback;
 
     private void Start()
     {
-        InitializeOutputDevice();
+        InitializeOutputEndpoint();
         var midiFile = CreateTestFile();
         InitializeFilePlayback(midiFile);
         StartPlayback();
@@ -65,7 +65,7 @@ public class DemoScript : MonoBehaviour
 
     private void OnApplicationQuit()
     {
-        Debug.Log("Releasing playback and device...");
+        Debug.Log("Releasing playback and endpoint...");
 
         if (_playback != null)
         {
@@ -74,26 +74,26 @@ public class DemoScript : MonoBehaviour
             _playback.Dispose();
         }
 
-        if (_outputDevice != null)
-            _outputDevice.Dispose();
+        if (_outputEndpoint != null)
+            _outputEndpoint.Dispose();
 
-        Debug.Log("Playback and device released.");
+        Debug.Log("Playback and endpoint released.");
     }
 
-    private void InitializeOutputDevice()
+    private void InitializeOutputEndpoint()
     {
-        Debug.Log($"Initializing output device [{OutputDeviceName}]...");
+        Debug.Log($"Initializing output endpoint [{OutputEndpointName}]...");
 
-        var allOutputDevices = OutputDevice.GetAll();
-        if (!allOutputDevices.Any(d => d.Name == OutputDeviceName))
+        var allOutputEndpoints = OutputEndpoint.GetAll();
+        if (!allOutputEndpoints.Any(d => d.Name == OutputEndpointName))
         {
-            var allDevicesList = string.Join(Environment.NewLine, allOutputDevices.Select(d => $"  {d.Name}"));
-            Debug.Log($"There is no [{OutputDeviceName}] device presented in the system. Here the list of all device:{Environment.NewLine}{allDevicesList}");
+            var allEndpointsList = string.Join(Environment.NewLine, allOutputEndpoints.Select(d => $"  {d.Name}"));
+            Debug.Log($"There is no [{OutputEndpointName}] endpoint presented in the system. Here the list of all endpoints:{Environment.NewLine}{allEndpointsList}");
             return;
         }
 
-        _outputDevice = OutputDevice.GetByName(OutputDeviceName);
-        Debug.Log($"Output device [{OutputDeviceName}] initialized.");
+        _outputEndpoint = OutputEndpoint.GetByName(OutputEndpointName);
+        Debug.Log($"Output endpoint [{OutputEndpointName}] initialized.");
     }
 
     private MidiFile CreateTestFile()
@@ -120,12 +120,12 @@ public class DemoScript : MonoBehaviour
     {
         Debug.Log("Initializing playback...");
 
-        _playback = midiFile.GetPlayback(_outputDevice);
+        _playback = midiFile.GetPlayback(_outputEndpoint);
         _playback.Loop = true;
         _playback.NotesPlaybackStarted += OnNotesPlaybackStarted;
         _playback.NotesPlaybackFinished += OnNotesPlaybackFinished;
        
-        Debug.Log($"Output device [{OutputDeviceName}] initialized.");
+        Debug.Log("Playback initialized.");
     }
 
     private void StartPlayback()
@@ -156,4 +156,4 @@ public class DemoScript : MonoBehaviour
 ```
 
 > [!WARNING]
-> Pay attention to `OnApplicationQuit` method. You should always take care about disposing of MIDI devices. Without it all resources taken by the device will live until GC collects them. In the case of Unity, it means Unity may need to be reopened to be able to use the same devices again (for example, on Windows).
+> Pay attention to `OnApplicationQuit` method. You should always take care about disposing of MIDI endpoints. Without it all resources taken by an endpoint will live until GC collects them. In the case of Unity, it means Unity may need to be reopened to be able to use the same endpoints again (for example, on Windows).

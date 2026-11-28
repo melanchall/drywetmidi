@@ -40,7 +40,7 @@ private sealed class MyPlayback : Playback
 
     protected override bool TryPlayEvent(MidiEvent midiEvent, object metadata)
     {
-        if (metadata == 0)
+        if (metadata is int trackChunkIndex && trackChunkIndex == 0)
             return false;
 
         OutputEndpoint?.SendEvent(midiEvent);

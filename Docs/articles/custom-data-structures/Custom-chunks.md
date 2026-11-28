@@ -172,22 +172,35 @@ protected override void WriteContent(MidiWriter writer, WritingSettings settings
 }
 ```
 
-Every chunk starts with an ID and its size. DryWetMIDI calls the `GetContentSize` method of the `MidiChunk` to write its return value as the chunk's size. This calculation is synchronous CPU work, including during asynchronous writing; there is no `GetContentSizeAsync` method. It should calculate a size, not read or write a stream. You must calculate the real size of the chunk's content so that programs that read a MIDI file with your custom chunk can skip it by advancing the reader's position by this size. Let's implement `GetContentSize`:
+Every chunk starts with an ID and its size. DryWetMIDI calls the `GetContentSize` method of the `MidiChunk` to write its return value as the chunk's size. This calculation is synchronous CPU work, including during asynchronous writing; there is no `GetContentSizeAsync` method. It should calculate a size, not read or write a stream. You must calculate the real size of the chunk's content so that programs that read a MIDI file with your custom chunk can skip it by advancing the reader's position by this size. Let's implement `GetContentSize` along with a helper method that calculates the length of a VLQ number:
 
 ```csharp
 protected override uint GetContentSize(WritingSettings settings)
 {
     return (uint)(
-        _changes.Count.GetVlqLength() +
+        GetVlqLength(_changes.Count) +
         _changes.Select(c =>
         {
             var commentLength = Encoding.Unicode.GetByteCount(c.Comment ?? string.Empty);
             return 4 /* 1 for day, 1 for month, 2 for year */ +
-                    commentLength.GetVlqLength() +
+                    GetVlqLength(commentLength) +
                     commentLength;
         })
         .DefaultIfEmpty()
         .Sum());
+}
+
+private static int GetVlqLength(int number)
+{
+    var length = 1;
+
+    while (number > 127)
+    {
+        number >>= 7;
+        length++;
+    }
+
+    return length;
 }
 ```
 

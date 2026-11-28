@@ -9,6 +9,8 @@ Playback API allows you to modify objects during playback. So you can, for examp
 Following code is a small demonstration of what you can do:
 
 ```csharp
+using System;
+using System.Linq;
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
@@ -36,8 +38,8 @@ namespace DynamicPlayback
                         .SetLength(NoteLength, tempoMap))
             };
 
-            var outputDevice = OutputDevice.GetByName("Microsoft GS Wavetable Synth");
-            var playback = new Playback(observableCollection, tempoMap, outputDevice);
+            var outputEndpoint = OutputEndpoint.GetByName("Microsoft GS Wavetable Synth");
+            var playback = new Playback(observableCollection, tempoMap, outputEndpoint);
             playback.Loop = true;
 
             Console.WriteLine("Press any key to start playback...");
@@ -52,7 +54,7 @@ namespace DynamicPlayback
             HandleChanges(observableCollection, tempoMap);
 
             playback.Dispose();
-            outputDevice.Dispose();
+            outputEndpoint.Dispose();
         }
 
         private static void HandleChanges(

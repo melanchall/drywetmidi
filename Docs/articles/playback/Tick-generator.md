@@ -34,24 +34,20 @@ As an example we create a simple loop tick generator working in a separate threa
 ```csharp
 private sealed class ThreadTickGenerator : TickGenerator
 {
-    private Thread _thread;
-    private bool _isRunning;
+    private CancellationTokenSource _cancellationTokenSource;
     private bool _disposed;
 
     protected override void Start(TimeSpan interval)
     {
-        if (_thread != null)
-            return;
+        _cancellationTokenSource = new CancellationTokenSource();
+        var cancellationToken = _cancellationTokenSource.Token;
 
-        _thread = new Thread(() =>
+        var thread = new Thread(() =>
         {
-            var stopwatch = new Stopwatch();
+            var stopwatch = Stopwatch.StartNew();
             var lastMs = 0L;
 
-            stopwatch.Start();
-            _isRunning = true;
-
-            while (_isRunning)
+            while (!cancellationToken.IsCancellationRequested)
             {
                 var elapsedMs = stopwatch.ElapsedMilliseconds;
                 if (elapsedMs - lastMs >= interval.TotalMilliseconds)
@@ -62,7 +58,14 @@ private sealed class ThreadTickGenerator : TickGenerator
             }
         });
 
-        _thread.Start();
+        thread.Start();
+    }
+
+    protected override void Stop()
+    {
+        _cancellationTokenSource?.Cancel();
+        _cancellationTokenSource?.Dispose();
+        _cancellationTokenSource = null;
     }
 
     protected override void Dispose(bool disposing)
@@ -71,9 +74,7 @@ private sealed class ThreadTickGenerator : TickGenerator
             return;
 
         if (disposing)
-        {
-            _isRunning = false;
-        }
+            Stop();
 
         _disposed = true;
     }
