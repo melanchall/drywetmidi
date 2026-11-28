@@ -102,9 +102,11 @@ namespace Melanchall.DryWetMidi.Interaction
         ///  Tempo map events will be added to this new track chunk.
         /// </remarks>
         /// <exception cref="ArgumentNullException"><paramref name="file"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><see cref="MidiFile.TimeDivision"/> of <paramref name="file"/> is <c>null</c>.</exception>
         public static TempoMapManager ManageTempoMap(this MidiFile file)
         {
             ThrowIfArgument.IsNull(nameof(file), file);
+            ThrowIfArgument.HasNullTimeDivision(nameof(file), file);
 
             if (!file.GetTrackChunks().Any())
                 file.Chunks.Add(new TrackChunk());
@@ -209,9 +211,11 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <param name="file">MIDI file to get tempo map of.</param>
         /// <returns>Tempo map of the <paramref name="file"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="file"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><see cref="MidiFile.TimeDivision"/> of <paramref name="file"/> is <c>null</c>.</exception>
         public static TempoMap GetTempoMap(this MidiFile file)
         {
             ThrowIfArgument.IsNull(nameof(file), file);
+            ThrowIfArgument.HasNullTimeDivision(nameof(file), file);
 
             return file.GetTrackChunks().GetTempoMap(file.TimeDivision!);
         }

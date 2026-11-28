@@ -559,6 +559,23 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 filter: e => (e.Event as ChannelEvent)?.Channel < 6);
         }
 
+        [Test]
+        public void SplitByChannel_NullTimeDivision()
+        {
+            var midiFile = new MidiFile(
+                new TrackChunk(
+                    new NoteOnEvent { Channel = (FourBitNumber)0 },
+                    new NoteOnEvent { Channel = (FourBitNumber)1 }))
+            {
+                _timeDivision = null
+            };
+
+            var newFiles = midiFile.SplitByChannel().ToArray();
+
+            ClassicAssert.AreEqual(2, newFiles.Length, "Invalid count of new files.");
+            ClassicAssert.IsTrue(newFiles.All(f => f.TimeDivision == null), "Time division of a new file is not null.");
+        }
+
         #endregion
 
         #region Private methods

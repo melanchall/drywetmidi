@@ -149,6 +149,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// </item>
         /// </list>
         /// </exception>
+        /// <exception cref="ArgumentOutOfRangeException"><see cref="MidiFile.TimeDivision"/> of <paramref name="midiFile"/> is <c>null</c>.</exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="from"/> specified an invalid value.</exception>
         public static void SplitObjectsAtDistance(
             this MidiFile midiFile,
@@ -159,6 +160,7 @@ namespace Melanchall.DryWetMidi.Tools
             Predicate<ITimedObject>? filter = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
+            ThrowIfArgument.HasNullTimeDivision(nameof(midiFile), midiFile);
             ThrowIfArgument.IsNull(nameof(distance), distance);
             ThrowIfArgument.IsInvalidEnumValue(nameof(from), from);
 
@@ -330,7 +332,17 @@ namespace Melanchall.DryWetMidi.Tools
         /// means don't split it. <c>null</c> (the default value) can be passed to the parameter
         /// to process all objects.</param>
         /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="ratio"/> is not finite or is out of valid range.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// <para>One of the following errors occurred:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><see cref="MidiFile.TimeDivision"/> of <paramref name="midiFile"/> is <c>null</c>.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="ratio"/> is not finite or is out of valid range.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         /// <exception cref="InvalidEnumArgumentException">
         /// <para>One of the following errors occurred:</para>
         /// <list type="bullet">
@@ -352,6 +364,7 @@ namespace Melanchall.DryWetMidi.Tools
             Predicate<ITimedObject>? filter = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
+            ThrowIfArgument.HasNullTimeDivision(nameof(midiFile), midiFile);
             ThrowIfArgument.DoesntSatisfyCondition(
                 nameof(ratio),
                 ratio,

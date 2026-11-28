@@ -32,6 +32,14 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
         public void ManageTempoMap_EmptyEventsCollectionsCollection_Exception() =>
             ClassicAssert.Throws<ArgumentOutOfRangeException>(() => Array.Empty<EventsCollection>().ManageTempoMap(new TicksPerQuarterNoteTimeDivision()));
 
+        [Test]
+        public void ManageTempoMap_NullTimeDivision()
+        {
+            var midiFile = new MidiFile(new TrackChunk(new TextEvent("A"))) { _timeDivision = null };
+
+            ClassicAssert.Throws<ArgumentOutOfRangeException>(() => midiFile.ManageTempoMap(), "Tempo map manager was created for a file with null time division.");
+        }
+
         #endregion
     }
 }

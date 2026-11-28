@@ -144,6 +144,31 @@ namespace Melanchall.DryWetMidi.Tests.Core
             CheckControlChangesOrder(readFile.GetTrackChunks().First(), expected);
         }
 
+        [Test]
+        public void SetTimeDivision_Null()
+        {
+            var midiFile = new MidiFile();
+            var timeDivision = midiFile.TimeDivision;
+
+            ClassicAssert.Throws<ArgumentNullException>(() => midiFile.TimeDivision = null, "Null time division was accepted.");
+            ClassicAssert.AreSame(timeDivision, midiFile.TimeDivision, "Time division changed after rejected assignment.");
+        }
+
+        [Test]
+        public void Clone_NoHeaderChunk()
+        {
+            var midiFile = WriteRead(
+                new MidiFile(new TrackChunk(new TextEvent("A"))),
+                new WritingSettings { WriteHeaderChunk = false },
+                new ReadingSettings { NoHeaderChunkPolicy = NoHeaderChunkPolicy.Ignore });
+            ClassicAssert.IsNull(midiFile.TimeDivision, "Time division of a file without header chunk is not null.");
+
+            var clonedFile = midiFile.Clone();
+
+            ClassicAssert.IsNull(clonedFile.TimeDivision, "Time division of the clone is not null.");
+            MidiAsserts.AreEqual(midiFile, clonedFile, true, "Clone of a file without header chunk is invalid.");
+        }
+
         #endregion
 
         #region Private methods

@@ -163,6 +163,14 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
             ClassicAssert.AreEqual(new MidiTimeSpan(Math.Max(deltaTime1, deltaTime2)), duration, "Invalid duration.");
         }
 
+        [Test]
+        public void GetDuration_File_NullTimeDivision()
+        {
+            var midiFile = new MidiFile(new TrackChunk(new TextEvent("A"))) { _timeDivision = null };
+
+            ClassicAssert.Throws<ArgumentOutOfRangeException>(() => midiFile.GetDuration<MidiTimeSpan>(), "Duration was got for a file with null time division.");
+        }
+
         #endregion
 
         #region IsEmpty

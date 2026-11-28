@@ -141,6 +141,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="settings">Settings according to which merging process should be done.</param>
         /// <param name="objectDetectionSettings">Settings according to which objects should be detected and built.</param>
         /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><see cref="MidiFile.TimeDivision"/> of <paramref name="midiFile"/> is <c>null</c>.</exception>
         public static void MergeObjects(
             this MidiFile midiFile,
             ObjectType objectType,
@@ -148,6 +149,7 @@ namespace Melanchall.DryWetMidi.Tools
             ObjectDetectionSettings? objectDetectionSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
+            ThrowIfArgument.HasNullTimeDivision(nameof(midiFile), midiFile);
 
             var tempoMap = midiFile.GetTempoMap();
 

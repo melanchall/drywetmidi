@@ -348,6 +348,39 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             },
             settings: new SplitFileByChunksSettings { Filter = c => !(c is CustomChunk) });
 
+        [Test]
+        public void SplitByChunks_NullTimeDivision_PreserveTempoMap()
+        {
+            var midiFile = new MidiFile(
+                new TrackChunk(new TextEvent("A")),
+                new TrackChunk(new TextEvent("B")))
+            {
+                _timeDivision = null
+            };
+
+            ClassicAssert.Throws<ArgumentOutOfRangeException>(
+                () => midiFile.SplitByChunks().ToArray(),
+                "File with null time division was split with tempo map preserving.");
+        }
+
+        [Test]
+        public void SplitByChunks_NullTimeDivision_DontPreserveTempoMap()
+        {
+            var midiFile = new MidiFile(
+                new TrackChunk(new TextEvent("A")),
+                new TrackChunk(new TextEvent("B")))
+            {
+                _timeDivision = null
+            };
+
+            var newFiles = midiFile
+                .SplitByChunks(new SplitFileByChunksSettings { PreserveTempoMap = false })
+                .ToArray();
+
+            ClassicAssert.AreEqual(2, newFiles.Length, "Invalid count of new files.");
+            ClassicAssert.IsTrue(newFiles.All(f => f.TimeDivision == null), "Time division of a new file is not null.");
+        }
+
         #endregion
 
         #region Private methods

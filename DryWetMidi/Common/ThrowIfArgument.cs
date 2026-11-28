@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using Melanchall.DryWetMidi.Core;
 
 namespace Melanchall.DryWetMidi.Common
 {
@@ -87,6 +88,17 @@ namespace Melanchall.DryWetMidi.Common
         {
             if (!condition(value))
                 throw new ArgumentOutOfRangeException(parameterName, value, message);
+        }
+
+        internal static void HasNullTimeDivision(string parameterName, MidiFile midiFile)
+        {
+            DoesntSatisfyCondition(parameterName, midiFile, f => f.TimeDivision != null, "File's time division is null.");
+        }
+
+        internal static void ContainsFileWithNullTimeDivision(string parameterName, IEnumerable<MidiFile> midiFiles)
+        {
+            if (midiFiles.Any(f => f.TimeDivision == null))
+                throw new ArgumentException("Collection contains a file with null time division.", parameterName);
         }
 
         internal static void IsGreaterThan(string parameterName, int value, int reference, string message)

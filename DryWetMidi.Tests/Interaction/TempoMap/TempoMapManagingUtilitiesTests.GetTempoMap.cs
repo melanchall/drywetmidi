@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
@@ -527,6 +528,14 @@ namespace Melanchall.DryWetMidi.Tests.Interaction
                 tempoMap.GetTimeSignatureChanges(),
                 "Invalid time signature changes.");
             CollectionAssert.IsEmpty(tempoMap.GetTempoChanges(), "There are tempo changes.");
+        }
+
+        [Test]
+        public void GetTempoMap_NullTimeDivision()
+        {
+            var midiFile = new MidiFile(new TrackChunk(new TextEvent("A"))) { _timeDivision = null };
+
+            ClassicAssert.Throws<ArgumentOutOfRangeException>(() => midiFile.GetTempoMap(), "Tempo map was got for a file with null time division.");
         }
 
         #endregion

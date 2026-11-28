@@ -143,6 +143,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// </item>
         /// </list>
         /// </exception>
+        /// <exception cref="ArgumentOutOfRangeException"><see cref="MidiFile.TimeDivision"/> of <paramref name="midiFile"/> is <c>null</c>.</exception>
         public static void SplitObjectsByStep(
             this MidiFile midiFile,
             ObjectType objectType,
@@ -151,6 +152,7 @@ namespace Melanchall.DryWetMidi.Tools
             Predicate<ITimedObject>? filter = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
+            ThrowIfArgument.HasNullTimeDivision(nameof(midiFile), midiFile);
             ThrowIfArgument.IsNull(nameof(step), step);
 
             var tempoMap = midiFile.GetTempoMap();

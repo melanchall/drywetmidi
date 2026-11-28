@@ -3,6 +3,7 @@ using Melanchall.DryWetMidi.Interaction;
 using Melanchall.DryWetMidi.Tests.Utilities;
 using Melanchall.DryWetMidi.Tools;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using System;
 using System.Linq;
 
@@ -85,6 +86,14 @@ namespace Melanchall.DryWetMidi.Tests.Tools
 
             Assert.That(timedObjects.EnumerationsCount, Is.EqualTo(1), "The source collection should be enumerated once.");
             Assert.That(actualObjects, Has.Count.EqualTo(2), "The repeated collection should contain the original and one repeated object.");
+        }
+
+        [Test]
+        public void Repeat_NullTimeDivision()
+        {
+            var midiFile = new MidiFile(new TrackChunk(new TextEvent("A"))) { _timeDivision = null };
+
+            ClassicAssert.Throws<ArgumentOutOfRangeException>(() => midiFile.Repeat(1), "File with null time division was repeated.");
         }
 
         #endregion

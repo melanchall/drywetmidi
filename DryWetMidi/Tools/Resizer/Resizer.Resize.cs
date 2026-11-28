@@ -147,9 +147,11 @@ namespace Melanchall.DryWetMidi.Tools
         /// </item>
         /// </list>
         /// </exception>
+        /// <exception cref="ArgumentOutOfRangeException"><see cref="MidiFile.TimeDivision"/> of <paramref name="midiFile"/> is <c>null</c>.</exception>
         public static void Resize(this MidiFile midiFile, ITimeSpan length)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
+            ThrowIfArgument.HasNullTimeDivision(nameof(midiFile), midiFile);
             ThrowIfArgument.IsNull(nameof(length), length);
 
             var tempoMap = midiFile.GetTempoMap();

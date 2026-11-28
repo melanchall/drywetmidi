@@ -432,6 +432,24 @@ namespace Melanchall.DryWetMidi.Tests.Tools
             },
             checkSeparateChunks: false);
 
+        [Test]
+        public void SerializeToCsv_NullTimeDivision()
+        {
+            var midiFile = new MidiFile(new TrackChunk(new TextEvent("A"))) { _timeDivision = null };
+
+            using (var stream = new MemoryStream())
+            {
+                ClassicAssert.Throws<ArgumentOutOfRangeException>(() => midiFile.SerializeToCsv(stream), "File with null time division was serialized.");
+
+                var exception = ClassicAssert.Throws<AggregateException>(
+                    () => midiFile.SerializeToCsvAsync(stream, cancellationToken: CancellationToken.None).Wait(),
+                    "File with null time division was serialized asynchronously.");
+                ClassicAssert.IsInstanceOf<ArgumentOutOfRangeException>(exception.InnerException, "Invalid exception on asynchronous serialization.");
+
+                ClassicAssert.AreEqual(0, stream.Length, "Data was written for a file with null time division.");
+            }
+        }
+
         #endregion
 
         #region Private methods
