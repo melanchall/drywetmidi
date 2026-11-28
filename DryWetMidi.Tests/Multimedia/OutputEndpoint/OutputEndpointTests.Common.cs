@@ -144,10 +144,9 @@ namespace Melanchall.DryWetMidi.Tests.Multimedia
             SendEvents(new[] { new NormalSysExEvent(new byte[] { 0xF0, 0x5F, 0x40, 0xF7 }) });
         }
 
-        // TODO: fix very large sys ex sending
         [TimingCritical]
         [Test]
-        public void SendEvent_SysEx_Large([Values(100, 1000, 10000/*, 100000*/)] int size)
+        public void SendEvent_SysEx_Large([Values(100, 1000, 10000)] int size)
         {
             SendEvents(new[] { new NormalSysExEvent(
                 Enumerable

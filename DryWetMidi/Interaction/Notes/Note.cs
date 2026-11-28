@@ -363,7 +363,6 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </summary>
         internal TimedEvent TimedNoteOffEvent { get; }
 
-        // TODO: what about just GetMusicTheoryNote??
         internal MusicTheory.Note UnderlyingNote => MusicTheory.Note.Get(NoteNumber);
 
         #endregion

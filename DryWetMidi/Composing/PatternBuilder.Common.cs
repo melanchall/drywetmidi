@@ -300,7 +300,6 @@ namespace Melanchall.DryWetMidi.Composing
             return counter;
         }
 
-        // TODO: check all anchors usage, they must be non-null
         private void UpdateAnchorsCounters(object? anchor)
         {
             _globalAnchorsCounter++;

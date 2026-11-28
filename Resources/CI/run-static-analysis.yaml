@@ -44,6 +44,12 @@ stages:
       inputs:
         script: 'jb inspectcode Melanchall.DryWetMidi.slnx --properties:Configuration=Debug --include="**\*.cs" --exclude="DryWetMidi.Benchmarks\**.*" -o=ReSharperReport.sarif'
     
+    - task: PublishPipelineArtifact@1
+      displayName: Publish 'ReSharperReportSarif' artifact
+      inputs:
+        targetPath: ReSharperReport.sarif
+        artifact: ReSharperReportSarif
+
     - task: DotNetCoreCLI@2
       displayName: Convert report to HTML
       inputs:
@@ -52,7 +58,7 @@ stages:
         arguments: '-c Release -- ReSharperReport.sarif ReSharperReport.html $(Build.SourceBranchName)'
     
     - task: PublishPipelineArtifact@1
-      displayName: Publish 'ReSharperReport' artifact
+      displayName: Publish 'ReSharperReportHtml' artifact
       inputs:
         targetPath: ReSharperReport.html
-        artifact: ReSharperReport
+        artifact: ReSharperReportHtml

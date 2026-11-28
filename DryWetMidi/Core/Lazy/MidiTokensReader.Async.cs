@@ -10,7 +10,7 @@ namespace Melanchall.DryWetMidi.Core
         internal async Task InitializeAsync(CancellationToken cancellationToken)
         {
             if (await _reader.EndReachedAsync(cancellationToken).ConfigureAwait(false))
-                throw new ArgumentException("Stream is already read.", "stream");
+                throw new InvalidOperationException("Stream is already read.");
         }
 
         private async Task<MidiToken?> ReadTokenCoreAsync(CancellationToken cancellationToken)

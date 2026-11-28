@@ -59,7 +59,7 @@ jobs:
         $version = $xml.Project.PropertyGroup[1].Version
         Write-Host "Current version is $version"
         Write-Host "Prerelease number is ${{ parameters.prereleaseNumber }}"
-        $newVersion = $version + "-prerelease" + ${{ parameters.prereleaseNumber }}
+        $newVersion = $version + "-prerelease." + ${{ parameters.prereleaseNumber }}
         $xml.Project.PropertyGroup[1].Version = $newVersion
         Write-Host "New version: $($xml.Project.PropertyGroup[1].Version)"
         Write-Host "Removing release notes..."
