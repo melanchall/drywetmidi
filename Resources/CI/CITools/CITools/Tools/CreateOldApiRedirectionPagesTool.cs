@@ -13,6 +13,8 @@
             ["Multimedia.IOutputEndpoint"] = "Multimedia.IOutputDevice",
             ["Multimedia.OutputEndpoint"] = "Multimedia.OutputDevice",
             ["Multimedia.MidiEndpoint"] = "Multimedia.MidiDevice",
+            ["Common.NativeApiException"] = "Multimedia.MidiDeviceException",
+            ["Interaction.BarBeatTimeSpanUtilities"] = "Interaction.BarBeatUtilities",
 
             ["Input-endpoint"] = "Input-device",
             ["Output-endpoint"] = "Output-device",
