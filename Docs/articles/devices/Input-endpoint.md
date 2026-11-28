@@ -104,12 +104,14 @@ public sealed class KeyboardInputEndpoint : IInputEndpoint
         [ConsoleKey.J] = NoteName.B
     };
 
+    private static readonly double NanosecondsPerStopwatchTick = 1_000_000_000.0 / Stopwatch.Frequency;
+
     private readonly Thread _thread;
             
     private int _octaveNumber = 4;
     private SevenBitNumber? _currentNoteNumber;
 
-    public KeyboardInputDevice()
+    public KeyboardInputEndpoint()
     {
         _thread = new Thread(ListenEvents);
     }
@@ -126,9 +128,15 @@ public sealed class KeyboardInputEndpoint : IInputEndpoint
     {
         if (_currentNoteNumber != null)
             EventReceived?.Invoke(this, new MidiEventReceivedEventArgs(
-                new NoteOffEvent(_currentNoteNumber.Value, SevenBitNumber.MinValue)));
+                new NoteOffEvent(_currentNoteNumber.Value, SevenBitNumber.MinValue),
+                GetCurrentTimestamp()));
 
         IsListeningForEvents = false;
+    }
+
+    public long GetCurrentTimestamp()
+    {
+        return (long)(Stopwatch.GetTimestamp() * NanosecondsPerStopwatchTick);
     }
 
     public void Dispose()
@@ -167,10 +175,12 @@ public sealed class KeyboardInputEndpoint : IInputEndpoint
 
             if (_currentNoteNumber != null)
                 EventReceived?.Invoke(this, new MidiEventReceivedEventArgs(
-                    new NoteOffEvent(_currentNoteNumber.Value, SevenBitNumber.MinValue)));
+                    new NoteOffEvent(_currentNoteNumber.Value, SevenBitNumber.MinValue),
+                    GetCurrentTimestamp()));
 
             EventReceived?.Invoke(this, new MidiEventReceivedEventArgs(
-                new NoteOnEvent((SevenBitNumber)noteNumber, SevenBitNumber.MaxValue)));
+                new NoteOnEvent((SevenBitNumber)noteNumber, SevenBitNumber.MaxValue),
+                GetCurrentTimestamp()));
 
             _currentNoteNumber = (SevenBitNumber)noteNumber;
         }

@@ -18,7 +18,7 @@ DryWetMIDI is the .NET library to work with MIDI data and MIDI devices. It allow
   * easily catch a specific error when reading or writing a MIDI file, since all possible errors in a file are presented as separate exception classes;
   * finely adjust the process of reading and writing (it allows, for example, to read corrupted files and repair them, or build MIDI file validators);
   * implement [custom meta events](https://melanchall.github.io/drywetmidi/articles/custom-data-structures/Custom-meta-events.html) and [custom chunks](https://melanchall.github.io/drywetmidi/articles/custom-data-structures/Custom-chunks.html) that can be written to and read from MIDI files.
-* [Send](https://melanchall.github.io/drywetmidi/articles/devices/Output-device.html) MIDI events to MIDI devices and [receive](https://melanchall.github.io/drywetmidi/articles/devices/Input-device.html) them from MIDI devices.
+* [Send](https://melanchall.github.io/drywetmidi/articles/devices/Output-endpoint.html) MIDI events to MIDI devices and [receive](https://melanchall.github.io/drywetmidi/articles/devices/Input-endpoint.html) them from MIDI devices.
 * [Play](https://melanchall.github.io/drywetmidi/articles/playback/Overview.html) MIDI data and [record](https://melanchall.github.io/drywetmidi/articles/recording/Overview.html) it.
 * Manage MIDI data either with low-level objects, like a MIDI event, or high-level ones, like a note, using different time and length representations (read the **High-level data managing** section of the [library docs](https://melanchall.github.io/drywetmidi)).
 * Build musical compositions (see [Pattern](https://melanchall.github.io/drywetmidi/articles/composing/Pattern.html) page of the library docs) and use music theory API (see [Music Theory - Overview](https://melanchall.github.io/drywetmidi/articles/music-theory/Overview.html) article).
@@ -71,16 +71,16 @@ foreach (var note in midiFile.GetNotes())
 Or maybe you want to [record data](https://melanchall.github.io/drywetmidi/articles/recording/Overview.html) from a [MIDI device](https://melanchall.github.io/drywetmidi/articles/devices/Overview.html), then [quantize](https://melanchall.github.io/drywetmidi/articles/tools/Quantizer.html) (see all [tools](https://melanchall.github.io/drywetmidi/articles/tools/Overview.html)) recorded events by the grid with a step of 1/8, and [play](https://melanchall.github.io/drywetmidi/articles/playback/Overview.html) the data via the default Windows synth:
 
 ```csharp
-var inputDevice = InputDevice.GetByName("MyMidiKeyboard");
-inputDevice.StartEventsListening();
+var inputEndpoint = InputEndpoint.GetByName("MyMidiKeyboard");
+inputEndpoint.StartEventsListening();
 
-var recording = new Recording(TempoMap.Default, inputDevice);
+var recording = new Recording(TempoMap.Default, inputEndpoint);
 recording.Start();
  
 // ...
  
 recording.Stop();
-inputDevice.Dispose();
+inputEndpoint.Dispose();
  
 var recordedFile = recording.ToFile();
 recording.Dispose();
@@ -89,14 +89,14 @@ recordedFile.QuantizeObjects(
     ObjectType.TimedEvent,
     new SteppedGrid(MusicalTimeSpan.Eighth));
  
-var outputDevice = OutputDevice.GetByName("Microsoft GS Wavetable Synth");
-var playback = recordedFile.GetPlayback(outputDevice);
+var outputEndpoint = OutputEndpoint.GetByName("Microsoft GS Wavetable Synth");
+var playback = recordedFile.GetPlayback(outputEndpoint);
 playback.Start();
  
 // ...
  
 playback.Dispose();
-outputDevice.Dispose();
+outputEndpoint.Dispose();
 ```
 
 You can even [build a musical composition](https://melanchall.github.io/drywetmidi/articles/composing/Pattern.html):
@@ -169,39 +169,39 @@ var manyObjects = objects
         ShiftRoundingStep = new BarBeatTicksTimeSpan(1)
     });
  
-var midiFile = objects.ToFile();
+var midiFile = manyObjects.ToFile();
 midiFile.Write("ManyObjects.mid");
 ```
 
-If you are a user of macOS, you can use the API to manage [virtual MIDI devices](https://melanchall.github.io/drywetmidi/articles/devices/Virtual-device.html) and to watch [devices being plugged in and unplugged](https://melanchall.github.io/drywetmidi/articles/devices/Devices-watcher.html):
+If you are a user of macOS or Windows with Windows MIDI Services, you can use the API to manage [virtual MIDI devices](https://melanchall.github.io/drywetmidi/articles/devices/Virtual-device.html) and to watch [MIDI endpoints being added and removed](https://melanchall.github.io/drywetmidi/articles/devices/Endpoints-watcher.html):
 
 ```csharp
-DevicesWatcher.Instance.DeviceAdded += OnDeviceAdded;
-DevicesWatcher.Instance.DeviceRemoved += OnDeviceRemoved;
+EndpointsWatcher.Instance.EndpointAdded += OnEndpointAdded;
+EndpointsWatcher.Instance.EndpointRemoved += OnEndpointRemoved;
  
-// Virtual device creation will cause DevicesWatcher.Instance.DeviceAdded
-// to be fired since one input device and one output device
+// Virtual device creation will cause EndpointsWatcher.Instance.EndpointAdded
+// to be fired since one input endpoint and one output endpoint
 // will be created
 var virtualDevice = VirtualDevice.Create("My Virtual Device");
  
-virtualDevice.InputDevice.EventReceived += OnEventReceived;
-virtualDevice.InputDevice.StartEventsListening();
+virtualDevice.InputEndpoint.EventReceived += OnEventReceived;
+virtualDevice.InputEndpoint.StartEventsListening();
  
 // Since virtual device is a loopback device in DryWetMIDI,
-// this event will be received on virtualDevice.InputDevice
-virtualDevice.OutputDevice.SendEvent(new PitchBendEvent(2000));
+// this event will be received on virtualDevice.InputEndpoint
+virtualDevice.OutputEndpoint.SendEvent(new PitchBendEvent(2000));
 
 // Dispose the virtual device when you don't need it anymore
 virtualDevice.Dispose();
 
 // Events handlers
 
-private static void OnDeviceAdded(object? sender, DeviceAddedRemovedEventArgs e)
+private static void OnEndpointAdded(object? sender, EndpointAddedRemovedEventArgs e)
 {
     // ...
 }
  
-private static void OnDeviceRemoved(object? sender, DeviceAddedRemovedEventArgs e)
+private static void OnEndpointRemoved(object? sender, EndpointAddedRemovedEventArgs e)
 {
     // ...
 }

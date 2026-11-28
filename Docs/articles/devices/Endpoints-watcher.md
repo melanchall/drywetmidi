@@ -116,7 +116,7 @@ namespace DwmExamples
 {
     class Program
     {
-        private static Dictionary<MidiDevice, string> _devicesNames;
+        private static Dictionary<MidiEndpoint, string> _endpointsNames;
 
         static void Main(string[] args)
         {
@@ -125,10 +125,10 @@ namespace DwmExamples
             var virtualDevice = VirtualDevice.Create("MyDevice");
             Thread.Sleep(500); // to get system time to see new device
 
-            _devicesNames = InputDevice.GetAll()
-                .OfType<MidiDevice>()
-                .Concat(OutputDevice.GetAll())
-                .ToDictionary(d => d, d => d.Name);
+            _endpointsNames = InputEndpoint.GetAll()
+                .OfType<MidiEndpoint>()
+                .Concat(OutputEndpoint.GetAll())
+                .ToDictionary(e => e, e => e.Name);
 
             Console.WriteLine("Removing endpoint...");
             virtualDevice.Dispose();
@@ -139,7 +139,7 @@ namespace DwmExamples
         private static void OnEndpointRemoved(object sender, EndpointAddedRemovedEventArgs e)
         {
             Console.WriteLine($"Endpoint removed. Getting its name...");
-            var endpointName = _devicesNames[e.Endpoint];
+            var endpointName = _endpointsNames[e.Endpoint];
             Console.WriteLine($"Name is {endpointName}");
         }
     }
