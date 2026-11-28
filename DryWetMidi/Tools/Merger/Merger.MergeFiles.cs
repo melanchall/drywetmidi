@@ -65,6 +65,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <item>
         /// <description><paramref name="midiFiles"/> is an empty collection.</description>
         /// </item>
+        /// <item>
+        /// <description><paramref name="midiFiles"/> collection contains a file with <c>null</c>
+        /// <see cref="MidiFile.TimeDivision"/>.</description>
+        /// </item>
         /// </list>
         /// </exception>
         /// <exception cref="InvalidOperationException">
@@ -87,6 +91,7 @@ namespace Melanchall.DryWetMidi.Tools
             midiFiles = midiFiles.ToArray();
             ThrowIfArgument.ContainsNull(nameof(midiFiles), midiFiles);
             ThrowIfArgument.IsEmptyCollection(nameof(midiFiles), midiFiles, "MIDI files collection is empty.");
+            ThrowIfArgument.ContainsFileWithNullTimeDivision(nameof(midiFiles), midiFiles);
 
             settings = settings ?? new SequentialMergingSettings();
 
@@ -160,6 +165,10 @@ namespace Melanchall.DryWetMidi.Tools
         /// <item>
         /// <description><paramref name="midiFiles"/> is an empty collection.</description>
         /// </item>
+        /// <item>
+        /// <description><paramref name="midiFiles"/> collection contains a file with <c>null</c>
+        /// <see cref="MidiFile.TimeDivision"/>.</description>
+        /// </item>
         /// </list>
         /// </exception>
         /// <exception cref="InvalidOperationException">
@@ -186,18 +195,19 @@ namespace Melanchall.DryWetMidi.Tools
             midiFiles = midiFiles.ToArray();
             ThrowIfArgument.ContainsNull(nameof(midiFiles), midiFiles);
             ThrowIfArgument.IsEmptyCollection(nameof(midiFiles), midiFiles, "MIDI files collection is empty.");
+            ThrowIfArgument.ContainsFileWithNullTimeDivision(nameof(midiFiles), midiFiles);
 
             settings = settings ?? new SimultaneousMergingSettings();
 
             var result = PrepareResultFile(midiFiles);
-            var timeDivision = result.TimeDivision;
+            var timeDivision = result.TimeDivision!;
 
             var newTempoMaps = new List<TempoMap>();
 
             foreach (var midiFile in midiFiles)
             {
                 var chunks = midiFile.Chunks.Select(c => c.Clone()).ToArray();
-                var deltaTimeFactor = GetDeltaTimeFactor(timeDivision!, midiFile.TimeDivision!);
+                var deltaTimeFactor = GetDeltaTimeFactor(timeDivision, midiFile.TimeDivision!);
 
                 var newTrackChunks = new List<TrackChunk>();
 

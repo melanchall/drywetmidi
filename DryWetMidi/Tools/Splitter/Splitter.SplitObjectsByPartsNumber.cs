@@ -140,7 +140,17 @@ namespace Melanchall.DryWetMidi.Tools
         /// means don't split it. <c>null</c> (the default value) can be passed to the parameter
         /// to process all objects.</param>
         /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="partsNumber"/> is zero or negative.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// <para>One of the following errors occurred:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><see cref="MidiFile.TimeDivision"/> of <paramref name="midiFile"/> is <c>null</c>.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="partsNumber"/> is zero or negative.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="lengthType"/> specified an invalid value.</exception>
         public static void SplitObjectsByPartsNumber(
             this MidiFile midiFile,
@@ -151,6 +161,7 @@ namespace Melanchall.DryWetMidi.Tools
             Predicate<ITimedObject>? filter = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
+            ThrowIfArgument.HasNullTimeDivision(nameof(midiFile), midiFile);
             ThrowIfArgument.IsNonpositive(nameof(partsNumber), partsNumber, "Parts number is zero or negative.");
             ThrowIfArgument.IsInvalidEnumValue(nameof(lengthType), lengthType);
 

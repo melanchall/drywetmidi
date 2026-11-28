@@ -1790,7 +1790,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
         public void Read_NotEnoughBytes_Ignore_HeaderChunkId([Values(1, 2, 3)] int takeBytesCount) => Read_NotEnoughBytes_Ignore(
             new MidiFile(new TrackChunk(new TextEvent("A"))) { TimeDivision = new TicksPerQuarterNoteTimeDivision(80) },
             bytes => bytes.Take(takeBytesCount).ToArray(),
-            new MidiFile { TimeDivision = null });
+            new MidiFile { _timeDivision = null });
 
         [Test]
         public void Read_NotEnoughBytes_Ignore_HeaderChunkSize([Values(1, 2, 3)] int takeBytesCount) => Read_NotEnoughBytes_Ignore(

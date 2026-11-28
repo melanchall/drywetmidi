@@ -47,6 +47,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// </item>
         /// </list>
         /// </exception>
+        /// <exception cref="ArgumentOutOfRangeException"><see cref="MidiFile.TimeDivision"/> of <paramref name="midiFile"/> is <c>null</c>.</exception>
         public static void SerializeToCsv(
             this MidiFile midiFile,
             Stream stream,
@@ -55,6 +56,7 @@ namespace Melanchall.DryWetMidi.Tools
             ObjectDetectionSettings? objectDetectionSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
+            ThrowIfArgument.HasNullTimeDivision(nameof(midiFile), midiFile);
             ThrowIfArgument.IsNull(nameof(stream), stream);
 
             if (!stream.CanWrite)
@@ -101,6 +103,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// contains only white space, or contains one or more invalid characters as defined by
         /// <see cref="Path.InvalidPathChars"/>.</exception>
         /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><see cref="MidiFile.TimeDivision"/> of <paramref name="midiFile"/> is <c>null</c>.</exception>
         public static void SerializeToCsv(
             this MidiFile midiFile,
             string filePath,
@@ -110,6 +113,7 @@ namespace Melanchall.DryWetMidi.Tools
             ObjectDetectionSettings? objectDetectionSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
+            ThrowIfArgument.HasNullTimeDivision(nameof(midiFile), midiFile);
             ThrowIfArgument.IsNullOrEmptyString(nameof(filePath), filePath, "File path");
 
             using (var fileStream = FileUtilities.OpenFileForWrite(filePath, overwriteFile))

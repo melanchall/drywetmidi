@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using Melanchall.DryWetMidi.Common;
@@ -45,6 +46,7 @@ namespace Melanchall.DryWetMidi.Core
         #region Fields
 
         internal ushort? _originalFormat;
+        internal TimeDivision? _timeDivision = new TicksPerQuarterNoteTimeDivision();
 
         #endregion
 
@@ -95,7 +97,6 @@ namespace Melanchall.DryWetMidi.Core
 
         #region Properties
 
-        // TODO: maybe not null?
         /// <summary>
         /// Gets or sets the time division of a MIDI file.
         /// </summary>
@@ -104,8 +105,22 @@ namespace Melanchall.DryWetMidi.Core
         /// There are two types of the time division: ticks per quarter note and SMPTE. The first type is represented by
         /// the <see cref="TicksPerQuarterNoteTimeDivision"/> class and the second one is represented by
         /// <see cref="SmpteTimeDivision"/> class.</para>
+        /// <para>The property can't be set to <c>null</c>. But it can return <c>null</c> if the file was read
+        /// without a header chunk (see <see cref="ReadingSettings.NoHeaderChunkPolicy"/>). Many operations
+        /// require a time division, so set the property to a valid value before processing such a file.</para>
         /// </remarks>
-        public TimeDivision? TimeDivision { get; set; } = new TicksPerQuarterNoteTimeDivision();
+        /// <exception cref="ArgumentNullException"><paramref name="value"/> is <c>null</c>.</exception>
+        [DisallowNull]
+        public TimeDivision? TimeDivision
+        {
+            get { return _timeDivision; }
+            set
+            {
+                ThrowIfArgument.IsNull(nameof(value), value);
+
+                _timeDivision = value;
+            }
+        }
 
         /// <summary>
         /// Gets collection of chunks of a MIDI file.
@@ -528,8 +543,8 @@ namespace Melanchall.DryWetMidi.Core
                                 file.TimeDivision = headerChunk.TimeDivision;
                                 file._originalFormat = headerChunk.FileFormat;
 
-                                if (settings.MaxMemorySize != null && file.TimeDivision != null)
-                                    reader.AddEstimatedMemory(MemorySizeEstimator.EstimateShallow(file.TimeDivision), settings);
+                                if (settings.MaxMemorySize != null)
+                                    reader.AddEstimatedMemory(MemorySizeEstimator.EstimateShallow(headerChunk.TimeDivision), settings);
                             }
 
                             headerChunkIsRead = true;
@@ -563,7 +578,7 @@ namespace Melanchall.DryWetMidi.Core
 
                 if (!headerChunkIsRead)
                 {
-                    file.TimeDivision = null;
+                    file._timeDivision = null;
 
                     if (settings.NoHeaderChunkPolicy == NoHeaderChunkPolicy.Abort)
                         throw new NoHeaderChunkException();
@@ -740,10 +755,8 @@ namespace Melanchall.DryWetMidi.Core
         /// <returns>Copy of the current <see cref="MidiFile"/>.</returns>
         public MidiFile Clone()
         {
-            var result = new MidiFile(Chunks.Select(c => c.Clone()))
-            {
-                TimeDivision = TimeDivision?.Clone()
-            };
+            var result = new MidiFile(Chunks.Select(c => c.Clone()));
+            result._timeDivision = _timeDivision?.Clone();
             result._originalFormat = _originalFormat;
 
             return result;

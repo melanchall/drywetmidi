@@ -261,9 +261,11 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// </item>
         /// </list>
         /// </exception>
+        /// <exception cref="ArgumentOutOfRangeException"><see cref="MidiFile.TimeDivision"/> of <paramref name="midiFile"/> is <c>null</c>.</exception>
         public static Playback GetPlayback(this MidiFile midiFile, IOutputEndpoint outputEndpoint, PlaybackSettings? playbackSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
+            ThrowIfArgument.HasNullTimeDivision(nameof(midiFile), midiFile);
             ThrowIfArgument.IsNull(nameof(outputEndpoint), outputEndpoint);
 
             return GetPlayback(midiFile.GetTrackChunks(), midiFile.GetTempoMap(), outputEndpoint, playbackSettings);
@@ -278,9 +280,11 @@ namespace Melanchall.DryWetMidi.Multimedia
         /// <returns>An instance of the <see cref="Playback"/> for playing MIDI events contained in
         /// the <paramref name="midiFile"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><see cref="MidiFile.TimeDivision"/> of <paramref name="midiFile"/> is <c>null</c>.</exception>
         public static Playback GetPlayback(this MidiFile midiFile, PlaybackSettings? playbackSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
+            ThrowIfArgument.HasNullTimeDivision(nameof(midiFile), midiFile);
 
             return GetPlayback(midiFile.GetTrackChunks(), midiFile.GetTempoMap(), playbackSettings);
         }

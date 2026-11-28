@@ -24,12 +24,23 @@ namespace Melanchall.DryWetMidi.Tools
         /// <returns>A new instance of the <see cref="MidiFile"/> which is the <paramref name="midiFile"/>
         /// repeated <paramref name="repeatsNumber"/> times using <paramref name="settings"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="repeatsNumber"/> is negative.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// <para>One of the following errors occurred:</para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description><see cref="MidiFile.TimeDivision"/> of <paramref name="midiFile"/> is <c>null</c>.</description>
+        /// </item>
+        /// <item>
+        /// <description><paramref name="repeatsNumber"/> is negative.</description>
+        /// </item>
+        /// </list>
+        /// </exception>
         /// <exception cref="ArgumentException"><see cref="RepeatingSettings.Shift"/> of the <paramref name="settings"/>
         /// is <c>null</c> for fixed-value shift.</exception>
         public static MidiFile Repeat(this MidiFile midiFile, int repeatsNumber, RepeatingSettings? settings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
+            ThrowIfArgument.HasNullTimeDivision(nameof(midiFile), midiFile);
             ThrowIfArgument.IsNegative(nameof(repeatsNumber), repeatsNumber, "Repeats number is negative.");
 
             return new Repeater().Repeat(midiFile, repeatsNumber, settings);

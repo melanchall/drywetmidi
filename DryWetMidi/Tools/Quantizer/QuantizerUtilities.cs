@@ -240,6 +240,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// </item>
         /// </list>
         /// </exception>
+        /// <exception cref="ArgumentOutOfRangeException"><see cref="MidiFile.TimeDivision"/> of <paramref name="midiFile"/> is <c>null</c>.</exception>
         /// <exception cref="InvalidOperationException">
         /// An encountered grid time is negative, repeated, or less than the previous time, or
         /// randomization bounds contain no nonnegative times in ascending order.
@@ -252,6 +253,7 @@ namespace Melanchall.DryWetMidi.Tools
             ObjectDetectionSettings? objectDetectionSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
+            ThrowIfArgument.HasNullTimeDivision(nameof(midiFile), midiFile);
             ThrowIfArgument.IsNull(nameof(grid), grid);
 
             midiFile.QuantizeObjects(
@@ -287,6 +289,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// </item>
         /// </list>
         /// </exception>
+        /// <exception cref="ArgumentOutOfRangeException"><see cref="MidiFile.TimeDivision"/> of <paramref name="midiFile"/> is <c>null</c>.</exception>
         /// <exception cref="InvalidOperationException">
         /// An encountered grid time is negative, repeated, or less than the previous time, or
         /// randomization bounds contain no nonnegative times in ascending order.
@@ -300,6 +303,7 @@ namespace Melanchall.DryWetMidi.Tools
             ObjectDetectionSettings? objectDetectionSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
+            ThrowIfArgument.HasNullTimeDivision(nameof(midiFile), midiFile);
             ThrowIfArgument.IsNull(nameof(quantizer), quantizer);
             ThrowIfArgument.IsNull(nameof(grid), grid);
 

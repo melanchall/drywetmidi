@@ -48,9 +48,11 @@ namespace Melanchall.DryWetMidi.Tools
         /// <param name="settings">Settings which control how the <paramref name="midiFile"/>
         /// should be sanitized.</param>
         /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><see cref="MidiFile.TimeDivision"/> of <paramref name="midiFile"/> is <c>null</c>.</exception>
         public static void Sanitize(this MidiFile midiFile, SanitizingSettings? settings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
+            ThrowIfArgument.HasNullTimeDivision(nameof(midiFile), midiFile);
 
             settings = settings ?? new SanitizingSettings();
 
@@ -58,7 +60,7 @@ namespace Melanchall.DryWetMidi.Tools
             {
                 foreach (var trackChunk in midiFile.GetTrackChunks().ToArray())
                 {
-                    new MidiFile(trackChunk) { TimeDivision = midiFile.TimeDivision }.Sanitize(settings);
+                    new MidiFile(trackChunk) { TimeDivision = midiFile.TimeDivision! }.Sanitize(settings);
                 }
 
                 RemoveEmptyTrackChunks(midiFile, settings);

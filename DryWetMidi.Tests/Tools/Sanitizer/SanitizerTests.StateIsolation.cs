@@ -4,6 +4,7 @@ using Melanchall.DryWetMidi.Interaction;
 using Melanchall.DryWetMidi.Tests.Utilities;
 using Melanchall.DryWetMidi.Tools;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using System;
 using System.IO;
 
@@ -570,6 +571,14 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 new MidiFile(new TrackChunk(
                     new NoteOnEvent((SevenBitNumber)70, (SevenBitNumber)100),
                     new NoteOffEvent((SevenBitNumber)70, SevenBitNumber.MinValue) { DeltaTime = 20 })));
+        }
+
+        [Test]
+        public void Sanitize_NullTimeDivision()
+        {
+            var midiFile = new MidiFile(new TrackChunk(new TextEvent("A"))) { _timeDivision = null };
+
+            ClassicAssert.Throws<ArgumentOutOfRangeException>(() => midiFile.Sanitize(), "File with null time division was sanitized.");
         }
 
         #endregion

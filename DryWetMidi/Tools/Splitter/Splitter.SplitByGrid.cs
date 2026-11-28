@@ -39,7 +39,7 @@ namespace Melanchall.DryWetMidi.Tools
         public static IEnumerable<MidiFile> SplitByGrid(this MidiFile midiFile, IGrid grid, SliceMidiFileSettings? settings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
-            ThrowIfArgument.DoesntSatisfyCondition(nameof(midiFile), midiFile, f => f.TimeDivision != null, "File's time division is null.");
+            ThrowIfArgument.HasNullTimeDivision(nameof(midiFile), midiFile);
             ThrowIfArgument.IsNull(nameof(grid), grid);
 
             if (!midiFile.GetEvents().Any())

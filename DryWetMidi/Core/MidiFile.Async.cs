@@ -435,7 +435,7 @@ namespace Melanchall.DryWetMidi.Core
 
                 if (!hasHeaderChunk)
                 {
-                    file.TimeDivision = null;
+                    file._timeDivision = null;
 
                     if (settings.NoHeaderChunkPolicy == NoHeaderChunkPolicy.Abort)
                         throw new NoHeaderChunkException();

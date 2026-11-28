@@ -22,6 +22,7 @@ namespace Melanchall.DryWetMidi.Tools
         /// <returns>Collection of <see cref="MidiFile"/> where each file contains objects as defined by
         /// <paramref name="settings"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><see cref="MidiFile.TimeDivision"/> of <paramref name="midiFile"/> is <c>null</c>.</exception>
         public static IEnumerable<MidiFile> SplitByObjects(
             this MidiFile midiFile,
             ObjectType objectType,
@@ -29,6 +30,7 @@ namespace Melanchall.DryWetMidi.Tools
             ObjectDetectionSettings? objectDetectionSettings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
+            ThrowIfArgument.HasNullTimeDivision(nameof(midiFile), midiFile);
 
             settings = settings ?? new SplitByObjectsSettings();
 
@@ -78,7 +80,7 @@ namespace Melanchall.DryWetMidi.Tools
                 .Select(objectsByKey =>
                 {
                     var file = objectsByKey.ToFile();
-                    file.TimeDivision = midiFile.TimeDivision?.Clone();
+                    file.TimeDivision = midiFile.TimeDivision!.Clone();
                     file.ReplaceTempoMap(tempoMap);
                     return file;
                 });

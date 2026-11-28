@@ -37,6 +37,7 @@ namespace Melanchall.DryWetMidi.Tools
             cancellationToken.ThrowIfCancellationRequested();
 
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
+            ThrowIfArgument.HasNullTimeDivision(nameof(midiFile), midiFile);
             ThrowIfArgument.IsNull(nameof(stream), stream);
 
             if (!stream.CanWrite)
@@ -88,6 +89,7 @@ namespace Melanchall.DryWetMidi.Tools
         {
             cancellationToken.ThrowIfCancellationRequested();
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
+            ThrowIfArgument.HasNullTimeDivision(nameof(midiFile), midiFile);
 
             ThrowIfArgument.IsNullOrEmptyString(nameof(filePath), filePath, "File path");
 

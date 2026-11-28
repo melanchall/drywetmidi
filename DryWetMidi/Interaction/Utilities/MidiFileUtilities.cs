@@ -147,11 +147,13 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <returns>An instance of <typeparamref name="TTimeSpan"/> representing
         /// duration of <paramref name="midiFile"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><see cref="MidiFile.TimeDivision"/> of <paramref name="midiFile"/> is <c>null</c>.</exception>
         /// <exception cref="NotSupportedException"><typeparamref name="TTimeSpan"/> is not supported.</exception>
         public static TTimeSpan GetDuration<TTimeSpan>(this MidiFile midiFile)
             where TTimeSpan : class, ITimeSpan
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
+            ThrowIfArgument.HasNullTimeDivision(nameof(midiFile), midiFile);
 
             var tempoMap = midiFile.GetTempoMap();
             return midiFile
@@ -168,10 +170,12 @@ namespace Melanchall.DryWetMidi.Interaction
         /// <returns>An implementation of <see cref="ITimeSpan"/> representing
         /// duration of <paramref name="midiFile"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="midiFile"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><see cref="MidiFile.TimeDivision"/> of <paramref name="midiFile"/> is <c>null</c>.</exception>
         /// <exception cref="InvalidEnumArgumentException"><paramref name="durationType"/> specified an invalid value.</exception>
         public static ITimeSpan GetDuration(this MidiFile midiFile, TimeSpanType durationType)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
+            ThrowIfArgument.HasNullTimeDivision(nameof(midiFile), midiFile);
             ThrowIfArgument.IsInvalidEnumValue(nameof(durationType), durationType);
 
             var tempoMap = midiFile.GetTempoMap();
@@ -210,9 +214,11 @@ namespace Melanchall.DryWetMidi.Interaction
         /// </item>
         /// </list>
         /// </exception>
+        /// <exception cref="ArgumentOutOfRangeException"><see cref="MidiFile.TimeDivision"/> of <paramref name="midiFile"/> is <c>null</c>.</exception>
         public static void ShiftEvents(this MidiFile midiFile, ITimeSpan distance)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
+            ThrowIfArgument.HasNullTimeDivision(nameof(midiFile), midiFile);
             ThrowIfArgument.IsNull(nameof(distance), distance);
 
             midiFile.GetTrackChunks().ShiftEvents(distance, midiFile.GetTempoMap());

@@ -74,7 +74,7 @@ namespace Melanchall.DryWetMidi.Tools
             foreach (var channel in FourBitNumber.Values.Where(c => channelsUsed[c]))
             {
                 var newFile = timedEventsByChannel[channel].ToFile();
-                newFile.TimeDivision = midiFile.TimeDivision?.Clone();
+                newFile._timeDivision = midiFile.TimeDivision?.Clone();
 
                 yield return newFile;
             }

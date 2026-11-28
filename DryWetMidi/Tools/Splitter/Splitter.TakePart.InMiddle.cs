@@ -41,7 +41,7 @@ namespace Melanchall.DryWetMidi.Tools
         public static MidiFile TakePart(this MidiFile midiFile, ITimeSpan partStart, ITimeSpan partLength, SliceMidiFileSettings? settings = null)
         {
             ThrowIfArgument.IsNull(nameof(midiFile), midiFile);
-            ThrowIfArgument.DoesntSatisfyCondition(nameof(midiFile), midiFile, f => f.TimeDivision != null, "File's time division is null.");
+            ThrowIfArgument.HasNullTimeDivision(nameof(midiFile), midiFile);
             ThrowIfArgument.IsNull(nameof(partStart), partStart);
             ThrowIfArgument.IsNull(nameof(partLength), partLength);
 

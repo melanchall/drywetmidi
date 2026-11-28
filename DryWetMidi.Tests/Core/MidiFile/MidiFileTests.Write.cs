@@ -421,7 +421,7 @@ namespace Melanchall.DryWetMidi.Tests.Core
                 (fileInfo1, fileInfo2) =>
                 {
                     var originalMidiFile = MidiFile.Read(fileInfo1.FullName);
-                    originalMidiFile.TimeDivision = null;
+                    originalMidiFile._timeDivision = null;
 
                     ClassicAssert.Throws<NoHeaderChunkException>(() => MidiFile.Read(fileInfo2.FullName));
                     var newMidiFile = MidiFile.Read(fileInfo2.FullName, new ReadingSettings

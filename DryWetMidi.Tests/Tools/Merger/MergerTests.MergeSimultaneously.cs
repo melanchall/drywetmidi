@@ -792,6 +792,18 @@ namespace Melanchall.DryWetMidi.Tests.Tools
                 TimeDivision = new TicksPerQuarterNoteTimeDivision(120)
             });
 
+        [Test]
+        public void MergeSimultaneously_NullTimeDivision()
+        {
+            var midiFiles = new[]
+            {
+                new MidiFile(new TrackChunk(new TextEvent("A"))),
+                new MidiFile(new TrackChunk(new TextEvent("A"))) { _timeDivision = null },
+            };
+
+            ClassicAssert.Throws<ArgumentException>(() => midiFiles.MergeSimultaneously(), "Files were merged though one of them has null time division.");
+        }
+
         #endregion
 
         #region Private methods
